@@ -1,0 +1,89 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://ParticleEffects/GlowShader.tres" type="Material" id=1]
+[ext_resource path="res://Stages/AirManDemo/Enemy2Anim.tres" type="SpriteFrames" id=2]
+
+[sub_resource type="GDScript" id=1]
+
+script/source = "extends Node2D
+var curHealth = 3;
+var whiteTime = 0;
+var goingLeft = true;
+onready var searchArea = $Area2D2
+onready var hurtSound = $HurtSound
+onready var vis = $VisibilityNotifier2D
+
+func _ready():
+	$Area2D.connect(\"body_entered\",self,\"expire\")
+
+var timeElapsed = 0
+func _physics_process(delta):
+	if !vis.is_on_screen():
+		queue_free()
+	#label.text = String(curHealth) + \"/\" + String(maxHealth)
+	#label.text = String(curTime)
+	if timeElapsed < .2:
+		if goingLeft:
+			self.position.x -= 5;
+		else:
+			self.position.x += 5;
+		timeElapsed+=delta;
+	elif timeElapsed < 1:
+		self.position.y -= 5
+		timeElapsed+=delta;
+	else:
+		if get_node(\"/root/Node2D/Player\").global_position.x > global_position.x:
+			self.position.x += 3
+		else:
+			position.x -= 3
+	if !self.use_parent_material:
+		whiteTime += delta
+		if whiteTime > .1:
+			self.use_parent_material = true
+
+func damage(amount):
+	curHealth -= amount
+	#print(\"Took damage!\")
+	if curHealth <= 0:
+		if !$ExplosionSound.playing:
+			set_physics_process(false)
+			self.visible = false
+			$Area2D.queue_free() #how to turn off monitoring, the broken way
+			$Explosion.emitting = true
+			$ExplosionSound.play()
+			$ExplosionSound.connect(\"finished\",self,\"queue_free\")
+	else:
+		#set false so the white tint shader will show up.
+		hurtSound.play()
+		self.use_parent_material = false
+		whiteTime = 0
+		
+func expire(obj):
+	if obj.has_method(\"enemy_touched\"):
+		obj.call(\"enemy_touched\",self)
+	elif obj.has_method(\"player_touched\"):
+		obj.call(\"player_touched\",self)"
+
+[sub_resource type="RectangleShape2D" id=3]
+
+extents = Vector2( 100, 100 )
+
+[node name="Node2D" type="KinematicBody2D"]
+script = SubResource( 1 )
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+material = ExtResource( 1 )
+use_parent_material = true
+scale = Vector2( 4, 4 )
+frames = ExtResource( 2 )
+frame = 2
+
+[node name="Area2D2" type="Area2D" parent="."]
+visible = false
+monitoring = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D2"]
+shape = SubResource( 3 )
+
+[node name="VisibilityNotifier2D" type="VisibilityNotifier2D" parent="."]
+

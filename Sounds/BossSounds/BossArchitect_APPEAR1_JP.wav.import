@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/BossArchitect_APPEAR1_JP.wav-29635a4fbd29b804f16e66a9053c98aa.sample"
+
+[deps]
+
+source_file="res://Sounds/BossSounds/BossArchitect_APPEAR1_JP.wav"
+dest_files=[ "res://.import/BossArchitect_APPEAR1_JP.wav-29635a4fbd29b804f16e66a9053c98aa.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

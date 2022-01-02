@@ -1,0 +1,92 @@
+[gd_scene load_steps=17 format=2]
+
+[ext_resource path="res://Stages_Reina/Enemies/Dinergate Spritesheet.png" type="Texture" id=1]
+[ext_resource path="res://Stages/EnemyBase.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Stages_Reina/Enemies/dinergate_ghostVariant.gd" type="Script" id=3]
+[ext_resource path="res://Stages_Reina/Enemies/Dinergate Ghost Spritesheet.png" type="Texture" id=4]
+[ext_resource path="res://addons/godot-next/gui/debug_label.gd" type="Script" id=5]
+
+[sub_resource type="AtlasTexture" id=1]
+atlas = ExtResource( 4 )
+region = Rect2( 0, 64, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=2]
+atlas = ExtResource( 4 )
+region = Rect2( 32, 64, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=3]
+atlas = ExtResource( 1 )
+region = Rect2( 0, 96, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=4]
+atlas = ExtResource( 1 )
+region = Rect2( 32, 96, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=5]
+atlas = ExtResource( 1 )
+region = Rect2( 64, 96, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=6]
+atlas = ExtResource( 1 )
+region = Rect2( 96, 96, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=7]
+atlas = ExtResource( 1 )
+region = Rect2( 0, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=8]
+atlas = ExtResource( 1 )
+region = Rect2( 32, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=9]
+atlas = ExtResource( 1 )
+region = Rect2( 64, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=10]
+atlas = ExtResource( 1 )
+region = Rect2( 96, 0, 32, 32 )
+
+[sub_resource type="SpriteFrames" id=11]
+animations = [ {
+"frames": [ SubResource( 1 ), SubResource( 2 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 3 ), SubResource( 4 ), SubResource( 5 ), SubResource( 6 ) ],
+"loop": true,
+"name": "Moving",
+"speed": 10.0
+}, {
+"frames": [ SubResource( 7 ), SubResource( 8 ), SubResource( 9 ), SubResource( 10 ) ],
+"loop": true,
+"name": "Shoot",
+"speed": 5.0
+} ]
+
+[node name="Ghost Dinergate" instance=ExtResource( 2 )]
+script = ExtResource( 3 )
+
+[node name="AnimatedSprite" parent="." index="0"]
+scale = Vector2( 4.5, 4.5 )
+frames = SubResource( 11 )
+offset = Vector2( 0, -9 )
+
+[node name="Area2D" parent="." index="2"]
+collision_layer = 10
+
+[node name="Tween" type="Tween" parent="." index="6"]
+
+[node name="DebugLabel" type="Label" parent="." index="7"]
+margin_left = -64.0
+margin_top = -96.0
+margin_right = 28.0
+margin_bottom = -65.0
+text = "curState = null
+"
+script = ExtResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+target_path = NodePath("..")
+properties = PoolStringArray( "curState" )

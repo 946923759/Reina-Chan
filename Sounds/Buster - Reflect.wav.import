@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/Buster - Reflect.wav-fc5cb1c3252e469894472877a8fbdd13.sample"
+
+[deps]
+
+source_file="res://Sounds/Buster - Reflect.wav"
+dest_files=[ "res://.import/Buster - Reflect.wav-fc5cb1c3252e469894472877a8fbdd13.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=true
+edit/normalize=true
+edit/loop=false
+compress/mode=0

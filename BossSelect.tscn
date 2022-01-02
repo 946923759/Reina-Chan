@@ -1,0 +1,257 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://MM2Font_Small.tres" type="DynamicFont" id=3]
+[ext_resource path="res://BossPortraitPositioner.gd" type="Script" id=4]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Node
+
+var grid;
+var selectionIcon
+var selection = 4
+
+func _ready():
+	grid = self.get_node(\"GridContainer\");
+	selectionIcon = self.get_node(\"Selection\");
+	setter(4);
+	set_process_input(true);
+	
+func _input(event):
+	if Input.is_action_pressed(\"ui_focus_next\"):
+		get_tree().change_scene(\"res://Stages/TestStage/TestStage.tscn\");
+	if Input.is_action_just_pressed(\"ui_up\"):
+		if selection > 2:
+			selection-=3
+			setter(selection)
+	if Input.is_action_just_pressed(\"ui_left\"):
+		if selection > 0:
+			selection-=1
+			setter(selection)
+	if Input.is_action_just_pressed(\"ui_right\"):
+		if selection < 8:
+			selection+=1
+			setter(selection)
+	if Input.is_action_just_pressed(\"ui_down\"):
+		if selection < 6:
+			selection+=3
+			setter(selection)
+		
+func setter(i):
+	var item = grid.get_child(i)
+	selectionIcon.rect_global_position = item.rect_global_position + Vector2(item.rect_size.x/2, item.rect_size.y-30);
+"
+
+[node name="Node" type="Node"]
+script = SubResource( 1 )
+
+[node name="Background" type="Polygon2D" parent="."]
+color = Color( 0, 0.0854492, 0.78125, 1 )
+polygon = PoolVector2Array( 1280, 0, 1280, 720, 0, 720, 0, 0 )
+uv = PoolVector2Array( 0, 0, 1280, 0, 1280, 720, 0, 720 )
+
+[node name="Select A Stage" type="AudioStreamPlayer" parent="."]
+autoplay = true
+
+[node name="AudioStreamPlayer2" type="AudioStreamPlayer" parent="."]
+
+[node name="GridContainer" type="GridContainer" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -500.0
+margin_top = -350.0
+margin_right = 500.0
+margin_bottom = 350.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+columns = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Reimu" type="Label" parent="GridContainer"]
+margin_right = 330.0
+margin_bottom = 230.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/font = ExtResource( 3 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/shadow_offset_y = 4
+text = "Grace"
+align = 1
+valign = 2
+
+[node name="Sprite" type="Sprite" parent="GridContainer/Reimu"]
+centered = false
+region_rect = Rect2( 0, 0, 120, 120 )
+script = ExtResource( 4 )
+
+[node name="Reimu2" type="Label" parent="GridContainer"]
+margin_left = 334.0
+margin_right = 664.0
+margin_bottom = 230.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/font = ExtResource( 3 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/shadow_offset_y = 4
+text = "Akira"
+align = 1
+valign = 2
+
+[node name="Sprite" type="Sprite" parent="GridContainer/Reimu2"]
+centered = false
+script = ExtResource( 4 )
+
+[node name="Reimu3" type="Label" parent="GridContainer"]
+margin_left = 668.0
+margin_right = 998.0
+margin_bottom = 230.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/font = ExtResource( 3 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/shadow_offset_y = 4
+text = "Yukari"
+align = 1
+valign = 2
+
+[node name="Sprite" type="Sprite" parent="GridContainer/Reimu3"]
+centered = false
+script = ExtResource( 4 )
+
+[node name="Youmu" type="Label" parent="GridContainer"]
+margin_top = 234.0
+margin_right = 330.0
+margin_bottom = 464.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/font = ExtResource( 3 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/shadow_offset_y = 4
+text = "Mia"
+align = 1
+valign = 2
+
+[node name="Sprite" type="Sprite" parent="GridContainer/Youmu"]
+centered = false
+script = ExtResource( 4 )
+
+[node name="Sanae" type="Label" parent="GridContainer"]
+margin_left = 334.0
+margin_top = 234.0
+margin_right = 664.0
+margin_bottom = 464.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/font = ExtResource( 3 )
+custom_colors/font_color = Color( 0.501961, 0.501961, 0.501961, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/shadow_offset_y = 4
+text = "..."
+align = 1
+valign = 2
+clip_text = true
+uppercase = true
+
+[node name="Sprite" type="Sprite" parent="GridContainer/Sanae"]
+centered = false
+script = ExtResource( 4 )
+
+[node name="Marisa" type="Label" parent="GridContainer"]
+margin_left = 668.0
+margin_top = 234.0
+margin_right = 998.0
+margin_bottom = 464.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/font = ExtResource( 3 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/shadow_offset_y = 4
+text = "Alice"
+align = 1
+valign = 2
+
+[node name="Sprite" type="Sprite" parent="GridContainer/Marisa"]
+centered = false
+script = ExtResource( 4 )
+
+[node name="Sumireko" type="Label" parent="GridContainer"]
+margin_top = 468.0
+margin_right = 330.0
+margin_bottom = 698.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/font = ExtResource( 3 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/shadow_offset_y = 4
+text = "Mira"
+align = 1
+valign = 2
+
+[node name="Sprite2" type="Sprite" parent="GridContainer/Sumireko"]
+centered = false
+script = ExtResource( 4 )
+
+[node name="Sumireko2" type="Label" parent="GridContainer"]
+margin_left = 334.0
+margin_top = 468.0
+margin_right = 664.0
+margin_bottom = 698.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/font = ExtResource( 3 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/shadow_offset_y = 4
+text = "Amanda"
+align = 1
+valign = 2
+
+[node name="Sprite2" type="Sprite" parent="GridContainer/Sumireko2"]
+centered = false
+script = ExtResource( 4 )
+
+[node name="Sumireko3" type="Label" parent="GridContainer"]
+margin_left = 668.0
+margin_top = 468.0
+margin_right = 998.0
+margin_bottom = 698.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/font = ExtResource( 3 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/shadow_offset_y = 4
+text = "Rin"
+align = 1
+valign = 2
+
+[node name="Sprite2" type="Sprite" parent="GridContainer/Sumireko3"]
+centered = false
+script = ExtResource( 4 )
+
+[node name="Selection" type="Container" parent="."]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -20.0
+margin_top = 95.0
+margin_right = 20.0
+margin_bottom = 135.0
+
+[node name="Polygon2D2" type="Polygon2D" parent="Selection"]
+color = Color( 0, 0, 0, 1 )
+offset = Vector2( 0, 30 )
+polygon = PoolVector2Array( -200, 0, 200, 0, 200, 10, -200, 10 )

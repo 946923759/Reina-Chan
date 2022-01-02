@@ -1,0 +1,68 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://Stages/IntroStageTest/Stage.gd" type="Script" id=1]
+[ext_resource path="res://Stages/IntroStageTest/3893.png" type="Texture" id=2]
+[ext_resource path="res://Player Files/Player.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Music/Stage_Intro2.ogg" type="AudioStream" id=4]
+[ext_resource path="res://Stages/IntroStageTest/CollisionLayer.tres" type="TileSet" id=5]
+[ext_resource path="res://Stages/IntroStageTest/ForegroundLayer.tres" type="TileSet" id=6]
+[ext_resource path="res://Various Objects/CameraController/CameraAdjuster.tscn" type="PackedScene" id=7]
+
+[sub_resource type="SegmentShape2D" id=1]
+a = Vector2( -96, 0 )
+b = Vector2( 96, 0 )
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource( 1 )
+
+[node name="Sprite" type="Sprite" parent="."]
+modulate = Color( 1, 1, 1, 0.584314 )
+scale = Vector2( 2.5, 2.5 )
+z_index = -2
+texture = ExtResource( 2 )
+centered = false
+offset = Vector2( -11, -69 )
+
+[node name="Player" parent="." instance=ExtResource( 3 )]
+position = Vector2( 3000, 2000 )
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 4 )
+autoplay = true
+
+[node name="TileMap" type="TileMap" parent="."]
+scale = Vector2( 2.5, 2.5 )
+z_index = -1
+tile_set = ExtResource( 5 )
+cell_size = Vector2( 16, 16 )
+format = 1
+tile_data = PoolIntArray( 1638420, 7, 0, 1638422, 7, 0, 1638424, 7, 0, 1638426, 7, 0, 1638428, 7, 0, 1638430, 7, 0, 1638432, 7, 0, 1638434, 7, 0, 1638436, 7, 0, 1638438, 7, 0, 1638440, 7, 0, 1638442, 7, 0, 1638444, 7, 0, 1638446, 7, 0, 1638448, 7, 0, 1638450, 7, 0, 1769488, 10, 0, 2031668, 9, 0, 2162742, 6, 0, 2293812, 1, 0, 2293816, 5, 0, 2359353, 5, 0, 2424890, 5, 0, 2555903, 0, 0, 2490369, 0, 0, 2490371, 0, 0, 2490372, 1, 0, 2490374, 0, 0, 2490375, 0, 0, 2490377, 0, 0, 2490379, 0, 0, 2490381, 1, 0, 2490383, 0, 0, 2490384, 11, 0, 2490427, 5, 0, 2555904, 2, 0, 2555906, 2, 0, 2555908, 2, 0, 2555910, 2, 0, 2555912, 2, 0, 2555914, 2, 0, 2555916, 2, 0, 2555918, 2, 0, 2555920, 2, 0, 2555922, 2, 0, 2555924, 2, 0, 2555926, 2, 0, 2555928, 2, 0, 2555930, 2, 0, 2555932, 2, 0, 2555934, 2, 0, 2555936, 2, 0, 2555938, 2, 0, 2555940, 2, 0, 2555942, 2, 0, 2555944, 2, 0, 2555946, 2, 0, 2555948, 3, 0, 2555964, 5, 0, 2621501, 5, 0, 2687038, 5, 0, 2752575, 5, 0, 2818112, 5, 0, 2883649, 5, 0, 2949186, 5, 0, 3014723, 5, 0, 3080260, 5, 0, 3080270, 536870921, 0, 3145797, 5, 0, 3211334, 5, 0, 3211337, 6, 0, 3211338, 6, 0, 3211339, 6, 0, 3211340, 6, 0, 3211341, 6, 0, 3276871, 5, 0, 3342410, 1, 0, 3342412, 0, 0, 3342414, 0, 0, 3407946, 2, 0, 3407948, 2, 0, 3407950, 2, 0, 3473480, 3, 0, 3473484, 4, 0 )
+
+[node name="ForegroundLayer" type="TileMap" parent="."]
+scale = Vector2( 2.5, 2.5 )
+z_index = 1
+tile_set = ExtResource( 6 )
+cell_size = Vector2( 16, 16 )
+collision_layer = 0
+collision_mask = 0
+format = 1
+tile_data = PoolIntArray( 2949188, 2, 0, 3014725, 2, 0, 3080262, 2, 0, 3145799, 2, 0, 3145800, 0, 0 )
+
+[node name="Area2D2" parent="." instance=ExtResource( 7 )]
+position = Vector2( 2083.61, 1314.58 )
+leftBound = 16
+topBound = 25
+rightBound = 52
+bottomBound = 39
+cameraScale = 40.0
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+position = Vector2( 2080, 1314.8 )
+rotation = 4.71239
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+shape = SubResource( 1 )
+one_way_collision = true

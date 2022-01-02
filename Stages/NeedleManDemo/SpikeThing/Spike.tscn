@@ -1,0 +1,85 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://Stages/NeedleManDemo/SpikeThing/1.png" type="Texture" id=1]
+[ext_resource path="res://Stages/NeedleManDemo/SpikeThing/2.png" type="Texture" id=2]
+[ext_resource path="res://Stages/NeedleManDemo/SpikeThing/3.png" type="Texture" id=3]
+
+[sub_resource type="SpriteFrames" id=1]
+
+animations = [ {
+"frames": [ ExtResource( 1 ), ExtResource( 2 ), ExtResource( 3 ), ExtResource( 3 ), ExtResource( 3 ), ExtResource( 2 ), ExtResource( 1 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[sub_resource type="GDScript" id=2]
+
+script/source = "extends AnimatedSprite
+
+export (float) var startDelay = 0.0
+var width
+var is_reflecting = true
+
+var area2D
+var parentID
+var shapeID
+var shape
+
+func _ready():
+	area2D = $Area2D
+	#width = collisionShape2d.shape.extents.x
+	width = 16
+	
+	# The shapes in the editor are helper nodes that attach the real shape at runtime.
+	# This means that if you adjust the shapes in the nodes, they don't actually change
+	# in-game. So the below code generates a real shape then attaches it to the Area2D.
+	shape = ConvexPolygonShape2D.new()
+	adjustHurtbox()
+	parentID = area2D.create_shape_owner(area2D)
+	shapeID = shape.get_rid().get_id()
+	area2D.shape_owner_add_shape(parentID, shape)
+	
+	#width = collisionShape2d.shape.points[0]*2
+	#self.connect(\"body_entered\",self,\"expire\")
+	$Area2D.connect(\"body_entered\",self,\"expire\")
+	self.connect(\"frame_changed\",self,\"adjustHurtbox\")
+	if startDelay > 0:
+		var timer = $Timer
+		timer.wait_time = startDelay
+		timer.connect(\"timeout\",self,\"play\")
+		timer.start()
+	else:
+		play()
+	
+func adjustHurtbox():
+	var height = self.frames.get_frame(\"default\", self.frame).get_height()
+	shape.set_point_cloud(PoolVector2Array([Vector2(0,0),Vector2(width,0),Vector2(width/2,height)]))
+	
+	# CollisionShape2D is not a real shape and does not exist in production.
+	# This is just so you can see the shape during debugging.
+	if OS.is_debug_build():
+		self.get_node(\"Area2D/CollisionShape2D FOR DEBUGGING\").set_shape(shape)
+
+	pass
+	
+func expire(obj):
+	#print(\"needle touched someting\")
+	if obj.has_method(\"player_touched\"):
+		obj.call(\"player_touched\",self)"
+
+[node name="AnimatedSprite" type="AnimatedSprite"]
+scale = Vector2( 4, 4 )
+frames = SubResource( 1 )
+centered = false
+script = SubResource( 2 )
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_layer = 3
+collision_mask = 3
+
+[node name="CollisionShape2D FOR DEBUGGING" type="CollisionShape2D" parent="Area2D"]
+
+[node name="Timer" type="Timer" parent="."]
+one_shot = true
+

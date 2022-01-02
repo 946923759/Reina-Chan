@@ -1,0 +1,66 @@
+[gd_scene load_steps=13 format=2]
+
+[ext_resource path="res://Stages/EnemyBase.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Stages/WoodManDemo/enemyBat/bat1.png" type="Texture" id=2]
+[ext_resource path="res://Stages/WoodManDemo/enemyBat/bat2.png" type="Texture" id=3]
+[ext_resource path="res://Stages/WoodManDemo/enemyBat/bat3.png" type="Texture" id=4]
+[ext_resource path="res://Stages/WoodManDemo/enemyBat/bat4.png" type="Texture" id=5]
+[ext_resource path="res://Stages/WoodManDemo/enemyBat/bat5.png" type="Texture" id=6]
+[ext_resource path="res://Stages/WoodManDemo/enemyBat/batFly1.png" type="Texture" id=7]
+[ext_resource path="res://Stages/WoodManDemo/enemyBat/batFly2.png" type="Texture" id=8]
+[ext_resource path="res://Stages/WoodManDemo/enemyBat/batFly3.png" type="Texture" id=9]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends \"res://Stages/EnemyBaseScript.gd\"
+
+var isFlyingTowardsPlayer = false
+
+func _ready():
+	sprite.connect(\"animation_finished\",self,\"animationFinished\")
+	$VisibilityNotifier2D.connect(\"viewport_entered\",self,\"enable\")
+	set_physics_process(false)
+	
+func enable():
+	set_physics_process(true)
+
+
+func _physics_process(delta):
+	if isFlyingTowardsPlayer:
+		#movX = get_node(\"/root/Node2D/Player\").global_position.x > global_position.x ? 100 : -100
+		var movX = (100 if get_node(\"/root/Node2D/Player\").global_position.x > global_position.x else -100)
+		var movY = (100 if get_node(\"/root/Node2D/Player\").global_position.y > global_position.y else -100)
+		move_and_slide(Vector2(movX,movY))
+		
+func animationFinished():
+	isFlyingTowardsPlayer = true
+	sprite.set_animation(\"flying\")
+"
+
+[sub_resource type="CircleShape2D" id=2]
+radius = 32.0
+
+[sub_resource type="SpriteFrames" id=3]
+animations = [ {
+"frames": [ ExtResource( 2 ), ExtResource( 3 ), ExtResource( 4 ), ExtResource( 5 ), ExtResource( 6 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 7 ), ExtResource( 8 ), ExtResource( 9 ) ],
+"loop": true,
+"name": "flying",
+"speed": 10.0
+} ]
+
+[node name="EnemyBat" instance=ExtResource( 1 )]
+position = Vector2( 0, 0 )
+script = SubResource( 1 )
+shapeOverride = SubResource( 2 )
+
+[node name="AnimatedSprite" parent="." index="0"]
+scale = Vector2( 4, 4 )
+frames = SubResource( 3 )
+animation = "flying"
+frame = 1
+
+[node name="VisibilityNotifier2D" type="VisibilityNotifier2D" parent="." index="7"]

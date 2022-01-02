@@ -1,0 +1,63 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://Various Objects/pickupHPSmall.png" type="Texture" id=1]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 16, 16 )
+
+[sub_resource type="AtlasTexture" id=2]
+atlas = ExtResource( 1 )
+region = Rect2( 0, 0, 10, 13 )
+
+[sub_resource type="AtlasTexture" id=3]
+atlas = ExtResource( 1 )
+region = Rect2( 0, 13, 10, 13 )
+
+[sub_resource type="SpriteFrames" id=4]
+animations = [ {
+"frames": [ SubResource( 2 ), SubResource( 3 ) ],
+"loop": true,
+"name": "default",
+"speed": 10.0
+} ]
+
+[sub_resource type="GDScript" id=5]
+script/source = "extends Area2D
+
+func _ready():
+# warning-ignore:return_value_discarded
+	self.connect(\"body_entered\",self,\"heal\")
+
+func heal(obj):
+	#print(\"Healing!\")
+	if obj.has_method(\"healPlayer\"):
+		obj.healPlayer(3)
+		self.get_parent().queue_free()
+"
+
+[sub_resource type="RectangleShape2D" id=6]
+extents = Vector2( 16, 16 )
+
+[node name="SmallHeal" type="RigidBody2D"]
+collision_layer = 32
+collision_mask = 32
+gravity_scale = 15.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 1 )
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+scale = Vector2( 4, 4 )
+frames = SubResource( 4 )
+frame = 1
+playing = true
+offset = Vector2( 0, -1 )
+
+[node name="Area2D" type="Area2D" parent="."]
+script = SubResource( 5 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource( 6 )

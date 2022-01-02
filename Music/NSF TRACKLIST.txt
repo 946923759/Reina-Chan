@@ -1,0 +1,29 @@
+R4MI
+0 -  Dream Chaser (BrightMan)
+11 - Intro
+16 - Stage Select
+17 - Boss
+20 - Weapon Get
+21 - Wily's Something
+22 - Wily's Maze
+59 - Cossack's Castle intro?
+60 - Wily's Castle Intro?
+67 - Title Screen
+69 - Final Boss
+80 - Cossack stage?
+81 - Bonus Boss
+82 - Title Screen?
+85 - Wily Boss
+87 - final wily stage
+88 - Wily Gauntlet (Gradius II: Overheat)
+89 - Alien Wily Boss
+91 - Game Over
+92 - Idk, I think it was used in a cutscene
+94 - Another wily's castle intro
+96 - Wily Boss again
+100 - Escape!
+101 - Ending 1
+102 - Ending cutscene 
+103 - Ending 2
+104 - Ending 3
+105 - Ending 4 (Rockman World V)

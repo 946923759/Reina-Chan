@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/FOOT_WATER.wav-1a4c8591e6535b609982a94adb9f8761.sample"
+
+[deps]
+
+source_file="res://Sounds/Foot Step/FOOT_WATER.wav"
+dest_files=[ "res://.import/FOOT_WATER.wav-1a4c8591e6535b609982a94adb9f8761.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=true
+edit/normalize=true
+edit/loop=false
+compress/mode=0

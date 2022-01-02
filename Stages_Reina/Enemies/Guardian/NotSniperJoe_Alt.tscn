@@ -1,0 +1,394 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://ParticleEffects/GlowShader.tres" type="Material" id=1]
+[ext_resource path="res://Sounds/Classic/EnemyDamage.wav" type="AudioStream" id=2]
+[ext_resource path="res://Stages_Reina/Enemies/Guardian/guardian.png" type="Texture" id=3]
+[ext_resource path="res://Stages_Reina/Enemies/Guardian/guardian_shoot.png" type="Texture" id=4]
+
+[sub_resource type="GDScript" id=1]
+script/source = "#extends \"res://Stages/EnemyBaseScript.gd\"
+extends KinematicBody2D
+
+export(int, 1, 50) var maxHealth = 10
+var curHealth;
+# warning-ignore:unused_class_variable
+var is_reflecting = false; #This is unused, it's just because the bullet class expects it to be there
+var _is_reflecting = false;
+#-1 to move left, 1 to move right
+enum DIRECTION {LEFT = -1, RIGHT = 1}
+export(DIRECTION) var facing = DIRECTION.LEFT
+
+#This is only if you didn't override objectTouched!
+#There might be cases where you need to override it.
+export(int,0,25) var player_damage = 1
+
+var bullet = preload(\"res://Stages_Reina/Enemies/bulletDinergate.tscn\")
+var smallExplosion = preload(\"res://Stages/EnemyExplodeSmall.tscn\")
+
+enum STATES {
+	GUARDING = 0,
+	WAIT,
+	SHOT_1,
+	SHOT_2,
+	SHOT_3,
+}
+var stateTimes = [
+	1.5,
+	1.0,
+	.5,
+	.5,
+	.5,
+]
+
+var state: int = 0
+var timer: float = 0.0
+
+onready var sprite = $AnimatedSprite
+onready var hurtSound = $HurtSound
+
+func _ready():
+# warning-ignore:return_value_discarded
+	$Area2D.connect(\"body_entered\",self,\"objectTouched\")
+	#$Area2D2.connect(\"body_entered\",self,\"touched_bullet\")
+	#add_collision_exception_with($Area2D2)
+	curHealth = maxHealth
+	#assert(curHealth)
+	sprite.flip_h = (facing == DIRECTION.RIGHT)
+	set_physics_process(true);
+# warning-ignore:return_value_discarded
+	#$Area2D.connect(\"body_entered\",self,\"objectTouched\")
+	sprite.play()
+	
+	
+#The duration that the sprite has been colored white.
+var whiteTime = 0
+func _process(delta):
+	#move_and_slide(Vector2(0,300))
+	#label.text = String(curHealth) + \"/\" + String(maxHealth)
+	#label.text = String(curTime)
+
+	if !sprite.use_parent_material:
+		whiteTime += delta
+		if whiteTime > .1:
+			sprite.use_parent_material = true
+	#if $DebugShowFacing.visible:
+	#	$DebugShowFacing.text = str(facing)
+	
+	if timer > 0:
+		timer-=delta
+		return
+	
+	#print(String(state))
+	match state:
+		STATES.SHOT_1, STATES.SHOT_2, STATES.SHOT_3:
+			_is_reflecting = false
+			var bi = bullet.instance()
+			var pos = position + Vector2(55*facing, 8)
+			
+			bi.position = pos
+			get_parent().add_child(bi)
+			bi.init(Vector2(5*facing,0))
+			
+			self.add_collision_exception_with(bi)# Make bullet and this not collide
+			#print(\"Fired bullet.\")
+		STATES.GUARDING:
+			_is_reflecting=true
+			sprite.set_animation(\"default\")
+		STATES.WAIT:
+			_is_reflecting=false
+			sprite.set_animation(\"shoot\")
+		_:
+			print(\"lol something is broken\")
+			
+	if state == 4:
+		state = 0
+	else:
+		state+=1
+	timer=float(stateTimes[state])
+
+func objectTouched(obj):
+	if obj.has_method(\"enemy_touched\"):
+		obj.enemy_touched_alt(self,false)
+	elif obj.has_method(\"player_touched\"): #If enemy touched player
+		obj.call(\"player_touched\",self,player_damage)
+
+
+#We want an isAlive var so we can play the death animation only one time
+var isAlive = true
+#damage is called by the player weapon, so don't rename it.
+func damage(amount):
+	curHealth -= amount
+	#print(\"Took damage!\")
+	if curHealth <= 0:
+		if isAlive:
+			killSelf()
+	else:
+		#set false so the white tint shader will show up.
+		hurtSound.play()
+		sprite.use_parent_material = false
+		whiteTime = 0
+
+func killSelf():
+	print(self.name+\" queued to be killed.\")
+	isAlive = false
+	set_physics_process(false)
+	sprite.visible = false
+	sprite.stop()
+	dropRandomItem()
+	var e = smallExplosion.instance()
+	e.position = position
+	#e.position.y-=32
+	get_parent().add_child(e)
+	
+	self.queue_free()
+
+var health = preload(\"res://Various Objects/HeartDrop.tscn\")
+var smallHealth = preload(\"res://Various Objects/SmallHeartDrop.tscn\")
+
+var ammo = preload(\"res://Various Objects/MPDrop.tscn\")
+var smallAmmo = preload(\"res://Various Objects/PickupAmmoSmall.tscn\")
+
+var oneUp = preload(\"res://Various Objects/1UP_Drop.tscn\")
+func dropRandomItem():
+	
+	#Nothing = 24/128
+	#Bonus Ball = 69/128     93
+	#Small Weapon = 15/128   108
+	#Small Health = 15/128   123
+	#Large Weapon = 2/128    125
+	#Large Health = 2/128    127
+	#1 Up = 1/128            128
+	var r = randi() % 128 + 1
+	#var r = 120
+	
+	if r < 93:    #Nothing
+		#print(\"Drop result: Nothing\")
+		return
+	elif r < 108: #Small weapon
+		#print(\"Drop result: Small weapon\")
+		var h = smallAmmo.instance()
+		h.position = position
+		h.linear_velocity = Vector2(0,-400)
+		get_parent().add_child(h)
+		pass
+	elif r < 123: #small health
+		#print(\"Drop result: small health\")
+		var h = smallHealth.instance()
+		h.position = position
+		h.linear_velocity = Vector2(0,-400)
+		get_parent().add_child(h)
+	elif r < 125: #Large weapon
+		var h = ammo.instance()
+		h.position = position
+		h.add_central_force(Vector2(0,-200))
+		get_parent().add_child(h)
+		pass
+	elif r < 127: #Large health
+		#print(\"Drop result: large health\")
+		var h = health.instance()
+		h.position = position
+		h.add_central_force(Vector2(0,-200))
+		get_parent().add_child(h)
+	else:         #1-Up
+		#print(\"Drop result: 1-Up\")
+		var h = oneUp.instance()
+		h.position = position
+		h.add_central_force(Vector2(0,-200))
+		get_parent().add_child(h)
+"
+
+[sub_resource type="SpriteFrames" id=2]
+animations = [ {
+"frames": [ ExtResource( 3 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 4 ) ],
+"loop": true,
+"name": "shoot",
+"speed": 5.0
+} ]
+
+[sub_resource type="RectangleShape2D" id=3]
+extents = Vector2( 48, 3 )
+
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 40, 20 )
+
+[sub_resource type="GDScript" id=5]
+script/source = "extends Area2D
+
+var WhereAmI: Vector2
+var parent
+func _ready():
+	#print(global_transform[2])
+	WhereAmI=global_transform[2]
+	parent = get_parent()
+
+func _physics_process(delta):
+	for body in get_overlapping_bodies():
+		#No need to calculate position for this one
+		if body.has_method(\"player_touched\"): #If enemy touched player
+			body.call(\"player_touched\",parent,parent.player_damage)
+			print(\"Touched player!\")
+			return
+		#If enemy touched bullet. Need to calculate position if reflecting
+		elif body.has_method(\"enemy_touched\"):
+			if parent._is_reflecting:
+				for body_owner_id in body.get_shape_owners():
+					for body_shape_id in body.shape_owner_get_shape_count(body_owner_id):
+						var body_owner = body.shape_owner_get_owner(body_owner_id)
+						var body_shape_2d = body.shape_owner_get_shape(body_owner_id, body_shape_id)
+						var body_owner_global_transform = body_owner.global_transform
+						var collision_points = _get_collision_points_with_shape(body_shape_2d, body_owner_global_transform)
+						if collision_points:
+							for point in collision_points:
+								print(\"Reflecting bullet!\")
+								print(point)
+								print(WhereAmI)
+								#I'm pretty sure there's some math way to do this so you don't need a conditional
+								if parent.facing == -1:
+									if point.x < WhereAmI.x:
+										body.call(\"enemy_touched_alt\",parent,true)
+									else:
+										body.call(\"enemy_touched_alt\",parent,false)
+								else:
+									if point.x > WhereAmI.x:
+										body.call(\"enemy_touched_alt\",parent,true)
+									else:
+										body.call(\"enemy_touched_alt\",parent,false)
+								return
+									
+			else:
+				body.call(\"enemy_touched\",parent)
+				print(\"Touched enemy (no reflect)\")
+				return
+		else:
+			print(\"Not a bullet, ignoring...\")
+			
+	#return
+	#TODO: This runs every frame... Even when the enemy isn't visible...
+	for body in get_overlapping_areas():
+		var bodyParent = body.get_parent()
+		#If enemy touched bullet. Need to calculate position if reflecting
+		if bodyParent.has_method(\"enemy_touched\"):
+			if parent._is_reflecting:
+				for body_owner_id in body.get_shape_owners():
+					for body_shape_id in body.shape_owner_get_shape_count(body_owner_id):
+						var body_owner = body.shape_owner_get_owner(body_owner_id)
+						var body_shape_2d = body.shape_owner_get_shape(body_owner_id, body_shape_id)
+						var body_owner_global_transform = body_owner.global_transform
+						var collision_points = _get_collision_points_with_shape(body_shape_2d, body_owner_global_transform)
+						if collision_points:
+							for point in collision_points:
+								#print(\"Reflecting bullet!\")
+								#print(point)
+								#print(WhereAmI)
+								#I'm pretty sure there's some math way to do this so you don't need a conditional
+								if parent.facing == -1:
+									if point.x < WhereAmI.x:
+										bodyParent.call(\"enemy_touched_alt\",parent,true)
+									else:
+										bodyParent.call(\"enemy_touched_alt\",parent,false)
+								else:
+									if point.x > WhereAmI.x:
+										bodyParent.call(\"enemy_touched_alt\",parent,true)
+									else:
+										bodyParent.call(\"enemy_touched_alt\",parent,false)
+								return
+									
+			else:
+				bodyParent.call(\"enemy_touched\",parent)
+				print(\"Touched enemy (no reflect)\")
+				return
+		#else:
+		#	print(\"Not a bullet, ignoring...\")
+	
+
+func _get_collision_points() -> Array:
+	var all_collision_points := []
+
+	for body in get_overlapping_bodies():
+		for body_owner_id in body.get_shape_owners():
+			for body_shape_id in body.shape_owner_get_shape_count(body_owner_id):
+				var body_owner = body.shape_owner_get_owner(body_owner_id)
+				var body_shape_2d = body.shape_owner_get_shape(body_owner_id, body_shape_id)
+				var body_owner_global_transform = body_owner.global_transform
+				var collision_points = _get_collision_points_with_shape(body_shape_2d, body_owner_global_transform)
+				if collision_points:
+					for point in collision_points:
+						all_collision_points.append(point)
+
+	return all_collision_points
+
+
+func _get_collision_points_with_shape(other_shape: Shape2D, other_global_transform: Transform2D) -> Array:
+	var all_collision_points := []
+
+	for owner_id in get_shape_owners():
+		for shape_id in shape_owner_get_shape_count(owner_id):
+			var owner = shape_owner_get_owner(owner_id)
+			var shape_2d = shape_owner_get_shape(owner_id, shape_id)
+			var owner_global_transform = owner.global_transform
+			var collision_points = shape_2d.collide_and_get_contacts(owner_global_transform,
+												other_shape,
+												other_global_transform)
+			if collision_points:
+				for point in collision_points:
+					all_collision_points.append(point)
+
+	return all_collision_points
+"
+
+[sub_resource type="RectangleShape2D" id=6]
+extents = Vector2( 48, 34 )
+
+[node name="Guardian" type="KinematicBody2D"]
+position = Vector2( 500, 500 )
+collision_layer = 2
+collision_mask = 2
+script = SubResource( 1 )
+maxHealth = 5
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+material = ExtResource( 1 )
+use_parent_material = true
+scale = Vector2( 4, 4 )
+frames = SubResource( 2 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( 0, 64 )
+shape = SubResource( 3 )
+
+[node name="HurtSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 2 )
+
+[node name="VisibilityEnabler2D" type="VisibilityEnabler2D" parent="."]
+process_parent = true
+physics_process_parent = true
+
+[node name="DebugShowFacing" type="Label" parent="."]
+visible = false
+margin_right = 40.0
+margin_bottom = 14.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_layer = 9
+collision_mask = 9
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2( 0, -28 )
+shape = SubResource( 4 )
+
+[node name="Area2D2" type="Area2D" parent="."]
+collision_layer = 8
+collision_mask = 8
+script = SubResource( 5 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D2"]
+position = Vector2( 0, 26 )
+shape = SubResource( 6 )

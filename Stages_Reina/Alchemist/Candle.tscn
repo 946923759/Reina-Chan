@@ -1,0 +1,60 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://Stages_Reina/Alchemist/Candle.png" type="Texture" id=1]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Area2D
+
+var smallExplosion = preload(\"res://Stages/EnemyExplodeSmall.tscn\")
+var smallAmmo = preload(\"res://Various Objects/PickupAmmoVerySmall.tscn\")
+
+func _ready():
+	connect(\"body_entered\",self,\"drop_item\")
+
+func drop_item(obj):
+	if obj.has_method(\"enemy_touched\"):
+		obj.queue_free()
+		var h = smallAmmo.instance()
+		h.position = position
+		h.linear_velocity = Vector2(0,-400)
+		get_parent().add_child(h)
+		
+		var e = smallExplosion.instance()
+		e.position = position
+		get_parent().add_child(e)
+		
+		queue_free()
+"
+
+[sub_resource type="AtlasTexture" id=2]
+atlas = ExtResource( 1 )
+region = Rect2( 0, 0, 8, 16 )
+
+[sub_resource type="AtlasTexture" id=3]
+atlas = ExtResource( 1 )
+region = Rect2( 8, 0, 8, 16 )
+
+[sub_resource type="SpriteFrames" id=4]
+animations = [ {
+"frames": [ SubResource( 2 ), SubResource( 3 ) ],
+"loop": true,
+"name": "default",
+"speed": 7.0
+} ]
+
+[sub_resource type="RectangleShape2D" id=5]
+extents = Vector2( 16, 32 )
+
+[node name="Candle" type="Area2D"]
+collision_layer = 8
+collision_mask = 8
+script = SubResource( 1 )
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+scale = Vector2( 4, 4 )
+frames = SubResource( 4 )
+frame = 1
+playing = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 5 )

@@ -1,0 +1,27 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://Player Files/8bitPlayer/8bitPlayer.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Stages/TestStage/Tileset.tres" type="TileSet" id=2]
+[ext_resource path="res://Stages_Reina/8bitBaseStage.tres.gd" type="Script" id=3]
+[ext_resource path="res://Stages/DebugRoomBorders.tscn" type="PackedScene" id=4]
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource( 3 )
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+bus = "Music"
+
+[node name="TileMap" type="TileMap" parent="."]
+scale = Vector2( 4, 4 )
+tile_set = ExtResource( 2 )
+cell_size = Vector2( 16, 16 )
+show_collision = true
+collision_layer = 48
+format = 1
+
+[node name="DebugRoomBorders" parent="." instance=ExtResource( 4 )]
+
+[node name="Player" parent="." instance=ExtResource( 1 )]
+position = Vector2( 638.132, 362.391 )
+
+[node name="BulletHolder" type="Node2D" parent="."]

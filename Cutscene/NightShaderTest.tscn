@@ -1,0 +1,15 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Cutscene/Backgrounds/21Jashin_testroom.png" type="Texture" id=1]
+[ext_resource path="res://stepmania-compat/smSprite.gd" type="Script" id=2]
+[ext_resource path="res://ParticleEffects/NightShader.tres" type="Material" id=3]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="Sprite" type="Sprite" parent="."]
+material = ExtResource( 3 )
+scale = Vector2( 1.25, 1.25 )
+texture = ExtResource( 1 )
+centered = false
+region_rect = Rect2( 0, 0, 1280, 720 )
+script = ExtResource( 2 )

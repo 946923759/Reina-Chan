@@ -1,0 +1,99 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://ParticleEffects/Explosion.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Sounds/Classic/Explosion.wav" type="AudioStream" id=2]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Node2D
+
+var tex = preload(\"res://Animations/mmExplodeSmall.png\")
+
+func _ready():
+	$ExplosionParticle.emitting = true
+	$ExplosionSound.play()
+	#$ExplosionSound.connect(\"finished\",self,\"queue_free\")
+
+#There are 5 frames and tex goes at 15fps, so it's showing the animation for one third of a second
+#So roughly every 66 milliseconds it changes frames
+
+var curFrame:int = 0
+var time:float = -1.0
+func _process(delta):
+	#return
+	time+=delta
+	curFrame = floor(time/0.066)
+	#curFrame = floor(time*2)
+	if curFrame > 10:
+		time=0
+		curFrame=0
+		set_process(false)
+		visible=false
+	if curFrame >= 0:
+		update()
+
+#So to draw ten explosions in order...
+#The previous explosion is drawn at the same time as the current one...
+#The opposite exposion is just the current one but negative
+
+var destRect = Vector2(24,24)
+var destPos = [
+	Vector2(0,-24),
+	Vector2(16,-16),
+	Vector2(24,0),
+	Vector2(16,16),
+	Vector2(0,24)
+]
+\"\"\"var destPos = [
+	Vector2(100,100),
+	Vector2(120,100),
+	Vector2(140,100),
+	Vector2(160,100),
+	Vector2(180,100)
+]\"\"\"
+
+#It's more like five separate draw calls 
+
+func drawFrame(pos,frame):
+	draw_texture_rect_region(tex,Rect2(destPos[pos]+Vector2(100,100),destRect),Rect2(24*frame,0,24,24))
+	draw_texture_rect_region(tex,Rect2(destPos[pos]*-1+Vector2(100,100),destRect),Rect2(24*frame,0,24,24))
+
+func _draw():
+	for i in range(0,5):
+		var nextFrame = curFrame-i
+		if nextFrame >= 0 and nextFrame < 5:
+			drawFrame(i,nextFrame)
+	#	if nextFrame >= 0:
+	#		drawFrame(i)
+		
+	#	for j in range(0,5):
+	#		drawFrame(j,curFrame)
+		#draw_texture_rect_region(tex,Rect2(destPos[0],destRect),Rect2(24*thisFrame,0,24,24))
+		#draw_texture_rect_region(tex,Rect2(destPos[1],destRect),Rect2(24*thisFrame,0,24,24))
+		#draw_texture_rect_region(tex,Rect2(destPos[2],destRect),Rect2(24*thisFrame,0,24,24))
+		#draw_texture_rect_region(tex,Rect2(destPos[3],destRect),Rect2(24*thisFrame,0,24,24))
+		#draw_texture_rect_region(tex,Rect2(destPos[4],destRect),Rect2(24*thisFrame,0,24,24))
+	#	for j in range(0,5):
+	#		if thisFrame < 5 and thisFrame >= 0:
+	#for x in range(0,5):
+	
+	#I couldn't figure out how to make it a loop so fuck it I don't care
+	#drawFrame(0,curFrame)
+	#var nextFrame = curFrame-1;
+	#if nextFrame >= 0:
+	#	drawFrame(1,nextFrame)
+	
+	
+	
+	#for i in range(curFrame-5,curFrame):
+	#	if i <= 4 and i>=0:
+	#		draw_texture_rect_region(tex,Rect2(destPos[i],destRect),Rect2(24*i,0,24,24))
+"
+
+[node name="Explosion" type="Node2D"]
+script = SubResource( 1 )
+
+[node name="ExplosionParticle" parent="." instance=ExtResource( 1 )]
+visible = false
+
+[node name="ExplosionSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 2 )

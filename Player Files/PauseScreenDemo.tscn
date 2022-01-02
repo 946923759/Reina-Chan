@@ -1,0 +1,220 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://MM2Font_Small.tres" type="DynamicFont" id=1]
+[ext_resource path="res://MM2Font_Smaller.tres" type="DynamicFont" id=2]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends CanvasLayer
+
+onready var optList = $m/VBoxContainer
+
+func _ready():
+	optList.get_child(0).modulate =Color(0.21,0.63,1,1)
+	$m.modulate.a=0
+	$m.visible=true
+	#set_process(false)
+	set_process_input(false)
+	#OnCommand()
+
+var time
+func updateTimer(time,timeWithDeath):
+	self.time=time
+	var text = \"YOUR TIME SO FAR:\\n\"
+	text+=Globals.format_time(
+		time,
+		Globals.TimeFormat.FORMAT_MINUTES|Globals.TimeFormat.FORMAT_SECONDS|Globals.TimeFormat.FORMAT_MILISECONDS
+	)
+	if time!=timeWithDeath:
+		text+=\"\\nDEATHS INCLUDED:\\n\"+Globals.format_time(
+			timeWithDeath,
+			Globals.TimeFormat.FORMAT_MINUTES|Globals.TimeFormat.FORMAT_SECONDS|Globals.TimeFormat.FORMAT_MILISECONDS
+		)
+	$m/timerLabel.text=text
+
+func OnCommand():
+	$Fadeout_Tween.interpolate_property($m, \"modulate:a\", null, 1, .2, Tween.TRANS_LINEAR, Tween.EASE_OUT)
+	$Fadeout_Tween.start()
+	set_process_input(true)
+	
+	$m/currentDifficulty.text=tr(Globals.difficultyToString())
+	if Globals.gameDifficulty > Globals.Difficulty.EASY:
+		$m/currentDifficulty.text+=\"\\nSpare Dummies: \"+String(CheckpointPlayerStats.playerLivesLeft)
+	$m/debugHelp.visible=OS.is_debug_build()
+
+func OffCommand():
+	$Fadeout_Tween.interpolate_property($m, \"modulate:a\", null, 0, .2, Tween.TRANS_LINEAR, Tween.EASE_OUT)
+	$Fadeout_Tween.start()
+	yield($Fadeout_Tween,\"tween_completed\")
+	set_process_input(false)
+	get_tree().paused = false
+	#return $Fadeout_Tween
+	
+var pos = 0
+func _input(_ev):
+	if _ev is InputEventJoypadMotion or _ev is InputEventMouseMotion: #XInput controllers are broken on Windows :P
+		return
+	if Input.is_action_pressed(\"ui_shift\") and Input.is_action_just_pressed(\"ui_down\"):
+		get_tree().paused = false
+		CheckpointPlayerStats.playerLivesLeft-=1
+# warning-ignore:return_value_discarded
+		get_tree().reload_current_scene()
+	elif Input.is_action_just_pressed(\"ui_pause\"):
+		OffCommand()
+	elif Input.is_action_just_pressed(\"ui_up\") and pos > 0:
+		optList.get_child(pos).modulate=Color(1,1,1,1)
+		pos-=1
+		optList.get_child(pos).modulate =Color(0.21,0.63,1,1)
+	elif Input.is_action_just_pressed(\"ui_down\") and pos < 2:
+		optList.get_child(pos).modulate=Color(1,1,1,1)
+		pos+=1
+		optList.get_child(pos).modulate =Color(0.21,0.63,1,1)
+	elif Input.is_action_just_pressed(\"ui_cancel\"):
+		OffCommand()
+	elif Input.is_action_just_pressed(\"ui_select\"):
+		if pos==0:
+			OffCommand()
+		elif pos==1:
+			CheckpointPlayerStats.setDeathTimer(time)
+			$Fadeout.visible = true
+			$Fadeout_Tween.interpolate_property($Fadeout, \"modulate\", Color(0,0,0,0), Color(0,0,0,1), .5, Tween.TRANS_LINEAR, Tween.EASE_OUT)
+			$Fadeout_Tween.start()
+			yield($Fadeout_Tween,\"tween_completed\")
+			get_tree().paused = false
+# warning-ignore:return_value_discarded
+			get_tree().reload_current_scene()
+		elif pos==2:
+			$Fadeout.visible = true
+			$Fadeout_Tween.interpolate_property($Fadeout, \"modulate\", Color(0,0,0,0), Color(0,0,0,1), .5, Tween.TRANS_LINEAR, Tween.EASE_OUT)
+			$Fadeout_Tween.start()
+			yield($Fadeout_Tween,\"tween_completed\")
+			Globals.save_my_game()
+			get_tree().paused = false
+# warning-ignore:return_value_discarded
+			get_tree().change_scene(\"res://TitleScreenV2.tscn\")
+	elif Input.is_action_just_pressed(\"DebugButton1\"):
+		if Globals.gameDifficulty < len(Globals.Difficulty)-1:
+			Globals.gameDifficulty+=1
+		else:
+			Globals.gameDifficulty=0
+		$m/currentDifficulty.text=tr(Globals.difficultyToString())
+		if Globals.gameDifficulty > Globals.Difficulty.EASY:
+			$m/currentDifficulty.text+=\"\\nSpare Dummies: \"+String(CheckpointPlayerStats.playerLivesLeft)
+	
+"
+
+[node name="PauseScreen" type="CanvasLayer"]
+pause_mode = 2
+script = SubResource( 1 )
+
+[node name="m" type="Node2D" parent="."]
+visible = false
+
+[node name="bg" type="Polygon2D" parent="m"]
+color = Color( 0, 0, 0, 0.658824 )
+polygon = PoolVector2Array( 0, 0, 1280, 0, 1280, 720, 0, 720 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="m"]
+margin_left = 448.0
+margin_top = 352.0
+margin_right = 832.0
+margin_bottom = 497.0
+custom_constants/separation = 20
+__meta__ = {
+"_edit_group_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="m/VBoxContainer"]
+margin_right = 384.0
+margin_bottom = 35.0
+custom_fonts/font = ExtResource( 1 )
+text = "continue"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="give up" type="Label" parent="m/VBoxContainer"]
+margin_top = 55.0
+margin_right = 384.0
+margin_bottom = 90.0
+custom_fonts/font = ExtResource( 1 )
+text = "retry"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="title screen" type="Label" parent="m/VBoxContainer"]
+margin_top = 110.0
+margin_right = 384.0
+margin_bottom = 145.0
+custom_fonts/font = ExtResource( 1 )
+text = "title screen"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="m"]
+margin_left = 11.1118
+margin_top = 645.326
+margin_right = 1040.11
+margin_bottom = 711.326
+custom_fonts/font = ExtResource( 2 )
+text = "tip: Press select plus down while paused to quickly retry.
+quick retry still costs 1 life.
+real pause screen coming eventually..."
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="timerLabel" type="Label" parent="m"]
+margin_left = 389.175
+margin_top = 28.0914
+margin_right = 900.175
+margin_bottom = 140.091
+custom_fonts/font = ExtResource( 2 )
+text = "YOUR TIME SO FAR:
+00:00.000
+
+DEATHS INCLUDED:
+00:00.000"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="debugHelp" type="Label" parent="m"]
+margin_left = 622.59
+margin_top = 63.7273
+margin_right = 1276.59
+margin_bottom = 175.727
+custom_fonts/font = ExtResource( 2 )
+text = "Debug: Press F1 to
+cycle difficulty."
+align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="currentDifficulty" type="Label" parent="m"]
+margin_left = 620.809
+margin_top = 4.92802
+margin_right = 1274.81
+margin_bottom = 116.928
+custom_fonts/font = ExtResource( 2 )
+text = "??? mode"
+align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Fadeout" type="Polygon2D" parent="."]
+visible = false
+modulate = Color( 1, 1, 1, 0 )
+color = Color( 0, 0, 0, 1 )
+polygon = PoolVector2Array( 0, 0, 1280, 0, 1280, 720, 0, 720 )
+
+[node name="Fadeout_Tween" type="Tween" parent="."]
+pause_mode = 2

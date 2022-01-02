@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/ItAllDependsOnYourSkill.wav-31df5188da8d504bf83c8b56cedf94a2.sample"
+
+[deps]
+
+source_file="res://Sounds/Announcer/Mission Start/ItAllDependsOnYourSkill.wav"
+dest_files=[ "res://.import/ItAllDependsOnYourSkill.wav-31df5188da8d504bf83c8b56cedf94a2.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=true
+edit/normalize=true
+edit/loop=false
+compress/mode=0

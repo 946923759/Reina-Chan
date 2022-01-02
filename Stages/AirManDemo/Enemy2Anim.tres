@@ -1,0 +1,15 @@
+[gd_resource type="SpriteFrames" load_steps=4 format=2]
+
+[ext_resource path="res://Stages/AirManDemo/head1.png" type="Texture" id=1]
+[ext_resource path="res://Stages/AirManDemo/head2.png" type="Texture" id=2]
+[ext_resource path="res://Stages/AirManDemo/head3.png" type="Texture" id=3]
+
+[resource]
+
+animations = [ {
+"frames": [ ExtResource( 1 ), ExtResource( 2 ), ExtResource( 3 ) ],
+"loop": true,
+"name": "default",
+"speed": 7.0
+} ]
+

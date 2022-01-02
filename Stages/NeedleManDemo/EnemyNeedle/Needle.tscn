@@ -1,0 +1,79 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Stages/NeedleManDemo/EnemyNeedle/EnemyNeedleShot1.png" type="Texture" id=1]
+
+[sub_resource type="GDScript" id=1]
+
+script/source = "extends Area2D
+
+var tex1 = preload(\"res://Stages/NeedleManDemo/EnemyNeedle/EnemyNeedleShot1.png\")
+var tex2 = preload(\"res://Stages/NeedleManDemo/EnemyNeedle/EnemyNeedleShot2.png\")
+var tex3 = preload(\"res://Stages/NeedleManDemo/EnemyNeedle/EnemyNeedleShot3.png\")
+onready var vis = $VisibilityNotifier2D
+const movementSpeed = 10
+var movement
+
+func _ready():
+	#set_process(false)
+	self.connect(\"body_entered\",self,\"expire\")
+	pass
+
+func type(t, pos):
+	#print(\"Type \"+String(t))
+	var sprite = $Sprite
+	if t == 1: #Upleft
+		sprite.texture = tex2
+		movement = Vector2(-movementSpeed,-movementSpeed)
+		self.position = Vector2(pos.x - 20, pos.y-20)
+	elif t == 2: #Up
+		sprite.texture = tex3
+		movement = Vector2(0,-movementSpeed)
+		self.position = Vector2(pos.x, pos.y - 20)
+	elif t == 3: #UpRight
+		sprite.texture = tex2
+		sprite.flip_h = true
+		movement = Vector2(movementSpeed,-movementSpeed)
+		self.position = Vector2(pos.x+20,pos.y-20)
+	elif t == 4: #Right
+		sprite.texture = tex1
+		sprite.flip_h = true
+		movement = Vector2(movementSpeed,0)
+		self.position = Vector2(pos.x+20,pos.y)
+	else: #Left
+		sprite.texture = tex1
+		movement = Vector2(-movementSpeed,0)
+		self.position = Vector2(pos.x - 20, pos.y)
+	set_physics_process(true)
+	#no need, already true
+	#set_process(true)
+	
+func _physics_process(delta):
+	if !vis.is_on_screen():
+		queue_free()
+	#move_and_collide(movement)
+	position+=movement
+
+
+func expire(obj):
+	if obj.has_method(\"player_touched\"):
+		obj.call(\"player_touched\",self)
+	#print(\"Needle touched something\")
+	queue_free()"
+
+[sub_resource type="RectangleShape2D" id=2]
+
+extents = Vector2( 4, 4 )
+
+[node name="Node" type="Area2D"]
+script = SubResource( 1 )
+
+[node name="VisibilityNotifier2D" type="VisibilityNotifier2D" parent="."]
+
+[node name="Sprite" type="Sprite" parent="."]
+scale = Vector2( 4, 4 )
+texture = ExtResource( 1 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+scale = Vector2( 4, 4 )
+shape = SubResource( 2 )
+

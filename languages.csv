@@ -1,0 +1,31 @@
+keys;en
+AudioVolume;Music Volume
+SFXVolume;SFX Volume
+isFullscreen;Full Screen
+playCutscenes;Play Cutscenes
+playCutscenes_Desc;Play cutscenes at the beginning of a stage and before a boss.
+textSpeed;Cutscene Speed
+flipButtons;Flip Buttons
+flipButtons_Desc;Flip the jump/shoot button.
+showTimer;Show Timer
+showTimer_Desc;Show a timer in the bottom right that counts how long you've been playing a stage.
+SFA3Announcer;SFA3 Announcer
+SFA3Announcer_Desc;Play random round call announcements from Street Fighter Alpha 3 instead of the boss warning sirens.
+VoiceVolume;Voices Volume
+VoiceVolume_Desc;Control the volume of the boss intro voice and announcement.
+BEGINNER;Beginner
+EASY;Easy
+MEDIUM;Medium
+HARD;Hard
+SUPERHERO;404 Not Found
+desc_BEGINNER;Infinite lives and bullets, rapidfire buster. Recommended for game journalists.
+desc_EASY;Infinite lives, infinite bullets.
+desc_MEDIUM;Limited to 3 shots at a time. Recommended for the average player.
+desc_HARD;3 shots, enemies do 1.5x damage.
+desc_SUPERHERO;Health is capped at half, 3 shots, enemies do 2x damage.
+Jukebox;Jukebox
+TestStage;Test Stage
+ZeroTest;Zero Test
+CustomStage;Load Custom Stage
+Credits;Credits
+StageArchitect.tscn;Architect

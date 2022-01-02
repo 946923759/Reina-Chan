@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/1up.wav-aa53a25b0ee9e2c0150282b3195d3eb7.sample"
+
+[deps]
+
+source_file="res://Sounds/Classic/1up.wav"
+dest_files=[ "res://.import/1up.wav-aa53a25b0ee9e2c0150282b3195d3eb7.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

@@ -1,0 +1,127 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://Sounds/Enemy - Hurt.wav" type="AudioStream" id=1]
+[ext_resource path="res://ParticleEffects/Explosion.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Sounds/Enemy - Explosion.wav" type="AudioStream" id=3]
+[ext_resource path="res://Stages/NeedleManDemo/EnemySpinnyGuy/Animation.tres" type="SpriteFrames" id=4]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends KinematicBody2D
+
+export (bool) var is_facing_left = false
+
+var ball = preload(\"res://Stages/NeedleManDemo/EnemySpinnyGuy/ball.tscn\")
+var highlightMaterial = preload(\"res://ParticleEffects/GlowShader.tres\")
+onready var timer = $Timer
+onready var highlightTimer = $highlightTimer
+onready var hurtSound = $AudioStreamPlayer2D
+onready var anim = $AnimatedSprite
+var is_reflecting = true
+var curHealth = 10
+
+func _ready():
+	$Area2D.connect(\"body_entered\",self,\"expire\")
+	anim.connect(\"animation_finished\",self,\"animationFinished\")
+	timer.connect(\"timeout\",self,\"reset\")
+	$highlightTimer.connect(\"timeout\",self,\"setMaterial\")
+	set_physics_process(true);
+	
+	#Set the AnimatedSprite to use the same shape as Area2D
+	#var area2D = $Area2D
+	#var parentID
+	#var shapeID = area2D.shape_find_owner(0)
+	#var shape = 
+	
+	#parentID = area2D.create_shape_owner(self)
+	#area2D.shape_owner_add_shape(parentID, shapeID)
+	
+	if is_facing_left:
+		anim.flip_h = true
+		anim.offset.x = 10
+	anim.play()
+	
+func _physics_process(delta):
+	move_and_slide(Vector2(0,1000), Vector2(0, -1))
+
+func reset():
+	anim.frame = 0
+	is_reflecting = true
+	
+func animationFinished():
+	var bi = ball.instance()
+	bi.position = self.position
+	get_parent().add_child(bi)
+	bi.init(is_facing_left)
+	timer.start()
+	is_reflecting = false
+	
+
+func damage(amount):
+	curHealth -= amount
+	#print(\"Took damage!\")
+	#$Label.text = String(curHealth)
+	if curHealth <= 0:
+		#queue_free()
+		anim.set_animation(\"invis\")
+		#how to turn off monitoring, the broken way
+		#This causes a race condition where queue_free can be pressed twice
+		$Area2D.queue_free() 
+		$Explosion.emitting = true
+		$ExplosionSound.play()
+		$ExplosionSound.connect(\"finished\",self,\"queue_free\")
+	else:
+		hurtSound.play()
+		anim.material = highlightMaterial
+		highlightTimer.start()
+
+func expire(obj):
+	if obj.has_method(\"player_touched\"): #If enemy touched player
+		obj.call(\"player_touched\",self)
+	elif obj.has_method(\"enemy_touched\"): #If enemy touched bullet
+		obj.call(\"enemy_touched\",self)
+
+func setMaterial():
+	anim.material = null
+"
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 13, 17 )
+
+[node name="AnimatedSprite" type="KinematicBody2D"]
+scale = Vector2( 4, 4 )
+collision_layer = 18
+collision_mask = 18
+script = SubResource( 1 )
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_layer = 11
+collision_mask = 11
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2( -1, 5 )
+shape = SubResource( 2 )
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.5
+one_shot = true
+
+[node name="highlightTimer" type="Timer" parent="."]
+wait_time = 0.1
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 1 )
+
+[node name="Explosion" parent="." instance=ExtResource( 2 )]
+position = Vector2( 0, 10 )
+scale = Vector2( 0.5, 0.5 )
+
+[node name="ExplosionSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 3 )
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+frames = ExtResource( 4 )
+offset = Vector2( -10, 0 )
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="."]
+position = Vector2( -1, 5 )
+shape = SubResource( 2 )

@@ -1,0 +1,494 @@
+[gd_scene load_steps=30 format=2]
+
+[ext_resource path="res://Various Objects/mission start2.png" type="Texture" id=1]
+[ext_resource path="res://Character Sprites/ump9/ump9.tres" type="SpriteFrames" id=2]
+[ext_resource path="res://Various Objects/mission start_EDITOR_ONLY.png" type="Texture" id=3]
+[ext_resource path="res://Character Sprites/HPBar_Player.png" type="Texture" id=4]
+[ext_resource path="res://Various Objects/mission start1.png" type="Texture" id=5]
+[ext_resource path="res://MM2Font_Smaller.tres" type="DynamicFont" id=6]
+[ext_resource path="res://Player Files/8bitPlayer/8bitPlayer.gd" type="Script" id=7]
+[ext_resource path="res://Player Files/CameraController_v2.gd" type="Script" id=8]
+[ext_resource path="res://Sounds/Classic/Die.wav" type="AudioStream" id=9]
+[ext_resource path="res://Sounds/Classic/Hurt.wav" type="AudioStream" id=10]
+[ext_resource path="res://Sounds/Classic/Floor.wav" type="AudioStream" id=11]
+[ext_resource path="res://Sounds/Classic/Shoot.wav" type="AudioStream" id=12]
+[ext_resource path="res://Sounds/Classic/S3K_Splash.wav" type="AudioStream" id=13]
+[ext_resource path="res://Player Files/PauseScreenDemo.tscn" type="PackedScene" id=14]
+[ext_resource path="res://ubuntu-font-family/UbuntuMono-B.ttf" type="DynamicFontData" id=15]
+[ext_resource path="res://Sounds/Classic/Victory.wav" type="AudioStream" id=16]
+[ext_resource path="res://Sounds/Classic/QuickSelectWeapon.wav" type="AudioStream" id=17]
+[ext_resource path="res://Sounds/Classic/HealthUp.wav" type="AudioStream" id=18]
+[ext_resource path="res://ParticleEffects/PaletteSwapShader.gdshader" type="Shader" id=19]
+[ext_resource path="res://Sounds/Classic/1up.wav" type="AudioStream" id=20]
+[ext_resource path="res://Player Files/8bitPlayer/FadeoutController.gd" type="Script" id=21]
+
+[sub_resource type="ShaderMaterial" id=1]
+shader = ExtResource( 19 )
+shader_param/clr1 = Color( 0.608, 0.467, 0.388, 1 )
+shader_param/clr2 = Color( 0.694, 0.627, 0.592, 1 )
+
+[sub_resource type="GDScript" id=2]
+script/source = "extends Node2D
+var tex = preload(\"res://Player Files/WeaponIcons.png\")
+onready var timer=$TimeToShow
+onready var sound=$SwitchSound
+var frame:int=0
+func _draw():
+	draw_texture_rect_region(tex,Rect2(-32,-32,64,64),Rect2(16*frame,0,16,16))
+	
+func showIcon(_frame):
+	frame=_frame
+	update()
+	sound.play()
+	visible=true
+	timer.start()
+	
+
+func _on_Timer_timeout():
+	visible=false
+"
+
+[sub_resource type="RectangleShape2D" id=3]
+extents = Vector2( 30, 48 )
+
+[sub_resource type="ShaderMaterial" id=4]
+shader = ExtResource( 19 )
+shader_param/clr1 = Color( 1, 0, 0, 1 )
+shader_param/clr2 = Color( 1, 0.47451, 0, 1 )
+
+[sub_resource type="GDScript" id=5]
+script/source = "extends Sprite
+
+onready var tween = $Tween
+onready var audio = $AudioStreamPlayer
+var piece = preload(\"res://Character Sprites/hp_piece.png\")
+var ammoPiece = preload(\"res://Character Sprites/ammo_piece.png\")
+#This would probably be better if it was an AnimatedSprite
+var normalBar = preload(\"res://Character Sprites/HPBar_Player.png\")
+var ammoBar = preload(\"res://Character Sprites/HPBar_Player_WithAmmo.png\")
+
+var curHP = 0
+var showingWeapon:bool=false
+var currentAmmo=32 #I think the limit is 32
+
+
+func _ready():
+	tween.connect(\"tween_completed\",self,\"tweenFinished\")
+	#show_weapon(true,24)
+
+func _draw():
+	#draw_texture(ammoBar,Vector2(-7,-43))
+	for i in range(curHP):
+		draw_texture(piece,Vector2(-4,23+2*-i))
+	if showingWeapon:
+		for i in range(currentAmmo):
+			draw_texture(ammoPiece,Vector2(8,23+2*-i))
+		
+func updateHP(newHP,shouldTween:bool=false):
+	if newHP > curHP and shouldTween:
+		var difference = newHP - curHP
+		tween.interpolate_property(self, 'curHP',
+		null, newHP, .05*difference, Tween.TRANS_QUAD, Tween.EASE_OUT);
+		tween.start();
+		audio.play()
+		set_process(true)
+	else:
+		curHP = newHP
+		update()
+		
+func updateAmmo(newAmmoPercent:float,shouldTween:bool=false):
+	var newAmmo = ceil(newAmmoPercent*24.0)
+	if newAmmo > currentAmmo and shouldTween:
+		var difference = newAmmo - currentAmmo
+		tween.interpolate_property(self, 'currentAmmo',
+		null, newAmmo, .05*difference, Tween.TRANS_QUAD, Tween.EASE_OUT);
+		tween.start();
+		audio.play()
+		set_process(true)
+	else:
+		currentAmmo = newAmmo
+		update()
+
+func show_weapon(b,newValue:float=-1):
+	if b:
+		texture=ammoBar
+	else:
+		texture=normalBar
+	showingWeapon=b
+	currentAmmo=ceil(newValue*24.0)
+	print(currentAmmo)
+	update()
+
+func _process(delta):
+	update()
+	
+func tweenFinished(_a,_b):
+	#Just in case.
+	update();
+	set_process(false)
+	audio.stop()
+"
+
+[sub_resource type="GDScript" id=6]
+script/source = "extends Node2D
+export (bool) var playSoundOnAnimationStart;
+
+
+func list_files_in_directory(path):
+	var files = []
+	var dir = Directory.new()
+	dir.open(path)
+	dir.list_dir_begin()
+
+	while true:
+		var file = dir.get_next()
+		if file == \"\":
+			break
+		elif !file.begins_with(\".\") and !file.ends_with(\".import\"):
+			files.append(file)
+	return files
+
+func _ready():
+	var tex1 = $MissionTex
+	var tex2 = $StartTex
+	var tex1width = tex1.texture.get_width()
+	var tex2width = tex2.texture.get_width()
+	var texVPos = 720/2 - tex1.texture.get_height() / 2
+	#var totalWidth = tex1width + tex2width
+	#TODO: change 720/2 to screen height
+	#tex1.position = Vector2(-tex1width,720/2);
+	var tween = $Tween
+	tween.interpolate_property(tex1, \"position\",
+		Vector2(-tex1width,texVPos), Vector2(1280/2-tex1width, texVPos), 1,
+		Tween.TRANS_QUAD, Tween.EASE_OUT)
+	tween.start()
+	if playSoundOnAnimationStart:
+		var files = list_files_in_directory(\"res://Sounds/Announcer/Mission Start/\")
+		randomize() #inits randi()
+		var sound = randi()%files.size()
+		print(files[sound])
+		var audio = load(\"res://Sounds/Announcer/Mission Start/\"+files[sound])
+		$AudioStreamPlayer.stream = audio;
+		$AudioStreamPlayer.play();
+	
+	var tween2 = $Tween2
+	#tween2.connect(\"tween_completed\",self,\"aaaa\")
+	tween2.interpolate_property(tex2, \"position\",
+		Vector2(1280+tex1width-tex2width,texVPos), Vector2(1280/2, texVPos), 1,
+		Tween.TRANS_QUAD, Tween.EASE_OUT)
+	tween2.start()
+	
+	yield(tween2,\"tween_completed\")
+	#Here is the part where it would flash white, but I don't know how to add glow yet
+	if !playSoundOnAnimationStart:
+
+		$AudioStreamPlayer.play()
+	
+	tween.interpolate_property(tex1,\"modulate\",
+		Color(1,1,1,1), Color(1,1,1,0), 1,
+		Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	tween.start()
+	
+	tween2.interpolate_property(tex2,\"modulate\",
+		Color(1,1,1,1), Color(1,1,1,0), 1,
+		Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	tween2.start()
+	
+	#lol
+	yield(tween2,\"tween_completed\")
+	tex1.visible = false
+	tex2.visible = false
+#func aaaa(a, b):
+#	$AudioStreamPlayer.play()
+#	tween2.disconnect(\"tween_completed\",self,\"aaaa\") #we don't want an endless loop
+	
+"
+
+[sub_resource type="DynamicFont" id=7]
+size = 30
+font_data = ExtResource( 15 )
+
+[sub_resource type="GDScript" id=8]
+script/source = "extends Label
+
+
+
+var timer
+func _ready():
+	#
+	if Globals.OPTIONS['showTimer']['value']==true or OS.is_debug_build():
+		timer = get_node(\"../../\") #This is getting the player node
+		set_process(true)
+	else:
+		visible=false
+		set_process(false)
+		
+func _process(_delta):
+	text=Globals.format_time(
+		timer.timer,
+		Globals.TimeFormat.FORMAT_MINUTES|Globals.TimeFormat.FORMAT_SECONDS|Globals.TimeFormat.FORMAT_MILISECONDS
+	)
+	var timerWithDeath = timer.timerWithDeath
+	text+=\"\\n\"+Globals.format_time(
+		timerWithDeath,
+		Globals.TimeFormat.FORMAT_MINUTES|Globals.TimeFormat.FORMAT_SECONDS|Globals.TimeFormat.FORMAT_MILISECONDS
+	)
+"
+
+[node name="Player" type="KinematicBody2D"]
+script = ExtResource( 7 )
+run_speed = 350
+jump_speed = -1200
+gravity = 3500
+
+[node name="Sprite" type="AnimatedSprite" parent="."]
+material = SubResource( 1 )
+scale = Vector2( 4, 4 )
+frames = ExtResource( 2 )
+animation = "Begin"
+
+[node name="WeaponSwitch" type="Node2D" parent="."]
+visible = false
+position = Vector2( 0, -128 )
+script = SubResource( 2 )
+
+[node name="TimeToShow" type="Timer" parent="WeaponSwitch"]
+one_shot = true
+
+[node name="SwitchSound" type="AudioStreamPlayer" parent="WeaponSwitch"]
+stream = ExtResource( 17 )
+volume_db = -5.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( 0, 16 )
+shape = SubResource( 3 )
+
+[node name="Camera2D" type="Camera2D" parent="."]
+current = true
+drag_margin_v_enabled = true
+drag_margin_top = 0.4
+script = ExtResource( 8 )
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="CameraBounds" type="Polygon2D" parent="CanvasLayer"]
+visible = false
+color = Color( 0.96875, 1, 0, 0.325961 )
+polygon = PoolVector2Array( 500, 200, 780, 200, 780, 520, 500, 520 )
+
+[node name="DebugButtonHelp" type="Label" parent="CanvasLayer"]
+visible = false
+margin_left = 721.264
+margin_top = 158.363
+margin_right = 1522.26
+margin_bottom = 339.363
+custom_fonts/font = ExtResource( 6 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_as_outline = 10
+text = "F1 - FREE ROAM
+F2 - NOCLIP
+F3 - warp to 0,0
+F4 - RAPIDFIRE
+f5 - refill health
+f6 - unlock camera
+f7 - lock camera to current pos
+f8 - exit game
+F9 - CYCLE  DEBUG DISP
+F10 - KILL SELF"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="DebugDisplay" type="Node2D" parent="CanvasLayer"]
+
+[node name="StateInfo" type="Label" parent="CanvasLayer/DebugDisplay"]
+margin_left = 99.0
+margin_top = 118.0
+margin_right = 900.0
+margin_bottom = 168.0
+custom_fonts/font = ExtResource( 6 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_as_outline = 10
+text = "PlayerState debug"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CameraInfo" type="Label" parent="CanvasLayer/DebugDisplay"]
+margin_left = 454.816
+margin_top = 50.6725
+margin_right = 1255.82
+margin_bottom = 100.673
+custom_fonts/font = ExtResource( 6 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_as_outline = 10
+text = "camera debug"
+align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="StateVelocity" type="Label" parent="CanvasLayer/DebugDisplay"]
+margin_left = 101.0
+margin_top = 21.0
+margin_right = 739.0
+margin_bottom = 71.0
+custom_fonts/font = ExtResource( 6 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_as_outline = 10
+text = "Velocity debug"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="StateTile" type="Label" parent="CanvasLayer/DebugDisplay"]
+margin_left = 99.0
+margin_top = 88.0
+margin_right = 737.0
+margin_bottom = 138.0
+custom_fonts/font = ExtResource( 6 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_as_outline = 10
+text = "Tile Debug"
+
+[node name="StatePosition" type="Label" parent="CanvasLayer/DebugDisplay"]
+margin_left = 101.0
+margin_top = 53.0
+margin_right = 739.0
+margin_bottom = 103.0
+custom_fonts/font = ExtResource( 6 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_as_outline = 10
+text = "Position Debug"
+
+[node name="FreeRoam" type="Label" parent="CanvasLayer/DebugDisplay"]
+margin_left = 617.0
+margin_top = 15.0
+margin_right = 1255.0
+margin_bottom = 65.0
+custom_fonts/font = ExtResource( 6 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_y = 0
+custom_constants/shadow_as_outline = 10
+text = "Free Roam"
+align = 2
+
+[node name="PositionOnScreen" type="Label" parent="CanvasLayer/DebugDisplay"]
+margin_left = 103.0
+margin_top = 243.0
+margin_right = 679.0
+margin_bottom = 278.0
+custom_fonts/font = ExtResource( 6 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_as_outline = 5
+text = "Onscreen pos"
+
+[node name="bar" type="Sprite" parent="CanvasLayer"]
+material = SubResource( 4 )
+position = Vector2( 45, 340.658 )
+scale = Vector2( 4, 4 )
+texture = ExtResource( 4 )
+centered = false
+offset = Vector2( -7, -43 )
+script = SubResource( 5 )
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="CanvasLayer/bar"]
+stream = ExtResource( 18 )
+
+[node name="Tween" type="Tween" parent="CanvasLayer/bar"]
+
+[node name="MissionStartAnim" type="Node2D" parent="CanvasLayer"]
+script = SubResource( 6 )
+
+[node name="MissionTex" type="Sprite" parent="CanvasLayer/MissionStartAnim"]
+position = Vector2( 165.403, -144.224 )
+texture = ExtResource( 5 )
+centered = false
+region_rect = Rect2( 320, 180, 640, 360 )
+
+[node name="StartTex" type="Sprite" parent="CanvasLayer/MissionStartAnim"]
+position = Vector2( 657.941, -144.224 )
+texture = ExtResource( 1 )
+centered = false
+
+[node name="Sprite3" type="Sprite" parent="CanvasLayer/MissionStartAnim"]
+visible = false
+modulate = Color( 0.21875, 1, 0, 1 )
+texture = ExtResource( 3 )
+offset = Vector2( 640, 360 )
+
+[node name="Tween" type="Tween" parent="CanvasLayer/MissionStartAnim"]
+
+[node name="Tween2" type="Tween" parent="CanvasLayer/MissionStartAnim"]
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="CanvasLayer/MissionStartAnim"]
+
+[node name="Fadeout" type="Polygon2D" parent="CanvasLayer"]
+visible = false
+modulate = Color( 1, 1, 1, 0 )
+color = Color( 0, 0, 0, 1 )
+polygon = PoolVector2Array( 0, 0, 1280, 0, 1280, 720, 0, 720 )
+script = ExtResource( 21 )
+
+[node name="Fadeout_Tween" type="Tween" parent="CanvasLayer/Fadeout"]
+
+[node name="Warning" type="Node2D" parent="CanvasLayer"]
+
+[node name="Timer" type="Label" parent="CanvasLayer"]
+margin_left = 1108.08
+margin_top = 640.028
+margin_right = 1264.08
+margin_bottom = 705.028
+custom_fonts/font = SubResource( 7 )
+text = "00:00.00
+00:00.00"
+script = SubResource( 8 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="LivesCounter" type="Node2D" parent="CanvasLayer"]
+
+[node name="Sprite" type="Sprite" parent="CanvasLayer/LivesCounter"]
+
+[node name="PauseScreen" parent="." instance=ExtResource( 14 )]
+
+[node name="ShotTimer" type="Timer" parent="."]
+wait_time = 0.5
+one_shot = true
+
+[node name="DieSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 9 )
+bus = "Player/Enemies"
+
+[node name="HurtSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 10 )
+volume_db = 3.0
+bus = "Player/Enemies"
+
+[node name="FootstepSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 11 )
+bus = "Player/Enemies"
+
+[node name="ShootSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 12 )
+bus = "Player/Enemies"
+
+[node name="SplashSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 13 )
+bus = "Player/Enemies"
+
+[node name="EventCheck" type="RayCast2D" parent="."]
+enabled = true
+cast_to = Vector2( 0, 44 )
+collision_mask = 4
+
+[node name="VictorySound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 16 )
+bus = "Music"
+
+[node name="OneUpSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 20 )
+bus = "Player/Enemies"
+
+[connection signal="timeout" from="WeaponSwitch/TimeToShow" to="WeaponSwitch" method="_on_Timer_timeout"]

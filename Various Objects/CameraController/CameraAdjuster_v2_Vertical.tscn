@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Various Objects/CameraController/cameraController.tres.gd" type="Script" id=1]
+[ext_resource path="res://Various Objects/shapes/v.tres" type="Shape2D" id=2]
+
+[node name="CameraAdjuster" type="Area2D"]
+collision_layer = 4
+collision_mask = 5
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = ExtResource( 2 )

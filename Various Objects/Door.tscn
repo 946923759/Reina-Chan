@@ -1,0 +1,60 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://Sounds/Classic/Door.wav" type="AudioStream" id=1]
+[ext_resource path="res://Various Objects/Door.tres.gd" type="Script" id=2]
+
+[sub_resource type="GDScript" id=1]
+script/source = "tool
+extends Sprite
+
+#There are 16 of these door thingies
+var piece = preload(\"res://Various Objects/doorGraphic.png\")
+var CONST_MAX_PIECES_TO_DRAW = 16
+var piecesToDraw = CONST_MAX_PIECES_TO_DRAW
+
+func _ready():
+	set_process(false)
+
+func _draw():
+	for i in range(piecesToDraw):
+		draw_texture(piece,Vector2(0,4*i))
+
+func _process(_delta):
+	update()
+"
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 16, 130 )
+
+[sub_resource type="SegmentShape2D" id=3]
+a = Vector2( 260, 0 )
+b = Vector2( 0, 0 )
+
+[node name="Door" type="Node2D"]
+script = ExtResource( 2 )
+tweenTime = 1.0
+
+[node name="Sprite" type="Sprite" parent="."]
+scale = Vector2( 4, 4 )
+centered = false
+region_rect = Rect2( 0, 0, 16, 65 )
+script = SubResource( 1 )
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2( 16, 130 )
+shape = SubResource( 2 )
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+collision_layer = 17
+collision_mask = 17
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2( 66, 0 )
+rotation = 1.5708
+shape = SubResource( 3 )
+one_way_collision = true
+
+[node name="Sound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 1 )

@@ -1,0 +1,40 @@
+[gd_scene load_steps=2 format=2]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Node2D
+
+export (int,\"Enable Blocks\",\"Disable Blocks\") var mode=0
+export (float,0.0,1.0) var time_between_blocks=0.03
+onready var children = get_child_count()
+
+func _ready():
+	set_process(false)
+
+func execute():
+	if time_between_blocks==0:
+		for child in get_children():
+			if mode==0:
+				child.enable();
+			else:
+				child.disable();
+	else:
+		set_process(true)
+		
+var i:int=0
+var t:float = 0.0
+func _process(delta):
+	t+=delta
+	if t>=time_between_blocks:
+		if mode==0:
+			get_child(i).enable()
+		else:
+			get_child(i).disable()
+		if i==children-1:
+			set_process(false)
+		else:
+			i+=1
+			t=0
+"
+
+[node name="BlockEnablerDisabler" type="Node2D"]
+script = SubResource( 1 )

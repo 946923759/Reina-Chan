@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/Get Weapon.wav-7f4a4a0b8d86d8ac7f53d87bd3a27333.sample"
+
+[deps]
+
+source_file="res://Sounds/Classic/Get Weapon.wav"
+dest_files=[ "res://.import/Get Weapon.wav-7f4a4a0b8d86d8ac7f53d87bd3a27333.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

@@ -1,0 +1,766 @@
+[gd_scene load_steps=22 format=2]
+
+[ext_resource path="res://TitleScreenV2.tres.gd" type="Script" id=1]
+[ext_resource path="res://MM2Font.tres" type="DynamicFont" id=2]
+[ext_resource path="res://Sounds/Menu - Picked.WAV" type="AudioStream" id=3]
+[ext_resource path="res://Sounds/Menu - Choosing.WAV" type="AudioStream" id=4]
+[ext_resource path="res://reina_logo.png" type="Texture" id=5]
+[ext_resource path="res://MM2Font_Smaller.tres" type="DynamicFont" id=6]
+[ext_resource path="res://megaman_2.ttf" type="DynamicFontData" id=7]
+[ext_resource path="res://Sounds/Classic/S3K_B8 - Chaos Emerald.wav" type="AudioStream" id=8]
+[ext_resource path="res://CheatCodeDetector.gd" type="Script" id=9]
+[ext_resource path="res://Sounds/Announcer/Mission Start/LetsParty.wav" type="AudioStream" id=10]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Label
+export var hasSubmenu = true;
+export(String) var submenuNode;
+
+#func action():
+#	get_tree().change_scene(\"res://BossSelect.tscn\");
+"
+
+[sub_resource type="GDScript" id=2]
+script/source = "extends Label
+export var hasSubmenu = false
+
+func action():
+	Globals.nextCutscene=\"cutscene1Data.json\"
+	get_tree().change_scene(\"res://Cutscene/CutsceneFromFile.tscn\")
+"
+
+[sub_resource type="GDScript" id=3]
+script/source = "extends Label
+export var hasSubmenu = true;
+export(String) var submenuNode = \"OptionsSubmenu\"
+"
+
+[sub_resource type="GDScript" id=4]
+script/source = "extends Label
+export var hasSubmenu = true;
+export(String) var submenuNode;
+"
+
+[sub_resource type="GDScript" id=5]
+script/source = "extends Label
+export var hasSubmenu = false
+
+func action():
+	OS.shell_open(\"http://gfl.amaryllisworks.pw/gfgame\")
+"
+
+[sub_resource type="GDScript" id=6]
+script/source = "extends Label
+export var hasSubmenu = false
+
+func action():
+	get_tree().quit();
+"
+
+[sub_resource type="GDScript" id=7]
+script/source = "extends VBoxContainer
+
+var font = preload(\"res://MM2Font.tres\")
+onready var parent = get_node(\"../\")
+onready var desc = get_node(\"/root/Node2D/DifficultySelect_Description\")
+#var propertyToAdjust=\"gameDifficulty\"
+
+func BitmapText(d):
+	var l = Label.new()
+	for property in d:
+		l.set(property,d[property])
+	l.set(\"custom_fonts/font\",font)
+	return l
+
+func _ready():
+	#var i = 0
+	for difficulty in Globals.Difficulty:
+		#print(tr(difficulty.to_upper()))
+		add_child(BitmapText({
+			\"text\":difficulty.to_upper(),
+			\"name\":difficulty
+		}))
+	parent.highlightList(self,Globals.gameDifficulty)
+	desc.text = \"desc_\"+Globals.difficultyToString(Globals.gameDifficulty)
+	#print(Globals.get(\"gameDifficulty\"))
+
+func input():
+	if Input.is_action_just_pressed(\"ui_down\") and Globals.gameDifficulty < len(Globals.Difficulty)-1:
+		Globals.gameDifficulty=Globals.gameDifficulty+1
+		parent.highlightList(self,Globals.gameDifficulty)
+		desc.text = \"desc_\"+Globals.difficultyToString(Globals.gameDifficulty)
+		parent.selectSound.play()
+	elif Input.is_action_just_pressed(\"ui_up\") and Globals.gameDifficulty > 0:
+		Globals.gameDifficulty=Globals.gameDifficulty-1
+		parent.highlightList(self,Globals.gameDifficulty)
+		desc.text = \"desc_\"+Globals.difficultyToString(Globals.gameDifficulty)
+		parent.selectSound.play()
+	elif Input.is_action_just_pressed(\"ui_select\") or Input.is_action_just_pressed(\"ui_pause\"):
+		Globals.nextStage = \"res://Stages_Reina/Architect/StageArchitect.tscn\"
+		get_tree().change_scene(\"res://StageIntro.tscn\")
+	
+func OnCommand():
+	parent.diffusealpha(desc,1)
+func OffCommand():
+	parent.diffusealpha(desc,0)
+"
+
+[sub_resource type="DynamicFont" id=8]
+size = 33
+font_data = ExtResource( 7 )
+
+[sub_resource type="GDScript" id=9]
+script/source = "extends VBoxContainer
+
+onready var parent = get_node(\"../\")
+var selection = 0
+#var propertyToAdjust=\"gameDifficulty\"
+
+var extras_table = {
+	\"Jukebox\":{
+		\"hidden\":false
+	},
+	\"TestStage\":{
+		\"hidden\":false
+	},
+	\"NSF_Test\":{
+		\"hidden\":false
+	},
+	\"ZeroTest\":{
+		\"hidden\":true
+	},
+	\"CustomStage\":{
+		\"hidden\":true #Because we need to check if PC
+	},
+	\"CustomCutscene\":{
+		\"hidden\":true
+	},
+	\"Credits\":{
+		\"hidden\":false
+	}
+}
+
+#BECAUSE IT'S NOT GODOT 4.0 YET AND I CAN'T PUT FUNCTIONS INSIDE DICTS
+func action_Jukebox():
+	pass
+func action_TestStage():
+	get_tree().change_scene(\"res://Stages_Reina/TestStage.tscn\");
+
+func action_ZeroTest():
+	get_tree().change_scene(\"res://Stages/TestStage/TestStage.tscn\")
+
+func unlock_ZeroTest()->bool:
+	return Globals.unlockedZeroMode
+	
+func action_Credits():
+	get_tree().change_scene(\"res://Credits.tscn\")
+
+func action_NSF_Test():
+	get_tree().change_scene(\"res://Stages_Reina/TestStage_NSF/TestStage_NSF_2.tscn\")
+
+func action_CustomStage():
+	var filePicker = parent.get_node(\"FileDialog_stage\")
+	if OS.has_feature(\"standalone\"):
+		filePicker.current_dir=OS.get_executable_path().get_base_dir()+\"/CustomStages/\"
+	filePicker.popup()
+	pass
+	
+func action_CustomCutscene():
+	var filePicker = parent.get_node(\"FileDialog_cutscene\")
+	if OS.has_feature(\"standalone\"):
+		filePicker.current_dir=OS.get_executable_path().get_base_dir()+\"/GameData/Cutscene/\"
+	filePicker.popup()
+	pass
+
+func unlock_CustomStage()->bool:
+	#if OS.has_feature(\"standalone\"):
+	if true:
+		match OS.get_name():
+			\"Windows\",\"WinRT\",\"X11\",\"macOS\",\"UWP\":
+				return true
+	return false
+	
+func unlock_CustomCutscene()->bool:
+	return unlock_CustomStage()
+
+func _ready():
+	#var i = 0
+	for option in extras_table:
+		if extras_table[option]['hidden']==false or call(\"unlock_\"+option):
+			add_child(parent.BitmapText({
+				\"text\":option,
+				\"name\":option
+			}))
+	parent.highlightList(self,0)
+	#print(Globals.get(\"gameDifficulty\"))
+
+func input():
+	if Input.is_action_pressed(\"ui_down\") and selection < get_child_count() - 1:
+		selection+=1
+		parent.highlightList(self,selection)
+		parent.selectSound.play()
+	elif Input.is_action_pressed(\"ui_up\") and selection > 0:
+		selection-=1
+		parent.highlightList(self,selection)
+		parent.selectSound.play()
+	elif Input.is_action_just_pressed(\"ui_select\"):
+		call(\"action_\"+get_child(selection).name)
+
+
+func _on_FileDialog_file_selected(path):
+	var scene = ResourceLoader.load(path)
+	#print(\"Loading \"+String(scene))
+	get_tree().change_scene_to(scene)
+	pass # Replace with function body.
+
+
+func _on_FileDialog_cutscene_file_selected(path):
+	#var scene = ResourceLoader.load(path)
+	#var a = path.split('/')
+	print(\"Loading \"+path)
+	#return
+	Globals.nextCutscene=path
+	get_tree().change_scene(\"res://Cutscene/CutsceneFromFile.tscn\")
+	pass # Replace with function body.
+"
+
+[sub_resource type="GDScript" id=10]
+script/source = "extends Node2D
+
+onready var parent = get_node(\"../\")
+var existing_children:int
+var displayedOptions:int=0
+
+#var optionsList:PoolStringArray = []
+func _ready():
+	#I miss StepMania... A lot...
+	\"\"\"
+	for i,option in ipairs(options) do
+		local tmpFrame = Def.ActorFrame{
+			Name=\"Frame\"..i;
+			Def.ActorMultiVertex{
+				Name=\"Vertex\";
+				InitCommand=function(subself)
+					subself:xy(-25,-20);
+					subself:SetDrawState{Mode=\"DrawMode_QuadStrip\"}
+					--subself:ztest(true):ztestmode(\"ZTestMode_WriteOnFail\");
+				end;
+				GainFocusCommand=function(q)
+					q:stoptweening():SetVertices({
+						{{0, 0, 0}, Color.HoloBlue},
+						{{40, 0, 0}, Color.HoloBlue},
+						{{0, 40, 0}, Color.HoloBlue},
+						{{0, 40, 0}, Color.HoloBlue}
+					})
+					q:decelerate(.45):SetVertices({
+						{{0, 0, 0}, Color.HoloBlue},
+						{{400+40, 0, 0}, Color.HoloBlue},
+						{{0, 40, 0}, Color.HoloBlue},
+						{{400-2, 40, 0}, Color.HoloBlue}
+					})
+				end;
+				LoseFocusCommand=function(q)
+					q:finishtweening():SetVertices({
+						{{0, 0, 0}, Color.HoloBlue},
+						{{0, 0, 0}, Color.HoloBlue},
+						{{0, 40, 0}, Color.HoloBlue},
+						{{0, 40, 0}, Color.HoloBlue}
+					})
+				end;
+			};
+			Def.BitmapText{
+				Name=\"Text\";
+				Font=\"Common Normal\";
+				Text=option.string;
+				InitCommand=cmd(horizalign,left);
+				GainFocusCommand=cmd(stoptweening;linear,.1;diffuse,Color.Black);
+				LoseFocusCommand=cmd(stoptweening;diffuse,color(\"ffffff\"));
+				--GainFocusCommand=cmd(stoptweening;linear,.1;zoom,1;diffuse,Color.Blue);
+				--LoseFocusCommand=cmd(stoptweening;linear,.1;zoom,0.9;diffuse,color(\"ffffff\"));
+			}
+		}
+		if option.optionType then
+				local clr = {.5,.5,.5,1};
+				tmpFrame[#tmpFrame+1] = Def.ActorMultiVertex{
+				Name=\"Vertex2\";
+				InitCommand=function(subself)
+					subself:xy(200-50,-20);
+					subself:SetDrawState{Mode=\"DrawMode_QuadStrip\"}
+					--subself:ztest(true):ztestmode(\"ZTestMode_WriteOnFail\");
+				end;
+				GainFocusCommand=function(q)
+					q:stoptweening():SetVertices({
+						{{0, 0, 0}, clr},
+						{{0, 0, 0}, clr},
+						{{-40, 40, 0}, clr},
+						{{-40, 40, 0}, clr}
+					})
+					q:sleep(.45/4):decelerate(.45*.7):SetVertices({
+						{{0, 0, 0}, clr},
+						{{200+40+25, 0, 0}, clr},
+						{{-40, 40, 0}, clr},
+						{{200-2+25, 40, 0}, clr}
+					})
+				end;
+				LoseFocusCommand=function(q)
+					q:finishtweening():SetVertices({
+						{{0, 0, 0}, {0,0,0,.5}},
+						{{0, 0, 0}, {0,0,0,.5}},
+						{{0, 40, 0}, {0,0,0,.5}},
+						{{0, 40, 0}, {0,0,0,.5}}
+					})
+				end;
+			};
+		
+			if option.optionType == \"int\" then
+				--[[tmpFrame[#tmpFrame+1] = rectGen(200,8,1,{.5,.5,.5,.5})..{
+					InitCommand=cmd(x,225);
+				};]]
+				--[[tmpFrame[#tmpFrame+1]=Def.Quad{
+					InitCommand=cmd(setsize,223,40;x,223+40;diffuse,Color.Red)
+				}]]
+				tmpFrame[#tmpFrame+1] = Def.Quad{
+					Name=\"SliderBack\";
+					InitCommand=cmd(setsize,1,8;zoomtowidth,150;diffuse,Color.Black;horizalign,left;x,240-150/2);
+					GainFocusCommand=cmd(stoptweening;sleep,.15;linear,.1;diffuse,Color.Black);
+					LoseFocusCommand=cmd(stoptweening;diffuse,Color.White);
+					
+				}
+				tmpFrame[#tmpFrame+1] = Def.Quad{
+					Name=\"Slider\";
+					InitCommand=cmd(setsize,1,8;zoomtowidth,150;diffuse,Color.HoloBlue;horizalign,left;x,240-150/2)
+				}
+				tmpFrame[#tmpFrame+1] = Def.BitmapText{
+					Font=\"Common Normal\";
+					Name='Value';
+					Text='100';
+					InitCommand=cmd(x,350;maxwidth,50);
+				}
+			else
+				--[[tmpFrame[#tmpFrame+1]=Def.Quad{
+					InitCommand=cmd(setsize,223,40;x,223+40;diffuse,Color.Red)
+				}]]
+				tmpFrame[#tmpFrame+1] = Def.BitmapText{
+					Font=\"Common Normal\";
+					Text='OFF';
+					Name='BoolOff';
+					InitCommand=cmd(x,223+40-223/2+223*.25;diffuse,Color.White);
+					--GainFocusCommand=cmd(stoptweening;linear,.1;diffuse,Color.Black);
+					GainFocusCommand=function(self)
+						self:stoptweening():linear(.1):diffuse({0,0,0,self:GetDiffuseAlpha()});
+					end;
+					LoseFocusCommand=function(self)
+						self:diffuse({1,1,1,self:GetDiffuseAlpha()});
+					end;
+				}
+				
+				tmpFrame[#tmpFrame+1] = Def.BitmapText{
+					Font=\"Common Normal\";
+					Text='ON';
+					Name='BoolOn';
+					InitCommand=cmd(x,223+40-223/2+223*.75;diffuse,{1,1,1,.5});
+					GainFocusCommand=function(self)
+						self:stoptweening():linear(.1):diffuse({0,0,0,self:GetDiffuseAlpha()});
+					end;
+					LoseFocusCommand=function(self)
+						self:diffuse({1,1,1,self:GetDiffuseAlpha()});
+					end;
+				}
+			end;
+		end;
+		oas[#oas+1] = tmpFrame;
+	end;
+	\"\"\"
+	existing_children=get_child_count()
+	
+	var i = 0
+	for option in Globals.OPTIONS:
+		
+		#Skip the fullscreen option on consoles
+		if OS.has_feature(\"console\") and option == \"isFullscreen\":
+			continue
+		
+		var optionItem = Node2D.new()
+		optionItem.name=\"Item\"+str(i)
+		optionItem.set_meta(\"opt_name\",option)
+		optionItem.position=Vector2(0,i*70)
+		var optionNameActor = parent.BitmapText({
+			\"name\":\"TextActor\",
+			\"text\":option
+		})
+		#print(Globals.OPTIONS[option])
+		if Globals.OPTIONS[option]['type']==\"int\":
+			optionItem.add_child(parent.BitmapText({
+				name=\"Value\",
+				text=str(Globals.OPTIONS[option]['value']),
+				rect_position=Vector2(600,0)
+			}))
+		else:
+			optionItem.add_child(parent.BitmapText({
+				\"name\":\"BoolOff\",
+				\"text\":\"Off\",
+				\"rect_position\":Vector2(600,0)
+			}))
+			optionItem.add_child(parent.BitmapText({
+				\"name\":\"BoolOn\",
+				\"text\":\"On\",
+				\"rect_position\":Vector2(750,0)
+			}))
+		
+		displayedOptions+=1
+		optionItem.add_child(optionNameActor)
+		i=i+1
+		
+		self.add_child(optionItem)
+		#optionsList.append(option)
+	highlightList()
+	realInitPos=position
+
+func OffCommand():
+	Globals.save_my_game()
+
+var selection = 0
+
+func highlightList():
+	for node in get_children():
+		if node.name == \"Item\"+str(selection):
+			node.set(\"modulate\", Color(1,1,1,1));
+		else:
+			node.set(\"modulate\", Color(.5,.5,.5,1));
+		if node.has_node(\"BoolOn\"):
+			var opt = node.get_meta(\"opt_name\")
+			#print(opt)
+			highlightBool(node,Globals.OPTIONS[opt]['value'])
+			
+func highlightBool(node,b):
+	node.get_node(\"BoolOff\").set(\"modulate\", Color(.5,.5,.5,1) if b else Color(1,1,1,1));
+	node.get_node(\"BoolOn\").set(\"modulate\", Color(.5,.5,.5,1) if not b else Color(1,1,1,1));
+
+#func updateInt
+
+#What
+var realInitPos
+func moveListUp():
+	#print(String(realInitPos))
+	var tween2 = get_node(\"../Tween2\");
+	var subList = self
+	tween2.interpolate_property(subList, 'position:y',
+	null,
+	realInitPos.y-100, #move 100px up
+	.25, Tween.TRANS_QUAD, Tween.EASE_OUT);
+	tween2.start();
+	
+func moveListDown():
+	var tween2 = get_node(\"../Tween2\");
+	var subList = self
+	tween2.interpolate_property(subList, 'position:y',
+	null,
+	realInitPos.y, #move to original position
+	.25, Tween.TRANS_QUAD, Tween.EASE_OUT);
+	tween2.start()
+
+func input():
+	if Input.is_action_pressed(\"ui_down\") and selection < displayedOptions-1:
+		selection+=1
+		highlightList()
+		if selection > 5:
+			moveListUp()
+		parent.selectSound.play()
+	elif Input.is_action_pressed(\"ui_up\") and selection > 0:
+		selection-=1
+		highlightList()
+		if selection < 6:
+			moveListDown()
+		parent.selectSound.play()
+	elif Input.is_action_pressed(\"ui_left\"):
+		var option = get_child(existing_children+selection).get_meta(\"opt_name\")
+		if Globals.OPTIONS[option]['type']==\"bool\":
+			Globals.OPTIONS[option]['value']=false
+			highlightBool(get_child(existing_children+selection),false)
+			if option==\"isFullscreen\":
+				Globals.set_fullscreen(false)
+		elif Globals.OPTIONS[option]['type']==\"int\":
+			var val = Globals.OPTIONS[option]['value']
+			if val > 0:
+				val-=10
+				Globals.OPTIONS[option]['value']=val
+				get_child(existing_children+selection).get_node(\"Value\").text=String(val)
+				if option==\"AudioVolume\" or option==\"SFXVolume\" or option==\"VoiceVolume\":
+					if parent.reinaAudioPlayer.nsf_player != null:
+						var realVolumeLevel = Globals.OPTIONS['AudioVolume']['value']*.6-60
+						parent.reinaAudioPlayer.nsf_player.set_volume(realVolumeLevel);
+					Globals.set_audio_levels()
+				if option == \"VoiceVolume\":
+					$Announcer.stop()
+					$Announcer.play()
+				#else:
+				#	print(\"a\")
+		else:
+			print(\"Unknown type! \"+Globals.OPTIONS[option]['type'])
+	elif Input.is_action_pressed(\"ui_right\"):
+		var option = get_child(existing_children+selection).get_meta(\"opt_name\")
+		if Globals.OPTIONS[option]['type']==\"bool\":
+			Globals.OPTIONS[option]['value']=true
+			highlightBool(get_child(existing_children+selection),true)
+			if option==\"isFullscreen\":
+				Globals.set_fullscreen(true)
+		elif Globals.OPTIONS[option]['type']==\"int\":
+			var val = Globals.OPTIONS[option]['value']
+			if val < 100:
+				val+=10
+				Globals.OPTIONS[option]['value']=val
+				get_child(existing_children+selection).get_node(\"Value\").text=String(val)
+				if option==\"AudioVolume\" or option==\"SFXVolume\" or option==\"VoiceVolume\":
+					if parent.reinaAudioPlayer.nsf_player != null:
+						var realVolumeLevel = Globals.OPTIONS['AudioVolume']['value']*.6-60
+						parent.reinaAudioPlayer.nsf_player.set_volume(realVolumeLevel);
+					Globals.set_audio_levels()
+				if option == \"VoiceVolume\":
+					$Announcer.stop()
+					$Announcer.play()
+	#elif Input.is_action_just_pressed(\"ui_select\"):
+	#	call(\"action_\"+get_child(selection).name)
+"
+
+[sub_resource type="GDScript" id=11]
+script/source = "extends AudioStreamPlayer
+
+#test
+
+
+func _on_Node_cheat_detected(code):
+	#pass # Replace with function body.
+	#print(code)
+	Globals.unlockedZeroMode=true
+	Globals.availableWeapons[1]=true
+	play()
+	connect(\"finished\",self, \"on_play_finished\")
+
+func on_play_finished():
+	get_tree().reload_current_scene()
+"
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource( 1 )
+nsf_music = "MM2.nsf"
+nsf_track_num = 1
+
+[node name="Polygon2D" type="Polygon2D" parent="."]
+color = Color( 0, 0, 0, 1 )
+polygon = PoolVector2Array( 0, 0, 1280, 0, 1280, 720, 0, 720 )
+
+[node name="reina_logo" type="Sprite" parent="Polygon2D"]
+position = Vector2( 640, 86.76 )
+scale = Vector2( 2, 2 )
+texture = ExtResource( 5 )
+
+[node name="Label" type="Label" parent="Polygon2D"]
+margin_left = 706.935
+margin_top = 128.693
+margin_right = 813.935
+margin_bottom = 148.693
+custom_fonts/font = ExtResource( 6 )
+text = "Demo 1"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label2" type="Label" parent="Polygon2D"]
+margin_left = 633.272
+margin_top = 645.9
+margin_right = 1271.27
+margin_bottom = 711.9
+custom_fonts/font = ExtResource( 6 )
+text = "this is a free fan game!
+girls' frontline is property of mica"
+align = 2
+valign = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MainMenu" type="VBoxContainer" parent="."]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_left = 35.0
+margin_top = 201.0
+margin_right = 636.0
+margin_bottom = 761.0
+focus_mode = 2
+mouse_filter = 0
+custom_constants/separation = 30
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="StartLabel" type="Label" parent="MainMenu"]
+margin_right = 601.0
+margin_bottom = 50.0
+custom_fonts/font = ExtResource( 2 )
+text = "start game"
+uppercase = true
+script = SubResource( 1 )
+submenuNode = "DifficultySelect"
+
+[node name="playIntro" type="Label" parent="MainMenu"]
+margin_top = 80.0
+margin_right = 601.0
+margin_bottom = 130.0
+custom_fonts/font = ExtResource( 2 )
+text = "play intro"
+uppercase = true
+script = SubResource( 2 )
+
+[node name="OptionsLabel" type="Label" parent="MainMenu"]
+margin_top = 160.0
+margin_right = 601.0
+margin_bottom = 210.0
+custom_fonts/font = ExtResource( 2 )
+text = "Options"
+uppercase = true
+script = SubResource( 3 )
+submenuNode = "OptionsList"
+
+[node name="JukeboxLabel" type="Label" parent="MainMenu"]
+margin_top = 240.0
+margin_right = 601.0
+margin_bottom = 290.0
+custom_fonts/font = ExtResource( 2 )
+text = "EXTRAS"
+uppercase = true
+script = SubResource( 4 )
+submenuNode = "Extras"
+
+[node name="Home page" type="Label" parent="MainMenu"]
+margin_top = 320.0
+margin_right = 601.0
+margin_bottom = 370.0
+custom_fonts/font = ExtResource( 2 )
+text = "homepage"
+uppercase = true
+script = SubResource( 5 )
+
+[node name="QuitLabel" type="Label" parent="MainMenu"]
+margin_top = 400.0
+margin_right = 601.0
+margin_bottom = 450.0
+custom_fonts/font = ExtResource( 2 )
+text = "Quit"
+uppercase = true
+script = SubResource( 6 )
+
+[node name="DifficultySelect" type="VBoxContainer" parent="."]
+margin_left = 35.0
+margin_top = 200.0
+margin_right = 75.0
+margin_bottom = 240.0
+custom_constants/separation = 30
+script = SubResource( 7 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="DifficultySelect_Description" type="Label" parent="."]
+margin_top = 550.0
+margin_right = 1280.0
+margin_bottom = 650.0
+custom_fonts/font = SubResource( 8 )
+text = "difficulty help text goes here"
+align = 1
+valign = 1
+autowrap = true
+clip_text = true
+__meta__ = {
+"_edit_use_anchors_": false,
+"_editor_description_": "sdfsdfsddfsfsdf"
+}
+
+[node name="Extras" type="VBoxContainer" parent="."]
+margin_left = 38.255
+margin_top = 200.0
+margin_right = 78.255
+margin_bottom = 240.0
+custom_constants/separation = 30
+script = SubResource( 9 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="OptionsList" type="Node2D" parent="."]
+position = Vector2( 0, 200 )
+script = SubResource( 10 )
+
+[node name="Polygon2D" type="Polygon2D" parent="OptionsList"]
+position = Vector2( 4, -88 )
+scale = Vector2( 1, 0.216667 )
+polygon = PoolVector2Array( 0, 0, 1280, 0, 1280, 720, 0, 720 )
+vertex_colors = PoolColorArray( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1 )
+
+[node name="Polygon2D2" type="Polygon2D" parent="OptionsList"]
+position = Vector2( 544, 461 )
+scale = Vector2( 0.584375, 0.216667 )
+polygon = PoolVector2Array( 0, 0, 1280, 0, 1280, 720, 0, 720 )
+vertex_colors = PoolColorArray( 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 )
+
+[node name="Announcer" type="AudioStreamPlayer" parent="OptionsList"]
+stream = ExtResource( 10 )
+bus = "Voices"
+
+[node name="Select" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 4 )
+bus = "Player/Enemies"
+
+[node name="Confirm" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 3 )
+bus = "Player/Enemies"
+
+[node name="Tween" type="Tween" parent="."]
+
+[node name="Tween2" type="Tween" parent="."]
+
+[node name="Tween3" type="Tween" parent="."]
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+bus = "Music"
+
+[node name="FileDialog_stage" type="FileDialog" parent="."]
+margin_left = 486.274
+margin_top = 111.266
+margin_right = 874.274
+margin_bottom = 599.266
+window_title = "Open a File"
+mode = 0
+access = 2
+filters = PoolStringArray( "*.tscn ; Godot Scenes" )
+current_dir = "/Programming/IDEs/Godot_v3.0.2-stable_mono_win64/Reina-Chan/Reina-Chan Godot Project"
+current_path = "/Programming/IDEs/Godot_v3.0.2-stable_mono_win64/Reina-Chan/Reina-Chan Godot Project/"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="FileDialog_cutscene" type="FileDialog" parent="."]
+margin_left = 486.274
+margin_top = 111.266
+margin_right = 874.274
+margin_bottom = 599.266
+window_title = "Open a File"
+mode = 0
+access = 2
+filters = PoolStringArray( "*.json ; Cutscene Scripts" )
+current_dir = "/Programming/IDEs/Godot_v3.0.2-stable_mono_win64/Reina-Chan/Reina-Chan Godot Project"
+current_path = "/Programming/IDEs/Godot_v3.0.2-stable_mono_win64/Reina-Chan/Reina-Chan Godot Project/"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AudioStreamPlayer2" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 8 )
+script = SubResource( 11 )
+
+[node name="Node" type="Node" parent="AudioStreamPlayer2"]
+script = ExtResource( 9 )
+codes = [ "UUDDLRLR" ]
+
+[connection signal="file_selected" from="FileDialog_stage" to="Extras" method="_on_FileDialog_file_selected"]
+[connection signal="file_selected" from="FileDialog_cutscene" to="Extras" method="_on_FileDialog_cutscene_file_selected"]
+[connection signal="cheat_detected" from="AudioStreamPlayer2/Node" to="AudioStreamPlayer2" method="_on_Node_cheat_detected"]

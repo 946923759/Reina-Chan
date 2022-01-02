@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/Zero - Charge 2.WAV-daa18e52542f8a11a58035f17952737c.sample"
+
+[deps]
+
+source_file="res://Sounds/Zero - Charge 2.WAV"
+dest_files=[ "res://.import/Zero - Charge 2.WAV-daa18e52542f8a11a58035f17952737c.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=true
+edit/normalize=true
+edit/loop=false
+compress/mode=0

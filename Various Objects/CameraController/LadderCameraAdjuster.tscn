@@ -1,0 +1,102 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Various Objects/shapes/CollsionShape2D_h.tscn" type="PackedScene" id=1]
+
+[sub_resource type="GDScript" id=1]
+script/source = "#tool
+extends Area2D
+signal camera_adjusted(camera,newBounds)
+#export (Array, int) var newBounds;
+#asdadsadaddsa
+export (int) var leftBound = 0;
+export (int) var topBound = 0;
+export (int) var rightBound = 0;
+export (int) var bottomBound = 0;
+export (float) var tweenTime = 1;
+export (bool) var freeze_player_during_transition=false
+const cameraScale = 64;
+#export(Shape2D) var shape;
+
+func _ready():
+	#The shape to trigger the camera. If the assertion is failing, the camera can't be triggered so it's useless.
+	#In other words, give your camera controller a shape! It's somewhere in your stage!
+	#assert(shape)
+	#if OS.is_debug_build():
+	#	self.get_node(\"CollisionShape2D\").set_shape(shape)
+	#self.shape_owner_add_shape(self.create_shape_owner(self), shape)
+# warning-ignore:return_value_discarded
+	self.connect(\"body_entered\",self,\"cam\")
+# warning-ignore:return_value_discarded
+	self.connect(\"body_exited\",self,\"cam\")
+	
+#func _process(delta):
+#	if Engine.editor_hint and shape != null:
+#		self.get_node(\"CollisionShape2D\").set_shape(shape)
+
+var disabled = false
+func cam(obj):
+	if obj.has_method(\"player_touched\"):
+		if obj.velocity.y > -4 and obj.velocity.y < 4:
+			return
+		#disabled = true
+		var cc = get_node(\"/root/Node2D/Player/Camera2D\")
+		if cc.is_tweening:
+			return
+		print(\"Touched camera trigger!\")
+		
+		#We don't want to overwrite leftBound,rightBound, etc so keep the changed variables in a new array.
+		var boundsArray = [null,null,null,null]
+		if rightBound == -999:
+			boundsArray[2] = leftBound*cameraScale+Globals.gameResolution.x
+		else:
+			boundsArray[2] = rightBound*cameraScale
+			
+		if leftBound == -999:
+			boundsArray[0] = rightBound*cameraScale-Globals.gameResolution.x
+		elif leftBound == -9999:
+			boundsArray[0] = cc.limit_right
+		else:
+			boundsArray[0] = leftBound*cameraScale;
+			#print(\"WARN: Left and right bounds are not defined. The camera won't work.\")
+		
+		#If the player is going up
+		if obj.velocity.y < 0:
+			
+			#Set bottom bound to location of the camera trigger
+			boundsArray[3]=global_position.y
+			
+			if topBound == -999:
+				boundsArray[1] = global_position.y-Globals.gameResolution.y
+			else:
+				boundsArray[1] = topBound*cameraScale;
+		else:
+			
+			#Set top bound to the location of the camera trigger
+			boundsArray[1]=global_position.y
+			
+			if bottomBound == -999:
+				boundsArray[3] = topBound*cameraScale+Globals.gameResolution.y
+			else:
+				boundsArray[3] = bottomBound*cameraScale
+		
+		print(\"LEFT: \"+ String(boundsArray[0])+ \" TOP: \"+String(boundsArray[1])+\" RIGHT: \"+String(boundsArray[2]) + \" BOTTOM: \"+String(boundsArray[3]))
+		assert(boundsArray[0] < boundsArray[2]);
+		assert(boundsArray[1] < boundsArray[3]);
+		
+		if freeze_player_during_transition:
+			obj.lockMovement(tweenTime,Vector2(0,0))
+		cc.adjustCamera(boundsArray, tweenTime)
+		emit_signal(\"camera_adjusted\",cc,boundsArray)
+"
+
+[node name="LadderCameraAdjuster" type="Area2D"]
+script = SubResource( 1 )
+__meta__ = {
+"_edit_group_": true
+}
+leftBound = 80
+topBound = 13
+rightBound = 100
+bottomBound = 36
+
+[node name="h" parent="." instance=ExtResource( 1 )]

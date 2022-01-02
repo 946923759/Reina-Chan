@@ -1,0 +1,49 @@
+[gd_scene load_steps=2 format=2]
+
+[sub_resource type="GDScript" id=1]
+script/source = "tool
+extends Node2D
+
+var size = 16*4
+
+var numberTex = preload(\"res://groove gauge 1x10.png\")
+
+func printNumber(_n,xPosition,yPosition):
+	var n = abs(_n);
+	var result:Array #Because PoolIntArrays don't have push_front for some reason
+	
+	if n > 0:
+		while n > 0:
+			#print(n % 10)
+			result.push_front(n%10)
+			n /= 10;
+	else:
+		result = [0]
+	
+	for i in range(len(result)):
+		#tex, dest, source
+		#Rect2 = x,y,width,height
+		draw_texture_rect_region(numberTex,
+			Rect2(i*35+xPosition,yPosition,31,24),
+			Rect2(0,24*result[i],31,24)
+		)
+
+func _draw():
+	if !OS.is_debug_build():
+		return
+	#printNumber(35160)
+	for i in range(20):
+		draw_line(Vector2(20*size*i,0),Vector2(20*size*i,12*size*64),Color.orange,20.0)
+		draw_line(Vector2(0,12*size*i),Vector2(20*size*64,12*size*i),Color.orange,20.0)
+	
+	for j in range(20):
+		for i in range(20):
+			printNumber(i*20,20*size*i,j*12*size+12*size/2-24)
+			printNumber(i*12,j*20*size+(20*size/2)-30,12*size*i+10)
+	#
+		
+"
+
+[node name="DebugRoomBorders" type="Node2D"]
+modulate = Color( 1, 1, 1, 0.501961 )
+script = SubResource( 1 )

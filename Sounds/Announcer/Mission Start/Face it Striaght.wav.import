@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/Face it Striaght.wav-22b9aa6dbb6336a156b24a5a77d3a0af.sample"
+
+[deps]
+
+source_file="res://Sounds/Announcer/Mission Start/Face it Striaght.wav"
+dest_files=[ "res://.import/Face it Striaght.wav-22b9aa6dbb6336a156b24a5a77d3a0af.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=true
+edit/normalize=true
+edit/loop=false
+compress/mode=0

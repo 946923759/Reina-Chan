@@ -1,0 +1,88 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://Stages/NeedleManDemo/EnemySpinnyGuy/ball1.png" type="Texture" id=1]
+[ext_resource path="res://Stages/NeedleManDemo/EnemySpinnyGuy/ball2.png" type="Texture" id=2]
+
+[sub_resource type="GDScript" id=1]
+
+script/source = "extends Area2D
+
+onready var vis = $VisibilityNotifier2D
+var shape
+var area2d
+var parentID
+
+func _ready():
+	
+	# The shapes in the editor are helper nodes that attach the real shape at runtime.
+	# This means that if you adjust the shapes in the nodes, they don't actually change
+	# in-game. So the below code generates a real shape then attaches it to the Area2D.
+	shape = CircleShape2D.new()
+	shape.radius = 20
+	#shape.position = Vector2(5.5,0.5)
+	
+	parentID = create_shape_owner(self)
+	#shapeID = shape.get_rid().get_id()
+	self.shape_owner_add_shape(parentID, shape)
+	
+	self.connect(\"body_entered\",self,\"expire\")
+
+var l
+func init(moveLeft):
+	l = moveLeft
+	if moveLeft:
+		#shape.transform = Transform2D(0, Vector2(-5.5,0.5))
+		shape_owner_set_transform(parentID, Transform2D(0, Vector2(-22,2)))
+		position += Vector2(-50,10);
+		$AnimatedSprite.flip_h = true
+	else:
+		position += Vector2(50,10);
+		shape_owner_set_transform(parentID, Transform2D(0, Vector2(22,2)))
+	set_physics_process(true)
+
+func _physics_process(delta):
+	var collision;
+	if l:
+		position+=Vector2(-25,0);
+		#collision = move_and_collide(Vector2(-25,0))
+	else:
+		position+=Vector2(25,0);
+		#collision = move_and_collide(Vector2(25,0))
+	if collision != null:
+		expire(collision.collider)
+		
+	if !vis.is_on_screen():
+		queue_free()
+		
+func expire(obj):
+	if obj.has_method(\"player_touched\"):
+		#print(String(OS.get_ticks_msec())+\" Bullet collided!\")
+		obj.call(\"player_touched\",self)
+	queue_free()"
+
+[sub_resource type="SpriteFrames" id=2]
+
+animations = [ {
+"frames": [ ExtResource( 1 ), ExtResource( 2 ) ],
+"loop": true,
+"name": "default",
+"speed": 15.0
+} ]
+
+[sub_resource type="CircleShape2D" id=3]
+
+radius = 20.0
+
+[node name="Area2D" type="Area2D"]
+script = SubResource( 1 )
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+scale = Vector2( 4, 4 )
+frames = SubResource( 2 )
+
+[node name="VisibilityNotifier2D" type="VisibilityNotifier2D" parent="."]
+
+[node name="CollisionShape2D FOR THE EDITOR ONLY" type="CollisionShape2D" parent="."]
+position = Vector2( 22, 2 )
+shape = SubResource( 3 )
+

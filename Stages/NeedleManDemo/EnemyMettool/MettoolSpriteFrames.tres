@@ -1,0 +1,27 @@
+[gd_resource type="SpriteFrames" load_steps=6 format=2]
+
+[ext_resource path="res://Stages/NeedleManDemo/EnemyMettool/1.png" type="Texture" id=1]
+[ext_resource path="res://Stages/NeedleManDemo/EnemyMettool/2.png" type="Texture" id=2]
+[ext_resource path="res://Stages/NeedleManDemo/EnemyMettool/3.png" type="Texture" id=3]
+[ext_resource path="res://Stages/NeedleManDemo/EnemyMettool/4.png" type="Texture" id=4]
+[ext_resource path="res://Stages/NeedleManDemo/EnemyMettool/5.png" type="Texture" id=5]
+
+[resource]
+
+animations = [ {
+"frames": [ ExtResource( 1 ), ExtResource( 2 ), ExtResource( 3 ) ],
+"loop": false,
+"name": "in",
+"speed": 15.0
+}, {
+"frames": [ ExtResource( 3 ), ExtResource( 2 ), ExtResource( 1 ) ],
+"loop": false,
+"name": "out",
+"speed": 15.0
+}, {
+"frames": [ ExtResource( 4 ), ExtResource( 5 ) ],
+"loop": true,
+"name": "walking",
+"speed": 15.0
+} ]
+

@@ -1,0 +1,31 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://init.png" type="Texture" id=1]
+[ext_resource path="res://Music/opening.wav" type="AudioStream" id=2]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Node
+#warning-ignore:return_value_discarded
+func _on_AudioStreamPlayer_finished():
+	var tween = $Tween
+	tween.interpolate_property($Sprite, \"modulate\", Color(1,1,1), Color(0,0,0), .5, Tween.TRANS_LINEAR, Tween.EASE_OUT)
+	tween.start()
+	yield(tween,\"tween_completed\")
+	#get_tree().change_scene(\"res://Intro.tscn\");
+	get_tree().change_scene(\"res://BetaDisclaimer.tscn\")
+"
+
+[node name="Node2D" type="Node"]
+script = SubResource( 1 )
+
+[node name="Sprite" type="Sprite" parent="."]
+texture = ExtResource( 1 )
+centered = false
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 2 )
+autoplay = true
+
+[node name="Tween" type="Tween" parent="."]
+
+[connection signal="finished" from="AudioStreamPlayer" to="." method="_on_AudioStreamPlayer_finished"]

@@ -1,0 +1,28 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Stages_Reina/Enemies/bulletDinergate.tscn" type="PackedScene" id=1]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends \"res://Stages_Reina/Enemies/bulletDinergate.gd\"
+
+var gravity: float
+
+var reflected:bool=false
+
+func init_b(t_movement,gravity):
+	movement = t_movement
+	self.gravity = gravity
+	
+	# warning-ignore:return_value_discarded
+	$Area2D.connect(\"body_entered\",self,\"objectTouched\")
+	set_physics_process(true)
+
+#bulletDinergate function is called after this
+func _physics_process(delta):
+	movement.y += gravity * delta
+"
+
+[node name="bullet" instance=ExtResource( 1 )]
+collision_layer = 1
+collision_mask = 1
+script = SubResource( 1 )

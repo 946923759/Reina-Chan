@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/ItsShowtime.wav-498fafc5b45636e42724c6ddc300b460.sample"
+
+[deps]
+
+source_file="res://Sounds/Announcer/Mission Start/ItsShowtime.wav"
+dest_files=[ "res://.import/ItsShowtime.wav-498fafc5b45636e42724c6ddc300b460.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=true
+edit/normalize=true
+edit/loop=false
+compress/mode=0

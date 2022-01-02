@@ -1,0 +1,103 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://Stages_Reina/Enemies/FloorMasters.png" type="Texture" id=1]
+[ext_resource path="res://Stages/EnemyBase.tscn" type="PackedScene" id=2]
+[ext_resource path="res://addons/godot-next/gui/debug_label.gd" type="Script" id=3]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends \"res://Stages/EnemyBaseScript.gd\"
+
+onready var player = get_node_or_null(\"/root/Node2D/Player\")
+onready var leftCast = $RayCast2D
+onready var rightCast = $RayCast2D2
+func _ready():
+	is_reflecting=true
+
+func _physics_process(_delta):
+	#48 is the height of the player, normally you'd do player.shape.extents but this is faster
+	if is_instance_valid(player) and player.is_on_floor() and player.position.y+48 > position.y-20+16 and player.position.y+48 < position.y+20+16:
+		if leftCast.is_colliding() and rightCast.is_colliding():
+			move_and_slide(Vector2(600*facing,100), Vector2(0, -1))
+	else:
+		move_and_slide(Vector2(300*facing,100), Vector2(0, -1))
+	#var lastCollision = get_slide_collision(0)
+	#if lastCollision and lastCollision
+
+	if is_on_wall():
+		facing = facing*-1
+	elif !leftCast.is_colliding() or !rightCast.is_colliding():
+		facing = facing*-1
+		#nobody is gonna notice right
+		move_and_slide(Vector2(600*facing,100), Vector2(0, -1))
+	#elif !is_on_floor():
+	#	facing = facing*-1
+		#sprite.flip_h = (facing == DIRECTION.RIGHT)
+
+	#print(position.y)
+"
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 32, 16 )
+
+[sub_resource type="AtlasTexture" id=3]
+atlas = ExtResource( 1 )
+region = Rect2( 0, 0, 16, 8 )
+
+[sub_resource type="AtlasTexture" id=4]
+atlas = ExtResource( 1 )
+region = Rect2( 16, 0, 16, 8 )
+
+[sub_resource type="AtlasTexture" id=5]
+atlas = ExtResource( 1 )
+region = Rect2( 0, 8, 16, 8 )
+
+[sub_resource type="AtlasTexture" id=6]
+atlas = ExtResource( 1 )
+region = Rect2( 16, 8, 16, 8 )
+
+[sub_resource type="SpriteFrames" id=7]
+animations = [ {
+"frames": [ SubResource( 3 ), SubResource( 4 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 5 ), SubResource( 6 ) ],
+"loop": true,
+"name": "red",
+"speed": 5.0
+} ]
+
+[node name="FloorMaster" instance=ExtResource( 2 )]
+script = SubResource( 1 )
+maxHealth = 3
+shapeOverride = SubResource( 2 )
+collisionOffset = Vector2( 0, 16 )
+
+[node name="AnimatedSprite" parent="." index="0"]
+position = Vector2( 0, 16 )
+scale = Vector2( 4, 4 )
+frames = SubResource( 7 )
+
+[node name="RayCast2D" type="RayCast2D" parent="." index="7"]
+position = Vector2( -32, 32 )
+enabled = true
+collision_mask = 16
+
+[node name="RayCast2D2" type="RayCast2D" parent="." index="8"]
+position = Vector2( 32, 32 )
+enabled = true
+collision_mask = 16
+
+[node name="DebugLabel" type="Label" parent="." index="9"]
+margin_top = -32.0
+margin_right = 64.0
+margin_bottom = -18.0
+text = "position = Vector2( 0, 0 )
+"
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+target_path = NodePath("..")
+properties = PoolStringArray( "position" )

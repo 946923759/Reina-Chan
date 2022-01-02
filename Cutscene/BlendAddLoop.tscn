@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Cutscene/VN MaskOverlay (stretch).png" type="Texture" id=1]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Light2D
+
+func _process(delta):
+	position.y += delta*100
+	if position.y > Globals.gameResolution.y+20:
+		position.y=-70
+"
+
+[node name="BlendAddLoop" type="Light2D"]
+position = Vector2( 641.31, -65.5161 )
+scale = Vector2( 2, 2 )
+texture = ExtResource( 1 )
+script = SubResource( 1 )

@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/Zero - Wall Jump.WAV-e060417ab22443cab1e8aa03c51f8931.sample"
+
+[deps]
+
+source_file="res://Sounds/Foot Step/Zero - Wall Jump.WAV"
+dest_files=[ "res://.import/Zero - Wall Jump.WAV-e060417ab22443cab1e8aa03c51f8931.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=true
+edit/normalize=true
+edit/loop=false
+compress/mode=0

@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/FOOT_TANK.wav-96279065e686c844d5dba3dc8c374ecb.sample"
+
+[deps]
+
+source_file="res://Sounds/Foot Step/FOOT_TANK.wav"
+dest_files=[ "res://.import/FOOT_TANK.wav-96279065e686c844d5dba3dc8c374ecb.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=true
+edit/normalize=true
+edit/loop=false
+compress/mode=0

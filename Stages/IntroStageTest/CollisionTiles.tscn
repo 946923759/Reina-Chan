@@ -1,0 +1,114 @@
+[gd_scene load_steps=12 format=2]
+
+[ext_resource path="res://Stages/IntroStageTest/carpet1.png" type="Texture" id=1]
+[ext_resource path="res://Stages/IntroStageTest/carpet2.png" type="Texture" id=2]
+[ext_resource path="res://Stages/IntroStageTest/brick1.png" type="Texture" id=3]
+[ext_resource path="res://Stages/IntroStageTest/leaves1.png" type="Texture" id=4]
+[ext_resource path="res://Stages/IntroStageTest/leaves2.png" type="Texture" id=5]
+[ext_resource path="res://Stages/IntroStageTest/stairs1.png" type="Texture" id=6]
+[ext_resource path="res://Stages/IntroStageTest/fence.png" type="Texture" id=7]
+[ext_resource path="res://Stages/IntroStageTest/brick4.png" type="Texture" id=8]
+[ext_resource path="res://Stages/IntroStageTest/arch.png" type="Texture" id=9]
+[ext_resource path="res://Stages/IntroStageTest/mainstage.png" type="Texture" id=10]
+[ext_resource path="res://Stages/IntroStageTest/mainstage_floor.png" type="Texture" id=11]
+
+[node name="Node2D" type="Node"]
+
+[node name="Sprite" type="Sprite" parent="."]
+texture = ExtResource( 1 )
+centered = false
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Sprite"]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Sprite/StaticBody2D"]
+polygon = PoolVector2Array( 0, 0, 32, 0, 32, 16, 0, 16 )
+
+[node name="Sprite9" type="Sprite" parent="."]
+position = Vector2( 64, 0 )
+texture = ExtResource( 1 )
+centered = false
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Sprite9"]
+visible = false
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Sprite9/StaticBody2D"]
+polygon = PoolVector2Array( 0, 0, 32, 0, 32, 16, 0, 16 )
+
+[node name="Sprite2" type="Sprite" parent="."]
+position = Vector2( 32, 0 )
+texture = ExtResource( 2 )
+centered = false
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Sprite2"]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Sprite2/StaticBody2D"]
+polygon = PoolVector2Array( 0, 0, 32, 0, 32, 16, 0, 16 )
+
+[node name="Sprite3" type="Sprite" parent="."]
+position = Vector2( 0, 16 )
+texture = ExtResource( 3 )
+centered = false
+
+[node name="Sprite4" type="Sprite" parent="."]
+position = Vector2( 0, 32 )
+texture = ExtResource( 4 )
+centered = false
+
+[node name="Sprite5" type="Sprite" parent="."]
+position = Vector2( 48, 32 )
+texture = ExtResource( 5 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 0, 0, 64, 48 )
+
+[node name="Sprite6" type="Sprite" parent="."]
+position = Vector2( 128, 32 )
+texture = ExtResource( 6 )
+centered = false
+region_rect = Rect2( 0, 0, 64, 48 )
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Sprite6"]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Sprite6/StaticBody2D"]
+polygon = PoolVector2Array( 0, 0, 0, 16, 16, 16 )
+
+[node name="Sprite7" type="Sprite" parent="."]
+position = Vector2( 0, 64 )
+texture = ExtResource( 7 )
+centered = false
+
+[node name="Sprite8" type="Sprite" parent="."]
+position = Vector2( 32, 64 )
+texture = ExtResource( 8 )
+centered = false
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Sprite8"]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Sprite8/StaticBody2D"]
+polygon = PoolVector2Array( 0, 0, 32, 0, 32, 32, 0, 32 )
+
+[node name="Sprite10" type="Sprite" parent="."]
+position = Vector2( 64, 64 )
+texture = ExtResource( 9 )
+centered = false
+
+[node name="MainStage" type="Sprite" parent="."]
+position = Vector2( 0, 128 )
+texture = ExtResource( 10 )
+centered = false
+
+[node name="StaticBody2D" type="StaticBody2D" parent="MainStage"]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="MainStage/StaticBody2D"]
+polygon = PoolVector2Array( 512, 128, 576, 128, 576, 176, 512, 176 )
+
+[node name="MainStageFloor" type="Sprite" parent="."]
+position = Vector2( 0, 304 )
+texture = ExtResource( 11 )
+centered = false
+
+[node name="StaticBody2D" type="StaticBody2D" parent="MainStageFloor"]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="MainStageFloor/StaticBody2D"]
+polygon = PoolVector2Array( 0, 0, 512, 0, 512, 16, 0, 16 )
+

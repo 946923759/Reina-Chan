@@ -1,0 +1,23 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Various Objects/shapes/h.tres" type="Shape2D" id=1]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Node2D
+var event_ID = Globals.EVENT_TILES.CHECKPOINT
+var disabled = false
+#Because \"Spawn Fail and Clear\" is too confusing
+export(bool) var spawn_eddie = false
+export(Vector2) var respawn_position = Vector2(0,0)
+"
+
+[node name="Node2D" type="StaticBody2D"]
+collision_layer = 4
+collision_mask = 4
+script = SubResource( 1 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = ExtResource( 1 )

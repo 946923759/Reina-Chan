@@ -1,0 +1,57 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://Various Objects/BossWarning/RandomAnnouncer.gd" type="Script" id=1]
+[ext_resource path="res://Various Objects/BossWarning/WARNING_new.gd" type="Script" id=2]
+[ext_resource path="res://Sounds/Siren.wav" type="AudioStream" id=3]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 32, 32 )
+
+[sub_resource type="GDScript" id=2]
+script/source = "extends Sprite
+
+var tex = preload(\"res://Various Objects/BossWarning/WARNING.png\")
+var toDraw = 0
+var CONST_IMG_WIDTH = 850
+
+var cropright:bool=false
+func _process(_delta):
+	update()
+#	pass
+
+func _draw():
+	#draw_texture_rect_region(tex,Rect2(Globals.SCREEN_CENTER_X+CONST_IMG_WIDTH/2,Globals.SCREEN_CENTER_Y-216/2,toDraw,216),Rect2(CONST_IMG_WIDTH-toDraw,0,toDraw,216))
+	if !cropright:
+		draw_texture_rect_region(tex,Rect2(Globals.SCREEN_CENTER_X-CONST_IMG_WIDTH/2,Globals.SCREEN_CENTER_Y-216/2,toDraw,216),Rect2(0,0,toDraw,216))
+	else:
+		#tex, dest rect, source rect?
+		draw_texture_rect_region(tex,
+			Rect2(Globals.SCREEN_CENTER_X+CONST_IMG_WIDTH/2-toDraw,Globals.SCREEN_CENTER_Y-216/2,toDraw,216),
+			Rect2(CONST_IMG_WIDTH-toDraw,0,toDraw,216)
+		)
+	
+	draw_rect(Rect2(Globals.SCREEN_CENTER_X-toDraw/2,Globals.SCREEN_CENTER_Y+120,toDraw,20),Color.red)
+"
+
+[node name="WARNING intro" type="StaticBody2D"]
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 2 )
+message = PoolStringArray( "portrait|pic_UMP9|pic_Architect", "speaker|Architect", "msg|Heee-ey, Griffin T-Dolls! Let\'s have some fun!", "speaker|UMP9", "msg|...Who is this weirdo\?" )
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+pause_mode = 2
+stream = ExtResource( 3 )
+bus = "Voices"
+script = ExtResource( 1 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( 32, 32 )
+shape = SubResource( 1 )
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 3
+
+[node name="Sprite" type="Sprite" parent="CanvasLayer"]
+region_rect = Rect2( 0, 0, 821, 216 )
+script = SubResource( 2 )

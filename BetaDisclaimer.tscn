@@ -1,0 +1,84 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://ubuntu-font-family/Ubuntu-B.ttf" type="DynamicFontData" id=1]
+[ext_resource path="res://loopingTextFade.gd" type="Script" id=2]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Node
+
+func _input(_event):
+	#Ignore alt key on this screen so Alt+Enter doesn't go forward
+	if (Input.is_action_just_pressed(\"ui_pause\") or Input.is_action_just_pressed(\"ui_select\")) and !Input.is_key_pressed(KEY_ALT):
+# warning-ignore:return_value_discarded
+		get_tree().change_scene(\"res://TitleScreenV2.tscn\");
+	else:
+		print(String(_event.get_device())+\" \"+_event.as_text())
+"
+
+[sub_resource type="DynamicFont" id=2]
+size = 30
+use_mipmaps = true
+use_filter = true
+font_data = ExtResource( 1 )
+
+[sub_resource type="GDScript" id=3]
+script/source = "extends Label
+
+func _ready():
+	$Tween.interpolate_property(self, \"modulate:a\",
+		0, 1, .3, Tween.TRANS_LINEAR, Tween.EASE_IN);
+	$Tween.start();
+"
+
+[node name="Node" type="Node"]
+script = SubResource( 1 )
+
+[node name="Polygon2D" type="Polygon2D" parent="."]
+color = Color( 0, 0, 0, 1 )
+polygon = PoolVector2Array( 0, 0, 1280, 0, 1280, 720, 0, 720 )
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+
+[node name="Label" type="Label" parent="."]
+margin_right = 1280.0
+margin_bottom = 720.0
+custom_fonts/font = SubResource( 2 )
+text = "Thanks for trying the demo, yes fullscreen works, yes you can use a controller,
+please report bugs or feedback at PatchouliSama765@gmail.com
+or on the itch.io page
+
+Controls for keyboard:
+Z is forward/jump, X is back/shoot
+Enter is start/pause, shift is select
+
+Controls for a game controller:
+A is shoot, B is jump
+Although Godot is supposed to support X360, DS4, and switch, only X360 seems
+to work on some systems so use Steam input remapping if your controller
+is not functioning properly
+
+Shoot/jump can be flipped in the options
+
+Debug controls: Press F9 to display them."
+align = 1
+script = SubResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Tween" type="Tween" parent="Label"]
+
+[node name="Label3" type="Label" parent="."]
+margin_top = 320.0
+margin_right = 1280.0
+margin_bottom = 1040.0
+custom_fonts/font = SubResource( 2 )
+text = "Press Start, Enter, X, Z, whatever to continue"
+align = 1
+valign = 1
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Tween" type="Tween" parent="Label3"]

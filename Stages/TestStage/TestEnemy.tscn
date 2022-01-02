@@ -1,0 +1,47 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://Stages/EnemyBase.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Stages/NeedleManDemo/EnemySpinnyGuy/Animation.tres" type="SpriteFrames" id=2]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends \"res://Stages/EnemyBaseScript.gd\"
+
+var ball = preload(\"res://Stages/NeedleManDemo/EnemySpinnyGuy/ball.tscn\")
+onready var timer = $Timer
+
+func _ready():
+	sprite.connect(\"animation_finished\",self,\"animationFinished\")
+	timer.connect(\"timeout\",self,\"reset\")
+
+func reset():
+	sprite.frame = 0
+	is_reflecting = true
+	
+func animationFinished():
+	var bi = ball.instance()
+	bi.position = self.position
+	get_parent().add_child(bi)
+	bi.init(facing == DIRECTION.LEFT)
+	timer.start()
+	is_reflecting = false
+	
+func _physics_process(delta):
+	move_and_slide(Vector2(0,300))
+	#pass"
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 15, 17 )
+
+[node name="Enemy" instance=ExtResource( 1 )]
+script = SubResource( 1 )
+shapeOverride = SubResource( 2 )
+collisionOffset = Vector2( 0, 5 )
+
+[node name="AnimatedSprite" parent="." index="0"]
+frames = ExtResource( 2 )
+frame = 16
+offset = Vector2( -10, 0 )
+
+[node name="Timer" type="Timer" parent="." index="7"]
+wait_time = 0.5
+one_shot = true

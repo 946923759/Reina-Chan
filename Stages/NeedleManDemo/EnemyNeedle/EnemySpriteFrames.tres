@@ -1,0 +1,19 @@
+[gd_resource type="SpriteFrames" load_steps=5 format=2]
+
+[ext_resource path="res://Stages/NeedleManDemo/EnemyNeedle/EnemyNeedle0.png" type="Texture" id=1]
+[ext_resource path="res://Stages/NeedleManDemo/EnemyNeedle/EnemyNeedle1.png" type="Texture" id=2]
+[ext_resource path="res://Stages/NeedleManDemo/EnemyNeedle/EnemyNeedle2.png" type="Texture" id=3]
+[ext_resource path="res://Stages/NeedleManDemo/EnemyNeedle/EnemyNeedle3.png" type="Texture" id=4]
+
+[resource]
+animations = [ {
+"frames": [ ExtResource( 1 ), ExtResource( 2 ) ],
+"loop": false,
+"name": "default",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 3 ), ExtResource( 4 ) ],
+"loop": true,
+"name": "rolling",
+"speed": 5.0
+} ]

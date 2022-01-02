@@ -1,0 +1,32 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Stages/AirManDemo/glassBlock.png" type="Texture" id=1]
+[ext_resource path="res://Stages/AirManDemo/weirdThing.png" type="Texture" id=2]
+[ext_resource path="res://Various Objects/spikeball.png" type="Texture" id=3]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="GlassBlock" type="Sprite" parent="."]
+texture = ExtResource( 1 )
+centered = false
+
+[node name="StaticBody2D" type="StaticBody2D" parent="GlassBlock"]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="GlassBlock/StaticBody2D"]
+polygon = PoolVector2Array( 0, 0, 16, 0, 16, 16, 0, 16 )
+
+[node name="WeirdThing" type="Sprite" parent="."]
+position = Vector2( 16, 0 )
+texture = ExtResource( 2 )
+centered = false
+
+[node name="StaticBody2D" type="StaticBody2D" parent="WeirdThing"]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="WeirdThing/StaticBody2D"]
+polygon = PoolVector2Array( 0, 0, 32, 0, 32, 16, 0, 16 )
+
+[node name="Spikeball" type="Sprite" parent="."]
+position = Vector2( 0, 32 )
+texture = ExtResource( 3 )
+centered = false
+

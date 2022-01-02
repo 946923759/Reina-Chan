@@ -1,0 +1,167 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://ParticleEffects/GlowShader.tres" type="Material" id=1]
+[ext_resource path="res://Stages/NeedleManDemo/EnemyNeedle/EnemySpriteFrames.tres" type="SpriteFrames" id=2]
+[ext_resource path="res://Sounds/Enemy - Hurt.wav" type="AudioStream" id=3]
+[ext_resource path="res://Sounds/Enemy - Explosion.wav" type="AudioStream" id=4]
+[ext_resource path="res://ParticleEffects/Explosion.tscn" type="PackedScene" id=5]
+
+[sub_resource type="GDScript" id=1]
+script/source = "#extends \"res://Stages/EnemyBaseScript.gd\"
+extends KinematicBody2D
+
+enum STATES {
+	WAIT,
+	SHOOTING,
+	ROLLING
+}
+
+var curState = 0
+var stateLoop = [
+	STATES.WAIT,
+	STATES.SHOOTING, 
+	STATES.WAIT,
+	STATES.SHOOTING,
+	STATES.ROLLING,
+	STATES.WAIT,
+	STATES.SHOOTING,
+	STATES.ROLLING
+]
+
+var needle = preload(\"res://Stages/NeedleManDemo/EnemyNeedle/Needle.tscn\")
+
+#export(int) var maxHealth;
+export(int, 1, 50) var maxHealth = 10
+var curHealth;
+var is_reflecting = false;
+#-1 to move left, 1 to move right
+enum DIRECTION {LEFT = -1, RIGHT = 1}
+export(DIRECTION) var facing
+
+export(bool) var override_extents = false
+export(Vector2) var extents
+export(bool) var use_collision = true
+
+onready var sprite = $AnimatedSprite
+onready var hurtSound = $HurtSound
+
+func _ready():
+	#sprite.stop()
+	#sprite.set_animation(\"default\")
+	#assert(maxHealth > 0)
+	curHealth = maxHealth
+	#assert(curHealth)
+	sprite.flip_h = (facing == DIRECTION.RIGHT)
+	set_physics_process(true);
+	$Area2D.connect(\"body_entered\",self,\"expire\")
+	sprite.play()
+
+var curTime = 0
+func nextState():
+	curTime = 0
+	curState+=1
+	if curState > stateLoop.size()-1:
+		curState = 0
+		
+	#if stateLoop[curState] == STATES.WAIT:
+	#	label.text = \"Wait\"
+	#elif stateLoop[curState] == STATES.SHOOTING:
+	#	label.text = \"Shooting\"
+	#elif stateLoop[curState] == STATES.ROLLING:
+	#	label.text = \"Rolling\"
+
+#-1 to move left, 1 to move right
+var direction = -1
+
+func _physics_process(delta):
+	#label.text = String(curHealth) + \"/\" + String(maxHealth)
+	#label.text = String(curTime)
+	if stateLoop[curState] == STATES.WAIT:
+		curTime += delta;
+		if curTime > .3:
+			nextState()
+	elif stateLoop[curState] == STATES.SHOOTING:
+		if curTime == 0:
+			shoot()
+			sprite.frame = 1
+			curTime += delta;
+		else:
+			curTime += delta;
+			if curTime > .4:
+				nextState()
+			elif curTime > .2:
+				sprite.frame = 0
+	elif stateLoop[curState] == STATES.ROLLING:
+		if curTime == 0:
+			sprite.set_animation(\"rolling\")
+			sprite.play()
+			if get_node(\"/root/Node2D/Player\").global_position.x > global_position.x:
+				direction = 1
+			else:
+				direction = -1
+			curTime += delta;
+		else:
+			if is_on_wall():
+				direction = direction*-1
+			move_and_slide(Vector2(300*direction,1000), Vector2(0, -1))
+			curTime += delta;
+			if curTime > 1.5:
+				sprite.stop()
+				sprite.set_animation(\"default\")
+				nextState()
+
+func shoot():
+	for i in range(5):
+		var n = needle.instance()
+		n.type(i, position)
+		get_parent().add_child(n)
+		n.set_physics_process(true)
+		#add_collision_exception_with(n) # Make bullet and this not collide
+		#n.set_scale(Vector2(50,50))
+		#print(\"test\")
+	#var n = needle.instance()
+	#n.type(1, position)
+	#get_parent().add_child(n)
+	#add_collision_exception_with(n) # Make bullet and this not collide
+"
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 16, 10 )
+
+[sub_resource type="GDScript" id=3]
+script/source = "extends Area2D"
+
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 16, 10 )
+
+[node name="NeedleEnemy" type="KinematicBody2D"]
+position = Vector2( 500, 500 )
+scale = Vector2( 4, 4 )
+collision_layer = 26
+collision_mask = 26
+script = SubResource( 1 )
+use_collision = false
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+material = ExtResource( 1 )
+use_parent_material = true
+frames = ExtResource( 2 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( 0, 6 )
+shape = SubResource( 2 )
+
+[node name="Area2D" type="Area2D" parent="."]
+script = SubResource( 3 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource( 4 )
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 3 )
+
+[node name="ExplosionSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 4 )
+
+[node name="Explosion" parent="." instance=ExtResource( 5 )]
+scale = Vector2( 0.5, 0.5 )

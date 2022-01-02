@@ -1,0 +1,71 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://MM2Font.tres" type="DynamicFont" id=1]
+[ext_resource path="res://Stages/TestStage/Tileset.tres" type="TileSet" id=2]
+[ext_resource path="res://Player Files/8bitPlayer/8bitPlayer.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Stages_Reina/Enemies/FloorMasters.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Stages_Reina/Enemies/Scout.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Stages_Reina/Enemies/Jaguar.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Stages_Reina/Enemies/Guardian/NotSniperJoe_Alt.tscn" type="PackedScene" id=7]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Node2D
+
+var LADDER_TILE_ID = -999
+var LADDER_TOP_TILE_ID = -999
+
+var music_player = FLMusicLib.new();
+
+var loopStart = 0;
+var loopEnd = 0;
+var loop = true;
+var trackNum = 0;
+var vol = -4.0; #This is documented NOWHERE in the plugin, but you have to set it to negative
+
+# Create music player
+func _ready():
+	add_child(music_player);
+	music_player.set_gme_buffer_size(2048*5);#optional
+	
+	var mus = Globals.NSF_location+\"Mega Man X7 - Our Blood Boils.nsf\"
+	music_player.play_music(mus,trackNum,loop,loopStart,loopEnd,0);
+	music_player.set_volume(vol);
+"
+
+[node name="Node2D" type="Node2D"]
+script = SubResource( 1 )
+
+[node name="TileMap" type="TileMap" parent="."]
+position = Vector2( 1, 1 )
+scale = Vector2( 4, 4 )
+tile_set = ExtResource( 2 )
+cell_size = Vector2( 16, 16 )
+collision_layer = 16
+format = 1
+tile_data = PoolIntArray( 65541, 0, 0, 65550, 0, 0, 131077, 0, 0, 131078, 0, 0, 131079, 0, 0, 131080, 0, 0, 131081, 0, 0, 131082, 0, 0, 131083, 0, 0, 131084, 0, 0, 131085, 0, 0, 131086, 0, 0, 196613, 0, 0, 196622, 0, 0, 262149, 0, 0, 262158, 0, 0, 327685, 0, 0, 327694, 0, 0, 393221, 0, 0, 393230, 0, 0, 458757, 0, 0, 458766, 0, 0, 524293, 0, 0, 524302, 0, 0, 589829, 0, 0, 589830, 0, 0, 589831, 0, 0, 589832, 0, 0, 589833, 0, 0, 589834, 0, 0, 589835, 0, 0, 589836, 0, 0, 589837, 0, 0, 589838, 0, 0 )
+
+[node name="Player" parent="." instance=ExtResource( 3 )]
+position = Vector2( 448, 544 )
+
+[node name="Label" type="Label" parent="."]
+margin_left = 272.692
+margin_top = 202.271
+margin_right = 1036.69
+margin_bottom = 252.271
+custom_fonts/font = ExtResource( 1 )
+text = "NSF Playback test"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="FloorMaster" parent="." instance=ExtResource( 4 )]
+position = Vector2( 672, 96 )
+
+[node name="Enemy" parent="." instance=ExtResource( 6 )]
+position = Vector2( 832, 64 )
+
+[node name="Scout" parent="." instance=ExtResource( 5 )]
+position = Vector2( 544, 64 )
+
+[node name="Enemy2" parent="." instance=ExtResource( 7 )]
+position = Vector2( 448, -32 )

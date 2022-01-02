@@ -1,0 +1,85 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://MM2Font.tres" type="DynamicFont" id=1]
+[ext_resource path="res://Music/Intro.ogg" type="AudioStream" id=2]
+[ext_resource path="res://ubuntu-font-family/Ubuntu-B.ttf" type="DynamicFontData" id=3]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Node
+export(Array, String) var texts
+var curText = 0
+
+var textTime = 2.7*2
+var animTime = 2.7/2
+var elapsedTime = 2.7/2;
+var label
+var tween
+
+func _ready():
+	label = get_node(\"Label\")
+	tween = get_node(\"Tween\")
+	tween.interpolate_property(label, \"modulate\", Color(0,0,0), Color(1,1,1), animTime, Tween.TRANS_LINEAR, Tween.EASE_OUT)
+	tween.start()
+	set_process(true)
+	set_process_input(true);
+
+func _input(event):
+	if Input.is_action_just_pressed(\"ui_options\"):
+		get_tree().change_scene(\"res://TitleScreen.tscn\");
+
+func _process(delta):
+	elapsedTime += delta
+	get_node(\"Debug\").text = String(elapsedTime);
+	if elapsedTime >= textTime:
+		elapsedTime = 0
+		animateText();
+	
+func animateText():
+	tween.interpolate_property(label, \"modulate\", Color(1,1,1), Color(0,0,0), animTime, Tween.TRANS_LINEAR, Tween.EASE_OUT)
+	tween.start()
+	yield(tween,\"tween_completed\")
+	if curText < texts.size() - 1:
+		curText+=1
+		label.text = texts[curText]
+		tween.interpolate_property(label, \"modulate\", Color(0,0,0), Color(1,1,1), animTime, Tween.TRANS_LINEAR, Tween.EASE_OUT)
+		tween.start()
+	else:
+		get_tree().change_scene(\"res://TitleScreen.tscn\");
+"
+
+[sub_resource type="DynamicFont" id=2]
+size = 50
+font_data = ExtResource( 3 )
+
+[node name="Node" type="Node"]
+script = SubResource( 1 )
+texts = [ "One day...", "Axel recieved a prophecy", "he must go and team up with 8 different guardians", "so he can use their power to save the day!", "aidoaijoaidsj" ]
+
+[node name="Polygon2D" type="Polygon2D" parent="."]
+color = Color( 0, 0, 0, 1 )
+polygon = PoolVector2Array( 0, 0, 1280, 0, 1280, 720, 0, 720 )
+
+[node name="Label" type="Label" parent="."]
+margin_left = 30.0
+margin_top = 428.0
+margin_right = 1250.0
+margin_bottom = 645.0
+custom_fonts/font = ExtResource( 1 )
+custom_constants/line_spacing = 20
+text = "In the year 5xx AD..."
+autowrap = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 2 )
+autoplay = true
+
+[node name="Tween" type="Tween" parent="."]
+
+[node name="Debug" type="Label" parent="."]
+margin_right = 40.0
+margin_bottom = 14.0
+custom_fonts/font = SubResource( 2 )
+text = "Debug"

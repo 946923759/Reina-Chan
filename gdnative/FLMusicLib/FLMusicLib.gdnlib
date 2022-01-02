@@ -1,0 +1,18 @@
+[general]
+
+singleton=false
+load_once=true
+symbol_prefix="godot_"
+reloadable=true
+
+[entry]
+
+Windows.64="res://gdnative/FLMusicLib/Windows/x64/FLMusicLib.dll"
+Windows.32="res://gdnative/FLMusicLib/Windows/x86/FLMusicLib.dll"
+X11.64="res://gdnative/FLMusicLib/Linux/x64/libFLMusicLib.so.1.0.0"
+
+[dependencies]
+
+Windows.64=[ "res://gdnative/FLMusicLib/Windows/x64/libopenmpt.dll", "res://gdnative/FLMusicLib/Windows/x64/openmpt-mpg123.dll", "res://gdnative/FLMusicLib/Windows/x64/openmpt-ogg.dll", "res://gdnative/FLMusicLib/Windows/x64/openmpt-vorbis.dll", "res://gdnative/FLMusicLib/Windows/x64/openmpt-zlib.dll" ]
+Windows.32=[ "res://gdnative/FLMusicLib/Windows/x86/libopenmpt.dll", "res://gdnative/FLMusicLib/Windows/x86/openmpt-mpg123.dll", "res://gdnative/FLMusicLib/Windows/x86/openmpt-ogg.dll", "res://gdnative/FLMusicLib/Windows/x86/openmpt-vorbis.dll", "res://gdnative/FLMusicLib/Windows/x86/openmpt-zlib.dll" ]
+X11.64=[  ]

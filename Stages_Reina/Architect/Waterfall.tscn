@@ -1,0 +1,27 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Stages_Reina/Architect/waterfall 3x3.png" type="Texture" id=1]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Sprite
+
+var t:float = 0
+var i:int = 0
+func _process(delta):
+	t+=delta
+	if t > .1:
+		t=0
+		i+=1
+		if i==3:
+			i=0
+		region_rect=Rect2(i*16,0,region_rect.size.x,32)
+		
+"
+
+[node name="Node2D" type="Sprite"]
+scale = Vector2( 4, 4 )
+texture = ExtResource( 1 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 0, 0, 16, 32 )
+script = SubResource( 1 )

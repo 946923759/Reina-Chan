@@ -1,0 +1,122 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://Stages_Reina/Enemies/Jaguar.png" type="Texture" id=1]
+[ext_resource path="res://Sounds/Enemy - Hurt.wav" type="AudioStream" id=6]
+[ext_resource path="res://Sounds/Enemy - Explosion.wav" type="AudioStream" id=7]
+[ext_resource path="res://ParticleEffects/Explosion.tscn" type="PackedScene" id=8]
+
+[sub_resource type="SpriteFrames" id=1]
+animations = [ {
+"frames": [ ExtResource( 1 ) ],
+"loop": true,
+"name": "in",
+"speed": 5.0
+}, {
+"frames": [  ],
+"loop": true,
+"name": "out",
+"speed": 5.0
+}, {
+"frames": [  ],
+"loop": true,
+"name": "invis",
+"speed": 1.0
+} ]
+
+[sub_resource type="GDScript" id=2]
+script/source = "extends AnimatedSprite
+
+const maxHealth = 5
+var curHealth
+onready var timer = $Timer
+onready var highlightTimer = $highlightTimer
+onready var hurtSound = $AudioStreamPlayer2D
+#It starts out in the \"in\" state so it shouldn't be reflecting
+var is_reflecting = false
+var ball = preload(\"res://Stages/NeedleManDemo/EnemyCannon/CannonBall.tscn\")
+var highlightMaterial = preload(\"res://ParticleEffects/GlowShader.tres\")
+
+func _ready():
+	curHealth = maxHealth
+	self.stop()
+	$Area2D.connect(\"body_entered\",self,\"expire\")
+	timer.connect(\"timeout\",self,\"startShoot\")
+	self.connect(\"animation_finished\",self,\"animationFinished\")
+	highlightTimer.connect(\"timeout\",self,\"setMaterial\")
+
+func animationFinished():
+	if self.get_animation() == \"in\":
+		shoot()
+		self.set_animation(\"out\")
+	else:
+		is_reflecting = true
+		self.stop()
+		timer.start()
+
+func startShoot():
+	is_reflecting = false
+	self.set_animation(\"in\")
+	#self.frame = 0
+	self.play()
+	
+func shoot():
+	#print(\"spawned cannonball\")
+	var n = ball.instance()
+	n.position = position
+	get_parent().add_child(n)
+
+func expire(obj):
+	if obj.has_method(\"enemy_touched\"):
+		obj.call(\"enemy_touched\",self)
+		
+func damage(amount):
+	curHealth -= amount
+	#print(\"Took damage!\")
+	if curHealth <= 0:
+		set_animation(\"invis\")
+		$Area2D.queue_free() #how to turn off monitoring, the broken way
+		$Explosion.emitting = true
+		$ExplosionSound.play()
+		$ExplosionSound.connect(\"finished\",self,\"queue_free\")
+	else:
+		hurtSound.play()
+		self.material = highlightMaterial
+		highlightTimer.start()
+		
+func setMaterial():
+	self.material = null
+"
+
+[sub_resource type="CircleShape2D" id=3]
+radius = 16.0
+
+[node name="EnemyCannon" type="AnimatedSprite"]
+scale = Vector2( 4, 4 )
+frames = SubResource( 1 )
+animation = "in"
+script = SubResource( 2 )
+
+[node name="VisibilityEnabler2D" type="VisibilityEnabler2D" parent="."]
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2( 0, 7 )
+shape = SubResource( 3 )
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 3.0
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 6 )
+
+[node name="highlightTimer" type="Timer" parent="."]
+wait_time = 0.1
+one_shot = true
+
+[node name="ExplosionSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 7 )
+
+[node name="Explosion" parent="." instance=ExtResource( 8 )]
+position = Vector2( 0, 7 )
+scale = Vector2( 0.5, 0.5 )

@@ -1,0 +1,154 @@
+[gd_scene load_steps=14 format=2]
+
+[ext_resource path="res://Stages/TestStage/woodman1.png" type="Texture" id=1]
+[ext_resource path="res://Stages/TestStage/woodman2.png" type="Texture" id=2]
+[ext_resource path="res://Stages/TestStage/woodman3.png" type="Texture" id=3]
+[ext_resource path="res://Stages/TestStage/woodman4.png" type="Texture" id=4]
+[ext_resource path="res://Stages/TestStage/Woodman5.png" type="Texture" id=5]
+[ext_resource path="res://Stages/TestStage/Woodman6.png" type="Texture" id=6]
+[ext_resource path="res://Stages/TestStage/Ladder.png" type="Texture" id=7]
+[ext_resource path="res://Stages/TestStage/WoodmanLadder.png" type="Texture" id=8]
+[ext_resource path="res://Stages/TestStage/bigWall.png" type="Texture" id=9]
+[ext_resource path="res://Stages/TestStage/bgTile.png" type="Texture" id=10]
+[ext_resource path="res://Stages/TestStage/bgTile2.png" type="Texture" id=11]
+[ext_resource path="res://Stages/TestStage/tinyPlatform.png" type="Texture" id=12]
+[ext_resource path="res://Various Objects/spikeball.png" type="Texture" id=13]
+
+[node name="Node" type="Node"]
+
+[node name="Sprite" type="Sprite" parent="."]
+position = Vector2( 0, 16 )
+texture = ExtResource( 1 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 0, 0, 16, 16 )
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Sprite"]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Sprite/StaticBody2D"]
+polygon = PoolVector2Array( 0, 0, 0, 16, 16, 16, 16, 0 )
+
+[node name="Sprite2" type="Sprite" parent="."]
+position = Vector2( 32, 16 )
+texture = ExtResource( 2 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 0, 0, 16, 16 )
+
+[node name="StaticBody2D2" type="StaticBody2D" parent="Sprite2"]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Sprite2/StaticBody2D2"]
+polygon = PoolVector2Array( 0, 0, 0, 16, 16, 16, 16, 0 )
+
+[node name="Sprite3" type="Sprite" parent="."]
+position = Vector2( 64, 16 )
+texture = ExtResource( 3 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 0, 0, 16, 16 )
+
+[node name="StaticBody2D3" type="StaticBody2D" parent="Sprite3"]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Sprite3/StaticBody2D3"]
+polygon = PoolVector2Array( 0, 0, 0, 16, 16, 16, 16, 0 )
+
+[node name="Sprite4" type="Sprite" parent="."]
+position = Vector2( 32, 48 )
+texture = ExtResource( 4 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 0, 0, 16, 16 )
+
+[node name="StaticBody2D4" type="StaticBody2D" parent="Sprite4"]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Sprite4/StaticBody2D4"]
+polygon = PoolVector2Array( 0, 0, 0, 16, 16, 16, 16, 0 )
+
+[node name="Grass" type="Sprite" parent="."]
+position = Vector2( 64, 48 )
+texture = ExtResource( 5 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 0, 0, 16, 16 )
+
+[node name="Grass2" type="Sprite" parent="."]
+position = Vector2( 128, 64 )
+texture = ExtResource( 6 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 0, 0, 16, 16 )
+
+[node name="Ladder" type="Sprite" parent="."]
+position = Vector2( 0, 48 )
+texture = ExtResource( 7 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 0, 0, 16, 16 )
+
+[node name="Ladder2" type="Sprite" parent="."]
+position = Vector2( 16, 48 )
+texture = ExtResource( 8 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 0, 0, 16, 16 )
+
+[node name="Ladder2WithCollision" type="Sprite" parent="."]
+position = Vector2( 16, 48 )
+texture = ExtResource( 8 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 0, 0, 16, 16 )
+
+[node name="StaticBody2D2" type="StaticBody2D" parent="Ladder2WithCollision"]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Ladder2WithCollision/StaticBody2D2"]
+polygon = PoolVector2Array( 0, 0, 16, 0, 16, 2, 0, 2 )
+one_way_collision = true
+
+[node name="LadderWithCollision" type="Sprite" parent="."]
+position = Vector2( 64, 80 )
+texture = ExtResource( 7 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 0, 0, 16, 16 )
+
+[node name="StaticBody2D" type="StaticBody2D" parent="LadderWithCollision"]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="LadderWithCollision/StaticBody2D"]
+polygon = PoolVector2Array( 0, 0, 16, 0, 16, 2, 0, 2 )
+one_way_collision = true
+
+[node name="BigBox" type="Sprite" parent="."]
+position = Vector2( 96, 0 )
+texture = ExtResource( 9 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 0, 0, 64, 64 )
+
+[node name="bgTile" type="Sprite" parent="."]
+position = Vector2( 0, 80 )
+texture = ExtResource( 10 )
+centered = false
+
+[node name="bgTile2" type="Sprite" parent="."]
+position = Vector2( 0, 96 )
+texture = ExtResource( 11 )
+centered = false
+
+[node name="tinyPlatform" type="Sprite" parent="."]
+position = Vector2( 32, 80 )
+texture = ExtResource( 12 )
+centered = false
+
+[node name="StaticBody2D" type="StaticBody2D" parent="tinyPlatform"]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="tinyPlatform/StaticBody2D"]
+polygon = PoolVector2Array( 0, 0, 16, 0, 16, 6, 0, 6 )
+one_way_collision = true
+
+[node name="Spikeball" type="Sprite" parent="."]
+position = Vector2( 32, 116 )
+texture = ExtResource( 13 )
+centered = false
+
+[node name="Node" type="Node" parent="."]

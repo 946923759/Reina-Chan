@@ -1,0 +1,142 @@
+[gd_scene load_steps=12 format=2]
+
+[ext_resource path="res://Stages/MinibossBase.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Stages_Reina/Enemies/Jupiter Cannon_Spriteframes.tres" type="SpriteFrames" id=2]
+[ext_resource path="res://Sounds/Classic/S3K_LaserCharging.wav" type="AudioStream" id=3]
+[ext_resource path="res://Sounds/Classic/S3K_DeathEggLaser2.wav" type="AudioStream" id=4]
+[ext_resource path="res://addons/godot-next/gui/debug_label.gd" type="Script" id=5]
+[ext_resource path="res://Sounds/Classic/Explosion2.wav" type="AudioStream" id=6]
+[ext_resource path="res://Stages_Reina/Enemies/JUPITERCANNON_prongs.png" type="Texture" id=7]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Sprite
+
+var tex = preload(\"res://Stages_Reina/Enemies/Jupiter_2_rot.png\")
+var tex2 = preload(\"res://Stages_Reina/Enemies/Jupiter_2_begin.png\")
+var toDraw=0
+
+var CONST_IMG_WIDTH=16
+
+func _draw():
+	#draw_texture_rect_region(tex,
+	#	Rect2(-toDraw+11,0,toDraw,16), #dest
+	#	Rect2(0,0,1,16) #src
+	#)
+	#It turns out that if you specify a position below 0 it will do this
+	draw_texture_rect_region(tex2,
+		Rect2(3+CONST_IMG_WIDTH/2-toDraw,-8,toDraw,32),
+		Rect2(CONST_IMG_WIDTH-toDraw,0,toDraw,32)
+	)
+
+
+func _process(delta):
+	update()
+"
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 48, 10 )
+
+[sub_resource type="GDScript" id=3]
+script/source = "extends Area2D
+
+var lastTouched
+
+func _ready():
+# warning-ignore:return_value_discarded
+	connect(\"body_entered\",self,\"objectTouched\")
+# warning-ignore:return_value_discarded
+	connect(\"body_exited\",self,\"clearLastTouched\")
+	
+func objectTouched(obj):
+	#print(\"intersecting!\")
+	if obj.has_method(\"player_touched\"): #If enemy touched player
+		lastTouched = obj
+		obj.call(\"player_touched\",self,1)
+
+func clearLastTouched(_obj):
+	lastTouched=null
+"
+
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 90, 8 )
+
+[node name="Jupiter Cannon" instance=ExtResource( 1 )]
+collision_layer = 27
+collision_mask = 27
+maxHealth = 30
+
+[node name="AnimatedSprite" parent="." index="0"]
+position = Vector2( 0, 2 )
+frames = ExtResource( 2 )
+animation = "startup"
+
+[node name="Laser" type="Sprite" parent="." index="1"]
+position = Vector2( -38, -10 )
+centered = false
+region_rect = Rect2( 0, 0, 999, 7 )
+script = SubResource( 1 )
+
+[node name="Sprite_prongs" type="Sprite" parent="." index="2"]
+visible = false
+position = Vector2( 0.5, 2 )
+texture = ExtResource( 7 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" index="0"]
+position = Vector2( -8, -4 )
+shape = SubResource( 2 )
+
+[node name="HurtSound" parent="." index="4"]
+bus = "Player/Enemies"
+
+[node name="WhatTheFuckIsWrongWithGodot" type="Area2D" parent="." index="6"]
+monitoring = false
+collision_layer = 9
+collision_mask = 9
+
+[node name="BottomHalf2" type="CollisionPolygon2D" parent="WhatTheFuckIsWrongWithGodot" index="0"]
+position = Vector2( 0, 8 )
+polygon = PoolVector2Array( 0, 0, 20, 0, 40, 35, -30, 35 )
+
+[node name="BottomHalf" type="CollisionPolygon2D" parent="." index="7"]
+visible = false
+position = Vector2( -2, 8 )
+polygon = PoolVector2Array( 0, 0, 20, 0, 40, 35, -30, 35 )
+disabled = true
+
+[node name="LaserCharging" type="AudioStreamPlayer2D" parent="." index="8"]
+stream = ExtResource( 3 )
+bus = "Player/Enemies"
+
+[node name="LaserFire" type="AudioStreamPlayer2D" parent="." index="9"]
+stream = ExtResource( 4 )
+bus = "Player/Enemies"
+
+[node name="DebugLabel" type="Label" parent="." index="10"]
+margin_left = -53.3289
+margin_top = -40.1147
+margin_right = 38.6711
+margin_bottom = -9.11469
+rect_scale = Vector2( 0.5, 0.5 )
+text = "curState = null
+waitTime = null
+"
+script = ExtResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+target_path = NodePath("..")
+properties = PoolStringArray( "curState", "waitTime" )
+
+[node name="Tween" type="Tween" parent="." index="11"]
+
+[node name="laserArea2D" type="Area2D" parent="." index="12"]
+monitoring = false
+script = SubResource( 3 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="laserArea2D" index="0"]
+position = Vector2( -116.912, -2.452 )
+shape = SubResource( 4 )
+
+[node name="MiniExplodeSound" type="AudioStreamPlayer2D" parent="." index="13"]
+stream = ExtResource( 6 )
+bus = "Player/Enemies"

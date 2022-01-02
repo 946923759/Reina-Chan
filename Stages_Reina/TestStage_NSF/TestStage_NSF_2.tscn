@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Stages_Reina/8bitBaseStage.tscn" type="PackedScene" id=5]
+
+[node name="Node2D" instance=ExtResource( 5 )]
+adjust_camera = true
+rightBound = -999
+bottomBound = -999
+nsf_music_file = "Mega Man X7 - Our Blood Boils.nsf"
+
+[node name="TileMap" parent="." index="1"]
+tile_data = PoolIntArray( 131074, 0, 0, 131087, 0, 0, 196610, 0, 0, 196611, 0, 0, 196612, 0, 0, 196613, 0, 0, 196614, 0, 0, 196615, 0, 0, 196616, 0, 0, 196617, 0, 0, 196618, 0, 0, 196619, 0, 0, 196620, 0, 0, 196621, 0, 0, 196622, 0, 0, 196623, 0, 0, 262146, 0, 0, 262159, 0, 0, 327682, 0, 0, 327695, 0, 0, 393218, 0, 0, 393231, 0, 0, 458754, 0, 0, 458755, 0, 0, 458756, 0, 0, 458757, 0, 0, 458758, 0, 0, 458759, 0, 0, 458760, 0, 0, 458761, 0, 0, 458762, 0, 0, 458763, 0, 0, 458764, 0, 0, 458765, 0, 0, 458766, 0, 0, 458767, 0, 0 )

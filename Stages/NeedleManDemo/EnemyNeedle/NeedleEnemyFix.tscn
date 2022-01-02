@@ -1,0 +1,108 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://Stages/EnemyBase.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Stages/NeedleManDemo/EnemyNeedle/EnemySpriteFrames.tres" type="SpriteFrames" id=2]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends \"res://Stages/EnemyBaseScript.gd\"
+
+enum STATES {
+	WAIT,
+	SHOOTING,
+	ROLLING
+}
+
+var curState = 0
+var stateLoop = [
+	STATES.WAIT,
+	STATES.SHOOTING, 
+	STATES.WAIT,
+	STATES.SHOOTING,
+	STATES.ROLLING,
+	STATES.WAIT,
+	STATES.SHOOTING,
+	STATES.ROLLING
+]
+
+var needle = preload(\"res://Stages/NeedleManDemo/EnemyNeedle/Needle.tscn\")
+
+
+var curTime = 0
+func nextState():
+	curTime = 0
+	curState+=1
+	if curState > stateLoop.size()-1:
+		curState = 0
+		
+	#if stateLoop[curState] == STATES.WAIT:
+	#	label.text = \"Wait\"
+	#elif stateLoop[curState] == STATES.SHOOTING:
+	#	label.text = \"Shooting\"
+	#elif stateLoop[curState] == STATES.ROLLING:
+	#	label.text = \"Rolling\"
+
+#-1 to move left, 1 to move right
+var direction = -1
+
+func _physics_process(delta):
+	#label.text = String(curHealth) + \"/\" + String(maxHealth)
+	#label.text = String(curTime)
+	if stateLoop[curState] == STATES.WAIT:
+		curTime += delta;
+		if curTime > .3:
+			nextState()
+	elif stateLoop[curState] == STATES.SHOOTING:
+		if curTime == 0:
+			shoot()
+			sprite.frame = 1
+			curTime += delta;
+		else:
+			curTime += delta;
+			if curTime > .4:
+				nextState()
+			elif curTime > .2:
+				sprite.frame = 0
+	elif stateLoop[curState] == STATES.ROLLING:
+		if curTime == 0:
+			sprite.set_animation(\"rolling\")
+			sprite.play()
+			if get_node(\"/root/Node2D/Player\").global_position.x > global_position.x:
+				direction = 1
+			else:
+				direction = -1
+			curTime += delta;
+		else:
+			if is_on_wall():
+				direction = direction*-1
+			move_and_slide(Vector2(300*direction,1000), Vector2(0, -1))
+			curTime += delta;
+			if curTime > 1.5:
+				sprite.stop()
+				sprite.set_animation(\"default\")
+				nextState()
+
+func shoot():
+	for i in range(5):
+		var n = needle.instance()
+		n.type(i, position)
+		get_parent().add_child(n)
+		n.set_physics_process(true)
+		#add_collision_exception_with(n) # Make bullet and this not collide
+		#n.set_scale(Vector2(50,50))
+		#print(\"test\")
+	#var n = needle.instance()
+	#n.type(1, position)
+	#get_parent().add_child(n)
+	#add_collision_exception_with(n) # Make bullet and this not collide
+"
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 64, 64 )
+
+[node name="NeedleEnemyFix" instance=ExtResource( 1 )]
+script = SubResource( 1 )
+shapeOverride = SubResource( 2 )
+
+[node name="AnimatedSprite" parent="." index="0"]
+scale = Vector2( 4, 4 )
+frames = ExtResource( 2 )
