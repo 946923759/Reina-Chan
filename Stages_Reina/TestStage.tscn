@@ -1,4 +1,4 @@
-[gd_scene load_steps=54 format=2]
+[gd_scene load_steps=56 format=2]
 
 [ext_resource path="res://Stages/IceMan/IceManTileset.tres" type="TileSet" id=1]
 [ext_resource path="res://Stages_Reina/Enemies/Dinergate.tscn" type="PackedScene" id=2]
@@ -35,6 +35,7 @@
 [ext_resource path="res://Various Objects/PickupAmmoSmall.tscn" type="PackedScene" id=33]
 [ext_resource path="res://Various Objects/CameraController/LadderCameraAdjuster.tscn" type="PackedScene" id=34]
 [ext_resource path="res://addons/godot-next/gui/debug_label.gd" type="Script" id=35]
+[ext_resource path="res://Stages_Reina/Scarecrow/quicksand_top.png" type="Texture" id=36]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 1920, 32 )
@@ -432,7 +433,7 @@ func _process(delta):
 
 [sub_resource type="GDScript" id=16]
 script/source = "extends StaticBody2D
-export(int) var quicksand_height=128
+export(int) var quicksand_height_in_half_blocks=4
 export(float,10,30) var quicksand_speed=10
 
 var original_global_pos_y:float
@@ -462,13 +463,15 @@ func _physics_process(delta):
 	if player==null:
 		return
 	if player.is_on_floor():
-		position.y=min(position.y+quicksand_speed*delta,original_pos_y+quicksand_height)
-		if player.global_position.y+64 >= original_global_pos_y+quicksand_height-1:
+		position.y=min(position.y+quicksand_speed*delta,original_pos_y+quicksand_height_in_half_blocks*32)
+		if player.global_position.y+64 >= original_global_pos_y+quicksand_height_in_half_blocks*32-1:
 			player.die()
 	else:
 		#Have to account for player hitbox size here since their position starts from the top left
-		global_position.y=max(original_global_pos_y,min(player.global_position.y+64,original_global_pos_y+quicksand_height))
+		global_position.y=max(original_global_pos_y,min(player.global_position.y+64,original_global_pos_y+quicksand_height_in_half_blocks*32))
 	player.inSand = (player.global_position.y+64 > original_global_pos_y+10)
+
+	$Sprite.position.y = -position.y-64
 "
 
 [sub_resource type="RectangleShape2D" id=17]
@@ -477,6 +480,48 @@ extents = Vector2( 1024, 8 )
 [sub_resource type="SegmentShape2D" id=18]
 a = Vector2( 0, -16 )
 b = Vector2( 2048, -16 )
+
+[sub_resource type="GDScript" id=19]
+script/source = "extends Sprite
+
+# I know this is really stupid but doing it using one tilemap
+# would have been too hard.
+#
+# Or god forbid I have to use another shader to change the pixel colors.
+var bottom = [
+	preload(\"res://Stages_Reina/Scarecrow/quicksand_bottom.png\"),
+	preload(\"res://Stages_Reina/Scarecrow/quicksand_bottom_2.png\"),
+	preload(\"res://Stages_Reina/Scarecrow/quicksand_bottom_3.png\")
+]
+var height
+
+func _ready():
+	region_rect=Rect2(0,0,region_rect.size.x,32)
+	height = get_parent().quicksand_height_in_half_blocks/2
+	pass # Replace with function body.
+
+func _draw():
+	
+	#draw_texture_rect(bottom[j],Rect2(0,16,region_rect.size.x,height*16),false)
+	#tex, dest rect, source rect?
+	draw_texture_rect_region(bottom[j],
+		Rect2(0,16,region_rect.size.x,height*16),
+		Rect2(0,0,region_rect.size.x,height*16)
+	)
+
+var t:float = 0
+var j:int=0
+func _process(delta):
+	t+=delta
+	if t > .2:
+		t=0
+		j+=1
+		if j==3:
+			j=0
+		update()
+		region_rect=Rect2(0,j*16,region_rect.size.x,32)
+		
+"
 
 [node name="Node2D" instance=ExtResource( 10 )]
 LADDER_TILE_ID = 6
@@ -970,7 +1015,17 @@ __meta__ = {
 target_path = NodePath("..")
 properties = PoolStringArray( "position" )
 
+[node name="Sprite" type="Sprite" parent="Node2D2/QuickSand" index="3"]
+position = Vector2( 0, -64 )
+scale = Vector2( 4, 4 )
+texture = ExtResource( 36 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 0, 0, 512, 16 )
+script = SubResource( 19 )
+
 [node name="Polygon2D" type="Polygon2D" parent="Node2D2" index="1"]
+visible = false
 modulate = Color( 1, 1, 1, 0.486275 )
 color = Color( 1, 0.929412, 0.2, 1 )
 polygon = PoolVector2Array( 0, 0, 2048, 0, 2048, 128, 0, 128 )
