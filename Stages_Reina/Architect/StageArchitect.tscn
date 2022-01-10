@@ -476,7 +476,6 @@ topBound = -999
 rightBound = 161
 bottomBound = 48
 freeze_player_during_transition = true
-frozen_movement_direction = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="room140-24/CameraAdjuster4"]
 shape = SubResource( 5 )

@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/Alchemist_APPEAR2_JP.wav-323d7bde81fbd6094ae9e5f55746af8f.sample"
+
+[deps]
+
+source_file="res://Sounds/BossSounds/Alchemist_APPEAR2_JP.wav"
+dest_files=[ "res://.import/Alchemist_APPEAR2_JP.wav-323d7bde81fbd6094ae9e5f55746af8f.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

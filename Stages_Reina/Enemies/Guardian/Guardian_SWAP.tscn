@@ -200,7 +200,7 @@ animations = [ {
 "speed": 5.0
 } ]
 
-[node name="Guardian" instance=ExtResource( 1 )]
+[node name="Guardian_SWAP" instance=ExtResource( 1 )]
 script = SubResource( 1 )
 maxHealth = 10
 

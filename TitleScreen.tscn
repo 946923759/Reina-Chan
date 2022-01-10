@@ -3,7 +3,7 @@
 [ext_resource path="res://TitleBG.png" type="Texture" id=1]
 [ext_resource path="res://Sounds/Menu - Choosing.WAV" type="AudioStream" id=2]
 [ext_resource path="res://Sounds/Menu - Picked.WAV" type="AudioStream" id=3]
-[ext_resource path="res://Hermes_TitleMenu.tres" type="DynamicFont" id=5]
+[ext_resource path="res://FallbackPixelFont.tres" type="DynamicFont" id=5]
 [ext_resource path="res://TitleMenuItem.tscn" type="PackedScene" id=6]
 [ext_resource path="res://ubuntu-font-family/Ubuntu-B.ttf" type="DynamicFontData" id=7]
 [ext_resource path="res://ubuntu-font-family/Hermes-Regular.otf" type="DynamicFontData" id=8]

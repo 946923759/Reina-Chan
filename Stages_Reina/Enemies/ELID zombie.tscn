@@ -3,37 +3,38 @@
 [ext_resource path="res://Stages_Reina/Enemies/ELIDs_temp.png" type="Texture" id=1]
 [ext_resource path="res://Stages/EnemyBase.tscn" type="PackedScene" id=2]
 
-[sub_resource type="GDScript" id=5]
+[sub_resource type="GDScript" id=1]
 script/source = "extends \"res://Stages/EnemyBaseScript.gd\"
 
 func _physics_process(delta):
 	move_and_slide(Vector2(facing*200,300))
 "
 
-[sub_resource type="RectangleShape2D" id=6]
-extents = Vector2( 32, 64 )
-
-[sub_resource type="AtlasTexture" id=2]
-atlas = ExtResource( 1 )
-region = Rect2( 0, 0, 16, 32 )
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 32, 63 )
 
 [sub_resource type="AtlasTexture" id=3]
 atlas = ExtResource( 1 )
+region = Rect2( 0, 0, 16, 32 )
+
+[sub_resource type="AtlasTexture" id=4]
+atlas = ExtResource( 1 )
 region = Rect2( 16, 0, 16, 32 )
 
-[sub_resource type="SpriteFrames" id=4]
+[sub_resource type="SpriteFrames" id=5]
 animations = [ {
-"frames": [ SubResource( 2 ), SubResource( 3 ) ],
+"frames": [ SubResource( 3 ), SubResource( 4 ) ],
 "loop": true,
 "name": "default",
 "speed": 5.0
 } ]
 
 [node name="ELID" instance=ExtResource( 2 )]
-script = SubResource( 5 )
+script = SubResource( 1 )
 maxHealth = 5
-shapeOverride = SubResource( 6 )
+shapeOverride = SubResource( 2 )
+collisionOffset = Vector2( 0, 1 )
 
 [node name="AnimatedSprite" parent="." index="0"]
 scale = Vector2( 4, 4 )
-frames = SubResource( 4 )
+frames = SubResource( 5 )

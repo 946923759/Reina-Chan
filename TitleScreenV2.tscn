@@ -70,6 +70,7 @@ func BitmapText(d):
 	for property in d:
 		l.set(property,d[property])
 	l.set(\"custom_fonts/font\",font)
+	l.add_to_group(\"Translatable\")
 	return l
 
 func _ready():
@@ -386,26 +387,31 @@ func _ready():
 		optionItem.position=Vector2(0,i*70)
 		var optionNameActor = parent.BitmapText({
 			\"name\":\"TextActor\",
-			\"text\":option
+			\"text\":option,
+			\"uppercase\":true
 		})
+		print(parent.font.get_string_size(option))
 		#print(Globals.OPTIONS[option])
-		if Globals.OPTIONS[option]['type']==\"int\":
-			optionItem.add_child(parent.BitmapText({
-				name=\"Value\",
-				text=str(Globals.OPTIONS[option]['value']),
-				rect_position=Vector2(600,0)
-			}))
-		else:
-			optionItem.add_child(parent.BitmapText({
-				\"name\":\"BoolOff\",
-				\"text\":\"Off\",
-				\"rect_position\":Vector2(600,0)
-			}))
-			optionItem.add_child(parent.BitmapText({
-				\"name\":\"BoolOn\",
-				\"text\":\"On\",
-				\"rect_position\":Vector2(750,0)
-			}))
+		match Globals.OPTIONS[option]['type']:
+			\"int\",\"list\":
+				optionItem.add_child(parent.BitmapText({
+					name=\"Value\",
+					text=str(Globals.OPTIONS[option]['value']),
+					rect_position=Vector2(600,0)
+				}))
+			_:
+				optionItem.add_child(parent.BitmapText({
+					\"name\":\"BoolOff\",
+					\"text\":\"Off\",
+					\"rect_position\":Vector2(600,0),
+					\"uppercase\":true
+				}))
+				optionItem.add_child(parent.BitmapText({
+					\"name\":\"BoolOn\",
+					\"text\":\"On\",
+					\"rect_position\":Vector2(750,0),
+					\"uppercase\":true
+				}))
 		
 		displayedOptions+=1
 		optionItem.add_child(optionNameActor)
@@ -436,7 +442,8 @@ func highlightBool(node,b):
 	node.get_node(\"BoolOff\").set(\"modulate\", Color(.5,.5,.5,1) if b else Color(1,1,1,1));
 	node.get_node(\"BoolOn\").set(\"modulate\", Color(.5,.5,.5,1) if not b else Color(1,1,1,1));
 
-#func updateInt
+func updateValue(selection,option):
+	get_child(existing_children+selection).get_node(\"Value\").text=Globals.OPTIONS[option]['value']
 
 #What
 var realInitPos
@@ -495,29 +502,42 @@ func input():
 					$Announcer.play()
 				#else:
 				#	print(\"a\")
+		elif Globals.OPTIONS[option]['type']==\"list\":
+			var val = Globals.OPTIONS[option]['value']
+			var idx = Globals.OPTIONS[option]['choices'].find(val,0)
+			if idx >0:
+				Globals.OPTIONS[option]['value']=Globals.OPTIONS[option]['choices'][idx-1]
+				get_child(existing_children+selection).get_node(\"Value\").text=Globals.OPTIONS[option]['value']
 		else:
 			print(\"Unknown type! \"+Globals.OPTIONS[option]['type'])
 	elif Input.is_action_pressed(\"ui_right\"):
 		var option = get_child(existing_children+selection).get_meta(\"opt_name\")
-		if Globals.OPTIONS[option]['type']==\"bool\":
-			Globals.OPTIONS[option]['value']=true
-			highlightBool(get_child(existing_children+selection),true)
-			if option==\"isFullscreen\":
-				Globals.set_fullscreen(true)
-		elif Globals.OPTIONS[option]['type']==\"int\":
-			var val = Globals.OPTIONS[option]['value']
-			if val < 100:
-				val+=10
-				Globals.OPTIONS[option]['value']=val
-				get_child(existing_children+selection).get_node(\"Value\").text=String(val)
-				if option==\"AudioVolume\" or option==\"SFXVolume\" or option==\"VoiceVolume\":
-					if parent.reinaAudioPlayer.nsf_player != null:
-						var realVolumeLevel = Globals.OPTIONS['AudioVolume']['value']*.6-60
-						parent.reinaAudioPlayer.nsf_player.set_volume(realVolumeLevel);
-					Globals.set_audio_levels()
-				if option == \"VoiceVolume\":
-					$Announcer.stop()
-					$Announcer.play()
+		match Globals.OPTIONS[option]['type']:
+			\"bool\":
+				Globals.OPTIONS[option]['value']=true
+				highlightBool(get_child(existing_children+selection),true)
+				if option==\"isFullscreen\":
+					Globals.set_fullscreen(true)
+			\"int\":
+				var val = Globals.OPTIONS[option]['value']
+				if val < 100:
+					val+=10
+					Globals.OPTIONS[option]['value']=val
+					get_child(existing_children+selection).get_node(\"Value\").text=String(val)
+					if option==\"AudioVolume\" or option==\"SFXVolume\" or option==\"VoiceVolume\":
+						if parent.reinaAudioPlayer.nsf_player != null:
+							var realVolumeLevel = Globals.OPTIONS['AudioVolume']['value']*.6-60
+							parent.reinaAudioPlayer.nsf_player.set_volume(realVolumeLevel);
+						Globals.set_audio_levels()
+					if option == \"VoiceVolume\":
+						$Announcer.stop()
+						$Announcer.play()
+			\"list\":
+				var val = Globals.OPTIONS[option]['value']
+				var idx = Globals.OPTIONS[option]['choices'].find(val,0)
+				if idx < len(Globals.OPTIONS[option]['choices'])-1:
+					Globals.OPTIONS[option]['value']=Globals.OPTIONS[option]['choices'][idx+1]
+					get_child(existing_children+selection).get_node(\"Value\").text=Globals.OPTIONS[option]['value']
 	#elif Input.is_action_just_pressed(\"ui_select\"):
 	#	call(\"action_\"+get_child(selection).name)
 "
@@ -660,7 +680,9 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="DifficultySelect_Description" type="Label" parent="."]
+[node name="DifficultySelect_Description" type="Label" parent="." groups=[
+"Translatable",
+]]
 margin_top = 550.0
 margin_right = 1280.0
 margin_bottom = 650.0
@@ -732,8 +754,8 @@ window_title = "Open a File"
 mode = 0
 access = 2
 filters = PoolStringArray( "*.tscn ; Godot Scenes" )
-current_dir = "/Programming/IDEs/Godot_v3.0.2-stable_mono_win64/Reina-Chan/Reina-Chan Godot Project"
-current_path = "/Programming/IDEs/Godot_v3.0.2-stable_mono_win64/Reina-Chan/Reina-Chan Godot Project/"
+current_dir = "/media/LocalHDD/Programming/IDEs/Godot_v3.0.2-stable_mono_win64/Reina-Chan/Reina-Chan Godot Project"
+current_path = "/media/LocalHDD/Programming/IDEs/Godot_v3.0.2-stable_mono_win64/Reina-Chan/Reina-Chan Godot Project/"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -747,8 +769,8 @@ window_title = "Open a File"
 mode = 0
 access = 2
 filters = PoolStringArray( "*.json ; Cutscene Scripts" )
-current_dir = "/Programming/IDEs/Godot_v3.0.2-stable_mono_win64/Reina-Chan/Reina-Chan Godot Project"
-current_path = "/Programming/IDEs/Godot_v3.0.2-stable_mono_win64/Reina-Chan/Reina-Chan Godot Project/"
+current_dir = "/media/LocalHDD/Programming/IDEs/Godot_v3.0.2-stable_mono_win64/Reina-Chan/Reina-Chan Godot Project"
+current_path = "/media/LocalHDD/Programming/IDEs/Godot_v3.0.2-stable_mono_win64/Reina-Chan/Reina-Chan Godot Project/"
 __meta__ = {
 "_edit_use_anchors_": false
 }

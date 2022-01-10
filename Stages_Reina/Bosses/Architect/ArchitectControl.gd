@@ -1,4 +1,5 @@
 extends KinematicBody2D
+signal boss_killed()
 
 #-1 to move left, 1 to move right
 enum DIRECTION {LEFT = -1, RIGHT = 1}
@@ -13,6 +14,9 @@ onready var hurtSound = $HurtSound
 #This is only if you didn't override objectTouched!
 #There might be cases where you need to override it.
 export(int,0,25) var player_damage = 1
+
+export(String) var intro_subtitle_key = "Architect_Intro"
+export(bool) var stage_finished_when_killed = true
 
 var rocket = preload("res://Stages_Reina/Bosses/Architect/ArchiRocket.tscn")
 var deathAnimation = preload("res://Animations/deathAnimation.tscn")
@@ -225,6 +229,7 @@ func killSelf():
 	#dropRandomItem()
 	
 	#self.queue_free()
+	emit_signal("boss_killed")
 	var player = get_node("/root/Node2D/Player")
 	player.finishStage()
 	#.lockMovement(999,Vector2())

@@ -29,6 +29,11 @@ var OPTIONS = {
 		"type":"bool",
 		"default":false
 	},
+	"language":{
+		"type":"list",
+		"choices":["system","en","es"],
+		"default":"system"
+	},
 	"flipButtons":{
 		"type":"bool",
 		"default":false
@@ -200,6 +205,7 @@ func _ready():
 	playerHadSaveData = load_my_game()
 	if playerHadSaveData:
 		set_audio_levels()
+		set_language("es")
 		playCutscenes=Globals.OPTIONS['playCutscenes']['value']
 		flipButtons=Globals.OPTIONS['flipButtons']['value']
 	
@@ -216,6 +222,12 @@ func set_fullscreen(b):
 		OS.set_window_fullscreen(false)
 		OS.window_size = gameResolution
 		OS.center_window()
+		
+func set_language(new_lang:String=""):
+	if new_lang=="":
+		new_lang=Globals.OPTIONS['language']['value']
+	if new_lang!="system":
+		TranslationServer.set_locale(new_lang)
 		
 func set_audio_levels():
 	# Audio starts at -60db (silent) and ends at 0db (max).

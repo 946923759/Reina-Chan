@@ -10,7 +10,8 @@ export (int) var bottomBound = 0;
 export (float) var cameraScale = 64;
 export (float) var tweenTime = 1;
 export (bool) var freeze_player_during_transition=false
-export (int,"Left","Right","Down","Up") var frozen_movement_direction=1 
+export (int,"Left","Right","Down","Up") var frozen_movement_direction=2 
+export (bool) var never_disable=false
 export (bool) var fade_out_and_warp_player=false
 export (int,"Relative","Absolute","No Warp") var warp_type = 0;
 export (Vector2) var destination_coordinates_if_warp=Vector2(0,-2.5);
@@ -33,7 +34,7 @@ func _ready():
 var disabled = false
 func cam(obj):
 	if obj.has_method("player_touched") and not disabled:
-		disabled = true
+		disabled = !never_disable
 		var cc = get_node("/root/Node2D/Player/Camera2D")
 		print("Touched camera trigger!")
 		

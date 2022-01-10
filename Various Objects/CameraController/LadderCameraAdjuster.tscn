@@ -12,6 +12,7 @@ export (int) var leftBound = 0;
 export (int) var topBound = 0;
 export (int) var rightBound = 0;
 export (int) var bottomBound = 0;
+export (float,-3,3,.5) var center_bound_offset = 0
 export (float) var tweenTime = 1;
 export (bool) var freeze_player_during_transition=false
 const cameraScale = 64;
@@ -38,6 +39,9 @@ func cam(obj):
 	if obj.has_method(\"player_touched\"):
 		if obj.velocity.y > -4 and obj.velocity.y < 4:
 			return
+		#Have to adjust no matter what because they could drop down
+		#elif !obj.state != 6: #State.ON_LADDER
+		#	return
 		#disabled = true
 		var cc = get_node(\"/root/Node2D/Player/Camera2D\")
 		if cc.is_tweening:
@@ -63,19 +67,19 @@ func cam(obj):
 		if obj.velocity.y < 0:
 			
 			#Set bottom bound to location of the camera trigger
-			boundsArray[3]=global_position.y
+			boundsArray[3]=global_position.y+center_bound_offset*cameraScale
 			
 			if topBound == -999:
-				boundsArray[1] = global_position.y-Globals.gameResolution.y
+				boundsArray[1] = boundsArray[3]-Globals.gameResolution.y
 			else:
 				boundsArray[1] = topBound*cameraScale;
 		else:
 			
 			#Set top bound to the location of the camera trigger
-			boundsArray[1]=global_position.y
+			boundsArray[1]=global_position.y+center_bound_offset*cameraScale
 			
 			if bottomBound == -999:
-				boundsArray[3] = topBound*cameraScale+Globals.gameResolution.y
+				boundsArray[3] = boundsArray[1]+Globals.gameResolution.y
 			else:
 				boundsArray[3] = bottomBound*cameraScale
 		

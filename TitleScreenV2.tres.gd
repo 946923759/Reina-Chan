@@ -1,6 +1,7 @@
 extends Node2D
 
 var font = preload("res://MM2Font.tres")
+var fallbackFont = preload("res://FallbackPixelFont.tres")
 var currentlyHandledMenu;
 var selection = 0;
 onready var list = $MainMenu
@@ -12,11 +13,12 @@ export (int) var nsf_track_num = 0
 #var nsf_player
 var reinaAudioPlayer
 
-func BitmapText(d):
+func BitmapText(d)->Label:
 	var l = Label.new()
 	for property in d:
 		l.set(property,d[property])
 	l.set("custom_fonts/font",font)
+	l.add_to_group("Translatable")
 	return l
 	
 func diffusealpha(node,alpha):
@@ -53,6 +55,16 @@ func _ready():
 	#$OptionsList.visible=false
 	#optionItem.add_child()
 	CheckpointPlayerStats.clearEverything()
+	if TranslationServer.get_locale() != "en_US":
+		for l in get_tree().get_nodes_in_group("Translatable"):
+			#print(l.text)
+			var width = fallbackFont.get_string_size(tr(l.text)).x
+			#print(width)
+			if width > 550:
+				var scaling = 550/width
+				
+				l.rect_scale.x=scaling
+			l.set("custom_fonts/font",fallbackFont)
 
 func _input(event):
 	if event is InputEventJoypadMotion or event is InputEventMouseMotion: #XInput controllers are broken on Windows :P

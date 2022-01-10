@@ -20,7 +20,15 @@ func enable(_discard):
 
 func _physics_process(delta):
 	#movX = get_node(\"/root/Node2D/Player\").global_position.x > global_position.x ? 100 : -100
-	var movX = (100 if get_node(\"/root/Node2D/Player\").global_position.x > global_position.x else -100)
+	var movX = 0
+	if get_node(\"/root/Node2D/Player\").global_position.x > global_position.x+10:
+		movX=100
+		sprite.flip_h = true
+	elif get_node(\"/root/Node2D/Player\").global_position.x < global_position.x-10:
+		sprite.flip_h = false
+		movX=-100
+	
+	
 	var movY = 0
 	if get_node(\"/root/Node2D/Player\").global_position.y > global_position.y+10:
 		movY = 100
@@ -28,7 +36,6 @@ func _physics_process(delta):
 		movY = -100
 	#if movX > 0:
 	#facing = DIRECTION.RIGHT if movX > 0 else DIRECTION.LEFT
-	sprite.flip_h = movX > 0
 	move_and_slide(Vector2(movX,movY))
 	
 #func animationFinished():

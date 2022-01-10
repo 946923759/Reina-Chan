@@ -36,6 +36,7 @@
 [ext_resource path="res://Various Objects/CameraController/LadderCameraAdjuster.tscn" type="PackedScene" id=34]
 [ext_resource path="res://addons/godot-next/gui/debug_label.gd" type="Script" id=35]
 [ext_resource path="res://Stages_Reina/Scarecrow/quicksand_top.png" type="Texture" id=36]
+[ext_resource path="res://Various Objects/EnemySpawner.gd" type="Script" id=37]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 1920, 32 )
@@ -131,41 +132,6 @@ func _process(delta):
 "
 
 [sub_resource type="GDScript" id=5]
-script/source = "extends VisibilityNotifier2D
-
-export var spawn_cooldown = 1
-var time: float = 0.0
-var source_scene
-var exported_vars: Array = []
-
-func _ready():
-	#set_process(false)
-	var n = $Dinergate
-	#print(n.filename)
-	source_scene = load(n.filename)
-	var l = n.get_property_list()
-	for v in l:
-		if v['usage']==8199:
-			print(v)
-			exported_vars.push_back([ v['name'], n.get(v['name']) ])
-
-func _process(delta):
-	time+=delta
-	if time > spawn_cooldown:
-		spawn_entity()
-		time=0
-
-func spawn_entity():
-	var newEntity = source_scene.instance()
-	for v in exported_vars:
-		newEntity.set(v[0],v[1])
-	newEntity.position=Vector2(0,0)
-	self.add_child(newEntity)
-	print(\"Spawned duplicate entity at \"+String(newEntity.position))
-	#pass
-"
-
-[sub_resource type="GDScript" id=6]
 script/source = "extends \"res://Stages/EnemyBaseScript.gd\"
 
 onready var timer = $Timer
@@ -206,7 +172,7 @@ func killSelf():
 	.killSelf()
 "
 
-[sub_resource type="GDScript" id=7]
+[sub_resource type="GDScript" id=6]
 script/source = "extends \"res://Stages/EnemyBaseScript.gd\"
 
 var isFlyingTowardsPlayer = false
@@ -239,7 +205,7 @@ func _physics_process(delta):
 #	sprite.set_animation(\"flying\")
 "
 
-[sub_resource type="GDScript" id=8]
+[sub_resource type="GDScript" id=7]
 script/source = "#extends \"res://Stages/EnemyBaseScript.gd\"
 extends KinematicBody2D
 
@@ -376,25 +342,25 @@ func killSelf():
 	self.queue_free()
 "
 
-[sub_resource type="RectangleShape2D" id=9]
+[sub_resource type="RectangleShape2D" id=8]
 extents = Vector2( 64, 320 )
 
-[sub_resource type="RectangleShape2D" id=10]
+[sub_resource type="RectangleShape2D" id=9]
 extents = Vector2( 32, 320 )
+
+[sub_resource type="RectangleShape2D" id=10]
+extents = Vector2( 992, 32 )
 
 [sub_resource type="RectangleShape2D" id=11]
 extents = Vector2( 992, 32 )
 
-[sub_resource type="RectangleShape2D" id=12]
-extents = Vector2( 992, 32 )
-
-[sub_resource type="SegmentShape2D" id=13]
+[sub_resource type="SegmentShape2D" id=12]
 b = Vector2( 0, 192 )
 
-[sub_resource type="RectangleShape2D" id=14]
+[sub_resource type="RectangleShape2D" id=13]
 extents = Vector2( 32, 32 )
 
-[sub_resource type="GDScript" id=15]
+[sub_resource type="GDScript" id=14]
 script/source = "extends Node2D
 
 export (int) var finalLimitLeft
@@ -431,7 +397,7 @@ func _process(delta):
 	
 "
 
-[sub_resource type="GDScript" id=16]
+[sub_resource type="GDScript" id=15]
 script/source = "extends StaticBody2D
 export(int) var quicksand_height_in_half_blocks=4
 export(float,10,30) var quicksand_speed=10
@@ -474,14 +440,14 @@ func _physics_process(delta):
 	$Sprite.position.y = -position.y-64
 "
 
-[sub_resource type="RectangleShape2D" id=17]
+[sub_resource type="RectangleShape2D" id=16]
 extents = Vector2( 1024, 8 )
 
-[sub_resource type="SegmentShape2D" id=18]
+[sub_resource type="SegmentShape2D" id=17]
 a = Vector2( 0, -16 )
 b = Vector2( 2048, -16 )
 
-[sub_resource type="GDScript" id=19]
+[sub_resource type="GDScript" id=18]
 script/source = "extends Sprite
 
 # I know this is really stupid but doing it using one tilemap
@@ -684,7 +650,7 @@ facing = 1
 [node name="SpawnerTest" type="VisibilityNotifier2D" parent="." index="25"]
 position = Vector2( -160, 256 )
 rect = Rect2( 0, 0, 64, 64 )
-script = SubResource( 5 )
+script = ExtResource( 37 )
 __meta__ = {
 "_edit_group_": true
 }
@@ -701,7 +667,7 @@ facing = 1
 position = Vector2( -2432, 704 )
 collision_layer = 26
 collision_mask = 26
-script = SubResource( 6 )
+script = SubResource( 5 )
 shapeOverride = null
 collisionOffset = Vector2( 0, 0 )
 use_collision = true
@@ -710,12 +676,12 @@ use_collision = true
 position = Vector2( -2006, 1144 )
 collision_layer = 26
 collision_mask = 26
-script = SubResource( 7 )
+script = SubResource( 6 )
 shapeOverride = null
 
 [node name="Enemy4" parent="." index="29" instance=ExtResource( 14 )]
 position = Vector2( 768, 704 )
-script = SubResource( 8 )
+script = SubResource( 7 )
 maxHealth = 10
 
 [node name="RigidBody2D" parent="." index="30" instance=ExtResource( 6 )]
@@ -725,7 +691,7 @@ position = Vector2( -224, 736 )
 position = Vector2( -672, 736 )
 
 [node name="Player" parent="." index="32"]
-position = Vector2( 12768, -224 )
+position = Vector2( 12198, -110 )
 
 [node name="room20-0" type="Node2D" parent="." index="33"]
 
@@ -789,7 +755,7 @@ rightBound = -999
 bottomBound = 36
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="EventTile13" index="0"]
-shape = SubResource( 9 )
+shape = SubResource( 8 )
 
 [node name="EventTile14" type="Area2D" parent="." index="39"]
 position = Vector2( 1248, 1888 )
@@ -806,7 +772,7 @@ bottomBound = 36
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EventTile14" index="0"]
 position = Vector2( 32, 32 )
-shape = SubResource( 9 )
+shape = SubResource( 8 )
 
 [node name="EventTile15" type="Area2D" parent="." index="40"]
 position = Vector2( 3776, 1888 )
@@ -823,7 +789,7 @@ bottomBound = 36
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EventTile15" index="0"]
 position = Vector2( 32, 32 )
-shape = SubResource( 10 )
+shape = SubResource( 9 )
 
 [node name="EventTile16" type="Area2D" parent="." index="41"]
 position = Vector2( 4864, 1888 )
@@ -840,7 +806,7 @@ bottomBound = 36
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EventTile16" index="0"]
 position = Vector2( 32, 32 )
-shape = SubResource( 10 )
+shape = SubResource( 9 )
 
 [node name="RigidBody2D2" parent="." index="42" instance=ExtResource( 4 )]
 position = Vector2( -288, 736 )
@@ -857,7 +823,7 @@ event_ID = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EventTile17" index="0"]
 position = Vector2( 32, 32 )
-shape = SubResource( 11 )
+shape = SubResource( 10 )
 
 [node name="EventTile18" type="StaticBody2D" parent="." index="44"]
 position = Vector2( -4160, 704 )
@@ -871,7 +837,7 @@ event_ID = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EventTile18" index="0"]
 position = Vector2( 32, 32 )
-shape = SubResource( 12 )
+shape = SubResource( 11 )
 
 [node name="CameraAdjuster" parent="." index="45" instance=ExtResource( 23 )]
 position = Vector2( 0, 448 )
@@ -882,13 +848,13 @@ bottomBound = 100000
 cameraScale = 1.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CameraAdjuster" index="0"]
-shape = SubResource( 13 )
+shape = SubResource( 12 )
 
 [node name="TestEnemy" parent="." index="46" instance=ExtResource( 21 )]
 position = Vector2( 352, 736 )
 collision_layer = 26
 collision_mask = 26
-shapeOverride = SubResource( 14 )
+shapeOverride = SubResource( 13 )
 
 [node name="FGTiles" type="TileMap" parent="." index="47"]
 scale = Vector2( 4, 4 )
@@ -906,7 +872,7 @@ rightBound = 40
 bottomBound = 24
 
 [node name="CustomCameraProcessor" type="Node2D" parent="CameraAdjuster2" index="1"]
-script = SubResource( 15 )
+script = SubResource( 14 )
 finalLimitLeft = 20
 scrollSpeed = 3.0
 
@@ -945,7 +911,6 @@ leftBound = 100
 topBound = -999
 rightBound = 120
 bottomBound = 36
-frozen_movement_direction = 2
 fade_out_and_warp_player = true
 destination_coordinates_if_warp = Vector2( 0, -8 )
 
@@ -989,18 +954,18 @@ position = Vector2( 12800, 0 )
 [node name="QuickSand" type="StaticBody2D" parent="Node2D2" index="0"]
 collision_layer = 17
 collision_mask = 17
-script = SubResource( 16 )
+script = SubResource( 15 )
 quicksand_speed = 30.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D2/QuickSand" index="0"]
 position = Vector2( 1024, 8 )
-shape = SubResource( 17 )
+shape = SubResource( 16 )
 one_way_collision = true
 
 [node name="Area2D" type="Area2D" parent="Node2D2/QuickSand" index="1"]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D2/QuickSand/Area2D" index="0"]
-shape = SubResource( 18 )
+shape = SubResource( 17 )
 
 [node name="DebugLabel" type="Label" parent="Node2D2/QuickSand" index="2"]
 margin_top = -96.0
@@ -1022,7 +987,7 @@ texture = ExtResource( 36 )
 centered = false
 region_enabled = true
 region_rect = Rect2( 0, 0, 512, 16 )
-script = SubResource( 19 )
+script = SubResource( 18 )
 
 [node name="Polygon2D" type="Polygon2D" parent="Node2D2" index="1"]
 visible = false

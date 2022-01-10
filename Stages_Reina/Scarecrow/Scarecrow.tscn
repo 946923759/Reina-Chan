@@ -107,6 +107,10 @@ adjust_camera = true
 topBound = -999
 rightBound = 40
 bottomBound = 12
+custom_music_name = "Scarecrow"
+nsf_music_file = "Rockman 6 UH.nsf"
+nsf_track_num = 11
+mute_music_in_debug = true
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="." index="1"]
 
@@ -146,6 +150,7 @@ script = SubResource( 1 )
 __meta__ = {
 "_edit_group_": true
 }
+quicksand_speed = 15.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="0-0 to 0-40/QuickSand" index="0"]
 position = Vector2( 3200, 8 )
