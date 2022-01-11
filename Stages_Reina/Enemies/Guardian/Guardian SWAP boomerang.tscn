@@ -11,6 +11,7 @@ var direction=1
 var time:float=0.0
 
 func _ready():
+# warning-ignore:return_value_discarded
 	connect(\"body_entered\",self,\"objectTouched\")
 
 func init(length:float,go_left:bool):
@@ -65,7 +66,6 @@ script = SubResource( 1 )
 position = Vector2( 0, 1 )
 scale = Vector2( 4, 4 )
 frames = SubResource( 5 )
-frame = 1
 playing = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

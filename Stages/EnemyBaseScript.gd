@@ -18,8 +18,8 @@ export(Vector2) var collisionOffset = Vector2(0,0)
 export(bool) var use_collision = true
 export(bool) var use_large_explosion = false
 
-onready var sprite = $AnimatedSprite
-onready var hurtSound = $HurtSound
+onready var sprite:AnimatedSprite = $AnimatedSprite
+onready var hurtSound:AudioStreamPlayer2D = $HurtSound
 
 var explosion = preload("res://Stages/EnemyExplosion.tscn")
 var smallExplosion = preload("res://Stages/EnemyExplodeSmall.tscn")

@@ -1,10 +1,14 @@
-[gd_resource type="TileSet" load_steps=17 format=2]
+[gd_resource type="TileSet" load_steps=21 format=2]
 
 [ext_resource path="res://Stages_Reina/Alchemist/cv1.png" type="Texture" id=1]
 [ext_resource path="res://Stages_Reina/Alchemist/cv1tiles.png" type="Texture" id=2]
 [ext_resource path="res://Stages_Reina/Alchemist/ladderTile.png" type="Texture" id=3]
 [ext_resource path="res://Various Objects/spikeball.png" type="Texture" id=4]
 [ext_resource path="res://Stages_Reina/Alchemist/cv1_stage6.png" type="Texture" id=5]
+[ext_resource path="res://Stages_Reina/Alchemist/WheelAnimatedTexture.tres" type="Texture" id=6]
+[ext_resource path="res://Stages_Reina/Alchemist/WheelHorizontal_AnimatedTexture.tres" type="Texture" id=7]
+[ext_resource path="res://Stages_Reina/Alchemist/verticalChain_AnimatedTexture.tres" type="Texture" id=8]
+[ext_resource path="res://Stages_Reina/Alchemist/vChainBottom_AT.tres" type="Texture" id=9]
 
 [sub_resource type="ConvexPolygonShape2D" id=1]
 points = PoolVector2Array( 16, 16, 0, 16, 0, 0, 16, 0 )
@@ -1195,3 +1199,59 @@ points = PoolVector2Array( 16, 16, 0, 16, 0, 0, 16, 0 )
 82/shape_one_way_margin = 0.0
 82/shapes = [  ]
 82/z_index = 0
+83/name = "WheelAnimatedTexture.tres 83"
+83/texture = ExtResource( 6 )
+83/tex_offset = Vector2( 0, 0 )
+83/modulate = Color( 1, 1, 1, 1 )
+83/region = Rect2( 0, 0, 32, 32 )
+83/tile_mode = 0
+83/occluder_offset = Vector2( 0, 0 )
+83/navigation_offset = Vector2( 0, 0 )
+83/shape_offset = Vector2( 0, 0 )
+83/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+83/shape_one_way = false
+83/shape_one_way_margin = 0.0
+83/shapes = [  ]
+83/z_index = 0
+84/name = "WheelHorizontal_AnimatedTexture.tres 84"
+84/texture = ExtResource( 7 )
+84/tex_offset = Vector2( 0, 0 )
+84/modulate = Color( 1, 1, 1, 1 )
+84/region = Rect2( 0, 0, 16, 48 )
+84/tile_mode = 0
+84/occluder_offset = Vector2( 0, 0 )
+84/navigation_offset = Vector2( 0, 0 )
+84/shape_offset = Vector2( 0, 0 )
+84/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+84/shape_one_way = false
+84/shape_one_way_margin = 0.0
+84/shapes = [  ]
+84/z_index = 0
+85/name = "verticalChain_AnimatedTexture.tres 85"
+85/texture = ExtResource( 8 )
+85/tex_offset = Vector2( 0, 0 )
+85/modulate = Color( 1, 1, 1, 1 )
+85/region = Rect2( 0, 0, 16, 16 )
+85/tile_mode = 0
+85/occluder_offset = Vector2( 0, 0 )
+85/navigation_offset = Vector2( 0, 0 )
+85/shape_offset = Vector2( 0, 0 )
+85/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+85/shape_one_way = false
+85/shape_one_way_margin = 0.0
+85/shapes = [  ]
+85/z_index = 0
+86/name = "vChainBottom_AT.tres 86"
+86/texture = ExtResource( 9 )
+86/tex_offset = Vector2( 0, 0 )
+86/modulate = Color( 1, 1, 1, 1 )
+86/region = Rect2( 0, 0, 16, 16 )
+86/tile_mode = 0
+86/occluder_offset = Vector2( 0, 0 )
+86/navigation_offset = Vector2( 0, 0 )
+86/shape_offset = Vector2( 0, 0 )
+86/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+86/shape_one_way = false
+86/shape_one_way_margin = 0.0
+86/shapes = [  ]
+86/z_index = 0

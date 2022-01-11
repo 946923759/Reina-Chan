@@ -847,8 +847,10 @@ func die():
 		$CanvasLayer/Fadeout.fadeOut()
 		yield($CanvasLayer/Fadeout/Fadeout_Tween,"tween_completed")
 		if Globals.gameDifficulty < Globals.Difficulty.MEDIUM or CheckpointPlayerStats.playerLivesLeft >= 0:
+# warning-ignore:return_value_discarded
 			get_tree().reload_current_scene()
 		else:
+# warning-ignore:return_value_discarded
 			get_tree().change_scene("res://TitleScreenV2.tscn")
 
 func finishStage():
@@ -858,11 +860,13 @@ func finishStage():
 	lockMovement(999,Vector2(),false)
 	get_node("/root/Node2D").stopMusic()
 	$VictorySound.play()
+# warning-ignore:return_value_discarded
 	$VictorySound.connect("finished",self,"finishStage_2")
 	
 func finishStage_2():
 	$CanvasLayer/Fadeout.fadeOut()
 	yield($CanvasLayer/Fadeout/Fadeout_Tween,"tween_completed")
+# warning-ignore:return_value_discarded
 	get_tree().change_scene("res://Cutscene/cutsceneWhatever.tscn")
 	
 

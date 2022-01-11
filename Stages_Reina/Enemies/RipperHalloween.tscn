@@ -1,0 +1,187 @@
+[gd_scene load_steps=15 format=2]
+
+[ext_resource path="res://Stages/EnemyBase.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Stages_Reina/Enemies/Ripper.png" type="Texture" id=2]
+[ext_resource path="res://addons/godot-next/gui/debug_label.gd" type="Script" id=3]
+
+[sub_resource type="GDScript" id=10]
+script/source = "extends \"res://Stages/EnemyBaseScript.gd\"
+
+enum STATES {
+	SHOOTING,
+	RUNNING,
+	THROWING
+}
+var curState = 0
+var numShots = 0
+
+#lol
+var bullet = preload(\"res://Stages_Reina/Enemies/bulletDinergate.tscn\")
+var grenade = preload(\"res://Stages_Reina/Enemies/EnemyGrenade.tscn\")
+var pumpkin = preload(\"res://Stages_Reina/Bosses/Alchemist/PumpkinBomb.tscn\")
+
+var player
+func _ready():
+	player = get_node_or_null(\"/root/Node2D/Player\")
+	if !is_instance_valid(player):
+		print(\"RIPPER: No player!\")
+	sprite.set_animation(\"default\")
+		
+var timer:float=0.0
+var velocity:Vector2=Vector2(0,300)
+func _physics_process(delta):
+	$Label.text=String(is_on_floor())
+	velocity=move_and_slide(velocity, Vector2(0, -1), true)
+	velocity.y+=1000*delta
+	
+	if timer>=0:
+		timer-=delta
+		return
+	match curState:
+		STATES.SHOOTING:
+			sprite.set_animation(\"shoot\")
+			if numShots <3:
+				var bi = bullet.instance()
+				var pos = position + Vector2(30*facing, 0)
+				
+				bi.position = pos
+				get_parent().add_child(bi)
+				bi.init(Vector2(5*facing,0))
+				
+				self.add_collision_exception_with(bi)# Make bullet and this not collide
+				#sleepTime=1
+				#print(\"Fired bullet.\")
+				timer=.1
+				numShots+=1
+			else:
+				sprite.set_animation(\"jump\")
+				numShots=0
+				curState+=1
+				velocity=Vector2(500*facing,-150)
+		STATES.RUNNING:
+			if is_on_floor():
+				sprite.set_animation(\"default\")
+				velocity.x=0
+				curState+=1
+				timer=.5
+				facing=1 if (player.global_position.x > global_position.x) else -1
+				sprite.flip_h = (facing == DIRECTION.RIGHT)
+		STATES.THROWING:
+			sprite.set_animation(\"throw\")
+			if sprite.frame==1:
+				var bi = grenade.instance()
+				var pos = position + Vector2(15*facing, -16)
+				
+				bi.position = pos
+				get_parent().add_child(bi)
+				bi.init(facing)
+				
+				self.add_collision_exception_with(bi)# Make bullet and this not collide
+				timer=1
+				curState=0
+
+func killSelf():
+	var bi = pumpkin.instance()
+	var pos = position + Vector2(15*facing, -16)
+	
+	bi.position = pos
+	get_parent().add_child(bi)
+	bi.velocity=Vector2(5*facing,5)
+	#bi.init(facing)
+	
+	self.add_collision_exception_with(bi)# Make bullet and this not collide
+	#Call super method
+	.killSelf()
+"
+
+[sub_resource type="RectangleShape2D" id=11]
+extents = Vector2( 36, 64 )
+
+[sub_resource type="AtlasTexture" id=1]
+atlas = ExtResource( 2 )
+region = Rect2( 0, 0, 32, 34 )
+
+[sub_resource type="AtlasTexture" id=2]
+atlas = ExtResource( 2 )
+region = Rect2( 128, 0, 32, 34 )
+
+[sub_resource type="AtlasTexture" id=3]
+atlas = ExtResource( 2 )
+region = Rect2( 160, 0, 32, 34 )
+
+[sub_resource type="AtlasTexture" id=4]
+atlas = ExtResource( 2 )
+region = Rect2( 192, 0, 32, 34 )
+
+[sub_resource type="AtlasTexture" id=5]
+atlas = ExtResource( 2 )
+region = Rect2( 224, 0, 32, 34 )
+
+[sub_resource type="AtlasTexture" id=6]
+atlas = ExtResource( 2 )
+region = Rect2( 32, 0, 32, 34 )
+
+[sub_resource type="AtlasTexture" id=7]
+atlas = ExtResource( 2 )
+region = Rect2( 64, 0, 32, 34 )
+
+[sub_resource type="AtlasTexture" id=8]
+atlas = ExtResource( 2 )
+region = Rect2( 96, 0, 32, 34 )
+
+[sub_resource type="SpriteFrames" id=9]
+animations = [ {
+"frames": [ SubResource( 1 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 2 ) ],
+"loop": true,
+"name": "jump",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 3 ), SubResource( 4 ), SubResource( 5 ) ],
+"loop": false,
+"name": "throw",
+"speed": 10.0
+}, {
+"frames": [ SubResource( 6 ), SubResource( 7 ), SubResource( 8 ) ],
+"loop": false,
+"name": "shoot",
+"speed": 5.0
+} ]
+
+[node name="RipperHalloween" instance=ExtResource( 1 )]
+script = SubResource( 10 )
+shapeOverride = SubResource( 11 )
+
+[node name="AnimatedSprite" parent="." index="0"]
+scale = Vector2( 4, 4 )
+frames = SubResource( 9 )
+animation = "throw"
+
+[node name="DebugLabel" type="Label" parent="." index="6"]
+margin_left = 1.41422
+margin_top = -113.844
+margin_right = 93.4142
+margin_bottom = -82.8442
+text = "curState = null
+velocity = null
+"
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+target_path = NodePath("..")
+properties = PoolStringArray( "curState", "velocity" )
+
+[node name="Label" type="Label" parent="." index="7"]
+margin_left = 2.12128
+margin_top = -140.007
+margin_right = 70.1213
+margin_bottom = -126.007
+text = "is_on_floor"
+__meta__ = {
+"_edit_use_anchors_": false
+}
