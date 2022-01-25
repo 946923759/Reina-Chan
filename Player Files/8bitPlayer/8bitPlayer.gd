@@ -726,6 +726,12 @@ var posInQueue:int = 0
 func lockMovement(time:float,velocity:Vector2,freeze_y_velocity:bool=true):
 	lockMovementQueue([[time,velocity,"",freeze_y_velocity]])
 
+#Queue is structured like time,vector2,animation,freeze_y_velocity
+#obj.call("lockMovementQueue",[
+#	[.3,Vector2(0,0)],
+#	[.5,Vector2(obj.run_speed,0),"",false],
+#	[.3,Vector2(0,0),"Idle"]
+#])
 func lockMovementQueue(queue:Array):
 	lockQueue = queue
 	movementLocked = true
@@ -840,7 +846,7 @@ func die():
 		sprite.visible = false
 		
 		var sp = deathAnimation.instance()
-		sp.position=position
+		sp.position=position-Vector2(48,16)
 		get_parent().add_child(sp)
 		$DieSound.play()
 		yield($DieSound,"finished")

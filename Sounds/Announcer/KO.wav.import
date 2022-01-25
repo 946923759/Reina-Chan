@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/KO.wav-fdde363aa4fcaa1bac05f5d5aadb5f74.sample"
+
+[deps]
+
+source_file="res://Sounds/Announcer/KO.wav"
+dest_files=[ "res://.import/KO.wav-fdde363aa4fcaa1bac05f5d5aadb5f74.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0
