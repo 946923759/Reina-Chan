@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/S3K_77.wav-793227808569e52d5973f946407fd99c.sample"
+
+[deps]
+
+source_file="res://Sounds/Classic/S3K_77.wav"
+dest_files=[ "res://.import/S3K_77.wav-793227808569e52d5973f946407fd99c.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

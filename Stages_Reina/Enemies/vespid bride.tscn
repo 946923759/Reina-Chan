@@ -15,6 +15,7 @@ enum STATES {
 	WAIT
 }
 var curState = 0
+export (float,.2,2,.1) var moveAfter=.7
 
 #var g = preload(\"res://Stages_Reina/Enemies/EnemyGrenade.tscn\")
 var g = preload(\"res://Stages_Reina/Enemies/VespidBrideFlowers.tscn\")
@@ -38,7 +39,7 @@ func _physics_process(delta):
 		sprite.set_animation(\"default\")
 		move_and_slide(Vector2(150*mov,200))
 		movedFor+=delta
-		if movedFor > .7:
+		if movedFor > moveAfter:
 			movedFor=0
 			curState=STATES.THROW
 	elif curState==STATES.THROW:
