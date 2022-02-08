@@ -17,7 +17,9 @@ export (String) var nsf_music_file
 export (int) var nsf_track_num = 0
 export (bool) var mute_music_in_debug=false
 export (bool) var mute_boss_music_in_debug=false
+#export (bool) var completely_disable_music=false
 #var camera_multiplier = 16
+export (Globals.Weapons) var weapon_to_unlock=0
 
 var reinaAudioPlayer
 
@@ -63,11 +65,13 @@ func _ready():
 func playBossMusic():
 	if OS.is_debug_build() and mute_boss_music_in_debug:
 		return
+	print("playing boss music")
 	reinaAudioPlayer.load_song("Boss","Rockman 6 UH.nsf",30)
 
-func fadeMusic():
+#This is only ever used for the boss doors honestly
+func fadeMusic(time:float=2):
 	print("Got FadeMusic command")
-	reinaAudioPlayer.fade_music()
+	reinaAudioPlayer.fade_music(time)
 	#var seq := TweenSequence.new(get_tree())
 
 		#$AudioStreamPlayer.stop()

@@ -1,6 +1,6 @@
 extends Node2D
 
-var font = preload("res://MM2Font.tres")
+var font = preload("res://FallbackPixelFont.tres")
 var fallbackFont = preload("res://FallbackPixelFont.tres")
 var currentlyHandledMenu;
 var selection = 0;
@@ -36,7 +36,7 @@ func highlightList(actor,param):
 			actor.get_child(i).set("custom_colors/font_color", Color(1,1,1,1));
 
 func _ready():
-	font.size=40
+	#font.size=40
 	if OS.has_feature("console"):
 		list.get_node("QuitLabel").queue_free()
 		#home page can be kept since it works on Android TV and chrome supports controllers
@@ -44,27 +44,43 @@ func _ready():
 	$DifficultySelect_Description.modulate.a=0
 	$Extras.modulate.a=0
 	$OptionsList.modulate.a=0
+	
+	if Globals.playerHasSaveData:
+		selection=1
+	else:
+		$MainMenu/Continue.modulate=Color(.5,.5,.5)
 	highlightList(list, selection);
 	
 	#print(OS.get_executable_path().get_base_dir()+"/CustomMusic/")
 	reinaAudioPlayer=Globals.ReinaAudioPlayer.new(self)
 	reinaAudioPlayer.load_song("TitleScreen",nsf_music,nsf_track_num)
-	var music = Globals.get_custom_music("TitleScreen")
+	#var music = Globals.get_custom_music("TitleScreen")
 	#$DifficultySelect.visible=false
 	#$Extras.visible=false
 	#$OptionsList.visible=false
 	#optionItem.add_child()
 	CheckpointPlayerStats.clearEverything()
-	if TranslationServer.get_locale() != "en_US":
-		for l in get_tree().get_nodes_in_group("Translatable"):
-			#print(l.text)
-			var width = fallbackFont.get_string_size(tr(l.text)).x
-			#print(width)
-			if width > 550:
-				var scaling = 550/width
-				
-				l.rect_scale.x=scaling
-			l.set("custom_fonts/font",fallbackFont)
+	setTranslated()
+
+func setTranslated():
+	for node in $MainMenu.get_children():
+		node.text=INITrans.GetString("TitleScreen",node.text)
+		if INITrans.currentLanguageType!=INITrans.LanguageType.ASCII:
+			node.set("custom_fonts/font",INITrans.font)
+#	if TranslationServer.get_locale() != "en_US":
+#		print("user lang: "+TranslationServer.get_locale())
+#		for l in get_tree().get_nodes_in_group("TEST"):
+#
+#			#print(l.text)
+#			print(l.get_path())
+#			#l.get_parent()
+#			if l.get_parent()==$OptionsList:
+#				var width = fallbackFont.get_string_size(tr(l.text)).x
+#				#print(width)
+#				if width > 550:
+#					var scaling = 550/width
+#					l.rect_scale.x=scaling
+#			l.set("custom_fonts/font",fallbackFont)
 
 func _input(event):
 	if event is InputEventJoypadMotion or event is InputEventMouseMotion: #XInput controllers are broken on Windows :P
@@ -87,16 +103,16 @@ func _input(event):
 				selectSound.play()
 				selection = selection + 1;
 				#Skip continue if there's no save file
-				#if selection == 1:
-				#	selection = 2;
+				if selection == 1 and !Globals.playerHasSaveData:
+					selection = 2;
 				highlightList(list,selection);
 				
 		if Input.is_action_pressed("ui_up"):
 			if selection > 0:
 				selectSound.play()
 				selection = selection - 1;
-				#if selection == 1:
-				#	selection = 0;
+				if selection == 1 and !Globals.playerHasSaveData:
+					selection = 0;
 				highlightList(list, selection);
 				
 		if Input.is_action_just_pressed("ui_select"):
@@ -168,3 +184,7 @@ func tweenMainMenuIn():
 	tween2.interpolate_property(currentlyHandledMenu, 'modulate',
 	null, Color(1,1,1,0), .25, Tween.TRANS_QUAD, Tween.EASE_OUT);
 	tween2.start();
+
+
+func _on_CheatCodeHandler_cheat_detected():
+	pass # Replace with function body.

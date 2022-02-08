@@ -1,13 +1,13 @@
-[gd_scene load_steps=22 format=2]
+[gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://TitleScreenV2.tres.gd" type="Script" id=1]
-[ext_resource path="res://MM2Font.tres" type="DynamicFont" id=2]
+[ext_resource path="res://FallbackPixelFont.tres" type="DynamicFont" id=2]
 [ext_resource path="res://Sounds/Menu - Picked.WAV" type="AudioStream" id=3]
 [ext_resource path="res://Sounds/Menu - Choosing.WAV" type="AudioStream" id=4]
 [ext_resource path="res://reina_logo.png" type="Texture" id=5]
 [ext_resource path="res://MM2Font_Smaller.tres" type="DynamicFont" id=6]
 [ext_resource path="res://megaman_2.ttf" type="DynamicFontData" id=7]
-[ext_resource path="res://Sounds/Classic/S3K_B8 - Chaos Emerald.wav" type="AudioStream" id=8]
+[ext_resource path="res://Sounds/Classic/37 - Chaos Emerald.ogg" type="AudioStream" id=8]
 [ext_resource path="res://CheatCodeDetector.gd" type="Script" id=9]
 [ext_resource path="res://Sounds/Announcer/Mission Start/LetsParty.wav" type="AudioStream" id=10]
 
@@ -18,6 +18,18 @@ export(String) var submenuNode;
 
 #func action():
 #	get_tree().change_scene(\"res://BossSelect.tscn\");
+"
+
+[sub_resource type="GDScript" id=12]
+script/source = "extends Label
+export var hasSubmenu = true;
+export(String) var submenuNode;
+
+func action():
+	if Globals.load_player_game():
+		get_tree().change_scene(\"res://StageSelectV2/NewBossSelect.tscn\")
+	else:
+		get_tree().change_scene(\"res://savedataError.tscn\")
 "
 
 [sub_resource type="GDScript" id=2]
@@ -73,32 +85,37 @@ func BitmapText(d):
 	l.add_to_group(\"Translatable\")
 	return l
 
+func setDescText():
+	#desc.text=Globals.difficultyToString(Globals.playerData.gameDifficulty)
+	desc.text = INITrans.GetString(\"Difficulty\",\"desc_\"+Globals.difficultyToString(Globals.playerData.gameDifficulty))
+	#desc.text=tr(\"SUPERHERO\")
+
 func _ready():
 	#var i = 0
 	for difficulty in Globals.Difficulty:
 		#print(tr(difficulty.to_upper()))
 		add_child(BitmapText({
-			\"text\":difficulty.to_upper(),
+			\"text\":INITrans.GetString(\"Difficulty\",difficulty.to_upper()),
 			\"name\":difficulty
 		}))
-	parent.highlightList(self,Globals.gameDifficulty)
-	desc.text = \"desc_\"+Globals.difficultyToString(Globals.gameDifficulty)
+	parent.highlightList(self,Globals.playerData.gameDifficulty)
+	setDescText()
 	#print(Globals.get(\"gameDifficulty\"))
 
 func input():
-	if Input.is_action_just_pressed(\"ui_down\") and Globals.gameDifficulty < len(Globals.Difficulty)-1:
-		Globals.gameDifficulty=Globals.gameDifficulty+1
-		parent.highlightList(self,Globals.gameDifficulty)
-		desc.text = \"desc_\"+Globals.difficultyToString(Globals.gameDifficulty)
+	if Input.is_action_just_pressed(\"ui_down\") and Globals.playerData.gameDifficulty < len(Globals.Difficulty)-1:
+		Globals.playerData.gameDifficulty=Globals.playerData.gameDifficulty+1
+		parent.highlightList(self,Globals.playerData.gameDifficulty)
+		setDescText()
 		parent.selectSound.play()
-	elif Input.is_action_just_pressed(\"ui_up\") and Globals.gameDifficulty > 0:
-		Globals.gameDifficulty=Globals.gameDifficulty-1
-		parent.highlightList(self,Globals.gameDifficulty)
-		desc.text = \"desc_\"+Globals.difficultyToString(Globals.gameDifficulty)
+	elif Input.is_action_just_pressed(\"ui_up\") and Globals.playerData.gameDifficulty > 0:
+		Globals.playerData.gameDifficulty=Globals.playerData.gameDifficulty-1
+		parent.highlightList(self,Globals.playerData.gameDifficulty)
+		setDescText()
 		parent.selectSound.play()
 	elif Input.is_action_just_pressed(\"ui_select\") or Input.is_action_just_pressed(\"ui_pause\"):
-		Globals.nextStage = \"res://Stages_Reina/Architect/StageArchitect.tscn\"
-		get_tree().change_scene(\"res://StageIntro.tscn\")
+		#Globals.nextStage = \"res://Stages_Reina/Architect/StageArchitect.tscn\"
+		get_tree().change_scene(\"res://StageSelectV2/NewBossSelect.tscn\")
 	
 func OnCommand():
 	parent.diffusealpha(desc,1)
@@ -189,7 +206,7 @@ func _ready():
 	for option in extras_table:
 		if extras_table[option]['hidden']==false or call(\"unlock_\"+option):
 			add_child(parent.BitmapText({
-				\"text\":option,
+				\"text\":INITrans.GetString(\"Extras\",option),
 				\"name\":option
 			}))
 	parent.highlightList(self,0)
@@ -387,7 +404,7 @@ func _ready():
 		optionItem.position=Vector2(0,i*70)
 		var optionNameActor = parent.BitmapText({
 			\"name\":\"TextActor\",
-			\"text\":option,
+			\"text\":INITrans.GetString(\"SystemOptions\",option),
 			\"uppercase\":true
 		})
 		print(parent.font.get_string_size(option))
@@ -397,19 +414,20 @@ func _ready():
 				optionItem.add_child(parent.BitmapText({
 					name=\"Value\",
 					text=str(Globals.OPTIONS[option]['value']),
-					rect_position=Vector2(600,0)
+					\"uppercase\":true,
+					rect_position=Vector2(650,0)
 				}))
 			_:
 				optionItem.add_child(parent.BitmapText({
 					\"name\":\"BoolOff\",
 					\"text\":\"Off\",
-					\"rect_position\":Vector2(600,0),
+					\"rect_position\":Vector2(650,0),
 					\"uppercase\":true
 				}))
 				optionItem.add_child(parent.BitmapText({
 					\"name\":\"BoolOn\",
 					\"text\":\"On\",
-					\"rect_position\":Vector2(750,0),
+					\"rect_position\":Vector2(820,0),
 					\"uppercase\":true
 				}))
 		
@@ -420,10 +438,11 @@ func _ready():
 		self.add_child(optionItem)
 		#optionsList.append(option)
 	highlightList()
+	updateTranslation()
 	realInitPos=position
 
 func OffCommand():
-	Globals.save_my_game()
+	Globals.save_system_data()
 
 var selection = 0
 
@@ -445,6 +464,30 @@ func highlightBool(node,b):
 func updateValue(selection,option):
 	get_child(existing_children+selection).get_node(\"Value\").text=Globals.OPTIONS[option]['value']
 
+func updateTranslation(refresh:bool=false,t:String=\"\"):
+	if refresh:
+		INITrans.SetLanguage(t)
+		parent.setTranslated()
+	for node in get_children():
+		if node.has_meta(\"opt_name\"):
+			var o = node.get_meta(\"opt_name\")
+			var tn = node.get_node(\"TextActor\")
+			tn.text=INITrans.GetString(\"SystemOptions\",o)
+			var width = INITrans.font.get_string_size(tn.text).x
+			if width > 600:
+				var scaling = 600/width
+				tn.rect_scale.x=scaling
+			else:
+				tn.rect_scale.x=1.0
+#				#print(width)
+			for nn in node.get_children():
+				if nn is Label:
+					nn.set(\"custom_fonts/font\",INITrans.font)
+			#tn.set(\"custom_fonts/font\",INITrans.font)
+			#if node.has_node(\"BoolOn\"):
+			#	node.get_node(\"BoolOff\").set(\"custom_fonts/font\",INITrans.font)
+			#	node.get_node(\"BoolOn\").set(\"custom_fonts/font\",INITrans.font)
+			#elif node.has_node(\"\")
 #What
 var realInitPos
 func moveListUp():
@@ -453,7 +496,7 @@ func moveListUp():
 	var subList = self
 	tween2.interpolate_property(subList, 'position:y',
 	null,
-	realInitPos.y-100, #move 100px up
+	realInitPos.y-175, #move 100px up
 	.25, Tween.TRANS_QUAD, Tween.EASE_OUT);
 	tween2.start();
 	
@@ -507,7 +550,11 @@ func input():
 			var idx = Globals.OPTIONS[option]['choices'].find(val,0)
 			if idx >0:
 				Globals.OPTIONS[option]['value']=Globals.OPTIONS[option]['choices'][idx-1]
-				get_child(existing_children+selection).get_node(\"Value\").text=Globals.OPTIONS[option]['value']
+				var t = Globals.OPTIONS[option]['value']
+				if option==\"language\":
+					updateTranslation(true,t)
+					t=INITrans.GetString(\"Language\",t)
+				get_child(existing_children+selection).get_node(\"Value\").text=t
 		else:
 			print(\"Unknown type! \"+Globals.OPTIONS[option]['type'])
 	elif Input.is_action_pressed(\"ui_right\"):
@@ -537,7 +584,11 @@ func input():
 				var idx = Globals.OPTIONS[option]['choices'].find(val,0)
 				if idx < len(Globals.OPTIONS[option]['choices'])-1:
 					Globals.OPTIONS[option]['value']=Globals.OPTIONS[option]['choices'][idx+1]
-					get_child(existing_children+selection).get_node(\"Value\").text=Globals.OPTIONS[option]['value']
+					var t = Globals.OPTIONS[option]['value']
+					if option==\"language\":
+						updateTranslation(true,t)
+						t=INITrans.GetString(\"Language\",t)
+					get_child(existing_children+selection).get_node(\"Value\").text=t
 	#elif Input.is_action_just_pressed(\"ui_select\"):
 	#	call(\"action_\"+get_child(selection).name)
 "
@@ -546,18 +597,18 @@ func input():
 script/source = "extends AudioStreamPlayer
 
 #test
+func on_play_finished():
+	get_tree().reload_current_scene()
 
 
-func _on_Node_cheat_detected(code):
+func _on_CheatCodeHandler_cheat_detected(_a):
 	#pass # Replace with function body.
 	#print(code)
 	Globals.unlockedZeroMode=true
 	Globals.availableWeapons[1]=true
+	get_parent().reinaAudioPlayer.stop_music()
 	play()
 	connect(\"finished\",self, \"on_play_finished\")
-
-func on_play_finished():
-	get_tree().reload_current_scene()
 "
 
 [node name="Node2D" type="Node2D"]
@@ -580,12 +631,12 @@ margin_top = 128.693
 margin_right = 813.935
 margin_bottom = 148.693
 custom_fonts/font = ExtResource( 6 )
-text = "Demo 1"
+text = "Demo 2"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label2" type="Label" parent="Polygon2D"]
+[node name="Disclaimer" type="Label" parent="Polygon2D"]
 margin_left = 633.272
 margin_top = 645.9
 margin_right = 1271.27
@@ -613,59 +664,83 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="StartLabel" type="Label" parent="MainMenu"]
+[node name="StartLabel" type="Label" parent="MainMenu" groups=[
+"TEST",
+]]
 margin_right = 601.0
-margin_bottom = 50.0
+margin_bottom = 45.0
 custom_fonts/font = ExtResource( 2 )
-text = "start game"
+text = "START_GAME"
 uppercase = true
 script = SubResource( 1 )
 submenuNode = "DifficultySelect"
 
-[node name="playIntro" type="Label" parent="MainMenu"]
-margin_top = 80.0
+[node name="Continue" type="Label" parent="MainMenu" groups=[
+"TEST",
+]]
+margin_top = 75.0
 margin_right = 601.0
-margin_bottom = 130.0
+margin_bottom = 120.0
 custom_fonts/font = ExtResource( 2 )
-text = "play intro"
+text = "CONTINUE"
+uppercase = true
+script = SubResource( 12 )
+hasSubmenu = false
+
+[node name="playIntro" type="Label" parent="MainMenu" groups=[
+"TEST",
+]]
+margin_top = 150.0
+margin_right = 601.0
+margin_bottom = 195.0
+custom_fonts/font = ExtResource( 2 )
+text = "PLAY_INTRO"
 uppercase = true
 script = SubResource( 2 )
 
-[node name="OptionsLabel" type="Label" parent="MainMenu"]
-margin_top = 160.0
+[node name="OptionsLabel" type="Label" parent="MainMenu" groups=[
+"TEST",
+]]
+margin_top = 225.0
 margin_right = 601.0
-margin_bottom = 210.0
+margin_bottom = 270.0
 custom_fonts/font = ExtResource( 2 )
-text = "Options"
+text = "OPTIONS"
 uppercase = true
 script = SubResource( 3 )
 submenuNode = "OptionsList"
 
-[node name="JukeboxLabel" type="Label" parent="MainMenu"]
-margin_top = 240.0
+[node name="JukeboxLabel" type="Label" parent="MainMenu" groups=[
+"TEST",
+]]
+margin_top = 300.0
 margin_right = 601.0
-margin_bottom = 290.0
+margin_bottom = 345.0
 custom_fonts/font = ExtResource( 2 )
 text = "EXTRAS"
 uppercase = true
 script = SubResource( 4 )
 submenuNode = "Extras"
 
-[node name="Home page" type="Label" parent="MainMenu"]
-margin_top = 320.0
+[node name="Home page" type="Label" parent="MainMenu" groups=[
+"TEST",
+]]
+margin_top = 375.0
 margin_right = 601.0
-margin_bottom = 370.0
+margin_bottom = 420.0
 custom_fonts/font = ExtResource( 2 )
-text = "homepage"
+text = "HOMEPAGE"
 uppercase = true
 script = SubResource( 5 )
 
-[node name="QuitLabel" type="Label" parent="MainMenu"]
-margin_top = 400.0
+[node name="QuitLabel" type="Label" parent="MainMenu" groups=[
+"TEST",
+]]
+margin_top = 450.0
 margin_right = 601.0
-margin_bottom = 450.0
+margin_bottom = 495.0
 custom_fonts/font = ExtResource( 2 )
-text = "Quit"
+text = "QUIT"
 uppercase = true
 script = SubResource( 6 )
 
@@ -680,9 +755,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="DifficultySelect_Description" type="Label" parent="." groups=[
-"Translatable",
-]]
+[node name="DifficultySelect_Description" type="Label" parent="."]
 margin_top = 550.0
 margin_right = 1280.0
 margin_bottom = 650.0
@@ -714,13 +787,13 @@ script = SubResource( 10 )
 
 [node name="Polygon2D" type="Polygon2D" parent="OptionsList"]
 position = Vector2( 4, -88 )
-scale = Vector2( 1, 0.216667 )
+scale = Vector2( 1, 0.36616 )
 polygon = PoolVector2Array( 0, 0, 1280, 0, 1280, 720, 0, 720 )
 vertex_colors = PoolColorArray( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1 )
 
 [node name="Polygon2D2" type="Polygon2D" parent="OptionsList"]
 position = Vector2( 544, 461 )
-scale = Vector2( 0.584375, 0.216667 )
+scale = Vector2( 0.584375, 0.387182 )
 polygon = PoolVector2Array( 0, 0, 1280, 0, 1280, 720, 0, 720 )
 vertex_colors = PoolColorArray( 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 )
 
@@ -779,10 +852,10 @@ __meta__ = {
 stream = ExtResource( 8 )
 script = SubResource( 11 )
 
-[node name="Node" type="Node" parent="AudioStreamPlayer2"]
+[node name="CheatCodeHandler" type="Node" parent="AudioStreamPlayer2"]
 script = ExtResource( 9 )
 codes = [ "UUDDLRLR" ]
 
 [connection signal="file_selected" from="FileDialog_stage" to="Extras" method="_on_FileDialog_file_selected"]
 [connection signal="file_selected" from="FileDialog_cutscene" to="Extras" method="_on_FileDialog_cutscene_file_selected"]
-[connection signal="cheat_detected" from="AudioStreamPlayer2/Node" to="AudioStreamPlayer2" method="_on_Node_cheat_detected"]
+[connection signal="cheat_detected" from="AudioStreamPlayer2/CheatCodeHandler" to="AudioStreamPlayer2" method="_on_CheatCodeHandler_cheat_detected"]

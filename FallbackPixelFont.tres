@@ -3,6 +3,6 @@
 [ext_resource path="res://ubuntu-font-family/PressStart2P.ttf" type="DynamicFontData" id=1]
 
 [resource]
-size = 43
+size = 45
 extra_spacing_space = -12
 font_data = ExtResource( 1 )

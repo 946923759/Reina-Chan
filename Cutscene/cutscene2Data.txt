@@ -1,0 +1,57 @@
+#BG 17xh-Networld
+#NSF_FILENAME RNC.nsf
+#NSF_TRACKNUM 5
+#CDAUDIO Cutscene2
+
+preload_portraits pic_UMP9|Dier|Nyto_Isomer_8|pic_UMP45
+portrait pic_UMP9|Dier,true,0
+matchnames UMP9|Dier|Dandelai
+speaker Dier
+msg Hello!! Can you hear me? And see and feel properly?
+speaker UMP9
+msg Yeah. I'm in... A blue cyberspace.
+speaker Dier
+msg Alright, that means it's working properly.
+msg This simulator is designed to put you in many different environments to test your skills.
+msg It's based on the neural cloud data of most of Sangvis Ferri and your missions as 404.
+speaker UMP9
+msg Woah, cool.
+speaker Dier
+msg Dandelai here is working hard to keep it running. At least, I think she's working hard. Her expression hasn't changed at all.
+portrait pic_UMP9|Dier,true,0|Nyto_Isomer_8,true,0
+speaker Dandelai
+msg I'm currently using about 35% of my computational power.
+portrait|pic_UMP9|Dier,true,0|pic_UMP45,true,0
+speaker UMP45
+msg Is this safe?
+speaker Dier
+msg ...We have no idea?
+speaker UMP45
+msg /hl[2]Of course you don't. If she gets deleted it's half a million credits, alright?
+portrait|pic_UMP9|Dier,true,0|Nyto_Isomer_8,true,0
+speaker Dier
+msg It's safe, right Dande?
+speaker Dandelai
+msg I'm not going to audit the simulator you wrote. But currently, it seems to be working without issue.
+speaker Dier
+msg Of course. I did test it often enough with my A-Dolls, so it should be pretty stable.
+speaker UMP9
+msg Exactly how much testing is 'often enough'? You know what, I don't want to know. Why is my gun so light?
+speaker Dier
+msg It's a raygun in the shape of a UMP9. It can fire three shots at a time, but it recharges very quickly so don't worry about having to find ammo.
+speaker UMP9
+msg Hey, that's pretty cool!
+speaker  
+msg /dim[0]Just then, someone kicked the door open and a small army of black haired androids poured in.
+speaker Sangvis Doll
+msg Hey, hey, we wanna watch! We heard we're being featured in the simulator!
+speaker G11
+msg waaah, it's so crowded now...
+speaker Dandelai
+msg Do what you want as long as you don't bother me.
+speaker Dier
+msg I'm glad this room is big enough to fit 50 people... Now then. Who here has played Mega Man?
+speaker Everyone
+msg ...
+speaker Dier
+msg Right, none of you play video games... Anyways, pick the stage and boss you want to fight and have fun!"

@@ -22,20 +22,34 @@ func getStuff(time:float)->String:
 	else:
 		return \"Hmm... Looks like you're still getting the hang of the simulator.\"
 
+#var cutsceneInformation:PoolStringArray = [
+#	\"preload_portraits Dier|pic_Architect\",
+#	\"portrait Dier\",
+#	\"speaker AmWorks\",
+#	\"msg /hl[0]Let's see... It took you [color=#ff00ff]%s[/color] to clear the stage on %s. %s\" % [ Globals.format_time(CheckpointPlayerStats.timerWithDeath), tr(Globals.difficultyToString()), getStuff(CheckpointPlayerStats.timerWithDeath)],
+#	\"speaker AmWorks\",
+#	\"msg Thanks for trying the demo! I hope you enjoyed it.\",
+#	\"portrait Dier|pic_Architect\",
+#	\"speaker Architect\",
+#	\"msg /hl[1]Did you like the boss battle? It was cool, right? Right?\",
+#	\"msg By the way, you've obtained my weapon! Try the stage again, then use Q/E or L1/R1 to switch weapons.\",
+#	\"speaker AmWorks\",
+#	\"msg /hl[0]If you'd like to leave feedback, click the button on the title screen. You can also email me random Girls' Frontline fanart, if you want.\"
+#	#\"msg|SEE YOU NEXT DEMO (Hopefully)!\"
+#]
 var cutsceneInformation:PoolStringArray = [
-	\"preload_portraits|Dier|pic_Architect\",
-	\"portrait|Dier\",
-	\"speaker|AmWorks\",
-	\"msg|/hl[0]Let's see... It took you [color=#ff00ff]%s[/color] to clear the stage on %s. %s\" % [ Globals.format_time(CheckpointPlayerStats.timerWithDeath), tr(Globals.difficultyToString()), getStuff(CheckpointPlayerStats.timerWithDeath)],
-	\"speaker|AmWorks\",
-	\"msg|Thanks for trying the demo! I hope you enjoyed it.\",
-	\"portrait|Dier|pic_Architect\",
-	\"speaker|Architect\",
-	\"msg|/hl[1]Did you like the boss battle? It was cool, right? Right?\",
-	\"msg|By the way, you've obtained my weapon! Try the stage again, then use Q/E or L1/R1 to switch weapons.\",
-	\"speaker|AmWorks\",
-	\"msg|/hl[0]If you'd like to leave feedback, click the button on the title screen. You can also email me random Girls' Frontline fanart, if you want.\"
-	#\"msg|SEE YOU NEXT DEMO (Hopefully)!\"
+	\"preload_portraits Dier|pic_Alchemist|pic_Scarecrow\",
+	\"portrait Dier\",
+	\"matchnames AmWorks|Alchemist|Scarecrow\",
+	\"speaker AmWorks\",
+	\"msg So, did you enjoy the second demo? Hopefully it was worth the wait.\",
+	\"portrait Dier|pic_Alchemist\",
+	\"speaker Alchemist\",
+	\"msg /hl[1]We hope you enjoyed the upside-down castle. And certain boss battle moves.\",
+	\"msg Surely you've played other Capcom games, right?\",
+	\"speaker Scarecrow\",
+	\"portrait Dier|pic_Alchemist|pic_Scarecrow\",
+	\"msg /hl[2]See you soon for the next demo, featuring me.\"
 ]
 
 
@@ -45,7 +59,7 @@ func _ready():
 		cutsceneInformation.append(\"msg|You're pretty good! Congratulations, you've unlocked \\\"Zero Test\\\" in the Extras.\")
 		Globals.unlockedZeroMode=true
 # warning-ignore:return_value_discarded
-	Globals.save_my_game()
+	Globals.save_system_data()
 	$Sprite.Cover()
 	#init_(message, parent, dim_background = true)
 	$Cutscene.init_(cutsceneInformation,null,false)

@@ -79,7 +79,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/godot-next/global/editor_tools.gd"
 }, {
-"base": "",
+"base": "Node",
 "class": "FLMusicLib",
 "language": "NativeScript",
 "path": "res://gdnative/FLMusicLib/FLMusic.gdns"
@@ -301,6 +301,7 @@ config/icon="res://icon.png"
 Globals="*res://Globals.gd"
 CheckpointPlayerStats="*res://CheckpointPlayerStats.gd"
 ExternalAudio="*res://GDScriptAudioImport.gd"
+INITrans="*res://Translation.gd"
 
 [display]
 
@@ -505,6 +506,17 @@ DebugButton6={
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777249,"unicode":0,"echo":false,"script":null)
  ]
 }
+FullscreenButton={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777254,"unicode":0,"echo":false,"script":null)
+, Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":true,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777221,"unicode":0,"echo":false,"script":null)
+ ]
+}
+DebugButton12={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777255,"unicode":0,"echo":false,"script":null)
+ ]
+}
 
 [layer_names]
 
@@ -517,8 +529,8 @@ DebugButton6={
 
 [locale]
 
-translations=PoolStringArray( "res://languages.en.translation", "res://languages.es.translation" )
-locale_filter=[ 1, [ "en" ] ]
+translations=PoolStringArray(  )
+locale_filter=[ 0, [ "en" ] ]
 
 [rendering]
 

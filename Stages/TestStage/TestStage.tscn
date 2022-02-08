@@ -1,6 +1,5 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=20 format=2]
 
-[ext_resource path="res://Music/Classic/TestStage.ogg" type="AudioStream" id=1]
 [ext_resource path="res://gridDisplay.png" type="Texture" id=2]
 [ext_resource path="res://Stages/TestStage/Tileset.tres" type="TileSet" id=3]
 [ext_resource path="res://Player Files/Player.tscn" type="PackedScene" id=4]
@@ -26,14 +25,17 @@ script/source = "extends Node2D
 var LADDER_TILE_ID = 6
 var LADDER_TOP_TILE_ID = 11
 var SPIKES_TILE_ID = 12
+
+var reinaAudioPlayer
+func _ready():
+	reinaAudioPlayer = Globals.ReinaAudioPlayer.new(self)
+	reinaAudioPlayer.load_song(\"TestRoom\",\"test.vgm\",0)
+	if reinaAudioPlayer.added_nsf_player:
+		reinaAudioPlayer.nsf_player.set_volume(3);
 "
 
 [node name="Node2D" type="Node2D"]
 script = SubResource( 1 )
-
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
-stream = ExtResource( 1 )
-autoplay = true
 
 [node name="Polygon2D" type="Polygon2D" parent="."]
 visible = false

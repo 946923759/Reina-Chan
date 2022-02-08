@@ -30,7 +30,7 @@ func _ready():
 var timer:float=0.0
 var velocity:Vector2=Vector2(0,300)
 func _physics_process(delta):
-	$Label.text=String(is_on_floor())
+	#$Label.text=String(is_on_floor())
 	velocity=move_and_slide(velocity, Vector2(0, -1), true)
 	velocity.y+=1000*delta
 	
@@ -103,31 +103,31 @@ region = Rect2( 0, 0, 32, 34 )
 
 [sub_resource type="AtlasTexture" id=4]
 atlas = ExtResource( 2 )
-region = Rect2( 128, 0, 32, 34 )
+region = Rect2( 160, 0, 32, 34 )
 
 [sub_resource type="AtlasTexture" id=5]
 atlas = ExtResource( 2 )
-region = Rect2( 32, 0, 32, 34 )
+region = Rect2( 192, 0, 32, 34 )
 
 [sub_resource type="AtlasTexture" id=6]
 atlas = ExtResource( 2 )
-region = Rect2( 64, 0, 32, 34 )
+region = Rect2( 224, 0, 32, 34 )
 
 [sub_resource type="AtlasTexture" id=7]
 atlas = ExtResource( 2 )
-region = Rect2( 96, 0, 32, 34 )
+region = Rect2( 32, 0, 32, 34 )
 
 [sub_resource type="AtlasTexture" id=8]
 atlas = ExtResource( 2 )
-region = Rect2( 160, 0, 32, 34 )
+region = Rect2( 64, 0, 32, 34 )
 
 [sub_resource type="AtlasTexture" id=9]
 atlas = ExtResource( 2 )
-region = Rect2( 192, 0, 32, 34 )
+region = Rect2( 96, 0, 32, 34 )
 
 [sub_resource type="AtlasTexture" id=10]
 atlas = ExtResource( 2 )
-region = Rect2( 224, 0, 32, 34 )
+region = Rect2( 128, 0, 32, 34 )
 
 [sub_resource type="SpriteFrames" id=11]
 animations = [ {
@@ -136,20 +136,20 @@ animations = [ {
 "name": "default",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 4 ) ],
-"loop": true,
-"name": "jump",
-"speed": 5.0
+"frames": [ SubResource( 4 ), SubResource( 5 ), SubResource( 6 ) ],
+"loop": false,
+"name": "throw",
+"speed": 10.0
 }, {
-"frames": [ SubResource( 5 ), SubResource( 6 ), SubResource( 7 ) ],
+"frames": [ SubResource( 7 ), SubResource( 8 ), SubResource( 9 ) ],
 "loop": false,
 "name": "shoot",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 8 ), SubResource( 9 ), SubResource( 10 ) ],
-"loop": false,
-"name": "throw",
-"speed": 10.0
+"frames": [ SubResource( 10 ) ],
+"loop": true,
+"name": "jump",
+"speed": 5.0
 } ]
 
 [node name="RipperHalloween" instance=ExtResource( 1 )]
@@ -177,6 +177,7 @@ target_path = NodePath("..")
 properties = PoolStringArray( "curState", "velocity" )
 
 [node name="Label" type="Label" parent="." index="7"]
+visible = false
 margin_left = 2.12128
 margin_top = -140.007
 margin_right = 70.1213

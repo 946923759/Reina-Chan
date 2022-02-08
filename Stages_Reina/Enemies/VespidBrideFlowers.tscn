@@ -47,7 +47,7 @@ func killSelf():
 	set_collision_mask_bit(0,false)
 	
 	var e = smallExplosion.instance()
-	e.get_node(\"AudioStreamPlayer2D\").volume_db=-999
+	e.get_node(\"s1\").volume_db=-999
 	e.position = position
 	get_parent().add_child(e)
 	$snd.connect(\"finished\",self,\"queue_free\")

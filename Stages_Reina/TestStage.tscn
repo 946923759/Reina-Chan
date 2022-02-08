@@ -25,7 +25,7 @@
 [ext_resource path="res://Various Objects/CameraController/CameraAdjuster_v2.tscn" type="PackedScene" id=23]
 [ext_resource path="res://Stages/IceMan/trees.png" type="Texture" id=24]
 [ext_resource path="res://Stages/IceMan/clouds.png" type="Texture" id=25]
-[ext_resource path="res://Stages_Reina/Bosses/Architect/BossArchitect.tscn" type="PackedScene" id=26]
+[ext_resource path="res://Stages_Reina/Bosses/Architect/BossArchitect_v2.tscn" type="PackedScene" id=26]
 [ext_resource path="res://Various Objects/CameraController/CameraAdjuster_v2_Vertical.tscn" type="PackedScene" id=27]
 [ext_resource path="res://Various Objects/BlockAsObject.tscn" type="PackedScene" id=28]
 [ext_resource path="res://Various Objects/BlockEnablerDisabler.tscn" type="PackedScene" id=29]
@@ -496,6 +496,8 @@ func _process(delta):
 script/source = "extends Area2D
 
 var explosion = preload(\"res://Stages/EnemyExplodeSmall.tscn\")
+var heaven = preload(\"res://Stages_Reina/Bosses/M16/heaven.tscn\")
+
 onready var stageRoot = get_node(\"/root/Node2D/\")
 var player
 
@@ -521,6 +523,8 @@ func _process(delta):
 	if limit==0:
 		player.die()
 		$KO.play()
+		var h = heaven.instance()
+		player.add_child(h)
 		player.get_node(\"CanvasLayer/Fadeout\").modulate.a=0.0
 		set_process(false)
 	elif delay<=0:
@@ -539,6 +543,7 @@ LADDER_TILE_ID = 6
 LADDER_TOP_TILE_ID = 5
 SPIKES_TILE_ID = 4
 custom_music_name = "TestRoom"
+nsf_music_file = "test.vgm"
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="." index="0"]
 
@@ -736,7 +741,7 @@ position = Vector2( -224, 736 )
 position = Vector2( -672, 736 )
 
 [node name="Player" parent="." index="32"]
-position = Vector2( 2015.5, -843.303 )
+position = Vector2( 1120, -160 )
 
 [node name="room20-0" type="Node2D" parent="." index="33"]
 
@@ -789,8 +794,9 @@ bottomBound = -9999
 
 [node name="Node2D" parent="Door" index="4" instance=ExtResource( 17 )]
 position = Vector2( 256, 192 )
+message = PoolStringArray( "portrait|pic_UMP9|pic_Architect", "speaker|Architect", "msg|This is a test intro block.", "speaker|UMP9", "msg|Hello world, I\'m family-chan! aoijsdoaidj" )
 
-[node name="Boss" parent="Door/Node2D" index="3" instance=ExtResource( 26 )]
+[node name="BossArchitect" parent="Door/Node2D" index="3" instance=ExtResource( 26 )]
 position = Vector2( 736, 0 )
 
 [node name="EventTile13" parent="." index="38" instance=ExtResource( 23 )]

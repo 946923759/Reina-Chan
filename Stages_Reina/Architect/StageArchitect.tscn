@@ -25,7 +25,7 @@
 [ext_resource path="res://Stages_Reina/Architect/ganymede.png" type="Texture" id=23]
 [ext_resource path="res://Stages_Reina/Enemies/Jupiter Cannon.tscn" type="PackedScene" id=24]
 [ext_resource path="res://Various Objects/EventTiles/EventTile.tscn" type="PackedScene" id=25]
-[ext_resource path="res://Stages_Reina/Bosses/Architect/BossArchitect.tscn" type="PackedScene" id=26]
+[ext_resource path="res://Stages_Reina/Bosses/Architect/BossArchitect_OLD_DO_NOT_USE.tscn" type="PackedScene" id=26]
 [ext_resource path="res://Various Objects/CameraController/CameraAdjuster_v2_Vertical.tscn" type="PackedScene" id=27]
 [ext_resource path="res://Cutscene/Backgrounds/SFBase.png" type="Texture" id=28]
 [ext_resource path="res://Various Objects/EventTiles/Checkpoint_Vertical.tscn" type="PackedScene" id=29]
@@ -83,6 +83,7 @@ custom_music_name = "Architect"
 nsf_music_file = "Rockman 4MI.nsf"
 mute_music_in_debug = true
 mute_boss_music_in_debug = true
+weapon_to_unlock = 1
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 pause_mode = 2

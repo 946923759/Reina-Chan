@@ -37,7 +37,7 @@ func OnCommand():
 	set_process_input(true)
 	
 	$m/currentDifficulty.text=tr(Globals.difficultyToString())
-	if Globals.gameDifficulty > Globals.Difficulty.EASY:
+	if Globals.playerData.gameDifficulty > Globals.Difficulty.EASY:
 		$m/currentDifficulty.text+=\"\\nSpare Dummies: \"+String(CheckpointPlayerStats.playerLivesLeft)
 	$m/debugHelp.visible=OS.is_debug_build()
 
@@ -87,17 +87,18 @@ func _input(_ev):
 			$Fadeout_Tween.interpolate_property($Fadeout, \"modulate\", Color(0,0,0,0), Color(0,0,0,1), .5, Tween.TRANS_LINEAR, Tween.EASE_OUT)
 			$Fadeout_Tween.start()
 			yield($Fadeout_Tween,\"tween_completed\")
-			Globals.save_my_game()
+			Globals.save_player_game()
+			#Globals.save_system_data() #Not sure why this is here
 			get_tree().paused = false
 # warning-ignore:return_value_discarded
 			get_tree().change_scene(\"res://TitleScreenV2.tscn\")
 	elif Input.is_action_just_pressed(\"DebugButton1\"):
-		if Globals.gameDifficulty < len(Globals.Difficulty)-1:
-			Globals.gameDifficulty+=1
+		if Globals.playerData.gameDifficulty < len(Globals.Difficulty)-1:
+			Globals.playerData.gameDifficulty+=1
 		else:
-			Globals.gameDifficulty=0
+			Globals.playerData.gameDifficulty=0
 		$m/currentDifficulty.text=tr(Globals.difficultyToString())
-		if Globals.gameDifficulty > Globals.Difficulty.EASY:
+		if Globals.playerData.gameDifficulty > Globals.Difficulty.EASY:
 			$m/currentDifficulty.text+=\"\\nSpare Dummies: \"+String(CheckpointPlayerStats.playerLivesLeft)
 	
 "

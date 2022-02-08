@@ -1,0 +1,99 @@
+#BG 1,true black 1,true
+bg 0
+speaker 
+msg ...Arrived at the first rendezvous point.
+portrait MP5
+speaker Gr MP5
+msgboxTransition
+msg Report.
+portrait MG5,true,0|MP5,false,0
+speaker MchG5
+msg /hl[0]Looks like things are going smoothly. We were a bit worried whether this mission would be too much for you.
+speaker Gr MP5
+msgboxTransition
+msg /hl[1]Heheh. It is all thanks to the commander's guidance. I will also be careful.
+speaker MchG5
+msgboxTransition
+msg /hl[0]Good. Then have you found the scout in the area?
+portrait MP5
+speaker Gr MP5
+msg /hl[0]Um... I do not know where she is. Maybe she is hiding herself?
+msgboxTransition
+speaker ??
+msg /dim[0]I'm scouting in enemy territory. Of course I'm hiding.
+msgboxTransition
+speaker Gr MP5
+msg /hl[0]Ah! Who is it?!
+msgboxTransition
+portrait WA2000|MP5
+speaker WA2000
+msg /hl[0]Hush... The Sangvis troops are right next to us. Stop shouting, or do you actually wanna die?
+msgboxTransition
+speaker Gr MP5
+msg /hl[1](Whispers) S-Sorry...Miss WA2000. What is your situation over here?
+msgboxTransition
+speaker WA2000
+msg My situation? I'm perfectly well, of course. As for the situation over here? Not so much.
+msg There are armored bugs prowling all over the place. How did you manage to sneak in alone?
+msgboxTransition
+speaker Gr MP5
+msg Me? I am being escorted by a commander in this area.
+msgboxTransition
+speaker .
+portrait 
+speaker WA2000
+bg 1
+msg Huh? What?!
+msg Hey! Why have we suddenly switched to the commander's channel?!
+msgboxTransition
+speaker Gr MP5
+msg Hush... Please keep your voice down. We are right next to Sangvis troops!
+msgboxTransition
+speaker WA2000
+msg (Whispers) I-I know. You don't have to remind me...
+msgboxTransition
+portrait WA2000
+speaker WA2000
+msg /hl[0]Um... So you're the commander in Area S09?
+msg Uh... Thanks for your help, and...
+msg ...That's all. I salute you. Over.
+msgboxTransition
+portrait MP5
+speaker Gr MP5
+bg 2
+msg Huh? Is that all?
+msgboxTransition 
+portrait WA2000|MP5
+speaker WA2000
+msg /hl[0]We're T-Dolls. We just have to carry out our missions.
+msgboxTransition 
+speaker Gr MP5
+msg /hl[1]But...you seem to be blushing? Are you embarrassed?
+msgboxTransition 
+speaker WA2000
+msg /hl[0]W-Why would I be?! Besides, I was born to fight. It's only natural that I'm not good with words!
+msgboxTransition 
+speaker Gr MP5
+msg /hl[1]So are you admitting or denying your embarrassment...
+msgboxTransition 
+speaker WA2000
+msg /hl[0]Shut up. Aren't you here for the recon report? You got it, so get lost already.
+msgboxTransition 
+speaker Gr MP5
+msg /hl[1]Thank you, Miss WA. Here are some supplies that Miss G36 prepared especially for you.
+msgboxTransition 
+speaker WA2000
+msg /hl[0]Oh... Chocolate ice cream? As expected of G36. She knows me.
+msg But don't you dare tell a soul... WA2000 loves ice cream? What a joke.
+msgboxTransition 
+speaker Gr MP5
+msg /hl[1]Um... I am very sorry...
+msg But actually... The commander is still on the line...
+msgboxTransition 
+speaker .
+portrait 
+speaker WA2000
+nop bg 9
+msg ...
+msg ...Why didn't you say so earlier?!
+msgboxTransition 

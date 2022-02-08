@@ -37,6 +37,9 @@ func _draw():
 collision_layer = 4
 collision_mask = 4
 script = ExtResource( 2 )
+__meta__ = {
+"_editor_description_": "The boss must be the LAST child node of this block."
+}
 message = PoolStringArray( "portrait|pic_UMP9|pic_Architect", "speaker|Architect", "msg|Heee-ey, Griffin T-Dolls! Let\'s have some fun!", "speaker|UMP9", "msg|...Who is this weirdo\?" )
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]

@@ -1,0 +1,16 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://Stages_Reina/Bosses/BossBase.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Stages_Reina/Bosses/Architect/ArchitectControl.gd" type="Script" id=2]
+[ext_resource path="res://Sounds/Classic/Explosion2.wav" type="AudioStream" id=3]
+[ext_resource path="res://Sounds/BossSounds/BossArchitect_APPEAR1_JP.wav" type="AudioStream" id=4]
+
+[node name="BossArchitect" instance=ExtResource( 1 )]
+script = ExtResource( 2 )
+
+[node name="IntroSound" parent="." index="3"]
+stream = ExtResource( 4 )
+
+[node name="LaunchRocket" type="AudioStreamPlayer2D" parent="." index="9"]
+stream = ExtResource( 3 )
+bus = "Player/Enemies"

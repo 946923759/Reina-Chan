@@ -27,3 +27,14 @@ R4MI
 103 - Ending 2
 104 - Ending 3
 105 - Ending 4 (Rockman World V)
+
+DMG-CWJ
+0 - Password?
+1 - Success
+2 - Stage Select
+3 -
+4 -
+5 -
+6 - 
+7
+8 - New Messiah

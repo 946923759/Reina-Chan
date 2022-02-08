@@ -31,7 +31,7 @@ var OPTIONS = {
 	},
 	"language":{
 		"type":"list",
-		"choices":["system","en","es"],
+		"choices":["en","es","kr","ja","zh"],
 		"default":"system"
 	},
 	"flipButtons":{
@@ -64,22 +64,48 @@ enum Difficulty {
 	HARD,
 	SUPERHERO
 }
-var gameDifficulty = Difficulty.EASY
-
-#DO NOT TRANSLATE WITHIN THIS FUNCTION
-#Some language keys use it for stuff like "desc_SUPERHERO"
-func difficultyToString(d=gameDifficulty)->String:
-	return Difficulty.keys()[d]
-
 #If you rearrange these for some reason you have to rearrange weaponColorSwaps
 enum Weapons {
 	Buster=0,
-	Architect
+	Architect,
+	Alchemist,
+	Scarecrow
 }
-var availableWeapons = [
-	true,
-	false
-]
+
+var playerData={
+	gameDifficulty = Difficulty.EASY,
+	availableWeapons = [
+		true,
+		false, #Architect Rocket
+		false,
+		false,
+		false,
+		false,
+		false,
+		false,
+		false,
+		false,
+		false #bonus stage (10)
+	],
+	wilyStageNum = 0,
+	ReinaChanEmblems=[ #U M P 9 C H A N
+		false, 
+		false,
+		false,
+		false,
+		false,
+		false,
+		false,
+		false
+	]
+}
+
+#DO NOT TRANSLATE WITHIN THIS FUNCTION
+#Some language keys use it for stuff like "desc_SUPERHERO"
+func difficultyToString(d=playerData.gameDifficulty)->String:
+	return Difficulty.keys()[d]
+
+
 # Weapon energy is some unknown number (Metal Blade from MM2 has 112 uses)
 # but I think 144 is enough for everything.
 # I think weapon energy in mega man is a float and it's 32, but since it's
@@ -111,16 +137,17 @@ var weaponColorSwaps = [
 
 var unlockedZeroMode:bool=false
 
-var playerHadSaveData:bool=false
+var playerHasSaveData:bool=false
+var playerHadSystemData:bool=false
 
-func load_my_game()->bool:
+func load_system_data()->bool:
 	var save_game = File.new()
-	if not save_game.file_exists(get_savedata_path()):
+	if not save_game.file_exists(get_save_directory('systemData')):
 		for option in OPTIONS:
 			OPTIONS[option]['value'] = OPTIONS[option]['default']
 		return false
 	else:
-		save_game.open(get_savedata_path(), File.READ)
+		save_game.open(get_save_directory('systemData'), File.READ)
 		var dataToLoad=parse_json(save_game.get_as_text())
 		#TODO: what if an option gets removed?
 		for option in OPTIONS:
@@ -128,6 +155,7 @@ func load_my_game()->bool:
 				OPTIONS[option]['value'] = dataToLoad['options'][option]
 			else:
 				OPTIONS[option]['value'] = OPTIONS[option]['default']
+		flipButtons=Globals.OPTIONS['flipButtons']['value']
 		
 		#Actually, this should only be set when the player pressed continue
 		#gameDifficulty=dataToLoad['playerdata']['difficulty']
@@ -135,21 +163,28 @@ func load_my_game()->bool:
 		if 'extras' in dataToLoad:
 			unlockedZeroMode=dataToLoad['extras']['zeroMode']
 		save_game.close()
-		print("Save data loaded.")
+		print("System save data loaded.")
 		return true
 
-func save_my_game()->bool:
+func load_player_game()->bool:
 	var save_game = File.new()
-	var ok = save_game.open(get_savedata_path(),File.WRITE)
+	if not save_game.file_exists(get_save_directory('playerData')):
+		return false
+	save_game.open(get_save_directory('playerData'), File.READ)
+	playerData=parse_json(save_game.get_as_text())
+	save_game.close()
+	print("Player save data loaded.")
+	return true
+
+func save_system_data()->bool:
+	var save_game = File.new()
+	var ok = save_game.open(get_save_directory('systemData'),File.WRITE)
 	if ok != OK:
 		printerr("Warning: could not create file for writing! ERROR ", ok)
 		return false
 	var dataToSave = {
 		"options":{},
-		"playerdata":{
-			"difficulty":gameDifficulty,
-			"weapons":availableWeapons
-		},
+		"playerdata":playerData,
 		"extras":{
 			"zeroMode":unlockedZeroMode
 		}
@@ -158,10 +193,21 @@ func save_my_game()->bool:
 		dataToSave['options'][option]=OPTIONS[option]['value']
 	save_game.store_line(to_json(dataToSave))
 	save_game.close()
-	print("Saved to "+get_savedata_path())
-	flipButtons=Globals.OPTIONS['flipButtons']['value']
+	print("Saved to "+get_save_directory('systemData'))
 	return true
 	
+func save_player_game()->bool:
+	var save_game = File.new()
+	var ok = save_game.open(get_save_directory('playerData'),File.WRITE)
+	if ok != OK:
+		printerr("Warning: could not create file for writing! ERROR ", ok)
+		#save_game.close() #Idk if it's still needed if open() failed
+		return false
+	save_game.store_line(to_json(playerData))
+	save_game.close()
+	print("Saved to "+get_save_directory('playerData'))
+	Globals.playerHasSaveData=true
+	return true
 
 var gameResolution:Vector2;
 var SCREEN_CENTER:Vector2
@@ -178,13 +224,13 @@ var nextStage
 # if we're using the "cutscene from file" scene
 var nextCutscene:String="cutscene1Data.json"
 
-func get_savedata_path()->String:
+func get_save_directory(fName:String)->String:
 	match OS.get_name():
 		"Windows","X11","macOS":
 			if OS.has_feature("standalone"):
-				return OS.get_executable_path().get_base_dir()+"/savedata.json"
+				return OS.get_executable_path().get_base_dir()+"/"+fName+".json"
 	#If not compiled or if the platform doesn't allow writing to the game's current directory
-	return "user://savedata.json"
+	return "user://"+fName+".json"
 
 func _ready():
 	gameResolution = Vector2(ProjectSettings.get_setting("display/window/size/width"),ProjectSettings.get_setting("display/window/size/height"))
@@ -202,12 +248,18 @@ func _ready():
 	else:
 		NSF_location = "res://Music/"
 	
-	playerHadSaveData = load_my_game()
-	if playerHadSaveData:
+	playerHadSystemData = load_system_data()
+	if playerHadSystemData:
 		set_audio_levels()
-		set_language("es")
+		#INITrans.SetLanguage("kr")
+		INITrans.SetLanguage(Globals.OPTIONS["language"]['value'])
 		playCutscenes=Globals.OPTIONS['playCutscenes']['value']
 		flipButtons=Globals.OPTIONS['flipButtons']['value']
+	else:
+		INITrans.SetLanguage("en")
+	
+	var save_game = File.new()
+	playerHasSaveData=save_game.file_exists(get_save_directory('playerData'))
 	
 	#It's annoying when I'm debugging
 	if !OS.is_debug_build():
@@ -223,11 +275,11 @@ func set_fullscreen(b):
 		OS.window_size = gameResolution
 		OS.center_window()
 		
-func set_language(new_lang:String=""):
-	if new_lang=="":
-		new_lang=Globals.OPTIONS['language']['value']
-	if new_lang!="system":
-		TranslationServer.set_locale(new_lang)
+#func set_language(new_lang:String=""):
+#	if new_lang=="":
+#		new_lang=Globals.OPTIONS['language']['value']
+#	if new_lang!="system":
+#		TranslationServer.set_locale(new_lang)
 		
 func set_audio_levels():
 	# Audio starts at -60db (silent) and ends at 0db (max).
@@ -296,11 +348,19 @@ func get_custom_music(fname):
 		return Globals.get_matching_files("res://Music/CDAudio/",fname)
 	return Globals.get_matching_files(OS.get_executable_path().get_base_dir()+"/CustomMusic/",fname)
 
+var nsf_player
+func _init():
+	if !OS.has_feature("console"):
+		nsf_player = FLMusicLib.new();
+		nsf_player.set_gme_buffer_size(2048*5);#optional
+		#print("Init!!")
 
 class ReinaAudioPlayer:
 	var node:Node;
 	var audioStreamPlayer;
-	var nsf_player;
+	var nsf_player
+	var added_nsf_player:bool=false
+	#var is_fading_music:bool=false
 	
 	func _init(_node:Node):
 		node = _node;
@@ -317,25 +377,38 @@ class ReinaAudioPlayer:
 				audioStreamPlayer.stream = ExternalAudio.loadfile(music)
 			audioStreamPlayer.play()
 		elif nsf_music_file != "" and !OS.has_feature("console"):
-			if nsf_player==null:
-				nsf_player = FLMusicLib.new();
+			if !is_instance_valid(Globals.nsf_player):
+				print("The NSF player has expired somehow... Trying to re-init")
+				Globals.nsf_player = FLMusicLib.new();
+				Globals.nsf_player.set_gme_buffer_size(2048*5);#optional
+			nsf_player = Globals.nsf_player
+			if !added_nsf_player:
 				node.add_child(nsf_player);
-				nsf_player.set_gme_buffer_size(2048*5);#optional
+				added_nsf_player=true
 			#print(Globals.NSF_location+nsf_music_file)
-			nsf_player.play_music(Globals.NSF_location+nsf_music_file,nsf_track_num,true,0,0,0);
+			print("(NSF) Trying to play "+Globals.NSF_location+nsf_music_file)
+			nsf_player.play_music(Globals.NSF_location+nsf_music_file,nsf_track_num,false,0,0,0);
 			var realVolumeLevel = Globals.OPTIONS['AudioVolume']['value']*.3-30
 			nsf_player.set_volume(realVolumeLevel);
 		else:
 			print("No custom music specified and this platform doesn't support NSF. That means there's no music!")
 			
-	func fade_music():
-		if nsf_player != null:
+	func fade_music(time:float=3.0):
+		if added_nsf_player:
+			#nsf_player.stop_music()
+			#print("Stopped NSF player")
+			var t := Tween.new()
+			node.add_child(t)
+			#var realVolumeLevel = Globals.OPTIONS['AudioVolume']['value']*.3-30
+			t.interpolate_method(nsf_player,"set_volume",0,-10.0,time)
+			t.start()
+			yield(t,"tween_completed")
 			nsf_player.stop_music()
-			print("Stopped NSF player")
+			#nsf_player.set_volume(realVolumeLevel)
 			#seq.append(nsf_player,"toDraw",CONST_IMG_WIDTH,2).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 		elif audioStreamPlayer.is_playing():
 			var seq := TweenSequence.new(node.get_tree())
-			seq.append(audioStreamPlayer,"volume_db",-10,0).set_trans(Tween.TRANS_LINEAR).set_ease(Tween.EASE_OUT)
+			seq.append(audioStreamPlayer,"volume_db",-10,time).set_trans(Tween.TRANS_LINEAR).set_ease(Tween.EASE_OUT)
 # warning-ignore:return_value_discarded
 			seq.append_callback(audioStreamPlayer,"stop")
 			

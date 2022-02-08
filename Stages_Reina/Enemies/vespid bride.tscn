@@ -124,6 +124,7 @@ animations = [ {
 
 [node name="Vespid Bride" instance=ExtResource( 2 )]
 script = SubResource( 1 )
+maxHealth = 8
 shapeOverride = SubResource( 2 )
 collisionOffset = Vector2( 0, 2 )
 

@@ -70,7 +70,7 @@ var gf_cutscene = preload("res://Cutscene/CutsceneMain.tscn")
 #debug
 var freeRoam = false
 var noClip = false
-var rapidFire:bool = (Globals.gameDifficulty==Globals.Difficulty.BEGINNER)
+var rapidFire:bool = (Globals.playerData.gameDifficulty==Globals.Difficulty.BEGINNER)
 
 #var showDebugDisplay:int = 0 #0 - off, 1 - 
 onready var debugDisplay = $CanvasLayer/DebugDisplay
@@ -111,12 +111,12 @@ func _ready():
 		#HP=CheckpointPlayerStats.lastHealth
 		timer=CheckpointPlayerStats.timer
 		weaponMeters=CheckpointPlayerStats.lastWeaponMeters
-		if Globals.gameDifficulty < Globals.Difficulty.MEDIUM:
+		if Globals.playerData.gameDifficulty < Globals.Difficulty.MEDIUM:
 			for i in range(weaponMeters.size()):
 				weaponMeters[i] = 144
 		sprite.flip_h = CheckpointPlayerStats.shouldFaceLeft
 	else:
-		weaponMeters.resize(Globals.availableWeapons.size())
+		weaponMeters.resize(Globals.playerData.availableWeapons.size())
 		for i in range(weaponMeters.size()):
 			weaponMeters[i] = 144
 	timerWithDeath=CheckpointPlayerStats.timerWithDeath
@@ -161,7 +161,7 @@ func get_input(delta):
 		setDebugInfoText()
 		CheckpointPlayerStats.usedDebugMode=true
 		
-	if Input.is_action_just_pressed("DebugButton2"):
+	elif Input.is_action_just_pressed("DebugButton2"):
 		if noClip:
 			set_collision_mask_bit(0,true)
 			set_collision_layer_bit(0,true)
@@ -174,11 +174,11 @@ func get_input(delta):
 		setDebugInfoText()
 		CheckpointPlayerStats.usedDebugMode=true
 		
-	if Input.is_action_just_pressed("DebugButton3"):
+	elif Input.is_action_just_pressed("DebugButton3"):
 		position = Vector2(0,-100)
 		$Camera2D.adjustCamera([-10000000,-10000000,10000000,10000000],0)
 	
-	if Input.is_action_just_pressed("DebugButton4"):
+	elif Input.is_action_just_pressed("DebugButton4"):
 		print(bulletManager.bullets)
 		rapidFire = !rapidFire
 		setDebugInfoText()
@@ -186,7 +186,7 @@ func get_input(delta):
 		
 
 		
-	if Input.is_action_just_pressed("DebugButton5"):
+	elif Input.is_action_just_pressed("DebugButton5"):
 		HP = MAX_HP
 		HPBar.updateHP(HP)
 		for i in range(weaponMeters.size()):
@@ -196,10 +196,10 @@ func get_input(delta):
 		CheckpointPlayerStats.usedDebugMode=true
 		pass
 		
-	if Input.is_action_just_pressed("DebugButton6"):
+	elif Input.is_action_just_pressed("DebugButton6"):
 		#position = Vector2(0,-100)
 		$Camera2D.adjustCamera([-10000000,-10000000,10000000,10000000],0)
-	if Input.is_action_just_pressed("DebugButton7"):
+	elif Input.is_action_just_pressed("DebugButton7"):
 		var c = $Camera2D
 		var cPos = c.get_camera_screen_center()
 		c.limit_left = cPos.x - Globals.SCREEN_CENTER_X
@@ -207,7 +207,7 @@ func get_input(delta):
 		c.limit_top = cPos.y - Globals.SCREEN_CENTER_Y
 		c.limit_bottom = cPos.y + Globals.SCREEN_CENTER_Y
 		pass
-	if Input.is_action_just_pressed("DebugButton9"):
+	elif Input.is_action_just_pressed("DebugButton9"):
 		if debugDisplay.visible and $CanvasLayer/DebugButtonHelp.visible:
 			debugDisplay.visible=false
 			$CanvasLayer/DebugButtonHelp.visible=false
@@ -218,8 +218,10 @@ func get_input(delta):
 			
 	#No need to set the debug mode flag for this one since it has zero benefit to the player
 	#and they can restart by pressing start and down+b anyways
-	if Input.is_action_just_pressed("DebugButton10"):
+	elif Input.is_action_just_pressed("DebugButton10"):
 		die()
+	elif Input.is_action_just_pressed("DebugButton12"):
+		set_checkpoint(Vector2(),sprite.flip_h)
 	
 	if Input.is_action_just_pressed("ui_pause"):
 		$PauseScreen.updateTimer(timer,timerWithDeath)
@@ -244,9 +246,9 @@ func get_input(delta):
 		if Input.is_action_just_pressed("R1"):
 			var i = currentWeapon+1
 			while true:
-				if i == len(Globals.availableWeapons):
+				if i == len(Globals.playerData.availableWeapons):
 					i=0
-				elif Globals.availableWeapons[i]:
+				elif Globals.playerData.availableWeapons[i]:
 					break
 				else:
 					i+=1
@@ -256,8 +258,8 @@ func get_input(delta):
 			var i = currentWeapon-1
 			while true:
 				if i < 0:
-					i=len(Globals.availableWeapons)-1
-				elif Globals.availableWeapons[i]:
+					i=len(Globals.playerData.availableWeapons)-1
+				elif Globals.playerData.availableWeapons[i]:
 					break
 				else:
 					i-=1
@@ -291,7 +293,7 @@ func get_input(delta):
 		# compensates for physics imprecision, as well as human reaction delay.
 		if shoot:
 			shoot_time = 0
-			if (Globals.gameDifficulty <= Globals.Difficulty.EASY or bulletManager.get_num_bullets() < 3) and weaponMeters[currentWeapon]>=Globals.weaponEnergyCost[currentWeapon]:
+			if (Globals.playerData.gameDifficulty <= Globals.Difficulty.EASY or bulletManager.get_num_bullets() < 3) and weaponMeters[currentWeapon]>=Globals.weaponEnergyCost[currentWeapon]:
 				
 				var bi
 				var ss
@@ -330,7 +332,7 @@ func get_input(delta):
 				
 				add_collision_exception_with(bi) # Make bullet and this not collide
 				
-				if Globals.gameDifficulty > Globals.Difficulty.EASY:
+				if Globals.playerData.gameDifficulty > Globals.Difficulty.EASY:
 					bulletManager.push_bullet(bi)
 				else:
 					for child in bulletHolder.get_children():
@@ -508,22 +510,26 @@ func handleEvents():
 			Globals.EVENT_TILES.CUSTOM_EVENT:
 				event.run_event(self)
 			Globals.EVENT_TILES.CHECKPOINT:
-				if event.respawn_position != Vector2(0,0):
-					CheckpointPlayerStats.lastCheckpointPos = cell2pos(event.respawn_position)
-				else:
-					CheckpointPlayerStats.lastCheckpointPos=position
-					var cam = $Camera2D
-					CheckpointPlayerStats.lastCameraBounds=cam.destPositions
-				#CheckpointPlayerStats.lastHealth=HP
-				CheckpointPlayerStats.setTimer(timer)
-				CheckpointPlayerStats.lastWeaponMeters=weaponMeters
-				print("Set new respawn position to"+String(CheckpointPlayerStats.lastCheckpointPos))
-				print("Set the camera parameters to "+String(CheckpointPlayerStats.lastCameraBounds))
+				set_checkpoint(event.respawn_position,event.respawn_facing_left)
 				event.disabled=true
-				CheckpointPlayerStats.shouldFaceLeft=event.respawn_facing_left
-				CheckpointPlayerStats.checkpointSet=true
 			_:
 				print("Unknown event ID: "+String(event_ID))
+
+func set_checkpoint(respawnPosition:Vector2,shouldFaceLeft=false):
+	if respawnPosition != Vector2(0,0):
+		CheckpointPlayerStats.lastCheckpointPos = cell2pos(respawnPosition)
+	else:
+		CheckpointPlayerStats.lastCheckpointPos=position
+		var cam = $Camera2D
+		CheckpointPlayerStats.lastCameraBounds=cam.destPositions
+	#CheckpointPlayerStats.lastHealth=HP
+	CheckpointPlayerStats.setTimer(timer)
+	CheckpointPlayerStats.lastWeaponMeters=weaponMeters
+	print("Set new respawn position to"+String(CheckpointPlayerStats.lastCheckpointPos))
+	print("Set the camera parameters to "+String(CheckpointPlayerStats.lastCameraBounds))
+	
+	CheckpointPlayerStats.shouldFaceLeft=shouldFaceLeft
+	CheckpointPlayerStats.checkpointSet=true
 
 func _physics_process(delta):
 	if !is_timer_stopped:
@@ -684,7 +690,7 @@ func _physics_process(delta):
 		#stateInfo.text = "Floor: " + String(is_on_floor()) + " Wall: " + String(is_on_wall()) + " Ceiling: " + String(rayCast.is_colliding())
 		#stateInfo.text = "Floor:" + String(is_on_floor()) +" ! "+ "Jumping: "+String(jumping)
 		stateInfo.text = sprite.get_animation() + " ! " + String(sprite.is_playing())
-		if Globals.gameDifficulty > Globals.Difficulty.EASY:
+		if Globals.playerData.gameDifficulty > Globals.Difficulty.EASY:
 			for i in range(3):
 				stateInfo.text +="\n"+String(bulletManager.get_onscreen_bullet_pos(i))
 		
@@ -791,9 +797,9 @@ func player_touched(obj, amountToDamage:int):
 			else:
 				velocity.x = -300
 			lockMovement(.25,velocity,false)
-		if Globals.gameDifficulty == Globals.Difficulty.HARD:
+		if Globals.playerData.gameDifficulty == Globals.Difficulty.HARD:
 			amountToDamage*=1.5
-		elif Globals.gameDifficulty == Globals.Difficulty.SUPERHERO:
+		elif Globals.playerData.gameDifficulty == Globals.Difficulty.SUPERHERO:
 			amountToDamage*=2.0
 		HP-=amountToDamage;
 		if HP > 0:
@@ -852,7 +858,7 @@ func die():
 		yield($DieSound,"finished")
 		$CanvasLayer/Fadeout.fadeOut()
 		yield($CanvasLayer/Fadeout/Fadeout_Tween,"tween_completed")
-		if Globals.gameDifficulty < Globals.Difficulty.MEDIUM or CheckpointPlayerStats.playerLivesLeft >= 0:
+		if Globals.playerData.gameDifficulty < Globals.Difficulty.MEDIUM or CheckpointPlayerStats.playerLivesLeft >= 0:
 # warning-ignore:return_value_discarded
 			get_tree().reload_current_scene()
 		else:
@@ -872,8 +878,10 @@ func finishStage():
 func finishStage_2():
 	$CanvasLayer/Fadeout.fadeOut()
 	yield($CanvasLayer/Fadeout/Fadeout_Tween,"tween_completed")
+	Globals.playerData.availableWeapons[stageRoot.weapon_to_unlock]=true
+	Globals.save_player_game()
 # warning-ignore:return_value_discarded
-	get_tree().change_scene("res://Cutscene/cutsceneWhatever.tscn")
+	get_tree().change_scene("res://StageSelectV2/NewBossSelect.tscn")
 	
 
 func healPlayer(amount):
@@ -891,7 +899,7 @@ func restoreAmmo(amount):
 		HPBar.updateAmmo(weaponMeters[currentWeapon]/144.0,true)
 	
 func giveExtraLife():
-	if Globals.gameDifficulty < Globals.Difficulty.MEDIUM:
+	if Globals.playerData.gameDifficulty < Globals.Difficulty.MEDIUM:
 		HP = MAX_HP
 		HPBar.updateHP(HP,false)
 	else:

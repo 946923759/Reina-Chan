@@ -18,7 +18,6 @@ export(int,0,25) var player_damage = 1
 export(String) var intro_subtitle_key = "Architect_Intro"
 export(bool) var stage_finished_when_killed = true
 
-#var rocket = preload("res://Stages_Reina/Bosses/Architect/ArchiRocket.tscn")
 var deathAnimation = preload("res://Animations/deathAnimation.tscn")
 
 func _ready():
@@ -44,26 +43,11 @@ func playIntro(playSound=true,showHPbar=true):
 # warning-ignore:return_value_discarded
 		seq.append_callback(HPBar,"set_process",[false])
 	if playSound:
-		$AudioStreamPlayer.play()
-		return $AudioStreamPlayer
+		$IntroSound.play()
+		return $IntroSound
 	#1235
 	#$AudioStreamPlayer.connect("finished",callback,)
 
-enum STATE {
-	IDLE,
-	SHOOTING1,
-	SHOOTING2,
-	MOVING,
-	IDLE2,
-	JUMPING,
-	JUMPING2,
-	SHOOTDOWN
-}
-var curState = STATE.SHOOTING1
-var idleTime:float =0
-var shots:int = 0
-var shouldMoveLeft:bool=true
-var tempVelocity:Vector2
 #var is_on_floor_:bool
 #The duration that the sprite has been colored white.
 var whiteTime = 0
@@ -73,6 +57,11 @@ func _physics_process(delta):
 	if not enabled:
 # warning-ignore:return_value_discarded
 		move_and_slide(Vector2(0,200))
+	else:
+		if !sprite.use_parent_material:
+			whiteTime += delta
+			if whiteTime > .1:
+				sprite.use_parent_material = true
 
 func objectTouched(obj):
 	#print("intersecting!")
@@ -121,7 +110,10 @@ func killSelf():
 	
 	#self.queue_free()
 	emit_signal("boss_killed")
-	var player = get_node("/root/Node2D/Player")
-	player.finishStage()
-	#.lockMovement(999,Vector2())
-	#get_node("/root/Node2D/VictorySound").play()
+	if stage_finished_when_killed:
+		var player = get_node("/root/Node2D/Player")
+		player.finishStage()
+		#.lockMovement(999,Vector2())
+		#get_node("/root/Node2D/VictorySound").play()
+	else:
+		HPBar.visible=false

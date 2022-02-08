@@ -25,7 +25,8 @@ func run_event(sender):
 		return
 	disabled=true
 	parent=sender
-	parent.lockMovement(999,Vector2())
+	#Due to funny collision problems we have to push the player down or she'll be in the air for 1 frame after unlocking
+	parent.lockMovement(999,Vector2(0,5)) 
 	parent.sprite.set_animation("Idle")
 	if Globals.playCutscenes==false or CheckpointPlayerStats.watchedBossIntro:
 		child.playIntro(false)

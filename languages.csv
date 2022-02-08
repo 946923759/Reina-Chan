@@ -1,10 +1,10 @@
 keys;en;es
-START GAME;START GAME
-PLAY INTRO;PLAY INTRO
-OPTIONS;OPTIONS
-EXTRAS;EXTRAS
-HOMEPAGE;HOMEPAGE
-QUIT;QUIT
+START GAME;START GAME;empezar juego
+PLAY_INTRO;PLAY INTRO;PLAY INTRO
+OPTIONS;OPTIONS;opciones
+EXTRAS;EXTRAS;extras
+HOMEPAGE;HOMEPAGE;página principal
+QUIT;QUIT;dejar
 AudioVolume;Music Volume;Volúmen de la Música
 SFXVolume;SFX Volume;Volúmen de los Efectos
 isFullscreen;Full Screen;Pantalla Completa

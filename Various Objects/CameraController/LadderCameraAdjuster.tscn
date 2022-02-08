@@ -96,7 +96,9 @@ func cam(obj):
 [node name="LadderCameraAdjuster" type="Area2D"]
 script = SubResource( 1 )
 __meta__ = {
-"_edit_group_": true
+"_edit_group_": true,
+"_editor_description_": "Place this where you want the camera to transition while on a ladder.
+The top/bottom limit will be determined based on the location of where this is placed."
 }
 leftBound = 80
 topBound = 13

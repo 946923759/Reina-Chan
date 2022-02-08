@@ -1,0 +1,50 @@
+#BG	black	21Jashin_testroom	17xh-Networld
+#NSF_FILENAME	Kirby.nsf
+#NSF_TRACKNUM	6
+#CDAUDIO	Cutscene1
+#NEXT	cutscene2Data.txt
+#LANGUAGES	en	es
+
+preload_portraits	pic_UMP45	pic_UMP9	Dier	Nyto_7
+nop msg	oh no
+msg	The year is 21XX. In some alternate universe G&K still exists, everything's settled down, and 404 was able to live the rest of their days happily at the G&K base.
+msg	One day, Dandelai and Dier teamed up to build a new battle simulator as thanks for 404 helping out the AR Team and the commander all the time.
+msg	Since the Griffin commander decided to go on a much needed vacation, Dandelai was left in charge.
+bg	1
+portrait	pic_UMP45	pic_UMP9	Dier	Nyto_7,true,0
+nop	portrait	pic_UMP9
+nop	Automatically highlight portrait with a matching name. Since names are translated by the engine there is no need to change them when translating it into another language (refer to languages.csv)
+nop	This is based on order of the matchnames command, so UMP45 = portrait at position 0, UMP9 = portrait at position 1, Dier = Portrait at position 2
+matchnames	UMP45	UMP9	Dier	Dandelai
+speaker	Dier
+msg	Alright, just a few more edits...
+speaker	UMP45
+msg	Don't you think she's going to go through your files?
+speaker	Dier
+msg	I guess. It's worth it for being able to use the fastest processor in the world though.
+msg	Dandelai can process about thirty times as much in parallel as the average T-Doll.
+speaker	Dandelai
+msg	I already have gone through his computer.
+msg	It seems like Dier enjoys purchasing expensive clothing for his A-Dolls and taking pictures... I do not understand this kind of hobby.
+speaker	Dier
+msg	Did you have to bring that up?! Besides, there's nothing harmful about it!
+speaker	UMP45
+msg	Yeah, we already knew he's got... Unique tastes. We try to keep G11 away from him since he has four of her model at home.
+speaker	Dandelai
+msg	Unique? I'm sorry, I do not understand the meaning.
+speaker	UMP45
+msg	It means he only has eyes for androids. Don't worry Dandelai, you're too human for his tastes.
+speaker	Dier
+msg	Do you enjoy teasing your benefactor? Let's go back to the simulator, we're getting off track. Who wants to go first?
+speaker	UMP9
+msg	I'll go! It sounds fun!
+speaker	Dier
+msg	Alright. Dande, are you ready?
+speaker	Dandelai
+msg	Yes.
+speaker	Dier
+msg	Okay then! UMP9, you'll want to sit down in that chair. Unless you want to fall over when Dandelai pulls your neural cloud into the simulator.
+speaker	UMP9
+msg	Got it.
+speaker	Dier
+msg	All ready? 3... 2... 1... Let's go!"

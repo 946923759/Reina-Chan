@@ -294,7 +294,9 @@ f6 - unlock camera
 f7 - lock camera to current pos
 f8 - exit game
 F9 - CYCLE  DEBUG DISP
-F10 - KILL SELF"
+F10 - KILL SELF
+f11 - reserved
+f12 - set checkpoint at cur pos"
 __meta__ = {
 "_edit_use_anchors_": false
 }

@@ -12,7 +12,8 @@ onready var music_player = Globals.ReinaAudioPlayer.new(self)
 
 func _ready():
 	$Sprite.Cover()
-	music_player.load_song(\"Credits\",\"Rockman 4MI.nsf\",104)
+	#music_player.load_song(\"Credits\",\"Rockman 4MI.nsf\",104)
+	music_player.load_song(\"Credits\",\"Metroid.nsf\",11)
 	
 	
 	$c1.rect_position=Vector2(
@@ -81,7 +82,9 @@ margin_right = 332.0
 margin_bottom = 70.0
 grow_horizontal = 2
 custom_fonts/font = ExtResource( 1 )
-text = "Reina-Chan"
+text = "Reina-Chan
+demo 2"
+align = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -89,7 +92,7 @@ __meta__ = {
 [node name="c2" type="RichTextLabel" parent="."]
 margin_top = 736.0
 margin_right = 1280.0
-margin_bottom = 2336.0
+margin_bottom = 2393.0
 custom_fonts/bold_font = SubResource( 3 )
 custom_fonts/normal_font = ExtResource( 1 )
 bbcode_enabled = true

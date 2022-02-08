@@ -66,6 +66,7 @@ animations = [ {
 
 [node name="Ghost Dinergate" instance=ExtResource( 2 )]
 script = ExtResource( 3 )
+maxHealth = 7
 
 [node name="AnimatedSprite" parent="." index="0"]
 scale = Vector2( 4.5, 4.5 )

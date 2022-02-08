@@ -15,7 +15,7 @@ onready var TEXT_SPEED: float = Globals.OPTIONS['TextSpeed']['value']/5
 var parent_node
 var backgrounds:Node2D
 
-enum OPCODES {MSG, PORTRAITS, PRELOAD_PORTRAITS, SPEAKER, BG, MATCH_NAMES}
+enum OPCODES {MSG, PORTRAITS, PRELOAD_PORTRAITS, SPEAKER, BG, MATCH_NAMES, MSGBOX_TRANSITION}
 
 var curPos: int = -1
 
@@ -32,42 +32,58 @@ var message: Array
 
 var portraits:Array=[]
 
-func parse_string_array(arr):
+func push_back_from_idx_one(arr,arr2):
+	for i in range(1,arr2.size()):
+		arr.push_back(arr2[i])
+	return arr
+
+func parse_string_array(arr,delimiter:String="|"):
 	message = []
 	for s in arr:
-		var splitString = s.split("|")
+		var splitString = s.split(delimiter,true,1)
 		match splitString[0]:
 			'msg':
 				message.push_back([OPCODES.MSG,splitString[1]])
 			'speaker':
-				message.push_back([OPCODES.SPEAKER,splitString[1]])
+				if splitString.size()==1:
+					message.push_back([OPCODES.SPEAKER,""])
+				else:
+					message.push_back(push_back_from_idx_one([OPCODES.SPEAKER],splitString))
 			"portrait":
 				var pOpcode = [OPCODES.PORTRAITS]
-				#"portraits|ump9,false,0|Nyto_7
-				for i in range(1,splitString.size()):
-					var p = splitString[i]
-					if ',' in p:
-						var pStructStr = p.split(',')
-						assert(pStructStr.size()<=3, "Malformed portrait command. Did you mix up commas and pipes? "+String(pStructStr))
-						pOpcode.push_back([pStructStr[0],pStructStr[1].to_lower()=="true",int(pStructStr[2])])
-					else:
-						pOpcode.push_back(p)
+				if splitString.size()>1:
+					#var params = splitString[1].split("|")
+					#"portraits|ump9,false,0|Nyto_7
+					for i in range(1,splitString.size()):
+						var p = splitString[i]
+						if ',' in p:
+							var pStructStr = p.split(',')
+							assert(pStructStr.size()<=3, "Malformed portrait command. Did you mix up commas and pipes? "+String(pStructStr))
+							pOpcode.push_back([pStructStr[0],pStructStr[1].to_lower()=="true",int(pStructStr[2])])
+						else:
+							pOpcode.push_back(p)
 				#print(pOpcode)
 				message.push_back(pOpcode)
 			"preload_portraits":
 				var newCmd=[OPCODES.PRELOAD_PORTRAITS]
-				for i in range(1,splitString.size()):
-					newCmd.push_back(splitString[i])
-				message.push_back(newCmd)
+				message.push_back(push_back_from_idx_one(newCmd,splitString))
+				#var params = splitString[1].split("|")
+				#for i in range(1,splitString.size()):
+				#	newCmd.push_back(splitString[i])
+				#message.push_back(newCmd)
 			"bg":
 				message.push_back([OPCODES.BG,int(splitString[1])])
 			"matchnames":
 				var data = [] 
+				push_back_from_idx_one(data,splitString)
+				#var params = splitString[1].split("|")
 				for i in range(1,splitString.size()):
 					data.push_back(splitString[i])
 				message.push_back([OPCODES.MATCH_NAMES,data])
 			"nop": # "no-operation"
 				pass
+			"msgboxTransition":
+				message.push_back([OPCODES.MSGBOX_TRANSITION])
 			_:
 				printerr("Unknown command:"+splitString[0])
 
@@ -87,6 +103,7 @@ func get_portrait_at_idx(idx):
 
 var lastPortraitTable = {}
 var matchedNames = []
+onready var tw = $TextboxTween
 func advance_text()->bool:
 	curPos+=1
 	while true:
@@ -97,7 +114,7 @@ func advance_text()->bool:
 			return false
 		var curMessage = message[curPos]
 		
-		var t
+		#var t
 		match curMessage[0]:
 			OPCODES.MSG:
 				var tmp_txt = curMessage[1]
@@ -132,17 +149,11 @@ func advance_text()->bool:
 							#print("Highlighting at idx "+String(val))
 							tmp_txt=tmp_txt.substr(cmd_end+1,len(tmp_txt))
 					elif tmp_txt.begins_with("/close"):
-						if t == null:
-							t = TweenSequence.new(get_tree())
-							t._tween.pause_mode = Node.PAUSE_MODE_PROCESS
-						closeTextbox(t)
+						closeTextbox(tw,waitForAnim)
 						waitForAnim+=.3
 						tmp_txt=tmp_txt.substr(6,len(tmp_txt))
 					elif tmp_txt.begins_with("/open"):
-						if t == null:
-							t = TweenSequence.new(get_tree())
-							t._tween.pause_mode = Node.PAUSE_MODE_PROCESS
-						openTextbox(t)
+						openTextbox(tw,waitForAnim)
 						waitForAnim+=.3
 						tmp_txt=tmp_txt.substr(5,len(tmp_txt))
 					else:
@@ -152,14 +163,20 @@ func advance_text()->bool:
 				text.visible_characters=0
 				text.bbcode_text = tmp_txt
 				break
+			#Compatibility opcode for Girls' Frontline
+			OPCODES.MSGBOX_TRANSITION:
+				closeTextbox(tw)
+				openTextbox(tw,.3)
+				waitForAnim+=.6
 			OPCODES.MATCH_NAMES:
 				matchedNames=curMessage[1]
 			OPCODES.SPEAKER:
 				$SpeakerActor.text=curMessage[1]
 				if len(matchedNames) > 1:
+					#print(matchedNames)
 					for i in range(len(matchedNames)):
 						if matchedNames[i]==curMessage[1]:
-							#print("Matched portrait at idx "+String(i))
+							print("Matched portrait "+curMessage[1]+" at idx "+String(i))
 							for p in portraits:
 								if p.idx==i:
 									p.undim()
@@ -168,6 +185,8 @@ func advance_text()->bool:
 									p.dim()
 									p.z_index = -1
 							break
+						#print("|"+matchedNames[i]+"| != |"+curMessage[1]+"|")
+					#print("Couldn't match "+curMessage[1]+ " in "+String(matchedNames))
 			OPCODES.PRELOAD_PORTRAITS:
 				#TODO: Change to a portrait pooling class
 				#TODO: Do not preload until no portraits are shown
@@ -233,17 +252,36 @@ func advance_text()->bool:
 						if lastUsed != null:
 							print("Stopping sprite"+name)
 							get_portrait_from_sprite(name).stop()
+							
 		curPos+=1
+	tw.interpolate_property(text,"visible_characters",0,text.text.length(),
+		1/TEXT_SPEED*text.text.length(),
+		Tween.TRANS_LINEAR,
+		Tween.EASE_IN,
+		waitForAnim
+	)
+	print("Tweening... waitForAnim is "+String(waitForAnim))
+	tw.start()
+	waitForAnim=0
 	#If there was any processing done at all, this should be true
 	return true
 
-func closeTextbox(t):
-	t.append($textbox,'scale:y',0,.3).set_trans(Tween.TRANS_QUAD)
+func closeTextbox(t:Tween,delay:float=0):
+	#t.append($textbox,'scale:y',0,.3).set_trans(Tween.TRANS_QUAD)
+	#print("Closing textbox with delay of "+String(delay))
+	t.interpolate_property($textbox,"scale:y",1,0,.3,Tween.TRANS_QUAD,Tween.EASE_IN,delay)
+	t.interpolate_property($SpeakerActor,"rect_position:y",460,533,.3,Tween.TRANS_QUAD,Tween.EASE_IN,delay)
+	t.interpolate_property($SpeakerActor,"modulate:a",1,0,.3,Tween.TRANS_QUAD,Tween.EASE_IN,delay)
 
-func openTextbox(t):
-	t.append($textbox,'scale:y',1,.3).set_trans(Tween.TRANS_QUAD)
+func openTextbox(t:Tween,delay:float=0):
+	#print("Opening textbox with delay of "+String(delay))
+	t.interpolate_property($textbox,"scale:y",0,1,.3,Tween.TRANS_QUAD,Tween.EASE_OUT,delay)
+	t.interpolate_property($SpeakerActor,"rect_position:y",533,460,.3,Tween.TRANS_QUAD,Tween.EASE_OUT,delay)
+	t.interpolate_property($SpeakerActor,"modulate:a",0,1,.3,Tween.TRANS_QUAD,Tween.EASE_OUT,delay)
+	#t.append($textbox,'scale:y',1,.3).set_trans(Tween.TRANS_QUAD)
 
 func _ready():
+	$PressStartToSkip.text=INITrans.GetString("Cutscene","PRESS START TO SKIP")
 	print("Text speed is "+String(TEXT_SPEED))
 	set_process(false)
 	text = $textActor_better
@@ -264,14 +302,14 @@ func _ready():
 	#TODO: Don't hardcode the dim quad! Make it fit to window size!
 	
 	#for debugging
-	"""init_([
-		'speaker|speaker name',
-		'portrait|pic_MAC10|Nyto_7',
-		"msg|test message 1",
-		"msg|test message 2"
-	],
-	null,
-	true)"""
+#	init_([
+#		'speaker speaker name',
+#		'portrait pic_MAC10|Nyto_7',
+#		"msg test message 1",
+#		"msg test message 2"
+#	],
+#	null,
+#	true)
 	
 	if len(standalone_message)!=0:
 		init_(standalone_message,null,dim_the_background_if_standalone)
@@ -338,20 +376,29 @@ func _process(delta):
 				end_cutscene()
 	else:
 		if forward:
-			print("skipped")
+			#print("skipped")
+			tw.stop_all()
+			$textbox.scale.y=1
+			$SpeakerActor.rect_position.y=460
+			$SpeakerActor.modulate.a=1
+			#openTextbox(tw)
+			#tw.start()
 			text.visible_characters = text.text.length()
-		elif waitForAnim > 0.0:
-			waitForAnim-=delta
+		#elif waitForAnim > 0.0:
+		#	waitForAnim-=delta
 		else:
-			time+=delta
+			#time+=delta
 			
-			var speedupMultiplier = 1.0
+			#var speedupMultiplier = 1.0
 			if Input.is_action_pressed("ui_cancel"):
-				speedupMultiplier = 2.0
+				tw.playback_speed=2.0
+			else:
+				tw.playback_speed=1.0
+				#speedupMultiplier = 2.0
 			
-			if time > .25/(TEXT_SPEED*speedupMultiplier):
-				time=0
-				text.visible_characters+=1
+			#if time > .25/(TEXT_SPEED*speedupMultiplier):
+			#	time=0
+			#	text.visible_characters+=1
 	manualTriggerForward=false
 	
 #Fucking piece of shit game engine

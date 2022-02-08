@@ -42,7 +42,28 @@ func load_cutscene_data(name:String)->Dictionary:
 	if ok != OK:
 		printerr(\"Warning: could not open file for reading! ERROR \", ok)
 		return Dictionary()
-	return parse_json(f.get_as_text())
+	
+	var d = {'msg':[]}
+	while !f.eof_reached():
+		var line = f.get_line().strip_edges(false,true)
+		if line.begins_with('#'):
+			match line.split(\" \",true,1)[0]:
+				\"#BG\":
+					d['bg']=line.lstrip(\"#BG \").split(\" \")
+				\"#NSF_FILENAME\":
+					d['nsf_fileName']=line.lstrip(\"#NSF_FILENAME \")
+				\"#NSF_TRACKNUM\":
+					d['nsf_trackNum']=int(line.lstrip(\"#NSF_TRACKNUM \"))
+				\"#CDAUDIO\":
+					d['CDAudio']=line.lstrip(\"#CDAUDIO \")
+				\"#NEXT\":
+					d['next']=line.lstrip(\"#NEXT \")
+				_:
+					push_warning(\"Unknown script metadata tag: \"+line)
+		elif !line.empty():
+			d['msg'].push_back(line)
+	return d
+	#return parse_json(f.get_as_text())
 
 func _ready():
 	
@@ -66,11 +87,12 @@ func _ready():
 			if kv[0]==\"--cutscene\":
 				Globals.nextCutscene=kv[1]
 				break
-	#cutsceneData = load_cutscene_data(\"closeOpenBoxTest.json\")
-	cutsceneData = load_cutscene_data(Globals.nextCutscene)
+	cutsceneData = load_cutscene_data(\"test_Midnight112.txt\")
+	#cutsceneData = load_cutscene_data(Globals.nextCutscene)
 	#print(cutsceneData)
-	reinaAudioPlayer = Globals.ReinaAudioPlayer.new(self)
-	reinaAudioPlayer.load_song(cutsceneData['CDAudio'],cutsceneData['nsf_fileName'],cutsceneData['nsf_trackNum'])
+	if \"CDAudio\" in cutsceneData and \"nsf_fileName\" in cutsceneData and \"nsf_trackNum\" in cutsceneData:
+		reinaAudioPlayer = Globals.ReinaAudioPlayer.new(self)
+		reinaAudioPlayer.load_song(cutsceneData['CDAudio'],cutsceneData['nsf_fileName'],cutsceneData['nsf_trackNum'])
 	
 	#var s = smSprite.new()
 	#s.set_texture(load(\"res://Cutscene/Backgrounds/SFBase.png\"))

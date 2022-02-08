@@ -3,7 +3,7 @@
 [ext_resource path="res://StageIntro.tres.gd" type="Script" id=1]
 [ext_resource path="res://MM2Font.tres" type="DynamicFont" id=2]
 [ext_resource path="res://starfilter.png" type="Texture" id=3]
-[ext_resource path="res://Stages_Reina/Bosses/Architect/BossArchitect.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Stages_Reina/Bosses/Architect/BossArchitect_OLD_DO_NOT_USE.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Music/Stage Start.ogg" type="AudioStream" id=5]
 [ext_resource path="res://Cutscene/Portraits/pic_Architect.png" type="Texture" id=6]
 
@@ -33,7 +33,7 @@ script/source = "extends Label
 func _ready():
 	if Globals.nextStage != null:
 		print(Globals.nextStage.rsplit(\"/\",false,1))
-		self.text = Globals.nextStage.rsplit(\"/\",false,1)[1]
+		self.text = INITrans.GetString(\"StageNames\",Globals.nextStage.rsplit(\"/\",false,1)[1])
 	self.visible_characters = 0
 	self.rect_position.x = Globals.SCREEN_CENTER_X - rect_size.x/2
 	$Timer.connect(\"timeout\",self,\"timer\");

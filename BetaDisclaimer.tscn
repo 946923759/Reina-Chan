@@ -30,8 +30,11 @@ func _ready():
 	$Tween.start();
 "
 
-[node name="Node" type="Node"]
+[node name="Node" type="Control"]
 script = SubResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Polygon2D" type="Polygon2D" parent="."]
 color = Color( 0, 0, 0, 1 )
@@ -39,34 +42,45 @@ polygon = PoolVector2Array( 0, 0, 1280, 0, 1280, 720, 0, 720 )
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 
-[node name="Label" type="Label" parent="."]
+[node name="CenterContainer" type="CenterContainer" parent="."]
 margin_right = 1280.0
 margin_bottom = 720.0
+rect_clip_content = true
+size_flags_horizontal = 0
+size_flags_vertical = 0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="CenterContainer"]
+margin_right = 1280.0
+margin_bottom = 720.0
+rect_min_size = Vector2( 1280, 720 )
 custom_fonts/font = SubResource( 2 )
-text = "Thanks for trying the demo, yes fullscreen works, yes you can use a controller,
-please report bugs or feedback at PatchouliSama765@gmail.com
+text = "Thanks for trying the second demo of Reina-Chan!
+Please report bugs or feedback at PatchouliSama765@gmail.com
 or on the itch.io page
 
 Controls for keyboard:
 Z is forward/jump, X is back/shoot
-Enter is start/pause, shift is select
+Enter is start/pause, shift is weapon switch right
 
 Controls for a game controller:
-A is shoot, B is jump
-Although Godot is supposed to support X360, DS4, and switch, only X360 seems
-to work on some systems so use Steam input remapping if your controller
-is not functioning properly
+A is shoot, B is jump, L1/R1 switches weapons
+Due to a Godot Engine bug the control sticks do not work on Windows, please use
+Steam input remapping. Vibration also does not work for non-XInput controllers.
 
 Shoot/jump can be flipped in the options
 
-Debug controls: Press F9 to display them."
+The debug menu can be toggled with F9 during a stage."
 align = 1
+clip_text = true
 script = SubResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Tween" type="Tween" parent="Label"]
+[node name="Tween" type="Tween" parent="CenterContainer/Label"]
 
 [node name="Label3" type="Label" parent="."]
 margin_top = 320.0

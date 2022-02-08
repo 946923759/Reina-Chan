@@ -1,13 +1,27 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://Stages_Reina/Bosses/Alchemist/PumpkinBomb.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Stages_Reina/8bitBaseStage.tscn" type="PackedScene" id=5]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Button
+
+var music_player = FLMusicLib.new();
+
+func _ready():
+	add_child(music_player)
+	pass
+
+func _on_Button_pressed():
+	print('aaa')
+	music_player.play_music(\"res://Music/DMG-CWJ.gbs\",0,false,-1,-1,0)
+"
 
 [node name="Node2D" instance=ExtResource( 5 )]
 adjust_camera = true
 rightBound = -999
 bottomBound = -999
-nsf_music_file = "Mega Man X7 - Our Blood Boils.nsf"
+nsf_music_file = "test.vgm"
 
 [node name="TileMap" parent="." index="1"]
 collision_mask = 3
@@ -20,3 +34,17 @@ collision_mask = 17
 
 [node name="RigidBody2D" parent="." index="5" instance=ExtResource( 1 )]
 position = Vector2( 896.319, 658.083 )
+
+[node name="Button" type="Button" parent="." index="6"]
+margin_left = 419.0
+margin_top = 288.0
+margin_right = 896.0
+margin_bottom = 480.0
+action_mode = 0
+text = "asdadasdsadsadsad"
+script = SubResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="pressed" from="Button" to="Button" method="_on_Button_pressed"]

@@ -22,7 +22,7 @@ func move(obj):
 			get_node("/root/Node2D/AudioStreamPlayer").play()
 
 		if automatically_set_x_bounds:
-			leftBound=position.x
+			leftBound=global_position.x
 			rightBound=leftBound+Globals.gameResolution.x
 		else:
 			#Copying and pasting the same code twice is a great idea right?			
