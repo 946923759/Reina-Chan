@@ -1,0 +1,68 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Cutscene/TextFont.tres" type="DynamicFont" id=1]
+[ext_resource path="res://Cutscene/biggerTextbox.png" type="Texture" id=2]
+[ext_resource path="res://Cutscene/CutsceneHistory.gd" type="Script" id=3]
+
+[node name="CutsceneHistory" type="Node2D"]
+z_index = 10
+script = ExtResource( 3 )
+
+[node name="biggerTextbox" type="Sprite" parent="."]
+position = Vector2( 640, 345 )
+texture = ExtResource( 2 )
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+margin_left = 220.0
+margin_top = 85.0
+margin_right = 1059.0
+margin_bottom = 667.0
+scroll_horizontal_enabled = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="GridContainer" type="GridContainer" parent="ScrollContainer"]
+margin_right = 833.0
+margin_bottom = 149.0
+rect_clip_content = true
+custom_constants/vseparation = 15
+custom_constants/hseparation = 15
+columns = 2
+
+[node name="Label" type="Label" parent="ScrollContainer/GridContainer"]
+margin_right = 278.0
+margin_bottom = 102.0
+grow_horizontal = 0
+grow_vertical = 0
+size_flags_vertical = 1
+custom_fonts/font = ExtResource( 1 )
+text = "This is object one!"
+align = 1
+
+[node name="Label2" type="Label" parent="ScrollContainer/GridContainer"]
+margin_left = 293.0
+margin_right = 833.0
+margin_bottom = 102.0
+rect_min_size = Vector2( 540, 0 )
+custom_fonts/font = ExtResource( 1 )
+text = "This is object 2! It can be very long! The minimum size of the right column is 550!"
+autowrap = true
+
+[node name="Label3" type="Label" parent="ScrollContainer/GridContainer"]
+margin_top = 117.0
+margin_right = 278.0
+margin_bottom = 149.0
+size_flags_horizontal = 9
+custom_fonts/font = ExtResource( 1 )
+text = "This is object three!"
+
+[node name="Label4" type="Label" parent="ScrollContainer/GridContainer"]
+margin_left = 293.0
+margin_top = 117.0
+margin_right = 833.0
+margin_bottom = 149.0
+rect_min_size = Vector2( 540, 0 )
+custom_fonts/font = ExtResource( 1 )
+text = "This is object 4! Hello world"
+autowrap = true

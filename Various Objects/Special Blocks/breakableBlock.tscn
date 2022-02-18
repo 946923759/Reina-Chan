@@ -6,6 +6,7 @@
 
 [sub_resource type="GDScript" id=1]
 script/source = "extends StaticBody2D
+signal block_broken()
 
 export(PackedScene) var drop_on_break
 
@@ -58,6 +59,7 @@ func killSelf():
 	#e.position.y-=32
 	get_parent().add_child(e)
 	
+	emit_signal(\"block_broken\")
 	if drop_on_break!=null:
 		var f = drop_on_break.instance()
 		f.global_position = global_position

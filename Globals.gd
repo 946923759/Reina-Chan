@@ -32,7 +32,7 @@ var OPTIONS = {
 	"language":{
 		"type":"list",
 		"choices":["en","es","kr","ja","zh"],
-		"default":"system"
+		"default":"en"
 	},
 	"flipButtons":{
 		"type":"bool",
@@ -219,6 +219,8 @@ var NSF_location;
 
 #The stage to load.
 var nextStage
+#For the item get screen... If 0, item will be skipped
+var nextStageWeaponNum:int=0
 
 # The name of the next cutscene to load from Cutscene/ or GameData/Cutscene
 # if we're using the "cutscene from file" scene
@@ -420,6 +422,9 @@ class ReinaAudioPlayer:
 		else:
 			#print("Stopped CDAudio")
 			audioStreamPlayer.stop()
+			
+	func pause_music():
+		pass
 
 
 #https://godotengine.org/qa/32785/is-there-simple-way-to-convert-seconds-to-hh-mm-ss-format-godot

@@ -1,0 +1,41 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Stages_Reina/Alchemist/cv2.png" type="Texture" id=1]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends StaticBody2D
+
+export (bool) var start_disabled=false
+
+func _ready():
+	if start_disabled:
+		disable();
+
+func enable():
+	print(\"a\")
+	self.visible=true
+	set_collision_mask_bit(0,true)
+	#set_collision_layer_bit(0,true)
+	
+func disable():
+	self.visible=false
+	set_collision_mask_bit(0,false)
+	set_collision_layer_bit(0,false)
+"
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 32, 32 )
+
+[node name="BlockNode" type="StaticBody2D"]
+collision_layer = 17
+collision_mask = 17
+script = SubResource( 1 )
+
+[node name="Sprite" type="Sprite" parent="."]
+scale = Vector2( 4, 4 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 16, 16 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 2 )

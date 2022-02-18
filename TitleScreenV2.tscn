@@ -20,7 +20,7 @@ export(String) var submenuNode;
 #	get_tree().change_scene(\"res://BossSelect.tscn\");
 "
 
-[sub_resource type="GDScript" id=12]
+[sub_resource type="GDScript" id=2]
 script/source = "extends Label
 export var hasSubmenu = true;
 export(String) var submenuNode;
@@ -32,7 +32,7 @@ func action():
 		get_tree().change_scene(\"res://savedataError.tscn\")
 "
 
-[sub_resource type="GDScript" id=2]
+[sub_resource type="GDScript" id=3]
 script/source = "extends Label
 export var hasSubmenu = false
 
@@ -41,24 +41,16 @@ func action():
 	get_tree().change_scene(\"res://Cutscene/CutsceneFromFile.tscn\")
 "
 
-[sub_resource type="GDScript" id=3]
+[sub_resource type="GDScript" id=4]
 script/source = "extends Label
 export var hasSubmenu = true;
 export(String) var submenuNode = \"OptionsSubmenu\"
 "
 
-[sub_resource type="GDScript" id=4]
+[sub_resource type="GDScript" id=5]
 script/source = "extends Label
 export var hasSubmenu = true;
 export(String) var submenuNode;
-"
-
-[sub_resource type="GDScript" id=5]
-script/source = "extends Label
-export var hasSubmenu = false
-
-func action():
-	OS.shell_open(\"http://gfl.amaryllisworks.pw/gfgame\")
 "
 
 [sub_resource type="GDScript" id=6]
@@ -66,10 +58,18 @@ script/source = "extends Label
 export var hasSubmenu = false
 
 func action():
-	get_tree().quit();
+	OS.shell_open(\"http://gfl.amaryllisworks.pw/gfgame\")
 "
 
 [sub_resource type="GDScript" id=7]
+script/source = "extends Label
+export var hasSubmenu = false
+
+func action():
+	get_tree().quit();
+"
+
+[sub_resource type="GDScript" id=8]
 script/source = "extends VBoxContainer
 
 var font = preload(\"res://MM2Font.tres\")
@@ -123,11 +123,11 @@ func OffCommand():
 	parent.diffusealpha(desc,0)
 "
 
-[sub_resource type="DynamicFont" id=8]
+[sub_resource type="DynamicFont" id=9]
 size = 33
 font_data = ExtResource( 7 )
 
-[sub_resource type="GDScript" id=9]
+[sub_resource type="GDScript" id=10]
 script/source = "extends VBoxContainer
 
 onready var parent = get_node(\"../\")
@@ -242,7 +242,7 @@ func _on_FileDialog_cutscene_file_selected(path):
 	pass # Replace with function body.
 "
 
-[sub_resource type="GDScript" id=10]
+[sub_resource type="GDScript" id=11]
 script/source = "extends Node2D
 
 onready var parent = get_node(\"../\")
@@ -593,7 +593,7 @@ func input():
 	#	call(\"action_\"+get_child(selection).name)
 "
 
-[sub_resource type="GDScript" id=11]
+[sub_resource type="GDScript" id=12]
 script/source = "extends AudioStreamPlayer
 
 #test
@@ -684,7 +684,7 @@ margin_bottom = 120.0
 custom_fonts/font = ExtResource( 2 )
 text = "CONTINUE"
 uppercase = true
-script = SubResource( 12 )
+script = SubResource( 2 )
 hasSubmenu = false
 
 [node name="playIntro" type="Label" parent="MainMenu" groups=[
@@ -696,7 +696,7 @@ margin_bottom = 195.0
 custom_fonts/font = ExtResource( 2 )
 text = "PLAY_INTRO"
 uppercase = true
-script = SubResource( 2 )
+script = SubResource( 3 )
 
 [node name="OptionsLabel" type="Label" parent="MainMenu" groups=[
 "TEST",
@@ -707,7 +707,7 @@ margin_bottom = 270.0
 custom_fonts/font = ExtResource( 2 )
 text = "OPTIONS"
 uppercase = true
-script = SubResource( 3 )
+script = SubResource( 4 )
 submenuNode = "OptionsList"
 
 [node name="JukeboxLabel" type="Label" parent="MainMenu" groups=[
@@ -719,7 +719,7 @@ margin_bottom = 345.0
 custom_fonts/font = ExtResource( 2 )
 text = "EXTRAS"
 uppercase = true
-script = SubResource( 4 )
+script = SubResource( 5 )
 submenuNode = "Extras"
 
 [node name="Home page" type="Label" parent="MainMenu" groups=[
@@ -731,7 +731,7 @@ margin_bottom = 420.0
 custom_fonts/font = ExtResource( 2 )
 text = "HOMEPAGE"
 uppercase = true
-script = SubResource( 5 )
+script = SubResource( 6 )
 
 [node name="QuitLabel" type="Label" parent="MainMenu" groups=[
 "TEST",
@@ -742,7 +742,7 @@ margin_bottom = 495.0
 custom_fonts/font = ExtResource( 2 )
 text = "QUIT"
 uppercase = true
-script = SubResource( 6 )
+script = SubResource( 7 )
 
 [node name="DifficultySelect" type="VBoxContainer" parent="."]
 margin_left = 35.0
@@ -750,7 +750,7 @@ margin_top = 200.0
 margin_right = 75.0
 margin_bottom = 240.0
 custom_constants/separation = 30
-script = SubResource( 7 )
+script = SubResource( 8 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -759,7 +759,7 @@ __meta__ = {
 margin_top = 550.0
 margin_right = 1280.0
 margin_bottom = 650.0
-custom_fonts/font = SubResource( 8 )
+custom_fonts/font = SubResource( 9 )
 text = "difficulty help text goes here"
 align = 1
 valign = 1
@@ -776,14 +776,14 @@ margin_top = 200.0
 margin_right = 78.255
 margin_bottom = 240.0
 custom_constants/separation = 30
-script = SubResource( 9 )
+script = SubResource( 10 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="OptionsList" type="Node2D" parent="."]
 position = Vector2( 0, 200 )
-script = SubResource( 10 )
+script = SubResource( 11 )
 
 [node name="Polygon2D" type="Polygon2D" parent="OptionsList"]
 position = Vector2( 4, -88 )
@@ -850,7 +850,7 @@ __meta__ = {
 
 [node name="AudioStreamPlayer2" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 8 )
-script = SubResource( 11 )
+script = SubResource( 12 )
 
 [node name="CheatCodeHandler" type="Node" parent="AudioStreamPlayer2"]
 script = ExtResource( 9 )

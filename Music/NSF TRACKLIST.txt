@@ -38,3 +38,7 @@ DMG-CWJ
 6 - 
 7
 8 - New Messiah
+
+Kirby
+20 - Arena Menu
+39 - Death

@@ -1,22 +1,40 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Character Sprites/ump9/ump9Idle.png" type="Texture" id=1]
 [ext_resource path="res://ubuntu-font-family/Ubuntu-B.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://ParticleEffects/PaletteSwapShader.gdshader" type="Shader" id=3]
+[ext_resource path="res://ParticleEffects/GlowShader.tres" type="Material" id=4]
 
-[sub_resource type="DynamicFont" id=3]
+[sub_resource type="DynamicFont" id=1]
 size = 32
 font_data = ExtResource( 2 )
 
-[sub_resource type="ShaderMaterial" id=4]
+[sub_resource type="ShaderMaterial" id=2]
 shader = ExtResource( 3 )
 shader_param/clr1 = Color( 0.608, 0.467, 0.388, 1 )
 shader_param/clr2 = Color( 0.694, 0.627, 0.592, 1 )
 
-[sub_resource type="ShaderMaterial" id=2]
+[sub_resource type="ShaderMaterial" id=3]
 shader = ExtResource( 3 )
 shader_param/clr1 = Color( 0.878431, 0, 0, 1 )
 shader_param/clr2 = Color( 1, 0.537255, 0.537255, 1 )
+
+[sub_resource type="Shader" id=4]
+code = "shader_type canvas_item;
+//render_mode blend_premul_alpha;
+
+void fragment(){
+	vec4 col = texture(TEXTURE, UV);
+	//COLOR=vec4(0,0,0,1);
+	COLOR.rgb=(col*.1).rgb;
+	COLOR.a  = col.a;
+	//vec4 col = texture(TEXTURE, UV);
+	//vec4 glow = col;
+	//COLOR = glow + col;
+}"
+
+[sub_resource type="ShaderMaterial" id=5]
+shader = SubResource( 4 )
 
 [node name="Node2D" type="Node2D"]
 
@@ -25,7 +43,7 @@ margin_left = 139.849
 margin_top = 525.494
 margin_right = 1112.85
 margin_bottom = 562.494
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 1 )
 text = "in the gimp brushes tabs, click the dropdown, add tab, colormap"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -34,26 +52,28 @@ __meta__ = {
 [node name="Node2D" type="Node2D" parent="."]
 
 [node name="Sprite" type="Sprite" parent="Node2D"]
-material = SubResource( 4 )
+material = SubResource( 2 )
 position = Vector2( 26.9087, 279.178 )
 scale = Vector2( 4, 4 )
 texture = ExtResource( 1 )
 centered = false
 
 [node name="Sprite2" type="Sprite" parent="Node2D"]
-material = SubResource( 2 )
+material = SubResource( 3 )
 position = Vector2( 182.763, 273.102 )
 scale = Vector2( 4, 4 )
 texture = ExtResource( 1 )
 centered = false
 
 [node name="Sprite3" type="Sprite" parent="Node2D"]
+material = SubResource( 5 )
 position = Vector2( 344.562, 281.065 )
 scale = Vector2( 4, 4 )
 texture = ExtResource( 1 )
 centered = false
 
 [node name="Sprite4" type="Sprite" parent="Node2D"]
+material = ExtResource( 4 )
 position = Vector2( 516.829, 283.571 )
 scale = Vector2( 4, 4 )
 texture = ExtResource( 1 )

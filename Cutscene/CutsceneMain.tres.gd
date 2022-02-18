@@ -15,7 +15,16 @@ onready var TEXT_SPEED: float = Globals.OPTIONS['TextSpeed']['value']/5
 var parent_node
 var backgrounds:Node2D
 
-enum OPCODES {MSG, PORTRAITS, PRELOAD_PORTRAITS, SPEAKER, BG, MATCH_NAMES, MSGBOX_TRANSITION}
+enum OPCODES {
+	MSG, 
+	PORTRAITS, 
+	PRELOAD_PORTRAITS, 
+	SPEAKER, 
+	BG, 
+	MATCH_NAMES, 
+	MSGBOX_TRANSITION
+	#REWRITE_HISTORY #Edit the history! lol
+	}
 
 var curPos: int = -1
 
@@ -32,6 +41,10 @@ var message: Array
 
 var portraits:Array=[]
 
+#Array of 2D arrays
+var textHistory:Array=[]
+onready var historyActor=$CutsceneHistory
+
 func push_back_from_idx_one(arr,arr2):
 	for i in range(1,arr2.size()):
 		arr.push_back(arr2[i])
@@ -40,7 +53,7 @@ func push_back_from_idx_one(arr,arr2):
 func parse_string_array(arr,delimiter:String="|"):
 	message = []
 	for s in arr:
-		var splitString = s.split(delimiter,true,1)
+		var splitString = s.split(delimiter) #,true,1
 		match splitString[0]:
 			'msg':
 				message.push_back([OPCODES.MSG,splitString[1]])
@@ -106,6 +119,7 @@ var matchedNames = []
 onready var tw = $TextboxTween
 func advance_text()->bool:
 	curPos+=1
+	var tmp_speaker = "NoSpeaker!!"
 	while true:
 		if curPos >= message.size():
 			print("Fix your code, idiot. You already hit the end.")
@@ -114,7 +128,6 @@ func advance_text()->bool:
 			return false
 		var curMessage = message[curPos]
 		
-		#var t
 		match curMessage[0]:
 			OPCODES.MSG:
 				var tmp_txt = curMessage[1]
@@ -162,6 +175,8 @@ func advance_text()->bool:
 					
 				text.visible_characters=0
 				text.bbcode_text = tmp_txt
+				
+				
 				break
 			#Compatibility opcode for Girls' Frontline
 			OPCODES.MSGBOX_TRANSITION:
@@ -170,8 +185,15 @@ func advance_text()->bool:
 				waitForAnim+=.6
 			OPCODES.MATCH_NAMES:
 				matchedNames=curMessage[1]
-			OPCODES.SPEAKER:
-				$SpeakerActor.text=curMessage[1]
+			OPCODES.SPEAKER: 
+				# I really didn't think this one through when I made /close and /open
+				# a mini command instead of an opcode
+				if waitForAnim>0:
+					tw.interpolate_callback(self,.3,"shitty_interpolate_label",curMessage[1])
+					#tw.interpolate_property($SpeakerActor,"text","null",tmp_speaker,0,Tween.TRANS_LINEAR,Tween.EASE_IN,.3)
+				else:
+					$SpeakerActor.text=curMessage[1]
+				tmp_speaker=curMessage[1]
 				if len(matchedNames) > 1:
 					#print(matchedNames)
 					for i in range(len(matchedNames)):
@@ -254,6 +276,9 @@ func advance_text()->bool:
 							get_portrait_from_sprite(name).stop()
 							
 		curPos+=1
+	
+	#WHAT COULD POSSIBLY GO WRONG
+	textHistory.push_back([tmp_speaker,text.text])
 	tw.interpolate_property(text,"visible_characters",0,text.text.length(),
 		1/TEXT_SPEED*text.text.length(),
 		Tween.TRANS_LINEAR,
@@ -280,12 +305,37 @@ func openTextbox(t:Tween,delay:float=0):
 	t.interpolate_property($SpeakerActor,"modulate:a",0,1,.3,Tween.TRANS_QUAD,Tween.EASE_OUT,delay)
 	#t.append($textbox,'scale:y',1,.3).set_trans(Tween.TRANS_QUAD)
 
+onready var historyTween = $HistoryTween
+func tween_in_history():
+	#tw.stop_all()
+	tw.stop(text,"visible_characters")
+	closeTextbox(historyTween)
+	historyTween.interpolate_property(historyActor,"position:x",
+		Globals.gameResolution.x*-1,0,.3,
+		Tween.TRANS_QUAD,Tween.EASE_OUT,.2)
+	historyTween.interpolate_property(text,"modulate:a",null,0,.3)
+	historyTween.start()
+	
+func tween_out_history():
+	tw.resume(text,"visible_characters")
+	openTextbox(historyTween,.2)
+	historyTween.interpolate_property(historyActor,"position:x",
+		0,Globals.gameResolution.x*-1,.3,
+		Tween.TRANS_QUAD,Tween.EASE_IN,0)
+	historyTween.interpolate_property(text,"modulate:a",null,1,.3,
+	Tween.TRANS_LINEAR,Tween.EASE_OUT,.2)
+	historyTween.start()
+
+func shitty_interpolate_label(s:String):
+	#print("Now I set speaker to"+s+"!!")
+	$SpeakerActor.text=s
+
 func _ready():
 	$PressStartToSkip.text=INITrans.GetString("Cutscene","PRESS START TO SKIP")
 	print("Text speed is "+String(TEXT_SPEED))
 	set_process(false)
 	text = $textActor_better
-	text.visible_characters=0
+	#text.visible_characters=0
 	#portraits=[$Portrait1,$Portrait2,$Portrait3,$Portrait4,$Portrait5]
 	var vnPortraithandler = load("res://Cutscene/VNPortraitHandler.gd")
 	for _i in range(5):
@@ -315,7 +365,7 @@ func _ready():
 		init_(standalone_message,null,dim_the_background_if_standalone)
 
 
-func init_(message, parent, dim_background = true,_backgrounds=null):
+func init_(message, parent, dim_background = true,_backgrounds=null,delim="|"):
 	if parent:
 		parent_node = parent
 	if _backgrounds:
@@ -328,7 +378,7 @@ func init_(message, parent, dim_background = true,_backgrounds=null):
 	if dim_background:
 # warning-ignore:return_value_discarded
 		t.parallel().append($dim,'modulate:a',.6,.5).from_current()
-	parse_string_array(message)
+	parse_string_array(message,delim)
 	advance_text()
 	set_process(true)
 
@@ -347,8 +397,8 @@ func end_cutscene():
 	seq.parallel().append($SpeakerActor,'modulate:a',0,.3)
 	#seq.parallel().append($SpeakerActor,'position:y',600,.3)
 	seq.parallel().append($dim,'modulate:a',0,.5).set_trans(Tween.TRANS_QUAD)
-	seq.parallel().append($Label2,'rect_position:x',-$Label2.rect_size.x,.5).set_trans(Tween.TRANS_QUAD)
-	seq.parallel().append($Label2,'modulate:a',0,.5)
+	seq.parallel().append($PressStartToSkip,'rect_position:x',-$PressStartToSkip.rect_size.x,.5).set_trans(Tween.TRANS_QUAD)
+	seq.parallel().append($PressStartToSkip,'modulate:a',0,.5)
 # warning-ignore:return_value_discarded
 	seq.connect("finished",self,"end_cutscene_2")
 	#seq.tween_callback()
@@ -358,11 +408,14 @@ func end_cutscene():
 # Honestly, this is a mess. When it was in lua the input handling and the VN processing
 # wasn't coupled together, instead vntext:advance() would be called and if it returned
 # false it meant there was no more text.
-# Too bad you can't decouple it in godot because the tweener requires being inside
-# the _process() function. Somehow. Godot is a piece of shit.
 var manualTriggerForward=false
+
+var isHistoryBeingShown=false
+
 func _process(delta):
 	
+	if isHistoryBeingShown:
+		return
 	if Input.is_action_just_pressed("ui_pause"):
 		end_cutscene()
 	elif Input.is_action_just_pressed("DebugButton1"):
@@ -405,6 +458,15 @@ func _process(delta):
 func _input(event):
 	if event is InputEventMouseButton and event.is_pressed() and event.button_index == BUTTON_LEFT:
 		manualTriggerForward=true
+	if event is InputEventKey and event.is_pressed() and event.scancode == KEY_1:
+		if isHistoryBeingShown:
+			print("Hiding history!")
+			tween_out_history()
+		else:
+			print("Displaying history!!!")
+			tween_in_history()
+			historyActor.set_history(textHistory)
+		isHistoryBeingShown=!isHistoryBeingShown
 
 signal cutscene_finished()
 func end_cutscene_2():

@@ -52,15 +52,19 @@ func _ready():
 	highlightList(list, selection);
 	
 	#print(OS.get_executable_path().get_base_dir()+"/CustomMusic/")
+	print("Starting music...")
 	reinaAudioPlayer=Globals.ReinaAudioPlayer.new(self)
 	reinaAudioPlayer.load_song("TitleScreen",nsf_music,nsf_track_num)
+	print("Success.")
 	#var music = Globals.get_custom_music("TitleScreen")
 	#$DifficultySelect.visible=false
 	#$Extras.visible=false
 	#$OptionsList.visible=false
 	#optionItem.add_child()
 	CheckpointPlayerStats.clearEverything()
+	print("Translating items...")
 	setTranslated()
+	print("Title screen ready!")
 
 func setTranslated():
 	for node in $MainMenu.get_children():

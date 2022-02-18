@@ -49,6 +49,7 @@ func load_cutscene_data(name:String)->Dictionary:
 		if line.begins_with('#'):
 			match line.split(\" \",true,1)[0]:
 				\"#BG\":
+					print(line)
 					d['bg']=line.lstrip(\"#BG \").split(\" \")
 				\"#NSF_FILENAME\":
 					d['nsf_fileName']=line.lstrip(\"#NSF_FILENAME \")
@@ -59,8 +60,9 @@ func load_cutscene_data(name:String)->Dictionary:
 				\"#NEXT\":
 					d['next']=line.lstrip(\"#NEXT \")
 				_:
-					push_warning(\"Unknown script metadata tag: \"+line)
+					push_warning(\"Unknown script metadata tag: \"+line.split(\" \",true,1)[0])
 		elif !line.empty():
+			#print(line)
 			d['msg'].push_back(line)
 	return d
 	#return parse_json(f.get_as_text())
@@ -129,7 +131,7 @@ func _ready():
 			s.material=nightShader
 		$BackgroundHolder.add_child(s)
 		s.position=Globals.SCREEN_CENTER
-	$CutscenePlayer.init_(cutsceneData['msg'],null,false,$BackgroundHolder)
+	$CutscenePlayer.init_(cutsceneData['msg'],null,false,$BackgroundHolder,\"\\t\")
 	
 	add_child(Def.Quad({
 		name=\"fadeOut\",

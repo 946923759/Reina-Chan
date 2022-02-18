@@ -21,9 +21,19 @@ export (bool) var mute_boss_music_in_debug=false
 #var camera_multiplier = 16
 export (Globals.Weapons) var weapon_to_unlock=0
 
+#Why don't I just enumerate checkpoints?
+#Because the checkpoints aren't in order and adding them to a checkpoint
+#group or something takes more effort
+export (Array,Vector2) var debug_warp_points
+#This should probably be stored in the player right? I dunno lol
+#var last_warped=0
+
 var reinaAudioPlayer
 
 func _ready():
+	if debug_warp_points.size()==0:
+		debug_warp_points=[Vector2(0,0)]
+	
 	#set_process(true)
 	if CheckpointPlayerStats.checkpointSet:
 		print("There is a checkpoint, not adjusting the camera.")

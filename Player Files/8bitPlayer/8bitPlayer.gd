@@ -85,20 +85,22 @@ var tiles;
 var LADDER_TILE_ID
 var LADDER_TOP_TILE_ID
 var SPIKES_TILE_ID
+var lastDebugWarped=-1
 
 func _ready():
 	
+	stageRoot = get_node("/root/Node2D/")
 	tiles = self.get_node("/root/Node2D/TileMap");
-	LADDER_TILE_ID = get_node("/root/Node2D/").LADDER_TILE_ID
-	LADDER_TOP_TILE_ID = get_node("/root/Node2D/").LADDER_TOP_TILE_ID
-	if "SPIKES_TILE_ID" in get_node("/root/Node2D/"):
-		SPIKES_TILE_ID = get_node("/root/Node2D/").SPIKES_TILE_ID
+	LADDER_TILE_ID = stageRoot.LADDER_TILE_ID
+	LADDER_TOP_TILE_ID = stageRoot.LADDER_TOP_TILE_ID
+	if "SPIKES_TILE_ID" in stageRoot:
+		SPIKES_TILE_ID = stageRoot.SPIKES_TILE_ID
 	else:
 		SPIKES_TILE_ID = -999
-	stageRoot = get_node("/root/Node2D/")
 	
 	var b = load("res://Player Files/8bitPlayer/bulletManager.gd")
 	bulletManager=b.new(stageRoot)
+	#TODO: This is actually really stupid considering you can spawn a Node2D on the fly...
 	bulletHolder = get_node("/root/Node2D/BulletHolder")
 	
 	debugDisplay.visible=OS.is_debug_build()
@@ -154,8 +156,7 @@ func switchWeapon():
 	#print(Globals.weaponColorSwaps[currentWeapon][0])
 	#print(Globals.weaponColorSwaps[currentWeapon][1])
 
-func get_input(delta):
-
+func get_menu_buttons_input(delta):
 	if Input.is_action_just_pressed('DebugButton1'):
 		freeRoam = !freeRoam
 		setDebugInfoText()
@@ -175,8 +176,15 @@ func get_input(delta):
 		CheckpointPlayerStats.usedDebugMode=true
 		
 	elif Input.is_action_just_pressed("DebugButton3"):
-		position = Vector2(0,-100)
+		if lastDebugWarped+1 < stageRoot.debug_warp_points.size():
+			lastDebugWarped+=1
+		else:
+			lastDebugWarped=0
+		#print(tile_scale)
+		print("Warped player to "+String(stageRoot.debug_warp_points[lastDebugWarped]*tile_scale))
+		position = stageRoot.debug_warp_points[lastDebugWarped]*64
 		$Camera2D.adjustCamera([-10000000,-10000000,10000000,10000000],0)
+
 	
 	elif Input.is_action_just_pressed("DebugButton4"):
 		print(bulletManager.bullets)
@@ -227,6 +235,8 @@ func get_input(delta):
 		$PauseScreen.updateTimer(timer,timerWithDeath)
 		get_tree().paused = true
 		$PauseScreen.OnCommand()
+		
+func get_input(delta):
 	
 	if freeRoam:
 		velocity.y = 0
@@ -379,7 +389,7 @@ func get_input(delta):
 			velocity = velocity.normalized() * SPEED
 		#Your normal movement processing
 		else:
-			if right:
+			if right and position.x < $Camera2D.destPositions[2]-40:
 				velocity.x = run_speed
 				sprite.flip_h = false
 			elif left and position.x > $Camera2D.destPositions[0]+40:
@@ -545,6 +555,8 @@ func _physics_process(delta):
 	if shoot_sprite_time > 0:
 		shoot_sprite_time -= delta
 	
+	#Menu buttons should always be accessible!
+	get_menu_buttons_input(delta)
 	
 	if state==State.INACTIVE:
 		sprite.visible=false
@@ -570,7 +582,7 @@ func _physics_process(delta):
 	
 	var tile = tiles.get_cellv(pos2cell(position))
 	#I got tired of dying to spikes in free roam
-	if tile == SPIKES_TILE_ID and (not noClip and not freeRoam):
+	if tile == SPIKES_TILE_ID and (not noClip and not freeRoam) and not invincible:
 		#pass
 		#CheckpointPlayerStats.setDeathTimer(get_node("/root/Node2D/timer"))
 		die()
@@ -640,7 +652,7 @@ func _physics_process(delta):
 			if sprite.frame == sprite.frames.get_frame_count("LadderBegin")-1:
 				sprite.set_animation("LadderLoop")
 			
-		elif shoot_sprite_time >= 0:
+		elif shoot_sprite_time > 0:
 				#TODO: Change to shot animation while keeping the frame
 				#var prevFrame = sprite.frame
 				sprite.set_animation("LadderShoot")
@@ -878,10 +890,14 @@ func finishStage():
 func finishStage_2():
 	$CanvasLayer/Fadeout.fadeOut()
 	yield($CanvasLayer/Fadeout/Fadeout_Tween,"tween_completed")
+	var nextScene = "res://ItemGet/ItemGet.tscn"
+	CheckpointPlayerStats.lastPlayedStage = stageRoot.weapon_to_unlock
+	if Globals.playerData.availableWeapons[stageRoot.weapon_to_unlock]: #If this stage is already completed
+		nextScene="res://StageSelectV2/NewBossSelect.tscn"
 	Globals.playerData.availableWeapons[stageRoot.weapon_to_unlock]=true
 	Globals.save_player_game()
 # warning-ignore:return_value_discarded
-	get_tree().change_scene("res://StageSelectV2/NewBossSelect.tscn")
+	get_tree().change_scene(nextScene)
 	
 
 func healPlayer(amount):

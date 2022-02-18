@@ -8,7 +8,7 @@ var lastCameraBounds:Array
 var lastWeaponMeters:PoolIntArray
 
 #You can change this to true if you want to debug, clearEverything() will reset it anyways
-var watchedBossIntro:bool = true
+var watchedBossIntro:bool = false
 
 #To check for cheated time attack scores
 var usedDebugMode:bool=false
@@ -18,6 +18,9 @@ var shouldFaceLeft:bool=false
 
 #Should this be stored here? Maybe Globals makes more sense?
 var playerLivesLeft:int=3
+
+#It doesn't really belong in Globals... Anyways, this is only used for the item get screen
+var lastPlayedStage:int=0
 
 #Timer gets assigned every checkpoint, but timerWithDeath should
 #get assigned every death

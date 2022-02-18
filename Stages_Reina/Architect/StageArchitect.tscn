@@ -25,7 +25,7 @@
 [ext_resource path="res://Stages_Reina/Architect/ganymede.png" type="Texture" id=23]
 [ext_resource path="res://Stages_Reina/Enemies/Jupiter Cannon.tscn" type="PackedScene" id=24]
 [ext_resource path="res://Various Objects/EventTiles/EventTile.tscn" type="PackedScene" id=25]
-[ext_resource path="res://Stages_Reina/Bosses/Architect/BossArchitect_OLD_DO_NOT_USE.tscn" type="PackedScene" id=26]
+[ext_resource path="res://Stages_Reina/Bosses/Architect/BossArchitect_v2.tscn" type="PackedScene" id=26]
 [ext_resource path="res://Various Objects/CameraController/CameraAdjuster_v2_Vertical.tscn" type="PackedScene" id=27]
 [ext_resource path="res://Cutscene/Backgrounds/SFBase.png" type="Texture" id=28]
 [ext_resource path="res://Various Objects/EventTiles/Checkpoint_Vertical.tscn" type="PackedScene" id=29]
@@ -84,6 +84,7 @@ nsf_music_file = "Rockman 4MI.nsf"
 mute_music_in_debug = true
 mute_boss_music_in_debug = true
 weapon_to_unlock = 1
+debug_warp_points = [ Vector2( 149, 29 ), Vector2( 227, 20 ) ]
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 pause_mode = 2
@@ -255,7 +256,7 @@ bottomBound = 36
 position = Vector2( 11103, 2208 )
 
 [node name="Player" parent="." instance=ExtResource( 2 )]
-position = Vector2( 415, 576 )
+position = Vector2( 223, 576 )
 
 [node name="BulletHolder" type="Node2D" parent="."]
 
@@ -272,6 +273,7 @@ position = Vector2( 1120, 608 )
 position = Vector2( 7712, 448 )
 
 [node name="CameraAdjuster" parent="room120-0" instance=ExtResource( 10 )]
+position = Vector2( -33, 0 )
 leftBound = 120
 topBound = -999
 rightBound = -999
@@ -288,7 +290,7 @@ facing = 1
 position = Vector2( 512, -320 )
 
 [node name="CameraAdjuster2" parent="." instance=ExtResource( 10 )]
-position = Vector2( 8992, 64 )
+position = Vector2( 8959, 64 )
 leftBound = 140
 topBound = -999
 rightBound = -999
@@ -369,7 +371,7 @@ bottomBound = 25
 position = Vector2( 256, 256 )
 message = PoolStringArray( "portrait|pic_UMP9|pic_Architect", "speaker|Architect", "msg|Heee-ey, Griffin T-Dolls! Let\'s have some fun!", "speaker|UMP9", "msg|...Who is this weirdo\?", "speaker|Architect", "msg|Heeeey, I heard that~!" )
 
-[node name="Architect Boss" parent="BossArea/Door2/WARNING intro" instance=ExtResource( 26 )]
+[node name="BossArchitect" parent="BossArea/Door2/WARNING intro" instance=ExtResource( 26 )]
 position = Vector2( 736, 0 )
 
 [node name="FloorMaster2" parent="." instance=ExtResource( 14 )]
@@ -530,11 +532,10 @@ bottomBound = 48
 position = Vector2( 14719, 1152 )
 
 [node name="Node2D2" parent="Checkpoints" instance=ExtResource( 19 )]
-position = Vector2( 9504, 1088 )
+position = Vector2( 9535, 1728 )
 respawn_facing_left = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Checkpoints/Node2D2"]
-position = Vector2( 31, 640 )
 shape = SubResource( 6 )
 
 [node name="CameraAdjuster6" parent="." instance=ExtResource( 27 )]

@@ -24,8 +24,8 @@ export (int) var nsf_track_num_pt2 = 0
 
 export (bool) var mute_music_in_debug=false
 export (bool) var mute_boss_music_in_debug=false
-#export (bool) var completely_disable_music=false
-#var camera_multiplier = 16
+
+export (Array,Vector2) var debug_warp_points
 
 var reinaAudioPlayer
 

@@ -1,0 +1,110 @@
+[gd_scene load_steps=59 format=2]
+
+[ext_resource path="res://bntest/shoot/vz61_attack_25_001.png" type="Texture" id=1]
+[ext_resource path="res://bntest/shoot/vz61_attack_25_000.png" type="Texture" id=2]
+[ext_resource path="res://bntest/shoot/vz61_attack_25_010.png" type="Texture" id=3]
+[ext_resource path="res://bntest/shoot/vz61_attack_25_008.png" type="Texture" id=4]
+[ext_resource path="res://addons/godot-next/gui/debug_label.gd" type="Script" id=5]
+[ext_resource path="res://bntest/shoot/vz61_attack_25_011.png" type="Texture" id=6]
+[ext_resource path="res://bntest/images/vz61_wait_25_027.png" type="Texture" id=7]
+[ext_resource path="res://bntest/images/vz61_wait_25_028.png" type="Texture" id=8]
+[ext_resource path="res://bntest/images/vz61_wait_25_030.png" type="Texture" id=9]
+[ext_resource path="res://bntest/images/vz61_wait_25_029.png" type="Texture" id=10]
+[ext_resource path="res://bntest/shoot/vz61_attack_25_013.png" type="Texture" id=11]
+[ext_resource path="res://bntest/shoot/vz61_attack_25_012.png" type="Texture" id=12]
+[ext_resource path="res://bntest/shoot/vz61_attack_25_007.png" type="Texture" id=13]
+[ext_resource path="res://bntest/shoot/vz61_attack_25_009.png" type="Texture" id=14]
+[ext_resource path="res://bntest/shoot/vz61_attack_25_002.png" type="Texture" id=15]
+[ext_resource path="res://bntest/images/vz61_wait_25_021.png" type="Texture" id=16]
+[ext_resource path="res://bntest/images/vz61_wait_25_023.png" type="Texture" id=17]
+[ext_resource path="res://bntest/images/vz61_wait_25_022.png" type="Texture" id=18]
+[ext_resource path="res://bntest/Player.gd" type="Script" id=19]
+[ext_resource path="res://bntest/images/vz61_wait_25_005.png" type="Texture" id=20]
+[ext_resource path="res://bntest/images/vz61_wait_25_007.png" type="Texture" id=21]
+[ext_resource path="res://bntest/images/vz61_wait_25_016.png" type="Texture" id=22]
+[ext_resource path="res://bntest/images/vz61_wait_25_024.png" type="Texture" id=23]
+[ext_resource path="res://bntest/images/vz61_wait_25_025.png" type="Texture" id=24]
+[ext_resource path="res://bntest/images/vz61_wait_25_026.png" type="Texture" id=25]
+[ext_resource path="res://bntest/images/vz61_wait_25_001.png" type="Texture" id=26]
+[ext_resource path="res://bntest/images/vz61_wait_25_031.png" type="Texture" id=27]
+[ext_resource path="res://bntest/images/vz61_wait_25_033.png" type="Texture" id=28]
+[ext_resource path="res://bntest/images/vz61_wait_25_034.png" type="Texture" id=29]
+[ext_resource path="res://bntest/images/vz61_wait_25_009.png" type="Texture" id=30]
+[ext_resource path="res://bntest/images/vz61_wait_25_006.png" type="Texture" id=31]
+[ext_resource path="res://bntest/images/vz61_wait_25_011.png" type="Texture" id=32]
+[ext_resource path="res://bntest/images/vz61_wait_25_010.png" type="Texture" id=33]
+[ext_resource path="res://bntest/images/vz61_wait_25_000.png" type="Texture" id=34]
+[ext_resource path="res://bntest/images/vz61_wait_25_002.png" type="Texture" id=35]
+[ext_resource path="res://bntest/images/vz61_wait_25_004.png" type="Texture" id=36]
+[ext_resource path="res://bntest/images/vz61_wait_25_032.png" type="Texture" id=37]
+[ext_resource path="res://bntest/images/vz61_wait_25_003.png" type="Texture" id=38]
+[ext_resource path="res://bntest/images/vz61_wait_25_008.png" type="Texture" id=39]
+[ext_resource path="res://bntest/images/vz61_wait_25_039.png" type="Texture" id=40]
+[ext_resource path="res://bntest/images/vz61_wait_25_035.png" type="Texture" id=41]
+[ext_resource path="res://bntest/images/vz61_wait_25_036.png" type="Texture" id=42]
+[ext_resource path="res://bntest/images/vz61_wait_25_037.png" type="Texture" id=43]
+[ext_resource path="res://bntest/images/vz61_wait_25_038.png" type="Texture" id=44]
+[ext_resource path="res://bntest/images/vz61_wait_25_017.png" type="Texture" id=45]
+[ext_resource path="res://bntest/images/vz61_wait_25_018.png" type="Texture" id=46]
+[ext_resource path="res://bntest/images/vz61_wait_25_019.png" type="Texture" id=47]
+[ext_resource path="res://bntest/images/vz61_wait_25_020.png" type="Texture" id=48]
+[ext_resource path="res://bntest/images/vz61_wait_25_014.png" type="Texture" id=49]
+[ext_resource path="res://bntest/images/vz61_wait_25_013.png" type="Texture" id=50]
+[ext_resource path="res://bntest/images/vz61_wait_25_012.png" type="Texture" id=51]
+[ext_resource path="res://bntest/images/vz61_wait_25_015.png" type="Texture" id=52]
+[ext_resource path="res://bntest/shoot/vz61_attack_25_003.png" type="Texture" id=53]
+[ext_resource path="res://bntest/shoot/vz61_attack_25_005.png" type="Texture" id=54]
+[ext_resource path="res://bntest/shoot/vz61_attack_25_004.png" type="Texture" id=55]
+[ext_resource path="res://bntest/shoot/vz61_attack_25_006.png" type="Texture" id=56]
+[ext_resource path="res://MM2Font.tres" type="DynamicFont" id=57]
+
+[sub_resource type="SpriteFrames" id=1]
+animations = [ {
+"frames": [ ExtResource( 34 ), ExtResource( 26 ), ExtResource( 35 ), ExtResource( 38 ), ExtResource( 36 ), ExtResource( 20 ), ExtResource( 31 ), ExtResource( 21 ), ExtResource( 39 ), ExtResource( 30 ), ExtResource( 33 ), ExtResource( 32 ), ExtResource( 51 ), ExtResource( 50 ), ExtResource( 49 ), ExtResource( 52 ), ExtResource( 22 ), ExtResource( 45 ), ExtResource( 46 ), ExtResource( 47 ), ExtResource( 48 ), ExtResource( 16 ), ExtResource( 18 ), ExtResource( 17 ), ExtResource( 23 ), ExtResource( 24 ), ExtResource( 25 ), ExtResource( 7 ), ExtResource( 8 ), ExtResource( 10 ), ExtResource( 9 ), ExtResource( 27 ), ExtResource( 37 ), ExtResource( 28 ), ExtResource( 29 ), ExtResource( 41 ), ExtResource( 42 ), ExtResource( 43 ), ExtResource( 44 ), ExtResource( 40 ) ],
+"loop": true,
+"name": "default",
+"speed": 40.0
+}, {
+"frames": [ ExtResource( 2 ), ExtResource( 1 ), ExtResource( 15 ), ExtResource( 53 ), ExtResource( 55 ), ExtResource( 54 ), ExtResource( 56 ), ExtResource( 13 ), ExtResource( 4 ), ExtResource( 14 ), ExtResource( 3 ), ExtResource( 6 ), ExtResource( 12 ), ExtResource( 11 ) ],
+"loop": true,
+"name": "shoot",
+"speed": 40.0
+} ]
+
+[node name="Player" type="Node2D"]
+position = Vector2( 416, 64 )
+script = ExtResource( 19 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+frames = SubResource( 1 )
+frame = 21
+playing = true
+
+[node name="DebugLabel" type="Label" parent="."]
+margin_left = 64.0
+margin_top = -64.0
+margin_right = 245.0
+margin_bottom = -33.0
+text = "position = Vector2( 416, 64 )
+playerPos = Vector2( 0, 0 )
+"
+script = ExtResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+target_path = NodePath("..")
+properties = PoolStringArray( "position", "playerPos" )
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Label" type="Label" parent="CanvasLayer"]
+margin_right = 40.0
+margin_bottom = 14.0
+custom_fonts/font = ExtResource( 57 )
+text = "9999"
+__meta__ = {
+"_edit_use_anchors_": false
+}

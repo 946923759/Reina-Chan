@@ -14,9 +14,12 @@ func _ready():
 	#init(-1)
 	pass
 	
-func init(direction):
+func init(direction,velocityOverride:Vector2=Vector2(0,0)):
 	$AnimatedSprite.playing=true
-	velocity=Vector2(5*direction,-5)
+	if velocityOverride!=Vector2(0,0):
+		velocity=velocityOverride
+	else:
+		velocity=Vector2(5*direction,-5)
 	set_physics_process(true)
 	
 func _physics_process(delta):
@@ -92,7 +95,7 @@ __meta__ = {
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 scale = Vector2( 4, 4 )
 frames = SubResource( 11 )
-frame = 5
+frame = 7
 playing = true
 offset = Vector2( -0.5, -0.5 )
 __meta__ = {

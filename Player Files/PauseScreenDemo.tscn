@@ -6,7 +6,7 @@
 [sub_resource type="GDScript" id=1]
 script/source = "extends CanvasLayer
 
-onready var optList = $m/VBoxContainer
+onready var optList = $m/CenterContainer/VBoxContainer
 
 func _ready():
 	optList.get_child(0).modulate =Color(0.21,0.63,1,1)
@@ -14,18 +14,26 @@ func _ready():
 	$m.visible=true
 	#set_process(false)
 	set_process_input(false)
+	#print(INITrans.GetString(\"PauseMenu\",\"DebugHelp\"))
+	$m/debugHelp.text = INITrans.GetString(\"PauseMenu\",\"DebugHelp\").replace(\"\\\\n\",\"\\n\")
+	
+	if INITrans.currentLanguage!=\"en\":
+		#if INITrans.currentLanguageType!=INITrans.LanguageType.ASCII:
+		for child in optList.get_children():
+			child.set(\"custom_fonts/font\",INITrans.font)
+			child.text=INITrans.GetString(\"PauseMenu\",child.text)
 	#OnCommand()
 
 var time
 func updateTimer(time,timeWithDeath):
 	self.time=time
-	var text = \"YOUR TIME SO FAR:\\n\"
+	var text = INITrans.GetString(\"PauseMenu\",\"YOUR TIME SO FAR\")+\"\\n\"
 	text+=Globals.format_time(
 		time,
 		Globals.TimeFormat.FORMAT_MINUTES|Globals.TimeFormat.FORMAT_SECONDS|Globals.TimeFormat.FORMAT_MILISECONDS
 	)
 	if time!=timeWithDeath:
-		text+=\"\\nDEATHS INCLUDED:\\n\"+Globals.format_time(
+		text+=\"\\n\"+INITrans.GetString(\"PauseMenu\",\"DEATHS INCLUDED\")+\"\\n\"+Globals.format_time(
 			timeWithDeath,
 			Globals.TimeFormat.FORMAT_MINUTES|Globals.TimeFormat.FORMAT_SECONDS|Globals.TimeFormat.FORMAT_MILISECONDS
 		)
@@ -36,10 +44,10 @@ func OnCommand():
 	$Fadeout_Tween.start()
 	set_process_input(true)
 	
-	$m/currentDifficulty.text=tr(Globals.difficultyToString())
+	$m/currentDifficulty.text=INITrans.GetString(\"Difficulty\",Globals.difficultyToString())
 	if Globals.playerData.gameDifficulty > Globals.Difficulty.EASY:
-		$m/currentDifficulty.text+=\"\\nSpare Dummies: \"+String(CheckpointPlayerStats.playerLivesLeft)
-	$m/debugHelp.visible=OS.is_debug_build()
+		$m/currentDifficulty.text+=\"\\n\"+(INITrans.GetString(\"PauseMenu\",\"SPARE DUMMIES\") % [CheckpointPlayerStats.playerLivesLeft] )
+	
 
 func OffCommand():
 	$Fadeout_Tween.interpolate_property($m, \"modulate:a\", null, 0, .2, Tween.TRANS_LINEAR, Tween.EASE_OUT)
@@ -97,10 +105,7 @@ func _input(_ev):
 			Globals.playerData.gameDifficulty+=1
 		else:
 			Globals.playerData.gameDifficulty=0
-		$m/currentDifficulty.text=tr(Globals.difficultyToString())
-		if Globals.playerData.gameDifficulty > Globals.Difficulty.EASY:
-			$m/currentDifficulty.text+=\"\\nSpare Dummies: \"+String(CheckpointPlayerStats.playerLivesLeft)
-	
+		OnCommand()
 "
 
 [node name="PauseScreen" type="CanvasLayer"]
@@ -114,45 +119,55 @@ visible = false
 color = Color( 0, 0, 0, 0.658824 )
 polygon = PoolVector2Array( 0, 0, 1280, 0, 1280, 720, 0, 720 )
 
-[node name="VBoxContainer" type="VBoxContainer" parent="m"]
-margin_left = 448.0
-margin_top = 352.0
-margin_right = 832.0
-margin_bottom = 497.0
+[node name="CenterContainer" type="CenterContainer" parent="m"]
+margin_right = 1280.0
+margin_bottom = 720.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="m/CenterContainer"]
+margin_left = 452.0
+margin_top = 287.0
+margin_right = 827.0
+margin_bottom = 432.0
 custom_constants/separation = 20
 __meta__ = {
 "_edit_group_": true,
 "_edit_use_anchors_": false
 }
 
-[node name="Label" type="Label" parent="m/VBoxContainer"]
-margin_right = 384.0
+[node name="Label" type="Label" parent="m/CenterContainer/VBoxContainer"]
+margin_right = 375.0
 margin_bottom = 35.0
 custom_fonts/font = ExtResource( 1 )
-text = "continue"
+text = "CONTINUE"
 align = 1
+uppercase = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="give up" type="Label" parent="m/VBoxContainer"]
+[node name="give up" type="Label" parent="m/CenterContainer/VBoxContainer"]
 margin_top = 55.0
-margin_right = 384.0
+margin_right = 375.0
 margin_bottom = 90.0
 custom_fonts/font = ExtResource( 1 )
-text = "retry"
+text = "RETRY"
 align = 1
+uppercase = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="title screen" type="Label" parent="m/VBoxContainer"]
+[node name="title screen" type="Label" parent="m/CenterContainer/VBoxContainer"]
 margin_top = 110.0
-margin_right = 384.0
+margin_right = 375.0
 margin_bottom = 145.0
 custom_fonts/font = ExtResource( 1 )
-text = "title screen"
+text = "TITLE SCREEN"
 align = 1
+uppercase = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -182,6 +197,7 @@ text = "YOUR TIME SO FAR:
 DEATHS INCLUDED:
 00:00.000"
 align = 1
+uppercase = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -195,6 +211,7 @@ custom_fonts/font = ExtResource( 2 )
 text = "Debug: Press F1 to
 cycle difficulty."
 align = 2
+uppercase = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -207,6 +224,7 @@ margin_bottom = 116.928
 custom_fonts/font = ExtResource( 2 )
 text = "??? mode"
 align = 2
+uppercase = true
 __meta__ = {
 "_edit_use_anchors_": false
 }

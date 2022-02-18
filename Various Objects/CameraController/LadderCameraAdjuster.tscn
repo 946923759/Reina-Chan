@@ -14,9 +14,12 @@ export (int) var rightBound = 0;
 export (int) var bottomBound = 0;
 export (float,-3,3,.5) var center_bound_offset = 0
 export (float) var tweenTime = 1;
-export (bool) var freeze_player_during_transition=false
+export (bool) var freeze_player_during_transition=true
 const cameraScale = 64;
 #export(Shape2D) var shape;
+
+
+var player
 
 func _ready():
 	#The shape to trigger the camera. If the assertion is failing, the camera can't be triggered so it's useless.
@@ -26,71 +29,94 @@ func _ready():
 	#	self.get_node(\"CollisionShape2D\").set_shape(shape)
 	#self.shape_owner_add_shape(self.create_shape_owner(self), shape)
 # warning-ignore:return_value_discarded
-	self.connect(\"body_entered\",self,\"cam\")
+	self.connect(\"body_entered\",self,\"player_entered\")
 # warning-ignore:return_value_discarded
-	self.connect(\"body_exited\",self,\"cam\")
+	self.connect(\"body_exited\",self,\"player_exited\")
+
+func player_entered(obj):
+	if obj.has_method(\"player_touched\"):
+		print(\"Touched camera trigger!\")
+		player=obj
+		set_process(true)
 	
-#func _process(delta):
+func player_exited(obj):
+	if obj.has_method(\"player_touched\"):
+		print(\"Touched camera trigger!\")
+		#print(\"ladder camera process stopped!\")
+		cam(obj)
+		player=null
+		set_process(false)
+
+func _process(delta):
+	if player != null:
+		cam(player)
 #	if Engine.editor_hint and shape != null:
 #		self.get_node(\"CollisionShape2D\").set_shape(shape)
 
 var disabled = false
 func cam(obj):
-	if obj.has_method(\"player_touched\"):
-		if obj.velocity.y > -4 and obj.velocity.y < 4:
-			return
-		#Have to adjust no matter what because they could drop down
-		#elif !obj.state != 6: #State.ON_LADDER
-		#	return
-		#disabled = true
-		var cc = get_node(\"/root/Node2D/Player/Camera2D\")
-		if cc.is_tweening:
-			return
-		print(\"Touched camera trigger!\")
+	if obj.velocity.y > -4 and obj.velocity.y < 4:
+		return
+	#Have to adjust no matter what because they could drop down
+	#elif !obj.state != 6: #State.ON_LADDER
+	#	return
+	#disabled = true
+	var cc = get_node(\"/root/Node2D/Player/Camera2D\")
+	if cc.is_tweening:
+		return
+	
+	
+	#We don't want to overwrite leftBound,rightBound, etc so keep the changed variables in a new array.
+	var boundsArray = [null,null,null,null]
+	if rightBound == -999:
+		boundsArray[2] = leftBound*cameraScale+Globals.gameResolution.x
+	else:
+		boundsArray[2] = rightBound*cameraScale
 		
-		#We don't want to overwrite leftBound,rightBound, etc so keep the changed variables in a new array.
-		var boundsArray = [null,null,null,null]
-		if rightBound == -999:
-			boundsArray[2] = leftBound*cameraScale+Globals.gameResolution.x
+	if leftBound == -999:
+		boundsArray[0] = rightBound*cameraScale-Globals.gameResolution.x
+	elif leftBound == -9999:
+		boundsArray[0] = cc.limit_right
+	else:
+		boundsArray[0] = leftBound*cameraScale;
+		#print(\"WARN: Left and right bounds are not defined. The camera won't work.\")
+	
+	#If the player is going up
+	if obj.velocity.y < 0:
+		
+		#Set bottom bound to location of the camera trigger
+		boundsArray[3]=global_position.y+center_bound_offset*cameraScale
+		
+		if topBound == -999:
+			boundsArray[1] = boundsArray[3]-Globals.gameResolution.y
 		else:
-			boundsArray[2] = rightBound*cameraScale
+			boundsArray[1] = topBound*cameraScale;
+	else:
+		
+		#Set top bound to the location of the camera trigger
+		boundsArray[1]=global_position.y+center_bound_offset*cameraScale
+		
+		if bottomBound == -999:
+			boundsArray[3] = boundsArray[1]+Globals.gameResolution.y
+		else:
+			boundsArray[3] = bottomBound*cameraScale
 			
-		if leftBound == -999:
-			boundsArray[0] = rightBound*cameraScale-Globals.gameResolution.x
-		elif leftBound == -9999:
-			boundsArray[0] = cc.limit_right
-		else:
-			boundsArray[0] = leftBound*cameraScale;
-			#print(\"WARN: Left and right bounds are not defined. The camera won't work.\")
-		
-		#If the player is going up
+	if cc.destPositions[1] == boundsArray[1] and cc.destPositions[3]==boundsArray[3]:
+		#print(\"No need to adjust!\")
+		return
+	
+	print(\"LEFT: \"+ String(boundsArray[0])+ \" TOP: \"+String(boundsArray[1])+\" RIGHT: \"+String(boundsArray[2]) + \" BOTTOM: \"+String(boundsArray[3]))
+	assert(boundsArray[0] < boundsArray[2]);
+	assert(boundsArray[1] < boundsArray[3]);
+	
+	#
+	if freeze_player_during_transition or obj.state == 6: #State.ON_LADDER:
 		if obj.velocity.y < 0:
-			
-			#Set bottom bound to location of the camera trigger
-			boundsArray[3]=global_position.y+center_bound_offset*cameraScale
-			
-			if topBound == -999:
-				boundsArray[1] = boundsArray[3]-Globals.gameResolution.y
-			else:
-				boundsArray[1] = topBound*cameraScale;
+			obj.lockMovement(tweenTime,Vector2(0,-100))
 		else:
-			
-			#Set top bound to the location of the camera trigger
-			boundsArray[1]=global_position.y+center_bound_offset*cameraScale
-			
-			if bottomBound == -999:
-				boundsArray[3] = boundsArray[1]+Globals.gameResolution.y
-			else:
-				boundsArray[3] = bottomBound*cameraScale
-		
-		print(\"LEFT: \"+ String(boundsArray[0])+ \" TOP: \"+String(boundsArray[1])+\" RIGHT: \"+String(boundsArray[2]) + \" BOTTOM: \"+String(boundsArray[3]))
-		assert(boundsArray[0] < boundsArray[2]);
-		assert(boundsArray[1] < boundsArray[3]);
-		
-		if freeze_player_during_transition:
-			obj.lockMovement(tweenTime,Vector2(0,0))
-		cc.adjustCamera(boundsArray, tweenTime)
-		emit_signal(\"camera_adjusted\",cc,boundsArray)
+			obj.lockMovement(tweenTime,Vector2(0,100))
+	cc.adjustCamera(boundsArray, tweenTime)
+	emit_signal(\"camera_adjusted\",cc,boundsArray)
 "
 
 [node name="LadderCameraAdjuster" type="Area2D"]
