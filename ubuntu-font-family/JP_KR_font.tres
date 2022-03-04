@@ -3,5 +3,5 @@
 [ext_resource path="res://ubuntu-font-family/NotoSansKR-Bold.otf" type="DynamicFontData" id=1]
 
 [resource]
-size = 50
+size = 35
 font_data = ExtResource( 1 )

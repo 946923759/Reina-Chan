@@ -81,12 +81,12 @@ func SetLanguage(lang:String)->bool:
 	
 	return true
 
-func GetString(category:String,key:String)->String:
+func GetString(category:String,key:String,warn:bool=true)->String:
 	if translation.size()==0:
 		push_error("There is no translation loaded...")
 		return key
 	elif translation.has(category) and translation[category].has(key):
 		return translation[category][key]
-	
-	push_warning("There is no translation for ["+category+"] "+key)
+	if warn:
+		push_warning("There is no translation for ["+category+"] "+key)
 	return key

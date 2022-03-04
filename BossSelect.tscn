@@ -11,6 +11,7 @@ var selectionIcon
 var selection = 4
 
 func _ready():
+	Globals.load_stage_cutscenes() #Might as well do it here
 	grid = self.get_node(\"GridContainer\");
 	selectionIcon = self.get_node(\"Selection\");
 	setter(4);

@@ -1,9 +1,8 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://StageIntro.tres.gd" type="Script" id=1]
 [ext_resource path="res://MM2Font.tres" type="DynamicFont" id=2]
 [ext_resource path="res://starfilter.png" type="Texture" id=3]
-[ext_resource path="res://Stages_Reina/Bosses/Architect/BossArchitect_OLD_DO_NOT_USE.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Music/Stage Start.ogg" type="AudioStream" id=5]
 [ext_resource path="res://Cutscene/Portraits/pic_Architect.png" type="Texture" id=6]
 
@@ -48,14 +47,29 @@ func timer():
 [sub_resource type="GDScript" id=4]
 script/source = "extends Node2D
 
+var bosses = {
+	\"StageArchitect.tscn\":\"res://Stages_Reina/Bosses/Architect/BossArchitect_v2.tscn\",
+	\"Alchemist_v2.tscn\":\"res://Stages_Reina/Bosses/Alchemist/BossAlchemist.tscn\"
+}
+
+var bi
 func _ready():
-	pass
+	var b
+	if Globals.nextStage:
+		var stg:String = Globals.nextStage.rsplit(\"/\",false,1)[1]
+		b = load(bosses[stg])
+	else:
+		b = load(\"res://Stages_Reina/Bosses/Architect/BossArchitect_v2.tscn\")
+	bi = b.instance()
+	bi.position=Vector2(Globals.SCREEN_CENTER_X,375)
+	add_child(bi)
+	
 
 var time:float=0
 func _process(delta):
 	time+=delta
 	if time > .3:
-		$Boss.playIntro(false,false)
+		bi.playIntro(false,false)
 		set_process(false)
 "
 
@@ -131,6 +145,3 @@ collision_mask = 18
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D/StaticBody2D"]
 position = Vector2( 642.318, 428.103 )
 shape = SubResource( 5 )
-
-[node name="Boss" parent="Node2D" instance=ExtResource( 4 )]
-position = Vector2( 640, 378.19 )

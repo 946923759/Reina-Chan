@@ -12,6 +12,7 @@ var smallExplosion = preload(\"res://Stages/EnemyExplodeSmall.tscn\")
 var velocity:Vector2
 var startingPosition:Vector2
 onready var sprite = $AnimatedSprite
+onready var raycast = $RayCast2D
 #onready var player = get_node_or_null(\"/root/Node2D/Player\")
 
 func _ready():
@@ -29,7 +30,9 @@ func init(direction):
 	
 func _physics_process(delta):
 	var collision=move_and_collide(velocity)
-	if collision:
+	if raycast.is_colliding():
+		collision = raycast
+	elif collision:
 		var obj = collision.get_collider()
 		if obj.has_method(\"player_touched\"): #If enemy touched player
 			obj.call(\"player_touched\",self,1)
@@ -95,3 +98,7 @@ __meta__ = {
 [node name="snd" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource( 2 )
 bus = "Player/Enemies"
+
+[node name="RayCast2D" type="RayCast2D" parent="."]
+enabled = true
+cast_to = Vector2( 0, -50 )

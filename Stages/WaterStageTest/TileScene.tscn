@@ -7,7 +7,7 @@
 [ext_resource path="res://Stages/WaterStageTest/Platform5.png" type="Texture" id=5]
 [ext_resource path="res://Stages/WaterStageTest/Platform4.png" type="Texture" id=6]
 [ext_resource path="res://Stages/WaterStageTest/Platform6.png" type="Texture" id=7]
-[ext_resource path="res://Various Objects/spikeball.png" type="Texture" id=8]
+[ext_resource path="res://Various Objects/Special Blocks/spikeball.png" type="Texture" id=8]
 [ext_resource path="res://Stages/WaterStageTest/shadow.png" type="Texture" id=9]
 
 [sub_resource type="RectangleShape2D" id=1]

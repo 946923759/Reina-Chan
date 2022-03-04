@@ -56,7 +56,7 @@
 [ext_resource path="res://Stages/NeedleManDemo/lgTile14.png" type="Texture" id=54]
 [ext_resource path="res://Stages/NeedleManDemo/lgTile15.png" type="Texture" id=55]
 [ext_resource path="res://Stages/NeedleManDemo/Tile1.png" type="Texture" id=56]
-[ext_resource path="res://Various Objects/spikeball.png" type="Texture" id=57]
+[ext_resource path="res://Various Objects/Special Blocks/spikeball.png" type="Texture" id=57]
 
 [node name="Node" type="Node"]
 

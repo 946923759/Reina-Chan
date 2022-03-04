@@ -113,7 +113,6 @@ pause_mode = 2
 script = SubResource( 1 )
 
 [node name="m" type="Node2D" parent="."]
-visible = false
 
 [node name="bg" type="Polygon2D" parent="m"]
 color = Color( 0, 0, 0, 0.658824 )
@@ -127,10 +126,10 @@ __meta__ = {
 }
 
 [node name="VBoxContainer" type="VBoxContainer" parent="m/CenterContainer"]
-margin_left = 452.0
-margin_top = 287.0
-margin_right = 827.0
-margin_bottom = 432.0
+margin_left = 446.0
+margin_top = 260.0
+margin_right = 834.0
+margin_bottom = 460.0
 custom_constants/separation = 20
 __meta__ = {
 "_edit_group_": true,
@@ -138,7 +137,7 @@ __meta__ = {
 }
 
 [node name="Label" type="Label" parent="m/CenterContainer/VBoxContainer"]
-margin_right = 375.0
+margin_right = 388.0
 margin_bottom = 35.0
 custom_fonts/font = ExtResource( 1 )
 text = "CONTINUE"
@@ -150,7 +149,7 @@ __meta__ = {
 
 [node name="give up" type="Label" parent="m/CenterContainer/VBoxContainer"]
 margin_top = 55.0
-margin_right = 375.0
+margin_right = 388.0
 margin_bottom = 90.0
 custom_fonts/font = ExtResource( 1 )
 text = "RETRY"
@@ -160,10 +159,22 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="title screen" type="Label" parent="m/CenterContainer/VBoxContainer"]
+[node name="stage select" type="Label" parent="m/CenterContainer/VBoxContainer"]
 margin_top = 110.0
-margin_right = 375.0
+margin_right = 388.0
 margin_bottom = 145.0
+custom_fonts/font = ExtResource( 1 )
+text = "STAGE SELECT"
+align = 1
+uppercase = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="title screen" type="Label" parent="m/CenterContainer/VBoxContainer"]
+margin_top = 165.0
+margin_right = 388.0
+margin_bottom = 200.0
 custom_fonts/font = ExtResource( 1 )
 text = "TITLE SCREEN"
 align = 1

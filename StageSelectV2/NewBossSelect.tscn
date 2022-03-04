@@ -51,33 +51,53 @@ func _ready():
 	setter(selection,false)
 
 func _input(event):
-	if Input.is_action_pressed(\"ui_pause\") or Input.is_action_pressed(\"ui_select\"):
-		if selection==4:
-			return
-		elif whatever[selection][2]!=\"\":
-			Globals.nextStage=whatever[selection][2]
-			get_tree().change_scene(\"res://StageIntro.tscn\")
-		else:
-			$No.play()
-		pass
-	if Input.is_action_just_pressed(\"ui_up\"):
+	if event is InputEventMouseButton and event.pressed:
+		#print(\"Clicked at \"+String(event.position))
+		for i in range(existing_children,get_child_count()):
+			var n=get_child(i)
+			if !(n is Node2D):
+				continue
+			if (n.position.x-78 < event.position.x and
+			event.position.x < n.position.x+78 and 
+			n.position.y-78 < event.position.y and
+			event.position.y < n.position.y+78
+			):
+				if i-existing_children==selection:
+					input_accept()
+				else:
+					setter(i-existing_children)
+				#print(i-existing_children)
+				#break
+				return
+	elif Input.is_action_pressed(\"ui_pause\") or Input.is_action_pressed(\"ui_select\"):
+		input_accept()
+	elif Input.is_action_just_pressed(\"ui_up\"):
 		if selection > 2:
 			setter(selection-3)
-	if Input.is_action_just_pressed(\"ui_left\"):
+	elif Input.is_action_just_pressed(\"ui_left\"):
 		if selection==3 or selection==6:
 			return
 		elif selection > 0:
 			setter(selection-1)
-	if Input.is_action_just_pressed(\"ui_right\"):
+	elif Input.is_action_just_pressed(\"ui_right\"):
 		if selection==2 or selection==5:
 			return
 		elif selection < 8:
 			setter(selection+1)
-	if Input.is_action_just_pressed(\"ui_down\"):
+	elif Input.is_action_just_pressed(\"ui_down\"):
 		if selection < 6:
 			#selection+=3
 			setter(selection+3)
-			
+
+func input_accept():
+	if selection==4:
+		return
+	elif whatever[selection][2]!=\"\":
+		Globals.nextStage=whatever[selection][2]
+		get_tree().change_scene(\"res://StageIntro.tscn\")
+	else:
+		$No.play()
+
 onready var selSound = $select
 func setter(newSelection,playSound=true):
 	get_child(existing_children+selection).loseFocus()

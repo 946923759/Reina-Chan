@@ -80,7 +80,7 @@ __meta__ = {
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 frames = SubResource( 1 )
-frame = 21
+frame = 27
 playing = true
 
 [node name="DebugLabel" type="Label" parent="."]
@@ -89,7 +89,7 @@ margin_top = -64.0
 margin_right = 245.0
 margin_bottom = -33.0
 text = "position = Vector2( 416, 64 )
-playerPos = Vector2( 0, 0 )
+playerPos = null
 "
 script = ExtResource( 5 )
 __meta__ = {
@@ -101,6 +101,7 @@ properties = PoolStringArray( "position", "playerPos" )
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="Label" type="Label" parent="CanvasLayer"]
+visible = false
 margin_right = 40.0
 margin_bottom = 14.0
 custom_fonts/font = ExtResource( 57 )

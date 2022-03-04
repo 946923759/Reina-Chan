@@ -31,6 +31,20 @@ func get_cutscene_path()->String:
 	#If not compiled or if the platform doesn't allow writing to the game's current directory
 	return \"res://Cutscene/\"
 	
+	
+#func push_back_from_idx_one(arrToFill:Array,arr2:Array)->Array:
+#	for i in range(1,arr2.size()):
+#		arrToFill.push_back(arr2[i])
+#	return arrToFill
+	
+func strip_first(arr2:Array)->Array:
+	var arrToFill=[]
+	for i in range(1,arr2.size()):
+		arrToFill.push_back(arr2[i])
+	return arrToFill
+
+#I wish I could mark functions as static
+#This is a static function, btw
 func load_cutscene_data(name:String)->Dictionary:
 	var f = File.new()
 	var path:String
@@ -46,21 +60,31 @@ func load_cutscene_data(name:String)->Dictionary:
 	var d = {'msg':[]}
 	while !f.eof_reached():
 		var line = f.get_line().strip_edges(false,true)
+		#print(line)
 		if line.begins_with('#'):
-			match line.split(\" \",true,1)[0]:
+			var meta = line.split(\"\\t\",true)
+			match meta[0]:
+				#THERE HAS TO BE A BETTER WAY TO DO THIS
 				\"#BG\":
 					print(line)
-					d['bg']=line.lstrip(\"#BG \").split(\" \")
+					d['bg']=strip_first(meta)
 				\"#NSF_FILENAME\":
-					d['nsf_fileName']=line.lstrip(\"#NSF_FILENAME \")
+					d['nsf_fileName']=line.lstrip(\"#NSF_FILENAME\\t\")
 				\"#NSF_TRACKNUM\":
-					d['nsf_trackNum']=int(line.lstrip(\"#NSF_TRACKNUM \"))
+					d['nsf_trackNum']=int(line.lstrip(\"#NSF_TRACKNUM\\t\"))
 				\"#CDAUDIO\":
-					d['CDAudio']=line.lstrip(\"#CDAUDIO \")
+					d['CDAudio']=line.lstrip(\"#CDAUDIO\\t\")
 				\"#NEXT\":
-					d['next']=line.lstrip(\"#NEXT \")
+					d['next']=line.lstrip(\"#NEXT\\t\")
+				\"#LANGUAGES\":
+					#We don't discard the 0th element this time since
+					#the columns match the columns in the msg command,
+					# ex. #LANGUAGES is column 0, en is column 1, etc
+					# and in the msg command \"msg\" is column 0, column 1
+					# matches the meta tag
+					d['lang']=meta
 				_:
-					push_warning(\"Unknown script metadata tag: \"+line.split(\" \",true,1)[0])
+					push_warning(\"Unknown script metadata tag: \"+meta[0])
 		elif !line.empty():
 			#print(line)
 			d['msg'].push_back(line)
@@ -81,6 +105,12 @@ func _ready():
 			cover=true
 		})
 	]
+	add_child(Def.Quad({
+		name=\"fadeOut\",
+		color=Color(0,0,0,0),
+		size=Globals.gameResolution,
+		position=Globals.SCREEN_CENTER
+	}))
 	
 	for arg in OS.get_cmdline_args():
 		print(\"Cmdline arg: \"+arg)
@@ -89,8 +119,14 @@ func _ready():
 			if kv[0]==\"--cutscene\":
 				Globals.nextCutscene=kv[1]
 				break
-	cutsceneData = load_cutscene_data(\"test_Midnight112.txt\")
-	#cutsceneData = load_cutscene_data(Globals.nextCutscene)
+	#cutsceneData = load_cutscene_data(\"test_Midnight112.txt\")
+	cutsceneData = load_cutscene_data(Globals.nextCutscene)
+	if cutsceneData.size()==0:
+		#var e = load(\"res://savedataError.tscn\").instance()
+		#e.setNewText(\"The cutscene failed to load.\")
+		#add_child(e)
+		$CutscenePlayer.init_(['msg|The cutscene failed to load. Most likely the file name is incorrect.'],null)
+		return
 	#print(cutsceneData)
 	if \"CDAudio\" in cutsceneData and \"nsf_fileName\" in cutsceneData and \"nsf_trackNum\" in cutsceneData:
 		reinaAudioPlayer = Globals.ReinaAudioPlayer.new(self)
@@ -131,14 +167,18 @@ func _ready():
 			s.material=nightShader
 		$BackgroundHolder.add_child(s)
 		s.position=Globals.SCREEN_CENTER
-	$CutscenePlayer.init_(cutsceneData['msg'],null,false,$BackgroundHolder,\"\\t\")
 	
-	add_child(Def.Quad({
-		name=\"fadeOut\",
-		color=Color(0,0,0,0),
-		size=Globals.gameResolution,
-		position=Globals.SCREEN_CENTER
-	}))
+	var msgColumn:int=1
+	if \"lang\" in cutsceneData and INITrans.currentLanguage != \"en\":
+		#print(cutsceneData['lang'])
+		for i in range(cutsceneData['lang'].size()):
+			if cutsceneData['lang'][i]==INITrans.currentLanguage:
+				#print(\"Loading from column \"+String(i))
+				msgColumn=i
+				break
+	$CutscenePlayer.init_(cutsceneData['msg'],null,false,$BackgroundHolder,\"\\t\",msgColumn)
+	
+	
 	#s.hide()
 
 

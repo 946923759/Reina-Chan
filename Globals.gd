@@ -45,7 +45,7 @@ var OPTIONS = {
 	"TextSpeed":{
 		"type":"int",
 		"choices":[10,20,30,40,50,60,70,80,90,100],
-		"default":50
+		"default":80
 	},
 	"showTimer":{
 		"type":"bool",
@@ -54,7 +54,11 @@ var OPTIONS = {
 	"SFA3Announcer":{
 		"type":"bool",
 		"default":true
-	}
+	},
+	#"Touchscreen":{
+	#	"type":"bool",
+	#	"default":(OS.has_feature("mobile"))
+	#}
 }
 
 enum Difficulty {
@@ -224,7 +228,7 @@ var nextStageWeaponNum:int=0
 
 # The name of the next cutscene to load from Cutscene/ or GameData/Cutscene
 # if we're using the "cutscene from file" scene
-var nextCutscene:String="cutscene1Data.json"
+var nextCutscene:String="cutscene1Data.txt"
 
 func get_save_directory(fName:String)->String:
 	match OS.get_name():
@@ -233,6 +237,57 @@ func get_save_directory(fName:String)->String:
 				return OS.get_executable_path().get_base_dir()+"/"+fName+".json"
 	#If not compiled or if the platform doesn't allow writing to the game's current directory
 	return "user://"+fName+".json"
+
+var stage_cutscene_data:Dictionary = {}
+
+func load_stage_cutscenes()->bool:
+	var f = File.new()
+	var path = "res://Cutscene/"
+	match OS.get_name():
+		"Windows","X11","macOS":
+			if OS.has_feature("standalone"):
+				path = OS.get_executable_path().get_base_dir()+"/GameData/Cutscene/"
+				#break
+	var ok = f.open(path+"stage_cutscenes.txt", File.READ)
+	if ok != OK:
+		printerr("Couldn't open the stage cutscenes! Ya done fucked it up! ERROR ", ok)
+		return false
+	
+	var langs = ["en","es","kr","ja","zh"]
+	var msgColumn:int=1
+	if INITrans.currentLanguage != "en":
+		#print(cutsceneData['lang'])
+		for i in range(langs.size()):
+			if langs[i]==INITrans.currentLanguage:
+				#print("Loading from column "+String(i))
+				msgColumn=i
+				break
+	var d={'default':[]}
+	var dictKey = "default"
+	while !f.eof_reached():
+		var line = f.get_line().strip_edges(false,true)
+		#print(line)
+		if line.begins_with('#KEY'):
+			dictKey=line.lstrip("#KEY\t")
+			d[dictKey]=[]
+		elif !line.empty():
+			if line.begins_with('msg'):
+				#print(line)
+				var aa = line.split('\t',true)
+				if msgColumn < aa.size()-1:
+					d[dictKey].push_back('msg\t'+aa[msgColumn])
+				else:
+					d[dictKey].push_back('msg\t'+aa[1])
+			else:
+				d[dictKey].push_back(line)
+	stage_cutscene_data=d
+	return true
+	
+	
+func get_stage_cutscene(key:String):
+	if stage_cutscene_data.size() == 0:
+		load_stage_cutscenes()
+	return stage_cutscene_data[key]
 
 func _ready():
 	gameResolution = Vector2(ProjectSettings.get_setting("display/window/size/width"),ProjectSettings.get_setting("display/window/size/height"))
@@ -368,7 +423,7 @@ class ReinaAudioPlayer:
 		node = _node;
 		audioStreamPlayer=node.get_node("AudioStreamPlayer")
 	
-	func load_song(custom_music_name:String, nsf_music_file:String, nsf_track_num:int):
+	func load_song(custom_music_name:String, nsf_music_file:String, nsf_track_num:int,nsf_volume_adjustment:float=0):
 		
 		var music = Globals.get_custom_music(custom_music_name) if custom_music_name != "" else null
 		if music != null:
@@ -378,31 +433,41 @@ class ReinaAudioPlayer:
 			else:
 				audioStreamPlayer.stream = ExternalAudio.loadfile(music)
 			audioStreamPlayer.play()
+			audioStreamPlayer.volume_db=0.0
 		elif nsf_music_file != "" and !OS.has_feature("console"):
 			if !is_instance_valid(Globals.nsf_player):
 				print("The NSF player has expired somehow... Trying to re-init")
 				Globals.nsf_player = FLMusicLib.new();
 				Globals.nsf_player.set_gme_buffer_size(2048*5);#optional
+				
 			nsf_player = Globals.nsf_player
 			if !added_nsf_player:
 				node.add_child(nsf_player);
+				nsf_player.set_pause_mode(2) #Node.PAUSE_MODE_PROCESS
 				added_nsf_player=true
 			#print(Globals.NSF_location+nsf_music_file)
 			print("(NSF) Trying to play "+Globals.NSF_location+nsf_music_file)
 			nsf_player.play_music(Globals.NSF_location+nsf_music_file,nsf_track_num,false,0,0,0);
 			var realVolumeLevel = Globals.OPTIONS['AudioVolume']['value']*.3-30
-			nsf_player.set_volume(realVolumeLevel);
+			#print("Volume level is "+String(realVolumeLevel))
+			nsf_player.set_volume(realVolumeLevel+nsf_volume_adjustment);
 		else:
 			print("No custom music specified and this platform doesn't support NSF. That means there's no music!")
-			
+	
+	#This is actually a terrible idea because if you play a new song before this tween finishes
+	#the music stays at a really low volume
 	func fade_music(time:float=3.0):
+		stop_music()
+		return
+		
 		if added_nsf_player:
 			#nsf_player.stop_music()
 			#print("Stopped NSF player")
 			var t := Tween.new()
 			node.add_child(t)
+			t.set_pause_mode(2) #Node.PAUSE_MODE_PROCESS
 			#var realVolumeLevel = Globals.OPTIONS['AudioVolume']['value']*.3-30
-			t.interpolate_method(nsf_player,"set_volume",0,-10.0,time)
+			t.interpolate_method(nsf_player,"set_volume",0,-15.0,time)
 			t.start()
 			yield(t,"tween_completed")
 			nsf_player.stop_music()
@@ -410,6 +475,7 @@ class ReinaAudioPlayer:
 			#seq.append(nsf_player,"toDraw",CONST_IMG_WIDTH,2).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 		elif audioStreamPlayer.is_playing():
 			var seq := TweenSequence.new(node.get_tree())
+			seq._tween.pause_mode = Node.PAUSE_MODE_PROCESS
 			seq.append(audioStreamPlayer,"volume_db",-10,time).set_trans(Tween.TRANS_LINEAR).set_ease(Tween.EASE_OUT)
 # warning-ignore:return_value_discarded
 			seq.append_callback(audioStreamPlayer,"stop")

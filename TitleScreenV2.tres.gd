@@ -4,7 +4,7 @@ var font = preload("res://FallbackPixelFont.tres")
 var fallbackFont = preload("res://FallbackPixelFont.tres")
 var currentlyHandledMenu;
 var selection = 0;
-onready var list = $MainMenu
+onready var mainMenu = $MainMenu
 onready var confirmSound = $Confirm
 onready var selectSound = $Select
 
@@ -35,10 +35,12 @@ func highlightList(actor,param):
 		else:
 			actor.get_child(i).set("custom_colors/font_color", Color(1,1,1,1));
 
+
+var translationCache:Dictionary = {}
 func _ready():
 	#font.size=40
 	if OS.has_feature("console"):
-		list.get_node("QuitLabel").queue_free()
+		mainMenu.get_node("QuitLabel").queue_free()
 		#home page can be kept since it works on Android TV and chrome supports controllers
 	$DifficultySelect.modulate.a=0
 	$DifficultySelect_Description.modulate.a=0
@@ -49,7 +51,7 @@ func _ready():
 		selection=1
 	else:
 		$MainMenu/Continue.modulate=Color(.5,.5,.5)
-	highlightList(list, selection);
+	highlightList(mainMenu, selection);
 	
 	#print(OS.get_executable_path().get_base_dir()+"/CustomMusic/")
 	print("Starting music...")
@@ -62,13 +64,17 @@ func _ready():
 	#$OptionsList.visible=false
 	#optionItem.add_child()
 	CheckpointPlayerStats.clearEverything()
+	print("Caching text keys...")
+	for node in $MainMenu.get_children():
+		translationCache[node.get_name()]=node.text
+	
 	print("Translating items...")
 	setTranslated()
 	print("Title screen ready!")
 
 func setTranslated():
 	for node in $MainMenu.get_children():
-		node.text=INITrans.GetString("TitleScreen",node.text)
+		node.text=INITrans.GetString("TitleScreen",translationCache[node.get_name()])
 		if INITrans.currentLanguageType!=INITrans.LanguageType.ASCII:
 			node.set("custom_fonts/font",INITrans.font)
 #	if TranslationServer.get_locale() != "en_US":
@@ -89,6 +95,33 @@ func setTranslated():
 func _input(event):
 	if event is InputEventJoypadMotion or event is InputEventMouseMotion: #XInput controllers are broken on Windows :P
 		return
+	elif event is InputEventMouseButton and event.pressed:
+		#print(event.button_index)
+		print("Clicked at "+String(event.position))
+		if event.button_index == 2:
+			if currentlyHandledMenu:
+				tweenMainMenuIn();
+				if currentlyHandledMenu.has_method("OffCommand"):
+						currentlyHandledMenu.OffCommand()
+				currentlyHandledMenu = null
+		elif currentlyHandledMenu:
+			currentlyHandledMenu.mouse_input(event)
+		else:
+			for i in range(mainMenu.get_child_count()):
+				var n = mainMenu.get_child(i)
+				var p = mainMenu.rect_position+n.rect_position
+				if event.position.y > p.y and event.position.y < p.y+n.rect_size.y:
+					print("Guessed click: "+n.get_name())
+					if i == 1 and !Globals.playerHasSaveData:
+						return
+					elif i==selection:
+						input_select()
+					else:
+						selectSound.play()
+						selection=i
+						highlightList(mainMenu,selection);
+					break
+		return
 	#print(String(event.get_device())+" "+event.as_text())
 	if currentlyHandledMenu:
 		if Input.is_action_just_pressed("ui_cancel"):
@@ -103,13 +136,13 @@ func _input(event):
 			currentlyHandledMenu.input();
 	else:
 		if Input.is_action_pressed("ui_down"):
-			if selection < list.get_child_count() - 1:
+			if selection < mainMenu.get_child_count() - 1:
 				selectSound.play()
 				selection = selection + 1;
 				#Skip continue if there's no save file
 				if selection == 1 and !Globals.playerHasSaveData:
 					selection = 2;
-				highlightList(list,selection);
+				highlightList(mainMenu,selection);
 				
 		if Input.is_action_pressed("ui_up"):
 			if selection > 0:
@@ -117,25 +150,28 @@ func _input(event):
 				selection = selection - 1;
 				if selection == 1 and !Globals.playerHasSaveData:
 					selection = 0;
-				highlightList(list, selection);
+				highlightList(mainMenu, selection);
 				
 		if Input.is_action_just_pressed("ui_select"):
-			#self.get_node("Debug").text = list.get_child(selection).text;
-			confirmSound.play()
-			var sel = list.get_child(selection);
-			if sel.hasSubmenu:
-				currentlyHandledMenu = get_node(sel.submenuNode);
-				if currentlyHandledMenu.has_method("OnCommand"):
-					currentlyHandledMenu.OnCommand()
-				#$MainMenu.visible=false
-				#currentlyHandledMenu.visible=true
-				#currentSubmenu.selection = 0;
-				#currentSubmenu.highlightList(currentSubmenu.selection);
-				#inSubmenu = true;
-				tweenMainMenu();
-				return
-			else:
-				sel.action();
+			input_select()
+
+func input_select():
+	#self.get_node("Debug").text = list.get_child(selection).text;
+	confirmSound.play()
+	var sel = mainMenu.get_child(selection);
+	if sel.hasSubmenu:
+		currentlyHandledMenu = get_node(sel.submenuNode);
+		if currentlyHandledMenu.has_method("OnCommand"):
+			currentlyHandledMenu.OnCommand()
+		#$MainMenu.visible=false
+		#currentlyHandledMenu.visible=true
+		#currentSubmenu.selection = 0;
+		#currentSubmenu.highlightList(currentSubmenu.selection);
+		#inSubmenu = true;
+		tweenMainMenu();
+		return
+	else:
+		sel.action();
 
 var initialPosition = 35
 func tweenMainMenu():
@@ -143,9 +179,9 @@ func tweenMainMenu():
 	
 	#First tween out main menu
 	var tween = $Tween;
-	tween.interpolate_property(list, 'rect_position:x',
+	tween.interpolate_property(mainMenu, 'rect_position:x',
 	null, initialPosition-200, .25, Tween.TRANS_QUAD, Tween.EASE_OUT);
-	tween.interpolate_property(list, 'modulate',
+	tween.interpolate_property(mainMenu, 'modulate',
 	null, Color(1,1,1,0), .25, Tween.TRANS_QUAD, Tween.EASE_OUT);
 	tween.start();
 	
@@ -169,9 +205,9 @@ func tweenMainMenuIn():
 	
 	#Tween the main menu back in
 	var tween = $Tween;
-	tween.interpolate_property(list, 'rect_position:x',
+	tween.interpolate_property(mainMenu, 'rect_position:x',
 	null, initialPosition, .25, Tween.TRANS_QUAD, Tween.EASE_OUT);
-	tween.interpolate_property(list, 'modulate',
+	tween.interpolate_property(mainMenu, 'modulate',
 	null, Color(1,1,1,1), .25, Tween.TRANS_QUAD, Tween.EASE_OUT);
 	tween.start();
 	

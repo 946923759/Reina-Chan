@@ -3,6 +3,7 @@ extends Node2D
 export(int,-2,255) var LADDER_TILE_ID = -2
 export(int,-2,255) var LADDER_TOP_TILE_ID = -2
 export(int,-2,255) var SPIKES_TILE_ID = -2
+export(int,-2,255) var DEATH_TILE_ID = -2 #Unlike spikes, these have no invincibility frames
 
 export(bool) var adjust_camera = false
 

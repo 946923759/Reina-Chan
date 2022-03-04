@@ -31,8 +31,9 @@ func _physics_process(delta):
 			#print(\"Bounced!\")
 			#print(collision.position,global_position)
 			#num_bounced+=1
-		else:
-			print(collision.position)
+		elif collision.position.y < global_position.y: #Hit the ceiling?
+			velocity.y = 0
+			#print(collision.position)
 	velocity.y+=delta*25
 
 	if num_bounced>5:

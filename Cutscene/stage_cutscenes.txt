@@ -1,0 +1,28 @@
+#LANGUAGES	en	es	kr	ja	zh
+
+#KEY default
+msg	If you can read this, you forgot to assign a key for your cutscene and the PoolStringArray is blank.
+
+#KEY Architect
+portrait	pic_UMP9	pic_Architect
+speaker	Architect
+msg	Heee-ey, Griffin T-Dolls! Let's have some fun!
+speaker	UMP9
+msg	...Who is this weirdo?
+speaker	Architect
+msg	Heeeey, I heard that~!
+
+#KEY	Alchemist1
+speaker	Alchemist
+portrait	pic_Alchemist,true,0
+msg	Hahaha! Did you really think you defeated me? That was just a dummy!
+msg	Take this!
+
+#KEY	Alchemist2
+portrait	pic_UMP9	pic_Alchemist
+speaker	Alchemist
+nop	Dear translators, this is a reference to the opening of Symphony of the Night (which quotes Andre Malraux). Hopefully it translates accurately?
+nop	https://www.youtube.com/watch?v=zTH6TlCcsu0
+msg	What is a Tactical Doll?
+msg	A miserable little pile of manpower, ammo, rations, parts, combat reports, training data, ice cream and cake! And an oath ring!
+msg	But enough talk, have at you!

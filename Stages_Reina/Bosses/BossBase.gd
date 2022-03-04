@@ -7,7 +7,7 @@ export(DIRECTION) var facing = DIRECTION.LEFT
 var lastTouched
 var enabled:bool = false
 var curHP:int = 28 #All bosses in mega man have 28 health.
-onready var sprite = $AnimatedSprite
+onready var sprite:AnimatedSprite = $AnimatedSprite
 onready var HPBar = $CanvasLayer/bar
 onready var hurtSound = $HurtSound
 
@@ -21,6 +21,8 @@ export(bool) var stage_finished_when_killed = true
 var deathAnimation = preload("res://Animations/deathAnimation.tscn")
 
 func _ready():
+	sprite.set_animation("default")
+	
 # warning-ignore:return_value_discarded
 	$Area2D.connect("body_entered",self,"objectTouched")
 # warning-ignore:return_value_discarded
@@ -33,7 +35,7 @@ func _ready():
 
 func playIntro(playSound=true,showHPbar=true):
 	#$AnimatedSprite.animation="intro"
-	$AnimatedSprite.play("intro")
+	sprite.play("intro")
 	if showHPbar:
 		var seq := TweenSequence.new(get_tree())
 		HPBar.set_process(true)
@@ -58,9 +60,9 @@ func _physics_process(delta):
 # warning-ignore:return_value_discarded
 		move_and_slide(Vector2(0,200))
 	else:
-		if !sprite.use_parent_material:
-			whiteTime += delta
-			if whiteTime > .1:
+		if whiteTime > 0: #Have to check becuase shaders might get swapped out...
+			whiteTime -= delta
+			if whiteTime <= 0:
 				sprite.use_parent_material = true
 
 func objectTouched(obj):
@@ -90,7 +92,7 @@ func damage(amount):
 		#set false so the white tint shader will show up.
 		hurtSound.play()
 		sprite.use_parent_material = false
-		whiteTime = 0
+		whiteTime = .1
 		#print(curHP/28.0)
 		HPBar.updateHP(curHP/28.0)
 		

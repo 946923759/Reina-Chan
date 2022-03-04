@@ -1,14 +1,47 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://init.png" type="Texture" id=1]
 [ext_resource path="res://Music/opening.wav" type="AudioStream" id=2]
+[ext_resource path="res://Cutscene/TextFont.tres" type="DynamicFont" id=3]
 
 [sub_resource type="GDScript" id=1]
 script/source = "extends Node
+
+var rText = [
+	\"Our code is chow mein just like MICA's\",
+	\"Don't stop, proceed. Because this is What U Need!\",
+	\"Not a real group name\",
+	\"Shoutouts to Midflight Digital\",
+	\"Hi /gfg/\",
+	#\"Fans of Girls' Frontline and Mega Man alike\"
+	\"Everyone Will Sue\",
+	\"Stole the precious thing\",
+	\"What is a T-Doll? A miserable little pile of bolts! And ice cream and cake.\",
+	\"https://gfl.amaryllisworks.pw\",
+	\"VZ-61 is cute. Cute!\",
+	\"\\\"SHOUJO ZENSEN!\\\"\"
+	#\"Amaryllis Works, VanDine, Unfiltered, Anonymous, & Nirvash\"
+]
+
+#warning-ignore:return_value_discarded
+func _ready():
+	var l = $Label
+	randomize()
+	l.text = rText[randi()%rText.size()]
+	l.modulate.a=0.0
+	#print(Globals.SCREEN_CENTER_X)
+	l.rect_size.x = Globals.gameResolution.x
+	l.rect_position = Vector2(0,416)
+	
+	var tween2 = $Tween2
+	tween2.interpolate_property(l, \"modulate:a\", null, 1, .3, Tween.TRANS_LINEAR, Tween.EASE_OUT, .3)
+	tween2.start()
+
 #warning-ignore:return_value_discarded
 func _on_AudioStreamPlayer_finished():
 	var tween = $Tween
 	tween.interpolate_property($Sprite, \"modulate\", Color(1,1,1), Color(0,0,0), .5, Tween.TRANS_LINEAR, Tween.EASE_OUT)
+	tween.interpolate_property($Label, \"modulate\", Color(1,1,1), Color(0,0,0), .5, Tween.TRANS_LINEAR, Tween.EASE_OUT)
 	tween.start()
 	yield(tween,\"tween_completed\")
 	#get_tree().change_scene(\"res://Intro.tscn\");
@@ -27,5 +60,18 @@ stream = ExtResource( 2 )
 autoplay = true
 
 [node name="Tween" type="Tween" parent="."]
+
+[node name="Label" type="Label" parent="."]
+margin_top = 768.0
+margin_right = 1280.0
+margin_bottom = 800.0
+custom_fonts/font = ExtResource( 3 )
+text = "Lorem Ipsum"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Tween2" type="Tween" parent="."]
 
 [connection signal="finished" from="AudioStreamPlayer" to="." method="_on_AudioStreamPlayer_finished"]

@@ -18,6 +18,18 @@ export(String) var submenuNode;
 
 #func action():
 #	get_tree().change_scene(\"res://BossSelect.tscn\");
+
+
+func _on_StartLabel_gui_input(event):
+	if (event is InputEventMouseButton && event.pressed && event.button_index == 1):
+		print(\"Clicked\")
+	else:
+		print(\"?\")
+
+
+func _on_StartLabel_mouse_entered():
+	print(\"Entered\")
+	pass # Replace with function body.
 "
 
 [sub_resource type="GDScript" id=2]
@@ -37,7 +49,7 @@ script/source = "extends Label
 export var hasSubmenu = false
 
 func action():
-	Globals.nextCutscene=\"cutscene1Data.json\"
+	#Globals.nextCutscene=\"cutscene1Data.json\"
 	get_tree().change_scene(\"res://Cutscene/CutsceneFromFile.tscn\")
 "
 
@@ -90,6 +102,11 @@ func setDescText():
 	desc.text = INITrans.GetString(\"Difficulty\",\"desc_\"+Globals.difficultyToString(Globals.playerData.gameDifficulty))
 	#desc.text=tr(\"SUPERHERO\")
 
+func reload_translation():
+	for difficulty in Globals.Difficulty:
+		get_node(difficulty).text = INITrans.GetString(\"Difficulty\",difficulty.to_upper())
+	setDescText()
+
 func _ready():
 	#var i = 0
 	for difficulty in Globals.Difficulty:
@@ -101,6 +118,18 @@ func _ready():
 	parent.highlightList(self,Globals.playerData.gameDifficulty)
 	setDescText()
 	#print(Globals.get(\"gameDifficulty\"))
+
+func mouse_input(event):
+	for i in range(get_child_count()):
+		var n = get_child(i)
+		var p = rect_position+n.rect_position
+		if event.position.y > p.y and event.position.y < p.y+n.rect_size.y:
+			if i==Globals.playerData.gameDifficulty:
+				get_tree().change_scene(\"res://StageSelectV2/NewBossSelect.tscn\")
+			else:
+				parent.selectSound.play()
+				Globals.playerData.gameDifficulty=i
+				parent.highlightList(self,Globals.playerData.gameDifficulty)
 
 func input():
 	if Input.is_action_just_pressed(\"ui_down\") and Globals.playerData.gameDifficulty < len(Globals.Difficulty)-1:
@@ -211,6 +240,19 @@ func _ready():
 			}))
 	parent.highlightList(self,0)
 	#print(Globals.get(\"gameDifficulty\"))
+
+
+func mouse_input(event):
+	for i in range(get_child_count()):
+		var n = get_child(i)
+		var p = rect_position+n.rect_position
+		if event.position.y > p.y and event.position.y < p.y+n.rect_size.y:
+			if i==selection:
+				call(\"action_\"+get_child(selection).name)
+			else:
+				parent.selectSound.play()
+				selection=i
+				parent.highlightList(self,selection)
 
 func input():
 	if Input.is_action_pressed(\"ui_down\") and selection < get_child_count() - 1:
@@ -417,6 +459,7 @@ func _ready():
 					\"uppercase\":true,
 					rect_position=Vector2(650,0)
 				}))
+				#optionItem.get_node(\"Value\").connect(\"gui_input\",self,\"mouse_input\")
 			_:
 				optionItem.add_child(parent.BitmapText({
 					\"name\":\"BoolOff\",
@@ -468,6 +511,7 @@ func updateTranslation(refresh:bool=false,t:String=\"\"):
 	if refresh:
 		INITrans.SetLanguage(t)
 		parent.setTranslated()
+		parent.get_node(\"DifficultySelect\").reload_translation()
 	for node in get_children():
 		if node.has_meta(\"opt_name\"):
 			var o = node.get_meta(\"opt_name\")
@@ -509,6 +553,29 @@ func moveListDown():
 	.25, Tween.TRANS_QUAD, Tween.EASE_OUT);
 	tween2.start()
 
+func mouse_input(event):
+	for i in range(existing_children,get_child_count()):
+		var n = get_child(i)
+		if !(n is Node2D):
+			continue
+		var nPos = n.position+position
+		if event.position.y > nPos.y and event.position.y < nPos.y+70:
+			#print(n.get_meta('opt_name'))
+			selection = i-existing_children
+			highlightList()
+			if selection < 6:
+				moveListDown()
+			else:
+				moveListUp()
+				
+			if event.position.x > nPos.x+650:
+				var o = n.get_meta('opt_name')
+				if Globals.OPTIONS[o]['type']==\"bool\":
+					Globals.OPTIONS[o]['value']=event.position.x > 820
+					highlightBool(n,event.position.x > 820)
+			else:
+				parent.selectSound.play()
+			break
 func input():
 	if Input.is_action_pressed(\"ui_down\") and selection < displayedOptions-1:
 		selection+=1
@@ -605,7 +672,8 @@ func _on_CheatCodeHandler_cheat_detected(_a):
 	#pass # Replace with function body.
 	#print(code)
 	Globals.unlockedZeroMode=true
-	Globals.availableWeapons[1]=true
+	if Globals.playerHasSaveData:
+		Globals.playerData.availableWeapons[1]=true
 	get_parent().reinaAudioPlayer.stop_music()
 	play()
 	connect(\"finished\",self, \"on_play_finished\")
@@ -658,7 +726,6 @@ margin_top = 201.0
 margin_right = 636.0
 margin_bottom = 761.0
 focus_mode = 2
-mouse_filter = 0
 custom_constants/separation = 30
 __meta__ = {
 "_edit_use_anchors_": false
@@ -669,6 +736,8 @@ __meta__ = {
 ]]
 margin_right = 601.0
 margin_bottom = 45.0
+mouse_filter = 1
+input_pass_on_modal_close_click = false
 custom_fonts/font = ExtResource( 2 )
 text = "START_GAME"
 uppercase = true
@@ -756,9 +825,9 @@ __meta__ = {
 }
 
 [node name="DifficultySelect_Description" type="Label" parent="."]
-margin_top = 550.0
+margin_top = 565.0
 margin_right = 1280.0
-margin_bottom = 650.0
+margin_bottom = 665.0
 custom_fonts/font = SubResource( 9 )
 text = "difficulty help text goes here"
 align = 1

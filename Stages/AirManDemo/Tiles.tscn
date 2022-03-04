@@ -2,7 +2,7 @@
 
 [ext_resource path="res://Stages/AirManDemo/glassBlock.png" type="Texture" id=1]
 [ext_resource path="res://Stages/AirManDemo/weirdThing.png" type="Texture" id=2]
-[ext_resource path="res://Various Objects/spikeball.png" type="Texture" id=3]
+[ext_resource path="res://Various Objects/Special Blocks/spikeball.png" type="Texture" id=3]
 
 [node name="Node2D" type="Node2D"]
 

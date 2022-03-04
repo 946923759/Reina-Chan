@@ -1,10 +1,22 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://Stages_Reina/Bosses/BossBase.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Sounds/BossSounds/Alchemist_APPEAR1_JP.wav" type="AudioStream" id=2]
+[ext_resource path="res://Stages_Reina/Bosses/Alchemist/AlchemistSpriteframes.tres" type="SpriteFrames" id=3]
 
 [node name="BossAlchemist" instance=ExtResource( 1 )]
 intro_subtitle_key = "Alchemist_Intro"
 
+[node name="AnimatedSprite" parent="." index="1"]
+frames = ExtResource( 3 )
+animation = "shoot"
+frame = 1
+offset = Vector2( -3, 0 )
+
 [node name="IntroSound" parent="." index="3"]
 stream = ExtResource( 2 )
+
+[node name="DebugLabel" parent="." index="7"]
+text = "animation = \"shoot\"
+playing = false
+"

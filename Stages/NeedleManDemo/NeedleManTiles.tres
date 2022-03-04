@@ -54,7 +54,7 @@
 [ext_resource path="res://Stages/NeedleManDemo/Tile32.png" type="Texture" id=52]
 [ext_resource path="res://Stages/NeedleManDemo/Tile34.png" type="Texture" id=53]
 [ext_resource path="res://Stages/NeedleManDemo/Tile33.png" type="Texture" id=54]
-[ext_resource path="res://Various Objects/spikeball.png" type="Texture" id=55]
+[ext_resource path="res://Various Objects/Special Blocks/spikeball.png" type="Texture" id=55]
 [ext_resource path="res://Stages/NeedleManDemo/Tile2.png" type="Texture" id=56]
 [ext_resource path="res://Stages/NeedleManDemo/Tile3.png" type="Texture" id=57]
 [ext_resource path="res://Stages/NeedleManDemo/Tile4.png" type="Texture" id=58]

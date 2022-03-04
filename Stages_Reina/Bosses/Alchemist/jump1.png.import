@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Yoku Blocks 1x6.png-e5faf2e31edbfe59b001df3240a06ce5.stex"
+path="res://.import/jump1.png-791bd833e5e3b359ddfa21327b442674.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Various Objects/Yoku Blocks 1x6.png"
-dest_files=[ "res://.import/Yoku Blocks 1x6.png-e5faf2e31edbfe59b001df3240a06ce5.stex" ]
+source_file="res://Stages_Reina/Bosses/Alchemist/jump1.png"
+dest_files=[ "res://.import/jump1.png-791bd833e5e3b359ddfa21327b442674.stex" ]
 
 [params]
 

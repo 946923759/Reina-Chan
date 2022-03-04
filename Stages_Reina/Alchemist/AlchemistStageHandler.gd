@@ -2,9 +2,14 @@ extends Node2D
 
 var weapon_to_unlock = Globals.Weapons.Alchemist
 
+#You CANNOT EDIT THESE VALUES IN THE SCRIPT!!!!
+#Because this script is overriding a base scene
+#you still need to edit the exported values in the node
+#properties or it will be ignored!
 export(int,-2,255) var LADDER_TILE_ID = -2
 export(int,-2,255) var LADDER_TOP_TILE_ID = -2
 export(int,-2,255) var SPIKES_TILE_ID = -2
+export(int,-2,255) var DEATH_TILE_ID = -2 #Unlike spikes, these have no invincibility frames
 
 export(bool) var adjust_camera = false
 
@@ -30,6 +35,9 @@ export (Array,Vector2) var debug_warp_points
 var reinaAudioPlayer
 
 func _ready():
+	#I don't know why this keeps resetting but I'm sick of it
+	#$ParallaxBackground2/moon2.position.x=99999
+	
 	#set_process(true)
 	if CheckpointPlayerStats.checkpointSet:
 		print("There is a checkpoint, not adjusting the camera.")

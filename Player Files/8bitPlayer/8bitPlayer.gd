@@ -85,6 +85,7 @@ var tiles;
 var LADDER_TILE_ID
 var LADDER_TOP_TILE_ID
 var SPIKES_TILE_ID
+var DEATH_TILE_ID
 var lastDebugWarped=-1
 
 func _ready():
@@ -93,10 +94,16 @@ func _ready():
 	tiles = self.get_node("/root/Node2D/TileMap");
 	LADDER_TILE_ID = stageRoot.LADDER_TILE_ID
 	LADDER_TOP_TILE_ID = stageRoot.LADDER_TOP_TILE_ID
+	
 	if "SPIKES_TILE_ID" in stageRoot:
 		SPIKES_TILE_ID = stageRoot.SPIKES_TILE_ID
 	else:
 		SPIKES_TILE_ID = -999
+	
+	if "DEATH_TILE_ID" in stageRoot:
+		DEATH_TILE_ID = stageRoot.DEATH_TILE_ID
+	else:
+		DEATH_TILE_ID = -999
 	
 	var b = load("res://Player Files/8bitPlayer/bulletManager.gd")
 	bulletManager=b.new(stageRoot)
@@ -353,7 +360,7 @@ func get_input(delta):
 					pass
 				if sprite.animation=="IdleShoot":
 					sprite.frame = 0
-				shoot_sprite_time = 0.5
+				shoot_sprite_time = 0.3
 				$ShootSound.play()
 		else:
 			shoot_time += delta
@@ -371,9 +378,10 @@ func get_input(delta):
 		elif state == State.ON_LADDER:
 			#Maybe waste of CPU?
 			velocity.y = 0
-			if up:
+			#Don't allow moving while shooting
+			if up and shoot_sprite_time <=0:
 				velocity.y -= 100
-			if down: #and position.y > $Camera2D.limit_bottom+40
+			if down and shoot_sprite_time<=0: #and position.y > $Camera2D.limit_bottom+40
 				velocity.y += 100
 			#Don't allow pressing jump while climbing up the ladder because
 			#it creates one frame of the jump animation
@@ -583,8 +591,8 @@ func _physics_process(delta):
 	var tile = tiles.get_cellv(pos2cell(position))
 	#I got tired of dying to spikes in free roam
 	if tile == SPIKES_TILE_ID and (not noClip and not freeRoam) and not invincible:
-		#pass
-		#CheckpointPlayerStats.setDeathTimer(get_node("/root/Node2D/timer"))
+		die()
+	elif tile == DEATH_TILE_ID and (not noClip and not freeRoam):
 		die()
 	
 	#Only process when moving or falling. Because otherwise the character slides down slopes and that's bad.

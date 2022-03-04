@@ -10,6 +10,12 @@ export (float) var cameraScale = 64;
 export (float) var tweenTime = .5;
 export(String, FILE, "*.ogg") var newMusic
 
+enum DOOR_IS_FACING {
+	LEFT = -1,
+	RIGHT = 1
+}
+export (DOOR_IS_FACING) var facing = DOOR_IS_FACING.RIGHT
+
 func _ready():
 	$Area2D.connect("body_entered",self,"move")
 	
@@ -59,13 +65,13 @@ func move(obj):
 			get_node("/root/Node2D").fadeMusic()
 			obj.call("lockMovementQueue",[
 				[.3,Vector2(0,0)],
-				[.8,Vector2(obj.run_speed,0),"",false],
+				[.8,Vector2(obj.run_speed*facing,0),"",false],
 				[.3,Vector2(0,0),"Idle"]
 			])
 		else:
 			obj.call("lockMovementQueue",[
 				[.3,Vector2(0,0)],
-				[.5,Vector2(obj.run_speed,0),"",false],
+				[.5,Vector2(obj.run_speed*facing,0),"",false],
 				[.3,Vector2(0,0),"Idle"]
 			])
 		

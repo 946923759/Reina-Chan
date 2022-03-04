@@ -1,6 +1,5 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://ubuntu-font-family/NotoSansJP-Bold.otf" type="DynamicFontData" id=1]
 [ext_resource path="res://ubuntu-font-family/JP_KR_font.tres" type="DynamicFont" id=2]
 
 [sub_resource type="GDScript" id=1]
@@ -11,11 +10,10 @@ func _input(_event):
 	if Input.is_action_just_pressed(\"ui_pause\"):
 # warning-ignore:return_value_discarded
 		get_tree().change_scene(\"res://TitleScreenV2.tscn\");
-"
 
-[sub_resource type="DynamicFont" id=2]
-size = 40
-font_data = ExtResource( 1 )
+func setNewText(t:String):
+	$CenterContainer/Label.text = t
+"
 
 [node name="Control" type="Control"]
 anchor_right = 1.0
@@ -41,17 +39,18 @@ __meta__ = {
 }
 
 [node name="Label" type="Label" parent="CenterContainer"]
-margin_left = 43.0
-margin_top = 206.0
-margin_right = 1236.0
-margin_bottom = 513.0
-custom_fonts/font = SubResource( 2 )
-text = "Your save data failed to load. Did you edit something?
+margin_top = 196.0
+margin_right = 1280.0
+margin_bottom = 523.0
+rect_min_size = Vector2( 1280, 0 )
+custom_fonts/font = ExtResource( 2 )
+text = "Your save data failed to load. If this is a new update, the old data is incompatible.
 You will have to start a new game.
 If this occured without any save editing, please let me know!
 
 Press start/enter to return to the title screen."
 align = 1
+autowrap = true
 
 [node name="Label" type="Label" parent="."]
 visible = false

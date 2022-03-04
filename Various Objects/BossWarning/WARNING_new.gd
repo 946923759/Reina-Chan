@@ -5,6 +5,7 @@ onready var sprite = $CanvasLayer/Sprite
 var gf_cutscene = preload("res://Cutscene/CutsceneMain.tscn")
 
 var event_ID = Globals.EVENT_TILES.CUSTOM_EVENT
+export(String) var message_id
 export(PoolStringArray) var message
 var disabled = false
 
@@ -12,6 +13,8 @@ var parent
 var child
 
 func _ready():
+	if message_id=="" and message.size()==0:
+		message_id="default"
 	child=get_child(get_child_count()-1)
 	#run_event(self)
 	#.connect("finished",self,"end_cutscene")
@@ -74,6 +77,7 @@ func part5():
 	parent.clearLockedMovement()
 
 func part1():
+	#get_node("/root/Node2D").stopMusic()
 	#if !msgEv.finished:
 	#parent.lockMovement(.1,Vector2())
 	get_tree().paused=true
@@ -81,9 +85,11 @@ func part1():
 	parent.add_child(newCutscene) #Needs to be done first for the _ready()
 	newCutscene.connect("cutscene_finished",self,"part2")
 	newCutscene.init_(
-		message,
+		Globals.get_stage_cutscene(message_id),
 		parent,
-		true
+		true,
+		null,
+		"\t"
 	)
 
 func part2():

@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/spikeball.png-0c810aefd089b700e199b4a1d399666c.stex"
+path="res://.import/upper1.png-d898107e20aeaa978e7d79dfdf95dd46.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Various Objects/spikeball.png"
-dest_files=[ "res://.import/spikeball.png-0c810aefd089b700e199b4a1d399666c.stex" ]
+source_file="res://Stages_Reina/Bosses/Alchemist/upper1.png"
+dest_files=[ "res://.import/upper1.png-d898107e20aeaa978e7d79dfdf95dd46.stex" ]
 
 [params]
 

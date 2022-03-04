@@ -13,7 +13,8 @@ onready var music_player = Globals.ReinaAudioPlayer.new(self)
 func _ready():
 	$Sprite.Cover()
 	#music_player.load_song(\"Credits\",\"Rockman 4MI.nsf\",104)
-	music_player.load_song(\"Credits\",\"Metroid.nsf\",11)
+	music_player.load_song(\"Credits\",\"DMG-ADNJ-JPN.gbs\",3,8)
+	#music_player.load_song(\"Credits\",\"Metroid.nsf\",11)
 	
 	
 	$c1.rect_position=Vector2(
@@ -92,7 +93,7 @@ __meta__ = {
 [node name="c2" type="RichTextLabel" parent="."]
 margin_top = 736.0
 margin_right = 1280.0
-margin_bottom = 2393.0
+margin_bottom = 2550.0
 custom_fonts/bold_font = SubResource( 3 )
 custom_fonts/normal_font = ExtResource( 1 )
 bbcode_enabled = true
@@ -117,6 +118,10 @@ amaryllis works
 mighty gunvolt burst, megaman,
 castlevania, and more
 
+[b]Beta Testers[/b]
+Nirvash
+The rest of the team
+
 [b]Translations[/b]
 Nokotarou - Spanish
 
@@ -129,9 +134,9 @@ See LICENSES.txt for more information
 
 
 [b]special thanks[/b]
-/gfg/
-The librarian
-nirvash
+/gfg/ - Boss ideas and more!
+The librarian - for your support
+nirvash - cool guy
 ...and you!
 
 girls' frontline is property of mica
@@ -160,6 +165,10 @@ amaryllis works
 mighty gunvolt burst, megaman,
 castlevania, and more
 
+Beta Testers
+Nirvash
+The rest of the team
+
 Translations
 Nokotarou - Spanish
 
@@ -172,9 +181,9 @@ See LICENSES.txt for more information
 
 
 special thanks
-/gfg/
-The librarian
-nirvash
+/gfg/ - Boss ideas and more!
+The librarian - for your support
+nirvash - cool guy
 ...and you!
 
 girls' frontline is property of mica

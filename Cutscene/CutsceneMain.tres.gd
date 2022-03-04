@@ -10,7 +10,7 @@ https://creativecommons.org/licenses/by-nc-sa/4.0/
 var text
 var time: float = 0.0
 var waitForAnim: float = 0.0
-onready var TEXT_SPEED: float = Globals.OPTIONS['TextSpeed']['value']/5
+onready var TEXT_SPEED: float = max(Globals.OPTIONS['TextSpeed']['value']/2,1)
 
 var parent_node
 var backgrounds:Node2D
@@ -22,8 +22,13 @@ enum OPCODES {
 	SPEAKER, 
 	BG, 
 	MATCH_NAMES, 
-	MSGBOX_TRANSITION
+	MSGBOX_TRANSITION,
 	#REWRITE_HISTORY #Edit the history! lol
+	CONDJMP, #Oh no
+	JMP_NOT_EQUAL_LANG,
+	JMP_EQUAL_LANG,
+	JMP,
+	#NOP
 	}
 
 var curPos: int = -1
@@ -50,13 +55,18 @@ func push_back_from_idx_one(arr,arr2):
 		arr.push_back(arr2[i])
 	return arr
 
-func parse_string_array(arr,delimiter:String="|"):
+#What an abomination of a function
+func parse_string_array(arr,delimiter:String="|",msgColumn:int=1):
 	message = []
 	for s in arr:
 		var splitString = s.split(delimiter) #,true,1
 		match splitString[0]:
 			'msg':
-				message.push_back([OPCODES.MSG,splitString[1]])
+				if msgColumn > splitString.size()-1:
+					print("Hey moron, you're missing the translation for this line: "+String(splitString))
+					message.push_back([OPCODES.MSG,splitString[1]])
+				else:
+					message.push_back([OPCODES.MSG,splitString[msgColumn]])
 			'speaker':
 				if splitString.size()==1:
 					message.push_back([OPCODES.SPEAKER,""])
@@ -365,7 +375,7 @@ func _ready():
 		init_(standalone_message,null,dim_the_background_if_standalone)
 
 
-func init_(message, parent, dim_background = true,_backgrounds=null,delim="|"):
+func init_(message, parent, dim_background = true,_backgrounds=null,delim="|",msgColumn:int=1):
 	if parent:
 		parent_node = parent
 	if _backgrounds:
@@ -378,7 +388,7 @@ func init_(message, parent, dim_background = true,_backgrounds=null,delim="|"):
 	if dim_background:
 # warning-ignore:return_value_discarded
 		t.parallel().append($dim,'modulate:a',.6,.5).from_current()
-	parse_string_array(message,delim)
+	parse_string_array(message,delim,msgColumn)
 	advance_text()
 	set_process(true)
 

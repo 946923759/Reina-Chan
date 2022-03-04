@@ -12,7 +12,7 @@
 [ext_resource path="res://Stages/TestStage/bgTile.png" type="Texture" id=10]
 [ext_resource path="res://Stages/TestStage/bgTile2.png" type="Texture" id=11]
 [ext_resource path="res://Stages/TestStage/tinyPlatform.png" type="Texture" id=12]
-[ext_resource path="res://Various Objects/spikeball.png" type="Texture" id=13]
+[ext_resource path="res://Various Objects/Special Blocks/spikeball.png" type="Texture" id=13]
 
 [node name="Node" type="Node"]
 

@@ -6,6 +6,7 @@
 script/source = "extends KinematicBody2D
 
 var smallExplosion = preload(\"res://Stages/EnemyExplodeSmall.tscn\")
+onready var raycast = $RayCast2D
 
 var velocity:Vector2
 
@@ -23,6 +24,13 @@ func init(direction,velocityOverride:Vector2=Vector2(0,0)):
 	set_physics_process(true)
 	
 func _physics_process(delta):
+	if raycast.is_colliding():
+		print(\"AAAAAAAAAAAA\")
+		var obj = raycast.get_collider()
+		if obj.has_method(\"player_touched\"): #If enemy touched player
+			obj.call(\"player_touched\",self,1)
+		killSelf()
+		return
 	var collision=move_and_collide(velocity)
 	if collision:
 		var obj = collision.get_collider()
@@ -101,3 +109,7 @@ offset = Vector2( -0.5, -0.5 )
 __meta__ = {
 "_edit_lock_": true
 }
+
+[node name="RayCast2D" type="RayCast2D" parent="."]
+enabled = true
+cast_to = Vector2( 0, -35 )

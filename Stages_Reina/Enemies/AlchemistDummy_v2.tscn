@@ -1,0 +1,243 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Stages_Reina/Bosses/BossBase.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Stages_Reina/Bosses/Alchemist/AlchemistSpriteframes.tres" type="SpriteFrames" id=2]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends \"res://Stages_Reina/Bosses/BossBase.gd\"
+
+#onready var player = 
+
+enum STATE {
+	PUMPKIN_THROW,
+	PUMPKIN_THROW_WAIT,
+	
+	
+	IDLE,
+	WARP,
+	DASHING,
+	UPPERCUT,
+	
+	JUMPING,
+	SHOOT,
+	
+	FADEOUT,
+	
+}
+
+#const nightShader = preload(\"res://ParticleEffects/NightShader.tres\")
+const motionBlur = preload(\"res://ParticleEffects/MotionBlur.tres\")
+const glow = preload(\"res://ParticleEffects/GlowShader.tres\")
+
+#YEP, HERE WE GO AGAIN
+const bullet = preload(\"res://Stages_Reina/Enemies/bulletDinergate.tscn\")
+var pumpkin = preload(\"res://Stages_Reina/Bosses/Alchemist/PumpkinBomb.tscn\")
+
+onready var dg = get_node(\"dg\")
+
+var curState = STATE.PUMPKIN_THROW_WAIT
+var player:KinematicBody2D
+
+#WHAT COULD POSSIBLY GO WRONG
+#func init():
+
+func _ready():
+	#sprite.material = motionBlur
+	#sprite.material=nightShader
+	#sprite.use_parent_material=false
+	#sprite.get_material().set_shader_param(\"Dir\", Vector2(1,1))
+	#set_physics_process(false)
+	sprite.flip_h = (facing == DIRECTION.RIGHT)
+	set_process(false)
+	pass
+	
+var reverse:int = 1
+func _process(delta):
+	if warpAnimationProgress <= 0:
+		warpAnimationProgress=1
+	
+	#var decelerate:float = cos((warpAnimationProgress+1)*PI/2)+1
+	var decelerate:float = sin((warpAnimationProgress-1)*PI/2)+1
+	sprite.offset.x=decelerate*reverse*5
+	sprite.modulate.a=1-decelerate
+	reverse*=-1
+	
+	sprite.get_material().set_shader_param(\"dir\", Vector2(decelerate*.05,0))
+	#motionBlur.set_shader_param(\"Dir\", Vector2(warpAnimationProgress,0))
+	warpAnimationProgress-=delta
+
+#Programming this sucks so hard
+var warpAnimationProgress:float=1.0
+var tempVelocity:Vector2
+var justShot:bool=false
+func _physics_process(delta):
+	if not enabled:
+		return
+		
+	sprite.playing=true
+	sprite.flip_h = (facing == DIRECTION.RIGHT)
+	#Because I'm lazy, the alchemist dummy always
+	#Assumes the room it's in is an x offset of zero
+	match curState:
+		STATE.PUMPKIN_THROW:
+			warpAnimationProgress-=delta
+			if sprite.frame==2 and !justShot:
+				var bi = pumpkin.instance()
+				var pos = position + Vector2(15*facing, -16)
+				
+				bi.position = pos
+				get_parent().add_child(bi)
+				bi.velocity=Vector2((randi()%10+5)*facing,(randi()%5))
+				#bi.velocity=Vector2(5*facing,5)
+				#bi.init(facing)
+				
+				self.add_collision_exception_with(bi)# Make bullet and this not collide
+			
+				justShot=true
+			
+			if justShot or warpAnimationProgress <= -1:
+				warpAnimationProgress=.9
+				curState=STATE.PUMPKIN_THROW_WAIT
+		STATE.PUMPKIN_THROW_WAIT:
+			warpAnimationProgress-=delta
+			if warpAnimationProgress<=0:
+				if dg.get_child_count()==0:
+					curState=STATE.IDLE
+				else:
+					print(dg.get_child_count())
+					justShot=false
+					sprite.set_animation(\"throw\")
+					sprite.frame=0
+					sprite.playing=true
+					curState=STATE.PUMPKIN_THROW
+		STATE.IDLE:
+			if true: #player.global_position.x < 480
+				var rand:bool = randi()%2==1
+				if player.global_position.y < 2755:
+					if player.global_position.x < 640: #On left side of platform
+						global_position=Vector2(350,2944+16)
+						facing = DIRECTION.RIGHT
+					else: #on right side of platform
+						global_position=Vector2(924,2944+16)
+						facing = DIRECTION.LEFT
+				elif rand or player.global_position.x < 240: #If facing left
+					global_position = Vector2(player.global_position.x+100,2944+16)
+					facing = DIRECTION.LEFT
+				else:
+					global_position = Vector2(player.global_position.x-100,2944+16)
+					facing = DIRECTION.RIGHT
+				
+				warpAnimationProgress=.5
+				sprite.material = motionBlur
+				sprite.use_parent_material=false
+				curState = STATE.WARP
+				sprite.set_animation(\"idle\")
+				sprite.playing=false
+		STATE.WARP:
+			if warpAnimationProgress<=0:
+				warpAnimationProgress=0.5
+				sprite.material=glow
+				sprite.use_parent_material=true
+				sprite.modulate.a=1
+				
+				if player.global_position.y < 2755 and player.global_position.x < 770 and player.global_position.x > 505:
+					tempVelocity=Vector2(facing*250,-900)
+					curState=STATE.JUMPING
+				else:
+					sprite.set_animation(\"dash\")
+					curState=STATE.DASHING
+				return
+			move_and_slide(Vector2(0,999),Vector2(0, -1))
+			var decelerate:float = sin((warpAnimationProgress-1)*PI/2)+1
+			sprite.modulate.a=1-decelerate
+			sprite.get_material().set_shader_param(\"dir\", Vector2(decelerate*.05,0))
+			warpAnimationProgress-=delta
+		STATE.DASHING:
+			if warpAnimationProgress<=0 or is_on_wall() or !is_on_floor():
+				warpAnimationProgress=.2
+				curState=STATE.UPPERCUT
+			sprite.playing=true
+			# warning-ignore:return_value_discarded
+			move_and_slide(Vector2(facing*600,500),Vector2(0, -1))
+			warpAnimationProgress-=delta
+		STATE.JUMPING:
+			sprite.set_animation(\"jump\")
+			if warpAnimationProgress<.4 and is_on_floor():
+				#warpAnimationProgress=.2
+				sprite.set_animation(\"shoot\")
+				warpAnimationProgress=1.0
+				curState=STATE.SHOOT
+			tempVelocity=move_and_slide(tempVelocity,Vector2(0,-1),true)
+			tempVelocity.y+=1600*delta
+			warpAnimationProgress-=delta
+		STATE.SHOOT:
+			if warpAnimationProgress <= 0:
+				warpAnimationProgress=.5
+				sprite.material = motionBlur
+				sprite.use_parent_material=false
+				sprite.frame=0
+				sprite.playing=false
+				curState=STATE.FADEOUT
+			elif sprite.frame==1 and !justShot:
+				var bi = bullet.instance()
+				var pos = position + Vector2(30*facing, -16)
+				
+				bi.position = pos
+				get_parent().add_child(bi)
+				bi.init(Vector2(5*facing,0))
+				
+				self.add_collision_exception_with(bi)# Make bullet and this not collide
+				justShot=true
+			elif sprite.frame!=1:
+				justShot=false
+			warpAnimationProgress-=delta
+				
+		STATE.UPPERCUT:
+			sprite.set_animation(\"uppercut\")
+			if warpAnimationProgress <= 0:
+				warpAnimationProgress=.5
+				sprite.material = motionBlur
+				sprite.use_parent_material=false
+				curState = STATE.WARP
+				curState=STATE.FADEOUT
+				return
+			warpAnimationProgress-=delta
+		STATE.FADEOUT:
+			if warpAnimationProgress <= 0:
+				curState=STATE.IDLE
+				return
+			var decelerate:float = cos((warpAnimationProgress+1)*PI/2)+1
+			sprite.modulate.a=1-decelerate
+			sprite.get_material().set_shader_param(\"dir\", Vector2(decelerate*.05,0))
+			warpAnimationProgress-=delta
+
+func _on_EventTile_event_executed():
+	player = get_node(\"/root/Node2D/Player\")
+	curHP=14 #lol
+	enabled=true
+"
+
+[node name="AlchemistDummy_v2" instance=ExtResource( 1 )]
+position = Vector2( 608, 352 )
+script = SubResource( 1 )
+
+[node name="AnimatedSprite" parent="." index="1"]
+frames = ExtResource( 2 )
+animation = "throw"
+frame = 3
+offset = Vector2( -2, 0 )
+
+[node name="DebugLabel" parent="." index="7"]
+text = "animation = \"throw\"
+playing = false
+frame = 3
+"
+properties = PoolStringArray( "animation", "playing", "frame" )
+
+[node name="DebugLabel2" parent="." index="8"]
+text = "position = Vector2( 608, 352 )
+global_position = Vector2( 608, 352 )
+curState = null
+warpAnimationProgress = null
+"
+properties = PoolStringArray( "position", "global_position", "curState", "warpAnimationProgress" )

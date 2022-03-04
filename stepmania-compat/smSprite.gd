@@ -9,7 +9,7 @@ func Cover():
 	if is_instance_valid(texture):
 		scale=Vector2(Globals.gameResolution.y/texture.get_height(),Globals.gameResolution.y/texture.get_height())
 	else:
-		print("You don't have a valid texture, idiot.")
+		print("smSprite.Cover(): You don't have a valid texture, idiot.")
 	#print(scale)
 
 func loadFromExternal(path:String):
