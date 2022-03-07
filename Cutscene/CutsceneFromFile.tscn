@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Cutscene/CutsceneMain.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Cutscene/Portraits/Nyto_7.png" type="Texture" id=2]
 [ext_resource path="res://Cutscene/BlendAddLoop.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Cutscene/Backgrounds/1.png" type="Texture" id=4]
 
 [sub_resource type="GDScript" id=1]
 script/source = "extends Node2D
@@ -29,7 +30,7 @@ func get_cutscene_path()->String:
 			if OS.has_feature(\"standalone\"):
 				return OS.get_executable_path().get_base_dir()+\"/GameData/Cutscene/\"
 	#If not compiled or if the platform doesn't allow writing to the game's current directory
-	return \"res://Cutscene/\"
+	return \"res://Cutscene/Embedded/\"
 	
 	
 #func push_back_from_idx_one(arrToFill:Array,arr2:Array)->Array:
@@ -37,14 +38,15 @@ func get_cutscene_path()->String:
 #		arrToFill.push_back(arr2[i])
 #	return arrToFill
 	
-func strip_first(arr2:Array)->Array:
+static func strip_first(arr2:Array)->Array:
 	var arrToFill=[]
 	for i in range(1,arr2.size()):
 		arrToFill.push_back(arr2[i])
 	return arrToFill
 
-#I wish I could mark functions as static
-#This is a static function, btw
+#This function produces no side effects,
+#But it can't be 'static' since the game has to be running
+#for the OS var to be available
 func load_cutscene_data(name:String)->Dictionary:
 	var f = File.new()
 	var path:String
@@ -119,8 +121,9 @@ func _ready():
 			if kv[0]==\"--cutscene\":
 				Globals.nextCutscene=kv[1]
 				break
+	cutsceneData = load_cutscene_data(\"choicesTest.txt\")
 	#cutsceneData = load_cutscene_data(\"test_Midnight112.txt\")
-	cutsceneData = load_cutscene_data(Globals.nextCutscene)
+	#cutsceneData = load_cutscene_data(Globals.nextCutscene)
 	if cutsceneData.size()==0:
 		#var e = load(\"res://savedataError.tscn\").instance()
 		#e.setNewText(\"The cutscene failed to load.\")
@@ -149,24 +152,26 @@ func _ready():
 	#for actor in LoadBackgrounds:
 	#	$BackgroundHolder.add_child(actor)
 	#	actor.position=Globals.SCREEN_CENTER
-	var bgs = cutsceneData['bg']
-	for i in range(len(bgs)):
-		var bgToLoad = bgs[i]
-		
-		var nightFilter = false
-		if \",\" in bgToLoad:
-			nightFilter = bgToLoad.split(\",\")[1].to_lower()==\"true\"
-			bgToLoad = bgToLoad.split(\",\")[0]
-		var c = Color(1,1,1,0) if i!=0 else Color(1,1,1,1)
-		var s = Def.Sprite({
-			modulate=c,
-			Texture=bgToLoad,
-			cover=true
-		})
-		if nightFilter:
-			s.material=nightShader
-		$BackgroundHolder.add_child(s)
-		s.position=Globals.SCREEN_CENTER
+	if 'bg' in cutsceneData:
+		var bgs = cutsceneData['bg']
+		for i in range(len(bgs)):
+			var bgToLoad = bgs[i]
+			
+			var nightFilter = false
+			if \",\" in bgToLoad:
+				nightFilter = bgToLoad.split(\",\")[1].to_lower()==\"true\"
+				bgToLoad = bgToLoad.split(\",\")[0]
+			var c = Color(1,1,1,0) if i!=0 else Color(1,1,1,1)
+			var s = Def.Sprite({
+				modulate=c,
+				Texture=bgToLoad,
+				cover=true,
+				name=bgToLoad
+			})
+			if nightFilter:
+				s.material=nightShader
+			$BackgroundHolder.add_child(s)
+			s.position=Globals.SCREEN_CENTER
 	
 	var msgColumn:int=1
 	if \"lang\" in cutsceneData and INITrans.currentLanguage != \"en\":
@@ -200,6 +205,27 @@ func end_cutscene_2():
 
 [node name="Node2D" type="Node2D"]
 script = SubResource( 1 )
+
+[node name="BackgroundHolder_v2" type="Control" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = 1280.0
+margin_bottom = 720.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect" type="TextureRect" parent="BackgroundHolder_v2"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+texture = ExtResource( 4 )
+expand = true
+stretch_mode = 7
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="BackgroundHolder" type="Node2D" parent="."]
 

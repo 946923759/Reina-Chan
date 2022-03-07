@@ -259,8 +259,8 @@ func load_stage_cutscenes()->bool:
 		#print(cutsceneData['lang'])
 		for i in range(langs.size()):
 			if langs[i]==INITrans.currentLanguage:
-				#print("Loading from column "+String(i))
-				msgColumn=i
+				print("Loading from column "+String(i+1)+" ("+INITrans.currentLanguage+")")
+				msgColumn=i+1
 				break
 	var d={'default':[]}
 	var dictKey = "default"
@@ -274,13 +274,14 @@ func load_stage_cutscenes()->bool:
 			if line.begins_with('msg'):
 				#print(line)
 				var aa = line.split('\t',true)
-				if msgColumn < aa.size()-1:
+				if msgColumn < aa.size():
 					d[dictKey].push_back('msg\t'+aa[msgColumn])
 				else:
 					d[dictKey].push_back('msg\t'+aa[1])
 			else:
 				d[dictKey].push_back(line)
 	stage_cutscene_data=d
+	#print("loaded stage cutscene data")
 	return true
 	
 	
@@ -290,7 +291,16 @@ func get_stage_cutscene(key:String):
 	return stage_cutscene_data[key]
 
 func _ready():
-	gameResolution = Vector2(ProjectSettings.get_setting("display/window/size/width"),ProjectSettings.get_setting("display/window/size/height"))
+	#print(OS.window_size)
+	#print(get_viewport().size)
+	#DUDE WHAT IF WE JUST HAD THIS FUNCTION AND NEVER DOCUMENTED IT ANYWHERE
+	#EVEN THOUGH IT'S THE ONE YOU ACTUALLY WANT AND YOU HAVE TO CHECK A REDDIT
+	#POST TO FIND IT
+	# - The godot devs probably
+	#print(get_viewport().get_visible_rect().size)
+	
+	#gameResolution = Vector2(ProjectSettings.get_setting("display/window/size/width"),ProjectSettings.get_setting("display/window/size/height"))
+	gameResolution = get_viewport().get_visible_rect().size
 # warning-ignore:narrowing_conversion
 	SCREEN_CENTER_X = gameResolution.x/2
 # warning-ignore:narrowing_conversion
@@ -314,6 +324,7 @@ func _ready():
 		flipButtons=Globals.OPTIONS['flipButtons']['value']
 	else:
 		INITrans.SetLanguage("en")
+
 	
 	var save_game = File.new()
 	playerHasSaveData=save_game.file_exists(get_save_directory('playerData'))

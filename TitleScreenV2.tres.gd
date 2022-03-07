@@ -70,7 +70,15 @@ func _ready():
 	
 	print("Translating items...")
 	setTranslated()
+	
+	#Enable resizing (WIP)
+	set_process(ProjectSettings.get_setting("display/window/stretch/aspect") != "keep")
+	
 	print("Title screen ready!")
+
+func _process(_delta):
+	$logoHolder.rect_size=get_viewport().get_visible_rect().size
+	#$logoHolder/Label2.text = String(get_viewport().get_visible_rect().size)
 
 func setTranslated():
 	for node in $MainMenu.get_children():
@@ -95,10 +103,10 @@ func setTranslated():
 func _input(event):
 	if event is InputEventJoypadMotion or event is InputEventMouseMotion: #XInput controllers are broken on Windows :P
 		return
-	elif event is InputEventMouseButton and event.pressed:
+	elif (event is InputEventMouseButton and event.pressed) or (event is InputEventScreenTouch and event.pressed):
 		#print(event.button_index)
 		print("Clicked at "+String(event.position))
-		if event.button_index == 2:
+		if (event is InputEventMouseButton and event.button_index == 2) or (event is InputEventScreenTouch and event.index==1):
 			if currentlyHandledMenu:
 				tweenMainMenuIn();
 				if currentlyHandledMenu.has_method("OffCommand"):

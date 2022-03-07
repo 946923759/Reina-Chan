@@ -7,7 +7,6 @@ https://creativecommons.org/licenses/by-nc-sa/4.0/
 - Amaryllis Works
 """
 
-var text
 var time: float = 0.0
 var waitForAnim: float = 0.0
 onready var TEXT_SPEED: float = max(Globals.OPTIONS['TextSpeed']['value']/2,1)
@@ -23,12 +22,13 @@ enum OPCODES {
 	BG, 
 	MATCH_NAMES, 
 	MSGBOX_TRANSITION,
+	CHOICE,
 	#REWRITE_HISTORY #Edit the history! lol
-	CONDJMP, #Oh no
-	JMP_NOT_EQUAL_LANG,
-	JMP_EQUAL_LANG,
+	CONDJMP_CHOICE, #Oh no
+	CONDJMP_NOT_EQUAL_LANG,
+	CONDJMP_EQUAL_LANG,
 	JMP,
-	#NOP
+	NOP #It's needed so jumps are accurate
 	}
 
 var curPos: int = -1
@@ -49,6 +49,13 @@ var portraits:Array=[]
 #Array of 2D arrays
 var textHistory:Array=[]
 onready var historyActor=$CutsceneHistory
+
+
+onready var text = $CenterContainer/textActor_better
+onready var textboxSpr = $CenterContainer/TextureRect
+onready var speakerActor = $CenterContainer/SpeakerActor
+
+var choiceResult:int=-1
 
 func push_back_from_idx_one(arr,arr2):
 	for i in range(1,arr2.size()):
@@ -104,9 +111,20 @@ func parse_string_array(arr,delimiter:String="|",msgColumn:int=1):
 					data.push_back(splitString[i])
 				message.push_back([OPCODES.MATCH_NAMES,data])
 			"nop": # "no-operation"
-				pass
+				message.push_back([OPCODES.NOP])
 			"msgboxTransition":
 				message.push_back([OPCODES.MSGBOX_TRANSITION])
+			"choice":
+				#var newCmd=[OPCODES.CHOICE]
+				#message.push_back(push_back_from_idx_one(newCmd,splitString))
+				
+				var newCmd=[]
+				push_back_from_idx_one(newCmd,splitString)
+				message.push_back([OPCODES.CHOICE,newCmd])
+			"jmp":
+				message.push_back([OPCODES.JMP,int(splitString[1])])
+			"condjmp_c":
+				message.push_back([OPCODES.CONDJMP_CHOICE,int(splitString[1]),int(splitString[2])])
 			_:
 				printerr("Unknown command:"+splitString[0])
 
@@ -125,6 +143,7 @@ func get_portrait_at_idx(idx):
 
 
 var lastPortraitTable = {}
+var ChoiceTable:PoolStringArray = []
 var matchedNames = []
 onready var tw = $TextboxTween
 func advance_text()->bool:
@@ -186,8 +205,9 @@ func advance_text()->bool:
 				text.visible_characters=0
 				text.bbcode_text = tmp_txt
 				
-				
-				break
+				if curPos < message.size()-1 and message[curPos+1][0]==OPCODES.CHOICE:
+					ChoiceTable=message[curPos+1][1]
+				break #Stop processing opcodes and wait for user to click
 			#Compatibility opcode for Girls' Frontline
 			OPCODES.MSGBOX_TRANSITION:
 				closeTextbox(tw)
@@ -196,13 +216,14 @@ func advance_text()->bool:
 			OPCODES.MATCH_NAMES:
 				matchedNames=curMessage[1]
 			OPCODES.SPEAKER: 
+				
 				# I really didn't think this one through when I made /close and /open
 				# a mini command instead of an opcode
 				if waitForAnim>0:
 					tw.interpolate_callback(self,.3,"shitty_interpolate_label",curMessage[1])
 					#tw.interpolate_property($SpeakerActor,"text","null",tmp_speaker,0,Tween.TRANS_LINEAR,Tween.EASE_IN,.3)
 				else:
-					$SpeakerActor.text=curMessage[1]
+					speakerActor.text=curMessage[1]
 				tmp_speaker=curMessage[1]
 				if len(matchedNames) > 1:
 					#print(matchedNames)
@@ -219,6 +240,7 @@ func advance_text()->bool:
 							break
 						#print("|"+matchedNames[i]+"| != |"+curMessage[1]+"|")
 					#print("Couldn't match "+curMessage[1]+ " in "+String(matchedNames))
+				#print(speakerActor.text)
 			OPCODES.PRELOAD_PORTRAITS:
 				#TODO: Change to a portrait pooling class
 				#TODO: Do not preload until no portraits are shown
@@ -227,9 +249,13 @@ func advance_text()->bool:
 						portraits[i].set_texture_wrapper(curMessage[i+1])
 						print("Preloaded "+curMessage[i+1])
 			OPCODES.BG:
-				var actor = backgrounds.get_child(curMessage[1])
-				print(actor)
-				actor.showActor(.5)
+				if curMessage[1] > backgrounds.get_child_count()-1:
+					printerr("Hey moron, you specified a background higher than the number of backgrounds")
+					#printerr(backgrounds.get_children())
+				else:
+					var actor = backgrounds.get_child(curMessage[1])
+					print(actor)
+					actor.showActor(.5)
 			OPCODES.PORTRAITS:
 				#Badly translated lua code
 				#Duplicate curMessage while skipping the 0th element
@@ -284,7 +310,17 @@ func advance_text()->bool:
 						if lastUsed != null:
 							print("Stopping sprite"+name)
 							get_portrait_from_sprite(name).stop()
-							
+			#This is a NOP since the msg handler checks if there is a choice right after.
+			#"But what if I want a choice without any text?"
+			#I don't know, fuck you
+			OPCODES.CHOICE, OPCODES.NOP:
+				pass
+			OPCODES.JMP:
+				curPos+=curMessage[1]
+			OPCODES.CONDJMP_CHOICE:
+				print("Processing CONDJUMP")
+				if curMessage[2]==choiceResult:
+					curPos+=curMessage[1]
 		curPos+=1
 	
 	#WHAT COULD POSSIBLY GO WRONG
@@ -301,27 +337,30 @@ func advance_text()->bool:
 	#If there was any processing done at all, this should be true
 	return true
 
+
 func closeTextbox(t:Tween,delay:float=0):
-	#t.append($textbox,'scale:y',0,.3).set_trans(Tween.TRANS_QUAD)
+	#t.append(textboxSpr,'scale:y',0,.3).set_trans(Tween.TRANS_QUAD)
 	#print("Closing textbox with delay of "+String(delay))
-	t.interpolate_property($textbox,"scale:y",1,0,.3,Tween.TRANS_QUAD,Tween.EASE_IN,delay)
-	t.interpolate_property($SpeakerActor,"rect_position:y",460,533,.3,Tween.TRANS_QUAD,Tween.EASE_IN,delay)
-	t.interpolate_property($SpeakerActor,"modulate:a",1,0,.3,Tween.TRANS_QUAD,Tween.EASE_IN,delay)
+	t.interpolate_property(textboxSpr,"rect_scale:y",1,0,.3,Tween.TRANS_QUAD,Tween.EASE_IN,delay)
+	t.interpolate_property(speakerActor,"rect_scale:y",1,0,.3,Tween.TRANS_QUAD,Tween.EASE_IN,delay)
+	t.interpolate_property(speakerActor,"modulate:a",1,0,.3,Tween.TRANS_QUAD,Tween.EASE_IN,delay)
 
 func openTextbox(t:Tween,delay:float=0):
 	#print("Opening textbox with delay of "+String(delay))
-	t.interpolate_property($textbox,"scale:y",0,1,.3,Tween.TRANS_QUAD,Tween.EASE_OUT,delay)
-	t.interpolate_property($SpeakerActor,"rect_position:y",533,460,.3,Tween.TRANS_QUAD,Tween.EASE_OUT,delay)
-	t.interpolate_property($SpeakerActor,"modulate:a",0,1,.3,Tween.TRANS_QUAD,Tween.EASE_OUT,delay)
-	#t.append($textbox,'scale:y',1,.3).set_trans(Tween.TRANS_QUAD)
+	t.interpolate_property(textboxSpr,"rect_scale:y",0,1,.3,Tween.TRANS_QUAD,Tween.EASE_OUT,delay)
+	t.interpolate_property(speakerActor,"rect_scale:y",0,1,.3,Tween.TRANS_QUAD,Tween.EASE_OUT,delay)
+	t.interpolate_property(speakerActor,"modulate:a",0,1,.3,Tween.TRANS_QUAD,Tween.EASE_OUT,delay)
+	
 
 onready var historyTween = $HistoryTween
+#Updated every frame... Might be slow
+#onready var screenWidth=Globals.gameResolution.x
 func tween_in_history():
 	#tw.stop_all()
 	tw.stop(text,"visible_characters")
 	closeTextbox(historyTween)
-	historyTween.interpolate_property(historyActor,"position:x",
-		Globals.gameResolution.x*-1,0,.3,
+	historyTween.interpolate_property(historyActor,"rect_position:x",
+		get_viewport().get_visible_rect().size.x*-1,0,.3,
 		Tween.TRANS_QUAD,Tween.EASE_OUT,.2)
 	historyTween.interpolate_property(text,"modulate:a",null,0,.3)
 	historyTween.start()
@@ -329,8 +368,8 @@ func tween_in_history():
 func tween_out_history():
 	tw.resume(text,"visible_characters")
 	openTextbox(historyTween,.2)
-	historyTween.interpolate_property(historyActor,"position:x",
-		0,Globals.gameResolution.x*-1,.3,
+	historyTween.interpolate_property(historyActor,"rect_position:x",
+		0,get_viewport().get_visible_rect().size.x*-1,.3,
 		Tween.TRANS_QUAD,Tween.EASE_IN,0)
 	historyTween.interpolate_property(text,"modulate:a",null,1,.3,
 	Tween.TRANS_LINEAR,Tween.EASE_OUT,.2)
@@ -338,13 +377,13 @@ func tween_out_history():
 
 func shitty_interpolate_label(s:String):
 	#print("Now I set speaker to"+s+"!!")
-	$SpeakerActor.text=s
+	speakerActor.text=s
 
 func _ready():
 	$PressStartToSkip.text=INITrans.GetString("Cutscene","PRESS START TO SKIP")
 	print("Text speed is "+String(TEXT_SPEED))
 	set_process(false)
-	text = $textActor_better
+	#text = $textActor_better
 	#text.visible_characters=0
 	#portraits=[$Portrait1,$Portrait2,$Portrait3,$Portrait4,$Portrait5]
 	var vnPortraithandler = load("res://Cutscene/VNPortraitHandler.gd")
@@ -380,14 +419,14 @@ func init_(message, parent, dim_background = true,_backgrounds=null,delim="|",ms
 		parent_node = parent
 	if _backgrounds:
 		backgrounds=_backgrounds
-	$dim.modulate.a=0
-	$textbox.scale.y=0
+	$dim.color.a=0
+	textboxSpr.rect_scale.y=0
 	var t := TweenSequence.new(get_tree())
 	t._tween.pause_mode = Node.PAUSE_MODE_PROCESS
-	t.append($textbox,'scale:y',1,.5).set_trans(Tween.TRANS_QUAD)
+	t.append(textboxSpr,'rect_scale:y',1,.5).set_trans(Tween.TRANS_QUAD)
 	if dim_background:
 # warning-ignore:return_value_discarded
-		t.parallel().append($dim,'modulate:a',.6,.5).from_current()
+		t.parallel().append($dim,'color:a',.6,.5).from_current()
 	parse_string_array(message,delim,msgColumn)
 	advance_text()
 	set_process(true)
@@ -402,12 +441,12 @@ func end_cutscene():
 	var seq := TweenSequence.new(get_tree())
 	seq._tween.pause_mode = Node.PAUSE_MODE_PROCESS
 # warning-ignore:return_value_discarded
-	seq.append($textbox,'scale:y',0,.5).set_trans(Tween.TRANS_QUAD)
+	seq.append(textboxSpr,'rect_scale:y',0,.5).set_trans(Tween.TRANS_QUAD)
 	seq.parallel().append(text,'modulate:a',0,.3)
-	seq.parallel().append($SpeakerActor,'modulate:a',0,.3)
+	seq.parallel().append(speakerActor,'modulate:a',0,.3)
 	#seq.parallel().append($SpeakerActor,'position:y',600,.3)
-	seq.parallel().append($dim,'modulate:a',0,.5).set_trans(Tween.TRANS_QUAD)
-	seq.parallel().append($PressStartToSkip,'rect_position:x',-$PressStartToSkip.rect_size.x,.5).set_trans(Tween.TRANS_QUAD)
+	seq.parallel().append($dim,'color:a',0,.5).set_trans(Tween.TRANS_QUAD)
+	#seq.parallel().append($PressStartToSkip,'rect_position:x',-$PressStartToSkip.rect_size.x,.5).set_trans(Tween.TRANS_QUAD)
 	seq.parallel().append($PressStartToSkip,'modulate:a',0,.5)
 # warning-ignore:return_value_discarded
 	seq.connect("finished",self,"end_cutscene_2")
@@ -421,6 +460,7 @@ func end_cutscene():
 var manualTriggerForward=false
 
 var isHistoryBeingShown=false
+var isWaitingForChoice=false
 
 func _process(delta):
 	
@@ -431,37 +471,42 @@ func _process(delta):
 	elif Input.is_action_just_pressed("DebugButton1"):
 		get_tree().reload_current_scene()
 	
+	if isWaitingForChoice:
+		if Input.is_action_just_pressed("ui_up"):
+			$Choices.input_up()
+		elif Input.is_action_just_pressed("ui_down"):
+			$Choices.input_down()
+		elif Input.is_action_just_pressed("ui_select"):
+			choiceResult=$Choices.selection+1
+			$Choices.visible=false
+			ChoiceTable=[]
+			advance_text()
+			isWaitingForChoice=false
+			#$Choices.input
+		return
+	
 	var forward = Input.is_action_just_pressed("ui_select") or manualTriggerForward
 	if text.visible_characters >= text.text.length():
-		if forward:
+		if ChoiceTable.size()>0:
+			$Choices.setChoices(ChoiceTable)
+			$Choices.visible=true
+			isWaitingForChoice=true
+		elif forward:
 			print("advancing")
 			if curPos >= message.size() or !advance_text():
 				end_cutscene()
 	else:
 		if forward:
-			#print("skipped")
 			tw.stop_all()
-			$textbox.scale.y=1
-			$SpeakerActor.rect_position.y=460
-			$SpeakerActor.modulate.a=1
-			#openTextbox(tw)
-			#tw.start()
+			textboxSpr.rect_scale.y=1
+			speakerActor.rect_scale.y=1
+			speakerActor.modulate.a=1
 			text.visible_characters = text.text.length()
-		#elif waitForAnim > 0.0:
-		#	waitForAnim-=delta
 		else:
-			#time+=delta
-			
-			#var speedupMultiplier = 1.0
 			if Input.is_action_pressed("ui_cancel"):
 				tw.playback_speed=2.0
 			else:
 				tw.playback_speed=1.0
-				#speedupMultiplier = 2.0
-			
-			#if time > .25/(TEXT_SPEED*speedupMultiplier):
-			#	time=0
-			#	text.visible_characters+=1
 	manualTriggerForward=false
 	
 #Fucking piece of shit game engine

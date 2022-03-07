@@ -1,10 +1,12 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Cutscene/textbox.png" type="Texture" id=1]
 [ext_resource path="res://Cutscene/TextFont.tres" type="DynamicFont" id=2]
 [ext_resource path="res://Cutscene/NotoSans-Bold.ttf" type="DynamicFontData" id=3]
 [ext_resource path="res://Cutscene/CutsceneHistory.tscn" type="PackedScene" id=4]
 [ext_resource path="res://MM2Font_Smaller.tres" type="DynamicFont" id=5]
+[ext_resource path="res://Cutscene/Backgrounds/1.png" type="Texture" id=6]
+[ext_resource path="res://Cutscene/ChoiceHandler.gd" type="Script" id=7]
 [ext_resource path="res://Cutscene/CutsceneMain.tres.gd" type="Script" id=8]
 
 [sub_resource type="DynamicFont" id=1]
@@ -15,14 +17,31 @@ font_data = ExtResource( 3 )
 pause_mode = 2
 script = ExtResource( 8 )
 
-[node name="dim" type="Polygon2D" parent="."]
-modulate = Color( 1, 1, 1, 0.6 )
-z_index = -3
-color = Color( 0, 0, 0, 1 )
-polygon = PoolVector2Array( 0, 0, 1280, 0, 1280, 720, 0, 720 )
+[node name="dim" type="ColorRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 0.701961 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="Backgrounds" type="Node2D" parent="."]
-z_index = -3
+[node name="Backgrounds_v2" type="Control" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect" type="TextureRect" parent="Backgrounds_v2"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 6 )
+expand = true
+stretch_mode = 7
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Portraits" type="Node2D" parent="."]
 position = Vector2( 0, 100 )
@@ -30,27 +49,65 @@ position = Vector2( 0, 100 )
 [node name="Music" type="Node" parent="."]
 
 [node name="textbox" type="Sprite" parent="."]
+visible = false
 position = Vector2( 640, 550 )
 texture = ExtResource( 1 )
 
-[node name="textActor" type="Label" parent="."]
-visible = false
-margin_left = 240.0
-margin_top = 510.0
-margin_right = 1040.0
-margin_bottom = 710.0
-custom_fonts/font = ExtResource( 2 )
-text = "\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad"
+[node name="CenterContainer" type="Control" parent="."]
+anchor_right = 1.0125
+anchor_bottom = 1.0
+margin_top = 460.0
+margin_right = -16.0
+margin_bottom = -53.0
+rect_min_size = Vector2( 876, 207 )
+__meta__ = {
+"_edit_group_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect" type="TextureRect" parent="CenterContainer"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -438.0
+margin_top = -103.5
+margin_right = 438.0
+margin_bottom = 103.5
+grow_vertical = 2
+rect_pivot_offset = Vector2( 0, 103 )
+texture = ExtResource( 1 )
+stretch_mode = 4
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SpeakerActor" type="Label" parent="CenterContainer"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -412.0
+margin_top = -98.5
+margin_right = 464.0
+margin_bottom = 81.5
+rect_pivot_offset = Vector2( 0, 90 )
+custom_fonts/font = SubResource( 1 )
+text = "Dandelion"
 autowrap = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="textActor_better" type="RichTextLabel" parent="."]
-margin_left = 240.0
-margin_top = 510.0
-margin_right = 1040.0
-margin_bottom = 710.0
+[node name="textActor_better" type="RichTextLabel" parent="CenterContainer"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -407.0
+margin_top = -45.5
+margin_right = 407.0
+margin_bottom = 100.5
 custom_fonts/normal_font = ExtResource( 2 )
 bbcode_enabled = true
 bbcode_text = "\"[color=#ff00ff]Lorem ipsum[/color] dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor  (If you can see this, the cutscene failed to load. File a bug report!)"
@@ -59,23 +116,12 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="SpeakerActor" type="Label" parent="."]
-margin_left = 240.0
-margin_top = 460.0
-margin_right = 1020.0
-margin_bottom = 510.0
-custom_fonts/font = SubResource( 1 )
-text = "Dandelion"
-autowrap = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
 [node name="PressStartToSkip" type="Label" parent="."]
-margin_left = 32.0
-margin_top = 682.0
-margin_right = 371.0
-margin_bottom = 702.0
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_left = 20.0
+margin_top = -35.0
+margin_right = 339.0
 custom_fonts/font = ExtResource( 5 )
 text = "PRESS START TO SKIP"
 __meta__ = {
@@ -83,12 +129,23 @@ __meta__ = {
 }
 
 [node name="Light2D" type="Light2D" parent="."]
+position = Vector2( 541.537, -60.5445 )
 
 [node name="CutsceneHistory" parent="." instance=ExtResource( 4 )]
-position = Vector2( -1280, 0 )
+margin_left = -1280.0
+margin_right = -1280.0
 
 [node name="TextboxTween" type="Tween" parent="."]
 pause_mode = 2
 playback_process_mode = 0
 
 [node name="HistoryTween" type="Tween" parent="."]
+
+[node name="Choices" type="Control" parent="."]
+visible = false
+margin_right = 40.0
+margin_bottom = 40.0
+script = ExtResource( 7 )
+__meta__ = {
+"_edit_use_anchors_": false
+}

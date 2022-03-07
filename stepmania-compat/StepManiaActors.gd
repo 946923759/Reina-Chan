@@ -4,14 +4,14 @@ extends Node
 const smSprite = preload("res://stepmania-compat/smSprite.gd")
 const smQuad = preload("res://stepmania-compat/smQuad.gd")
 
-func BitmapText(d)->Label:
+static func BitmapText(d)->Label:
 	var l = Label.new()
 	for property in d:
 		l.set(property,d[property])
 	#l.set("custom_fonts/font",font)
 	return l
 	
-func LoadFont(font,d)->Label:
+static func LoadFont(font,d)->Label:
 	var l = Label.new()
 	for property in d:
 		l.set(property,d[property])

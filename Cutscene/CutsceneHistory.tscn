@@ -4,19 +4,37 @@
 [ext_resource path="res://Cutscene/biggerTextbox.png" type="Texture" id=2]
 [ext_resource path="res://Cutscene/CutsceneHistory.gd" type="Script" id=3]
 
-[node name="CutsceneHistory" type="Node2D"]
-z_index = 10
+[node name="CutsceneHistory" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
 script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="biggerTextbox" type="Sprite" parent="."]
-position = Vector2( 640, 345 )
+[node name="biggerTextbox" type="TextureRect" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -438.0
+margin_top = -375.0
+margin_right = 438.0
+margin_bottom = 360.0
 texture = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
-margin_left = 220.0
-margin_top = 85.0
-margin_right = 1059.0
-margin_bottom = 667.0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -419.5
+margin_top = -291.0
+margin_right = 419.5
+margin_bottom = 291.0
 scroll_horizontal_enabled = false
 __meta__ = {
 "_edit_use_anchors_": false
@@ -38,7 +56,6 @@ grow_vertical = 0
 size_flags_vertical = 1
 custom_fonts/font = ExtResource( 1 )
 text = "This is object one!"
-align = 1
 
 [node name="Label2" type="Label" parent="ScrollContainer/GridContainer"]
 margin_left = 293.0

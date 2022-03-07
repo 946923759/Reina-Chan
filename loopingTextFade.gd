@@ -14,6 +14,12 @@ func _enter_tree():
 	pass
 
 func _ready():
+	var k = "Press_Any_Key"
+	if OS.has_feature("mobile"):
+		k="Tap_Screen"
+	elif OS.has_feature("console"):
+		k="Press_Button"
+	self.text=INITrans.GetString("Startup",k)
 	_start_tween()
 # warning-ignore:return_value_discarded
 	$Tween.connect("tween_completed", self, "_on_tween_completed")

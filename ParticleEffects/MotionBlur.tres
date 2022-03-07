@@ -41,5 +41,5 @@ void fragment(){
 
 [resource]
 shader = SubResource( 1 )
-shader_param/dir = Vector2( 0.5, 0 )
+shader_param/dir = Vector2( 0, 0 )
 shader_param/quality = 4

@@ -26,6 +26,7 @@ func _getDictionary(path:String)->Dictionary:
 	var ok = f.open(path, File.READ)
 	if ok != OK:
 		printerr("Warning: could not open file for reading! ERROR ", ok)
+		printerr(path)
 		return Dictionary()
 	var d = {'Common':{}}
 	var lastCategory:String="Common"

@@ -229,7 +229,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/godot-next/3d/vector_display_3d.gd"
 }, {
-"base": "Polygon2D",
+"base": "ColorRect",
 "class": "smQuad",
 "language": "GDScript",
 "path": "res://stepmania-compat/smQuad.gd"
@@ -307,11 +307,11 @@ INITrans="*res://Translation.gd"
 
 window/size/width=1280
 window/size/height=720
-window/size/resizable=false
 window/size/test_width=1280
 window/size/test_height=720
 window/vsync/use_vsync=false
 window/stretch/mode="2d"
+window/stretch/aspect="expand"
 
 [editor_plugins]
 

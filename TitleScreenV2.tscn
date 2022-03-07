@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=2]
+[gd_scene load_steps=24 format=2]
 
 [ext_resource path="res://TitleScreenV2.tres.gd" type="Script" id=1]
 [ext_resource path="res://FallbackPixelFont.tres" type="DynamicFont" id=2]
@@ -10,6 +10,7 @@
 [ext_resource path="res://Sounds/Classic/37 - Chaos Emerald.ogg" type="AudioStream" id=8]
 [ext_resource path="res://CheatCodeDetector.gd" type="Script" id=9]
 [ext_resource path="res://Sounds/Announcer/Mission Start/LetsParty.wav" type="AudioStream" id=10]
+[ext_resource path="res://MM2Font.tres" type="DynamicFont" id=11]
 
 [sub_resource type="GDScript" id=1]
 script/source = "extends Label
@@ -38,6 +39,9 @@ export var hasSubmenu = true;
 export(String) var submenuNode;
 
 func action():
+	#It has to be done on start/continue in case the player changed the language
+	Globals.load_stage_cutscenes()
+	
 	if Globals.load_player_game():
 		get_tree().change_scene(\"res://StageSelectV2/NewBossSelect.tscn\")
 	else:
@@ -125,6 +129,9 @@ func mouse_input(event):
 		var p = rect_position+n.rect_position
 		if event.position.y > p.y and event.position.y < p.y+n.rect_size.y:
 			if i==Globals.playerData.gameDifficulty:
+				
+				#It has to be done on start/continue in case the player changed the language
+				Globals.load_stage_cutscenes()
 				get_tree().change_scene(\"res://StageSelectV2/NewBossSelect.tscn\")
 			else:
 				parent.selectSound.play()
@@ -144,6 +151,8 @@ func input():
 		parent.selectSound.play()
 	elif Input.is_action_just_pressed(\"ui_select\") or Input.is_action_just_pressed(\"ui_pause\"):
 		#Globals.nextStage = \"res://Stages_Reina/Architect/StageArchitect.tscn\"
+		#It has to be done on start/continue in case the player changed the language
+		Globals.load_stage_cutscenes()
 		get_tree().change_scene(\"res://StageSelectV2/NewBossSelect.tscn\")
 	
 func OnCommand():
@@ -684,31 +693,32 @@ script = ExtResource( 1 )
 nsf_music = "MM2.nsf"
 nsf_track_num = 1
 
-[node name="Polygon2D" type="Polygon2D" parent="."]
-color = Color( 0, 0, 0, 1 )
-polygon = PoolVector2Array( 0, 0, 1280, 0, 1280, 720, 0, 720 )
-
-[node name="reina_logo" type="Sprite" parent="Polygon2D"]
-position = Vector2( 640, 86.76 )
-scale = Vector2( 2, 2 )
-texture = ExtResource( 5 )
-
-[node name="Label" type="Label" parent="Polygon2D"]
-margin_left = 706.935
-margin_top = 128.693
-margin_right = 813.935
-margin_bottom = 148.693
-custom_fonts/font = ExtResource( 6 )
-text = "Demo 2"
+[node name="logoHolder" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_min_size = Vector2( 1280, 720 )
+size_flags_horizontal = 3
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Disclaimer" type="Label" parent="Polygon2D"]
-margin_left = 633.272
-margin_top = 645.9
-margin_right = 1271.27
-margin_bottom = 711.9
+[node name="Panel" type="ColorRect" parent="logoHolder"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_min_size = Vector2( 1280, 720 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+color = Color( 0, 0, 0, 1 )
+
+[node name="Disclaimer" type="Label" parent="logoHolder"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -647.0
+margin_top = -60.0
+margin_right = -300.0
+margin_bottom = -100.0
 custom_fonts/font = ExtResource( 6 )
 text = "this is a free fan game!
 girls' frontline is property of mica"
@@ -717,6 +727,44 @@ valign = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Label" type="Label" parent="logoHolder"]
+anchor_left = 0.136
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_top = -230.0
+margin_bottom = -210.0
+custom_fonts/font = ExtResource( 6 )
+text = "Demo 2"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect" type="TextureRect" parent="logoHolder"]
+anchor_right = 1.0
+margin_right = -640.0
+margin_bottom = 85.0
+rect_min_size = Vector2( 640, 85 )
+rect_scale = Vector2( 2, 2 )
+size_flags_horizontal = 3
+size_flags_vertical = 8
+texture = ExtResource( 5 )
+expand = true
+stretch_mode = 4
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label2" type="Label" parent="logoHolder"]
+visible = false
+margin_left = 881.259
+margin_top = 482.675
+margin_right = 1275.26
+margin_bottom = 532.675
+custom_fonts/font = ExtResource( 11 )
+text = "dumb shit"
 
 [node name="MainMenu" type="VBoxContainer" parent="."]
 anchor_top = 1.0

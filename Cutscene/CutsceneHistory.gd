@@ -1,4 +1,4 @@
-extends Node2D
+extends Control
 
 onready var container = $ScrollContainer/GridContainer
 var font = preload("res://Cutscene/TextFont.tres")

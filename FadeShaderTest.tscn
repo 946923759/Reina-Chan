@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Cutscene/Backgrounds/17xh-Networld.png" type="Texture" id=1]
+[ext_resource path="res://ParticleEffects/FadeShader.tres" type="Material" id=2]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="17xh-Networld" type="Sprite" parent="."]
+material = ExtResource( 2 )
+position = Vector2( 614.484, 345.913 )
+texture = ExtResource( 1 )

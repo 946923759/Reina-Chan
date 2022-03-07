@@ -8,6 +8,7 @@
 script/source = "extends Node
 
 var rText = [
+	\"Live in your world. Date guns in ours.\",
 	\"Our code is chow mein just like MICA's\",
 	\"Don't stop, proceed. Because this is What U Need!\",
 	\"Not a real group name\",
@@ -39,6 +40,7 @@ func _ready():
 
 #warning-ignore:return_value_discarded
 func _on_AudioStreamPlayer_finished():
+	#return
 	var tween = $Tween
 	tween.interpolate_property($Sprite, \"modulate\", Color(1,1,1), Color(0,0,0), .5, Tween.TRANS_LINEAR, Tween.EASE_OUT)
 	tween.interpolate_property($Label, \"modulate\", Color(1,1,1), Color(0,0,0), .5, Tween.TRANS_LINEAR, Tween.EASE_OUT)
@@ -48,12 +50,32 @@ func _on_AudioStreamPlayer_finished():
 	get_tree().change_scene(\"res://BetaDisclaimer.tscn\")
 "
 
-[node name="Node2D" type="Node"]
+[node name="Node2D" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
 script = SubResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="Sprite" type="Sprite" parent="."]
+[node name="Panel" type="ColorRect" parent="."]
+modulate = Color( 0, 0, 0, 1 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Sprite" type="TextureRect" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -640.0
+margin_top = -360.0
+margin_right = 640.0
+margin_bottom = 360.0
 texture = ExtResource( 1 )
-centered = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 2 )
@@ -62,9 +84,10 @@ autoplay = true
 [node name="Tween" type="Tween" parent="."]
 
 [node name="Label" type="Label" parent="."]
-margin_top = 768.0
-margin_right = 1280.0
-margin_bottom = 800.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -32.0
 custom_fonts/font = ExtResource( 3 )
 text = "Lorem Ipsum"
 align = 1

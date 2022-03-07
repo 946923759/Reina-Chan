@@ -1,0 +1,16 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=2]
+
+[sub_resource type="Shader" id=1]
+code = "shader_type canvas_item;
+
+//uniform float gl_FragCoord;
+//uniform float ViewportHeight;
+
+void fragment(){
+	vec4 pixel_color = texture(TEXTURE,UV);
+	float clr = smoothstep(FRAGCOORD.y-20.0,FRAGCOORD.y+20.0,720.0/2.0);
+    COLOR = vec4(pixel_color.r, pixel_color.g, pixel_color.b, clr);
+}"
+
+[resource]
+shader = SubResource( 1 )

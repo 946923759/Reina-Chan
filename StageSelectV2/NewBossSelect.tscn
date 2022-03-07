@@ -29,11 +29,13 @@ var existing_children:int
 var reinaAudioPlayer
 func _ready():
 	CheckpointPlayerStats.clearEverything()
+	$Sprite.region_rect.size=Globals.gameResolution
+	
 	existing_children=get_child_count()
 	for i in range(whatever.size()):
 		var stage = whatever[i]
 		var p = portrait.instance()
-		p.position.x=320*(i%3+1)
+		p.position.x=Globals.SCREEN_CENTER_X/2*(i%3+1)
 		if i > 5:
 			p.position.y=548
 		elif i > 2:
@@ -51,7 +53,7 @@ func _ready():
 	setter(selection,false)
 
 func _input(event):
-	if event is InputEventMouseButton and event.pressed:
+	if (event is InputEventMouseButton and event.pressed) or (event is InputEventScreenTouch):
 		#print(\"Clicked at \"+String(event.position))
 		for i in range(existing_children,get_child_count()):
 			var n=get_child(i)

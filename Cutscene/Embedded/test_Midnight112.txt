@@ -1,4 +1,4 @@
-#BG 1,true black 1,true
+#BG	1,true black 1,true
 bg	0
 speaker	 
 msg	...Arrived at the first rendezvous point.

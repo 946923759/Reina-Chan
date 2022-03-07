@@ -1,16 +1,11 @@
 class_name smQuad
-extends Polygon2D
+extends ColorRect
 
 func setSize(size:Vector2):
-	polygon=PoolVector2Array([
-		Vector2(-size.x/2,-size.y/2),
-		Vector2(size.x/2,-size.y/2),
-		Vector2(size.x/2,size.y/2),
-		Vector2(-size.x/2,size.y/2)
-	])
+	rect_size=size
 
 func Center():
-	position=Globals.SCREEN_CENTER
+	rect_position=Globals.SCREEN_CENTER
 
 func hideActor(s:float):
 	var seq := TweenSequence.new(get_tree())
