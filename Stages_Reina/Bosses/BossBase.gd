@@ -7,6 +7,7 @@ export(DIRECTION) var facing = DIRECTION.LEFT
 var lastTouched
 var enabled:bool = false
 var curHP:int = 28 #All bosses in mega man have 28 health.
+var is_reflecting:bool=false
 onready var sprite:AnimatedSprite = $AnimatedSprite
 onready var HPBar = $CanvasLayer/bar
 onready var hurtSound = $HurtSound
@@ -83,6 +84,10 @@ func clearLastTouched(_obj):
 #We want an isAlive var so we can play the death animation only one time
 var isAlive = true
 func damage(amount):
+	#It turns out the boss can be shot through the walls sometimes
+	#so make sure you can't shoot it until it's enabled lol
+	if !enabled:
+		return
 	curHP -= amount
 	#print("Took damage!")
 	if curHP <= 0:

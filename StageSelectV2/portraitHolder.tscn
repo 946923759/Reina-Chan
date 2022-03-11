@@ -17,6 +17,7 @@ onready var tex = $Label
 func _ready():
 	hl.frame=0
 	$smQuad.setSize(Vector2(128,128))
+	$smQuad.rect_position=Vector2(-64,-64)
 	pass # Replace with function body.
 
 #var placeholder = load(\"res://StageSelectV2/comingSoon.png\")
@@ -59,9 +60,12 @@ animations = [ {
 position = Vector2( 640, 338 )
 script = SubResource( 1 )
 
-[node name="smQuad" type="Polygon2D" parent="."]
+[node name="smQuad" type="ColorRect" parent="."]
 color = Color( 0, 0, 0, 1 )
 script = ExtResource( 7 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="smSprite" type="Sprite" parent="."]
 texture = ExtResource( 1 )

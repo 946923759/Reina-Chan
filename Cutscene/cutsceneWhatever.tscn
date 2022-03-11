@@ -39,17 +39,17 @@ func getStuff(time:float)->String:
 #]
 var cutsceneInformation:PoolStringArray = [
 	\"preload_portraits Dier|pic_Alchemist|pic_Scarecrow\",
-	\"portrait Dier\",
-	\"matchnames AmWorks|Alchemist|Scarecrow\",
-	\"speaker AmWorks\",
-	\"msg So, did you enjoy the second demo? Hopefully it was worth the wait.\",
-	\"portrait Dier|pic_Alchemist\",
-	\"speaker Alchemist\",
-	\"msg /hl[1]We hope you enjoyed the upside-down castle. And certain boss battle moves.\",
-	\"msg Surely you've played other Capcom games, right?\",
-	\"speaker Scarecrow\",
-	\"portrait Dier|pic_Alchemist|pic_Scarecrow\",
-	\"msg /hl[2]See you soon for the next demo, featuring me.\"
+	\"portrait|Dier\",
+	\"matchnames|AmWorks|Alchemist|Scarecrow\",
+	\"speaker|AmWorks\",
+	\"msg|So, did you enjoy the second demo? Hopefully it was worth the wait.\",
+	\"portrait|Dier|pic_Alchemist\",
+	\"speaker|Alchemist\",
+	\"msg|/hl[1]We hope you enjoyed the upside-down castle. And certain boss battle moves.\",
+	\"msg|Surely you've played other Capcom games, right?\",
+	\"speaker|Scarecrow\",
+	\"portrait|Dier|pic_Alchemist|pic_Scarecrow\",
+	\"msg|/hl[2]See you soon for the next demo, featuring me.\"
 ]
 
 

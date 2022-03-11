@@ -27,7 +27,10 @@ enum OPCODES {
 	CONDJMP_CHOICE, #Oh no
 	CONDJMP_NOT_EQUAL_LANG,
 	CONDJMP_EQUAL_LANG,
+	LABEL, #It's like JMP, but for people who don't like math /jk
+	JMPLABEL,
 	JMP,
+	LONGJMP,
 	NOP #It's needed so jumps are accurate
 	}
 
@@ -67,6 +70,15 @@ func parse_string_array(arr,delimiter:String="|",msgColumn:int=1):
 	message = []
 	for s in arr:
 		var splitString = s.split(delimiter) #,true,1
+		if splitString[0].begins_with('/'): #Chaosoup's idea, since typing two opcodes every time was getting obnoxious
+			message.push_back([OPCODES.SPEAKER,splitString[0].substr(1)])
+			if msgColumn > splitString.size()-1:
+				print("Hey moron, you're missing the translation for this line: "+String(splitString))
+				message.push_back([OPCODES.MSG,splitString[1]])
+			else:
+				message.push_back([OPCODES.MSG,splitString[msgColumn]])
+			#message.push_back([OPCODES.MSG,splitString[1]])
+			continue
 		match splitString[0]:
 			'msg':
 				if msgColumn > splitString.size()-1:
@@ -123,6 +135,8 @@ func parse_string_array(arr,delimiter:String="|",msgColumn:int=1):
 				message.push_back([OPCODES.CHOICE,newCmd])
 			"jmp":
 				message.push_back([OPCODES.JMP,int(splitString[1])])
+			"longjmp":
+				message.push_back([OPCODES.LONGJMP,int(splitString[1])])
 			"condjmp_c":
 				message.push_back([OPCODES.CONDJMP_CHOICE,int(splitString[1]),int(splitString[2])])
 			_:
@@ -317,6 +331,8 @@ func advance_text()->bool:
 				pass
 			OPCODES.JMP:
 				curPos+=curMessage[1]
+			OPCODES.LONGJMP:
+				curPos=curMessage[1]-1
 			OPCODES.CONDJMP_CHOICE:
 				print("Processing CONDJUMP")
 				if curMessage[2]==choiceResult:

@@ -17,6 +17,8 @@ enum STATES {
 var curState = 0
 export (float,.2,2,.1) var moveAfter=.7
 
+onready var player = get_node_or_null(\"/root/Node2D/Player\")
+
 #var g = preload(\"res://Stages_Reina/Enemies/EnemyGrenade.tscn\")
 var g = preload(\"res://Stages_Reina/Enemies/VespidBrideFlowers.tscn\")
 
@@ -50,7 +52,10 @@ func _physics_process(delta):
 			var pos = position + Vector2(15*facing, -16)
 			bi.position = pos
 			get_parent().add_child(bi)
-			bi.init(facing)
+			var v = Vector2((randi()%2+2)*facing,(randi()%2)-8)
+			if player and abs(player.global_position.x - global_position.x) > 400:
+				v = Vector2((randi()%4+4)*facing,(randi()%2)-3)
+			bi.init(facing,v)
 			self.add_collision_exception_with(bi)# Make bullet and this not collide
 			
 			curState=STATES.START

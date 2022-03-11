@@ -78,3 +78,5 @@ custom_fonts/font = ExtResource( 2 )
 text = "This is a test object."
 align = 1
 valign = 1
+
+[node name="Tween" type="Tween" parent="."]

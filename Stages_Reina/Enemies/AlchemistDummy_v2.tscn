@@ -30,7 +30,8 @@ const motionBlur = preload(\"res://ParticleEffects/MotionBlur.tres\")
 const glow = preload(\"res://ParticleEffects/GlowShader.tres\")
 
 #YEP, HERE WE GO AGAIN
-const bullet = preload(\"res://Stages_Reina/Enemies/bulletDinergate.tscn\")
+const bullet = preload(\"res://Stages_Reina/Enemies/EnemyChargeShot.tscn\")
+#const bullet = preload(\"res://Stages_Reina/Enemies/bulletDinergate.tscn\")
 var pumpkin = preload(\"res://Stages_Reina/Bosses/Alchemist/PumpkinBomb.tscn\")
 
 onready var dg = get_node(\"dg\")
@@ -153,6 +154,7 @@ func _physics_process(delta):
 			sprite.get_material().set_shader_param(\"dir\", Vector2(decelerate*.05,0))
 			warpAnimationProgress-=delta
 		STATE.DASHING:
+			#Stop early if touched a wall
 			if warpAnimationProgress<=0 or is_on_wall() or !is_on_floor():
 				warpAnimationProgress=.2
 				curState=STATE.UPPERCUT
@@ -164,7 +166,7 @@ func _physics_process(delta):
 			sprite.set_animation(\"jump\")
 			if warpAnimationProgress<.4 and is_on_floor():
 				#warpAnimationProgress=.2
-				sprite.set_animation(\"shoot\")
+				sprite.set_animation(\"twoShoot\")
 				warpAnimationProgress=1.0
 				curState=STATE.SHOOT
 			tempVelocity=move_and_slide(tempVelocity,Vector2(0,-1),true)
@@ -178,17 +180,19 @@ func _physics_process(delta):
 				sprite.frame=0
 				sprite.playing=false
 				curState=STATE.FADEOUT
-			elif sprite.frame==1 and !justShot:
+			elif (sprite.frame==2 or sprite.frame==5):
+				if justShot:
+					return
 				var bi = bullet.instance()
-				var pos = position + Vector2(30*facing, -16)
+				var pos = position + Vector2(30*facing, 0)
 				
 				bi.position = pos
 				get_parent().add_child(bi)
-				bi.init(Vector2(5*facing,0))
+				bi.init(facing)
 				
-				self.add_collision_exception_with(bi)# Make bullet and this not collide
+				#self.add_collision_exception_with(bi)# Make bullet and this not collide
 				justShot=true
-			elif sprite.frame!=1:
+			else:
 				justShot=false
 			warpAnimationProgress-=delta
 				
@@ -223,14 +227,14 @@ script = SubResource( 1 )
 
 [node name="AnimatedSprite" parent="." index="1"]
 frames = ExtResource( 2 )
-animation = "throw"
-frame = 3
+animation = "shootready"
+frame = 4
 offset = Vector2( -2, 0 )
 
 [node name="DebugLabel" parent="." index="7"]
-text = "animation = \"throw\"
+text = "animation = \"shootready\"
 playing = false
-frame = 3
+frame = 4
 "
 properties = PoolStringArray( "animation", "playing", "frame" )
 

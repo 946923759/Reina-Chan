@@ -21,19 +21,21 @@ func _ready():
 	#init(-1)
 	pass
 	
-func init(direction):
+func init(direction,velo):
 	sprite.playing=true
 	sprite.flip_h=(direction==1)
-	velocity=Vector2((randi()%2+2)*direction,(randi()%2)-8)
+	velocity=velo
 	startingPosition=global_position
 	set_physics_process(true)
 	
 func _physics_process(delta):
 	var collision=move_and_collide(velocity)
 	if raycast.is_colliding():
+		#print(\"AAAABBBB\")
 		collision = raycast
-	elif collision:
+	if collision:
 		var obj = collision.get_collider()
+		#print(obj)
 		if obj.has_method(\"player_touched\"): #If enemy touched player
 			obj.call(\"player_touched\",self,1)
 		killSelf()

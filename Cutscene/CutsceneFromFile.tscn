@@ -120,10 +120,13 @@ func _ready():
 			var kv = arg.split(\"=\")
 			if kv[0]==\"--cutscene\":
 				Globals.nextCutscene=kv[1]
+				print(\"Set cutscene to \"+kv[1])
 				break
-	cutsceneData = load_cutscene_data(\"choicesTest.txt\")
-	#cutsceneData = load_cutscene_data(\"test_Midnight112.txt\")
-	#cutsceneData = load_cutscene_data(Globals.nextCutscene)
+				
+	cutsceneData = load_cutscene_data(Globals.nextCutscene)
+	#if OS.is_debug_build():
+	#	cutsceneData = load_cutscene_data(\"lol.txt\")
+		#cutsceneData = load_cutscene_data(\"test_Midnight112.txt\")
 	if cutsceneData.size()==0:
 		#var e = load(\"res://savedataError.tscn\").instance()
 		#e.setNewText(\"The cutscene failed to load.\")

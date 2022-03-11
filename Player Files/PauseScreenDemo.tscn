@@ -15,7 +15,10 @@ func _ready():
 	#set_process(false)
 	set_process_input(false)
 	#print(INITrans.GetString(\"PauseMenu\",\"DebugHelp\"))
-	$m/debugHelp.text = INITrans.GetString(\"PauseMenu\",\"DebugHelp\").replace(\"\\\\n\",\"\\n\")
+	if OS.is_debug_build():
+		$m/debugHelp.text = INITrans.GetString(\"PauseMenu\",\"DebugHelp\").replace(\"\\\\n\",\"\\n\")
+	else:
+		$m/debugHelp.visible=false
 	
 	if INITrans.currentLanguage!=\"en\":
 		#if INITrans.currentLanguageType!=INITrans.LanguageType.ASCII:
@@ -72,7 +75,7 @@ func _input(_ev):
 		optList.get_child(pos).modulate=Color(1,1,1,1)
 		pos-=1
 		optList.get_child(pos).modulate =Color(0.21,0.63,1,1)
-	elif Input.is_action_just_pressed(\"ui_down\") and pos < 2:
+	elif Input.is_action_just_pressed(\"ui_down\") and pos < 3:
 		optList.get_child(pos).modulate=Color(1,1,1,1)
 		pos+=1
 		optList.get_child(pos).modulate =Color(0.21,0.63,1,1)
@@ -99,6 +102,16 @@ func _input(_ev):
 			#Globals.save_system_data() #Not sure why this is here
 			get_tree().paused = false
 # warning-ignore:return_value_discarded
+			get_tree().change_scene(\"res://StageSelectV2/NewBossSelect.tscn\")
+		elif pos==3:
+			$Fadeout.visible = true
+			$Fadeout_Tween.interpolate_property($Fadeout, \"modulate\", Color(0,0,0,0), Color(0,0,0,1), .5, Tween.TRANS_LINEAR, Tween.EASE_OUT)
+			$Fadeout_Tween.start()
+			yield($Fadeout_Tween,\"tween_completed\")
+			Globals.save_player_game()
+			#Globals.save_system_data() #Not sure why this is here
+			get_tree().paused = false
+# warning-ignore:return_value_discarded
 			get_tree().change_scene(\"res://TitleScreenV2.tscn\")
 	elif Input.is_action_just_pressed(\"DebugButton1\"):
 		if Globals.playerData.gameDifficulty < len(Globals.Difficulty)-1:
@@ -112,15 +125,35 @@ func _input(_ev):
 pause_mode = 2
 script = SubResource( 1 )
 
-[node name="m" type="Node2D" parent="."]
+[node name="m" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="bg" type="Polygon2D" parent="m"]
+visible = false
 color = Color( 0, 0, 0, 0.658824 )
 polygon = PoolVector2Array( 0, 0, 1280, 0, 1280, 720, 0, 720 )
 
+[node name="ColorRect" type="ColorRect" parent="m"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 0.658824 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="CenterContainer" type="CenterContainer" parent="m"]
-margin_right = 1280.0
-margin_bottom = 720.0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -640.0
+margin_top = -360.0
+margin_right = 640.0
+margin_bottom = 360.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -184,10 +217,11 @@ __meta__ = {
 }
 
 [node name="Label" type="Label" parent="m"]
-margin_left = 11.1118
-margin_top = 645.326
-margin_right = 1040.11
-margin_bottom = 711.326
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = -75.0
+margin_right = 1029.0
 custom_fonts/font = ExtResource( 2 )
 text = "tip: Press select plus down while paused to quickly retry.
 quick retry still costs 1 life.
@@ -197,10 +231,12 @@ __meta__ = {
 }
 
 [node name="timerLabel" type="Label" parent="m"]
-margin_left = 389.175
-margin_top = 28.0914
-margin_right = 900.175
-margin_bottom = 140.091
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -255.5
+margin_top = 25.0
+margin_right = 255.5
+margin_bottom = 112.0
 custom_fonts/font = ExtResource( 2 )
 text = "YOUR TIME SO FAR:
 00:00.000
@@ -214,10 +250,12 @@ __meta__ = {
 }
 
 [node name="debugHelp" type="Label" parent="m"]
-margin_left = 622.59
-margin_top = 63.7273
-margin_right = 1276.59
-margin_bottom = 175.727
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -654.0
+margin_top = 70.0
+margin_right = -10.0
+margin_bottom = 112.0
 custom_fonts/font = ExtResource( 2 )
 text = "Debug: Press F1 to
 cycle difficulty."
@@ -228,10 +266,12 @@ __meta__ = {
 }
 
 [node name="currentDifficulty" type="Label" parent="m"]
-margin_left = 620.809
-margin_top = 4.92802
-margin_right = 1274.81
-margin_bottom = 116.928
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -654.001
+margin_top = 10.0
+margin_right = -10.0
+margin_bottom = 112.0
 custom_fonts/font = ExtResource( 2 )
 text = "??? mode"
 align = 2

@@ -1,0 +1,14 @@
+#BG	base
+portrait	pic_RO635Mod
+nop	/RO635	Hello, I'm a single speaker and message command!
+/RO635	Commander... Out of all the T-Dolls in the base, which one do you like the most?
+choice	Suomi ('s ass)	You. (Persica did a great job, by the way)
+condjmp_c	5	2
+nop	portrait	
+msg	Hmm? That's an... Interesting choice. I suppose. Is there any particular reason for that?
+choice	It's a secret.
+msg	.....Alright.
+jmp	1
+msg	Oh, is that so? Thank you, commander.
+msg	asdasdadsadsad (Jump back to the beginning)
+longjmp	2

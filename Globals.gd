@@ -242,7 +242,7 @@ var stage_cutscene_data:Dictionary = {}
 
 func load_stage_cutscenes()->bool:
 	var f = File.new()
-	var path = "res://Cutscene/"
+	var path = "res://Cutscene/Embedded/"
 	match OS.get_name():
 		"Windows","X11","macOS":
 			if OS.has_feature("standalone"):
@@ -251,6 +251,7 @@ func load_stage_cutscenes()->bool:
 	var ok = f.open(path+"stage_cutscenes.txt", File.READ)
 	if ok != OK:
 		printerr("Couldn't open the stage cutscenes! Ya done fucked it up! ERROR ", ok)
+		printerr(path)
 		return false
 	
 	var langs = ["en","es","kr","ja","zh"]
@@ -288,6 +289,8 @@ func load_stage_cutscenes()->bool:
 func get_stage_cutscene(key:String):
 	if stage_cutscene_data.size() == 0:
 		load_stage_cutscenes()
+	if !(key in stage_cutscene_data):
+		return stage_cutscene_data['error']
 	return stage_cutscene_data[key]
 
 func _ready():

@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/Mega Man 6 SRX (34) - Maybe Charge Shot.wav-6993b075de09eb11f09faa2f693d1fba.sample"
+
+[deps]
+
+source_file="res://Sounds/Classic/Mega Man 6 SRX (34) - Maybe Charge Shot.wav"
+dest_files=[ "res://.import/Mega Man 6 SRX (34) - Maybe Charge Shot.wav-6993b075de09eb11f09faa2f693d1fba.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0
