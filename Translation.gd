@@ -42,7 +42,7 @@ func _getDictionary(path:String)->Dictionary:
 			#print(line)
 			var kv = line.split("=",true,1)
 			#print(kv[1])
-			d[lastCategory][kv[0]]=kv[1]
+			d[lastCategory][kv[0]]=kv[1].replace("\\n","\n")
 	f.close() #
 	return d
 		

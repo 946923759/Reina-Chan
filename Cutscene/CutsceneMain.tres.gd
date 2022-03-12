@@ -527,7 +527,9 @@ func _process(delta):
 	
 #Fucking piece of shit game engine
 func _input(event):
-	if event is InputEventMouseButton and event.is_pressed() and event.button_index == BUTTON_LEFT:
+	if (event is InputEventMouseButton and event.is_pressed() and event.button_index == BUTTON_LEFT) or (
+		event is InputEventScreenTouch and event.is_pressed()
+	):
 		manualTriggerForward=true
 	if event is InputEventKey and event.is_pressed() and event.scancode == KEY_1:
 		if isHistoryBeingShown:

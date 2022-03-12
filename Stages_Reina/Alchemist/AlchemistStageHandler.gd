@@ -35,8 +35,7 @@ export (Array,Vector2) var debug_warp_points
 var reinaAudioPlayer
 
 func _ready():
-	#I don't know why this keeps resetting but I'm sick of it
-	#$ParallaxBackground2/moon2.position.x=99999
+	get_tree().set_screen_stretch(SceneTree.STRETCH_MODE_2D,SceneTree.STRETCH_ASPECT_KEEP,Vector2(1280,720))
 	
 	#set_process(true)
 	if CheckpointPlayerStats.checkpointSet:

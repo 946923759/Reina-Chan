@@ -7,6 +7,17 @@ var newPosition;
 #In case we touch a checkpoint before the tweening is finished.
 var destPositions:Array
 
+#So we can't really use the game's resolution because
+#it changes and during a stage we just set it to black
+#bars on the side
+#Having a global var for the resolution doesn't
+#make any sense anyways because it can change
+#every screen
+const SCREEN_WIDTH:int = 1280
+const SCREEN_HEIGHT:int = 720
+const SCREEN_CENTER_X = SCREEN_WIDTH/2
+const SCREEN_CENTER_Y = SCREEN_HEIGHT/2
+
 func _ready():
 	set_process(true)
 	destPositions=[cam.limit_left, cam.limit_top, cam.limit_right, cam.limit_bottom]
@@ -29,10 +40,10 @@ func adjustCamera(np,secs):
 		
 		#lock the camera to the current position so the tween works correctly
 		var cPos = cam.get_camera_screen_center()
-		cam.limit_left = cPos.x - Globals.SCREEN_CENTER_X
-		cam.limit_right = cPos.x + Globals.SCREEN_CENTER_X
-		cam.limit_top = cPos.y - Globals.SCREEN_CENTER_Y
-		cam.limit_bottom = cPos.y + Globals.SCREEN_CENTER_Y
+		cam.limit_left = cPos.x - SCREEN_CENTER_X
+		cam.limit_right = cPos.x + SCREEN_CENTER_X
+		cam.limit_top = cPos.y - SCREEN_CENTER_Y
+		cam.limit_bottom = cPos.y + SCREEN_CENTER_Y
 		
 		#seq._tween.pause_mode = Node.PAUSE_MODE_PROCESS
 		is_tweening=true
@@ -41,11 +52,11 @@ func adjustCamera(np,secs):
 		# left+right is larger than the size of the screen. So we have to tween it one
 		# screen over and then set it to the destination.
 		if np[0] < limit_left: #Camera is moving left?
-			seq.append(           cam,'limit_left',  cam.limit_left-Globals.gameResolution.x,secs).set_trans(Tween.TRANS_QUAD)
+			seq.append(           cam,'limit_left',  cam.limit_left-SCREEN_WIDTH,secs).set_trans(Tween.TRANS_QUAD)
 			seq.parallel().append(cam,'limit_right', np[2],secs).set_trans(Tween.TRANS_QUAD)
 		elif np[0] > limit_left: #Camera is moving right?
 			seq.append(           cam,'limit_left',  np[0],secs).set_trans(Tween.TRANS_QUAD)
-			seq.parallel().append(cam,'limit_right', cam.limit_right+Globals.gameResolution.x,secs).set_trans(Tween.TRANS_QUAD)
+			seq.parallel().append(cam,'limit_right', cam.limit_right+SCREEN_WIDTH,secs).set_trans(Tween.TRANS_QUAD)
 		else: #Left border didn't change at all, just tween right border
 			seq.append(cam,'limit_right', np[2],secs).set_trans(Tween.TRANS_QUAD)
 			#cam.limit_left = destPositions[0]
@@ -54,9 +65,9 @@ func adjustCamera(np,secs):
 		if np[0] == limit_left and np[2]== limit_right: #If only top and bottom is being adjusted...
 			if np[1] > limit_top: #Camera moving down?
 				seq.parallel().append(cam,'limit_top',   np[1],secs).set_trans(Tween.TRANS_QUAD)
-				seq.parallel().append(cam,'limit_bottom',limit_bottom+Globals.gameResolution.y,secs).set_trans(Tween.TRANS_QUAD)
+				seq.parallel().append(cam,'limit_bottom',limit_bottom+SCREEN_HEIGHT,secs).set_trans(Tween.TRANS_QUAD)
 			else: #Camera moving up?
-				seq.parallel().append(cam,'limit_top',  limit_top-Globals.gameResolution.y,secs).set_trans(Tween.TRANS_QUAD)
+				seq.parallel().append(cam,'limit_top',  limit_top-SCREEN_HEIGHT,secs).set_trans(Tween.TRANS_QUAD)
 				seq.parallel().append(cam,'limit_bottom',np[3],secs).set_trans(Tween.TRANS_QUAD)
 		else:
 			seq.parallel().append(cam,'limit_top',   np[1],secs).set_trans(Tween.TRANS_QUAD)

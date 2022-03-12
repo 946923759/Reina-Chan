@@ -107,12 +107,13 @@ func _physics_process(delta):
 			if (sprite.frame==2 or sprite.frame==5):
 				if justShot:
 					return
-				var bi = bullet.instance()
-				var pos = position + Vector2(30*facing, 0)
+				if Globals.playerData.gameDifficulty > Globals.Difficulty.EASY or sprite.frame==5:
+					var bi = bullet.instance()
+					var pos = position + Vector2(30*facing, 0)
 				
-				bi.position = pos
-				get_parent().add_child(bi)
-				bi.init(facing)
+					bi.position = pos
+					get_parent().add_child(bi)
+					bi.init(facing)
 				
 				#self.add_collision_exception_with(bi)# Make bullet and this not collide
 				justShot=true

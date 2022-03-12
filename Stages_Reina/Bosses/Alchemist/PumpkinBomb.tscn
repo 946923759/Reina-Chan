@@ -6,14 +6,20 @@
 [sub_resource type="GDScript" id=1]
 script/source = "extends KinematicBody2D
 
-const speed:float = -5.0
-const bounciness:float = -10.0
+var speed:float = -5.0
+var bounciness:float = -10.0
 
 var expl = preload(\"res://Stages/EnemyExplosion.tscn\")
 onready var raycast = $RayCast2D
 var num_bounced:int = 0
 
 var velocity:Vector2 = Vector2(speed,5)
+
+func _ready():
+	if Globals.playerData.gameDifficulty < Globals.Difficulty.MEDIUM:
+		bounciness/=2
+		speed/=2
+
 func _physics_process(delta):
 	
 	var collision = move_and_collide(velocity)

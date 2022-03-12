@@ -33,7 +33,8 @@ func _ready():
 		show_error()
 		return
 	"""
-	
+	$ColorRect.rect_size=Globals.gameResolution
+	$ColorRect2.rect_size.x=Globals.gameResolution.x
 	set_process(false)
 
 func done():

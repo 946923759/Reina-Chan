@@ -29,6 +29,8 @@ var existing_children:int
 var reinaAudioPlayer
 func _ready():
 	CheckpointPlayerStats.clearEverything()
+	
+	get_tree().set_screen_stretch(SceneTree.STRETCH_MODE_2D,SceneTree.STRETCH_ASPECT_EXPAND,Vector2(1280,720))
 	$Sprite.region_rect.size=Globals.gameResolution
 	
 	existing_children=get_child_count()
@@ -49,11 +51,11 @@ func _ready():
 			p.init(stage[0],stage[1])
 	pass
 	reinaAudioPlayer=Globals.ReinaAudioPlayer.new(self)
-	reinaAudioPlayer.load_song(\"StageSelect\",\"Rockman 4MI.nsf\",16)
+	reinaAudioPlayer.load_song(\"StageSelect\",\"Mega Man 10 (recreated).nsf\",8)
 	setter(selection,false)
 
 func _input(event):
-	if (event is InputEventMouseButton and event.pressed) or (event is InputEventScreenTouch):
+	if (event is InputEventMouseButton and event.pressed) or (event is InputEventScreenTouch and event.pressed):
 		#print(\"Clicked at \"+String(event.position))
 		for i in range(existing_children,get_child_count()):
 			var n=get_child(i)
@@ -73,6 +75,8 @@ func _input(event):
 				return
 	elif Input.is_action_pressed(\"ui_pause\") or Input.is_action_pressed(\"ui_select\"):
 		input_accept()
+	elif Input.is_action_just_pressed(\"ui_cancel\") or (event is InputEventScreenTouch and event.index==1):
+		get_tree().change_scene(\"res://TitleScreenV2.tscn\")
 	elif Input.is_action_just_pressed(\"ui_up\"):
 		if selection > 2:
 			setter(selection-3)

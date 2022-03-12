@@ -12,7 +12,6 @@ func _ready():
 	optList.get_child(0).modulate =Color(0.21,0.63,1,1)
 	$m.modulate.a=0
 	$m.visible=true
-	#set_process(false)
 	set_process_input(false)
 	#print(INITrans.GetString(\"PauseMenu\",\"DebugHelp\"))
 	if OS.is_debug_build():
@@ -26,6 +25,7 @@ func _ready():
 			child.set(\"custom_fonts/font\",INITrans.font)
 			child.text=INITrans.GetString(\"PauseMenu\",child.text)
 	#OnCommand()
+	#print($m/CenterContainer/VBoxContainer/Label.rect_global_position)
 
 var time
 func updateTimer(time,timeWithDeath):
@@ -64,6 +64,18 @@ var pos = 0
 func _input(_ev):
 	if _ev is InputEventJoypadMotion or _ev is InputEventMouseMotion: #XInput controllers are broken on Windows :P
 		return
+	elif (_ev is InputEventMouseButton and _ev.pressed) or (_ev is InputEventScreenTouch and _ev.pressed):
+		var opts = $m/CenterContainer/VBoxContainer
+		for i in range(opts.get_child_count()):
+			var node = opts.get_child(i)
+			if _ev.position.y > node.rect_global_position.y and _ev.position.y < node.rect_global_position.y + 50:
+				if pos==i:
+					input_accept()
+				else:
+					optList.get_child(pos).modulate=Color(1,1,1,1)
+					pos = i
+					optList.get_child(pos).modulate =Color(0.21,0.63,1,1)
+				break
 	if Input.is_action_pressed(\"ui_shift\") and Input.is_action_just_pressed(\"ui_down\"):
 		get_tree().paused = false
 		CheckpointPlayerStats.playerLivesLeft-=1
@@ -82,43 +94,46 @@ func _input(_ev):
 	elif Input.is_action_just_pressed(\"ui_cancel\"):
 		OffCommand()
 	elif Input.is_action_just_pressed(\"ui_select\"):
-		if pos==0:
-			OffCommand()
-		elif pos==1:
-			CheckpointPlayerStats.setDeathTimer(time)
-			$Fadeout.visible = true
-			$Fadeout_Tween.interpolate_property($Fadeout, \"modulate\", Color(0,0,0,0), Color(0,0,0,1), .5, Tween.TRANS_LINEAR, Tween.EASE_OUT)
-			$Fadeout_Tween.start()
-			yield($Fadeout_Tween,\"tween_completed\")
-			get_tree().paused = false
-# warning-ignore:return_value_discarded
-			get_tree().reload_current_scene()
-		elif pos==2:
-			$Fadeout.visible = true
-			$Fadeout_Tween.interpolate_property($Fadeout, \"modulate\", Color(0,0,0,0), Color(0,0,0,1), .5, Tween.TRANS_LINEAR, Tween.EASE_OUT)
-			$Fadeout_Tween.start()
-			yield($Fadeout_Tween,\"tween_completed\")
-			Globals.save_player_game()
-			#Globals.save_system_data() #Not sure why this is here
-			get_tree().paused = false
-# warning-ignore:return_value_discarded
-			get_tree().change_scene(\"res://StageSelectV2/NewBossSelect.tscn\")
-		elif pos==3:
-			$Fadeout.visible = true
-			$Fadeout_Tween.interpolate_property($Fadeout, \"modulate\", Color(0,0,0,0), Color(0,0,0,1), .5, Tween.TRANS_LINEAR, Tween.EASE_OUT)
-			$Fadeout_Tween.start()
-			yield($Fadeout_Tween,\"tween_completed\")
-			Globals.save_player_game()
-			#Globals.save_system_data() #Not sure why this is here
-			get_tree().paused = false
-# warning-ignore:return_value_discarded
-			get_tree().change_scene(\"res://TitleScreenV2.tscn\")
+		input_accept()
 	elif Input.is_action_just_pressed(\"DebugButton1\"):
 		if Globals.playerData.gameDifficulty < len(Globals.Difficulty)-1:
 			Globals.playerData.gameDifficulty+=1
 		else:
 			Globals.playerData.gameDifficulty=0
 		OnCommand()
+
+func input_accept():
+	if pos==0:
+		OffCommand()
+	elif pos==1:
+		CheckpointPlayerStats.setDeathTimer(time)
+		$Fadeout.visible = true
+		$Fadeout_Tween.interpolate_property($Fadeout, \"modulate\", Color(0,0,0,0), Color(0,0,0,1), .5, Tween.TRANS_LINEAR, Tween.EASE_OUT)
+		$Fadeout_Tween.start()
+		yield($Fadeout_Tween,\"tween_completed\")
+		get_tree().paused = false
+# warning-ignore:return_value_discarded
+		get_tree().reload_current_scene()
+	elif pos==2:
+		$Fadeout.visible = true
+		$Fadeout_Tween.interpolate_property($Fadeout, \"modulate\", Color(0,0,0,0), Color(0,0,0,1), .5, Tween.TRANS_LINEAR, Tween.EASE_OUT)
+		$Fadeout_Tween.start()
+		yield($Fadeout_Tween,\"tween_completed\")
+		Globals.save_player_game()
+		#Globals.save_system_data() #Not sure why this is here
+		get_tree().paused = false
+# warning-ignore:return_value_discarded
+		get_tree().change_scene(\"res://StageSelectV2/NewBossSelect.tscn\")
+	elif pos==3:
+		$Fadeout.visible = true
+		$Fadeout_Tween.interpolate_property($Fadeout, \"modulate\", Color(0,0,0,0), Color(0,0,0,1), .5, Tween.TRANS_LINEAR, Tween.EASE_OUT)
+		$Fadeout_Tween.start()
+		yield($Fadeout_Tween,\"tween_completed\")
+		Globals.save_player_game()
+		#Globals.save_system_data() #Not sure why this is here
+		get_tree().paused = false
+# warning-ignore:return_value_discarded
+		get_tree().change_scene(\"res://TitleScreenV2.tscn\")
 "
 
 [node name="PauseScreen" type="CanvasLayer"]
@@ -133,7 +148,6 @@ __meta__ = {
 }
 
 [node name="bg" type="Polygon2D" parent="m"]
-visible = false
 color = Color( 0, 0, 0, 0.658824 )
 polygon = PoolVector2Array( 0, 0, 1280, 0, 1280, 720, 0, 720 )
 
