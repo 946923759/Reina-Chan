@@ -1,7 +1,5 @@
 extends Node2D
 
-var weapon_to_unlock = Globals.Weapons.Alchemist
-
 #You CANNOT EDIT THESE VALUES IN THE SCRIPT!!!!
 #Because this script is overriding a base scene
 #you still need to edit the exported values in the node
@@ -29,6 +27,8 @@ export (int) var nsf_track_num_pt2 = 0
 
 export (bool) var mute_music_in_debug=false
 export (bool) var mute_boss_music_in_debug=false
+
+export (Globals.Weapons) var weapon_to_unlock=0
 
 export (Array,Vector2) var debug_warp_points
 

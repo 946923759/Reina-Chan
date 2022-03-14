@@ -75,6 +75,12 @@ enum Weapons {
 	Alchemist,
 	Scarecrow
 }
+var stagesToString = [ #Yeah it's stupid
+	"Buster",
+	"Architect",
+	"Alchemist",
+	"Scarecrow"
+]
 
 var playerData={
 	gameDifficulty = Difficulty.EASY,
@@ -117,7 +123,8 @@ func difficultyToString(d=playerData.gameDifficulty)->String:
 # Either that or weapon energy is a different number for each weapon... Idk lol
 var weaponEnergyCost = [
 	0,
-	9 #144/9 = 16 uses
+	9, #144/9 = 16 uses
+	6  #24 uses for dash
 ]
 
 var weaponColorSwaps = [
@@ -133,9 +140,9 @@ var weaponColorSwaps = [
 		Color(1,.51,.51)
 		
 	],
-	[ #Architect
-		Color(.918,.698,.369),
-		Color(.918,.788,.060)
+	[ #Alchemist
+		Color(.964,.556,.19),
+		Color(1,.718,.522)
 	]
 ]
 
@@ -438,7 +445,7 @@ class ReinaAudioPlayer:
 		audioStreamPlayer=node.get_node("AudioStreamPlayer")
 	
 	func load_song(custom_music_name:String, nsf_music_file:String, nsf_track_num:int,nsf_volume_adjustment:float=0):
-		
+		#return
 		var music = Globals.get_custom_music(custom_music_name) if custom_music_name != "" else null
 		if music != null:
 			print("Attempting to load "+music)
@@ -456,6 +463,7 @@ class ReinaAudioPlayer:
 				
 			nsf_player = Globals.nsf_player
 			if !added_nsf_player:
+				print("adding NSF player")
 				node.add_child(nsf_player);
 				nsf_player.set_pause_mode(2) #Node.PAUSE_MODE_PROCESS
 				added_nsf_player=true
@@ -495,8 +503,9 @@ class ReinaAudioPlayer:
 			seq.append_callback(audioStreamPlayer,"stop")
 			
 	func stop_music():
+		#return
 		#print("Stopping ReinaAudioPlayer")
-		if nsf_player != null:
+		if added_nsf_player and is_instance_valid(Globals.nsf_player):
 			#print("Stopped NSF")
 			nsf_player.stop_music()
 		else:

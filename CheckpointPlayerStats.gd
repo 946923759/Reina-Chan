@@ -54,3 +54,4 @@ func clearEverything():
 	checkpointSet=false
 	playerLivesLeft=3
 	shouldFaceLeft=false
+	lastPlayedStage=0

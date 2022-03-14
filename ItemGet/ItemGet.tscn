@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://starfilter.png" type="Texture" id=1]
 [ext_resource path="res://ItemGet/bottom.png" type="Texture" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://Character Sprites/ump9/ump9.tres" type="SpriteFrames" id=5]
 [ext_resource path="res://ParticleEffects/PaletteSwapShader.gdshader" type="Shader" id=6]
 [ext_resource path="res://MM2Font.tres" type="DynamicFont" id=7]
+[ext_resource path="res://Music/ItemGet.ogg" type="AudioStream" id=8]
 
 [sub_resource type="GDScript" id=1]
 script/source = "extends Node2D
@@ -28,13 +29,19 @@ func _ready():
 	bottom.position.y=Globals.SCREEN_CENTER_Y
 	top.position.y=Globals.SCREEN_CENTER_Y-160*4
 	l.visible_characters=0
-	var text = INITrans.GetString(\"Weapons\",\"YOU GOT\") % [INITrans.GetString(\"Weapons\",\"ArchitectFull\")]
+	if INITrans.currentLanguageType!=INITrans.LanguageType.ASCII:
+		$Label.set(\"custom_fonts/font\",INITrans.font)
+	var text = INITrans.GetString(\"Weapons\",\"YOU GOT\") % [INITrans.GetString(\"Weapons\",Globals.stagesToString[CheckpointPlayerStats.lastPlayedStage]+\"Full\")]
 	l.text=text
 	
-	newColor = Globals.weaponColorSwaps[1]
+	newColor = Globals.weaponColorSwaps[CheckpointPlayerStats.lastPlayedStage]
+	
+	#Globals.nsf_player = FLMusicLib.new();
+	#Globals.nsf_player = FLMusicLib.new();
+	#Globals.nsf_player = FLMusicLib.new();
 	
 	reinaAudioPlayer=Globals.ReinaAudioPlayer.new(self)
-	reinaAudioPlayer.load_song(\"ItemGet\",\"Kirby.nsf\",20)
+	#reinaAudioPlayer.load_song(\"ItemGet\",\"Mega Man 10 (recreated).nsf\",20)
 	#return
 	#bottom.region_rect.position.y=120
 	#var t = $Tween
@@ -60,8 +67,9 @@ func _process(delta):
 	timer+=delta
 	
 	#Surely there is a less stupid way to do this right
-	if timer >= 3.0:
-		$Tween.interpolate_property($FadeOut, \"modulate:a\", null, 1, .5, Tween.TRANS_LINEAR, Tween.EASE_OUT,5)
+	if timer >= 5.0:
+		$Tween.interpolate_property($FadeOut, \"modulate:a\", null, 1, .5, Tween.TRANS_LINEAR, Tween.EASE_OUT,3)
+		#reinaAudioPlayer.stop_music()
 		$Tween.start()
 		$Tween.connect(\"tween_completed\",self,\"end_screen\")
 		set_process(false)
@@ -84,7 +92,25 @@ func _process(delta):
 		player.get_material().set_shader_param(\"clr2\", newColor[1])
 	
 func end_screen(_a,_b):
-	get_tree().change_scene(\"res://StageSelectV2/NewBossSelect.tscn\")
+	reinaAudioPlayer.stop_music()
+	#if is_instance_valid(Globals.nsf_player):
+	#	Globals.nsf_player.queue_free()
+	#This fucking piece of shit I swear
+	#if reinaAudioPlayer.added_nsf_player:
+	#	Globals.nsf_player.queue_free()
+	#
+	if Globals.playerData.availableWeapons[1] and Globals.playerData.availableWeapons[2]:
+		get_tree().change_scene(\"res://Cutscene/cutsceneWhatever.tscn\")
+	else:
+		get_tree().change_scene(\"res://StageSelectV2/NewBossSelect.tscn\")
+
+func _input(event):
+	if Input.is_action_just_pressed(\"ui_pause\"):
+		$Tween.interpolate_property($FadeOut, \"modulate:a\", null, 1, .5, Tween.TRANS_LINEAR, Tween.EASE_OUT)
+		#reinaAudioPlayer.stop_music()
+		$Tween.start()
+		$Tween.connect(\"tween_completed\",self,\"end_screen\")
+		set_process(false)
 "
 
 [sub_resource type="GDScript" id=2]
@@ -173,11 +199,14 @@ margin_bottom = 626.0
 custom_fonts/font = ExtResource( 7 )
 text = "THIS IS PLACEHOLDER TEXT"
 align = 1
+uppercase = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 8 )
+autoplay = true
 
 [node name="FadeOut" type="Polygon2D" parent="."]
 modulate = Color( 1, 1, 1, 0 )

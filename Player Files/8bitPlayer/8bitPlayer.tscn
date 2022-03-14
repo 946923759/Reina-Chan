@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=2]
+[gd_scene load_steps=39 format=2]
 
 [ext_resource path="res://Player Files/mission start2.png" type="Texture" id=1]
 [ext_resource path="res://Character Sprites/ump9/ump9.tres" type="SpriteFrames" id=2]
@@ -242,17 +242,44 @@ func _process(_delta):
 	)
 "
 
+[sub_resource type="GDScript" id=10]
+script/source = "extends Area2D
+
+func _ready():
+	self.connect(\"area_entered\",self,\"enemy_touched\")
+	
+# If bullet touched an enemy, the enemy hitbox will call this function.
+# Why does the enemy need a hitbox? Because collision won't happen unless
+# it's on the exact frame...
+func enemy_touched(obj):
+	obj = obj.get_parent()
+	enemy_touched_alt(obj,obj.get(\"is_reflecting\") == true)
+
+#Because I clearly don't know what I'm doing
+func enemy_touched_alt(obj,reflect):
+	#If whatever called this function can get damaged by a bullet, damage it.
+	#TODO: This doesn't account for damage types or effectiveness or whatever...
+	if !reflect:
+		if obj.has_method(\"damage\"):
+			obj.call(\"damage\",2)
+"
+
+[sub_resource type="RectangleShape2D" id=9]
+extents = Vector2( 20, 20 )
+
 [node name="Player" type="KinematicBody2D"]
 script = ExtResource( 7 )
 run_speed = 350
 jump_speed = -1200
+dash_multiplier = 2.0
 gravity = 3500
 
 [node name="Sprite" type="AnimatedSprite" parent="."]
 material = SubResource( 1 )
 scale = Vector2( 4, 4 )
 frames = ExtResource( 2 )
-animation = "Begin"
+animation = "DashAttack"
+frame = 3
 
 [node name="WeaponSwitch" type="Node2D" parent="."]
 visible = false
@@ -535,5 +562,19 @@ bus = "Music"
 [node name="OneUpSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 20 )
 bus = "Player/Enemies"
+
+[node name="ChargeDash" type="Area2D" parent="."]
+position = Vector2( 60, 23 )
+monitoring = false
+monitorable = false
+collision_layer = 9
+collision_mask = 9
+script = SubResource( 10 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ChargeDash"]
+shape = SubResource( 9 )
 
 [connection signal="timeout" from="WeaponSwitch/TimeToShow" to="WeaponSwitch" method="_on_Timer_timeout"]

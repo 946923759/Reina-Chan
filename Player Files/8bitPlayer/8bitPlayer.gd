@@ -4,7 +4,7 @@ const SPEED = 250;
 
 export (int) var run_speed
 export (int) var jump_speed
-export (int) var dash_multiplier
+export (float,1,10,.5) var dash_multiplier
 export (int) var gravity = 0
 export (float,0,5) var time_before_active=.3
 
@@ -13,8 +13,8 @@ var velocity = Vector2()
 #go of the jump button.
 
 #Normal is running or idle, there doesn't need to be a distinction anyways
-enum State { INACTIVE, NORMAL, JUMPING, FALLING, HURT, GRABBING_LADDER, ON_LADDER, FLYING_BACKWARDS }
-var state_toString = ["Normal","Jumping","Falling","Hurt","Grabbing_Ladder","On_Ladder","Flying_Backwards"]
+enum State { INACTIVE, NORMAL, JUMPING, FALLING, HURT, GRABBING_LADDER, ON_LADDER, FLYING_BACKWARDS, DASH_ATTACK, DASH }
+var state_toString = ["Normal","Jumping","Falling","Hurt","Grabbing_Ladder","On_Ladder","Flying_Backwards","DashAttack", "Dash" ]
 var state = State.INACTIVE
 
 
@@ -42,6 +42,10 @@ var shoot_time = 1e20
 var shoot_sprite_time = 0
 var bullet = preload("res://Player Files/bullet.tscn")
 var archiRocket = preload("res://Player Files/8bitPlayer/ArchiRocket_Player.tscn")
+#how long UMP9 dashes when using the dash attack, or how long the slide goes
+#if it's above 0 it's currently active.
+var dash_time:float = 0.0
+
 #This is only used when on normal or higher difficulty. It keeps track of the bullets on screen by storing the variables.
 #When a bullet goes off screen or hits an enemy, the slot is replaced by null and a new one can be inserted.
 var bulletManager
@@ -235,6 +239,8 @@ func get_menu_buttons_input(delta):
 	#and they can restart by pressing start and down+b anyways
 	elif Input.is_action_just_pressed("DebugButton10"):
 		die()
+	elif Input.is_action_pressed("ui_shift") and Input.is_action_just_pressed("DebugButton11"):
+		finishStage()
 	elif Input.is_action_just_pressed("DebugButton12"):
 		set_checkpoint(Vector2(),sprite.flip_h)
 	
@@ -316,59 +322,69 @@ func get_input(delta):
 		# A good idea when implementing characters of all kinds,
 		# compensates for physics imprecision, as well as human reaction delay.
 		if shoot:
-			shoot_time = 0
-			if (Globals.playerData.gameDifficulty <= Globals.Difficulty.EASY or bulletManager.get_num_bullets() < 3) and weaponMeters[currentWeapon]>=Globals.weaponEnergyCost[currentWeapon]:
-				
-				var bi
-				var ss
-				if sprite.flip_h:
-					ss = -1.0
-				else:
-					ss = 1.0
-				#Note: $ is shorthand for get_node()
-				#Right here it's doing get_node("bullet_shoot")
-				#ternary: var p = 1 if f else -1
-				var pos = position + Vector2(73*ss, 10)
-				if state == State.ON_LADDER:
-					pos = position + Vector2(95*ss, -20)
-				
-				if currentWeapon!=Globals.Weapons.Buster:
+			if currentWeapon == Globals.Weapons.Alchemist and weaponMeters[currentWeapon]>=Globals.weaponEnergyCost[currentWeapon]:
+				if is_on_floor() and dash_time<=0:
+					state = State.DASH_ATTACK
+					dash_time=.5
+					var ss = -1.0 if sprite.flip_h else 1.0
 					weaponMeters[currentWeapon]=max(0,weaponMeters[currentWeapon]-Globals.weaponEnergyCost[currentWeapon])
-					#print(ceil(weaponMeters[currentWeapon]/128.0*32))
 					HPBar.updateAmmo(weaponMeters[currentWeapon]/144.0,false)
-				if currentWeapon==Globals.Weapons.Buster:
-					bi = bullet.instance()
+					sprite.set_animation("DashAttack")
+				#else, do nothing
+			else:
+				shoot_time = 0
+				if (Globals.playerData.gameDifficulty <= Globals.Difficulty.EASY or bulletManager.get_num_bullets() < 3) and weaponMeters[currentWeapon]>=Globals.weaponEnergyCost[currentWeapon]:
 					
+					var bi
+					var ss
+					if sprite.flip_h:
+						ss = -1.0
+					else:
+						ss = 1.0
+					#Note: $ is shorthand for get_node()
+					#Right here it's doing get_node("bullet_shoot")
+					#ternary: var p = 1 if f else -1
+					var pos = position + Vector2(73*ss, 10)
+					if state == State.ON_LADDER:
+						pos = position + Vector2(95*ss, -20)
 					
-					bi.position = pos
-					#get_parent().add_child(bi)
-					bulletHolder.add_child(bi)
-					#KinematicBody2D only
-					#bi.linear_velocity = Vector2(800.0 * ss, 0)
-					#RigidBody2D only
-					bi.init(Vector2(13*ss,0))
-				elif currentWeapon==Globals.Weapons.Architect:
-					bi = archiRocket.instance()
-					bi.position = pos
-					#get_parent().add_child(bi)
-					bulletHolder.add_child(bi)
-					bi.init(int(ss))
-				
-				add_collision_exception_with(bi) # Make bullet and this not collide
-				
-				if Globals.playerData.gameDifficulty > Globals.Difficulty.EASY:
-					bulletManager.push_bullet(bi)
-				else:
-					for child in bulletHolder.get_children():
-						if is_instance_valid(child) and child.get_class()=="KinematicBody2D":
-							#print(child.get_class())
-							#child.add_collision_exception_with(bi)
-							bi.add_collision_exception_with(child)
-					pass
-				if sprite.animation=="IdleShoot":
-					sprite.frame = 0
-				shoot_sprite_time = 0.3
-				$ShootSound.play()
+					if currentWeapon!=Globals.Weapons.Buster:
+						weaponMeters[currentWeapon]=max(0,weaponMeters[currentWeapon]-Globals.weaponEnergyCost[currentWeapon])
+						#print(ceil(weaponMeters[currentWeapon]/128.0*32))
+						HPBar.updateAmmo(weaponMeters[currentWeapon]/144.0,false)
+					if currentWeapon==Globals.Weapons.Buster:
+						bi = bullet.instance()
+						
+						
+						bi.position = pos
+						#get_parent().add_child(bi)
+						bulletHolder.add_child(bi)
+						#KinematicBody2D only
+						#bi.linear_velocity = Vector2(800.0 * ss, 0)
+						#RigidBody2D only
+						bi.init(Vector2(13*ss,0))
+					elif currentWeapon==Globals.Weapons.Architect:
+						bi = archiRocket.instance()
+						bi.position = pos
+						#get_parent().add_child(bi)
+						bulletHolder.add_child(bi)
+						bi.init(int(ss))
+					
+					add_collision_exception_with(bi) # Make bullet and this not collide
+					
+					if Globals.playerData.gameDifficulty > Globals.Difficulty.EASY:
+						bulletManager.push_bullet(bi)
+					else:
+						for child in bulletHolder.get_children():
+							if is_instance_valid(child) and child.get_class()=="KinematicBody2D":
+								#print(child.get_class())
+								#child.add_collision_exception_with(bi)
+								bi.add_collision_exception_with(child)
+						pass
+					if sprite.animation=="IdleShoot":
+						sprite.frame = 0
+					shoot_sprite_time = 0.3
+					$ShootSound.play()
 		else:
 			shoot_time += delta
 			
@@ -410,7 +426,7 @@ func get_input(delta):
 			elif left and position.x > $Camera2D.destPositions[0]+40:
 				velocity.x = -run_speed
 				sprite.flip_h = true
-			elif !movementLocked: #If movement locked, assume velocity should be preserved
+			elif !movementLocked and state!=State.DASH and state!=State.DASH_ATTACK: #If movement locked, assume velocity should be preserved
 				velocity.x=0
 			if up:
 				var tile = tiles.get_cellv(pos2cell(position))
@@ -569,6 +585,8 @@ func _physics_process(delta):
 	
 	if shoot_sprite_time > 0:
 		shoot_sprite_time -= delta
+	if dash_time>=0:
+		dash_time-=delta
 	
 	#Menu buttons should always be accessible!
 	get_menu_buttons_input(delta)
@@ -626,6 +644,15 @@ func _physics_process(delta):
 				velocity.x = 300
 			lockMovement(.25,velocity,false)
 			state=State.FALLING
+	elif state==State.DASH_ATTACK:
+		$ChargeDash.monitoring=(dash_time>=0)
+		if dash_time>0:
+			var ss = -1.0 if sprite.flip_h else 1.0
+			$ChargeDash.position.x=60*ss
+			velocity=Vector2(ss*run_speed*dash_multiplier,0)
+			return
+		else:
+			velocity.y=1
 
 	if is_on_floor() and velocity.y >= 0:
 		if state == State.FALLING:
@@ -809,7 +836,7 @@ func processInvincible(delta):
 		#$FuckGodot.set_collision_layer_bit(0,true)
 
 func player_touched(obj, amountToDamage:int):
-	if !invincible:
+	if !invincible and state != State.DASH_ATTACK:
 		#$FuckGodot.set_deferred("monitorable",false)
 		#$FuckGodot.set_collision_mask_bit(0,false)
 		#$FuckGodot.set_collision_layer_bit(0,false)
@@ -897,7 +924,11 @@ func finishStage():
 	CheckpointPlayerStats.setDeathTimer(timerWithDeath)
 	CheckpointPlayerStats.setTimer(timer)
 	lockMovement(999,Vector2(),false)
+	invincible=true
+	invincibleTime=9999
 	get_node("/root/Node2D").stopMusic()
+	if is_instance_valid(Globals.nsf_player):
+		Globals.nsf_player.queue_free()
 	$VictorySound.play()
 # warning-ignore:return_value_discarded
 	$VictorySound.connect("finished",self,"finishStage_2")
@@ -911,6 +942,7 @@ func finishStage_2():
 		nextScene="res://StageSelectV2/NewBossSelect.tscn"
 	Globals.playerData.availableWeapons[stageRoot.weapon_to_unlock]=true
 	Globals.save_player_game()
+	
 # warning-ignore:return_value_discarded
 	get_tree().change_scene(nextScene)
 	

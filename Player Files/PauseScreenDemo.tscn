@@ -141,6 +141,7 @@ pause_mode = 2
 script = SubResource( 1 )
 
 [node name="m" type="Control" parent="."]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 __meta__ = {

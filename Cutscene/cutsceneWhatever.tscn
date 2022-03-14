@@ -1,16 +1,15 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://Cutscene/CutsceneMain.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Cutscene/Backgrounds/2021summer_SANGVISFERRI.png" type="Texture" id=2]
-[ext_resource path="res://stepmania-compat/smSprite.gd" type="Script" id=3]
 
 [sub_resource type="GDScript" id=1]
-script/source = "extends Node2D
+script/source = "extends Control
 
 export (String) var custom_music_name
 export (String) var nsf_music_file
 export (int) var nsf_track_num = 0
-onready var music_player = Globals.ReinaAudioPlayer.new(self)
+var music_player
 
 func getStuff(time:float)->String:
 	if time== 0.0 or CheckpointPlayerStats.usedDebugMode:
@@ -37,33 +36,19 @@ func getStuff(time:float)->String:
 #	\"msg /hl[0]If you'd like to leave feedback, click the button on the title screen. You can also email me random Girls' Frontline fanart, if you want.\"
 #	#\"msg|SEE YOU NEXT DEMO (Hopefully)!\"
 #]
-var cutsceneInformation:PoolStringArray = [
-	\"preload_portraits Dier|pic_Alchemist|pic_Scarecrow\",
-	\"portrait|Dier\",
-	\"matchnames|AmWorks|Alchemist|Scarecrow\",
-	\"speaker|AmWorks\",
-	\"msg|So, did you enjoy the second demo? Hopefully it was worth the wait.\",
-	\"portrait|Dier|pic_Alchemist\",
-	\"speaker|Alchemist\",
-	\"msg|/hl[1]We hope you enjoyed the upside-down castle. And certain boss battle moves.\",
-	\"msg|Surely you've played other Capcom games, right?\",
-	\"speaker|Scarecrow\",
-	\"portrait|Dier|pic_Alchemist|pic_Scarecrow\",
-	\"msg|/hl[2]See you soon for the next demo, featuring me.\"
-]
 
 
 func _ready():
-	Globals.availableWeapons[1]=true
-	if Globals.gameDifficulty>1 and CheckpointPlayerStats.playerLivesLeft==3:
-		cutsceneInformation.append(\"msg|You're pretty good! Congratulations, you've unlocked \\\"Zero Test\\\" in the Extras.\")
-		Globals.unlockedZeroMode=true
+	
+	Globals.unlockedZeroMode=true
 # warning-ignore:return_value_discarded
 	Globals.save_system_data()
-	$Sprite.Cover()
 	#init_(message, parent, dim_background = true)
-	$Cutscene.init_(cutsceneInformation,null,false)
+	#if is_instance_valid(Globals.nsf_player):
+	#	Globals.nsf_player.queue_free()
+	music_player = Globals.ReinaAudioPlayer.new(self)
 	music_player.load_song(custom_music_name,nsf_music_file,nsf_track_num)
+	$Cutscene.init_(Globals.get_stage_cutscene(\"Demo2Ending\"),null,false,null,\"\\t\")
 	$Cutscene.connect(\"cutscene_finished\",self,\"a\")
 
 func a():
@@ -71,12 +56,10 @@ func a():
 	# So the NSF player plugin for Godot will crash on release builds if you try playing more than one song at a time
 	# And miraculously this is the only time I've had two consecutive screens with NSFs playing and I guess they're close enough that it's trying to play the new audio before stopping the old audio
 	music_player.stop_music()
-	music_player.nsf_player.queue_free()
-	#music_player.nsf_player.queue_free()
 	print(\"Tweening to credits...\")
 	var t := TweenSequence.new(get_tree())
 	t._tween.pause_mode = Node.PAUSE_MODE_PROCESS
-	t.append($Sprite,'modulate:a',1,.5).set_trans(Tween.TRANS_QUAD)
+	t.append($TextureRect,'modulate:a',1,.5).set_trans(Tween.TRANS_QUAD)
 	t.append_callback(self,\"toCredits\")
 	yield(t,\"finished\")
 	print(\"Going to credits...\")
@@ -87,18 +70,25 @@ func a():
 	
 "
 
-[node name="Node2D" type="Node2D"]
+[node name="Node2D" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
 script = SubResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 custom_music_name = "DemoEnding"
 nsf_music_file = "Rockman 4MI.nsf"
 nsf_track_num = 105
 
-[node name="Sprite" type="Sprite" parent="."]
-scale = Vector2( 1.25038, 1.25015 )
+[node name="TextureRect" type="TextureRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
 texture = ExtResource( 2 )
-centered = false
-region_rect = Rect2( 0, 0, 1280, 720 )
-script = ExtResource( 3 )
+stretch_mode = 7
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Cutscene" parent="." instance=ExtResource( 1 )]
 

@@ -43,7 +43,7 @@ func _ready():
 	
 func update_selections():
 	for i in range(currentChoiceSize):
-		get_child(i).modulate.a=1 if i==selection else .7
+		get_child(i).modulate.a=1.0 if i==selection else .7
 	pass
 
 func setChoices(choices:PoolStringArray,default_selection:int=0):
