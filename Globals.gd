@@ -261,34 +261,32 @@ func load_stage_cutscenes()->bool:
 		printerr(path)
 		return false
 	
-	var langs = ["en","es","kr","ja","zh"]
-	var msgColumn:int=1
-	if INITrans.currentLanguage != "en":
-		#print(cutsceneData['lang'])
-		for i in range(langs.size()):
-			if langs[i]==INITrans.currentLanguage:
-				print("Loading from column "+String(i+1)+" ("+INITrans.currentLanguage+")")
-				msgColumn=i+1
-				break
+	#var langs = ["en","es","kr","ja","zh"]
+
 	var d={'default':[]}
 	var dictKey = "default"
+	var langs = ['en']
+	var langKeyFound:bool=false
 	while !f.eof_reached():
 		var line = f.get_line().strip_edges(false,true)
 		#print(line)
 		if line.begins_with('#KEY'):
 			dictKey=line.lstrip("#KEY\t")
 			d[dictKey]=[]
+		elif !langKeyFound and line.begins_with("#LANGUAGES"):
+			langs=line.lstrip("#LANGUAGES\t").split("\t",true)
+			langKeyFound=true
 		elif !line.empty():
-			if line.begins_with('msg'):
-				#print(line)
-				var aa = line.split('\t',true)
-				if msgColumn < aa.size():
-					d[dictKey].push_back('msg\t'+aa[msgColumn])
-				else:
-					d[dictKey].push_back('msg\t'+aa[1])
-			else:
-				d[dictKey].push_back(line)
+			d[dictKey].push_back(line)
 	stage_cutscene_data=d
+	stage_cutscene_data['msgColumn']=1
+	if INITrans.currentLanguage != "en":
+		#print(cutsceneData['lang'])
+		for i in range(langs.size()):
+			if langs[i]==INITrans.currentLanguage:
+				print("Loading from column "+String(i+1)+" ("+INITrans.currentLanguage+")")
+				stage_cutscene_data['msgColumn']=i+1
+				break
 	#print("loaded stage cutscene data")
 	return true
 	

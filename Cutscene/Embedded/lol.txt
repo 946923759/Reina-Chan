@@ -1,7 +1,14 @@
 #BG	base
+bg	2021summer_SANGVISFERRI
 portrait	pic_RO635Mod
 nop	/RO635	Hello, I'm a single speaker and message command!
 /RO635	Commander... Out of all the T-Dolls in the base, which one do you like the most?
+bg	1	fade
+/Test	This is a test message.
+bg	2021summer_SANGVISFERRI	fade
+msg	This is another test message.
+bg	1	fade
+msg	Test...
 choice	Suomi ('s ass)	You. (Persica did a great job, by the way)
 condjmp_c	5	2
 nop	portrait	

@@ -1,12 +1,11 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://Cutscene/CutsceneMain.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Cutscene/Portraits/Nyto_7.png" type="Texture" id=2]
 [ext_resource path="res://Cutscene/BlendAddLoop.tscn" type="PackedScene" id=3]
-[ext_resource path="res://Cutscene/Backgrounds/1.png" type="Texture" id=4]
 
 [sub_resource type="GDScript" id=1]
-script/source = "extends Node2D
+script/source = "extends Control
 
 var reinaAudioPlayer:Globals.ReinaAudioPlayer
 
@@ -96,17 +95,17 @@ func load_cutscene_data(name:String)->Dictionary:
 func _ready():
 	
 	#\"What the fuck\" - My buddy SheepyChris, upon seeing this unholy abomination
-	var LoadBackgrounds = [
-		Def.Quad({
-			color=Color(0,0,0,1),
-			size=Globals.gameResolution
-		}),
-		Def.Sprite({
-			modulate=Color(1,1,1,0),
-			Texture=\"SFBase\",
-			cover=true
-		})
-	]
+#	var LoadBackgrounds = [
+#		Def.Quad({
+#			color=Color(0,0,0,1),
+#			size=Globals.gameResolution
+#		}),
+#		Def.Sprite({
+#			modulate=Color(1,1,1,0),
+#			Texture=\"SFBase\",
+#			cover=true
+#		})
+#	]
 	add_child(Def.Quad({
 		name=\"fadeOut\",
 		color=Color(0,0,0,0),
@@ -124,8 +123,8 @@ func _ready():
 				break
 				
 	cutsceneData = load_cutscene_data(Globals.nextCutscene)
-	#if OS.is_debug_build():
-	#	cutsceneData = load_cutscene_data(\"lol.txt\")
+	if OS.is_debug_build():
+		cutsceneData = load_cutscene_data(\"lol.txt\")
 		#cutsceneData = load_cutscene_data(\"test_Midnight112.txt\")
 	if cutsceneData.size()==0:
 		#var e = load(\"res://savedataError.tscn\").instance()
@@ -155,26 +154,28 @@ func _ready():
 	#for actor in LoadBackgrounds:
 	#	$BackgroundHolder.add_child(actor)
 	#	actor.position=Globals.SCREEN_CENTER
-	if 'bg' in cutsceneData:
-		var bgs = cutsceneData['bg']
-		for i in range(len(bgs)):
-			var bgToLoad = bgs[i]
-			
-			var nightFilter = false
-			if \",\" in bgToLoad:
-				nightFilter = bgToLoad.split(\",\")[1].to_lower()==\"true\"
-				bgToLoad = bgToLoad.split(\",\")[0]
-			var c = Color(1,1,1,0) if i!=0 else Color(1,1,1,1)
-			var s = Def.Sprite({
-				modulate=c,
-				Texture=bgToLoad,
-				cover=true,
-				name=bgToLoad
-			})
-			if nightFilter:
-				s.material=nightShader
-			$BackgroundHolder.add_child(s)
-			s.position=Globals.SCREEN_CENTER
+#	if 'bg' in cutsceneData:
+#		var bgs = cutsceneData['bg']
+#		for i in range(len(bgs)):
+#			var bgToLoad = bgs[i]
+#
+#			var nightFilter = false
+#			if \",\" in bgToLoad:
+#				nightFilter = bgToLoad.split(\",\")[1].to_lower()==\"true\"
+#				bgToLoad = bgToLoad.split(\",\")[0]
+#			var c = Color(1,1,1,0) if i!=0 else Color(1,1,1,1)
+#			var s = Def.Sprite({
+#				modulate=c,
+#				Texture=bgToLoad,
+#				cover=true,
+#				name=bgToLoad
+#			})
+#			if nightFilter:
+#				s.material=nightShader
+#			$BackgroundHolder.add_child(s)
+#		$BackgroundHolder.connect(\"resized\",self,\"set_rect_size\")
+			#s.Cover()
+			#s.position=Globals.SCREEN_CENTER
 	
 	var msgColumn:int=1
 	if \"lang\" in cutsceneData and INITrans.currentLanguage != \"en\":
@@ -184,11 +185,13 @@ func _ready():
 				#print(\"Loading from column \"+String(i))
 				msgColumn=i
 				break
-	$CutscenePlayer.init_(cutsceneData['msg'],null,false,$BackgroundHolder,\"\\t\",msgColumn)
+	$CutscenePlayer.init_(cutsceneData['msg'],null,false,null,\"\\t\",msgColumn)
 	
 	
 	#s.hide()
-
+func set_rect_size():
+	for child in $BackgroundHolder.get_children():
+		child.set_rect_size()
 
 func _on_CutscenePlayer_cutscene_finished():
 	var seq := TweenSequence.new(get_tree())
@@ -206,31 +209,20 @@ func end_cutscene_2():
 		get_tree().change_scene(\"res://TitleScreenV2.tscn\")
 "
 
-[node name="Node2D" type="Node2D"]
+[node name="Node2D" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
 script = SubResource( 1 )
-
-[node name="BackgroundHolder_v2" type="Control" parent="."]
-visible = false
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_right = 1280.0
-margin_bottom = 720.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="TextureRect" type="TextureRect" parent="BackgroundHolder_v2"]
+[node name="BackgroundHolder" type="Control" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-size_flags_horizontal = 3
-texture = ExtResource( 4 )
-expand = true
-stretch_mode = 7
 __meta__ = {
 "_edit_use_anchors_": false
 }
-
-[node name="BackgroundHolder" type="Node2D" parent="."]
 
 [node name="CutscenePlayer" parent="." instance=ExtResource( 1 )]
 

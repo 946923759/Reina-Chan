@@ -234,7 +234,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://stepmania-compat/smQuad.gd"
 }, {
-"base": "Sprite",
+"base": "TextureRect",
 "class": "smSprite",
 "language": "GDScript",
 "path": "res://stepmania-compat/smSprite.gd"
@@ -308,7 +308,6 @@ INITrans="*res://Translation.gd"
 
 window/size/width=1280
 window/size/height=720
-window/size/resizable=false
 window/size/test_width=1280
 window/size/test_height=720
 window/vsync/use_vsync=false

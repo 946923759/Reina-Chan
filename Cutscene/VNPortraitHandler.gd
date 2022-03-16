@@ -7,6 +7,7 @@ var portraitPositions:Array
 
 var lastLoaded: String
 var _offset: int
+var numPortraits:int = 0
 var idx: int = -1
 var is_active:bool = false
 var is_masked:bool=false
@@ -56,8 +57,11 @@ func _ready():
 	#var b = load("res://Cutscene/BlendAddLoop.tscn")
 	#blendAdd = b.instance()
 	#add_child(blendAdd)
+	update_portrait_positions(float(Globals.SCREEN_CENTER_X))
+
 	
-	SCREEN_CENTER_X = float(Globals.SCREEN_CENTER_X)
+func update_portrait_positions(center:float):
+	SCREEN_CENTER_X = center
 	#print(SCREEN_CENTER_X)
 	portraitPositions = [
 		[SCREEN_CENTER_X],
@@ -65,6 +69,9 @@ func _ready():
 		[SCREEN_CENTER_X-400,SCREEN_CENTER_X,SCREEN_CENTER_X+400],
 		[SCREEN_CENTER_X-450,SCREEN_CENTER_X-150,SCREEN_CENTER_X+150,SCREEN_CENTER_X+450]
 	]
+	
+	if is_active:
+		position.x=portraitPositions[numPortraits-1][idx]
 
 func position_portrait(idx:int,isMasked:bool,_offset:int,numPortraits:int):
 	print("curPortrait is "+lastLoaded)
@@ -75,6 +82,7 @@ func position_portrait(idx:int,isMasked:bool,_offset:int,numPortraits:int):
 	
 	self._offset = _offset;
 	self.idx=idx; #Needed for dim/hl to function
+	self.numPortraits=numPortraits
 	
 	
 	print("idx: "+String(idx)+" numPortraits: "+String(numPortraits)+ " offset: "+String(_offset))

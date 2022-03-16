@@ -89,7 +89,8 @@ func part1():
 		parent,
 		true,
 		null,
-		"\t"
+		"\t",
+		Globals.stage_cutscene_data['msgColumn']
 	)
 
 func part2():

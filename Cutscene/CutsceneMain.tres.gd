@@ -12,7 +12,17 @@ var waitForAnim: float = 0.0
 onready var TEXT_SPEED: float = max(Globals.OPTIONS['TextSpeed']['value']/2,1)
 
 var parent_node
-var backgrounds:Node2D
+
+const nightShader = preload("res://ParticleEffects/NightShader.tres")
+var backgrounds:Control
+var backgrounds_to_load:Array
+var lastBackground:smSprite
+enum BG_TWEEN {
+	DEFAULT,
+	FADE,
+	IMMEDIATE,
+	NONE
+}
 
 enum OPCODES {
 	MSG, 
@@ -42,7 +52,6 @@ var curPos: int = -1
 	[OPCODES.MSG,"This is the first string"]
 ]"""
 export(PoolStringArray) var standalone_message
-export(PoolStringArray) var backgrounds_to_load
 export(bool) var automatically_advance_text = false
 export(bool) var dim_the_background_if_standalone = true
 var message: Array
@@ -114,7 +123,18 @@ func parse_string_array(arr,delimiter:String="|",msgColumn:int=1):
 				#	newCmd.push_back(splitString[i])
 				#message.push_back(newCmd)
 			"bg":
-				message.push_back([OPCODES.BG,int(splitString[1])])
+				var c = BG_TWEEN.DEFAULT
+				if len(splitString) > 2:
+					match splitString[2]:
+						"none":
+							c=BG_TWEEN.NONE
+						"immediate":
+							c=BG_TWEEN.IMMEDIATE
+						"fade":
+							c=BG_TWEEN.FADE
+				message.push_back([OPCODES.BG,splitString[1],c])
+				if splitString[1] != "black" and splitString[1] != "none" and !(splitString[1] in backgrounds_to_load):
+					backgrounds_to_load.append(splitString[1])
 			"matchnames":
 				var data = [] 
 				push_back_from_idx_one(data,splitString)
@@ -263,13 +283,19 @@ func advance_text()->bool:
 						portraits[i].set_texture_wrapper(curMessage[i+1])
 						print("Preloaded "+curMessage[i+1])
 			OPCODES.BG:
-				if curMessage[1] > backgrounds.get_child_count()-1:
-					printerr("Hey moron, you specified a background higher than the number of backgrounds")
-					#printerr(backgrounds.get_children())
-				else:
-					var actor = backgrounds.get_child(curMessage[1])
-					print(actor)
+				var actor = backgrounds.get_node(curMessage[1])
+				#print(actor)
+				if curMessage[2]==BG_TWEEN.FADE:
+					if is_instance_valid(lastBackground):
+						VisualServer.canvas_item_set_z_index(lastBackground.get_canvas_item(),-1)
+					VisualServer.canvas_item_set_z_index(actor.get_canvas_item(),0)
+					actor.modulate.a=0
 					actor.showActor(.5)
+				elif curMessage[2]==BG_TWEEN.IMMEDIATE:
+					actor.modulate.a=1
+					if is_instance_valid(lastBackground):
+						lastBackground.modulate.a=0
+				lastBackground=actor
 			OPCODES.PORTRAITS:
 				#Badly translated lua code
 				#Duplicate curMessage while skipping the 0th element
@@ -395,6 +421,15 @@ func shitty_interpolate_label(s:String):
 	#print("Now I set speaker to"+s+"!!")
 	speakerActor.text=s
 
+func update_portrait_positions():
+	var SCREEN_CENTER_X = get_viewport().get_visible_rect().size.x/2
+	for n in $Portraits.get_children():
+		n.update_portrait_positions(float(SCREEN_CENTER_X))
+		
+func set_rect_size():
+	for child in $Backgrounds.get_children():
+		child.set_rect_size()
+
 func _ready():
 	$PressStartToSkip.text=INITrans.GetString("Cutscene","PRESS START TO SKIP")
 	print("Text speed is "+String(TEXT_SPEED))
@@ -410,7 +445,7 @@ func _ready():
 		p.scale=Vector2(.75,.75) #We do it here instead of the whole node because scaling the whole node breaks positioning.
 		portraits.append(p)
 		$Portraits.add_child(p)
-	
+	$Portraits.connect("resized",self,"update_portrait_positions")
 	#for p in portraits:
 	#	p.modulate.a=0.0
 	
@@ -430,11 +465,15 @@ func _ready():
 		init_(standalone_message,null,dim_the_background_if_standalone)
 
 
+
 func init_(message, parent, dim_background = true,_backgrounds=null,delim="|",msgColumn:int=1):
 	if parent:
 		parent_node = parent
+		
 	if _backgrounds:
 		backgrounds=_backgrounds
+	else:
+		backgrounds = $Backgrounds
 	$dim.color.a=0
 	textboxSpr.rect_scale.y=0
 	var t := TweenSequence.new(get_tree())
@@ -443,7 +482,29 @@ func init_(message, parent, dim_background = true,_backgrounds=null,delim="|",ms
 	if dim_background:
 # warning-ignore:return_value_discarded
 		t.parallel().append($dim,'color:a',.6,.5).from_current()
+	
 	parse_string_array(message,delim,msgColumn)
+	
+	for i in range(len(backgrounds_to_load)):
+		var bgToLoad = backgrounds_to_load[i]
+		
+		var nightFilter = false
+		if "," in bgToLoad:
+			nightFilter = bgToLoad.split(",")[1].to_lower()=="true"
+			bgToLoad = bgToLoad.split(",")[0]
+		var c = Color(1,1,1,0)
+		var s = Def.Sprite({
+			modulate=c,
+			Texture=bgToLoad,
+			cover=true,
+			name=bgToLoad
+		})
+		if nightFilter:
+			s.material=nightShader
+		backgrounds.add_child(s)
+		#if i==0:
+		#	lastBackground=s
+	backgrounds.connect("resized",self,"set_rect_size")
 	advance_text()
 	set_process(true)
 

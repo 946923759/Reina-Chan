@@ -738,7 +738,7 @@ margin_top = -710.0
 margin_right = -632.0
 margin_bottom = -667.0
 custom_fonts/font = ExtResource( 6 )
-text = "v2022.3.13.0"
+text = "developer version"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -751,7 +751,7 @@ anchor_bottom = 0.5
 margin_top = -230.0
 margin_bottom = -210.0
 custom_fonts/font = ExtResource( 6 )
-text = "Demo 2"
+text = "Demo 3?"
 align = 1
 __meta__ = {
 "_edit_use_anchors_": false

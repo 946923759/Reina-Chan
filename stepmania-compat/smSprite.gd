@@ -1,16 +1,23 @@
 class_name smSprite
-extends Sprite
+extends TextureRect
 
 func Center():
-	position=Globals.SCREEN_CENTER
+	print("smSprite.Center() has been removed")
+	return
+	#position=Globals.SCREEN_CENTER
 
 func Cover():
-	#scale=Vector2(1.2,1.2)
-	if is_instance_valid(texture):
-		scale=Vector2(Globals.gameResolution.y/texture.get_height(),Globals.gameResolution.y/texture.get_height())
-	else:
-		print("smSprite.Cover(): You don't have a valid texture, idiot.")
-	#print(scale)
+	#if expand:
+	#	print("Do not call Cover() more than once!!!")
+	#	return
+	rect_size=Globals.gameResolution
+	#size_flags_horizontal=1
+	stretch_mode=STRETCH_KEEP_ASPECT_COVERED
+	expand=true
+	
+func set_rect_size():
+	#print("r")
+	rect_size=get_viewport().get_visible_rect().size
 
 func loadFromExternal(path:String):
 	var file = File.new()

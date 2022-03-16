@@ -3,7 +3,7 @@
 #NSF_TRACKNUM	5
 #CDAUDIO	Cutscene2
 
-preload_portraits	pic_UMP9	Dier	Nyto_Isomer_8	pic_UMP45
+preload_portraits	pic_UMP9	Dier	Nyto_7	pic_UMP45
 portrait	pic_UMP9	Dier,true,0
 matchnames	UMP9	Dier	Dandelion
 /Dier	Hello!! Can you hear me? And see and feel properly?
