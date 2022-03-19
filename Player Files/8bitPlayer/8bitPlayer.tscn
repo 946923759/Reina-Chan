@@ -126,14 +126,23 @@ func show_weapon(b,newValue:float=-1):
 	print(currentAmmo)
 	update()
 
+var timer:float=0.0
 func _process(delta):
 	update()
+	
+	
+	timer+=delta #Just in case it gets stuck
+	if timer > 3.0:
+		set_process(false)
+		audio.stop()
+		timer=0
 	
 func tweenFinished(_a,_b):
 	#Just in case.
 	update();
 	set_process(false)
 	audio.stop()
+	timer=0
 "
 
 [sub_resource type="GDScript" id=6]
@@ -242,8 +251,10 @@ func _process(_delta):
 	)
 "
 
-[sub_resource type="GDScript" id=10]
+[sub_resource type="GDScript" id=9]
 script/source = "extends Area2D
+
+var touchedEnemy:bool=false
 
 func _ready():
 	self.connect(\"area_entered\",self,\"enemy_touched\")
@@ -259,19 +270,20 @@ func enemy_touched(obj):
 func enemy_touched_alt(obj,reflect):
 	#If whatever called this function can get damaged by a bullet, damage it.
 	#TODO: This doesn't account for damage types or effectiveness or whatever...
-	if !reflect:
-		if obj.has_method(\"damage\"):
+	if obj.has_method(\"damage\"):
+		if !reflect:
 			obj.call(\"damage\",2)
+		touchedEnemy=true
 "
 
-[sub_resource type="RectangleShape2D" id=9]
+[sub_resource type="RectangleShape2D" id=10]
 extents = Vector2( 20, 20 )
 
 [node name="Player" type="KinematicBody2D"]
 script = ExtResource( 7 )
 run_speed = 350
 jump_speed = -1200
-dash_multiplier = 2.0
+dash_multiplier = 2.5
 gravity = 3500
 
 [node name="Sprite" type="AnimatedSprite" parent="."]
@@ -569,12 +581,12 @@ monitoring = false
 monitorable = false
 collision_layer = 9
 collision_mask = 9
-script = SubResource( 10 )
+script = SubResource( 9 )
 __meta__ = {
 "_edit_group_": true
 }
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ChargeDash"]
-shape = SubResource( 9 )
+shape = SubResource( 10 )
 
 [connection signal="timeout" from="WeaponSwitch/TimeToShow" to="WeaponSwitch" method="_on_Timer_timeout"]

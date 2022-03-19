@@ -32,6 +32,8 @@ enum STATES {
 
 var state: int = 0
 var timer: float = 0.0
+onready var player = get_node_or_null(\"/root/Node2D/Player\")
+onready var gd:int =Globals.playerData.gameDifficulty
 
 onready var sprite = $AnimatedSprite
 onready var hurtSound = $HurtSound
@@ -48,6 +50,8 @@ func _ready():
 # warning-ignore:return_value_discarded
 	#$Area2D.connect(\"body_entered\",self,\"objectTouched\")
 	sprite.play()
+	
+	
 	
 	
 #The duration that the sprite has been colored white.
@@ -71,6 +75,10 @@ func _process(delta):
 	#print(String(state))
 	match state:
 		STATES.SHOT:
+			if gd > Globals.Difficulty.EASY and is_instance_valid(player):
+				if abs(global_position.x - player.global_position.x) > 460:
+					return
+			
 			sprite.set_animation(\"shoot\")
 			_is_reflecting = false
 			var bi = bullet.instance()

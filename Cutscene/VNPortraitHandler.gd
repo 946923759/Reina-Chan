@@ -12,7 +12,11 @@ var idx: int = -1
 var is_active:bool = false
 var is_masked:bool=false
 
+#We need to support expressions so
+#var portrait_textures=[]
+#var cur_expression:int=0
 var cur_texture:Texture
+
 var mask1 = preload("res://Cutscene/maskBox.png")
 var mask2 = preload("res://Cutscene/maskBox2.png")
 
@@ -225,3 +229,37 @@ func set_texture_wrapper(sprName):
 	else:
 		cur_texture=load("res://Cutscene/Portraits/"+sprName+".png")
 	update()
+
+func overdrive_set_texture(database:Dictionary,portraitKey:String):
+	lastLoaded=portraitKey
+	if portraitKey in database:
+		var toLoad = database[portraitKey]
+		for i in range(toLoad):
+			var sprName = toLoad[i]
+			#set_texture(load("res://Cutscene/Portraits/"+sprName+".png"))
+			var f = File.new()
+			if OS.has_feature("standalone") and !f.file_exists("res://Cutscene/Portraits/"+sprName+".png.import"):
+				var path = OS.get_executable_path().get_base_dir()+"/GameData/Cutscene/Portraits/"+sprName+".png"
+				#print("Checking path "+path)
+				if f.file_exists(path):
+					print("Found external image file at "+path)
+					var image = Image.new()
+					f.open(path, File.READ)
+					var buffer = f.get_buffer(f.get_len())
+					match path.get_extension():
+						"png":
+							image.load_png_from_buffer(buffer)
+						"jpg":
+							image.load_jpg_from_buffer(buffer)
+
+					f.close()
+					image.lock()
+
+					var texture = ImageTexture.new()
+					texture.create_from_image(image);
+					cur_texture = texture
+				else:
+					printerr("Portrait not embedded in pck and no external file!!")
+			else:
+				cur_texture=load("res://Cutscene/Portraits/"+sprName+".png")
+		update()

@@ -58,7 +58,12 @@ func load_cutscene_data(name:String)->Dictionary:
 		printerr(\"Warning: could not open file for reading! ERROR \", ok)
 		return Dictionary()
 	
-	var d = {'msg':[]}
+	var d = {
+		'CDAudio':\"\",
+		'nsf_fileName':\"\",
+		\"nsf_trackNum\":0,
+		'msg':[]
+	}
 	while !f.eof_reached():
 		var line = f.get_line().strip_edges(false,true)
 		#print(line)
@@ -133,7 +138,7 @@ func _ready():
 		$CutscenePlayer.init_(['msg|The cutscene failed to load. Most likely the file name is incorrect.'],null)
 		return
 	#print(cutsceneData)
-	if \"CDAudio\" in cutsceneData and \"nsf_fileName\" in cutsceneData and \"nsf_trackNum\" in cutsceneData:
+	if true:
 		reinaAudioPlayer = Globals.ReinaAudioPlayer.new(self)
 		reinaAudioPlayer.load_song(cutsceneData['CDAudio'],cutsceneData['nsf_fileName'],cutsceneData['nsf_trackNum'])
 	
@@ -178,11 +183,11 @@ func _ready():
 			#s.position=Globals.SCREEN_CENTER
 	
 	var msgColumn:int=1
-	if \"lang\" in cutsceneData and INITrans.currentLanguage != \"en\":
+	if \"lang\" in cutsceneData:
 		#print(cutsceneData['lang'])
 		for i in range(cutsceneData['lang'].size()):
 			if cutsceneData['lang'][i]==INITrans.currentLanguage:
-				#print(\"Loading from column \"+String(i))
+				print(\"Loading from column \"+String(i))
 				msgColumn=i
 				break
 	$CutscenePlayer.init_(cutsceneData['msg'],null,false,null,\"\\t\",msgColumn)
@@ -217,9 +222,10 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="BackgroundHolder" type="Control" parent="."]
+[node name="ColorRect" type="ColorRect" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
+color = Color( 0, 0, 0, 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }

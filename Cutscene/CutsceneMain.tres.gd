@@ -28,6 +28,7 @@ enum OPCODES {
 	MSG, 
 	PORTRAITS, 
 	PRELOAD_PORTRAITS, 
+	EMOTE,
 	SPEAKER, 
 	BG, 
 	MATCH_NAMES, 
@@ -39,7 +40,7 @@ enum OPCODES {
 	CONDJMP_EQUAL_LANG,
 	LABEL, #It's like JMP, but for people who don't like math /jk
 	JMPLABEL,
-	JMP,
+	#JMP,
 	LONGJMP,
 	NOP #It's needed so jumps are accurate
 	}
@@ -64,7 +65,7 @@ onready var historyActor=$CutsceneHistory
 
 
 onready var text = $CenterContainer/textActor_better
-onready var textboxSpr = $CenterContainer/TextureRect
+onready var textboxSpr = $CenterContainer/textBackground
 onready var speakerActor = $CenterContainer/SpeakerActor
 
 var choiceResult:int=-1
@@ -115,6 +116,8 @@ func parse_string_array(arr,delimiter:String="|",msgColumn:int=1):
 							pOpcode.push_back(p)
 				#print(pOpcode)
 				message.push_back(pOpcode)
+			"emote":
+				message.push_back([OPCODES.EMOTE,splitString[1],int(splitString[2])])
 			"preload_portraits":
 				var newCmd=[OPCODES.PRELOAD_PORTRAITS]
 				message.push_back(push_back_from_idx_one(newCmd,splitString))
@@ -142,10 +145,12 @@ func parse_string_array(arr,delimiter:String="|",msgColumn:int=1):
 				for i in range(1,splitString.size()):
 					data.push_back(splitString[i])
 				message.push_back([OPCODES.MATCH_NAMES,data])
-			"nop": # "no-operation"
-				message.push_back([OPCODES.NOP])
 			"msgboxTransition":
 				message.push_back([OPCODES.MSGBOX_TRANSITION])
+			"nop": # "no-operation"
+				message.push_back([OPCODES.NOP])
+			"label":
+				message.push_back([OPCODES.LABEL,splitString[1]])
 			"choice":
 				#var newCmd=[OPCODES.CHOICE]
 				#message.push_back(push_back_from_idx_one(newCmd,splitString))
@@ -153,12 +158,12 @@ func parse_string_array(arr,delimiter:String="|",msgColumn:int=1):
 				var newCmd=[]
 				push_back_from_idx_one(newCmd,splitString)
 				message.push_back([OPCODES.CHOICE,newCmd])
+			#"jmp":
+			#	message.push_back([OPCODES.JMP,int(splitString[1])])
 			"jmp":
-				message.push_back([OPCODES.JMP,int(splitString[1])])
-			"longjmp":
-				message.push_back([OPCODES.LONGJMP,int(splitString[1])])
+				message.push_back([OPCODES.LONGJMP,splitString[1]])
 			"condjmp_c":
-				message.push_back([OPCODES.CONDJMP_CHOICE,int(splitString[1]),int(splitString[2])])
+				message.push_back([OPCODES.CONDJMP_CHOICE,splitString[1],int(splitString[2])])
 			_:
 				printerr("Unknown command:"+splitString[0])
 
@@ -284,7 +289,14 @@ func advance_text()->bool:
 						print("Preloaded "+curMessage[i+1])
 			OPCODES.BG:
 				var actor = backgrounds.get_node(curMessage[1])
-				#print(actor)
+				print(actor)
+				
+				#Shitty way of handling transitions
+				#If it works don't fix it... or something
+				for n in backgrounds.get_children():
+					if n!=lastBackground and n!=actor:
+						n.modulate.a=0
+				
 				if curMessage[2]==BG_TWEEN.FADE:
 					if is_instance_valid(lastBackground):
 						VisualServer.canvas_item_set_z_index(lastBackground.get_canvas_item(),-1)
@@ -295,6 +307,18 @@ func advance_text()->bool:
 					actor.modulate.a=1
 					if is_instance_valid(lastBackground):
 						lastBackground.modulate.a=0
+				else:
+					if is_instance_valid(lastBackground):
+						#bgFadeLayer
+						pass
+						lastBackground.hideActor(.5)
+						actor.showActor(.5,.5)
+						if waitForAnim<.3:
+							waitForAnim+=.5
+					else:
+						#print("ShowActor!")
+						actor.showActor(.5)
+					#print("unknown bg tween? "+String(curMessage[2]))
 				lastBackground=actor
 			OPCODES.PORTRAITS:
 				#Badly translated lua code
@@ -355,14 +379,30 @@ func advance_text()->bool:
 			#I don't know, fuck you
 			OPCODES.CHOICE, OPCODES.NOP:
 				pass
-			OPCODES.JMP:
-				curPos+=curMessage[1]
-			OPCODES.LONGJMP:
-				curPos=curMessage[1]-1
-			OPCODES.CONDJMP_CHOICE:
-				print("Processing CONDJUMP")
-				if curMessage[2]==choiceResult:
-					curPos+=curMessage[1]
+			#OPCODES.JMP:
+			#	curPos+=curMessage[1]
+			OPCODES.LONGJMP,OPCODES.CONDJMP_CHOICE:
+				#if curMessage[0] == OPCODES.CONDJMP_CHOICE:
+				#	print("Processing CONDJUMP... cRes is "+String(choiceResult)+", jump if "+String(curMessage[2]))
+				#else:
+				#	print("processing LONGJUMP")
+				if curMessage[0] == OPCODES.LONGJMP or curMessage[2]==choiceResult:
+					#print(curMessage)
+					var jumped:bool=false
+					for i in range(curPos,message.size()):
+						if message[i][0]==OPCODES.LABEL and curMessage[1]==message[i][1]:
+							curPos=i
+							jumped=true
+							break
+					if !jumped:
+						for i in range(0,curPos):
+							if message[i][0]==OPCODES.LABEL and curMessage[1]==message[i][1]:
+								curPos=i
+								jumped=true
+					if !jumped:
+						printerr("The label '"+curMessage[1]+"' was not found!")
+				#Reset here?
+				choiceResult=-1
 		curPos+=1
 	
 	#WHAT COULD POSSIBLY GO WRONG
@@ -502,8 +542,6 @@ func init_(message, parent, dim_background = true,_backgrounds=null,delim="|",ms
 		if nightFilter:
 			s.material=nightShader
 		backgrounds.add_child(s)
-		#if i==0:
-		#	lastBackground=s
 	backgrounds.connect("resized",self,"set_rect_size")
 	advance_text()
 	set_process(true)
@@ -553,7 +591,7 @@ func _process(delta):
 			$Choices.input_up()
 		elif Input.is_action_just_pressed("ui_down"):
 			$Choices.input_down()
-		elif Input.is_action_just_pressed("ui_select"):
+		elif Input.is_action_just_pressed("ui_select") and $Choices.selection!=-1:
 			choiceResult=$Choices.selection+1
 			$Choices.visible=false
 			ChoiceTable=[]
@@ -588,6 +626,21 @@ func _process(delta):
 	
 #Fucking piece of shit game engine
 func _input(event):
+	if isWaitingForChoice:
+		if event is InputEventMouseMotion:
+			$Choices.input_cursor(event.position)
+		elif (event is InputEventMouseButton and event.is_pressed() and event.button_index == BUTTON_LEFT) or (
+			event is InputEventScreenTouch and event.is_pressed()
+		):
+			if $Choices.input_cursor(event.position,true):
+				choiceResult=$Choices.selection+1
+				$Choices.visible=false
+				ChoiceTable=[]
+				advance_text()
+				isWaitingForChoice=false
+		return
+			
+	
 	if (event is InputEventMouseButton and event.is_pressed() and event.button_index == BUTTON_LEFT) or (
 		event is InputEventScreenTouch and event.is_pressed()
 	):

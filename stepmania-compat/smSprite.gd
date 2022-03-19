@@ -98,14 +98,16 @@ func loadVNPortrait(sprName:String):
 	else:
 		texture=load("res://Cutscene/Portraits/"+sprName+".png")
 
-func hideActor(s:float):
+func hideActor(s:float,delay:float=0.0):
 	var seq := TweenSequence.new(get_tree())
 	seq._tween.pause_mode = Node.PAUSE_MODE_PROCESS
-# warning-ignore:return_value_discarded
-	seq.append(self,'modulate:a',0,s)
+	var p=seq.append(self,'modulate:a',0,s)
+	if delay>=0:
+		p.set_delay(delay)
 
-func showActor(s:float):
+func showActor(s:float,delay:float=0.0):
 	var seq := TweenSequence.new(get_tree())
 	seq._tween.pause_mode = Node.PAUSE_MODE_PROCESS
-# warning-ignore:return_value_discarded
-	seq.append(self,'modulate:a',1,s)
+	var p=seq.append(self,'modulate:a',1,s)
+	if delay>=0:
+		p.set_delay(delay)

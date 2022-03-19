@@ -24,18 +24,18 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Backgrounds" type="Control" parent="."]
-anchor_right = 1.0
-anchor_bottom = 1.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
 [node name="bgFadeLayer" type="ColorRect" parent="."]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 color = Color( 0, 0, 0, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Backgrounds" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -69,7 +69,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="TextureRect" type="TextureRect" parent="CenterContainer"]
+[node name="textBackground" type="TextureRect" parent="CenterContainer"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5

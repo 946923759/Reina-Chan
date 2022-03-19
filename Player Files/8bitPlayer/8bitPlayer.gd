@@ -646,6 +646,15 @@ func _physics_process(delta):
 			state=State.FALLING
 	elif state==State.DASH_ATTACK:
 		$ChargeDash.monitoring=(dash_time>=0)
+		if $ChargeDash.touchedEnemy or is_on_wall():
+			$ChargeDash.monitoring=false
+			dash_time=0.0
+			var ss = -1.0 if sprite.flip_h else 1.0
+			lockMovement(.1,Vector2(ss*-600,-400),true)
+			#velocity.y=-121771837874
+			$ChargeDash.touchedEnemy=false
+			state = State.FALLING
+			sprite.set_animation("Falling")
 		if dash_time>0:
 			var ss = -1.0 if sprite.flip_h else 1.0
 			$ChargeDash.position.x=60*ss

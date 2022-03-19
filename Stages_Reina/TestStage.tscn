@@ -1,4 +1,4 @@
-[gd_scene load_steps=61 format=2]
+[gd_scene load_steps=62 format=2]
 
 [ext_resource path="res://Stages/IceMan/IceManTileset.tres" type="TileSet" id=1]
 [ext_resource path="res://Stages_Reina/Enemies/Dinergate.tscn" type="PackedScene" id=2]
@@ -41,6 +41,7 @@
 [ext_resource path="res://Sounds/Announcer/KO.wav" type="AudioStream" id=39]
 [ext_resource path="res://Stages_Reina/Enemies/vespid bride.tscn" type="PackedScene" id=40]
 [ext_resource path="res://Stages_Reina/Enemies/RipperHalloween.tscn" type="PackedScene" id=41]
+[ext_resource path="res://Stages_Reina/Enemies/Guardian/Guardian_SWAP.tscn" type="PackedScene" id=42]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 1920, 32 )
@@ -627,9 +628,13 @@ script = SubResource( 4 )
 
 [node name="Dinergate3" parent="." index="10" instance=ExtResource( 2 )]
 position = Vector2( 2784, 480 )
+collision_layer = 18
+collision_mask = 18
 
 [node name="Dinergate4" parent="." index="11" instance=ExtResource( 2 )]
 position = Vector2( 3296, 352 )
+collision_layer = 18
+collision_mask = 18
 
 [node name="Label" type="Label" parent="." index="12"]
 margin_left = -1216.0
@@ -696,7 +701,7 @@ __meta__ = {
 
 [node name="Dinergate5" parent="." index="24" instance=ExtResource( 2 )]
 position = Vector2( -1408, 736 )
-collision_layer = 2
+collision_mask = 18
 facing = 1
 
 [node name="SpawnerTest" type="VisibilityNotifier2D" parent="." index="25"]
@@ -706,9 +711,12 @@ script = ExtResource( 37 )
 __meta__ = {
 "_edit_group_": true
 }
+spawn_cooldown = 30
 
 [node name="Dinergate" parent="SpawnerTest" index="0" instance=ExtResource( 2 )]
 position = Vector2( 32, 32 )
+collision_layer = 18
+collision_mask = 18
 facing = 1
 
 [node name="Enemy2" parent="." index="26" instance=ExtResource( 18 )]
@@ -744,14 +752,17 @@ position = Vector2( -672, 736 )
 
 [node name="RipperHalloween" parent="." index="32" instance=ExtResource( 41 )]
 position = Vector2( 12448, 1376 )
+collision_layer = 18
+collision_mask = 18
 
 [node name="Player" parent="." index="33"]
-position = Vector2( 1984, -960 )
+position = Vector2( 1984, -864 )
 
 [node name="room20-0" type="Node2D" parent="." index="34"]
 
 [node name="Dinergate" parent="room20-0" index="0" instance=ExtResource( 2 )]
 position = Vector2( 1696, 736 )
+collision_layer = 18
 collision_mask = 2
 
 [node name="Enemy" parent="room20-0" index="1" instance=ExtResource( 18 )]
@@ -760,6 +771,8 @@ scale = Vector2( 1.5, 1.5 )
 
 [node name="Dinergate2" parent="room20-0" index="2" instance=ExtResource( 2 )]
 position = Vector2( 2272, 608 )
+collision_layer = 18
+collision_mask = 18
 no_movement = true
 
 [node name="Node2D" type="Node2D" parent="." index="35"]
@@ -960,6 +973,8 @@ event_ID = 9
 
 [node name="Enemy3" parent="." index="53" instance=ExtResource( 16 )]
 position = Vector2( -1600, 1120 )
+collision_layer = 18
+collision_mask = 18
 
 [node name="CameraAdjuster3" parent="." index="54" instance=ExtResource( 31 )]
 position = Vector2( 7040, 1760 )
@@ -1002,6 +1017,8 @@ rightBound = -999
 
 [node name="Dinergate" parent="." index="61" instance=ExtResource( 2 )]
 position = Vector2( 11332.7, -62.6801 )
+collision_layer = 18
+collision_mask = 18
 facing = 1
 
 [node name="Node2D2" type="Node2D" parent="." index="62"]
@@ -1074,6 +1091,11 @@ bus = "Voices"
 
 [node name="Enemy" parent="." index="64" instance=ExtResource( 40 )]
 position = Vector2( 2304, -1088 )
+collision_layer = 18
+collision_mask = 18
+
+[node name="Guardian_SWAP" parent="." index="65" instance=ExtResource( 42 )]
+position = Vector2( 2420, -844 )
 
 [connection signal="camera_adjusted" from="CameraAdjuster2" to="CameraAdjuster2/CustomCameraProcessor" method="_on_CameraAdjuster2_camera_adjusted"]
 [connection signal="event_executed" from="EventTile12" to="EventTile12/BlockEnablerDisabler" method="execute"]

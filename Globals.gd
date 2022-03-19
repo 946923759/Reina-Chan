@@ -86,8 +86,8 @@ var playerData={
 	gameDifficulty = Difficulty.EASY,
 	availableWeapons = [
 		true,
-		false, #Architect Rocket
-		false,
+		true, #Architect Rocket
+		true,
 		false,
 		false,
 		false,
@@ -124,7 +124,7 @@ func difficultyToString(d=playerData.gameDifficulty)->String:
 var weaponEnergyCost = [
 	0,
 	9, #144/9 = 16 uses
-	6  #24 uses for dash
+	0 #6 #24 uses for dash
 ]
 
 var weaponColorSwaps = [
