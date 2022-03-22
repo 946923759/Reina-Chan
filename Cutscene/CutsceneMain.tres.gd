@@ -42,7 +42,10 @@ enum OPCODES {
 	JMPLABEL,
 	#JMP,
 	LONGJMP,
-	NOP #It's needed so jumps are accurate
+	NOP, #It's needed so jumps are accurate
+	MUSIC,
+	STOPMUSIC,
+	SFX
 	}
 
 var curPos: int = -1
@@ -58,6 +61,9 @@ export(bool) var dim_the_background_if_standalone = true
 var message: Array
 
 var portraits:Array=[]
+
+var musicToLoad:Array=[]
+var soundsToLoad:Array=[]
 
 #Array of 2D arrays
 var textHistory:Array=[]
@@ -164,6 +170,12 @@ func parse_string_array(arr,delimiter:String="|",msgColumn:int=1):
 				message.push_back([OPCODES.LONGJMP,splitString[1]])
 			"condjmp_c":
 				message.push_back([OPCODES.CONDJMP_CHOICE,splitString[1],int(splitString[2])])
+			"music":
+				message.push_back([OPCODES.MUSIC,splitString[1]])
+				if !(splitString[1] in musicToLoad):
+					musicToLoad.append(splitString[1])
+			"stopmusic":
+				message.push_back([OPCODES.STOPMUSIC,float(splitString[1]) if splitString[1] else 0.0])
 			_:
 				printerr("Unknown command:"+splitString[0])
 

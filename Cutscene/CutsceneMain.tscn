@@ -52,6 +52,8 @@ __meta__ = {
 
 [node name="Music" type="Node" parent="."]
 
+[node name="SoundEffects" type="Node" parent="."]
+
 [node name="textbox" type="Sprite" parent="."]
 visible = false
 position = Vector2( 640, 550 )

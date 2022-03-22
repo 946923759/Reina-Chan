@@ -1,8 +1,8 @@
 [gd_scene load_steps=7 format=2]
 
-[ext_resource path="res://Stages_Reina/Enemies/bomb enemy.png" type="Texture" id=1]
+[ext_resource path="res://Stages_Reina/Enemies/Goliath_Assets/bomb enemy.png" type="Texture" id=1]
 [ext_resource path="res://Stages/EnemyBase.tscn" type="PackedScene" id=2]
-[ext_resource path="res://Stages_Reina/Enemies/Bomb Enemy.gd" type="Script" id=3]
+[ext_resource path="res://Stages_Reina/Enemies/Goliath_Assets/Bomb Enemy.gd" type="Script" id=3]
 
 [sub_resource type="AtlasTexture" id=2]
 atlas = ExtResource( 1 )

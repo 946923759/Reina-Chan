@@ -291,7 +291,7 @@ _global_script_class_icons={
 [application]
 
 config/name="Reina-Chan"
-config/description="Classic 8-bit platformer action!"
+config/description="A Girls' Frontline fangame with classic 8-bit platformer action!"
 run/main_scene="res://InitLogo.tscn"
 boot_splash/image="res://init.png"
 config/icon="res://icon.png"
