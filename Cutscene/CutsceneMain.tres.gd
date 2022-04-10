@@ -142,7 +142,7 @@ func parse_string_array(arr,delimiter:String="|",msgColumn:int=1):
 						"fade":
 							c=BG_TWEEN.FADE
 				message.push_back([OPCODES.BG,splitString[1],c])
-				if splitString[1] != "black" and splitString[1] != "none" and !(splitString[1] in backgrounds_to_load):
+				if splitString[1] != "none" and !(splitString[1] in backgrounds_to_load):
 					backgrounds_to_load.append(splitString[1])
 			"matchnames":
 				var data = [] 
@@ -300,38 +300,41 @@ func advance_text()->bool:
 						portraits[i].set_texture_wrapper(curMessage[i+1])
 						print("Preloaded "+curMessage[i+1])
 			OPCODES.BG:
-				var actor = backgrounds.get_node(curMessage[1])
-				print(actor)
-				
-				#Shitty way of handling transitions
-				#If it works don't fix it... or something
-				for n in backgrounds.get_children():
-					if n!=lastBackground and n!=actor:
-						n.modulate.a=0
-				
-				if curMessage[2]==BG_TWEEN.FADE:
-					if is_instance_valid(lastBackground):
-						VisualServer.canvas_item_set_z_index(lastBackground.get_canvas_item(),-1)
-					VisualServer.canvas_item_set_z_index(actor.get_canvas_item(),0)
-					actor.modulate.a=0
-					actor.showActor(.5)
-				elif curMessage[2]==BG_TWEEN.IMMEDIATE:
-					actor.modulate.a=1
-					if is_instance_valid(lastBackground):
-						lastBackground.modulate.a=0
+				var actor = backgrounds.get_node(curMessage[1].replace("/","$"))
+				if !is_instance_valid(actor):
+					printerr(curMessage[1]+" is an invalid background! DO NOT USE SLASHES IN BACKGROUNDS!!!!!!")
 				else:
-					if is_instance_valid(lastBackground):
-						#bgFadeLayer
-						pass
-						lastBackground.hideActor(.5)
-						actor.showActor(.5,.5)
-						if waitForAnim<.3:
-							waitForAnim+=.5
-					else:
-						#print("ShowActor!")
+					print(actor)
+					
+					#Shitty way of handling transitions
+					#If it works don't fix it... or something
+					for n in backgrounds.get_children():
+						if n!=lastBackground and n!=actor:
+							n.modulate.a=0
+					
+					if curMessage[2]==BG_TWEEN.FADE:
+						if is_instance_valid(lastBackground):
+							VisualServer.canvas_item_set_z_index(lastBackground.get_canvas_item(),-11)
+						VisualServer.canvas_item_set_z_index(actor.get_canvas_item(),-10)
+						actor.modulate.a=0
 						actor.showActor(.5)
-					#print("unknown bg tween? "+String(curMessage[2]))
-				lastBackground=actor
+					elif curMessage[2]==BG_TWEEN.IMMEDIATE:
+						actor.modulate.a=1
+						if is_instance_valid(lastBackground):
+							lastBackground.modulate.a=0
+					else:
+						if is_instance_valid(lastBackground):
+							#bgFadeLayer
+							pass
+							lastBackground.hideActor(.5)
+							actor.showActor(.5,.5)
+							if waitForAnim<.3:
+								waitForAnim+=.5
+						else:
+							#print("ShowActor!")
+							actor.showActor(.5)
+						#print("unknown bg tween? "+String(curMessage[2]))
+					lastBackground=actor
 			OPCODES.PORTRAITS:
 				#Badly translated lua code
 				#Duplicate curMessage while skipping the 0th element
@@ -554,6 +557,7 @@ func init_(message, parent, dim_background = true,_backgrounds=null,delim="|",ms
 		if nightFilter:
 			s.material=nightShader
 		backgrounds.add_child(s)
+		VisualServer.canvas_item_set_z_index(s.get_canvas_item(),-10)
 	backgrounds.connect("resized",self,"set_rect_size")
 	advance_text()
 	set_process(true)

@@ -737,7 +737,10 @@ func _physics_process(delta):
 	if !is_on_floor() and not movementLocked and state != State.ON_LADDER:
 	#if state == State.FALLING:
 		if shoot_sprite_time <= 0:
-			sprite.set_animation("Falling")
+			if velocity.y<=0:
+				sprite.set_animation("JumpStart")
+			elif true: #velocity.y>.5
+				sprite.set_animation("Falling")
 		else:
 			sprite.set_animation("FallingShoot")
 	
@@ -792,8 +795,8 @@ var timeElapsed:float = 0.0
 var lockQueue = []
 var posInQueue:int = 0
 
-func lockMovement(time:float,velocity:Vector2,freeze_y_velocity:bool=true):
-	lockMovementQueue([[time,velocity,"",freeze_y_velocity]])
+func lockMovement(time:float,n_velocity:Vector2,freeze_y_velocity:bool=true):
+	lockMovementQueue([[time,n_velocity,"",freeze_y_velocity]])
 
 #Queue is structured like time,vector2,animation,freeze_y_velocity
 #obj.call("lockMovementQueue",[

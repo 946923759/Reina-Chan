@@ -1,0 +1,42 @@
+#BG	BG-Bar
+#CDAUDIO	AprilFools
+#LANGUAGES	en
+
+msg	One day, a huge battleship crash landed outside the Griffin base... And that's what we're going with.
+/Kalina	Commander, it seems to be a neutral party. And according to FN-57, they've been here before?
+/Commander	Before? I don't remember that.
+/Kalina	We were away at the time. Supposedly someone named Kiana took over temporarily. We still have her T-Doll.
+/Commander	We do? I've never seen a T-Doll named Kiana.
+/Kalina	Well, we do have over 500 unique dolls. We're bound to miss a few.
+/Commander	...I guess.
+nop	theresa on the right side in box
+/???	Um, hello? Sorry, it seems like our ship has crash landed here after some Honkai interference and the power is nonfunctional. Can we please use the tools at your base?
+/Commander	Kalina, am I talking to a twelve year old?
+/???	I'm over sixty, for your information!
+/Commander	...Whatever. Sure.
+
+/Kiana	Wow, this place is full of girls! Wait, who is that?
+/Kiana(?)	I'm Kiana Kaslana. Or to be more precise, I'm a T-Doll based on you. Don't you remember me?
+/Kiana	No? You look kind of... Different.
+/Kiana(?)	I don't have blue hair, but those handguns...
+
+/M16A1	So you love Jack Daniels too? That's awesome, I bet we'll get along just fine!
+/Himeko	Right, right! So, what's your job?
+/M16A1	Taking care of my sisters, going on missions, sometimes I get to sit around and do nothing.
+/Himeko	I'm a teacher. Well, I'm supposed to be.
+
+/Sin Mal	And I thought one Seele and Bronya was enough of a hassle. Now there's three Bronyas?!
+/PP-90	Er, I'm not Bronya... My name is PP-90. Why the heck did Vector drag me here, anyways?
+/Seele(?)	This Seele seems... Timid.
+/Seele	Huh?
+/Sin Mal	Hmm, do I sense murderous intent? Hey, let's fight!
+/Bronya	She's an android, Sin. She'd kill you.
+/Sin Mal	No way! I can take her!
+/Bronya	...I won't stop you from chasing your own death.
+/PP-90	Is that really okay? You know she has a massive scythe, right? And she's pretty violent.
+/Seele	Sin Mal's too stubborn to die. That's just how she is.
+/Sin Mal	Heaven or hell, let's rock!
+
+/Kyuushou	Oh, a video game? Can I play it?
+/Dier	Erm... Sure?
+/Dandelion	

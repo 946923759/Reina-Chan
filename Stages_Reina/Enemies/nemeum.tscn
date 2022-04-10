@@ -1,21 +1,343 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=39 format=2]
 
 [ext_resource path="res://Stages/EnemyBase.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Stages_Reina/Enemies/nemeum.png" type="Texture" id=2]
+[ext_resource path="res://ParticleEffects/alphaMask.gdshader" type="Shader" id=3]
+[ext_resource path="res://Stages_Reina/Enemies/nemeum shot.png" type="Texture" id=4]
+[ext_resource path="res://Stages_Reina/Enemies/nemeumAngled.png" type="Texture" id=5]
+[ext_resource path="res://Stages_Reina/Enemies/nemeumUp.png" type="Texture" id=6]
 
-[sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 32, 32 )
+[sub_resource type="GDScript" id=1]
+script/source = "extends \"res://Stages/EnemyBaseScript.gd\"
 
-[sub_resource type="SpriteFrames" id=2]
+enum STATES {
+	WAIT = 0,
+	SHOOTING,
+	TURNING
+}
+
+const OFFSETS = [
+	Vector2(1,-1),   #normal
+	Vector2(3,-11), #Angle
+	Vector2(-1,-7)  #Upwards
+]
+
+const CHARGE_OFFSETS = {
+	\"charging\": Vector2(92,-52),
+	\"chargingAngle\" : Vector2(92,-108),
+	\"chargingUp\": Vector2(0,-160)
+	
+}
+
+var curState = 0
+onready var charge = $charge
+
+#Testing
+var bullet = preload(\"res://Stages_Reina/Enemies/nemeum homing shot.tscn\")
+
+var player:KinematicBody2D
+func _ready():
+	sprite.set_animation('default')
+	player=get_node(\"/root/Node2D/Player\")
+
+var timer:float = 0.0
+func _physics_process(delta):
+	move_and_slide(Vector2(0,300))
+	if timer>0:
+		timer-=delta
+		return
+	
+	match curState:
+		STATES.WAIT:
+			#sprite.set_animation(\"charging\")
+			charge.frame=0
+			#charge.visible=false
+			curState=STATES.SHOOTING
+			#charge.position.x = 80*facing
+			pass
+		STATES.SHOOTING:
+			if charge.frame==7:
+				charge.visible=false
+				#$Area2D.monitoring = true
+				var bi = bullet.instance()
+				var pos = position + charge.position
+				
+				bi.position = pos
+				get_parent().add_child(bi)
+				#Have to adjust it a little since the player's position is at the top left of the collision box,
+				#not the center.
+				#charge.position should be taken into account but it's messing it up right now
+				var v:Vector2 = player.global_position-global_position + Vector2(30,40)
+				v=v.normalized()*400
+				if facing==DIRECTION.LEFT and player.global_position.x > global_position.x:
+					v.x=-400
+				elif facing==DIRECTION.RIGHT and player.global_position.x < global_position.x:
+					v.x=400
+				#v*=3
+				#if abs(v.x) > 100:
+				#	v*=abs(v.x)/100
+				#print(v)
+				#v.x=min(player.global_position.x-global_position.x,500)
+				#v.y=player.global_position.y+(-1 if player.global_position.y<0 else 1)*abs(player.global_position.x-global_position.x-v.x)
+				#print(v.normalized())
+				bi.init(v)
+				
+				#self.add_collision_exception_with(bi)# Make bullet and this not collide
+				#sleepTime=1
+				#print(\"Fired bullet.\")
+				timer=.2
+				#Surely there is a better way to do this?
+				match sprite.animation:
+					\"charging\":
+						sprite.set_animation(\"fired\")
+					\"chargingUp\":
+						sprite.set_animation(\"firedUp\")
+					\"chargingAngle\":
+						sprite.set_animation(\"firedAngle\")
+				
+				if (
+					(player.global_position.x > global_position.x and facing==DIRECTION.LEFT) 
+				 or (player.global_position.x < global_position.x and facing==DIRECTION.RIGHT)
+				):
+					curState=STATES.TURNING
+					if sprite.animation==\"firedUp\":
+						sprite.set_animation(\"turningUp\")
+						sprite.offset = Vector2(-3*facing,-11)
+					else:
+						sprite.set_animation(\"turning\")
+						sprite.offset=Vector2(facing,-1)
+					facing*=-1
+				else:
+					timer=1
+					curState=STATES.WAIT
+					
+			else:
+				if (player.global_position.x > global_position.x-100
+				and player.global_position.x < global_position.x+100
+				and player.global_position.y+40 < global_position.y):
+					sprite.set_animation(\"chargingUp\")
+					sprite.offset = Vector2(-3*facing,-11)
+				elif facing==DIRECTION.LEFT and (player.global_position.x < global_position.x
+				and player.global_position.y+40 < global_position.y-40):
+					sprite.set_animation(\"chargingAngle\")
+					sprite.offset=Vector2(facing,-7)
+				elif facing==DIRECTION.RIGHT and (player.global_position.x > global_position.x
+				and player.global_position.y+40 < global_position.y):
+					sprite.set_animation(\"chargingAngle\")
+					sprite.offset=Vector2(facing,-7)
+				else:
+					sprite.set_animation(\"charging\")
+					sprite.offset=Vector2(facing,-1)
+				charge.position = CHARGE_OFFSETS[sprite.animation]
+				charge.position.x*=facing
+				charge.visible=true
+		STATES.TURNING:
+			if sprite.frame==5:
+				curState=STATES.WAIT
+			elif sprite.frame>=3:
+				sprite.flip_h=facing==DIRECTION.RIGHT
+				if sprite.animation==\"turningUp\":
+					sprite.offset = Vector2(-3*facing,-11)
+				else:
+					sprite.offset=Vector2(facing,-1)
+			
+#/**		
+# * @brief Scales x so that l1 corresponds to l2 and h1 corresponds to h2.
+# *
+# * This does not modify x, so it MUST assign the result to something!
+# * Do the multiply before the divide to that integer scales have more precision.
+# *
+# * One such example: SCALE(x, 0, 1, L, H); interpolate between L and H.
+# */
+#static func SCALE(x, l1, h1, l2, h2)->float:
+#	return (((x) - (l1)) * ((h2) - (l2)) / ((h1) - (l1)) + (l2))
+"
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 60, 64 )
+
+[sub_resource type="AtlasTexture" id=3]
+atlas = ExtResource( 2 )
+region = Rect2( 0, 0, 54, 38 )
+
+[sub_resource type="AtlasTexture" id=4]
+atlas = ExtResource( 6 )
+region = Rect2( 46, 0, 46, 58 )
+
+[sub_resource type="AtlasTexture" id=5]
+atlas = ExtResource( 6 )
+region = Rect2( 0, 0, 46, 58 )
+
+[sub_resource type="AtlasTexture" id=6]
+atlas = ExtResource( 2 )
+region = Rect2( 162, 0, 54, 38 )
+
+[sub_resource type="AtlasTexture" id=7]
+atlas = ExtResource( 2 )
+region = Rect2( 0, 0, 54, 38 )
+
+[sub_resource type="AtlasTexture" id=8]
+atlas = ExtResource( 6 )
+region = Rect2( 0, 58, 46, 58 )
+
+[sub_resource type="AtlasTexture" id=9]
+atlas = ExtResource( 6 )
+region = Rect2( 46, 58, 46, 58 )
+
+[sub_resource type="AtlasTexture" id=10]
+atlas = ExtResource( 5 )
+region = Rect2( 52, 0, 52, 50 )
+
+[sub_resource type="AtlasTexture" id=11]
+atlas = ExtResource( 5 )
+region = Rect2( 0, 0, 52, 50 )
+
+[sub_resource type="AtlasTexture" id=12]
+atlas = ExtResource( 2 )
+region = Rect2( 0, 0, 54, 38 )
+
+[sub_resource type="AtlasTexture" id=13]
+atlas = ExtResource( 2 )
+region = Rect2( 0, 38, 54, 38 )
+
+[sub_resource type="AtlasTexture" id=14]
+atlas = ExtResource( 2 )
+region = Rect2( 54, 38, 54, 38 )
+
+[sub_resource type="AtlasTexture" id=15]
+atlas = ExtResource( 2 )
+region = Rect2( 54, 0, 54, 38 )
+
+[sub_resource type="AtlasTexture" id=16]
+atlas = ExtResource( 2 )
+region = Rect2( 108, 0, 54, 38 )
+
+[sub_resource type="AtlasTexture" id=17]
+atlas = ExtResource( 6 )
+region = Rect2( 0, 0, 46, 58 )
+
+[sub_resource type="AtlasTexture" id=18]
+atlas = ExtResource( 6 )
+region = Rect2( 0, 116, 46, 58 )
+
+[sub_resource type="AtlasTexture" id=19]
+atlas = ExtResource( 6 )
+region = Rect2( 46, 116, 46, 58 )
+
+[sub_resource type="AtlasTexture" id=20]
+atlas = ExtResource( 5 )
+region = Rect2( 0, 50, 52, 50 )
+
+[sub_resource type="AtlasTexture" id=21]
+atlas = ExtResource( 5 )
+region = Rect2( 52, 50, 52, 50 )
+
+[sub_resource type="SpriteFrames" id=22]
 animations = [ {
-"frames": [ ExtResource( 2 ) ],
+"frames": [ SubResource( 3 ) ],
 "loop": true,
 "name": "default",
 "speed": 5.0
+}, {
+"frames": [ SubResource( 4 ), SubResource( 5 ) ],
+"loop": false,
+"name": "firedUp",
+"speed": 10.0
+}, {
+"frames": [ SubResource( 6 ), SubResource( 7 ) ],
+"loop": false,
+"name": "fired",
+"speed": 10.0
+}, {
+"frames": [ SubResource( 8 ), SubResource( 9 ) ],
+"loop": true,
+"name": "chargingUp",
+"speed": 10.0
+}, {
+"frames": [ SubResource( 10 ), SubResource( 11 ) ],
+"loop": false,
+"name": "firedAngle",
+"speed": 10.0
+}, {
+"frames": [ SubResource( 12 ), SubResource( 13 ), SubResource( 14 ), SubResource( 14 ), SubResource( 13 ), SubResource( 12 ) ],
+"loop": false,
+"name": "turning",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 15 ), SubResource( 16 ) ],
+"loop": true,
+"name": "charging",
+"speed": 10.0
+}, {
+"frames": [ SubResource( 17 ), SubResource( 18 ), SubResource( 19 ), SubResource( 19 ), SubResource( 18 ), SubResource( 17 ) ],
+"loop": false,
+"name": "turningUp",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 20 ), SubResource( 21 ) ],
+"loop": true,
+"name": "chargingAngle",
+"speed": 10.0
+} ]
+
+[sub_resource type="ShaderMaterial" id=23]
+shader = ExtResource( 3 )
+shader_param/clr1 = Color( 0, 0, 0, 1 )
+
+[sub_resource type="AtlasTexture" id=24]
+atlas = ExtResource( 4 )
+region = Rect2( 0, 0, 17, 16 )
+
+[sub_resource type="AtlasTexture" id=25]
+atlas = ExtResource( 4 )
+region = Rect2( 17, 0, 17, 16 )
+
+[sub_resource type="AtlasTexture" id=26]
+atlas = ExtResource( 4 )
+region = Rect2( 34, 0, 17, 16 )
+
+[sub_resource type="AtlasTexture" id=27]
+atlas = ExtResource( 4 )
+region = Rect2( 51, 0, 17, 16 )
+
+[sub_resource type="AtlasTexture" id=28]
+atlas = ExtResource( 4 )
+region = Rect2( 68, 0, 17, 16 )
+
+[sub_resource type="AtlasTexture" id=29]
+atlas = ExtResource( 4 )
+region = Rect2( 85, 0, 17, 16 )
+
+[sub_resource type="AtlasTexture" id=30]
+atlas = ExtResource( 4 )
+region = Rect2( 102, 0, 17, 16 )
+
+[sub_resource type="AtlasTexture" id=31]
+atlas = ExtResource( 4 )
+region = Rect2( 119, 0, 17, 16 )
+
+[sub_resource type="SpriteFrames" id=32]
+animations = [ {
+"frames": [ SubResource( 24 ), SubResource( 25 ), SubResource( 26 ), SubResource( 27 ), SubResource( 28 ), SubResource( 29 ), SubResource( 30 ), SubResource( 31 ) ],
+"loop": false,
+"name": "default",
+"speed": 10.0
 } ]
 
 [node name="Enemy" instance=ExtResource( 1 )]
-shapeOverride = SubResource( 1 )
+script = SubResource( 1 )
+shapeOverride = SubResource( 2 )
+collisionOffset = Vector2( 2, 0 )
 
 [node name="AnimatedSprite" parent="." index="0"]
-frames = SubResource( 2 )
+position = Vector2( 0, -8 )
+frames = SubResource( 22 )
+animation = "turningUp"
+frame = 5
+
+[node name="charge" type="AnimatedSprite" parent="." index="6"]
+material = SubResource( 23 )
+position = Vector2( -92, -52 )
+scale = Vector2( 4, 4 )
+frames = SubResource( 32 )
+frame = 3

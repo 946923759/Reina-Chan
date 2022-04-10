@@ -304,6 +304,10 @@ CheckpointPlayerStats="*res://CheckpointPlayerStats.gd"
 ExternalAudio="*res://GDScriptAudioImport.gd"
 INITrans="*res://Translation.gd"
 
+[debug]
+
+gdscript/warnings/return_value_discarded=false
+
 [display]
 
 window/size/width=1280

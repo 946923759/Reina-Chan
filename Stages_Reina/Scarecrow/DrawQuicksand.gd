@@ -13,6 +13,7 @@ var height
 
 func _ready():
 	region_rect=Rect2(0,0,region_rect.size.x,32)
+	print(region_rect.size.x)
 	height = get_parent().quicksand_draw_height
 	pass # Replace with function body.
 

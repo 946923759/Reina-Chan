@@ -1,4 +1,4 @@
-[gd_resource type="SpriteFrames" load_steps=48 format=2]
+[gd_resource type="SpriteFrames" load_steps=50 format=2]
 
 [ext_resource path="res://Character Sprites/ump9/ump9ladder.png" type="Texture" id=1]
 [ext_resource path="res://Character Sprites/ump9/ump9appear.png" type="Texture" id=2]
@@ -7,11 +7,10 @@
 [ext_resource path="res://Character Sprites/ump9/ump9run_shoot.png" type="Texture" id=5]
 [ext_resource path="res://Character Sprites/ump9/ump9_chargeDash.png" type="Texture" id=6]
 [ext_resource path="res://Character Sprites/ump9/ump9fall_shoot.png" type="Texture" id=8]
+[ext_resource path="res://Character Sprites/ump9/ump9fall_new.png" type="Texture" id=9]
 [ext_resource path="res://Character Sprites/ump9/ump9run.png" type="Texture" id=11]
 [ext_resource path="res://Character Sprites/ump9/ump9Idle.png" type="Texture" id=12]
-[ext_resource path="res://Character Sprites/ump9/ump9fall.png" type="Texture" id=13]
 [ext_resource path="res://Player Files/8bitPlayer/Classic/ClassicFallShoot.png" type="Texture" id=17]
-[ext_resource path="res://Player Files/8bitPlayer/Classic/ClassicFall.png" type="Texture" id=18]
 [ext_resource path="res://Character Sprites/ump9/ump9shoot_2.png" type="Texture" id=19]
 [ext_resource path="res://Character Sprites/ump9/ump9shoot_1.png" type="Texture" id=20]
 
@@ -46,6 +45,10 @@ region = Rect2( 288, 0, 48, 48 )
 [sub_resource type="AtlasTexture" id=8]
 atlas = ExtResource( 11 )
 region = Rect2( 336, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=34]
+atlas = ExtResource( 9 )
+region = Rect2( 0, 0, 24, 32 )
 
 [sub_resource type="AtlasTexture" id=9]
 atlas = ExtResource( 1 )
@@ -131,6 +134,14 @@ region = Rect2( 100, 48, 50, 48 )
 atlas = ExtResource( 1 )
 region = Rect2( 50, 48, 50, 48 )
 
+[sub_resource type="AtlasTexture" id=35]
+atlas = ExtResource( 9 )
+region = Rect2( 24, 0, 24, 32 )
+
+[sub_resource type="AtlasTexture" id=36]
+atlas = ExtResource( 9 )
+region = Rect2( 48, 0, 24, 32 )
+
 [sub_resource type="AtlasTexture" id=30]
 atlas = ExtResource( 1 )
 region = Rect2( 0, 48, 50, 48 )
@@ -154,7 +165,7 @@ animations = [ {
 "name": "WalkLoop",
 "speed": 20.0
 }, {
-"frames": [ ExtResource( 18 ) ],
+"frames": [ SubResource( 34 ) ],
 "loop": false,
 "name": "JumpStart",
 "speed": 12.0
@@ -209,8 +220,8 @@ animations = [ {
 "name": "JumpShoot",
 "speed": 12.0
 }, {
-"frames": [ ExtResource( 13 ) ],
-"loop": true,
+"frames": [ SubResource( 35 ), SubResource( 36 ) ],
+"loop": false,
 "name": "Falling",
 "speed": 12.0
 }, {

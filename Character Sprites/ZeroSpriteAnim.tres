@@ -63,34 +63,14 @@
 
 [resource]
 animations = [ {
-"frames": [ ExtResource( 19 ), ExtResource( 20 ) ],
+"frames": [ ExtResource( 57 ), ExtResource( 58 ) ],
 "loop": false,
-"name": "IdleShoot",
-"speed": 10.0
-}, {
-"frames": [ ExtResource( 37 ), ExtResource( 38 ), ExtResource( 39 ), ExtResource( 38 ), ExtResource( 37 ), ExtResource( 40 ) ],
-"loop": true,
-"name": "LadderLoop",
-"speed": 10.0
-}, {
-"frames": [ ExtResource( 43 ), ExtResource( 44 ), ExtResource( 45 ), ExtResource( 46 ), ExtResource( 47 ), ExtResource( 48 ), ExtResource( 49 ), ExtResource( 50 ), ExtResource( 51 ), ExtResource( 52 ) ],
-"loop": true,
-"name": "WalkLoopShoot",
+"name": "WallKick",
 "speed": 15.0
 }, {
-"frames": [ ExtResource( 14 ), ExtResource( 15 ), ExtResource( 16 ), ExtResource( 17 ), ExtResource( 18 ) ],
+"frames": [ ExtResource( 26 ), ExtResource( 27 ), ExtResource( 28 ) ],
 "loop": false,
-"name": "JumpShoot",
-"speed": 12.0
-}, {
-"frames": [ ExtResource( 33 ), ExtResource( 34 ) ],
-"loop": true,
-"name": "FallingShoot",
-"speed": 5.0
-}, {
-"frames": [ ExtResource( 56 ), ExtResource( 40 ) ],
-"loop": false,
-"name": "LadderBegin",
+"name": "WallSlide",
 "speed": 15.0
 }, {
 "frames": [ ExtResource( 4 ), ExtResource( 5 ), ExtResource( 6 ), ExtResource( 7 ), ExtResource( 8 ), ExtResource( 9 ), ExtResource( 10 ), ExtResource( 11 ), ExtResource( 12 ), ExtResource( 13 ) ],
@@ -98,25 +78,15 @@ animations = [ {
 "name": "WalkLoop",
 "speed": 15.0
 }, {
-"frames": [ ExtResource( 1 ), ExtResource( 2 ), ExtResource( 3 ), ExtResource( 3 ), ExtResource( 1 ), ExtResource( 1 ), ExtResource( 1 ), ExtResource( 1 ), ExtResource( 1 ), ExtResource( 1 ), ExtResource( 1 ), ExtResource( 1 ), ExtResource( 1 ), ExtResource( 1 ), ExtResource( 1 ), ExtResource( 1 ), ExtResource( 1 ), ExtResource( 1 ) ],
-"loop": true,
-"name": "Idle",
-"speed": 10.0
-}, {
-"frames": [ ExtResource( 53 ) ],
-"loop": false,
-"name": "LadderShoot",
-"speed": 5.0
-}, {
-"frames": [ ExtResource( 41 ), ExtResource( 42 ) ],
-"loop": true,
-"name": "Falling",
-"speed": 12.0
-}, {
 "frames": [ ExtResource( 21 ), ExtResource( 22 ), ExtResource( 23 ), ExtResource( 24 ), ExtResource( 25 ) ],
 "loop": false,
 "name": "JumpStart",
 "speed": 12.0
+}, {
+"frames": [ ExtResource( 56 ), ExtResource( 40 ) ],
+"loop": false,
+"name": "LadderBegin",
+"speed": 15.0
 }, {
 "frames": [ ExtResource( 59 ), ExtResource( 60 ) ],
 "loop": false,
@@ -133,23 +103,53 @@ animations = [ {
 "name": "WalkBegin",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 26 ), ExtResource( 27 ), ExtResource( 28 ) ],
-"loop": false,
-"name": "WallSlide",
+"frames": [ ExtResource( 43 ), ExtResource( 44 ), ExtResource( 45 ), ExtResource( 46 ), ExtResource( 47 ), ExtResource( 48 ), ExtResource( 49 ), ExtResource( 50 ), ExtResource( 51 ), ExtResource( 52 ) ],
+"loop": true,
+"name": "WalkLoopShoot",
 "speed": 15.0
 }, {
-"frames": [ ExtResource( 54 ), ExtResource( 55 ) ],
-"loop": true,
-"name": "DashShoot",
+"frames": [ ExtResource( 19 ), ExtResource( 20 ) ],
+"loop": false,
+"name": "IdleShoot",
 "speed": 10.0
 }, {
-"frames": [ ExtResource( 57 ), ExtResource( 58 ) ],
+"frames": [ ExtResource( 1 ), ExtResource( 2 ), ExtResource( 3 ), ExtResource( 3 ), ExtResource( 1 ), ExtResource( 1 ), ExtResource( 1 ), ExtResource( 1 ), ExtResource( 1 ), ExtResource( 1 ), ExtResource( 1 ), ExtResource( 1 ), ExtResource( 1 ), ExtResource( 1 ), ExtResource( 1 ), ExtResource( 1 ), ExtResource( 1 ), ExtResource( 1 ) ],
+"loop": true,
+"name": "Idle",
+"speed": 10.0
+}, {
+"frames": [ ExtResource( 37 ), ExtResource( 38 ), ExtResource( 39 ), ExtResource( 38 ), ExtResource( 37 ), ExtResource( 40 ) ],
+"loop": true,
+"name": "LadderLoop",
+"speed": 10.0
+}, {
+"frames": [ ExtResource( 14 ), ExtResource( 15 ), ExtResource( 16 ), ExtResource( 17 ), ExtResource( 18 ) ],
 "loop": false,
-"name": "WallKick",
+"name": "JumpShoot",
+"speed": 12.0
+}, {
+"frames": [ ExtResource( 41 ), ExtResource( 42 ) ],
+"loop": true,
+"name": "Falling",
 "speed": 15.0
+}, {
+"frames": [ ExtResource( 53 ) ],
+"loop": false,
+"name": "LadderShoot",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 33 ), ExtResource( 34 ) ],
+"loop": true,
+"name": "FallingShoot",
+"speed": 5.0
 }, {
 "frames": [ ExtResource( 35 ), ExtResource( 36 ) ],
 "loop": true,
 "name": "DashLoop",
+"speed": 10.0
+}, {
+"frames": [ ExtResource( 54 ), ExtResource( 55 ) ],
+"loop": true,
+"name": "DashShoot",
 "speed": 10.0
 } ]

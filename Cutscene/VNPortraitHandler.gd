@@ -67,11 +67,13 @@ func _ready():
 func update_portrait_positions(center:float):
 	SCREEN_CENTER_X = center
 	#print(SCREEN_CENTER_X)
+	#WARN: This is not scaled for resolutions other than 1280px!
 	portraitPositions = [
 		[SCREEN_CENTER_X],
-		[SCREEN_CENTER_X-250,SCREEN_CENTER_X+250], #separation of 200px
-		[SCREEN_CENTER_X-400,SCREEN_CENTER_X,SCREEN_CENTER_X+400],
-		[SCREEN_CENTER_X-450,SCREEN_CENTER_X-150,SCREEN_CENTER_X+150,SCREEN_CENTER_X+450]
+		[SCREEN_CENTER_X-250,SCREEN_CENTER_X+250], #separation of 500px
+		[SCREEN_CENTER_X-400,SCREEN_CENTER_X,SCREEN_CENTER_X+400], #400px...
+		[SCREEN_CENTER_X-450,SCREEN_CENTER_X-150,SCREEN_CENTER_X+150,SCREEN_CENTER_X+450], #300px...
+		[SCREEN_CENTER_X-500,SCREEN_CENTER_X-250,SCREEN_CENTER_X,SCREEN_CENTER_X+250,SCREEN_CENTER_X+500] #250px
 	]
 	
 	if is_active:
@@ -261,5 +263,6 @@ func overdrive_set_texture(database:Dictionary,portraitKey:String):
 				else:
 					printerr("Portrait not embedded in pck and no external file!!")
 			else:
+				print("(DEBUG) Loaded image from res://")
 				cur_texture=load("res://Cutscene/Portraits/"+sprName+".png")
 		update()

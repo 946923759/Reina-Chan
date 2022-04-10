@@ -129,7 +129,7 @@ func _ready():
 				
 	cutsceneData = load_cutscene_data(Globals.nextCutscene)
 	if OS.is_debug_build():
-		cutsceneData = load_cutscene_data(\"lol.txt\")
+		cutsceneData = load_cutscene_data(\"april_fools.txt\")
 		#cutsceneData = load_cutscene_data(\"test_Midnight112.txt\")
 	if cutsceneData.size()==0:
 		#var e = load(\"res://savedataError.tscn\").instance()

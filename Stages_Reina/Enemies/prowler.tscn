@@ -1,10 +1,30 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://Stages/EnemyBase.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Stages_Reina/Enemies/prowler.png" type="Texture" id=2]
+[ext_resource path="res://addons/godot-next/gui/debug_label.gd" type="Script" id=3]
 
-[sub_resource type="GDScript" id=4]
+[sub_resource type="GDScript" id=1]
 script/source = "extends \"res://Stages/EnemyBaseScript.gd\"
+
+export(int, \"Normal\",\"Left\",\"Ceiling\",\"Right\") var gravity
+
+enum STATES {
+	move_towards,
+#	slow_down,
+	waitShootAnim,
+	shoot,
+#	move_away
+}
+var curState = STATES.move_towards
+
+#Will we ever stop using this lol
+var bullet = preload(\"res://Stages_Reina/Enemies/bulletDinergate.tscn\")
+onready var player:KinematicBody2D = get_node(\"/root/Node2D/Player\")
+
+func _ready():
+	rotation_degrees=gravity*90
+	sprite.set_animation(\"default\")
 
 func move_and_slide_based_on_direction()->Vector2:
 	if self.rotation_degrees==0:
@@ -18,42 +38,163 @@ func move_and_slide_based_on_direction()->Vector2:
 	else:
 		return Vector2(-100,420).rotated(rotation)
 
+var cooldown:float=0.0
+var shotCooldown:float=0.0
+var xVelo:float = 0.0
+var justShot:bool=false
 func _physics_process(delta):
-	move_and_slide(Vector2(200*facing,420).rotated(rotation), Vector2(0, -1))
-	if $RayCast2D.is_colliding():
-		self.rotation_degrees+=90
-		if self.rotation_degrees==360:
-			rotation_degrees=0
+	if cooldown>0:
+		cooldown-=delta
+		return
+	if shotCooldown>0:
+		shotCooldown-=delta
+	match curState:
+		STATES.move_towards:
+			sprite.set_animation(\"default\")
+			xVelo=min(200.0,10+xVelo+xVelo*delta) #I hope I programmed this correctly
+			
+			var shouldMove=1
+			if abs(player.global_position.x - global_position.x) < 10:
+				shouldMove=0
+			elif player.global_position.x < global_position.x:
+				shouldMove=-1
+			move_and_slide(Vector2(xVelo*shouldMove,420).rotated(rotation), Vector2(0, -1))
+			#if is_on_wall():
+			#	facing*=-1
+			#	sprite.flip_h = (facing == DIRECTION.RIGHT)
+			if shotCooldown<=0:
+				if (gravity==0 or gravity==3):
+					if abs(player.global_position.x - global_position.x) < 300:
+						curState=STATES.waitShootAnim
+						sprite.set_animation(\"readyFire\")
+		STATES.waitShootAnim:
+			if sprite.frame==2:
+				sprite.set_animation(\"fire\")
+				curState=STATES.shoot
+				#sprite.playing=false
+				pass
+		STATES.shoot:
+			if sprite.frame==1:
+				sprite.set_animation(\"doneFire\")
+				curState=STATES.move_towards
+				cooldown=.5
+				shotCooldown=1
+				xVelo=0
+				#justShot=false
+			elif !justShot:
+				var bi = bullet.instance()
+				var pos = position
+				
+				bi.position = pos
+				get_parent().add_child(bi)
+				
+				#Should we do this or should we just shoot in 8 directions?
+				var v:Vector2 = player.global_position-global_position + Vector2(10,40)
+				v=v.normalized()*10
+				#Vector2(5*facing,0)
+				bi.init(v)
+				justShot=true
+			
 "
 
-[sub_resource type="RectangleShape2D" id=5]
-extents = Vector2( 17, 13 )
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 68, 52 )
 
-[sub_resource type="AtlasTexture" id=1]
+[sub_resource type="AtlasTexture" id=3]
 atlas = ExtResource( 2 )
 region = Rect2( 0, 0, 34, 27 )
 
-[sub_resource type="AtlasTexture" id=2]
+[sub_resource type="AtlasTexture" id=4]
 atlas = ExtResource( 2 )
 region = Rect2( 34, 0, 34, 27 )
 
-[sub_resource type="SpriteFrames" id=3]
+[sub_resource type="AtlasTexture" id=9]
+atlas = ExtResource( 2 )
+region = Rect2( 34, 0, 34, 27 )
+
+[sub_resource type="AtlasTexture" id=10]
+atlas = ExtResource( 2 )
+region = Rect2( 0, 27, 34, 27 )
+
+[sub_resource type="AtlasTexture" id=11]
+atlas = ExtResource( 2 )
+region = Rect2( 68, 27, 34, 27 )
+
+[sub_resource type="AtlasTexture" id=12]
+atlas = ExtResource( 2 )
+region = Rect2( 34, 27, 34, 27 )
+
+[sub_resource type="AtlasTexture" id=13]
+atlas = ExtResource( 2 )
+region = Rect2( 0, 27, 34, 27 )
+
+[sub_resource type="AtlasTexture" id=6]
+atlas = ExtResource( 2 )
+region = Rect2( 68, 27, 34, 27 )
+
+[sub_resource type="AtlasTexture" id=7]
+atlas = ExtResource( 2 )
+region = Rect2( 0, 27, 34, 27 )
+
+[sub_resource type="AtlasTexture" id=8]
+atlas = ExtResource( 2 )
+region = Rect2( 34, 0, 34, 27 )
+
+[sub_resource type="SpriteFrames" id=5]
 animations = [ {
-"frames": [ SubResource( 1 ), SubResource( 2 ) ],
+"frames": [ SubResource( 3 ), SubResource( 4 ) ],
 "loop": true,
 "name": "default",
 "speed": 5.0
+}, {
+"frames": [ SubResource( 9 ), SubResource( 10 ), SubResource( 11 ) ],
+"loop": true,
+"name": "readyFire",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 12 ), SubResource( 13 ) ],
+"loop": true,
+"name": "fire",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 6 ), SubResource( 7 ), SubResource( 8 ) ],
+"loop": true,
+"name": "doneFire",
+"speed": 5.0
 } ]
 
-[node name="Enemy" instance=ExtResource( 1 )]
-script = SubResource( 4 )
-shapeOverride = SubResource( 5 )
+[node name="Prowler" instance=ExtResource( 1 )]
+script = SubResource( 1 )
+shapeOverride = SubResource( 2 )
 collisionOffset = Vector2( 0, 1 )
 
 [node name="AnimatedSprite" parent="." index="0"]
-frames = SubResource( 3 )
+frames = SubResource( 5 )
+animation = "doneFire"
 
-[node name="RayCast2D" type="RayCast2D" parent="." index="7"]
-enabled = true
-cast_to = Vector2( -18, 0 )
-collision_mask = 16
+[node name="DebugLabel" type="Label" parent="." index="6"]
+margin_top = -96.0
+margin_right = 75.0
+margin_bottom = -65.0
+text = "xVelo = null
+curState = null
+"
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+target_path = NodePath("..")
+properties = PoolStringArray( "xVelo", "curState" )
+
+[node name="DebugLabel2" type="Label" parent="." index="7"]
+margin_top = -128.0
+margin_right = 148.0
+margin_bottom = -97.0
+text = "animation = \"doneFire\"
+"
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+target_path = NodePath("../AnimatedSprite")
+properties = PoolStringArray( "animation" )

@@ -1,22 +1,13 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Stages_Reina/Bosses/M16/heaven.png" type="Texture" id=1]
 [ext_resource path="res://stepmania-compat/smSprite.gd" type="Script" id=2]
 [ext_resource path="res://ParticleEffects/outline.gdshader" type="Shader" id=3]
 [ext_resource path="res://stepmania-compat/smQuad.gd" type="Script" id=4]
 
-[sub_resource type="GDScript" id=2]
-script/source = "extends CanvasLayer
+[sub_resource type="ShaderMaterial" id=2]
 
-func _ready():
-	$smQuad.setSize(Globals.gameResolution)
-	$smQuad.Center()
-	$Sprite.Center()
-"
-
-[sub_resource type="ShaderMaterial" id=4]
-
-[sub_resource type="ShaderMaterial" id=1]
+[sub_resource type="ShaderMaterial" id=3]
 shader = ExtResource( 3 )
 shader_param/max_line_width = 100.0
 shader_param/min_line_width = 5.0
@@ -27,15 +18,24 @@ shader_param/ending_colour = Color( 0.447059, 0.156863, 0, 0 )
 
 [node name="CanvasLayer" type="CanvasLayer"]
 layer = -1
-script = SubResource( 2 )
 
-[node name="smQuad" type="Polygon2D" parent="."]
-material = SubResource( 4 )
+[node name="smQuad" type="ColorRect" parent="."]
+material = SubResource( 2 )
+anchor_right = 1.0
+anchor_bottom = 1.0
 color = Color( 0, 0, 0, 1 )
 script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="Sprite" type="Sprite" parent="."]
-material = SubResource( 1 )
-position = Vector2( 640, 352 )
+[node name="Sprite" type="TextureRect" parent="."]
+material = SubResource( 3 )
+anchor_right = 1.0
+anchor_bottom = 1.0
 texture = ExtResource( 1 )
+stretch_mode = 6
 script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}

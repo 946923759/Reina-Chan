@@ -112,6 +112,7 @@ stream = ExtResource( 4 )
 bus = "Player/Enemies"
 
 [node name="DebugLabel" type="Label" parent="." index="10"]
+visible = false
 margin_left = -53.3289
 margin_top = -40.1147
 margin_right = 38.6711

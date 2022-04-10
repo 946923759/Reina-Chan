@@ -290,8 +290,7 @@ gravity = 3500
 material = SubResource( 1 )
 scale = Vector2( 4, 4 )
 frames = ExtResource( 2 )
-animation = "DashAttack"
-frame = 3
+animation = "Begin"
 
 [node name="WeaponSwitch" type="Node2D" parent="."]
 visible = false

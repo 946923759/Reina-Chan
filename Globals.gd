@@ -441,6 +441,10 @@ class ReinaAudioPlayer:
 	func _init(_node:Node):
 		node = _node;
 		audioStreamPlayer=node.get_node("AudioStreamPlayer")
+		#Remember to comment this out at some point...
+		if false:
+			var gs = load("res://greenStripe.tscn")
+			node.add_child(gs.instance())
 	
 	func load_song(custom_music_name:String, nsf_music_file:String, nsf_track_num:int,nsf_volume_adjustment:float=0):
 		#return

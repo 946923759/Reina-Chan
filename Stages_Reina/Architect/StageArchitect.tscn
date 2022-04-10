@@ -259,7 +259,7 @@ collision_layer = 18
 collision_mask = 18
 
 [node name="Player" parent="." instance=ExtResource( 2 )]
-position = Vector2( 223, 576 )
+position = Vector2( 10367, 640 )
 
 [node name="BulletHolder" type="Node2D" parent="."]
 
@@ -657,15 +657,15 @@ position = Vector2( 9247, 672 )
 [node name="room160-0" type="Node2D" parent="."]
 
 [node name="Enemy9" parent="room160-0" instance=ExtResource( 9 )]
-position = Vector2( 11359, 416 )
+position = Vector2( 11391, 128 )
 collision_mask = 0
 
 [node name="Enemy10" parent="room160-0" instance=ExtResource( 9 )]
-position = Vector2( 11136, 448 )
+position = Vector2( 11135, 416 )
 collision_mask = 0
 
 [node name="Enemy11" parent="room160-0" instance=ExtResource( 9 )]
-position = Vector2( 10784, 544 )
+position = Vector2( 10783, 512 )
 collision_mask = 0
 
 [node name="room180-12" type="Node2D" parent="."]

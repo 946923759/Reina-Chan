@@ -20,8 +20,10 @@ var rText = [
 	\"What is a T-Doll? A miserable little pile of bolts! And ice cream and cake.\",
 	\"https://gfl.amaryllisworks.pw\",
 	\"VZ-61 is cute. Cute!\",
-	\"\\\"SHOUJO ZENSEN!\\\"\"
-	#\"Amaryllis Works, VanDine, Unfiltered, Anonymous, & Nirvash\"
+	\"\\\"SHOUJO ZENSEN!\\\"\",
+	\"Amaryllis Works, VanDine, Unfiltered, Anonymous, Leina & Nirvash\",
+	\"Remember to hydrate\",
+	\"We will reverse all creation!\"
 ]
 
 #warning-ignore:return_value_discarded

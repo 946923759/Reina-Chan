@@ -9,9 +9,10 @@ script/source = "extends CanvasLayer
 onready var optList = $m/CenterContainer/VBoxContainer
 
 func _ready():
+	$m.visible=Engine.editor_hint #If true ingame mouse will break
+	
 	optList.get_child(0).modulate =Color(0.21,0.63,1,1)
 	$m.modulate.a=0
-	$m.visible=true
 	set_process_input(false)
 	#print(INITrans.GetString(\"PauseMenu\",\"DebugHelp\"))
 	if OS.is_debug_build():
@@ -43,6 +44,7 @@ func updateTimer(time,timeWithDeath):
 	$m/timerLabel.text=text
 
 func OnCommand():
+	$m.visible=true
 	$Fadeout_Tween.interpolate_property($m, \"modulate:a\", null, 1, .2, Tween.TRANS_LINEAR, Tween.EASE_OUT)
 	$Fadeout_Tween.start()
 	set_process_input(true)
@@ -56,6 +58,7 @@ func OffCommand():
 	$Fadeout_Tween.interpolate_property($m, \"modulate:a\", null, 0, .2, Tween.TRANS_LINEAR, Tween.EASE_OUT)
 	$Fadeout_Tween.start()
 	yield($Fadeout_Tween,\"tween_completed\")
+	$m.visible=false
 	set_process_input(false)
 	get_tree().paused = false
 	#return $Fadeout_Tween

@@ -7,7 +7,7 @@ var _touch_index : int = -1
 func getInputOffset(event)->Vector2:
 	if event.position.x > position.x and event.position.x < position.x+SPRITE_SIZE*scale.x:
 		if event.position.y > position.y and event.position.y < position.y+SPRITE_SIZE*scale.y:
-			return Vector2(event.position.x-position.x-SPRITE_SIZE/2*scale.x,event.position.y-position.y-SPRITE_SIZE/2*scale.y)
+			return Vector2(event.position.x-position.x-SPRITE_SIZE/2.0*scale.x,event.position.y-position.y-SPRITE_SIZE/2.0*scale.y)
 	return Vector2()
 
 func _ready():

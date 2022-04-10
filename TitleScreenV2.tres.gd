@@ -72,6 +72,10 @@ func _ready():
 	print("Translating items...")
 	setTranslated()
 	
+	if OS.get_date()['month']==4 and OS.get_date()['day']==1:
+		var tex = load("res://reina_logo_april_fools.png")
+		$logoHolder/Logo.texture=tex
+	
 	#Enable resizing (WIP)
 	set_process(ProjectSettings.get_setting("display/window/stretch/aspect") != "keep")
 	

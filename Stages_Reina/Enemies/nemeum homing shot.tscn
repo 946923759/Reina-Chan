@@ -1,0 +1,88 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://ParticleEffects/alphaMask.gdshader" type="Shader" id=1]
+[ext_resource path="res://Stages_Reina/Enemies/nemeum shot2.png" type="Texture" id=2]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Area2D
+
+export (int,1,25) var player_damage = 3
+onready var sprite = $AnimatedSprite
+var velocity:Vector2
+
+func init(velo:Vector2):
+	velocity=velo
+
+func _ready():
+	# warning-ignore:return_value_discarded
+	self.connect(\"body_entered\",self,\"objectTouched\")
+
+func _process(delta):
+	
+	position+=velocity*delta
+
+func objectTouched(obj):
+	#print(\"intersecting!\")
+	if obj.has_method(\"player_touched\"): #If enemy touched player
+		#lastTouched = obj
+		obj.call(\"player_touched\",self,player_damage)
+		killSelf(true)
+	elif obj.has_method(\"enemy_touched\"): #If enemy touched bullet
+		obj.call(\"enemy_touched\",self)
+
+#func clearLastTouched(_obj):
+#	lastTouched=null
+		
+func killSelf(bigExplode=false):
+	print(self.name+\" queued to be killed.\")
+	#isAlive = false
+	set_physics_process(false)
+	sprite.visible = false
+	sprite.stop()
+	
+	self.queue_free()
+
+
+func _on_VisibilityNotifier2D_screen_exited():
+	queue_free()
+"
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = ExtResource( 1 )
+shader_param/clr1 = Color( 0, 0, 0, 1 )
+
+[sub_resource type="AtlasTexture" id=3]
+atlas = ExtResource( 2 )
+region = Rect2( 0, 0, 24, 24 )
+
+[sub_resource type="AtlasTexture" id=4]
+atlas = ExtResource( 2 )
+region = Rect2( 24, 0, 24, 24 )
+
+[sub_resource type="SpriteFrames" id=5]
+animations = [ {
+"frames": [ SubResource( 3 ), SubResource( 4 ) ],
+"loop": true,
+"name": "default",
+"speed": 8.0
+} ]
+
+[sub_resource type="CircleShape2D" id=6]
+radius = 38.0
+
+[node name="Node2D" type="Area2D"]
+script = SubResource( 1 )
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+material = SubResource( 2 )
+scale = Vector2( 4, 4 )
+frames = SubResource( 5 )
+frame = 1
+playing = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 6 )
+
+[node name="VisibilityNotifier2D" type="VisibilityNotifier2D" parent="."]
+
+[connection signal="screen_exited" from="VisibilityNotifier2D" to="." method="_on_VisibilityNotifier2D_screen_exited"]

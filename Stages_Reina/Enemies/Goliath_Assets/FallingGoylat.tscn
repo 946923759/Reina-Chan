@@ -12,10 +12,9 @@ collision_mask = 17
 script = ExtResource( 2 )
 
 [node name="Sprite" type="Sprite" parent="."]
-position = Vector2( 4, -3 )
-rotation = -0.637045
 scale = Vector2( 3, 3 )
 texture = ExtResource( 1 )
+offset = Vector2( 2, 0 )
 region_enabled = true
 region_rect = Rect2( 32, 0, 32, 32 )
 

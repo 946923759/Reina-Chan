@@ -1,12 +1,28 @@
 extends Area2D
+#"Goylat" is the chinese mispelling MICA uses for Goliath, if you were wondering
 
 var expl = preload("res://Stages/EnemyExplosion.tscn")
 
 func _ready():
 	self.connect("body_entered",self,"objTouched")
+	set_process(false)
+	
+func init(facing:int=1):
+	set_process(true)
+	var s = $Sprite
+	updateDraw(facing)
+	s.rotation_degrees=facing*36.5
 
+#Also called from tool script, so can't be used in init()
+func updateDraw(facing):
+	var s = $Sprite
+	s.flip_h=(facing==1)
+	s.offset=Vector2(-2*facing,3*facing)
+
+var velo:float=0
 func _process(delta):
-	position.y+=235*delta
+	position.y+=350*delta+velo
+	velo+=delta*2
 	
 
 func objTouched(obj):

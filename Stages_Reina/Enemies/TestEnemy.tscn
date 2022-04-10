@@ -20,4 +20,5 @@ shapeOverride = SubResource( 1 )
 use_large_explosion = true
 
 [node name="AnimatedSprite" parent="." index="0"]
+scale = Vector2( 1, 1 )
 frames = SubResource( 2 )
