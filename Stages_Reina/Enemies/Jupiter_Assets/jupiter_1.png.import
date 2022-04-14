@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/vespid_t2.png-d478950f7708b28025577729fbbf8616.stex"
+path="res://.import/jupiter_1.png-0b6eaa2e7baf654b06bd00a33337f29c.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Stages_Reina/Enemies/vespid_t2.png"
-dest_files=[ "res://.import/vespid_t2.png-d478950f7708b28025577729fbbf8616.stex" ]
+source_file="res://Stages_Reina/Enemies/Jupiter_Assets/jupiter_1.png"
+dest_files=[ "res://.import/jupiter_1.png-0b6eaa2e7baf654b06bd00a33337f29c.stex" ]
 
 [params]
 

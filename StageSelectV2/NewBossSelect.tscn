@@ -13,7 +13,7 @@ var whatever:Array=[
 	[\"Architect\",\"res://StageSelectV2/Architect.png\",\"res://Stages_Reina/Architect/StageArchitect.tscn\"],
 	[\"Alchemist\",\"res://StageSelectV2/Alchemist.png\",\"res://Stages_Reina/Alchemist/Alchemist_v2.tscn\"],
 	[\"Ouroboros\",\"\",\"\"],
-	[\"Scarecrow\",\"\",\"\"], #res://StageSelectV2/Scarecrow.png #res://Stages_Reina/Scarecrow/Scarecrow.tscn
+	[\"Scarecrow\",\"res://StageSelectV2/Scarecrow.png\",\"res://Stages_Reina/Scarecrow/Scarecrow.tscn\"],
 	[\"\",\"res://StageSelectV2/sf icon.png\",\"\"], #Middle, for wily castle
 	[\"Gager\",\"\",\"\"],
 	[\"Executioner\",\"\",\"\"],

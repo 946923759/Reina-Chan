@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Various Objects/PushingQuicksand.gd" type="Script" id=1]
+
+[node name="Pushing_Quicksand" type="StaticBody2D"]
+position = Vector2( 96, 352 )
+collision_layer = 4
+collision_mask = 4
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_group_": true,
+"_editor_description_": "ATTACH A COLLISIONSHAPE2D TO ME OR I WON'T WORK"
+}

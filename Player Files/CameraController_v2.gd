@@ -23,7 +23,8 @@ func _ready():
 	destPositions=[cam.limit_left, cam.limit_top, cam.limit_right, cam.limit_bottom]
 
 var is_tweening:bool=false
-func finish_tweening_camera(write_destinations:bool=false):
+#I no longer remember wtf write_destinations is for
+func finish_tweening_camera(_write_destinations:bool=false):
 	is_tweening=false
 	cam.limit_left = destPositions[0]
 	cam.limit_top = destPositions[1]
@@ -158,6 +159,6 @@ func add_stress(amount : float) -> void:
 	stress += amount
 		
 
-func shakeCamera(howMuch):
-	add_stress(3)
-	pass
+func shakeCamera(howMuch:float=3.0):
+	add_stress(howMuch)
+	#pass

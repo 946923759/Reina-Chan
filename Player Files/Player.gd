@@ -619,7 +619,7 @@ func processInvincible(delta):
 		invincibilityElapsed = 0.0
 		sprite.modulate.a = 1
 
-func player_touched(obj):
+func player_touched(_obj):
 	if !invincible:
 		if !on_ladder:
 			if is_on_floor():

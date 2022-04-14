@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/jupiter_3.png-0c07956378c73794ad947ce65dec5cab.stex"
+path="res://.import/JUPITERCANNON.png-7c8b50bc04a70f762f7b5f93113acdbf.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Stages_Reina/Enemies/jupiter_3.png"
-dest_files=[ "res://.import/jupiter_3.png-0c07956378c73794ad947ce65dec5cab.stex" ]
+source_file="res://Stages_Reina/Enemies/Jupiter_Assets/JUPITERCANNON.png"
+dest_files=[ "res://.import/JUPITERCANNON.png-7c8b50bc04a70f762f7b5f93113acdbf.stex" ]
 
 [params]
 

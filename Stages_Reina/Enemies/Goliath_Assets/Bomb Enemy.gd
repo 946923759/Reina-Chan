@@ -4,6 +4,7 @@ extends "res://Stages/EnemyBaseScript.gd"
 export (int,"black","red") var type=0;
 
 var fallingGoylat = preload("res://Stages_Reina/Enemies/Goliath_Assets/FallingGoylat.tscn")
+onready var carrying = $Carrying
 var dropped:bool=false
 
 
@@ -28,11 +29,11 @@ func updateVisuals():
 	if type==1:
 		sprite.set_animation("red")
 		if !Engine.editor_hint:
-			$Carrying.updateDraw(facing)
+			carrying.updateDraw(facing)
 	else:
 		sprite.set_animation("default")
 	$AnimatedSprite2.visible=(type==1)
-	$Carrying.visible=(type==1)
+	carrying.visible=(type==1)
 	
 	
 
@@ -55,11 +56,13 @@ func _physics_process(_delta):
 		if player:
 			if player.global_position.x > global_position.x-5 and player.global_position.x < global_position.x+5:
 				
-				var e = fallingGoylat.instance()
-				e.position = position+$Carrying.position
-				$Carrying.queue_free()
-				get_parent().add_child(e)
-				e.init(facing)
+				#If player runs into it it explodes and it's invalid
+				if is_instance_valid(carrying):
+					var e = fallingGoylat.instance()
+					e.position = position+carrying.position
+					carrying.queue_free()
+					get_parent().add_child(e)
+					e.init(facing)
 				dropped=true
 
 func objectTouched(obj):

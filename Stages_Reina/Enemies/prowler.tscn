@@ -40,8 +40,28 @@ func move_and_slide_based_on_direction()->Vector2:
 
 var cooldown:float=0.0
 var shotCooldown:float=0.0
-var xVelo:float = 0.0
+var moveSpeed:float = 0.0
 var justShot:bool=false
+
+#There has GOT to be a better way to do this
+func getMovementDirection(moveSpeed)->float:
+	var shouldMove=1
+	if (gravity==0 or gravity==2): #normal, upside-down
+		if abs(player.global_position.x - global_position.x) < 10:
+			shouldMove=0
+		elif gravity==0 and player.global_position.x < global_position.x:
+			shouldMove=-1
+		elif gravity==2 and player.global_position.x > global_position.x:
+			shouldMove=-1
+	else:
+		if abs(player.global_position.y - global_position.y) < 10:
+			shouldMove=0
+		elif gravity == 1 and player.global_position.y < global_position.y:
+			shouldMove=-1
+		elif gravity == 3 and player.global_position.y > global_position.y:
+			shouldMove=-1
+	return moveSpeed*shouldMove
+
 func _physics_process(delta):
 	if cooldown>0:
 		cooldown-=delta
@@ -51,46 +71,48 @@ func _physics_process(delta):
 	match curState:
 		STATES.move_towards:
 			sprite.set_animation(\"default\")
-			xVelo=min(200.0,10+xVelo+xVelo*delta) #I hope I programmed this correctly
-			
-			var shouldMove=1
-			if abs(player.global_position.x - global_position.x) < 10:
-				shouldMove=0
-			elif player.global_position.x < global_position.x:
-				shouldMove=-1
-			move_and_slide(Vector2(xVelo*shouldMove,420).rotated(rotation), Vector2(0, -1))
+			moveSpeed=min(200.0,10+moveSpeed+moveSpeed*delta) #I hope I programmed this correctly
+
+			move_and_slide(Vector2(getMovementDirection(moveSpeed),420).rotated(rotation), Vector2(0, -1))
 			#if is_on_wall():
 			#	facing*=-1
 			#	sprite.flip_h = (facing == DIRECTION.RIGHT)
 			if shotCooldown<=0:
-				if (gravity==0 or gravity==3):
-					if abs(player.global_position.x - global_position.x) < 300:
+				if (
+					((gravity==0 or gravity==2) and abs(player.global_position.x - global_position.x) < 300)
+				 or ((gravity==1 or gravity==3) and abs(player.global_position.y - global_position.y) < 300)
+					):
 						curState=STATES.waitShootAnim
 						sprite.set_animation(\"readyFire\")
 		STATES.waitShootAnim:
+			#This seems like a bad idea
+			moveSpeed=max(0.0,moveSpeed-moveSpeed*delta*2)
+			move_and_slide(Vector2(getMovementDirection(moveSpeed),420).rotated(rotation), Vector2(0, -1))
+			
+			
 			if sprite.frame==2:
 				sprite.set_animation(\"fire\")
 				curState=STATES.shoot
 				#sprite.playing=false
 				pass
 		STATES.shoot:
-			if sprite.frame==1:
+			if sprite.frame==1: #Wait 1 frame (Well, 5 frames at 60fps, but you get the idea)
 				sprite.set_animation(\"doneFire\")
 				curState=STATES.move_towards
 				cooldown=.5
 				shotCooldown=1
-				xVelo=0
-				#justShot=false
+				moveSpeed=0
+				justShot=false
 			elif !justShot:
 				var bi = bullet.instance()
 				var pos = position
 				
-				bi.position = pos
+				bi.position = pos+Vector2(-50,-10)
 				get_parent().add_child(bi)
 				
 				#Should we do this or should we just shoot in 8 directions?
 				var v:Vector2 = player.global_position-global_position + Vector2(10,40)
-				v=v.normalized()*10
+				v=v.normalized()*7
 				#Vector2(5*facing,0)
 				bi.init(v)
 				justShot=true
@@ -108,58 +130,58 @@ region = Rect2( 0, 0, 34, 27 )
 atlas = ExtResource( 2 )
 region = Rect2( 34, 0, 34, 27 )
 
-[sub_resource type="AtlasTexture" id=9]
-atlas = ExtResource( 2 )
-region = Rect2( 34, 0, 34, 27 )
-
-[sub_resource type="AtlasTexture" id=10]
-atlas = ExtResource( 2 )
-region = Rect2( 0, 27, 34, 27 )
-
-[sub_resource type="AtlasTexture" id=11]
+[sub_resource type="AtlasTexture" id=5]
 atlas = ExtResource( 2 )
 region = Rect2( 68, 27, 34, 27 )
-
-[sub_resource type="AtlasTexture" id=12]
-atlas = ExtResource( 2 )
-region = Rect2( 34, 27, 34, 27 )
-
-[sub_resource type="AtlasTexture" id=13]
-atlas = ExtResource( 2 )
-region = Rect2( 0, 27, 34, 27 )
 
 [sub_resource type="AtlasTexture" id=6]
 atlas = ExtResource( 2 )
-region = Rect2( 68, 27, 34, 27 )
+region = Rect2( 0, 27, 34, 27 )
 
 [sub_resource type="AtlasTexture" id=7]
 atlas = ExtResource( 2 )
-region = Rect2( 0, 27, 34, 27 )
+region = Rect2( 34, 0, 34, 27 )
 
 [sub_resource type="AtlasTexture" id=8]
 atlas = ExtResource( 2 )
 region = Rect2( 34, 0, 34, 27 )
 
-[sub_resource type="SpriteFrames" id=5]
+[sub_resource type="AtlasTexture" id=9]
+atlas = ExtResource( 2 )
+region = Rect2( 0, 27, 34, 27 )
+
+[sub_resource type="AtlasTexture" id=10]
+atlas = ExtResource( 2 )
+region = Rect2( 68, 27, 34, 27 )
+
+[sub_resource type="AtlasTexture" id=11]
+atlas = ExtResource( 2 )
+region = Rect2( 34, 27, 34, 27 )
+
+[sub_resource type="AtlasTexture" id=12]
+atlas = ExtResource( 2 )
+region = Rect2( 0, 27, 34, 27 )
+
+[sub_resource type="SpriteFrames" id=13]
 animations = [ {
 "frames": [ SubResource( 3 ), SubResource( 4 ) ],
 "loop": true,
 "name": "default",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 9 ), SubResource( 10 ), SubResource( 11 ) ],
+"frames": [ SubResource( 5 ), SubResource( 6 ), SubResource( 7 ) ],
+"loop": true,
+"name": "doneFire",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 8 ), SubResource( 9 ), SubResource( 10 ) ],
 "loop": true,
 "name": "readyFire",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 12 ), SubResource( 13 ) ],
+"frames": [ SubResource( 11 ), SubResource( 12 ) ],
 "loop": true,
 "name": "fire",
-"speed": 5.0
-}, {
-"frames": [ SubResource( 6 ), SubResource( 7 ), SubResource( 8 ) ],
-"loop": true,
-"name": "doneFire",
 "speed": 5.0
 } ]
 
@@ -169,7 +191,7 @@ shapeOverride = SubResource( 2 )
 collisionOffset = Vector2( 0, 1 )
 
 [node name="AnimatedSprite" parent="." index="0"]
-frames = SubResource( 5 )
+frames = SubResource( 13 )
 animation = "doneFire"
 
 [node name="DebugLabel" type="Label" parent="." index="6"]
@@ -178,13 +200,14 @@ margin_right = 75.0
 margin_bottom = -65.0
 text = "xVelo = null
 curState = null
+gravity = 0
 "
 script = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 target_path = NodePath("..")
-properties = PoolStringArray( "xVelo", "curState" )
+properties = PoolStringArray( "xVelo", "curState", "gravity" )
 
 [node name="DebugLabel2" type="Label" parent="." index="7"]
 margin_top = -128.0

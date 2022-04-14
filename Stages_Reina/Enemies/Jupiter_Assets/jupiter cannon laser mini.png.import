@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/jupiter cannon laser mini.png-16dc471244c10423886f7ad877ae3601.stex"
+path="res://.import/jupiter cannon laser mini.png-729188bc360c31b66ea339d79c31273a.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Stages_Reina/Enemies/jupiter cannon laser mini.png"
-dest_files=[ "res://.import/jupiter cannon laser mini.png-16dc471244c10423886f7ad877ae3601.stex" ]
+source_file="res://Stages_Reina/Enemies/Jupiter_Assets/jupiter cannon laser mini.png"
+dest_files=[ "res://.import/jupiter cannon laser mini.png-729188bc360c31b66ea339d79c31273a.stex" ]
 
 [params]
 

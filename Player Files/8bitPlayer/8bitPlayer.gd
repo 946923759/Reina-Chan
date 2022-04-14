@@ -250,6 +250,7 @@ func get_menu_buttons_input(delta):
 		$PauseScreen.OnCommand()
 
 #If Android back button pressed
+#TODO: Ignore if cutscene playing
 func _notification(what):
 	if what == MainLoop.NOTIFICATION_WM_GO_BACK_REQUEST:
 		$PauseScreen.updateTimer(timer,timerWithDeath)

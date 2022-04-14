@@ -1,18 +1,18 @@
 [gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://Stages/MinibossBase.tscn" type="PackedScene" id=1]
-[ext_resource path="res://Stages_Reina/Enemies/Jupiter Cannon_Spriteframes.tres" type="SpriteFrames" id=2]
+[ext_resource path="res://Stages_Reina/Enemies/Jupiter_Assets/Jupiter Cannon_Spriteframes.tres" type="SpriteFrames" id=2]
 [ext_resource path="res://Sounds/Classic/S3K_LaserCharging.wav" type="AudioStream" id=3]
 [ext_resource path="res://Sounds/Classic/S3K_DeathEggLaser2.wav" type="AudioStream" id=4]
 [ext_resource path="res://addons/godot-next/gui/debug_label.gd" type="Script" id=5]
 [ext_resource path="res://Sounds/Classic/Explosion2.wav" type="AudioStream" id=6]
-[ext_resource path="res://Stages_Reina/Enemies/JUPITERCANNON_prongs.png" type="Texture" id=7]
+[ext_resource path="res://Stages_Reina/Enemies/Jupiter_Assets/JUPITERCANNON_prongs.png" type="Texture" id=7]
 
 [sub_resource type="GDScript" id=1]
 script/source = "extends Sprite
 
-var tex = preload(\"res://Stages_Reina/Enemies/Jupiter_2_rot.png\")
-var tex2 = preload(\"res://Stages_Reina/Enemies/Jupiter_2_begin.png\")
+var tex = preload(\"res://Stages_Reina/Enemies/Jupiter_Assets/Jupiter_2_rot.png\")
+var tex2 = preload(\"res://Stages_Reina/Enemies/Jupiter_Assets/Jupiter_2_begin.png\")
 var toDraw=0
 
 var CONST_IMG_WIDTH=16
