@@ -689,10 +689,11 @@ func _physics_process(delta):
 			#	if !$FootstepSound.playing:
 			#		$FootstepSound.play()
 		else:
-			if shoot_sprite_time <= 0:
-				sprite.set_animation("Idle")
-			elif sprite.animation != "IdleShoot":
-				sprite.set_animation("IdleShoot");
+			if !overrideSprite:
+				if shoot_sprite_time <= 0:
+					sprite.set_animation("Idle")
+				elif sprite.animation != "IdleShoot":
+					sprite.set_animation("IdleShoot");
 	elif state == State.GRABBING_LADDER:
 		if tile == LADDER_TILE_ID or tile == LADDER_TOP_TILE_ID:
 			state = State.ON_LADDER
@@ -792,6 +793,7 @@ func _physics_process(delta):
 
 #Should this be using structs?
 var movementLocked = false
+var overrideSprite = false
 var timeElapsed:float = 0.0
 var lockQueue = []
 var posInQueue:int = 0
@@ -809,6 +811,11 @@ func lockMovementQueue(queue:Array):
 	lockQueue = queue
 	movementLocked = true
 	velocity=queue[0][1]
+	if len(queue[0])>2 and queue[0][2]!="":
+		sprite.set_animation(queue[0][2])
+		overrideSprite=true
+	else:
+		overrideSprite=false
 	
 #You can see that x velocity is only being set once if queue[x][3] is false,
 #That's because the above processing code checks if movement is locked
@@ -825,6 +832,9 @@ func processLockMovement(delta):
 			velocity=lockQueue[posInQueue][1]
 			if len(lockQueue[posInQueue])>2 and lockQueue[posInQueue][2]!="":
 				sprite.set_animation(lockQueue[posInQueue][2])
+				overrideSprite=true
+			else:
+				overrideSprite=false
 	elif len(lockQueue[posInQueue])>3 and lockQueue[posInQueue][3]:
 		velocity=lockQueue[posInQueue][1]
 
@@ -832,6 +842,7 @@ func clearLockedMovement():
 	posInQueue=0
 	timeElapsed=0.0
 	movementLocked = false
+	overrideSprite=false
 	
 
 

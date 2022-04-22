@@ -93,7 +93,7 @@ margin_bottom = 36.5
 grow_horizontal = 2
 custom_fonts/font = ExtResource( 1 )
 text = "Reina-Chan
-demo 2"
+demo 3"
 align = 1
 __meta__ = {
 "_edit_use_anchors_": false
@@ -105,7 +105,7 @@ anchor_right = 0.5
 margin_left = -640.0
 margin_top = 720.0
 margin_right = 640.0
-margin_bottom = 2603.0
+margin_bottom = 2638.0
 custom_fonts/bold_font = SubResource( 3 )
 custom_fonts/normal_font = ExtResource( 1 )
 bbcode_enabled = true
@@ -124,6 +124,7 @@ amaryllis works
 
 [b]artwork[/b]
 vandine
+anonymous
 amaryllis works
 DWAnon
 ...and many sprites stolen from
@@ -173,6 +174,7 @@ amaryllis works
 
 artwork
 vandine
+anonymous
 amaryllis works
 DWAnon
 ...and many sprites stolen from

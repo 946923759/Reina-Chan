@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://Various Objects/PushingQuicksand.gd" type="Script" id=1]
+[ext_resource path="res://Sounds/Classic/S3K_97 - Sand Noise.wav" type="AudioStream" id=2]
 
 [node name="Pushing_Quicksand" type="StaticBody2D"]
 position = Vector2( 96, 352 )
@@ -11,3 +12,8 @@ __meta__ = {
 "_edit_group_": true,
 "_editor_description_": "ATTACH A COLLISIONSHAPE2D TO ME OR I WON'T WORK"
 }
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 2 )
+volume_db = 4.0
+bus = "Player/Enemies"

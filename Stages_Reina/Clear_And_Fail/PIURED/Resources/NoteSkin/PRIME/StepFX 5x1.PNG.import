@@ -1,0 +1,34 @@
+[remap]
+
+importer="texture"
+type="StreamTexture"
+path="res://.import/StepFX 5x1.PNG-db5dd81a3b47700f9d8d737f6a76cc3f.stex"
+metadata={
+"vram_texture": false
+}
+
+[deps]
+
+source_file="res://Stages_Reina/Clear_And_Fail/PIURED/Resources/NoteSkin/PRIME/StepFX 5x1.PNG"
+dest_files=[ "res://.import/StepFX 5x1.PNG-db5dd81a3b47700f9d8d737f6a76cc3f.stex" ]
+
+[params]
+
+compress/mode=0
+compress/lossy_quality=0.7
+compress/hdr_mode=0
+compress/bptc_ldr=0
+compress/normal_map=0
+flags/repeat=0
+flags/filter=false
+flags/mipmaps=false
+flags/anisotropic=false
+flags/srgb=2
+process/fix_alpha_border=true
+process/premult_alpha=false
+process/HDR_as_SRGB=false
+process/invert_color=false
+stream=false
+size_limit=0
+detect_3d=true
+svg/scale=1.0

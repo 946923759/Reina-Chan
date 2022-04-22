@@ -1,5 +1,5 @@
 # Reina-Chan
-A Girls' Frontline fangame programmed by me, mostly drawn by Vandine, and partially designed by Unfiltered.
+A Girls' Frontline fangame programmed by me, mostly drawn by VanDine, and partially designed by Unfiltered.
 
 Oh, and it has a bunch of stolen music and sprites from Mega Man.
 
@@ -15,3 +15,5 @@ A "release" will also be created here for the source code when a new demo comes 
 
 ## License
 GPLv3 except for the cutscene interpreter ported to Godot which is CC-BY-NC-SA (Similar to GPL, but noncommercial).
+
+This game uses translated code from https://github.com/piulin/piured-engine which is also GPLv3

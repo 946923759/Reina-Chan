@@ -23,6 +23,15 @@
 
 class Song:
 
+    var pathToSSCFile:String
+    var meta = {};
+    var levels:Array=[];
+    var playBackSpeed;
+    var audioBuf;
+    var requiresResync:bool=false;
+    var readyToStart:bool=false;
+    var delay:float=0.0;
+
     func _init( pathToSSCFile, audioBuf, offset, playBackSpeed, onReadyToStart ):
 
 
@@ -57,24 +66,25 @@ class Song:
 
     
 
-    func getWARPS(level):
-        let arr ;
-        if ( 'WARPS' in this.levels[level] ) {
+    func getWARPS(level)->Array:
+        var arr:Array = []
+        if  'WARPS' in this.levels[level]:
             arr = this.levels[level].WARPS ;
-        } else if ('WARPS' in this.meta) {
+        elif 'WARPS' in this.meta:
             arr = this.meta['WARPS'] ;
-        } else {
+        else:
             return [] ;
-        }
         return arr ;
     
 
     func getLevelDifficulty(level):
-        return parseInt(this.levels[level].METER) === undefined ? 1 : parseInt(this.levels[level].METER) ;
+        if is_valid_integer(this.levels[level].METER):
+            return int(this.levels[level].METER)
+        return 1;
     
 
 
-    getBPMs(level):
+    func getBPMs(level):
         if 'BPMS' in this.levels[level]:
             return this.levels[level].BPMS ;
         else:
@@ -82,15 +92,14 @@ class Song:
         
     
 
-    getTickCounts(level) {
-        if ( 'TICKCOUNTS' in this.levels[level] ) {
+    func getTickCounts(level):
+        if 'TICKCOUNTS' in this.levels[level]:
             return this.levels[level].TICKCOUNTS;
-        } else if ('TICKCOUNTS' in this.meta) {
+        elif 'TICKCOUNTS' in this.meta:
             return this.meta['TICKCOUNTS'] ;
-        } else {
+        else:
             return [[0.0,4]] ;
-        }
-    }
+     
 
     getScrolls(level) {
         if ( 'SCROLLS' in this.levels[level] ) {

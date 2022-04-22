@@ -9,7 +9,7 @@ export(String) var message_id
 export(PoolStringArray) var message
 var disabled = false
 
-var parent
+var playerObj
 var child
 
 func _ready():
@@ -27,18 +27,22 @@ func run_event(sender):
 	if !sender.has_method("lockMovement"):
 		return
 	disabled=true
-	parent=sender
+	playerObj=sender
 	#Due to funny collision problems we have to push the player down or she'll be in the air for 1 frame after unlocking
-	parent.lockMovement(999,Vector2(0,5)) 
-	parent.sprite.set_animation("Idle")
+	#playerObj.lockMovement(999,Vector2(0,5),"Talking",true) 
+	playerObj.lockMovementQueue([
+		[999,Vector2(0,5),"Talking",true]
+	])
+	#playerObj.sprite.set_animation("Talking")
 	if Globals.playCutscenes==false or CheckpointPlayerStats.watchedBossIntro:
 		child.playIntro(false)
 		showWarning(false)
 	else:
 		part1()
+		#part2()
 	
 func showWarning(playLonger=true):
-	#parent.lockMovement(3,Vector2(0,0))
+	#playerObj.lockMovement(3,Vector2(0,0))
 	var CONST_IMG_WIDTH = sprite.CONST_IMG_WIDTH
 	var seq := TweenSequence.new(get_tree())
 	seq.append(sprite,"toDraw",CONST_IMG_WIDTH,2.0 if playLonger else .5).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
@@ -66,7 +70,7 @@ func hideWarning():
 	var seq := TweenSequence.new(get_tree())
 	seq.append(sprite,"toDraw",0,.5).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 # warning-ignore:return_value_discarded
-	#seq.connect("finished",parent,"clearLockedMovement")
+	#seq.connect("finished",playerObj,"clearLockedMovement")
 	seq.append_callback(self,"part5")
 	#seq.connect("finished",self,"part5")
 	#$AudioStreamPlayer.connect("finished",self,"part3")
@@ -74,19 +78,20 @@ func hideWarning():
 func part5():
 	CheckpointPlayerStats.watchedBossIntro=true
 	child.enabled=true
-	parent.clearLockedMovement()
+	playerObj.clearLockedMovement()
 
 func part1():
 	#get_node("/root/Node2D").stopMusic()
 	#if !msgEv.finished:
-	#parent.lockMovement(.1,Vector2())
+	#playerObj.lockMovement(.1,Vector2())
+	#playerObj.sprite.set_animation("Talking")
 	get_tree().paused=true
 	var newCutscene = gf_cutscene.instance()
-	parent.add_child(newCutscene) #Needs to be done first for the _ready()
+	playerObj.add_child(newCutscene) #Needs to be done first for the _ready()
 	newCutscene.connect("cutscene_finished",self,"part2")
 	newCutscene.init_(
 		Globals.get_stage_cutscene(message_id),
-		parent,
+		playerObj,
 		true,
 		null,
 		"\t",

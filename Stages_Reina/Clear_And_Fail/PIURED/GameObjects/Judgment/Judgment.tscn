@@ -1,0 +1,29 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://Stages_Reina/Clear_And_Fail/PIURED/Resources/jug.png" type="Texture" id=1]
+[ext_resource path="res://Stages_Reina/Clear_And_Fail/PIURED/GameObjects/Judgment/BannerV2.gd" type="Script" id=2]
+[ext_resource path="res://Stages_Reina/Clear_And_Fail/PIURED/Resources/Combo 1x2_XX.png" type="Texture" id=3]
+[ext_resource path="res://Stages_Reina/Clear_And_Fail/PIURED/GameObjects/Judgment/Combo.gd" type="Script" id=4]
+[ext_resource path="res://Stages_Reina/Clear_And_Fail/PIURED/GameObjects/Judgment/Judgment.gd" type="Script" id=5]
+
+[node name="Judgment" type="Node2D"]
+script = ExtResource( 5 )
+
+[node name="Banner" type="Sprite" parent="."]
+position = Vector2( 0, -50 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 360, 60 )
+script = ExtResource( 2 )
+
+[node name="Tween" type="Tween" parent="Banner"]
+
+[node name="Combo" type="Sprite" parent="."]
+texture = ExtResource( 3 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 138, 36 )
+script = ExtResource( 4 )
+
+[node name="Tween" type="Tween" parent="Combo"]
+
+[node name="Digits" type="Node2D" parent="."]
