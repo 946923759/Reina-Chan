@@ -30,8 +30,13 @@ export (Array,Vector2) var debug_warp_points
 #var last_warped=0
 
 var reinaAudioPlayer
+var player:KinematicBody2D
 
 func _ready():
+	assert($PlayerHolder,"Hey genius, PlayerHolder is invalid!")
+	assert($PlayerHolder.player,"Hey genius, there's no player!")
+	player = $PlayerHolder.player
+	
 	get_tree().set_screen_stretch(SceneTree.STRETCH_MODE_2D,SceneTree.STRETCH_ASPECT_KEEP,Vector2(1280,720))
 	
 	if debug_warp_points.size()==0:
@@ -41,7 +46,7 @@ func _ready():
 	if CheckpointPlayerStats.checkpointSet:
 		print("There is a checkpoint, not adjusting the camera.")
 	elif adjust_camera: #TODO: WHY IS THIS HERE INSTEAD OF CALLING CAMERACONTROLLERV2
-		var c = $Player/Camera2D
+		var c = player.get_node("Camera2D")
 		#assert(c,"Hey genius, you have to name the player \"Player\" for the camera to work!")
 		
 		#We don't want to overwrite leftBound,rightBound, etc so keep the changed variables in a new array.
@@ -74,7 +79,12 @@ func _ready():
 	#load_song(_node:Node, custom_music_name:String, nsf_music_file:String, nsf_track_num:int)
 	if !mute_music_in_debug or !OS.is_debug_build():
 		reinaAudioPlayer.load_song(custom_music_name,nsf_music_file,nsf_track_num)
-		
+
+#In case of multiplayer or something, always use this
+#function
+func get_player()->KinematicBody2D:
+	return player
+
 func playBossMusic():
 	if OS.is_debug_build() and mute_boss_music_in_debug:
 		return

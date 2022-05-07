@@ -131,7 +131,7 @@ var weaponColorSwaps = [
 	#R,G,B out of 100
 	#UMP9 has two hair colors, so you have to adjust both!
 	#Also colors are from 0 to 1.0
-	[ #Default
+	[ #Default.... Also m16 default is in 8bitplayer because I'm dumb
 		Color(.608,.467,.388),
 		Color(.604,.627,.592)
 	],
@@ -195,7 +195,7 @@ func save_system_data()->bool:
 		return false
 	var dataToSave = {
 		"options":{},
-		"playerdata":playerData,
+		#"playerdata":playerData,
 		"extras":{
 			"zeroMode":unlockedZeroMode
 		}

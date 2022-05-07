@@ -19,20 +19,23 @@ func enable(_discard):
 
 
 func _physics_process(delta):
+	var player = get_node(\"/root/Node2D\").get_player()
+	if !is_instance_valid(player):
+		return
 	#movX = get_node(\"/root/Node2D/Player\").global_position.x > global_position.x ? 100 : -100
 	var movX = 0
-	if get_node(\"/root/Node2D/Player\").global_position.x > global_position.x+10:
+	if player.global_position.x > global_position.x+10:
 		movX=100
 		sprite.flip_h = true
-	elif get_node(\"/root/Node2D/Player\").global_position.x < global_position.x-10:
+	elif player.global_position.x < global_position.x-10:
 		sprite.flip_h = false
 		movX=-100
 	
 	
 	var movY = 0
-	if get_node(\"/root/Node2D/Player\").global_position.y > global_position.y+10:
+	if player.global_position.y > global_position.y+10:
 		movY = 100
-	elif get_node(\"/root/Node2D/Player\").global_position.y < global_position.y-10:
+	elif player.global_position.y < global_position.y-10:
 		movY = -100
 	#if movX > 0:
 	#facing = DIRECTION.RIGHT if movX > 0 else DIRECTION.LEFT

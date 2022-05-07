@@ -61,7 +61,7 @@ func cam(obj):
 	#elif !obj.state != 6: #State.ON_LADDER
 	#	return
 	#disabled = true
-	var cc = get_node(\"/root/Node2D/Player/Camera2D\")
+	var cc = get_node(\"/root/Node2D\").get_player().get_node(\"Camera2D\")
 	if cc.is_tweening:
 		return
 	

@@ -2,19 +2,25 @@ extends KinematicBody2D
 
 const SPEED = 250;
 
-export (int) var run_speed
-export (int) var jump_speed
+export (int) var run_speed = 350
+export (int) var jump_speed = -1200
 export (float,1,10,.5) var dash_multiplier
-export (int) var gravity = 0
+export (int,100,10000) var gravity = 3500
 export (float,0,5) var time_before_active=.3
+#export (int,"UMP9","M16") var character_in_debug_mode=0
+
+#0 = UMP9
+#1 = M16 (can charge and dash, no other difference)
+#var current_character:int=0
 
 var velocity = Vector2()
 #Jumping is identical to falling except that the player can cancel upwards momentium by letting
 #go of the jump button.
 
 #Normal is running or idle, there doesn't need to be a distinction anyways
+#DASH MEANS DASH ATTACK! SLIDE IS WITHOUT ATTACK!
 enum State { INACTIVE, NORMAL, JUMPING, FALLING, HURT, GRABBING_LADDER, ON_LADDER, FLYING_BACKWARDS, DASH_ATTACK, DASH }
-var state_toString = ["Normal","Jumping","Falling","Hurt","Grabbing_Ladder","On_Ladder","Flying_Backwards","DashAttack", "Dash" ]
+var state_toString = ["INACTIVE","Normal","Jumping","Falling","Hurt","Grabbing_Ladder","On_Ladder","Flying_Backwards","DashAttack", "Dash"]
 var state = State.INACTIVE
 
 
@@ -63,6 +69,7 @@ var currentCam
 onready var HPBar = $CanvasLayer/bar
 
 onready var footstep = $FootstepSound
+#var sprite:AnimatedSprite
 onready var sprite = $Sprite
 onready var shotTimer = $ShotTimer
 
@@ -135,12 +142,14 @@ func _ready():
 	timerWithDeath=CheckpointPlayerStats.timerWithDeath
 	HPBar.updateHP(HP)
 	
-	sprite.get_material().set_shader_param("clr1", Globals.weaponColorSwaps[currentWeapon][0])
-	sprite.get_material().set_shader_param("clr2", Globals.weaponColorSwaps[currentWeapon][1])
+	#What's the point of this?
+	#sprite.get_material().set_shader_param("clr1", Globals.weaponColorSwaps[currentWeapon][0])
+	#sprite.get_material().set_shader_param("clr2", Globals.weaponColorSwaps[currentWeapon][1])
 	#self.get_node("Sprite").play("Begin");
 	sprite.set_animation("Begin")
 	sprite.frame=0
 	
+	setDebugInfoText()
 	
 
 func setDebugInfoText():
@@ -155,7 +164,11 @@ func setDebugInfoText():
 	t.text = st
 
 func switchWeapon():
-	weaponSwitch.showIcon(currentWeapon)
+#	weaponSwitch.showIcon(currentWeapon)
+#	if current_character==1 and currentWeapon==0: #lmao
+#		sprite.get_material().set_shader_param("clr1", Color(.749,.749,.749))
+#		sprite.get_material().set_shader_param("clr2", Color(.957,.957,.957))
+#	else:
 	sprite.get_material().set_shader_param("clr1", Globals.weaponColorSwaps[currentWeapon][0])
 	sprite.get_material().set_shader_param("clr2", Globals.weaponColorSwaps[currentWeapon][1])
 	#print(weaponMeters[currentWeapon]/144.0)
@@ -252,236 +265,231 @@ func get_menu_buttons_input(delta):
 #If Android back button pressed
 #TODO: Ignore if cutscene playing
 func _notification(what):
-	if what == MainLoop.NOTIFICATION_WM_GO_BACK_REQUEST:
+	if what == MainLoop.NOTIFICATION_WM_GO_BACK_REQUEST and get_tree().paused == false:
 		$PauseScreen.updateTimer(timer,timerWithDeath)
 		get_tree().paused = true
 		$PauseScreen.OnCommand()
 
+
 func get_input(delta):
-	
-	if freeRoam:
-		velocity.y = 0
-		velocity.x = 0
-		var m = 3 if Input.is_action_pressed('R1') else 1
-		if Input.is_action_pressed('ui_right'):
-			velocity.x = 500*m
-		if Input.is_action_pressed('ui_left'):
-			velocity.x = -500*m
-		if Input.is_action_pressed('ui_down'):
-			velocity.y = 500*m
-		if Input.is_action_pressed('ui_up'):
-			velocity.y = -500*m
-		#velocity = velocity.normalized() * SPEED
-	else:
-		#It's here because freeRoam overrides R1
-		if Input.is_action_just_pressed("R1"):
-			var i = currentWeapon+1
-			while true:
-				if i == len(Globals.playerData.availableWeapons):
-					i=0
-				elif Globals.playerData.availableWeapons[i]:
-					break
-				else:
-					i+=1
-			currentWeapon=i
-			switchWeapon()
-		elif Input.is_action_just_pressed("L1"):
-			var i = currentWeapon-1
-			while true:
-				if i < 0:
-					i=len(Globals.playerData.availableWeapons)-1
-				elif Globals.playerData.availableWeapons[i]:
-					break
-				else:
-					i-=1
-			currentWeapon=i
-			switchWeapon()
-				
-		
-		var right = Input.is_action_pressed('ui_right')
-		var left = Input.is_action_pressed('ui_left')
-		var up = Input.is_action_pressed('ui_up')
-		var down = Input.is_action_pressed('ui_down')
-		var jump = Input.is_action_just_pressed('ui_select')
-		var shoot = Input.is_action_just_pressed("ui_cancel")
-		if rapidFire and shoot_time > .1:
-			shoot = Input.is_action_pressed("ui_cancel")
-		
-		if Globals.flipButtons:
-			jump = Input.is_action_just_pressed('ui_cancel')
-			shoot = Input.is_action_just_pressed("ui_select") or rapidFire and (shoot_time > .1 and Input.is_action_pressed("ui_select"))
-
-		
-		#Cancel it here instead of accounting for it anywhere else
-		#you can move in the split second between Zero falling though the ladder top and grabbing onto
-		#the ladder, so cancel it here so they actually snap on correctly
-		if (left and right) or movementLocked or grabbingLadder:
-			left = false;
-			right = false;
-			
-		#All this shit is copypasted from the example platformer so I have no idea how it works
-		# A good idea when implementing characters of all kinds,
-		# compensates for physics imprecision, as well as human reaction delay.
-		if shoot:
-			if currentWeapon == Globals.Weapons.Alchemist and weaponMeters[currentWeapon]>=Globals.weaponEnergyCost[currentWeapon]:
-				if is_on_floor() and dash_time<=0:
-					state = State.DASH_ATTACK
-					dash_time=.5
-					var ss = -1.0 if sprite.flip_h else 1.0
-					weaponMeters[currentWeapon]=max(0,weaponMeters[currentWeapon]-Globals.weaponEnergyCost[currentWeapon])
-					HPBar.updateAmmo(weaponMeters[currentWeapon]/144.0,false)
-					sprite.set_animation("DashAttack")
-				#else, do nothing
+	#It's here because freeRoam overrides R1
+	if Input.is_action_just_pressed("R1"):
+		var i = currentWeapon+1
+		while true:
+			if i == len(Globals.playerData.availableWeapons):
+				i=0
+			elif Globals.playerData.availableWeapons[i]:
+				break
 			else:
-				shoot_time = 0
-				if (Globals.playerData.gameDifficulty <= Globals.Difficulty.EASY or bulletManager.get_num_bullets() < 3) and weaponMeters[currentWeapon]>=Globals.weaponEnergyCost[currentWeapon]:
-					
-					var bi
-					var ss
-					if sprite.flip_h:
-						ss = -1.0
-					else:
-						ss = 1.0
-					#Note: $ is shorthand for get_node()
-					#Right here it's doing get_node("bullet_shoot")
-					#ternary: var p = 1 if f else -1
-					var pos = position + Vector2(73*ss, 10)
-					if state == State.ON_LADDER:
-						pos = position + Vector2(95*ss, -20)
-					
-					if currentWeapon!=Globals.Weapons.Buster:
-						weaponMeters[currentWeapon]=max(0,weaponMeters[currentWeapon]-Globals.weaponEnergyCost[currentWeapon])
-						#print(ceil(weaponMeters[currentWeapon]/128.0*32))
-						HPBar.updateAmmo(weaponMeters[currentWeapon]/144.0,false)
-					if currentWeapon==Globals.Weapons.Buster:
-						bi = bullet.instance()
-						
-						
-						bi.position = pos
-						#get_parent().add_child(bi)
-						bulletHolder.add_child(bi)
-						#KinematicBody2D only
-						#bi.linear_velocity = Vector2(800.0 * ss, 0)
-						#RigidBody2D only
-						bi.init(Vector2(13*ss,0))
-					elif currentWeapon==Globals.Weapons.Architect:
-						bi = archiRocket.instance()
-						bi.position = pos
-						#get_parent().add_child(bi)
-						bulletHolder.add_child(bi)
-						bi.init(int(ss))
-					
-					add_collision_exception_with(bi) # Make bullet and this not collide
-					
-					if Globals.playerData.gameDifficulty > Globals.Difficulty.EASY:
-						bulletManager.push_bullet(bi)
-					else:
-						for child in bulletHolder.get_children():
-							if is_instance_valid(child) and child.get_class()=="KinematicBody2D":
-								#print(child.get_class())
-								#child.add_collision_exception_with(bi)
-								bi.add_collision_exception_with(child)
-						pass
-					if sprite.animation=="IdleShoot":
-						sprite.frame = 0
-					shoot_sprite_time = 0.3
-					$ShootSound.play()
-		else:
-			shoot_time += delta
+				i+=1
+		currentWeapon=i
+		switchWeapon()
+	elif Input.is_action_just_pressed("L1"):
+		var i = currentWeapon-1
+		while true:
+			if i < 0:
+				i=len(Globals.playerData.availableWeapons)-1
+			elif Globals.playerData.availableWeapons[i]:
+				break
+			else:
+				i-=1
+		currentWeapon=i
+		switchWeapon()
 			
-		if jump and is_on_floor():
-			#print("Jumped")
-			#$FootstepSound.play()
-			#state = State.JUMPING
-			#if shotTimer.is_stopped():
-			#	sprite.set_animation("JumpStart")
-			#else:
-			#	sprite.set_animation("JumpShoot")
-			velocity.y = jump_speed
-			state = State.JUMPING
-		elif state == State.ON_LADDER:
-			#Maybe waste of CPU?
-			velocity.y = 0
-			#Don't allow moving while shooting
-			if up and shoot_sprite_time <=0:
-				velocity.y -= 100
-			if down and shoot_sprite_time<=0: #and position.y > $Camera2D.limit_bottom+40
-				velocity.y += 100
-			#Don't allow pressing jump while climbing up the ladder because
-			#it creates one frame of the jump animation
-			if jump and !up: 
-				state = State.FALLING
-				sprite.play()
-			#This may have been a bad idea
-			if left:
-				sprite.flip_h = true
-			if right:
-				sprite.flip_h = false
-			
-			velocity = velocity.normalized() * SPEED
-		#Your normal movement processing
-		else:
-			if right and position.x < $Camera2D.destPositions[2]-40:
-				velocity.x = run_speed
-				sprite.flip_h = false
-			elif left and position.x > $Camera2D.destPositions[0]+40:
-				velocity.x = -run_speed
-				sprite.flip_h = true
-			elif !movementLocked and state!=State.DASH and state!=State.DASH_ATTACK: #If movement locked, assume velocity should be preserved
-				velocity.x=0
-			if up:
-				var tile = tiles.get_cellv(pos2cell(position))
-				if tile == LADDER_TILE_ID or tile == LADDER_TOP_TILE_ID:
-					sprite.set_animation("LadderBegin")
-					#get position of cell then multiply to get actual character position then offset by half of cell width multiplied by scale
-					position.x = pos2cell(position).x*16*4+8*4;
-					velocity.x = 0
-					#position = Vector2(round(floor(position.x)/16/4)*16*4+8*4, position.y)
-					state = State.ON_LADDER
-			if down and !movementLocked:
-				#print(String()))
-				var tilePos = pos2cell(position)
-				tilePos.y +=1
-				#Get tile underneath you
-				var tile = tiles.get_cellv(tilePos)
-				var cameraBottom = pos2cell(Vector2(position.x,$Camera2D.limit_bottom))
-				#print(String(tilePos.y)+" < "+String(cameraBottom.y)+"?")
-				if tile == LADDER_TOP_TILE_ID and tilePos.y < cameraBottom.y: #Don't allow going down on ladders you can't see
-					#print("attaching to ladder")
-					sprite.set_animation("LadderBegin")
-					position.x = pos2cell(position).x*16*4+8*4;
-					set_collision_mask_bit(0,false)
-					set_collision_layer_bit(0,false)
-					#velocity = 
-					lockMovement(.05,Vector2(0, 500),false)
-					#position = Vector2(round(floor(position.x)/16/4)*16*4+8*4, position.y)
-					#grabbingLadder = true
-					state = State.GRABBING_LADDER
-				#else:
-				#	print("Can't go down ladder!")
-				#	print(String(tilePos.y)+" < "+String(cameraBottom.y)+"?")
-				#	print(String(tile)+"!="+String(LADDER_TILE_ID)+"?")
-				#Example for one way platforms (I don't know if 7 is correct)
-				#elif tile == 7:
-				#	position.x = pos2cell(position).x*16*4+8*4;
-				#	#Don't set x velocity since we want them to keep moving at the same rate
-				#	velocity.y = 300
-				#	set_collision_mask_bit(0,false)
-				#	set_collision_layer_bit(0,false)
-			if state == State.JUMPING:
-				#Cancel upward momentium if jump button is let go
-				#I'm pretty sure this can be simplified into one if statement
-				if !Globals.flipButtons:
-					if velocity.y < 0 and !Input.is_action_pressed("ui_select"):
-						velocity.y = 0
-						state=State.FALLING
-				else:
-					if velocity.y < 0 and !Input.is_action_pressed("ui_cancel"):
-						velocity.y = 0
-						state=State.FALLING
-			
+	
+	var right = Input.is_action_pressed('ui_right')
+	var left = Input.is_action_pressed('ui_left')
+	var up = Input.is_action_pressed('ui_up')
+	var down = Input.is_action_pressed('ui_down')
+	var jump = Input.is_action_just_pressed('ui_select')
+	var shoot = Input.is_action_just_pressed("ui_cancel")
+	if rapidFire and shoot_time > .1:
+		shoot = Input.is_action_pressed("ui_cancel")
+	
+	if Globals.flipButtons:
+		jump = Input.is_action_just_pressed('ui_cancel')
+		shoot = Input.is_action_just_pressed("ui_select") or rapidFire and (shoot_time > .1 and Input.is_action_pressed("ui_select"))
 
+	
+	#Cancel it here instead of accounting for it anywhere else
+	#you can move in the split second between Zero falling though the ladder top and grabbing onto
+	#the ladder, so cancel it here so they actually snap on correctly
+	if (left and right) or movementLocked or grabbingLadder:
+		left = false;
+		right = false;
 		
+	#All this shit is copypasted from the example platformer so I have no idea how it works
+	# A good idea when implementing characters of all kinds,
+	# compensates for physics imprecision, as well as human reaction delay.
+	if shoot:
+		if currentWeapon == Globals.Weapons.Alchemist and weaponMeters[currentWeapon]>=Globals.weaponEnergyCost[currentWeapon]:
+			if is_on_floor() and dash_time<=0:
+				state = State.DASH_ATTACK
+				dash_time=.5
+				#var ss = -1.0 if sprite.flip_h else 1.0
+				weaponMeters[currentWeapon]=max(0,weaponMeters[currentWeapon]-Globals.weaponEnergyCost[currentWeapon])
+				HPBar.updateAmmo(weaponMeters[currentWeapon]/144.0,false)
+				sprite.set_animation("DashAttack")
+			#else, do nothing
+		else:
+			shoot_time = 0
+			if (Globals.playerData.gameDifficulty <= Globals.Difficulty.EASY or bulletManager.get_num_bullets() < 3) and weaponMeters[currentWeapon]>=Globals.weaponEnergyCost[currentWeapon]:
+				
+				var bi
+				var ss
+				if sprite.flip_h:
+					ss = -1.0
+				else:
+					ss = 1.0
+				#Note: $ is shorthand for get_node()
+				#Right here it's doing get_node("bullet_shoot")
+				#ternary: var p = 1 if f else -1
+				var pos = position + Vector2(73*ss, 10)
+				if state == State.ON_LADDER:
+					pos = position + Vector2(95*ss, -20)
+				
+				if currentWeapon!=Globals.Weapons.Buster:
+					weaponMeters[currentWeapon]=max(0,weaponMeters[currentWeapon]-Globals.weaponEnergyCost[currentWeapon])
+					#print(ceil(weaponMeters[currentWeapon]/128.0*32))
+					HPBar.updateAmmo(weaponMeters[currentWeapon]/144.0,false)
+				if currentWeapon==Globals.Weapons.Buster:
+					bi = bullet.instance()
+					
+					
+					bi.position = pos
+					#get_parent().add_child(bi)
+					bulletHolder.add_child(bi)
+					#KinematicBody2D only
+					#bi.linear_velocity = Vector2(800.0 * ss, 0)
+					#RigidBody2D only
+					bi.init(Vector2(13*ss,0))
+				elif currentWeapon==Globals.Weapons.Architect:
+					bi = archiRocket.instance()
+					bi.position = pos
+					#get_parent().add_child(bi)
+					bulletHolder.add_child(bi)
+					bi.init(int(ss))
+				
+				add_collision_exception_with(bi) # Make bullet and this not collide
+				
+				if Globals.playerData.gameDifficulty > Globals.Difficulty.EASY:
+					bulletManager.push_bullet(bi)
+				else:
+					for child in bulletHolder.get_children():
+						if is_instance_valid(child) and child.get_class()=="KinematicBody2D":
+							#print(child.get_class())
+							#child.add_collision_exception_with(bi)
+							bi.add_collision_exception_with(child)
+					pass
+				if sprite.animation=="IdleShoot":
+					sprite.frame = 0
+				shoot_sprite_time = 0.3
+				$ShootSound.play()
+	else:
+		shoot_time += delta
+		
+	if jump and is_on_floor():
+		#print("Jumped")
+		#$FootstepSound.play()
+		#state = State.JUMPING
+		#if shotTimer.is_stopped():
+		#	sprite.set_animation("JumpStart")
+		#else:
+		#	sprite.set_animation("JumpShoot")
+		velocity.y = jump_speed
+		state = State.JUMPING
+	elif state == State.ON_LADDER:
+		#Maybe waste of CPU?
+		velocity.y = 0
+		#Don't allow moving while shooting
+		if up and shoot_sprite_time <=0:
+			velocity.y -= 100
+		if down and shoot_sprite_time<=0: #and position.y > $Camera2D.limit_bottom+40
+			velocity.y += 100
+		#Don't allow pressing jump while climbing up the ladder because
+		#it creates one frame of the jump animation
+		if jump and !up: 
+			state = State.FALLING
+			sprite.play()
+		#This may have been a bad idea
+		if left:
+			sprite.flip_h = true
+		if right:
+			sprite.flip_h = false
+		
+		velocity = velocity.normalized() * SPEED
+	#Your normal movement processing
+	else:
+		if right and position.x < $Camera2D.destPositions[2]-40:
+			velocity.x = run_speed
+			sprite.flip_h = false
+		elif left and position.x > $Camera2D.destPositions[0]+40:
+			velocity.x = -run_speed
+			sprite.flip_h = true
+		elif !movementLocked and state!=State.DASH and state!=State.DASH_ATTACK: #If movement locked, assume velocity should be preserved
+			velocity.x=0
+		if up:
+			var tile = tiles.get_cellv(pos2cell(position))
+			if tile == LADDER_TILE_ID or tile == LADDER_TOP_TILE_ID:
+				sprite.set_animation("LadderBegin")
+				#get position of cell then multiply to get actual character position then offset by half of cell width multiplied by scale
+				position.x = pos2cell(position).x*16*4+8*4;
+				velocity.x = 0
+				#position = Vector2(round(floor(position.x)/16/4)*16*4+8*4, position.y)
+				state = State.ON_LADDER
+		if down and !movementLocked:
+			#print(String()))
+			var tilePos = pos2cell(position)
+			tilePos.y +=1
+			#Get tile underneath you
+			var tile = tiles.get_cellv(tilePos)
+			var cameraBottom = pos2cell(Vector2(position.x,$Camera2D.limit_bottom))
+			#print(String(tilePos.y)+" < "+String(cameraBottom.y)+"?")
+			if tile == LADDER_TOP_TILE_ID and tilePos.y < cameraBottom.y: #Don't allow going down on ladders you can't see
+				#print("attaching to ladder")
+				sprite.set_animation("LadderBegin")
+				position.x = pos2cell(position).x*16*4+8*4;
+				set_collision_mask_bit(0,false)
+				set_collision_layer_bit(0,false)
+				#velocity = 
+				lockMovement(.05,Vector2(0, 500),false)
+				#position = Vector2(round(floor(position.x)/16/4)*16*4+8*4, position.y)
+				#grabbingLadder = true
+				state = State.GRABBING_LADDER
+			#else:
+			#	print("Can't go down ladder!")
+			#	print(String(tilePos.y)+" < "+String(cameraBottom.y)+"?")
+			#	print(String(tile)+"!="+String(LADDER_TILE_ID)+"?")
+			#Example for one way platforms (I don't know if 7 is correct)
+			#elif tile == 7:
+			#	position.x = pos2cell(position).x*16*4+8*4;
+			#	#Don't set x velocity since we want them to keep moving at the same rate
+			#	velocity.y = 300
+			#	set_collision_mask_bit(0,false)
+			#	set_collision_layer_bit(0,false)
+		if state == State.JUMPING:
+			var jumpHeld = Input.is_action_pressed("ui_select")
+			if Globals.flipButtons:
+				jumpHeld = Input.is_action_pressed("ui_cancel")
+			#Cancel upward momentium if jump button is let go
+			#I'm pretty sure this can be simplified into one if statement
+			if velocity.y < 0 and !jumpHeld:
+				velocity.y = 0
+				state=State.FALLING
+
+func get_free_roam_input(delta):
+	velocity.y = 0
+	velocity.x = 0
+	var m = 3 if Input.is_action_pressed('R1') else 1
+	if Input.is_action_pressed('ui_right'):
+		velocity.x = 500*m
+	if Input.is_action_pressed('ui_left'):
+		velocity.x = -500*m
+	if Input.is_action_pressed('ui_down'):
+		velocity.y = 500*m
+	if Input.is_action_pressed('ui_up'):
+		velocity.y = -500*m
+	#velocity = velocity.normalized() * SPEED
 
 #The world_to_map function does NOT take into account the scale of the tilemap, so we have to calculate
 #the tile's actual mapping ourselves.
@@ -573,6 +581,12 @@ func set_checkpoint(respawnPosition:Vector2,shouldFaceLeft=false):
 	CheckpointPlayerStats.shouldFaceLeft=shouldFaceLeft
 	CheckpointPlayerStats.checkpointSet=true
 
+#Do nothing, empty function to be defined in m16
+#returns true if _physics_process() should end
+#execution early
+func m16_slide_handler()->bool:
+	return false
+
 func _physics_process(delta):
 	if !is_timer_stopped:
 		timer+=delta
@@ -607,7 +621,10 @@ func _physics_process(delta):
 				invincible=false
 		return
 	elif not movementLocked:
-		get_input(delta)
+		if freeRoam:
+			get_free_roam_input(delta)
+		else:
+			get_input(delta)
 		handleEvents() #This modifies velocity
 		
 	if position.x < $Camera2D.limit_left+10:
@@ -663,6 +680,13 @@ func _physics_process(delta):
 			return
 		else:
 			velocity.y=1
+	elif state==State.DASH:
+		if invincible: #Still need to process invincibility frames
+			processInvincible(delta)
+		if m16_slide_handler():
+			return
+		#return
+		#pass
 
 	if is_on_floor() and velocity.y >= 0:
 		if state == State.FALLING:
@@ -757,7 +781,7 @@ func _physics_process(delta):
 		#stateInfo.text = "Touching wall and NOT floor? " + String((is_on_wall() and !is_on_floor()))
 		#stateInfo.text = "Floor: " + String(is_on_floor()) + " Wall: " + String(is_on_wall()) + " Ceiling: " + String(rayCast.is_colliding())
 		#stateInfo.text = "Floor:" + String(is_on_floor()) +" ! "+ "Jumping: "+String(jumping)
-		stateInfo.text = sprite.get_animation() + " ! " + String(sprite.is_playing())
+		stateInfo.text = sprite.get_animation() + " ! " + state_toString[state]
 		if Globals.playerData.gameDifficulty > Globals.Difficulty.EASY:
 			for i in range(3):
 				stateInfo.text +="\n"+String(bulletManager.get_onscreen_bullet_pos(i))
@@ -861,6 +885,10 @@ func processInvincible(delta):
 
 func player_touched(obj, amountToDamage:int):
 	if !invincible and state != State.DASH_ATTACK:
+		
+		#End dash immediately
+		dash_time=0
+		
 		#$FuckGodot.set_deferred("monitorable",false)
 		#$FuckGodot.set_collision_mask_bit(0,false)
 		#$FuckGodot.set_collision_layer_bit(0,false)

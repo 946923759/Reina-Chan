@@ -1,4 +1,6 @@
 extends Node2D
+#Every day I wonder why I didn't just inherit the base script and modify it
+
 
 #You CANNOT EDIT THESE VALUES IN THE SCRIPT!!!!
 #Because this script is overriding a base scene
@@ -33,8 +35,13 @@ export (Globals.Weapons) var weapon_to_unlock=0
 export (Array,Vector2) var debug_warp_points
 
 var reinaAudioPlayer
+var player:KinematicBody2D
 
 func _ready():
+	assert($PlayerHolder,"Hey genius, PlayerHolder is invalid!")
+	assert($PlayerHolder.player,"Hey genius, there's no player!")
+	player = $PlayerHolder.player
+	
 	get_tree().set_screen_stretch(SceneTree.STRETCH_MODE_2D,SceneTree.STRETCH_ASPECT_KEEP,Vector2(1280,720))
 	
 	#set_process(true)
@@ -73,7 +80,7 @@ func _ready():
 	#var music = Globals.get_custom_music(custom_music_name) if custom_music_name != "" else null
 	#load_song(_node:Node, custom_music_name:String, nsf_music_file:String, nsf_track_num:int)
 	if !mute_music_in_debug or !OS.is_debug_build():
-		if get_node("Player").global_position.y < 84*64:
+		if player.global_position.y < 84*64:
 			reinaAudioPlayer.load_song(custom_music_name,nsf_music_file,nsf_track_num)
 		else:
 			reinaAudioPlayer.load_song(custom_music_name_pt2,nsf_music_file_pt2,nsf_track_num_pt2)
@@ -95,3 +102,6 @@ func pos2cell(pos):
 	#TODO: Offset is wrong, fix it for real
 	#pos minus 30 (why?) divided by quadrant size divided by tile scale
 	return Vector2(round((pos.x-32)/16/tile_scale.x), round((pos.y-32)/16/tile_scale.y));
+
+func get_player()->KinematicBody2D:
+	return player

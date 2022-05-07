@@ -1,18 +1,19 @@
 shader_type canvas_item;
 
+uniform vec4 colorToSwap1:hint_color=vec4(0.608,0.467,0.388,1.0);
+uniform vec4 colorToSwap2:hint_color=vec4(0.694,0.627,0.592,1.0);
+
 uniform vec4 clr1 : hint_color=vec4(0.608,0.467,0.388,1.0); //a is ignored
 uniform vec4 clr2 : hint_color=vec4(0.694,0.627,0.592,1.0);
 
 void fragment(){
-	vec3 colorToSwap1=vec3(0.608,0.467,0.388);
-	vec3 colorToSwap2=vec3(0.694,0.627,0.592);
 	
 	vec3 color = texture(TEXTURE,UV).rgb;
 	//vec3 new_color = vec3(100,100,255);
-	if (distance(color,colorToSwap1) < 0.1){
+	if (distance(color,colorToSwap1.rgb) < 0.1){
 		COLOR.rgb = clr1.rgb;
 	}
-	else if (distance(color,colorToSwap2) < 0.1){
+	else if (distance(color,colorToSwap2.rgb) < 0.05){
 		COLOR.rgb = clr2.rgb;
 	}
 	else

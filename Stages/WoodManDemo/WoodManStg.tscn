@@ -7,7 +7,7 @@
 [ext_resource path="res://Stages/TestStage/Trees2BGFront.png" type="Texture" id=5]
 [ext_resource path="res://Stages/WoodManDemo/forest01-512-x-256_003.png" type="Texture" id=6]
 [ext_resource path="res://Stages/WoodManDemo/forest01-512-x-256_002.png" type="Texture" id=7]
-[ext_resource path="res://Player Files/Player.tscn" type="PackedScene" id=8]
+[ext_resource path="res://Player Files/OLD_Zero/Player.tscn" type="PackedScene" id=8]
 [ext_resource path="res://Various Objects/CameraController/CameraAdjuster.tscn" type="PackedScene" id=9]
 [ext_resource path="res://Music/Stage_Sumireko.ogg" type="AudioStream" id=10]
 [ext_resource path="res://Stages/WoodManDemo/enemyBat/Bat.tscn" type="PackedScene" id=11]

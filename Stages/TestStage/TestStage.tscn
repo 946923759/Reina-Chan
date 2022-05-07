@@ -2,7 +2,7 @@
 
 [ext_resource path="res://gridDisplay.png" type="Texture" id=2]
 [ext_resource path="res://Stages/TestStage/Tileset.tres" type="TileSet" id=3]
-[ext_resource path="res://Player Files/Player.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Player Files/OLD_Zero/Player.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Stages/TestStage/8886.jpg" type="Texture" id=5]
 [ext_resource path="res://Stages/TestStage/TreesParallaxBG.png" type="Texture" id=6]
 [ext_resource path="res://Stages/TestStage/TestEnemy.tscn" type="PackedScene" id=7]

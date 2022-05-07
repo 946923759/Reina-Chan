@@ -7,9 +7,12 @@
 [sub_resource type="GDScript" id=1]
 script/source = "extends \"res://Stages/EnemyBaseScript.gd\"
 
-onready var player = get_node_or_null(\"/root/Node2D/Player\")
+onready var player = get_node(\"/root/Node2D\").get_player()
 
 func _physics_process(delta):
+	if !is_instance_valid(player):
+		player = get_node(\"/root/Node2D/\").get_player()
+		return
 	if (
 		(facing == DIRECTION.LEFT and 
 			player.global_position.x > global_position.x-256 and
@@ -76,5 +79,4 @@ shapeOverride = SubResource( 2 )
 collisionOffset = Vector2( 0, 1 )
 
 [node name="AnimatedSprite" parent="." index="0"]
-scale = Vector2( 4, 4 )
 frames = SubResource( 9 )
