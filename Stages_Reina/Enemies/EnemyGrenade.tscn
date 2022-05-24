@@ -25,7 +25,7 @@ func init(direction,velocityOverride:Vector2=Vector2(0,0)):
 	
 func _physics_process(delta):
 	if raycast.is_colliding():
-		print(\"AAAAAAAAAAAA\")
+		#print(\"Grenade collided with player\")
 		var obj = raycast.get_collider()
 		if obj.has_method(\"player_touched\"): #If enemy touched player
 			obj.call(\"player_touched\",self,1)
@@ -92,6 +92,8 @@ animations = [ {
 
 [node name="KinematicBody2D" type="KinematicBody2D"]
 position = Vector2( 1124.26, 559.248 )
+collision_layer = 2
+collision_mask = 0
 script = SubResource( 1 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

@@ -1,0 +1,104 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://Various Objects/boulder.png" type="Texture" id=1]
+[ext_resource path="res://addons/godot-next/gui/debug_label.gd" type="Script" id=2]
+[ext_resource path="res://ParticleEffects/alphaMask.gdshader" type="Shader" id=3]
+[ext_resource path="res://Sounds/Classic/S3K_B4 - small rocks.wav" type="AudioStream" id=4]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends KinematicBody2D
+
+#var speed:float = -5.0
+#var bounciness:float = -10.0
+
+var expl = preload(\"res://Stages/EnemyExplodeSmall.tscn\")
+onready var raycast = $RayCast2D
+onready var sprite = $Sprite
+onready var snd = $snd
+var num_bounced:int = 0
+
+var velocity:Vector2 = Vector2(0,5)
+
+func _ready():
+	pass
+
+func _physics_process(delta):
+	velocity.y += delta*5
+	var collision = move_and_collide(velocity)
+	
+	#Apparently objects only collide from the direction they are pushed
+	if raycast.is_colliding():
+		#print(\"AAAAAAAAAAAA\")
+		objectTouched(raycast.get_collider())
+	if collision:
+		objectTouched(collision.collider)
+		killSelf()
+
+func objectTouched(obj):
+	#print(\"AAA\")
+	if obj.has_method(\"player_touched\"): #If enemy touched player
+		obj.call(\"player_touched\",self,3)
+		#Special case for the bomb enemy, we want the enemy to kill itself when it touches the player
+		killSelf()
+	elif obj.has_method(\"enemy_touched\"): #If enemy touched bullet
+		obj.call(\"enemy_touched\",self)
+
+
+func killSelf():
+	set_physics_process(false)
+	sprite.visible=false
+	set_collision_layer_bit(0,false)
+	set_collision_mask_bit(0,false)
+	
+	var e = expl.instance()
+	e.position = position
+	#e.position.y-=32
+	e.get_node(\"s1\").volume_db=-999
+	get_parent().add_child(e)
+	
+	snd.connect(\"finished\",self,\"queue_free\")
+	snd.play()
+	#self.queue_free()
+"
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = ExtResource( 3 )
+shader_param/clr1 = Color( 0.501961, 0, 0.501961, 1 )
+
+[sub_resource type="CircleShape2D" id=3]
+radius = 35.0
+
+[node name="Boulder" type="KinematicBody2D"]
+collision_layer = 18
+collision_mask = 18
+script = SubResource( 1 )
+
+[node name="Sprite" type="Sprite" parent="."]
+material = SubResource( 2 )
+position = Vector2( 0, -4 )
+scale = Vector2( 4, 4 )
+texture = ExtResource( 1 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( 0, -3 )
+shape = SubResource( 3 )
+
+[node name="DebugLabel" type="Label" parent="."]
+margin_right = 40.0
+margin_bottom = 14.0
+text = "velocity = null
+"
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+target_path = NodePath("..")
+properties = PoolStringArray( "velocity" )
+
+[node name="RayCast2D" type="RayCast2D" parent="."]
+enabled = true
+cast_to = Vector2( 0, -30 )
+
+[node name="snd" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 4 )
+bus = "Player/Enemies"

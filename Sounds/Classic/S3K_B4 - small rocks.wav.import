@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/S3K_B4 - small rocks.wav-c022bd93ba23b15a7851170c02e2e289.sample"
+
+[deps]
+
+source_file="res://Sounds/Classic/S3K_B4 - small rocks.wav"
+dest_files=[ "res://.import/S3K_B4 - small rocks.wav-c022bd93ba23b15a7851170c02e2e289.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

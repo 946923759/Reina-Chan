@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Tap 5x2.PNG-d02c06c1a27378f8c61c34631855832f.stex"
+path="res://.import/bottle.png-f0257ec17cd29ff4e719285ab0e4dbb7.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Stages_Reina/Clear_And_Fail/PIURED/Resources/NoteSkin/PRIME/Tap 5x2.PNG"
-dest_files=[ "res://.import/Tap 5x2.PNG-d02c06c1a27378f8c61c34631855832f.stex" ]
+source_file="res://Stages_Reina/Enemies/Skorp/bottle.png"
+dest_files=[ "res://.import/bottle.png-f0257ec17cd29ff4e719285ab0e4dbb7.stex" ]
 
 [params]
 

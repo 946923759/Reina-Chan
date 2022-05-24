@@ -1,0 +1,27 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://Stages_Reina/Clear_And_Fail/PIURED/GameObjects/Stage/NoteField/ReceptorExplosions.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Stages_Reina/Clear_And_Fail/PIURED/Resources/NoteSkin/PRIME/UpLeft Ready Receptor 1x3.png" type="Texture" id=2]
+[ext_resource path="res://Stages_Reina/Clear_And_Fail/PIURED/GameObjects/Stage/NoteField/ReceptorV2.gd" type="Script" id=3]
+[ext_resource path="res://Stages_Reina/Clear_And_Fail/PIURED/Resources/NoteSkin/PRIME/DownRight Ready Receptor 1x3.png" type="Texture" id=4]
+[ext_resource path="res://Stages_Reina/Clear_And_Fail/PIURED/Resources/NoteSkin/PRIME/Center Ready Receptor 1x3.png" type="Texture" id=5]
+[ext_resource path="res://Stages_Reina/Clear_And_Fail/PIURED/Resources/NoteSkin/PRIME/DownLeft Ready Receptor 1x3.png" type="Texture" id=6]
+[ext_resource path="res://Stages_Reina/Clear_And_Fail/PIURED/Resources/NoteSkin/PRIME/UpRight Ready Receptor 1x3.png" type="Texture" id=7]
+
+[node name="Receptor" type="Node2D"]
+script = ExtResource( 3 )
+receptorTextures = [ ExtResource( 6 ), ExtResource( 2 ), ExtResource( 5 ), ExtResource( 7 ), ExtResource( 4 ) ]
+
+[node name="Base" type="Sprite" parent="."]
+texture = ExtResource( 2 )
+centered = false
+vframes = 3
+
+[node name="Glow" type="Sprite" parent="."]
+texture = ExtResource( 2 )
+centered = false
+vframes = 3
+frame = 1
+
+[node name="Explosion" parent="." instance=ExtResource( 1 )]
+offset = Vector2( 32, 32 )

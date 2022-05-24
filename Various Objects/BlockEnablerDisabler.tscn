@@ -5,7 +5,10 @@ script/source = "extends Node2D
 
 export (int,\"Enable Blocks\",\"Disable Blocks\") var mode=0
 export (float,0.0,1.0) var time_between_blocks=0.03
+export (bool) var play_explosions_if_disabling=false
 onready var children = get_child_count()
+
+var explosion = preload(\"res://Stages/EnemyExplodeSmall.tscn\")
 
 func _ready():
 	set_process(false)
@@ -28,7 +31,14 @@ func _process(delta):
 		if mode==0:
 			get_child(i).enable()
 		else:
-			get_child(i).disable()
+			var b = get_child(i)
+			b.disable()
+			if play_explosions_if_disabling:
+				var e = explosion.instance()
+				e.init(true)
+				e.position = b.position
+				add_child(e)
+			
 		if i==children-1:
 			set_process(false)
 		else:

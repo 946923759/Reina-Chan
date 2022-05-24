@@ -19,6 +19,7 @@ func _on_Button_pressed():
 "
 
 [node name="Node2D" instance=ExtResource( 5 )]
+LADDER_TILE_ID = 6
 adjust_camera = true
 topBound = -999
 rightBound = 60

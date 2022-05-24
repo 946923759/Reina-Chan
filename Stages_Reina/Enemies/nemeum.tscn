@@ -161,28 +161,28 @@ atlas = ExtResource( 2 )
 region = Rect2( 0, 0, 54, 38 )
 
 [sub_resource type="AtlasTexture" id=4]
-atlas = ExtResource( 6 )
-region = Rect2( 46, 0, 46, 58 )
+atlas = ExtResource( 5 )
+region = Rect2( 0, 50, 52, 50 )
 
 [sub_resource type="AtlasTexture" id=5]
-atlas = ExtResource( 6 )
-region = Rect2( 0, 0, 46, 58 )
+atlas = ExtResource( 5 )
+region = Rect2( 52, 50, 52, 50 )
 
 [sub_resource type="AtlasTexture" id=6]
-atlas = ExtResource( 6 )
-region = Rect2( 0, 0, 46, 58 )
+atlas = ExtResource( 2 )
+region = Rect2( 54, 0, 54, 38 )
 
 [sub_resource type="AtlasTexture" id=7]
-atlas = ExtResource( 6 )
-region = Rect2( 0, 116, 46, 58 )
+atlas = ExtResource( 2 )
+region = Rect2( 108, 0, 54, 38 )
 
 [sub_resource type="AtlasTexture" id=8]
-atlas = ExtResource( 6 )
-region = Rect2( 46, 116, 46, 58 )
+atlas = ExtResource( 5 )
+region = Rect2( 52, 0, 52, 50 )
 
 [sub_resource type="AtlasTexture" id=9]
-atlas = ExtResource( 2 )
-region = Rect2( 162, 0, 54, 38 )
+atlas = ExtResource( 5 )
+region = Rect2( 0, 0, 52, 50 )
 
 [sub_resource type="AtlasTexture" id=10]
 atlas = ExtResource( 2 )
@@ -190,47 +190,47 @@ region = Rect2( 0, 0, 54, 38 )
 
 [sub_resource type="AtlasTexture" id=11]
 atlas = ExtResource( 2 )
-region = Rect2( 54, 0, 54, 38 )
+region = Rect2( 0, 38, 54, 38 )
 
 [sub_resource type="AtlasTexture" id=12]
 atlas = ExtResource( 2 )
-region = Rect2( 108, 0, 54, 38 )
+region = Rect2( 54, 38, 54, 38 )
 
 [sub_resource type="AtlasTexture" id=13]
 atlas = ExtResource( 6 )
-region = Rect2( 0, 58, 46, 58 )
+region = Rect2( 0, 0, 46, 58 )
 
 [sub_resource type="AtlasTexture" id=14]
 atlas = ExtResource( 6 )
-region = Rect2( 46, 58, 46, 58 )
+region = Rect2( 0, 116, 46, 58 )
 
 [sub_resource type="AtlasTexture" id=15]
-atlas = ExtResource( 2 )
-region = Rect2( 0, 0, 54, 38 )
+atlas = ExtResource( 6 )
+region = Rect2( 46, 116, 46, 58 )
 
 [sub_resource type="AtlasTexture" id=16]
 atlas = ExtResource( 2 )
-region = Rect2( 0, 38, 54, 38 )
+region = Rect2( 162, 0, 54, 38 )
 
 [sub_resource type="AtlasTexture" id=17]
 atlas = ExtResource( 2 )
-region = Rect2( 54, 38, 54, 38 )
+region = Rect2( 0, 0, 54, 38 )
 
 [sub_resource type="AtlasTexture" id=18]
-atlas = ExtResource( 5 )
-region = Rect2( 52, 0, 52, 50 )
+atlas = ExtResource( 6 )
+region = Rect2( 0, 58, 46, 58 )
 
 [sub_resource type="AtlasTexture" id=19]
-atlas = ExtResource( 5 )
-region = Rect2( 0, 0, 52, 50 )
+atlas = ExtResource( 6 )
+region = Rect2( 46, 58, 46, 58 )
 
 [sub_resource type="AtlasTexture" id=20]
-atlas = ExtResource( 5 )
-region = Rect2( 0, 50, 52, 50 )
+atlas = ExtResource( 6 )
+region = Rect2( 46, 0, 46, 58 )
 
 [sub_resource type="AtlasTexture" id=21]
-atlas = ExtResource( 5 )
-region = Rect2( 52, 50, 52, 50 )
+atlas = ExtResource( 6 )
+region = Rect2( 0, 0, 46, 58 )
 
 [sub_resource type="SpriteFrames" id=22]
 animations = [ {
@@ -240,43 +240,43 @@ animations = [ {
 "speed": 5.0
 }, {
 "frames": [ SubResource( 4 ), SubResource( 5 ) ],
-"loop": false,
-"name": "firedUp",
+"loop": true,
+"name": "chargingAngle",
 "speed": 10.0
 }, {
-"frames": [ SubResource( 6 ), SubResource( 7 ), SubResource( 8 ), SubResource( 8 ), SubResource( 7 ), SubResource( 6 ) ],
-"loop": false,
-"name": "turningUp",
-"speed": 5.0
-}, {
-"frames": [ SubResource( 9 ), SubResource( 10 ) ],
-"loop": false,
-"name": "fired",
-"speed": 10.0
-}, {
-"frames": [ SubResource( 11 ), SubResource( 12 ) ],
+"frames": [ SubResource( 6 ), SubResource( 7 ) ],
 "loop": true,
 "name": "charging",
 "speed": 10.0
 }, {
-"frames": [ SubResource( 13 ), SubResource( 14 ) ],
-"loop": true,
-"name": "chargingUp",
-"speed": 10.0
-}, {
-"frames": [ SubResource( 15 ), SubResource( 16 ), SubResource( 17 ), SubResource( 17 ), SubResource( 16 ), SubResource( 15 ) ],
-"loop": false,
-"name": "turning",
-"speed": 5.0
-}, {
-"frames": [ SubResource( 18 ), SubResource( 19 ) ],
+"frames": [ SubResource( 8 ), SubResource( 9 ) ],
 "loop": false,
 "name": "firedAngle",
 "speed": 10.0
 }, {
-"frames": [ SubResource( 20 ), SubResource( 21 ) ],
+"frames": [ SubResource( 10 ), SubResource( 11 ), SubResource( 12 ), SubResource( 12 ), SubResource( 11 ), SubResource( 10 ) ],
+"loop": false,
+"name": "turning",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 13 ), SubResource( 14 ), SubResource( 15 ), SubResource( 15 ), SubResource( 14 ), SubResource( 13 ) ],
+"loop": false,
+"name": "turningUp",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 16 ), SubResource( 17 ) ],
+"loop": false,
+"name": "fired",
+"speed": 10.0
+}, {
+"frames": [ SubResource( 18 ), SubResource( 19 ) ],
 "loop": true,
-"name": "chargingAngle",
+"name": "chargingUp",
+"speed": 10.0
+}, {
+"frames": [ SubResource( 20 ), SubResource( 21 ) ],
+"loop": false,
+"name": "firedUp",
 "speed": 10.0
 } ]
 

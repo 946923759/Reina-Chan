@@ -741,6 +741,9 @@ rect_min_size = Vector2( 1280, 720 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
 color = Color( 0, 0, 0, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Disclaimer" type="Label" parent="logoHolder"]
 anchor_left = 1.0
@@ -761,14 +764,12 @@ __meta__ = {
 }
 
 [node name="version" type="Label" parent="logoHolder"]
-anchor_left = 1.0
-anchor_top = 1.0
 anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -1270.0
-margin_top = -710.0
-margin_right = -632.0
-margin_bottom = -667.0
+anchor_bottom = 0.06
+margin_left = 10.0
+margin_top = 10.0
+margin_right = -642.0
+margin_bottom = -0.200001
 custom_fonts/font = ExtResource( 6 )
 text = "developer version"
 __meta__ = {

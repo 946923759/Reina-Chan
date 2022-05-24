@@ -9,12 +9,11 @@
 
 [node name="M16" instance=ExtResource( 1 )]
 script = ExtResource( 3 )
-dash_multiplier = 3.0
+dash_multiplier = 2.0
 
 [node name="Sprite" parent="." index="0"]
 frames = ExtResource( 2 )
-animation = "Dash"
-frame = 3
+animation = "LadderShoot"
 
 [node name="AfterImage1" type="Sprite" parent="Sprite" index="0"]
 modulate = Color( 0.788235, 0.788235, 0.788235, 0.54902 )

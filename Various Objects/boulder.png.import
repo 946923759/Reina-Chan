@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Center Receptor 1x2.PNG-5a4cd2e49a2e981af599c98650a22d44.stex"
+path="res://.import/boulder.png-ec2df08ccbe9736fe61bf9257d61a4e3.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Stages_Reina/Clear_And_Fail/PIURED/Resources/NoteSkin/PRIME/Center Receptor 1x2.PNG"
-dest_files=[ "res://.import/Center Receptor 1x2.PNG-5a4cd2e49a2e981af599c98650a22d44.stex" ]
+source_file="res://Various Objects/boulder.png"
+dest_files=[ "res://.import/boulder.png-ec2df08ccbe9736fe61bf9257d61a4e3.stex" ]
 
 [params]
 

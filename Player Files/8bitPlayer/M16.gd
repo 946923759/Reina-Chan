@@ -15,6 +15,12 @@ func _ready():
 	#a1.offset=Vector2(0,0)
 	#a2.offset=Vector2(0,0)
 	#a3.offset=Vector2(0,0)
+	
+	#I DON'T UNDERSTAND WHY THIS WILL OVERRIDE THE BASE
+	#SCENES IF YOU CHANGE IT IN THE EDITOR WHO THE FUCK
+	#DESIGNED THIS
+	#sprite.get_material().set_shader_param("colorToSwap1", Color("#c2c2c2"))
+	#sprite.get_material().set_shader_param("colorToSwap2", Color("#f0f0f0"))
 
 #TODO: dude lmao
 func get_input(delta):
@@ -208,7 +214,10 @@ func get_input(delta):
 					velocity.y = 0
 					state=State.FALLING
 
+#Return true if processing should stop
 func m16_slide_handler()->bool:
+	if !is_on_floor():
+		dash_time=0.0
 	a1.visible = dash_time>0
 	a2.visible = dash_time>0
 	a3.visible = dash_time>0

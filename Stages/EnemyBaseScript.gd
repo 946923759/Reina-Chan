@@ -1,4 +1,6 @@
 extends KinematicBody2D
+signal enemy_killed
+
 #export(int) var maxHealth;
 export(int, 1, 50) var maxHealth = 10
 var curHealth;
@@ -139,6 +141,8 @@ func killSelf():
 	e.position = position
 	#e.position.y-=32
 	get_parent().add_child(e)
+	
+	emit_signal("enemy_killed")
 	
 	self.queue_free()
 	
