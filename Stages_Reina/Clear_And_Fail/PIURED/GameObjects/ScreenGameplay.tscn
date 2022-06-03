@@ -1,0 +1,13 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Stages_Reina/Clear_And_Fail/PIURED/GameObjects/Song.gd" type="Script" id=1]
+[ext_resource path="res://Stages_Reina/Clear_And_Fail/PIURED/GameObjects/PlayerStage.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Stages_Reina/Clear_And_Fail/PIURED/GameObjects/ScreenGameplay.gd" type="Script" id=3]
+
+[node name="ScreenGameplay" type="Node2D"]
+script = ExtResource( 3 )
+
+[node name="PlayerStage" parent="." instance=ExtResource( 2 )]
+
+[node name="Song" type="AudioStreamPlayer" parent="."]
+script = ExtResource( 1 )

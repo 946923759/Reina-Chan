@@ -1,0 +1,31 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Stages_Reina/Clear_And_Fail/PIURED/GameObjects/Stage/NoteField/Receptor_Single.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Stages_Reina/Clear_And_Fail/PIURED/GameObjects/Stage/NoteField/ReceptorManager.gd" type="Script" id=2]
+[ext_resource path="res://Stages_Reina/Clear_And_Fail/PIURED/GameObjects/Stage/NoteField/Steps.gd" type="Script" id=3]
+
+[node name="NoteField" type="Node2D"]
+
+[node name="Receptors" type="Node2D" parent="."]
+script = ExtResource( 2 )
+
+[node name="dl" parent="Receptors" instance=ExtResource( 1 )]
+columnToLoad = 0
+
+[node name="ul" parent="Receptors" instance=ExtResource( 1 )]
+position = Vector2( 64, 0 )
+
+[node name="c" parent="Receptors" instance=ExtResource( 1 )]
+position = Vector2( 128, 0 )
+columnToLoad = 2
+
+[node name="ur" parent="Receptors" instance=ExtResource( 1 )]
+position = Vector2( 192, 0 )
+columnToLoad = 3
+
+[node name="dr" parent="Receptors" instance=ExtResource( 1 )]
+position = Vector2( 256, 0 )
+columnToLoad = 4
+
+[node name="Steps" type="Node2D" parent="."]
+script = ExtResource( 3 )

@@ -23,316 +23,316 @@
 
 class Song:
 
-    var pathToSSCFile:String
-    var meta = {};
-    var levels:Array=[];
-    var playBackSpeed;
-    var audioBuf;
-    var requiresResync:bool=false;
-    var readyToStart:bool=false;
-    var delay:float=0.0;
-
-    func _init( pathToSSCFile, audioBuf, offset, playBackSpeed, onReadyToStart ):
-
-
-        this.pathToSSCFile = pathToSSCFile ;
-
-        # Metadata of the song
-        this.meta = {} ;
-
-        # NoteData of each level.
-        this.levels = [] ;
-
-        this.playBackSpeed = playBackSpeed ;
-
-        this.syncTime = offset ;
-
-        this.audioBuf = audioBuf ;
-
-        this.requiresResync = false ;
-
-        this.readyToStart = false ;
-
-        this.onReadyToStart = onReadyToStart ;
-
-        this.delay = 0.0 ;
-
-        # $.get(pathToSSCFile, this.parse.bind(this), 'text');
-
-        # Not that convenient way of reading files from disk.
-        readFileContent(pathToSSCFile,this.loadSSC.bind(this)) ;
-
-
-
-    
-
-    func getWARPS(level)->Array:
-        var arr:Array = []
-        if  'WARPS' in this.levels[level]:
-            arr = this.levels[level].WARPS ;
-        elif 'WARPS' in this.meta:
-            arr = this.meta['WARPS'] ;
-        else:
-            return [] ;
-        return arr ;
-    
-
-    func getLevelDifficulty(level):
-        if is_valid_integer(this.levels[level].METER):
-            return int(this.levels[level].METER)
-        return 1;
-    
-
-
-    func getBPMs(level):
-        if 'BPMS' in this.levels[level]:
-            return this.levels[level].BPMS ;
-        else:
-            return this.meta['BPMS'] ;
-        
-    
-
-    func getTickCounts(level):
-        if 'TICKCOUNTS' in this.levels[level]:
-            return this.levels[level].TICKCOUNTS;
-        elif 'TICKCOUNTS' in this.meta:
-            return this.meta['TICKCOUNTS'] ;
-        else:
-            return [[0.0,4]] ;
-     
-
-    getScrolls(level) {
-        if ( 'SCROLLS' in this.levels[level] ) {
-            return this.levels[level].SCROLLS ;
-        } else if ( 'SCROLLS' in this.meta) {
-            return this.meta['SCROLLS'] ;
-        } else {
-            return [[0.0,1.0]] ;
-        }
-    }
-
-    getStops(level) {
-        let arr ;
-        if ( 'STOPS' in this.levels[level] ) {
-            arr = this.levels[level].STOPS ;
-        } else if ('STOPS' in this.meta) {
-            arr = this.meta['STOPS'] ;
-        } else {
-            return [] ;
-        }
-        return arr ;
-    }
-
-    getDelays(level) {
-        let arr ;
-        if ( 'DELAYS' in this.levels[level] ) {
-            arr = this.levels[level].DELAYS;
-        } else if ( 'DELAYS' in this.meta) {
-            arr = this.meta['DELAYS'] ;
-        } else {
-            return [] ;
-        }
-        return arr ;
-    }
-
-    getSpeeds(level) {
-        if ( 'SPEEDS' in this.levels[level] ) {
-            return this.levels[level].SPEEDS;
-        } else if ( 'SPEEDS' in this.meta ) {
-            return this.meta['SPEEDS'] ;
-        } else {
-            return [[0.0,1.0,0.0,0.0]] ;
-        }
-    }
-
-    getOffset(level) {
-        if ( 'OFFSET' in this.levels[level] ) {
-            return this.levels[level].OFFSET ;
-        } else {
-            return this.meta['OFFSET'];
-        }
-    }
-
-    getBannerPath() {
-        return this.pathToSSCFile.substr(0, this.pathToSSCFile.lastIndexOf("/")) + '/' + this.meta['BACKGROUND'] ;
-    }
-
-    getTickCountAtBeat(level, beat) {
-
-        const tickCounts = this.getTickCounts(level) ;
-        let last = tickCounts[0][1];
-        for ( const tickCount of tickCounts ) {
-            const beatInTick = tickCount[0] ;
-            const tick = tickCount[1] ;
-            if ( beat >= beatInTick ) {
-                last = tick ;
-            } else {
-                return last ;
-            }
-
-        }
-        return last ;
-    }
-
-    getBPMAtBeat(level, beat) {
-
-        const tickCounts = this.getBMPs(level) ;
-        let last = tickCounts[0][1];
-        for ( const tickCount of tickCounts ) {
-            const beatInTick = tickCount[0] ;
-            const tick = tickCount[1] ;
-            if ( beat >= beatInTick ) {
-                last = tick ;
-            } else {
-                return last ;
-            }
+	var pathToSSCFile:String
+	var meta = {};
+	var levels:Array=[];
+	var playBackSpeed;
+	var audioBuf;
+	var requiresResync:bool=false;
+	var readyToStart:bool=false;
+	var delay:float=0.0;
+
+	func _init( pathToSSCFile, audioBuf, offset, playBackSpeed, onReadyToStart ):
+
+
+		this.pathToSSCFile = pathToSSCFile ;
+
+		# Metadata of the song
+		this.meta = {} ;
+
+		# NoteData of each level.
+		this.levels = [] ;
+
+		this.playBackSpeed = playBackSpeed ;
+
+		this.syncTime = offset ;
+
+		this.audioBuf = audioBuf ;
+
+		this.requiresResync = false ;
+
+		this.readyToStart = false ;
+
+		this.onReadyToStart = onReadyToStart ;
+
+		this.delay = 0.0 ;
+
+		# $.get(pathToSSCFile, this.parse.bind(this), 'text');
+
+		# Not that convenient way of reading files from disk.
+		readFileContent(pathToSSCFile,this.loadSSC.bind(this)) ;
+
+
+
+	
+
+	func getWARPS(level)->Array:
+		var arr:Array = []
+		if  'WARPS' in this.levels[level]:
+			arr = this.levels[level].WARPS ;
+		elif 'WARPS' in this.meta:
+			arr = this.meta['WARPS'] ;
+		else:
+			return [] ;
+		return arr ;
+	
+
+	func getLevelDifficulty(level):
+		if is_valid_integer(this.levels[level].METER):
+			return int(this.levels[level].METER)
+		return 1;
+	
+
+
+	func getBPMs(level):
+		if 'BPMS' in this.levels[level]:
+			return this.levels[level].BPMS ;
+		else:
+			return this.meta['BPMS'] ;
+		
+	
+
+	func getTickCounts(level):
+		if 'TICKCOUNTS' in this.levels[level]:
+			return this.levels[level].TICKCOUNTS;
+		elif 'TICKCOUNTS' in this.meta:
+			return this.meta['TICKCOUNTS'] ;
+		else:
+			return [[0.0,4]] ;
+	 
+
+	func getScrolls(level)->Array:
+		if 'SCROLLS' in this.levels[level]:
+			return this.levels[level].SCROLLS
+		elif 'SCROLLS' in this.meta:
+			return this.meta['SCROLLS']
+		else:
+			return [[0.0,1.0]] ;
+		
+	
+
+	func getStops(level)->Array:
+		var arr:Array ;
+		if 'STOPS' in this.levels[level]:
+			arr = this.levels[level].STOPS
+		elif 'STOPS' in this.meta:
+			arr = this.meta['STOPS'] ;
+		else:
+			return [] ;
+		
+		return arr ;
+	
+
+	func getDelays(level)->Array:
+		var arr:Array
+		if 'DELAYS' in this.levels[level]:
+			arr = this.levels[level].DELAYS;
+		elif 'DELAYS' in this.meta:
+			arr = this.meta['DELAYS'] ;
+		else:
+			return [] ;
+		
+		return arr ;
+	
+
+	func getSpeeds(level)->Array:
+		if 'SPEEDS' in this.levels[level]:
+			return this.levels[level].SPEEDS;
+		elif 'SPEEDS' in this.meta:
+			return this.meta['SPEEDS'] ;
+		else:
+			return [[0.0,1.0,0.0,0.0]] ;
+		
+	
+
+	func getOffset(level):
+		if 'OFFSET' in this.levels[level]:
+			return this.levels[level].OFFSET ;
+		else:
+			return this.meta['OFFSET'];
+		
+	
+
+	func getBannerPath():
+		return this.pathToSSCFile.substr(0, this.pathToSSCFile.lastIndexOf("/")) + '/' + this.meta['BACKGROUND'] ;
+	
+
+	func getTickCountAtBeat(level, beat):
+
+		var tickCounts = this.getTickCounts(level) ;
+		var last = tickCounts[0][1];
+		for ( const tickCount of tickCounts ) {
+			const beatInTick = tickCount[0] ;
+			const tick = tickCount[1] ;
+			if beat >= beatInTick ) {
+				last = tick ;
+			else:
+				return last ;
+			}
+
+		
+		return last ;
+	
+
+	getBPMAtBeat(level, beat) {
+
+		const tickCounts = this.getBMPs(level) ;
+		let last = tickCounts[0][1];
+		for ( const tickCount of tickCounts ) {
+			const beatInTick = tickCount[0] ;
+			const tick = tickCount[1] ;
+			if beat >= beatInTick ) {
+				last = tick ;
+			else:
+				return last ;
+			}
 
-        }
-        return last ;
-    }
+		}
+		return last ;
+	}
 
-    getSpeedAndTimeAtBeat(level, beat) {
+	getSpeedAndTimeAtBeat(level, beat) {
 
-        const speeds = this.getSpeeds(level) ;
-        let last = speeds[0];
-        for ( const speed of speeds ) {
-            const beatInSpeed = speed[0] ;
-            if ( beat >= beatInSpeed ) {
-                last = speed ;
-            } else {
+		const speeds = this.getSpeeds(level) ;
+		let last = speeds[0];
+		for ( const speed of speeds ) {
+			const beatInSpeed = speed[0] ;
+			if beat >= beatInSpeed ) {
+				last = speed ;
+			else:
 
-                # we also return the type: time in seconds or beats.
-                return [last[1],last[2], last[3]] ;
-            }
+				# we also return the type: time in seconds or beats.
+				return [last[1],last[2], last[3]] ;
+			}
 
-        }
-        return [last[1],last[2], last[3]] ;
-    }
-
-    getLevelStyle(level) {
-        return this.levels[level].STEPSTYPE ;
-    }
-
-
-
-    getMusicPath() {
-        return this.pathToSSCFile.substr(0, this.pathToSSCFile.lastIndexOf("/")) + '/' + this.meta['MUSIC'] ;
-        # return this.musicPath ;
-    }
+		}
+		return [last[1],last[2], last[3]] ;
+	}
+
+	getLevelStyle(level) {
+		return this.levels[level].STEPSTYPE ;
+	}
+
+
+
+	getMusicPath() {
+		return this.pathToSSCFile.substr(0, this.pathToSSCFile.lastIndexOf("/")) + '/' + this.meta['MUSIC'] ;
+		# return this.musicPath ;
+	}
 
-
-
-    loadSSC(content) {
-
-        const parse = sscParser.parse(content) ;
-        this.meta = parse.header ;
-        this.levels = parse.levels ;
-
-    }
-
-    setNewPlayBackSpeed ( newPlayBackSpeed ) {
-        this.source.playbackRate.value = newPlayBackSpeed ;
-        this.playBackSpeed = newPlayBackSpeed ;
-        # this.requiresResync = true ;
-    }
-
-
-    play () {
-
-        let audioLoader = new THREE.AudioLoader();
-        let context = null ;
-
-        if('webkitAudioContext' in window) {
-            context = new webkitAudioContext();
-        } else {
-            context = new AudioContext();
-        }
-        this.context = context ;
-        audioLoader.load( this.audioBuf, this.setUpPlayBack.bind(this)) ;
-
-
-
-        # context.decodeAudioData(this.audioBuf, this.playBack.bind(this));
-
-
-        #analyser = new THREE.AudioAnalyser( audio, 32 );
-        # audioLoader.load( this.getMusicPath(), this.playBack.bind(this)
-        #
-        #
-        # );
-
-        # this.startTime =  ;
-    }
-
-    setUpPlayBack( buf ) {
-        let source = this.context.createBufferSource();
-        this.source = source ;
-        source.playbackRate.value = this.playBackSpeed ;
-        source.onended = this.playBackEnded.bind(this) ;
-
-        # source.detune.value = 1200 ;
-        source.connect(this.context.destination);
-        source.buffer = buf;
-        this.onReadyToStart() ;
-
-        # this.delay = this.songStartDelay() ;
-
-    }
-
-    startPlayBack(startDate, getCurrentDatefn) {
-
-        let currentDate = getCurrentDatefn() ;
-
-        #           convert to secs
-        this.delay = (startDate - currentDate) / 1000.0 ;
-
-
-        this.startTime = this.context.currentTime;
-
-        # this.startTime = 0;
-        # console.log('start time: ' + this.startTime ) ;
-        console.log('computed delay: ' + this.delay) ;
-        this.source.start(this.startTime + this.delay) ;
-        this.readyToStart = true ;
-    }
-
-
-    playBackEnded() {
-        this.context.close() ;
-        engine.stop( ) ;
-    }
-
-    # This method is called when the buffer with the song is ready.
-    # playBack( buffer ) {
-    #
-    #     let audioBufferSourceNode = this.context.createBufferSource();
-    #     audioBufferSourceNode.buffer = buffer ;
-    #     audioBufferSourceNode.connect(this.context.destination);
-    #     this.startTime = this.context.currentTime;
-    #     audioBufferSourceNode.start(this.startTime + this.delay) ;
-    #     console.log('Start time: ' + this.startTime);
-    #
-    # }
-
-
-
-    getCurrentAudioTime( level ) {
-        # return this.context.currentTime ;
-        # console.log('Outside start time: ' + this.startTime) ;
-        # this.levels[level].meta['OFFSET'] ;
-        if ( this.readyToStart === false ) return -1.0 ;
-        return this.context.currentTime - this.delay + this.getOffset(level)  - this.startTime - this.syncTime;
-        # return this.startTime - this.audio.context.currentTime + parseFloat(this.meta['OFFSET']);
-        #return this.audio.context.currentTime + this.startTime + parseFloat(this.meta['OFFSET']);
-    }
-
-    getTotalOffset(level) {
-        return - this.delay + this.getOffset(level) - this.startTime;
-    }
-
-    closeBuff (){
-        this.context.close() ;
-    }
+
+
+	loadSSC(content) {
+
+		const parse = sscParser.parse(content) ;
+		this.meta = parse.header ;
+		this.levels = parse.levels ;
+
+	}
+
+	setNewPlayBackSpeed ( newPlayBackSpeed ) {
+		this.source.playbackRate.value = newPlayBackSpeed ;
+		this.playBackSpeed = newPlayBackSpeed ;
+		# this.requiresResync = true ;
+	}
+
+
+	play () {
+
+		let audioLoader = new THREE.AudioLoader();
+		let context = null ;
+
+		if('webkitAudioContext' in window) {
+			context = new webkitAudioContext();
+		else:
+			context = new AudioContext();
+		}
+		this.context = context ;
+		audioLoader.load( this.audioBuf, this.setUpPlayBack.bind(this)) ;
+
+
+
+		# context.decodeAudioData(this.audioBuf, this.playBack.bind(this));
+
+
+		#analyser = new THREE.AudioAnalyser( audio, 32 );
+		# audioLoader.load( this.getMusicPath(), this.playBack.bind(this)
+		#
+		#
+		# );
+
+		# this.startTime =  ;
+	}
+
+	setUpPlayBack( buf ) {
+		let source = this.context.createBufferSource();
+		this.source = source ;
+		source.playbackRate.value = this.playBackSpeed ;
+		source.onended = this.playBackEnded.bind(this) ;
+
+		# source.detune.value = 1200 ;
+		source.connect(this.context.destination);
+		source.buffer = buf;
+		this.onReadyToStart() ;
+
+		# this.delay = this.songStartDelay() ;
+
+	}
+
+	startPlayBack(startDate, getCurrentDatefn) {
+
+		let currentDate = getCurrentDatefn() ;
+
+		#           convert to secs
+		this.delay = (startDate - currentDate) / 1000.0 ;
+
+
+		this.startTime = this.context.currentTime;
+
+		# this.startTime = 0;
+		# console.log('start time: ' + this.startTime ) ;
+		console.log('computed delay: ' + this.delay) ;
+		this.source.start(this.startTime + this.delay) ;
+		this.readyToStart = true ;
+	}
+
+
+	playBackEnded() {
+		this.context.close() ;
+		engine.stop( ) ;
+	}
+
+	# This method is called when the buffer with the song is ready.
+	# playBack( buffer ) {
+	#
+	#     let audioBufferSourceNode = this.context.createBufferSource();
+	#     audioBufferSourceNode.buffer = buffer ;
+	#     audioBufferSourceNode.connect(this.context.destination);
+	#     this.startTime = this.context.currentTime;
+	#     audioBufferSourceNode.start(this.startTime + this.delay) ;
+	#     console.log('Start time: ' + this.startTime);
+	#
+	# }
+
+
+
+	getCurrentAudioTime( level ) {
+		# return this.context.currentTime ;
+		# console.log('Outside start time: ' + this.startTime) ;
+		# this.levels[level].meta['OFFSET'] ;
+		if this.readyToStart === false ) return -1.0 ;
+		return this.context.currentTime - this.delay + this.getOffset(level)  - this.startTime - this.syncTime;
+		# return this.startTime - this.audio.context.currentTime + parseFloat(this.meta['OFFSET']);
+		#return this.audio.context.currentTime + this.startTime + parseFloat(this.meta['OFFSET']);
+	}
+
+	getTotalOffset(level) {
+		return - this.delay + this.getOffset(level) - this.startTime;
+	}
+
+	closeBuff (){
+		this.context.close() ;
+	}
 
 
 

@@ -715,6 +715,8 @@ func _on_CheatCodeHandler_cheat_detected(_a):
 	Globals.unlockedZeroMode=true
 	if Globals.playerHasSaveData:
 		Globals.playerData.availableWeapons[1]=true
+		Globals.playerData.availableWeapons[2]=true
+		Globals.playerData.availableWeapons[3]=true
 	get_parent().reinaAudioPlayer.stop_music()
 	play()
 	connect(\"finished\",self, \"on_play_finished\")

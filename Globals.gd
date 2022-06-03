@@ -27,11 +27,13 @@ var OPTIONS = {
 	},
 	"isFullscreen":{
 		"type":"bool",
-		"default":false
+		"default":false,
+		#pc_only=true #It's probably faster to just delete this one
 	},
 	"language":{
 		"type":"list",
 		"choices":["en","es","kr","ja","zh"],
+		"localizeKey":"Language",
 		"default":"en"
 	},
 	"flipButtons":{
@@ -363,6 +365,7 @@ func set_audio_levels():
 	# determine what to put the volume level at.
 	
 	var audios = {
+		#The number corresponds to the position in default_bus_layout
 		3:Globals.OPTIONS['AudioVolume']['value'],
 		2:Globals.OPTIONS['SFXVolume']['value'],
 		1:Globals.OPTIONS['VoiceVolume']['value']

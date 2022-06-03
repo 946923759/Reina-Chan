@@ -1,4 +1,12 @@
 extends Node2D
+# A lifebar implementation needs two things:
+# constructor(beatManager:BeatManager,isDoubles:bool)
+# setLife(life:float)
+# The rest is up to you.
+# You are free to ignore the beatManager argument
+# of course, but it's useful if you want the lifebar
+# to pulse to the beat.
+
 # Custom draws are used for this since changing the
 # rect takes more effort and a custom draw
 # is probably faster anyways because there are no nodes
@@ -72,3 +80,20 @@ func _draw():
 	draw_texture_rect_region(tip,Rect2(barPos.size.x-15,33/2-50/2,tipPos.size.x,tipPos.size.y),tipPos)
 	
 	draw_texture_rect_region(front,Rect2(0,0,frontPos.size.x,frontPos.size.y),frontPos)
+
+
+#  Copyright (C) Amaryllis Works
+#  This file is part of Reina-Chan
+# 
+#  Reina-Chan is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, either version 3 of the License, or
+#  (at your option) any later version.
+# 
+#  Reina-Chan is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+# 
+#  You should have received a copy of the GNU General Public License
+#  along with Reina-Chan.If not, see <http://www.gnu.org/licenses/>.

@@ -17,7 +17,11 @@ extends Node2D
 #  # along with piured-engine.If not, see <http://www.gnu.org/licenses/>.
 #  *
 #  */
-# "use strict"; // good practice - see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode
+
+# A Judgment graphic implementation needs just one function:
+# animate(grade:String, comboCount:int)
+
+
 onready var _banner = $Banner
 onready var _combo = $Combo
 onready var _whiteDigits = $Numbers

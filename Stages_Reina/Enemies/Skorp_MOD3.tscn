@@ -1,4 +1,4 @@
-[gd_scene load_steps=42 format=2]
+[gd_scene load_steps=43 format=2]
 
 [ext_resource path="res://Stages/EnemyBase.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Stages_Reina/Enemies/Skorp/skIdle.png" type="Texture" id=2]
@@ -34,77 +34,86 @@ atlas = ExtResource( 2 )
 region = Rect2( 258, 0, 86, 86 )
 
 [sub_resource type="AtlasTexture" id=6]
-atlas = ExtResource( 3 )
-region = Rect2( 0, 0, 86, 86 )
-
-[sub_resource type="AtlasTexture" id=7]
-atlas = ExtResource( 3 )
-region = Rect2( 86, 0, 86, 86 )
-
-[sub_resource type="AtlasTexture" id=8]
-atlas = ExtResource( 3 )
-region = Rect2( 172, 0, 86, 86 )
-
-[sub_resource type="AtlasTexture" id=9]
-atlas = ExtResource( 3 )
-region = Rect2( 0, 86, 86, 86 )
-
-[sub_resource type="AtlasTexture" id=10]
 atlas = ExtResource( 12 )
 region = Rect2( 86, 86, 86, 86 )
 
-[sub_resource type="AtlasTexture" id=11]
+[sub_resource type="AtlasTexture" id=7]
 atlas = ExtResource( 12 )
 region = Rect2( 86, 172, 86, 86 )
 
-[sub_resource type="AtlasTexture" id=12]
+[sub_resource type="AtlasTexture" id=8]
 atlas = ExtResource( 12 )
 region = Rect2( 0, 172, 86, 86 )
 
-[sub_resource type="AtlasTexture" id=13]
+[sub_resource type="AtlasTexture" id=9]
 atlas = ExtResource( 12 )
 region = Rect2( 172, 86, 86, 86 )
 
+[sub_resource type="AtlasTexture" id=10]
+atlas = ExtResource( 3 )
+region = Rect2( 172, 86, 86, 86 )
+
+[sub_resource type="AtlasTexture" id=11]
+atlas = ExtResource( 3 )
+region = Rect2( 0, 0, 86, 86 )
+
+[sub_resource type="AtlasTexture" id=12]
+atlas = ExtResource( 3 )
+region = Rect2( 86, 0, 86, 86 )
+
+[sub_resource type="AtlasTexture" id=13]
+atlas = ExtResource( 3 )
+region = Rect2( 172, 0, 86, 86 )
+
 [sub_resource type="AtlasTexture" id=14]
-atlas = ExtResource( 12 )
-region = Rect2( 86, 172, 86, 86 )
+atlas = ExtResource( 3 )
+region = Rect2( 0, 86, 86, 86 )
 
 [sub_resource type="AtlasTexture" id=15]
 atlas = ExtResource( 12 )
-region = Rect2( 0, 0, 86, 86 )
+region = Rect2( 86, 172, 86, 86 )
 
 [sub_resource type="AtlasTexture" id=16]
 atlas = ExtResource( 12 )
-region = Rect2( 86, 0, 86, 86 )
+region = Rect2( 0, 0, 86, 86 )
 
 [sub_resource type="AtlasTexture" id=17]
 atlas = ExtResource( 12 )
+region = Rect2( 86, 0, 86, 86 )
+
+[sub_resource type="AtlasTexture" id=18]
+atlas = ExtResource( 12 )
 region = Rect2( 172, 0, 86, 86 )
 
-[sub_resource type="SpriteFrames" id=18]
+[sub_resource type="SpriteFrames" id=19]
 animations = [ {
 "frames": [ SubResource( 2 ), SubResource( 3 ), SubResource( 4 ), SubResource( 5 ), SubResource( 4 ), SubResource( 3 ) ],
 "loop": true,
 "name": "default",
 "speed": 7.0
 }, {
-"frames": [ SubResource( 6 ), SubResource( 7 ), SubResource( 8 ), SubResource( 9 ), SubResource( 9 ), SubResource( 9 ) ],
-"loop": false,
-"name": "fire",
-"speed": 5.0
-}, {
-"frames": [ SubResource( 10 ), SubResource( 11 ), SubResource( 12 ), SubResource( 13 ) ],
+"frames": [ SubResource( 6 ), SubResource( 7 ), SubResource( 8 ), SubResource( 9 ) ],
 "loop": false,
 "name": "ThrowFinish",
 "speed": 15.0
 }, {
-"frames": [ SubResource( 14 ), SubResource( 15 ), SubResource( 16 ), SubResource( 17 ) ],
+"frames": [ SubResource( 10 ) ],
+"loop": false,
+"name": "jump",
+"speed": 1.0
+}, {
+"frames": [ SubResource( 11 ), SubResource( 12 ), SubResource( 13 ), SubResource( 14 ), SubResource( 14 ), SubResource( 14 ) ],
+"loop": false,
+"name": "fire",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 15 ), SubResource( 16 ), SubResource( 17 ), SubResource( 18 ) ],
 "loop": false,
 "name": "ThrowReady",
 "speed": 15.0
 } ]
 
-[sub_resource type="GDScript" id=19]
+[sub_resource type="GDScript" id=20]
 script/source = "extends Node2D
 #THIS IS NEVER USED!!!!
 
@@ -172,38 +181,38 @@ func _process(delta):
 #	update()
 "
 
-[sub_resource type="CanvasItemMaterial" id=20]
+[sub_resource type="CanvasItemMaterial" id=21]
 particles_animation = true
 particles_anim_h_frames = 5
 particles_anim_v_frames = 1
 particles_anim_loop = true
 
-[sub_resource type="Curve" id=21]
+[sub_resource type="Curve" id=22]
 min_value = -200.0
 max_value = 200.0
 _data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, -80.9091 ), 0.0, 0.0, 0, 0 ]
 
-[sub_resource type="Curve" id=22]
+[sub_resource type="Curve" id=23]
 max_value = 2.0
 _data = [ Vector2( 0, 0.559091 ), 0.0, 0.0, 0, 0, Vector2( 1, 1.54318 ), 0.0, 0.0, 0, 0 ]
 
-[sub_resource type="Gradient" id=23]
+[sub_resource type="Gradient" id=24]
 offsets = PoolRealArray( 0.842767, 1 )
 colors = PoolColorArray( 1, 1, 1, 1, 1, 1, 1, 0 )
 
-[sub_resource type="RectangleShape2D" id=24]
+[sub_resource type="RectangleShape2D" id=25]
 extents = Vector2( 128, 48 )
 
-[sub_resource type="RectangleShape2D" id=25]
+[sub_resource type="RectangleShape2D" id=26]
 extents = Vector2( 200, 48 )
 
-[sub_resource type="RectangleShape2D" id=26]
+[sub_resource type="RectangleShape2D" id=27]
 extents = Vector2( 24, 64 )
 
-[sub_resource type="RectangleShape2D" id=27]
+[sub_resource type="RectangleShape2D" id=28]
 extents = Vector2( 64, 30 )
 
-[sub_resource type="ShaderMaterial" id=28]
+[sub_resource type="ShaderMaterial" id=29]
 shader = ExtResource( 11 )
 shader_param/clr1 = Color( 0.501961, 0, 0.501961, 1 )
 
@@ -217,8 +226,9 @@ collisionOffset = Vector2( 0, 64 )
 use_large_explosion = true
 
 [node name="AnimatedSprite" parent="." index="0"]
-frames = SubResource( 18 )
+frames = SubResource( 19 )
 animation = "ThrowReady"
+frame = 3
 offset = Vector2( 0, -5 )
 
 [node name="VisibilityEnabler2D" parent="." index="4"]
@@ -229,10 +239,10 @@ scale = Vector2( 1.9541, 25.1329 )
 visible = false
 position = Vector2( 124, 140 )
 scale = Vector2( 4, 4 )
-script = SubResource( 19 )
+script = SubResource( 20 )
 
 [node name="Particles2DBig" type="CPUParticles2D" parent="." index="7"]
-material = SubResource( 20 )
+material = SubResource( 21 )
 position = Vector2( 116.364, 133.111 )
 scale = Vector2( 4, 4 )
 amount = 10
@@ -241,15 +251,15 @@ gravity = Vector2( 150, 0 )
 initial_velocity = 10.0
 initial_velocity_random = 1.0
 linear_accel = 60.0
-tangential_accel_curve = SubResource( 21 )
-scale_amount_curve = SubResource( 22 )
-color_ramp = SubResource( 23 )
+tangential_accel_curve = SubResource( 22 )
+scale_amount_curve = SubResource( 23 )
+color_ramp = SubResource( 24 )
 anim_offset = 1.0
 anim_offset_random = 1.0
 
 [node name="Particles2DSmall" type="CPUParticles2D" parent="." index="8"]
 visible = false
-material = SubResource( 20 )
+material = SubResource( 21 )
 position = Vector2( 116.364, 133.111 )
 scale = Vector2( 4, 4 )
 texture = ExtResource( 4 )
@@ -257,9 +267,9 @@ gravity = Vector2( 125, 0 )
 initial_velocity = 5.0
 initial_velocity_random = 1.0
 linear_accel = 3.8
-tangential_accel_curve = SubResource( 21 )
-scale_amount_curve = SubResource( 22 )
-color_ramp = SubResource( 23 )
+tangential_accel_curve = SubResource( 22 )
+scale_amount_curve = SubResource( 23 )
+color_ramp = SubResource( 24 )
 anim_offset = 1.0
 anim_offset_random = 1.0
 
@@ -271,7 +281,7 @@ __meta__ = {
 }
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="FireArea2D1" index="0"]
-shape = SubResource( 24 )
+shape = SubResource( 25 )
 
 [node name="FireArea2D2" type="Area2D" parent="." index="10"]
 position = Vector2( 332, 129.405 )
@@ -280,7 +290,7 @@ __meta__ = {
 }
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="FireArea2D2" index="0"]
-shape = SubResource( 25 )
+shape = SubResource( 26 )
 
 [node name="footstep" type="AudioStreamPlayer2D" parent="." index="11"]
 position = Vector2( -12.6992, 161.915 )
@@ -301,12 +311,12 @@ bus = "Player/Enemies"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." index="14"]
 position = Vector2( -91.9745, -97.9891 )
 rotation = 0.403171
-shape = SubResource( 26 )
+shape = SubResource( 27 )
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="." index="15"]
 position = Vector2( 14.3604, -109.109 )
 rotation = 0.537561
-shape = SubResource( 27 )
+shape = SubResource( 28 )
 
 [node name="DebugDistance" type="Label" parent="." index="16"]
 margin_left = -100.841
@@ -336,8 +346,8 @@ target_path = NodePath("..")
 properties = PoolStringArray( "curState", "position" )
 
 [node name="FakeBottle" type="Sprite" parent="." index="18"]
-material = SubResource( 28 )
-position = Vector2( 60, -136 )
+material = SubResource( 29 )
+position = Vector2( 44, -152 )
 scale = Vector2( 4, 4 )
 texture = ExtResource( 13 )
 region_enabled = true

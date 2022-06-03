@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/ump9shoot_1.png-94a14215805fe8bc9002a354011da468.stex"
+path="res://.import/DownLeft Hold BottomCap Active 6x1.png-b57ec5a991d6355e0a18aab3d5fc83a8.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Character Sprites/ump9/ump9shoot_1.png"
-dest_files=[ "res://.import/ump9shoot_1.png-94a14215805fe8bc9002a354011da468.stex" ]
+source_file="res://Stages_Reina/Clear_And_Fail/PIURED/Resources/NoteSkin/PRIME/DownLeft Hold BottomCap Active 6x1.png"
+dest_files=[ "res://.import/DownLeft Hold BottomCap Active 6x1.png-b57ec5a991d6355e0a18aab3d5fc83a8.stex" ]
 
 [params]
 

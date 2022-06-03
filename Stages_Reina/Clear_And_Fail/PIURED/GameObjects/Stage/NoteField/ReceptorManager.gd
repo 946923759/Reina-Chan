@@ -33,7 +33,7 @@ const stepShift = 4/5;
 #// acount this overlap.
 const stepOverlap = 0.02 ;
 
-var receptor=preload("res://Stages_Reina/Clear_And_Fail/PIURED/GameObjects/Stage/NoteField/Receptor_Single.tscn")
+#var receptor=preload("res://Stages_Reina/Clear_And_Fail/PIURED/GameObjects/Stage/NoteField/Receptor_Single.tscn")
 #class stepReceptor:
 #	var xPos:float=0.0;
 #	var explosion:AnimatedSprite
@@ -46,16 +46,21 @@ func constructor(beatManager, keyInput, padId, animationRate, noteskin:String, n
 	self._beatManager = beatManager ;
 	self._animationRate = animationRate ;
 	self._padId = padId ;
-
-
-
+	
 	# If you change this, I really, REALLY hope you know what you're doing!
 	# Because the sprite is hardcoded for 5 columns!
-	receptorColumns.resize(numColumns)
+	#receptorColumns.resize(numColumns)
 	for i in range(numColumns):
-		var r = receptor.instance()
+		#var r = receptor.instance()
+		#self.add_child(r)
+		var r = get_child(i)
 		r.position.x=-2*(stepShift - stepOverlap)+i*(stepShift - stepOverlap)
-		self.add_child(r)
+
+
+#onready var dlTap = $Receptor
+#onready var 
+func _ready():
+	pass
 
 func animateExplosionStep(step:String):
 	#let tapEffect = null ;
@@ -63,26 +68,25 @@ func animateExplosionStep(step:String):
 	#let stepNote = null ;
 	#const kind = step.kind ;
 	var receptorToAnimate=get_child(0)
-	match step:
-		'dl':
-			tapEffect = this.dlBounce
-			explosion = this.dlFX ;
-			stepNote = this.dlStepNote ;
-		'ul':
-			tapEffect = this.ulBounce ;
-			explosion = this.ulFX ;
-			stepNote = this.ulStepNote ;
-		'c':
-			tapEffect = this.cBounce ;
-			explosion = this.cFX ;
-			stepNote = this.cStepNote ;
-		'ur':
-			tapEffect = this.urBounce ;
-			explosion = this.urFX ;
-			stepNote = this.urStepNote ;
-		'dr':
-			tapEffect = this.drBounce ;
-			explosion = this.drFX ;
-			stepNote = this.drStepNote ;
+#	match step:
+#		'dl':
+#			tapEffect = this.dlBounce
+#			explosion = this.dlFX ;
+#			stepNote = this.dlStepNote ;
+#		'ul':
+#			tapEffect = this.ulBounce ;
+#			explosion = this.ulFX ;
+#			stepNote = this.ulStepNote ;
+#		'c':
+#			tapEffect = this.cBounce ;
+#			explosion = this.cFX ;
+#			stepNote = this.cStepNote ;
+#		'ur':
+#			tapEffect = this.urBounce ;
+#			explosion = this.urFX ;
+#			stepNote = this.urStepNote ;
+#		'dr':
+#			tapEffect = this.drBounce ;
+#			explosion = this.drFX ;
+#			stepNote = this.drStepNote ;
 	receptorToAnimate.animateExplosion()
-	

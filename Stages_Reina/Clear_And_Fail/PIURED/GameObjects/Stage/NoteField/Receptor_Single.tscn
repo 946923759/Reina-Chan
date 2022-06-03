@@ -10,6 +10,7 @@
 
 [node name="Receptor" type="Node2D"]
 script = ExtResource( 3 )
+columnToLoad = 1
 receptorTextures = [ ExtResource( 6 ), ExtResource( 2 ), ExtResource( 5 ), ExtResource( 7 ), ExtResource( 4 ) ]
 
 [node name="Base" type="Sprite" parent="."]
@@ -24,4 +25,5 @@ vframes = 3
 frame = 1
 
 [node name="Explosion" parent="." instance=ExtResource( 1 )]
+visible = false
 offset = Vector2( 32, 32 )

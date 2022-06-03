@@ -1,15 +1,19 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Stages_Reina/Clear_And_Fail/PIURED/GameObjects/Judgment/Judgment.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Stages_Reina/Clear_And_Fail/PIURED/GameObjects/Lifebar.gd" type="Script" id=2]
-[ext_resource path="res://Stages_Reina/Clear_And_Fail/PIURED/GameObjects/PlayerStage.gd" type="Script" id=3]
+[ext_resource path="res://Stages_Reina/Clear_And_Fail/PIURED/GameObjects/Stage/PlayerStage.gd" type="Script" id=3]
 [ext_resource path="res://Stages_Reina/Clear_And_Fail/PIURED/Resources/LifeMeterBar_S_Bar 1x2.png" type="Texture" id=4]
 [ext_resource path="res://Stages_Reina/Clear_And_Fail/PIURED/Resources/LifeMeterBar_S_Back 1x2.PNG" type="Texture" id=5]
 [ext_resource path="res://Stages_Reina/Clear_And_Fail/PIURED/Resources/LifeMeterBar_S_Front.png" type="Texture" id=6]
 [ext_resource path="res://Stages_Reina/Clear_And_Fail/PIURED/Resources/SG-TIP 1x2.png" type="Texture" id=7]
+[ext_resource path="res://Stages_Reina/Clear_And_Fail/PIURED/GameObjects/Stage/NoteField/NoteField.tscn" type="PackedScene" id=8]
 
 [node name="PlayerStage" type="Node2D"]
 script = ExtResource( 3 )
+
+[node name="NoteField" parent="." instance=ExtResource( 8 )]
+position = Vector2( 64, 64 )
 
 [node name="Judgment" parent="." instance=ExtResource( 1 )]
 

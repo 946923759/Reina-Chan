@@ -40,7 +40,7 @@ func update_flip():
 	$FireArea2D2.position.x=332*facing
 	fireAnimBig.scale.x=4*facing
 	fireAnimBig.position.x=116*facing
-	fakeBottle.position.x=60*facing
+	fakeBottle.position.x=44*facing
 	fakeBottle.flip_h=(facing==DIRECTION.LEFT)
 
 func _init():
@@ -105,7 +105,8 @@ func _process(delta):
 					if distanceFromPlayer>9:
 						if timesMolotov>3:
 							timesMolotov=0
-							sprite.playing=false
+							#sprite.playing=false
+							sprite.set_animation("jump")
 							curState=STATES.JUMP_INTO_SKY
 						else:
 							timesMolotov+=1
@@ -200,9 +201,9 @@ func _process(delta):
 			gravity=5
 			curState=STATES.MOLOTOV_WAIT1
 		STATES.MOLOTOV_WAIT1:
-			gravity+=delta*50
-			fakeBottle.position.y=min(fakeBottle.position.y+gravity,-132)
-			if fakeBottle.position.y>=-134:
+			gravity+=delta*40
+			fakeBottle.position.y=min(fakeBottle.position.y+gravity,-152)
+			if fakeBottle.position.y>=-152:
 				fakeBottle.visible=false
 				sprite.playing=true
 				curState=STATES.MOLOTOV
@@ -211,10 +212,9 @@ func _process(delta):
 				print("Spawn molotov")
 				var e = molotov.instance()
 				#This is actually a complete guess and I have no idea
-				#how it works, but somehow
-				#taking the normalized vector
-				#is still accurate even if you move left a little
-				e.position = position-Vector2(0,200)
+				#how it works. But it works, and that's all that
+				#matters.
+				e.position = position+fakeBottle.position
 				var v:Vector2 = (player.global_position-global_position).normalized()*Vector2(abs(player.global_position.x-global_position.x)/64*.75,40)
 				v.y=-4
 				#v.x*=2

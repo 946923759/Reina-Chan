@@ -1,12 +1,14 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Character Sprites/ump9/ump9Idle.png" type="Texture" id=1]
 [ext_resource path="res://Stages/TestStage/Tileset.tres" type="TileSet" id=2]
 [ext_resource path="res://Stages_Reina/8bitBaseStage.tres.gd" type="Script" id=3]
 [ext_resource path="res://Stages/DebugRoomBorders.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Character Sprites/m16/m16Idle.png" type="Texture" id=5]
 
 [sub_resource type="GDScript" id=1]
-script/source = "extends Sprite
+script/source = "tool
+extends Sprite
 
 #This object spawns a player as a child and then
 #the base will grab the player variable.
@@ -21,15 +23,25 @@ script/source = "extends Sprite
 #Honestly there is probably a better way to do this than
 #using a Node2D or a sprite
 
-export (int,\"Reina\",\"M16\") var player_to_spawn_in_debug=0
+export (int,\"Reina\",\"M16\") var player_to_spawn_in_debug=0 setget update_sprite_editor
+export (Array,Texture) var charTextures
 var player:KinematicBody2D
 
+func update_sprite_editor(new_value):
+	player_to_spawn_in_debug=new_value
+	if charTextures.size()>new_value:
+		self.texture=charTextures[new_value]
+
+#func _process(delta):
+#	update_sprite_editor(player_to_spawn_in_debug)
 #Godot doesn't set exported variables until _ready() so
 #this does not work
 #func _init():
 #	pass
 
 func _ready():
+	if Engine.editor_hint:
+		return
 	var playerToSpawn = player_to_spawn_in_debug
 	if OS.is_debug_build():
 		playerToSpawn = player_to_spawn_in_debug
@@ -70,6 +82,9 @@ format = 1
 scale = Vector2( 4, 4 )
 texture = ExtResource( 1 )
 centered = false
+region_enabled = true
+region_rect = Rect2( 0, 0, 26, 32 )
 script = SubResource( 1 )
+charTextures = [ ExtResource( 1 ), ExtResource( 5 ) ]
 
 [node name="BulletHolder" type="Node2D" parent="."]

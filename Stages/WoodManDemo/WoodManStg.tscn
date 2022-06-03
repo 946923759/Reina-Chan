@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://Stages/TestStage/WoodmanStage.png" type="Texture" id=1]
 [ext_resource path="res://Stages/TestStage/Tileset.tres" type="TileSet" id=2]
@@ -9,7 +9,7 @@
 [ext_resource path="res://Stages/WoodManDemo/forest01-512-x-256_002.png" type="Texture" id=7]
 [ext_resource path="res://Player Files/OLD_Zero/Player.tscn" type="PackedScene" id=8]
 [ext_resource path="res://Various Objects/CameraController/CameraAdjuster.tscn" type="PackedScene" id=9]
-[ext_resource path="res://Music/Stage_Sumireko.ogg" type="AudioStream" id=10]
+[ext_resource path="res://Music/CDAudio/Alchemist1.ogg" type="AudioStream" id=10]
 [ext_resource path="res://Stages/WoodManDemo/enemyBat/Bat.tscn" type="PackedScene" id=11]
 [ext_resource path="res://Stages/WoodManDemo/enemyRabbit/enemyRabbit.tscn" type="PackedScene" id=12]
 
@@ -34,15 +34,6 @@ script/source = "extends Sprite
 func _process(delta):
 	var rect = region_rect
 	region_rect = Rect2(Vector2(rect.position.x+.02,rect.position.y),rect.size)"
-
-[sub_resource type="SegmentShape2D" id=3]
-b = Vector2( 64, 0 )
-
-[sub_resource type="SegmentShape2D" id=4]
-b = Vector2( 128, 0 )
-
-[sub_resource type="SegmentShape2D" id=5]
-b = Vector2( 0, 128 )
 
 [node name="Node2D" type="Node2D"]
 script = SubResource( 1 )
@@ -140,7 +131,6 @@ leftBound = 61
 topBound = 14
 rightBound = 82
 bottomBound = 45
-shape = SubResource( 3 )
 
 [node name="Area2D3" parent="." instance=ExtResource( 9 )]
 position = Vector2( 4225.42, 1872.06 )
@@ -148,7 +138,6 @@ leftBound = 61
 topBound = -1
 rightBound = 128
 bottomBound = 45
-shape = SubResource( 4 )
 
 [node name="Area2D4" parent="." instance=ExtResource( 9 )]
 position = Vector2( 7350.76, 1007.87 )
@@ -156,7 +145,6 @@ leftBound = 61
 topBound = 1
 rightBound = 195
 bottomBound = 45
-shape = SubResource( 4 )
 
 [node name="Area2D5" parent="." instance=ExtResource( 9 )]
 position = Vector2( 8149.29, 372.086 )
@@ -165,7 +153,6 @@ topBound = 1
 rightBound = 195
 bottomBound = 14
 tweenTime = 0
-shape = SubResource( 5 )
 
 [node name="Area2D6" parent="." instance=ExtResource( 9 )]
 position = Vector2( 12096.9, 279.119 )
@@ -173,7 +160,6 @@ leftBound = 175
 topBound = 1
 rightBound = 195
 bottomBound = 73
-shape = SubResource( 4 )
 
 [node name="Area2D7" parent="." instance=ExtResource( 9 )]
 position = Vector2( 12019.2, 2996.62 )
@@ -181,7 +167,6 @@ leftBound = 175
 topBound = 46
 rightBound = 195
 bottomBound = 73
-shape = SubResource( 4 )
 
 [node name="Area2D8" parent="." instance=ExtResource( 9 )]
 position = Vector2( 11378.6, 3830.17 )
@@ -189,7 +174,6 @@ leftBound = 175
 topBound = 46
 rightBound = 225
 bottomBound = 73
-shape = SubResource( 4 )
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 10 )
