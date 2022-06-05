@@ -44,7 +44,7 @@ var newTargetSpeed ;
 var stepQueue ;
 var beatManager ;
 var _speedTween ;
-var padSteps ;
+var padSteps:Dictionary ;
 var stepList ;
 var _song ;
 var _level ;
@@ -335,8 +335,9 @@ func updateHoldPosition(hold:StepHold):
 	hold.position.y += distanceToOrigin ;
 
 
-func removeStep(step):
-	self.padSteps[step.padId].remove(step) ;
+func removeStep(step:StepNote):
+	print("removeStep() stub! Was asked to remove StepNote from rendering")
+	#self.padSteps[step.padId].remove(step) ;
 
 
 func _process(delta):

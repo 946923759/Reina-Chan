@@ -51,6 +51,8 @@ func _ready():
 #	self.constructReceptors() ;
 
 
+
+var beatManagerC = preload("res://Stages_Reina/Clear_And_Fail/PIURED/GameObjects/BeatManager/BeatManager.gd")
 var _id:int ;
 var _song:String ;
 var _level:int;
@@ -86,34 +88,37 @@ func constructor(song,
 
 func configureBeatManager():
 	# creates a new beat manager with the options of the player
-	self.beatManager = new BeatManager(self._resourceManager,
+	self.beatManager = BeatManager.new() ;
+	beatManager.constructor(
 		self._song,
 		self._level,
 		self._userSpeed,
 		self.keyboardLag,
-		self.playBackSpeed) ;
+		self.playBackSpeed
+	);
 
-configureKeyInputPlayerStage(inputConfig) {
+func configureKeyInputPlayerStage(inputConfig):
+	print("configureKeyInputPlayerStage() stub!")
+	pass
 
-	# Create a KeyInput object
-	let playerInput = new KeyInput(self._resourceManager, self.frameLog)  ;
-
-	# Pad ids are used for identifying steps in double-style.
-	let pad1Id = '0' ;
-	let pad2Id = '1' ;
-
-	# We create two pads. Theoretically, more than 2 pads can be added, but in practice we only have either one or two.
-	playerInput.addPad(inputConfig.lpad, pad1Id) ;
-	playerInput.addPad(inputConfig.rpad, pad2Id) ;
-
-	# We store the input as a keyListener
-	self.keyListener = playerInput ;
-	self.idLeftPad = pad1Id ;
-	self.idRightPad = pad2Id ;
-
-	# We add the KeyInput to the stage (nothing to draw, in this case).
-	self._object.add(playerInput.object) ;
-}
+#	# Create a KeyInput object
+#	let playerInput = new KeyInput(self._resourceManager, self.frameLog)  ;
+#
+#	# Pad ids are used for identifying steps in double-style.
+#	let pad1Id = '0' ;
+#	let pad2Id = '1' ;
+#
+#	# We create two pads. Theoretically, more than 2 pads can be added, but in practice we only have either one or two.
+#	playerInput.addPad(inputConfig.lpad, pad1Id) ;
+#	playerInput.addPad(inputConfig.rpad, pad2Id) ;
+#
+#	# We store the input as a keyListener
+#	self.keyListener = playerInput ;
+#	self.idLeftPad = pad1Id ;
+#	self.idRightPad = pad2Id ;
+#
+#	# We add the KeyInput to the stage (nothing to draw, in this case).
+#	self._object.add(playerInput.object) ;
 
 # func configureTouchInputPlayerStage(inputConfig):
 
@@ -160,36 +165,18 @@ configureKeyInputPlayerStage(inputConfig) {
 #     self.idRightPad = pad2Id ;
 # }
 
-configureInputPlayerStage(inputConfig) {
+func configureInputPlayerStage(inputConfig):
 	self.configureKeyInputPlayerStage(inputConfig) ;
-}
 
-setNewPlayBackSpeed ( newPlayBackSpeed ) {
-	self.beatManager.setNewPlayBackSpeed(newPlayBackSpeed) ;
-}
+func setNewPlayBackSpeed ( newPlayBackSpeed ):
+	self.beatManager.setNewPlayBackSpeed(newPlayBackSpeed);
 
-constructStepQueue() {
-	if (self.playerConfig.inputConfig instanceof RemoteInput ) {
-		self.stepQueue = new IStepQueue(self._resourceManager, this, self.keyListener, self.beatManager, self.accuracyMargin) ;
-	} else {
-		self.stepQueue = new StepQueue(self._resourceManager, this, self.keyListener, self.beatManager, self.accuracyMargin, self.frameLog) ;
-		engine.addToInputList(self.stepQueue) ;
-	}
-
-}
-
-removeStep(step) {
-	self._steps.removeStep(step) ;
-}
+func constructStepQueue():
+	self.stepQueue = $NoteField
+	stepQueue.constructor(self, self.keyListener, self.beatManager, self.accuracyMargin, self.frameLog) ;
+	#engine.addToInputList(self.stepQueue) ;
 
 
-animateReceptorFX(stepList) {
-	for (var step of stepList) {
-		self.padReceptors[step.padId].animateExplosionStep(step) ;
-	}
-}
-
-logFrame(json) {
+func logFrame(json):
 	self.keyListener.applyFrameLog(json) ;
 	self.stepQueue.applyFrameLog(json) ;
-}

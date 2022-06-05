@@ -63,11 +63,15 @@ func _ready():
 	pass
 
 func animateExplosionStep(step:String):
+	#Ayy lmao
+	var receptorToAnimate=get_node(step)
+	receptorToAnimate.animateExplosion()
+	
+	
 	#let tapEffect = null ;
 	#let explosion = null ;
 	#let stepNote = null ;
 	#const kind = step.kind ;
-	var receptorToAnimate=get_child(0)
 #	match step:
 #		'dl':
 #			tapEffect = this.dlBounce
@@ -89,4 +93,3 @@ func animateExplosionStep(step:String):
 #			tapEffect = this.drBounce ;
 #			explosion = this.drFX ;
 #			stepNote = this.drStepNote ;
-	receptorToAnimate.animateExplosion()

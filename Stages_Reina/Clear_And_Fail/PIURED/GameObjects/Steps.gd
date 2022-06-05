@@ -1,4 +1,20 @@
 class_name Steps
+#var TimingData = preload("./TimingData.gd")
+
+class TimingData:
+	var BPM_SEGMENT:Array
+	var Stop_SEGMENT:Array
+	var Delay_SEGMENT:Array
+	var Warp_SEGMENT:Array
+	var Label_SEGMENT:Array
+	var TickCount_SEGMENT:Array
+	var Combo_SEGMENT:Array
+	var Speed_SEGMENT:Array
+	var Scroll_SEGMENT:Array
+	var Fake_SEGMENT:Array
+	var TimeSignature_SEGMENT:Array
+
+
 
 ## @brief The different ways of displaying the BPM. */
 enum DisplayBPM {
@@ -8,7 +24,7 @@ enum DisplayBPM {
 	NUM_DisplayBPM,
 	DisplayBPM_Invalid
 };
-static func DisplayBPMToString(displayBPM:int)->String:
+static func DisplayBPMEnumToString(displayBPM:int)->String:
 	match displayBPM:
 		DisplayBPM.DISPLAY_BPM_ACTUAL:
 			return "Actual"
@@ -85,11 +101,154 @@ var specifiedBPMMin:float;
 # * If this is a range, then min should not be equal to max. */
 var specifiedBPMMax:float;
 
+var timingData:TimingData
+var parent:Reference
 
+func init(parent_):
+	parent=parent_
+	timingData=TimingData.new()
 
 func toDictionary()->Dictionary:
 	return {}
 
+
+#I miss preprocessors
+func getWARPS():
+	if timingData.Warp_SEGMENT.size() > 0:
+		timingData.Warp_SEGMENT
+	else:
+		return parent.timingData.Warp_SEGMENT
+
+func getBPMs():
+	if timingData.BPM_SEGMENT.size() > 0:
+		timingData.BPM_SEGMENT
+	else:
+		return parent.timingData.BPM_SEGMENT
+
+getTickCounts(level) {
+	if ( 'TICKCOUNTS' in this.levels[level] ) {
+		return this.levels[level].TICKCOUNTS;
+	} else if ('TICKCOUNTS' in this.meta) {
+		return this.meta['TICKCOUNTS'] ;
+	} else {
+		return [[0.0,4]] ;
+	}
+}
+
+getScrolls(level) {
+	if ( 'SCROLLS' in this.levels[level] ) {
+		return this.levels[level].SCROLLS ;
+	} else if ( 'SCROLLS' in this.meta) {
+		return this.meta['SCROLLS'] ;
+	} else {
+		return [[0.0,1.0]] ;
+	}
+}
+
+getStops(level) {
+	let arr ;
+	if ( 'STOPS' in this.levels[level] ) {
+		arr = this.levels[level].STOPS ;
+	} else if ('STOPS' in this.meta) {
+		arr = this.meta['STOPS'] ;
+	} else {
+		return [] ;
+	}
+	return arr ;
+}
+
+getDelays(level) {
+	let arr ;
+	if ( 'DELAYS' in this.levels[level] ) {
+		arr = this.levels[level].DELAYS;
+	} else if ( 'DELAYS' in this.meta) {
+		arr = this.meta['DELAYS'] ;
+	} else {
+		return [] ;
+	}
+	return arr ;
+}
+
+getSpeeds(level) {
+	if ( 'SPEEDS' in this.levels[level] ) {
+		return this.levels[level].SPEEDS;
+	} else if ( 'SPEEDS' in this.meta ) {
+		return this.meta['SPEEDS'] ;
+	} else {
+		return [[0.0,1.0,0.0,0.0]] ;
+	}
+}
+
+getOffset(level) {
+	if ( 'OFFSET' in this.levels[level] ) {
+		return this.levels[level].OFFSET ;
+	} else {
+		return this.meta['OFFSET'];
+	}
+}
+
+getTickCountAtBeat(level, beat) {
+
+	const tickCounts = this.getTickCounts(level) ;
+	let last = tickCounts[0][1];
+	for ( const tickCount of tickCounts ) {
+		const beatInTick = tickCount[0] ;
+		const tick = tickCount[1] ;
+		if ( beat >= beatInTick ) {
+			last = tick ;
+		} else {
+			return last ;
+		}
+
+	}
+	return last ;
+}
+
+getBPMAtBeat(level, beat) {
+
+	const tickCounts = this.getBMPs(level) ;
+	let last = tickCounts[0][1];
+	for ( const tickCount of tickCounts ) {
+		const beatInTick = tickCount[0] ;
+		const tick = tickCount[1] ;
+		if ( beat >= beatInTick ) {
+			last = tick ;
+		} else {
+			return last ;
+		}
+
+	}
+	return last ;
+}
+
+getSpeedAndTimeAtBeat(level, beat) {
+
+	const speeds = this.getSpeeds(level) ;
+	let last = speeds[0];
+	for ( const speed of speeds ) {
+		const beatInSpeed = speed[0] ;
+		if ( beat >= beatInSpeed ) {
+			last = speed ;
+		} else {
+
+			# we also return the type: time in seconds or beats.
+			return [last[1],last[2], last[3]] ;
+		}
+
+	}
+	return [last[1],last[2], last[3]] ;
+}
+
+getLevelStyle(level) {
+	return this.levels[level].STEPSTYPE ;
+}
+
+
+
+getMusicPath() {
+	return this.pathToSSCFile.substr(0, this.pathToSSCFile.lastIndexOf("/")) + '/' + this.meta['MUSIC'] ;
+	# return this.musicPath ;
+}
 
 #/**
 # * @file

@@ -19,110 +19,101 @@ extends Node2D
 # *
 # */
 
+var playerStages:Array
 
 
+func constructor(song):
 
-_object ;
-_bg ;
-_playerStages ;
-_noteskins ;
-p1 ;
-song ;
-animationRate ;
+	#super(resourceManager);
+	self.animationRate = 30;
+	self.song = song;
 
-constructor( resourceManager, song, noteskins ) { //...
+	#self._object = new THREE.Object3D();
 
-	super(resourceManager);
-	this.animationRate = 30;
-	this.song = song;
+	self.playerStages = [
+		$PlayerStage
+	] ;
 
-	this._object = new THREE.Object3D();
-
-	this._playerStages = [] ;
-
-	noteskins.forEach( (noteskin) => {
-		this.configureNoteTextures(noteskin) ;
-	}) ;
+	#for noteskin in noteskins:
+	#	self.configureNoteTextures(noteskin)
 
 
+# This function seems to get the scores?
+#retrievePerformancePlayerStages() {
+#	let performances = [] ;
+#	for (let i = 0 ; i < self._playerStages.length ; i++) {
+#		performances.push( self._playerStages[i].judgment.performance ) ;
+#	}
+#	return performances ;
+#}
 
-}
-
-retrievePerformancePlayerStages() {
-	let performances = [] ;
-	for (let i = 0 ; i < this._playerStages.length ; i++) {
-		performances.push( this._playerStages[i].judgment.performance ) ;
-	}
-	return performances ;
-}
-
-configureNoteTextures(noteskin) {
-	new StepNoteTexture(this._resourceManager, 'dl', this.animationRate, noteskin) ;
-	new StepNoteTexture(this._resourceManager, 'ul', this.animationRate, noteskin) ;
-	new StepNoteTexture(this._resourceManager, 'c', this.animationRate, noteskin) ;
-	new StepNoteTexture(this._resourceManager, 'ur', this.animationRate, noteskin) ;
-	new StepNoteTexture(this._resourceManager, 'dr', this.animationRate, noteskin) ;
-
-	new HoldExtensibleTexture(this._resourceManager, 'dl', this.animationRate, noteskin) ;
-	new HoldExtensibleTexture(this._resourceManager, 'ul', this.animationRate, noteskin) ;
-	new HoldExtensibleTexture(this._resourceManager, 'c', this.animationRate, noteskin) ;
-	new HoldExtensibleTexture(this._resourceManager, 'ur', this.animationRate, noteskin) ;
-	new HoldExtensibleTexture(this._resourceManager, 'dr', this.animationRate, noteskin) ;
-}
-
-configureBG() {
-
-	this._bg = new Background(this._resourceManager, this._playerStages[0].beatManager) ;
-	this._bg.object.position.y = -3 ;
-	this._bg.object.position.z = -1 ;
-	this._object.add(this._bg.object) ;
-
-}
+#configureNoteTextures(noteskin) {
+#	new StepNoteTexture(self._resourceManager, 'dl', self.animationRate, noteskin) ;
+#	new StepNoteTexture(self._resourceManager, 'ul', self.animationRate, noteskin) ;
+#	new StepNoteTexture(self._resourceManager, 'c', self.animationRate, noteskin) ;
+#	new StepNoteTexture(self._resourceManager, 'ur', self.animationRate, noteskin) ;
+#	new StepNoteTexture(self._resourceManager, 'dr', self.animationRate, noteskin) ;
+#
+#	new HoldExtensibleTexture(self._resourceManager, 'dl', self.animationRate, noteskin) ;
+#	new HoldExtensibleTexture(self._resourceManager, 'ul', self.animationRate, noteskin) ;
+#	new HoldExtensibleTexture(self._resourceManager, 'c', self.animationRate, noteskin) ;
+#	new HoldExtensibleTexture(self._resourceManager, 'ur', self.animationRate, noteskin) ;
+#	new HoldExtensibleTexture(self._resourceManager, 'dr', self.animationRate, noteskin) ;
+#}
+#
+#configureBG() {
+#
+#	self._bg = new Background(self._resourceManager, self._playerStages[0].beatManager) ;
+#	self._bg.object.position.y = -3 ;
+#	self._bg.object.position.z = -1 ;
+#	self._object.add(self._bg.object) ;
+#
+#}
 
 
-addPlayerStage( playerConfig, playBackSpeed ) {
+func addPlayerStage( playerConfig, playBackSpeed ):
 
 
 	let lifebarOrientation ;
 
-	if ( this._playerStages.length % 2 === 0 ) {
+	if ( self._playerStages.length % 2 === 0 ) {
 		lifebarOrientation = 'left2right' ;
 	} else {
 		lifebarOrientation = 'right2left' ;
 	}
 
 
-	let stage = new PlayerStage(this._resourceManager,
-		this.song,
+	let stage = new PlayerStage(self._resourceManager,
+		self.song,
 		playerConfig,
 		playBackSpeed,
-		this._playerStages.length,
+		self._playerStages.length,
 		lifebarOrientation) ;
 
 	stage.setScale(playerConfig.scale) ;
 
-	this._object.add(stage.object) ;
-	this._playerStages.push(stage) ;
-	this.adjustPlayerStages() ;
+	self._object.add(stage.object) ;
+	self._playerStages.push(stage) ;
+	self.adjustPlayerStages() ;
 
 	// We can only configure the background if we have at least one stage (beat manager) set up.
-	if ( this._playerStages.length === 1 )  {
-		this.configureBG() ;
+	if ( self._playerStages.length === 1 )  {
+		self.configureBG() ;
 	}
 
 	// stageID
-	return this._playerStages.length -1 ;
+	return self._playerStages.length -1 ;
 
 
 }
 
 logFrame(playerStageId, json) {
-	this._playerStages[playerStageId].logFrame(json) ;
+	self._playerStages[playerStageId].logFrame(json) ;
 }
 
 adjustPlayerStages() {
 
-	let no_stages = this._playerStages.length ;
+	let no_stages = self._playerStages.length ;
 
 	// if (no_stages === 1) {
 	//     return ;
@@ -137,7 +128,7 @@ adjustPlayerStages() {
 	}
 
 	for (let i = 0 ; i < no_stages ; i++ ) {
-		if (  this.song.getLevelStyle(this._playerStages[i]._level) === 'pump-double' || this.song.getLevelStyle(this._playerStages[i]._level) === 'pump-halfdouble' ) {
+		if (  self.song.getLevelStyle(self._playerStages[i]._level) === 'pump-double' || self.song.getLevelStyle(self._playerStages[i]._level) === 'pump-halfdouble' ) {
 			distance = 9 ;
 			break ;
 		}
@@ -147,21 +138,21 @@ adjustPlayerStages() {
 	let Xpos = -(distance*no_stages)/2 + distance/2;
 
 	for (let i = 0 ; i < no_stages ; i++ ) {
-		this._playerStages[i].object.position.x = Xpos + this._playerStages[i].playerConfig.receptorX ;
-		this._playerStages[i].object.position.y = this._playerStages[i].playerConfig.receptorY ;
+		self._playerStages[i].object.position.x = Xpos + self._playerStages[i].playerConfig.receptorX ;
+		self._playerStages[i].object.position.y = self._playerStages[i].playerConfig.receptorY ;
 		Xpos += distance ;
 	}
 
 }
 
 setNewPlayBackSpeed ( newPlayBackSpeed ) {
-	for (let i = 0 ; i < this._playerStages.length ; i++ ) {
-		this._playerStages[i].setNewPlayBackSpeed ( newPlayBackSpeed ) ;
+	for (let i = 0 ; i < self._playerStages.length ; i++ ) {
+		self._playerStages[i].setNewPlayBackSpeed ( newPlayBackSpeed ) ;
 	}
 }
 
 updateOffset(stageId, newOffsetOffset) {
-	this._playerStages[stageId].beatManager.updateOffset(newOffsetOffset) ;
+	self._playerStages[stageId].beatManager.updateOffset(newOffsetOffset) ;
 }
 
 ready() {
@@ -175,5 +166,5 @@ update(delta) {
 }
 
 get object () {
-	return this._object ;
+	return self._object ;
 }

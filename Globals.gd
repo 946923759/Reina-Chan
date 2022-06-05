@@ -177,6 +177,7 @@ func load_system_data()->bool:
 			unlockedZeroMode=dataToLoad['extras']['zeroMode']
 		save_game.close()
 		print("System save data loaded.")
+		#print(dataToLoad.options)
 		return true
 
 func load_player_game()->bool:

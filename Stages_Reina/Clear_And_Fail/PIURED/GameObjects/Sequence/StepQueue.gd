@@ -1,4 +1,9 @@
-extends Node
+extends Node2D
+# This class handles both the Receptors and Steps.
+# It checks input for the receptors, then animates the receptors
+# if a note is covering it. Then it will queue_free() the corresponding
+# note if found.
+
 
 #/*
 # * # Copyright (C) Pedro G. Bascoy
@@ -44,7 +49,7 @@ var checkForNewHolds:bool=true
 var stepQueue:Array = []
 var stepDict:Dictionary = {}
 
-func constructor(playerStage, keyInput, beatManager, accuracyMargin, frameLog):
+func constructor(playerStage, keyInput, beatManager, accuracyMargin:float=0.15, frameLog=null):
 
 	#super(resourceManager) ;
 
@@ -64,7 +69,16 @@ func constructor(playerStage, keyInput, beatManager, accuracyMargin, frameLog):
 	self.frameLog = frameLog ;
 
 
-func update(delta):
+
+var KEYMAPPINGS_STUB = {
+	KEY_Q:"ul",
+	KEY_S:"c",
+	KEY_E:"ur",
+	KEY_Z:"dl",
+	KEY_C:"dr"
+}
+
+func _process(delta):
 
 	# console.log('tal') ;
 
@@ -73,9 +87,9 @@ func update(delta):
 	self.updateActiveHolds(currentAudioTime, delta, currentBeat);
 	self.updateStepQueue(currentAudioTime);
 
-
-
-
+	for k in KEYMAPPINGS_STUB:
+		if Input.is_key_pressed(k):
+			stepPressed(KEYMAPPINGS_STUB[k],1)
 
 #func input():
 #
@@ -88,6 +102,11 @@ func update(delta):
 #	}
 #
 #}
+
+#func _input(event):
+#	#if event is InputEventAction:
+#	if event is InputEventKey:
+#
 
 
 # THESE METHODS ARE CALLED WHEN CONSTRUCTING THE SCENE.
@@ -117,7 +136,7 @@ func cleanUpStepQueue():
 #	self.stepQueue[self.stepQueue.length -1].stepList.push(step) ;
 
 #step is either StepNote or StepHold type
-func addStepToStepList ( step, index, i,j ):
+func addStepToStepList ( step, index:int, i:int,j:int ):
 	var stepId = PIURED_ID.getId( step.kind,step.padId, i,j ) ;
 	step.id = stepId ;
 
@@ -238,12 +257,16 @@ func updateStepQueue( currentAudioTime:float) :
 			self.checkForNewHolds = true ;
 
 func needToAnimateReceptorFX(stepList):
-	self.frameLog.logAnimateReceptorFX(stepList) ;
-	self.playerStage.animateReceptorFX(stepList) ;
+	#self.frameLog.logAnimateReceptorFX(stepList) ;
+	#self.playerStage.animateReceptorFX(stepList) ;
+	
+	for step in stepList:
+		$Receptors.animateExplosionStep(step)
 
 func needToRemoveStep(step):
-	self.frameLog.logRemoveStep(step) ;
-	self.playerStage.removeStep(step) ;
+	#self.frameLog.logRemoveStep(step) ;
+	#self.playerStage.removeStep(step) ;
+	step.queue_free()
 
 # the boolean end is used to compute the remainder combo left after a set of holds.
 func judgeHolds(delta, currentAudioTime, beat, tickCounts):
@@ -433,7 +456,8 @@ func getFirstStepWithinMargin(currentAudioTime:float, kind:String, padId:int)->A
 
 
 
-func stepPressed(kind, padId):
+# Because isAnyNotePressedAtCurStep was too long
+func stepPressed(kind:String, padId:int):
 
 
 	var currentAudioTime = self.beatManager.currentAudioTime ;
@@ -472,10 +496,6 @@ func stepPressed(kind, padId):
 				self.needToAnimateReceptorFX(stepInfo.stepList) ;
 				self.needToAnimateReceptorFX(self.activeHolds.asList()) ;
 				self.removeNotesFromStepObject(stepInfo.stepList) ;
-
-			
-
-
 
 			# remove front
 			self.removeElement(hitIndex);

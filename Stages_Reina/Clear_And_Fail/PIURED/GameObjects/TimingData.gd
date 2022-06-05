@@ -1,0 +1,11 @@
+var BPM_SEGMENT
+var Stop_SEGMENT
+var Delay_SEGMENT
+var Warp_SEGMENT
+var Label_SEGMENT
+var TickCount_SEGMENT
+var Combo_SEGMENT
+var Speed_SEGMENT
+var Scroll_SEGMENT
+var Fake_SEGMENT
+var TimeSignature_SEGMENT

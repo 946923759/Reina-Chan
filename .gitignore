@@ -13,3 +13,6 @@ data_*/
 # Reina-Chan CDAudio or unused audio
 Music/CDAudio/*
 Music/Stage_Intro2.ogg
+
+#StepMania songs (for Clear & Fail stage)
+Stages_Reina/Clear_And_Fail/Songs/*

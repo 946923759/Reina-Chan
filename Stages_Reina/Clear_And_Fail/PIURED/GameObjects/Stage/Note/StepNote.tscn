@@ -158,6 +158,6 @@ animations = [ {
 [node name="Note" type="AnimatedSprite"]
 frames = SubResource( 31 )
 animation = "DownLeft"
-frame = 4
+frame = 1
 playing = true
 script = ExtResource( 6 )
