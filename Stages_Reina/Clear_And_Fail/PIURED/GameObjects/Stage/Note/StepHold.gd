@@ -24,6 +24,7 @@ var _holdExtensible ;
 var _lastGapLength:float= 0.0
 var _endBeat:float ;
 var _originalEndBeat:float ;
+var endTimeStamp:float
 #const holdZDepth := -2 ;
 
 func constructHoldExtensible(endBeat:float ):

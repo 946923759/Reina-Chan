@@ -1,4 +1,5 @@
 extends AudioStreamPlayer
+class_name Song
 
 # StepMania's Song class, poorly coded in Godot
 # by taking parts of StepMania and PIURED and gstep
@@ -27,6 +28,7 @@ extends AudioStreamPlayer
 # */
 
 var SSCFilePath:String
+var audioBuf:String
 var meta:Dictionary = {}
 var steps:Array = []
 var playBackSpeed:float=1.0
@@ -38,8 +40,14 @@ var delay:float=0.0
 var globalTimingData
 
 
-func constructor( pathToSSCFile, audioBuf, offset, playBackSpeed, onReadyToStart ):
+func constructor(
+	pathToSSCFile:String="res://Stages_Reina/Clear_And_Fail/Songs/Test Song/wh_2hu_wud_u_fk.ssc",
+	audioFilePath:String="res://Stages_Reina/Clear_And_Fail/Songs/Test Song/wh_2hu_wud_u_fk.ogg",
+	offset:float=1.0,
+	playBackSpeed:float=1.0,
+	onReadyToStart=null):
 
+	print("Loading SSC!")
 
 	SSCFilePath = pathToSSCFile ;
 
@@ -47,15 +55,17 @@ func constructor( pathToSSCFile, audioBuf, offset, playBackSpeed, onReadyToStart
 
 	self.syncTime = offset ;
 
-	self.audioBuf = audioBuf ;
+	self.audioBuf = audioFilePath ;
 
-	self.onReadyToStart = onReadyToStart ;
+	#self.onReadyToStart = onReadyToStart ;
 
 	loadSSC(SSCFilePath)
+	print("Load SSC fin! "+String(steps.size())+" charts have been loaded.")
+	print("Got meter: "+String(steps[0].METER))
 
 func loadSSC(sscPath:String)->bool:
-	print("Stubbed SSC loader!")
-	sscPath="res:#Stages_Reina/Clear_And_Fail/Songs/Gargoyle/Gargoyle.json"
+	print("Stubbed SSC loader! Loading BTH.json")
+	sscPath="res://Stages_Reina/Clear_And_Fail/Songs/Breaking The Habit/song.json"
 	#const parse = sscParser.parse(content) ;
 	var save_game = File.new()
 	if not save_game.file_exists(sscPath):
@@ -64,7 +74,7 @@ func loadSSC(sscPath:String)->bool:
 	var parse:Dictionary=parse_json(save_game.get_as_text())
 	save_game.close()
 	self.meta = parse.header ;
-	self.steps = parse.steps ;
+	self.steps = parse.levels ;
 	return true
 
 
@@ -197,7 +207,7 @@ func getLevelStyle(level)->String:
 func getMusicPath()->String:
 	print("Stubbed getMusicPath()!")
 	#return this.pathToSSCFile.substr(0, this.pathToSSCFile.lastIndexOf("/")) + '/' + this.meta['MUSIC'] ;
-	return 'res:#Stages_Reina/Clear_And_Fail/Songs/Gargoyle/15E5.mp3'
+	return 'res://Stages_Reina/Clear_And_Fail/Songs/Breaking The Habit/song.ogg'
 
 func setNewPlayBackSpeed ( newPlayBackSpeed ):
 	self.source.playbackRate.value = newPlayBackSpeed ;

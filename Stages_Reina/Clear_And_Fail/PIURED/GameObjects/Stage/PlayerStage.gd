@@ -1,6 +1,6 @@
 extends Node2D
 """
-PlayerStage - It holds the players!
+PlayerStage - It holds each player!
 But what is a player, you ask?
 A player is:
  * A NoteField Object
@@ -34,6 +34,7 @@ A player is:
 
 onready var lifebar = $Lifebar
 onready var judgment = $Judgment
+onready var stepQueue = $NoteField
 func _ready():
 	$Judgment.position=Globals.SCREEN_CENTER
 	$Lifebar.position=Vector2(Globals.SCREEN_CENTER_X,40)
@@ -51,50 +52,58 @@ func _ready():
 #	self.constructReceptors() ;
 
 
+#Each player must have its own BeatManager so per-step timing can be calculated.
+var BeatManager = load("res://Stages_Reina/Clear_And_Fail/PIURED/GameObjects/BeatManager/BeatManager.gd")
 
-var beatManagerC = preload("res://Stages_Reina/Clear_And_Fail/PIURED/GameObjects/BeatManager/BeatManager.gd")
-var _id:int ;
-var _song:String ;
-var _level:int;
+var playerConfig:Dictionary
+var beatManager
+var _id:int=1 ;
+var _song:AudioStreamPlayer ;
+var _level:int=0;
 var _steps;
 const keyboardLag:float = 0.07
+var _userSpeed:float=1.0
+var _noteskin:String
+var accuracyMargin:float
 var playbackSpeed:float=1.0; #TODO: Should be kept in ScreenGameplay
 var lifebarOrientation:String #TODO: This should be an enum
 
 
 func constructor(song,
 				playerConfig,
-				playBackSpeed,
-				lifebarOrientation = 'left2right'):
+				playBackSpeed:float=1.0,
+				myStageIndex:int=1, #If P1 or P2, 1 indexed.
+				lifebarOrientation:String = 'left2right'):
 
 	# Save properties.
 	self.playerConfig = playerConfig ;
 	self._song = song ;
 	self._level = playerConfig.level ;
 	self._userSpeed = playerConfig.speed ;
-	#self._id = id ;
+	self._id = myStageIndex ;
 	self._noteskin = playerConfig.noteskin ;
 	self.accuracyMargin = playerConfig.accuracyMargin ;
 	self.lifebarOrientation = lifebarOrientation ;
-	self.playBackSpeed = playBackSpeed ;
-
-	#
-	self.padReceptors = { } ;
+	self.playbackSpeed = playBackSpeed ;
 
 	self.configureBeatManager() ;
 
 	self.configureInputPlayerStage(playerConfig.inputConfig) ;
 
+	constructStepQueue()
+
 
 func configureBeatManager():
-	# creates a new beat manager with the options of the player
+	print("Spawning new BeatManager to manage timing for steps given")
+	# Creates a new beat manager with the options of the player.
+	# Each player must have its own BeatManager so per-step timing can be calculated.
 	self.beatManager = BeatManager.new() ;
 	beatManager.constructor(
 		self._song,
 		self._level,
 		self._userSpeed,
 		self.keyboardLag,
-		self.playBackSpeed
+		self.playbackSpeed
 	);
 
 func configureKeyInputPlayerStage(inputConfig):
@@ -172,8 +181,8 @@ func setNewPlayBackSpeed ( newPlayBackSpeed ):
 	self.beatManager.setNewPlayBackSpeed(newPlayBackSpeed);
 
 func constructStepQueue():
-	self.stepQueue = $NoteField
-	stepQueue.constructor(self, self.keyListener, self.beatManager, self.accuracyMargin, self.frameLog) ;
+	#self.stepQueue = $NoteField
+	stepQueue.constructor(self, null, self.beatManager, self.accuracyMargin, null) ;
 	#engine.addToInputList(self.stepQueue) ;
 
 

@@ -34,7 +34,7 @@ class StepInfo:
 		timeStamp=timeStamp_
 
 
-var _stepDict ;
+#var _stepDict ;
 
 var HoldsStateC = preload("res://Stages_Reina/Clear_And_Fail/PIURED/HoldStructs.gd")
 
@@ -48,6 +48,9 @@ var accuracyMargin
 var checkForNewHolds:bool=true
 var stepQueue:Array = []
 var stepDict:Dictionary = {}
+
+func _ready():
+	set_process(false)
 
 func constructor(playerStage, keyInput, beatManager, accuracyMargin:float=0.15, frameLog=null):
 
@@ -66,7 +69,13 @@ func constructor(playerStage, keyInput, beatManager, accuracyMargin:float=0.15, 
 	activeHolds = HoldsStateC.new()
 	activeHolds.constructor([1])
 
-	self.frameLog = frameLog ;
+	#self.frameLog = frameLog ;
+
+	print("NoteField is set up, ready to add new notes.")
+	print("calling $Steps.constructor() to set up note track.")
+	$Steps.constructor(self,beatManager,playerStage._song,0)
+
+
 
 
 
@@ -79,6 +88,9 @@ var KEYMAPPINGS_STUB = {
 }
 
 func _process(delta):
+	if not is_instance_valid(beatManager):
+		print("No BeatManager instance! Call stepQueue.constructor()!!")
+		return
 
 	# console.log('tal') ;
 
@@ -137,13 +149,13 @@ func cleanUpStepQueue():
 
 #step is either StepNote or StepHold type
 func addStepToStepList ( step, index:int, i:int,j:int ):
-	var stepId = PIURED_ID.getId( step.kind,step.padId, i,j ) ;
+	var stepId = PIURED_ID.getId( step.kind,1, i,j ) ;
 	step.id = stepId ;
 
 	# save in the dict.
-	self._stepDict[stepId] = step ;
+	stepDict[stepId] = step ;
 	#save in the list.
-	self.stepQueue[index].stepList.push(step) ;
+	self.stepQueue[index].stepList.append(step) ;
 
 #Why is this a function lol
 func getLength()->int:

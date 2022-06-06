@@ -53,16 +53,20 @@ var idLeftPad ;
 var idRightPad ;
 var keyListener ;
 
+
+func _ready():
+	set_process(false)
+
 func constructor(
 			stepQueue,
 			beatManager,
 			song,
-			level,
-			userSpeed,
-			idLeftPad,
-			idRightPad,
-			keyListener,
-			noteskin):
+			level:int=0,
+			userSpeed:float=1.0,
+			idLeftPad:int=1,
+			idRightPad:int=2,
+			keyListener=null,
+			noteskin:String="Prime"):
 	#super(resourceManager);
 
 
@@ -93,6 +97,7 @@ func constructor(
 	self.padSteps = {} ;
 	self.stepList = [] ;
 
+	configureStepConstantsPositions()
 	self.constructSteps() ;
 
 
@@ -114,7 +119,7 @@ func configureStepConstantsPositions ():
 	# define position of the notes w.r.t. the receptor
 
 	# Space to the right or left of a given step.
-	var stepShift = 4/5;
+	var stepShift = 100;
 	# Note that the receptor steps are a bit overlapped. This measure takes into
 	# acount this overlap.
 	var stepOverlap = 0.02 ;
@@ -135,8 +140,9 @@ func composePad(stepDataOffset:int=0, padId:int=1):
 	# object containing all the steps of the given Pad.
 	#var steps = new THREE.Object3D();
 
-	var noteData:Array = self._song.levels[self._level].NOTES;
-
+	var noteData:Array = self._song.steps[self._level].NOTES;
+	print("Got notedata from Steps class, generating track...")
+	print("There are "+String(noteData.size())+" measures in this track.")
 
 	var listIndex = 0;
 	# i loops the bars
@@ -233,6 +239,7 @@ func composePad(stepDataOffset:int=0, padId:int=1):
 				beat);
 
 
+	print("Finished generating note track! There are "+String(get_child_count())+" notes spawned.")
 	#return steps ;
 
 
@@ -247,7 +254,7 @@ currentYPosition
 XStepPosition
 steps:&Array (Reference to an array)
 """
-func processNote(note:String, kind:String, currentYPosition:float, XStepPosition:float, currentTimeInSong, index,  padId:int, i,j, beat):
+func processNote(note:String, kind:String, currentYPosition:float, stepXpos:float, currentTimeInSong, index,  padId:int, i,j, beat):
 
 
 	# Process StepNote
@@ -260,11 +267,12 @@ func processNote(note:String, kind:String, currentYPosition:float, XStepPosition
 			#add_child(step)
 			#var stepMesh = step.object ;
 
-			step.position=Vector2(XStepPosition,currentYPosition)
+			step.position=Vector2(stepXpos,currentYPosition)
 			#stepMesh.position.y = currentYPosition ;
 			step.originalYPos = currentYPosition ;
 			#stepMesh.position.x = XStepPosition ;
 			step.z_index = stepNoteZDepth ;
+			print("Placed step at "+String(step.position))
 
 
 			#Notice how this is NOT added as a child,
@@ -273,13 +281,21 @@ func processNote(note:String, kind:String, currentYPosition:float, XStepPosition
 			if note == '2':
 				var stepHold = StepHoldN.instance()
 				stepHold.constructor(kind, padId, currentTimeInSong, self._noteskin )
+				
+
+				stepHold.position=Vector2(stepXpos,currentYPosition)
+				#stepMesh.position.y = currentYPosition ;
+				stepHold.originalYPos = currentYPosition ;
+				#stepMesh.position.x = XStepPosition ;
+				stepHold.z_index = stepNoteZDepth ;
+				
 				#var stepHold = new StepHold(self._resourceManager, step, kind ) ;
 
 				# don't add steps into the stepqueue if they are inside a warp section
 				if !self.beatManager.isNoteInWarp(beat):
 					self.stepQueue.addStepToStepList(stepHold, index, i,j) ;
 				self.stepQueue.setHold(kind, padId, stepHold) ;
-				self.stepList.push(stepHold) ;
+				self.stepList.append(stepHold) ;
 			else:
 				# don't add steps into the stepqueue if they are inside a warp section
 				if !self.beatManager.isNoteInWarp(beat):
@@ -287,7 +303,7 @@ func processNote(note:String, kind:String, currentYPosition:float, XStepPosition
 				
 				add_child(step)
 				#steps.add(stepMesh) ;
-				self.stepList.push(step) ;
+				self.stepList.append(step) ;
 		'3':
 			var holdObject = self.stepQueue.getHold( kind , padId ) ;
 
@@ -341,6 +357,9 @@ func removeStep(step:StepNote):
 
 
 func _process(delta):
+	if not is_instance_valid(beatManager):
+		print("Can't process without beatManager! call steps.constructor()!")
+		return
 
 	self.updateCurrentSpeed() ;
 

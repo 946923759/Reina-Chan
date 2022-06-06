@@ -1,4 +1,4 @@
-extends Node
+class_name BeatManager
 # here's your funny comment
 # https://www.youtube.com/watch?v=eLGn_dVA3ow
 # Here's 1000 lines of I don't know what the heck this is,
@@ -191,9 +191,9 @@ class PIURED_Curve:
 		var point2 = Vector2(interval.scryX(y), y) ;
 
 		var chunk1 = Interval.new()
-		chunk1.constructor(interval.p1, point1, interval.openLeft, false) ;
+		chunk1.constructor(interval.p1, point1, interval._openLeft, false) ;
 		var chunk2 = Interval.new()
-		chunk2.constructor(point2, interval.p2, false, interval.openRight ) ;
+		chunk2.constructor(point2, interval.p2, false, interval._openRight ) ;
 		
 		#var chunk1 = new Interval(interval.p1, point1, interval.openLeft, false) ;
 		#var chunk2 = new Interval(point2, interval.p2, false, interval.openRight ) ;
@@ -223,15 +223,18 @@ class PIURED_Curve:
 #I can't tell what this is for or why it's using Vector2
 class Interval:
 
-	var _p1:Vector2 ;
-	var _p2:Vector2 ;
+	var p1:Vector2 ;
+	var p2:Vector2 ;
 	var _openLeft:bool ;
 	var _openRight:bool ;
 
-	func constructor( p1:Vector2, p2:Vector2, openLeft:bool, openRight:bool ):
+	func _to_string():
+		return "[p1="+String(p1)+", p2="+String(p2)+", openLeft="+String(_openLeft)+", openRight="+String(_openRight)+"]"
 
-		self._p1 = p1 ;
-		self._p2 = p2 ;
+	func constructor( p1_:Vector2, p2_:Vector2, openLeft:bool, openRight:bool ):
+
+		self.p1 = p1_ ;
+		self.p2 = p2_ ;
 
 		self._openLeft = openLeft ;
 		self._openRight = openRight ;
@@ -242,38 +245,38 @@ class Interval:
 		if ( self._openLeft && self._openRight ):
 			return true ;
 		elif self._openLeft:
-			return p.x < self._p2.x;
+			return p.x < p2.x;
 		elif self._openRight:
-			return p.x >= self._p1.x ;
+			return p.x >= p1.x ;
 		
-		return p.x >= self._p1.x && p.x < self._p2.x;
+		return p.x >= p1.x && p.x < p2.x;
 
 	func isInIntervalY( p:Vector2 )->bool:
 
 		if ( self._openLeft && self._openRight ):
 			return true ;
 		elif self._openLeft:
-			return p.y < self._p2.y;
+			return p.y < p2.y;
 		elif self._openRight:
-			return p.y >= self._p1.y ;
+			return p.y >= p1.y ;
 		
-		return p.y >= self._p1.y && p.y < self._p2.y;
+		return p.y >= p1.y && p.y < p2.y;
 
 	
 
 	func scryY( x ):
 
-		var m = (self._p2.y - self._p1.y) / (self._p2.x - self._p1.x) ;
+		var m = (p2.y - p1.y) / (p2.x - p1.x) ;
 
-		var y = m*(x-self._p1.x) + self._p1.y ;
+		var y = m*(x-p1.x) + p1.y ;
 
 		return y ;
 
 	func scryX( y ):
 
-		var m = (self._p2.x - self._p1.x) / (self._p2.y - self._p1.y) ;
+		var m = (p2.x - p1.x) / (p2.y - p1.y) ;
 
-		var x = m*(y-self._p1.y) + self._p1.x ;
+		var x = m*(y-p1.y) + p1.x ;
 
 		return x ;
 
@@ -287,8 +290,8 @@ class Interval:
 	#What's en enum anyways?
 	func sideOfInIntervalAtY(y)->String:
 
-		var leftBoundary = self.scryY(self.p1.x) ;
-		var rightBoundary = self.scryY(self.p2.x) ;
+		var leftBoundary = self.scryY(p1.x) ;
+		var rightBoundary = self.scryY(p2.x) ;
 
 		if ( y < leftBoundary ):
 			return 'left' ;
@@ -375,10 +378,13 @@ class Second2Displacement:
 
 		for i in range(_scrolls.size()-1):
 
-			var beat1 = self._scrolls[ i ][0] ;
+			var beat1:float = self._scrolls[ i ][0] ;
 			var scroll1 = self._scrolls[ i ] [1] ;
-			var beat2 = self._scrolls[ i+1 ][0] ;
+			var beat2:float = self._scrolls[ i+1 ][0] ;
 			var scroll2 = self._scrolls[ i+1 ] [1] ;
+
+			print("Calculating interval between "+String(beat1)+" and "+String(beat2))
+
 
 			var displacement1 = self._curve.scryY(self._s2b.reverseScry(beat1)).y ;
 			var displacement2 = self._curve.scryY(self._s2b.reverseScry(beat2)).y ;
@@ -393,9 +399,13 @@ class Second2Displacement:
 
 			var intervals = self._curve.findIntervalsBetweenY(displacement1,displacement2) ;
 
-			if abs(intervals[intervals.length -1].p1.y - displacement2) < tolerance:
+			print("Got intervals of size "+String(intervals))
+			if abs(intervals[intervals.size() -1].p1.y - displacement2) < tolerance:
+				print("Displacement 1 and displacement 2 are too close!")
+				print(intervals[intervals.size() -1].p1.y)
+				print(displacement2)
 				intervals.pop_back() ;
-			
+			print("Result size is "+String(intervals.size()))
 
 			var prevp1:Vector2 = intervals[0].p1 ;
 			var prevdiff = 0.0 ;
@@ -720,6 +730,13 @@ var currentYDisplacement:float=-100
 var currentBeat:float=0
 var currentTickCount:float=1
 
+var second2beat:Second2Beat
+var second2displacement:Second2Displacement
+var songtime2second:SongTime2Second
+var beat2speed:Beat2Speed
+
+var _speed
+
 
 func constructor(song, level, speed, keyBoardLag, playBackSpeed):
 
@@ -733,7 +750,7 @@ func constructor(song, level, speed, keyBoardLag, playBackSpeed):
 	self.speedsList = song.getSpeeds(level) ;
 	self.song = song ;
 	self.level = level ;
-	self.keyBoardLag = keyBoardLag ;
+	self.keyboardLag = keyBoardLag ;
 	#self.customOffset = 0 ;
 	#self.requiresResync = false ;
 
@@ -745,7 +762,16 @@ func constructor(song, level, speed, keyBoardLag, playBackSpeed):
 	#self.songTime2Second = new SongTime2Second(self.stopsList, self.delaysList, self.warpsList, self.second2beat) ;
 	#self.beat2speed = new Beat2Speed(self.speedsList, self.second2beat) ;
 	self._speed = speed;
+	second2beat = Second2Beat.new()
+	second2beat.constructor(bpmList)
+	second2displacement = Second2Displacement.new()
+	second2displacement.constructor(self.scrollList,self.bpmList,self.second2beat) ;
+	songtime2second = SongTime2Second.new()
+	songtime2second.constructor(self.stopsList, self.delaysList, self.warpsList, self.second2beat) ;
+	beat2speed = Beat2Speed.new()
+	beat2speed.constructor(self.speedsList, self.second2beat) ;
 
+	#set_process(true)
 # ready() {
 
 # 	self._currentAudioTime = 0 ;
@@ -768,7 +794,8 @@ func updateOffset(offset):
 	self.requiresResync = true ;
 
 
-func _process(delta):
+#This script is not a node, so we have to process it manually from the parent.
+func process(delta):
 
 	var songAudioTime = self.song.getCurrentAudioTime(self.level) - self.customOffset ;
 

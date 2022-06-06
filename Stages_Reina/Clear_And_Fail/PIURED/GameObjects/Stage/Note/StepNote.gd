@@ -21,7 +21,7 @@ class_name StepNote
 # */
 
 
-var _kind:String ; #DR, DL, C, UL, UR. No idea why this is needed. I guess PIURED makes no distinction between columns?
+var kind:String ; #DR, DL, C, UL, UR. No idea why this is needed. I guess PIURED makes no distinction between columns?
 var _padId ; #Not sure why this is needed either, if it's in column 6 or above it would be P2 no?
 
 #???
@@ -48,12 +48,22 @@ var _pressed:bool=false ;
 
 var id:String ;
 
-func constructor(kind:String, padId:int, timeStamp:float, noteskin:String, noteDisplay=0,isFake=false):
+func constructor(kind_:String, padId:int, timeStamp:float, noteskin:String, noteDisplay=0,isFake=false):
 
-	self._kind = kind ;
+	self.kind = kind_ ;
 	self._padId = padId ;
 	#this._mesh = this._resourceManager.constructStepNote( this._kind, noteskin ) ;
 	self._timeStamp = timeStamp ;
 	
 	self.noteDisplay=noteDisplay
 	isFakeNote=isFake
+
+	match kind_:
+		"c":
+			set_animation("Center")
+		"dr":
+			set_animation("DownRight")
+		"ul":
+			set_animation("UpLeft")
+		"ur":
+			set_animation("UpRight")
