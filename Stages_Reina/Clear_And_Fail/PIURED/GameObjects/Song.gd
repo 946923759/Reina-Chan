@@ -32,7 +32,7 @@ var audioBuf:String
 var meta:Dictionary = {}
 var steps:Array = []
 var playBackSpeed:float=1.0
-var syncTime:float=1.0
+var globalOffset:float=0.0
 var requiresResync:bool=false
 var readyToStart:bool=false
 var delay:float=0.0
@@ -41,8 +41,8 @@ var globalTimingData
 
 
 func constructor(
-	pathToSSCFile:String="res://Stages_Reina/Clear_And_Fail/Songs/Test Song/wh_2hu_wud_u_fk.ssc",
-	audioFilePath:String="res://Stages_Reina/Clear_And_Fail/Songs/Test Song/wh_2hu_wud_u_fk.ogg",
+	pathToSSCFile:String="res://Stages_Reina/Clear_And_Fail/Songs/TestSong2/Got Item.ssc",
+	audioFilePath:String="res://Stages_Reina/Clear_And_Fail/Songs/TestSong2/Got Item!.mp3",
 	offset:float=1.0,
 	playBackSpeed:float=1.0,
 	onReadyToStart=null):
@@ -53,7 +53,7 @@ func constructor(
 
 	self.playBackSpeed = playBackSpeed ;
 
-	self.syncTime = offset ;
+	self.globalOffset = offset ;
 
 	self.audioBuf = audioFilePath ;
 
@@ -62,6 +62,9 @@ func constructor(
 	loadSSC(SSCFilePath)
 	print("Load SSC fin! "+String(steps.size())+" charts have been loaded.")
 	print("Got meter: "+String(steps[0].METER))
+
+	print("Loading song!")
+	self.stream = ExternalAudio.loadfile("res://Stages_Reina/Clear_And_Fail/Songs/Breaking The Habit/song.ogg")
 
 func loadSSC(sscPath:String)->bool:
 	print("Stubbed SSC loader! Loading BTH.json")
@@ -209,15 +212,18 @@ func getMusicPath()->String:
 	#return this.pathToSSCFile.substr(0, this.pathToSSCFile.lastIndexOf("/")) + '/' + this.meta['MUSIC'] ;
 	return 'res://Stages_Reina/Clear_And_Fail/Songs/Breaking The Habit/song.ogg'
 
+#Godot doesn't support this
 func setNewPlayBackSpeed ( newPlayBackSpeed ):
-	self.source.playbackRate.value = newPlayBackSpeed ;
-	self.playBackSpeed = newPlayBackSpeed ;
+	#self.source.playbackRate.value = newPlayBackSpeed ;
+	#self.playBackSpeed = newPlayBackSpeed ;
 	# self.requiresResync = true ;
+	pass
 
 
-func startPlayBack(startDate:float):
+var startTime:float=0.0;
+func startPlayBack(startDate:int):
 
-	var currentDate:float = OS.get_unix_time()
+	var currentDate:int = OS.get_ticks_msec()
 
 	##           convert to secs
 	self.delay = (startDate - currentDate) / 1000.0 ;
@@ -228,19 +234,20 @@ func startPlayBack(startDate:float):
 	self.startTime = 0.0;
 	## console.log('start time: ' + self.startTime ) ;
 	print('computed delay: ' + String(self.delay)) ;
-	self.source.start(self.startTime + self.delay) ;
+	#self.source.start(self.startTime + self.delay) ;
+	play(self.startTime + self.delay)
 	self.readyToStart = true ;
 	pass
 
 
-
-func getCurrentAudioTime( level ):
+#This looks really stupid but SSCs have individual offsets
+func getCurrentAudioTime( level )->float:
 	# return self.context.currentTime ;
 	# console.log('Outside start time: ' + self.startTime) ;
 	# self.steps[level].meta['OFFSET'] ;
 	if ( self.readyToStart == false ):
 		return -1.0 ;
-	return self.context.currentTime - self.delay + self.getOffset(level)  - self.startTime - self.syncTime;
+	return self.get_playback_position() - self.delay + self.getOffset(level)  - self.startTime - self.globalOffset;
 	# return self.startTime - self.audio.context.currentTime + parseFloat(self.meta['OFFSET']);
 	#return self.audio.context.currentTime + self.startTime + parseFloat(self.meta['OFFSET']);
 

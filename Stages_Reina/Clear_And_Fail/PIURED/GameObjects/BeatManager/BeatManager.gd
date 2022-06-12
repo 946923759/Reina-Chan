@@ -716,7 +716,7 @@ var warpsList:Array
 var speedsList:Array
 var song
 var level
-var keyboardLag
+var keyboardLag:float=0.0
 var customOffset:float=0.0
 var requiresResync:bool=false
 
@@ -761,7 +761,7 @@ func constructor(song, level, speed, keyBoardLag, playBackSpeed):
 	#self.second2displacement = new Second2Displacement(self.scrollList,self.bpmList,self.second2beat) ;
 	#self.songTime2Second = new SongTime2Second(self.stopsList, self.delaysList, self.warpsList, self.second2beat) ;
 	#self.beat2speed = new Beat2Speed(self.speedsList, self.second2beat) ;
-	self._speed = speed;
+	self._speed = 300;
 	second2beat = Second2Beat.new()
 	second2beat.constructor(bpmList)
 	second2displacement = Second2Displacement.new()
@@ -799,20 +799,20 @@ func process(delta):
 
 	var songAudioTime = self.song.getCurrentAudioTime(self.level) - self.customOffset ;
 
-	if ( songAudioTime <= 0.0 || self.requiresResync):
+	if false: #if ( songAudioTime <= 0.0 || self.requiresResync):
 	## if ( true ) {
 		self.requiresResync = false ;
-		self._currentAudioTime = songAudioTime - self.keyBoardLag;
+		self._currentAudioTime = songAudioTime - keyboardLag;
 		self._currentAudioTimeReal = songAudioTime;
 	else:
 		self._currentAudioTime += delta * self.playBackSpeed ;
 		self._currentAudioTimeReal += delta * self.playBackSpeed;
 
-	self._currentChartAudioTime = self.songTime2Second.scry(self._currentAudioTime).y ;
-	self._currentChartAudioTimeReal = self.songTime2Second.scry(self._currentAudioTimeReal).y ;
+	self._currentChartAudioTime = self.songtime2second.scry(self._currentAudioTime).y ;
+	self._currentChartAudioTimeReal = self.songtime2second.scry(self._currentAudioTimeReal).y ;
 
 
-	self.currentYDisplacement = self.second2displacement.scry(self._currentChartAudioTime).y ;
+	self.currentYDisplacement = self.second2displacement.scry(self._currentChartAudioTime).y*-1 ;
 
 	self.currentBeat = self.second2beat.scry(self._currentChartAudioTime).y ;
 
@@ -872,7 +872,7 @@ func getCurrentSpeed():
 func getYShiftAndCurrentTimeInSongAtBeat( beat )->Array:
 
 	var second = self.second2beat.reverseScry(beat).x ;
-	var yShift = -self.second2displacement.scry(second).y * self._speed;
+	var yShift = self.second2displacement.scry(second).y * self._speed;
 
 
 	return [yShift, second] ;

@@ -66,6 +66,10 @@ func _ready():
 		receptorY = 0,
 		scale = 1.0
 	})
+	print("Game is ready to start, telling ScreenGameplay to start playing music and telling the players to start processing")
+	var start = OS.get_ticks_msec()
+
+	song.startPlayBack(start)
 	pass
 
 

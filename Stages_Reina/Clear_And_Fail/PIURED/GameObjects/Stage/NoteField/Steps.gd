@@ -99,6 +99,7 @@ func constructor(
 
 	configureStepConstantsPositions()
 	self.constructSteps() ;
+	set_process(true)
 
 
 func constructSteps():
@@ -272,7 +273,7 @@ func processNote(note:String, kind:String, currentYPosition:float, stepXpos:floa
 			step.originalYPos = currentYPosition ;
 			#stepMesh.position.x = XStepPosition ;
 			step.z_index = stepNoteZDepth ;
-			print("Placed step at "+String(step.position))
+			#print("Placed step at "+String(step.position))
 
 
 			#Notice how this is NOT added as a child,
@@ -365,7 +366,7 @@ func _process(delta):
 
 	self.animateSpeedChange() ;
 
-	self.position.y = self.beatManager.currentYDisplacement * self._userSpeed * self.effectSpeed ;
+	self.position.y = self.beatManager.currentYDisplacement * 300 * self.effectSpeed ;
 
 	# important, last thing to update.
 	self.updateActiveHoldsPosition() ;

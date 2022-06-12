@@ -24,7 +24,7 @@ extends Node2D
 
 onready var _banner = $Banner
 onready var _combo = $Combo
-onready var _whiteDigits = $Numbers
+onready var _whiteDigits = $Digits
 
 
 func constructor():

@@ -13,7 +13,7 @@
 script = ExtResource( 3 )
 
 [node name="NoteField" parent="." instance=ExtResource( 8 )]
-position = Vector2( 480, 288 )
+position = Vector2( 480, 32 )
 
 [node name="Judgment" parent="." instance=ExtResource( 1 )]
 
@@ -46,3 +46,11 @@ region_rect = Rect2( 0, 0, 30, 50 )
 
 [node name="Sprite3" type="Sprite" parent="test"]
 texture = ExtResource( 6 )
+
+[node name="Label" type="Label" parent="."]
+margin_right = 40.0
+margin_bottom = 14.0
+text = "TEST"
+__meta__ = {
+"_edit_use_anchors_": false
+}

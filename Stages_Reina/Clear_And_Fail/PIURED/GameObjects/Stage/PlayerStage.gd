@@ -92,7 +92,6 @@ func constructor(song,
 
 	constructStepQueue()
 
-
 func configureBeatManager():
 	print("Spawning new BeatManager to manage timing for steps given")
 	# Creates a new beat manager with the options of the player.
@@ -185,6 +184,11 @@ func constructStepQueue():
 	stepQueue.constructor(self, null, self.beatManager, self.accuracyMargin, null) ;
 	#engine.addToInputList(self.stepQueue) ;
 
+
+func _process(delta):
+	if is_instance_valid(beatManager):
+		beatManager.process(delta)
+		$Label.text=String(beatManager.currentYDisplacement)+"\n"+String(_song.getCurrentAudioTime(self._level))
 
 func logFrame(json):
 	self.keyListener.applyFrameLog(json) ;
