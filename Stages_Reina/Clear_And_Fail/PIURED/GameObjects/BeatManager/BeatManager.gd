@@ -28,7 +28,7 @@ class_name BeatManager
 class PIURED_Curve:
 	var _intervalList:Array = [] ;
 
-	func addInterval(interval):
+	func addInterval(interval:Interval):
 		_intervalList.append(interval)
 
 
@@ -127,7 +127,7 @@ class PIURED_Curve:
 
 		return intervals ;
 
-	func findIntervalAtY(y):
+	func findIntervalAtY(y)->Interval:
 		var p1 = Vector2(0,y) ;
 
 		# find first interval
@@ -137,6 +137,8 @@ class PIURED_Curve:
 
 			if ( itvl.isInIntervalY(p1) ):
 				return itvl ;
+		assert(false,"Good job, you broke it! Interval list size: "+String(len(_intervalList))+", Tried searching for y value "+String(y))
+		return Interval.new()
 
 	func findIntervalsFromY(y:float)->Array:
 
@@ -163,13 +165,17 @@ class PIURED_Curve:
 
 	
 	func splitIntervalAtY(interval:Interval, y):
-		
+		if not is_instance_valid(interval):
+			print("Game passed in an invalid interval!")
+
 		#findIndex() - Finds the first value that evaluates to true
 		#var index = self._intervalList.findIndex( itvl => itvl == interval) ;
-		var index:int = -1
+		var index:int = 0
+		var found=false
 		for i in range(_intervalList.size()):
 			if _intervalList[i] == interval:
 				index=i
+				found=true
 				break
 
 
@@ -209,9 +215,11 @@ class PIURED_Curve:
 		return index ;
 	
 
-	func addIntervalAtIndex(index:int, itvl):
+	func addIntervalAtIndex(index:int, itvl:Interval):
 		#self._intervalList.splice(index,0,itvl) ;
+		print("Size is "+String(len(_intervalList)))
 		_intervalList.insert(index,itvl)
+		print("insert at "+String(index)," size is "+String(len(_intervalList)))
 	
 
 	func getIntervalsFromIndex(index:int)->Array:
@@ -319,6 +327,7 @@ class Second2Beat:
 		var l = _bpms[_bpms.size()-1].duplicate()
 		l[0] += longFloat ;
 		self._bpms.append(l)
+		print(_bpms)
 		var prevPoint = Vector2(0.0,0.0) ;
 
 		for i in range(_bpms.size()-1):
@@ -340,6 +349,7 @@ class Second2Beat:
 			self._curve.addInterval(interval) ;
 
 			prevPoint = Vector2(p.x, p.y) ;
+		print(len(_curve._intervalList))
 
 	func scry(value)->Vector2:
 		var p = Vector2(value, 0 ) ;
@@ -513,6 +523,7 @@ class SongTime2Second:
 
 
 	func flatten(beat, span, eps):
+		assert(len(_curve._intervalList) > 0)
 
 		var y1 = self._s2b.reverseScry(beat + eps).x ;
 		var x1 = self._curve.scryX(Vector2(0.0,y1)).x ;
@@ -539,6 +550,7 @@ class SongTime2Second:
 			itvl.p2.x += diff ;
 
 	func raise (b1:float, b2:float):
+		assert(len(_curve._intervalList) > 0)
 		var y1 = self._s2b.reverseScry(b1).x ;
 		var y2 = self._s2b.reverseScry(b2).x ;
 

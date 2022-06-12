@@ -21,7 +21,7 @@
 #  */
 
 
-class Song:
+class Song_unused:
 
 	var pathToSSCFile:String
 	var meta = {};

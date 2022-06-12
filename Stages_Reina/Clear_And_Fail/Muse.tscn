@@ -52,7 +52,7 @@ region_rect = Rect2( 0, 0, 320, 45 )
 position = Vector2( 24, 144 )
 frames = ExtResource( 4 )
 animation = "WalkLoop"
-frame = 3
+frame = 9
 playing = true
 
 [node name="NoteTrack" type="Node2D" parent="."]

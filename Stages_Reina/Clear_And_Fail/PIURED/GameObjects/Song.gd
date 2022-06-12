@@ -1,5 +1,5 @@
 extends AudioStreamPlayer
-class_name Song
+#class_name Song
 
 # StepMania's Song class, poorly coded in Godot
 # by taking parts of StepMania and PIURED and gstep
@@ -41,11 +41,10 @@ var globalTimingData
 
 
 func constructor(
-	pathToSSCFile:String="res://Stages_Reina/Clear_And_Fail/Songs/TestSong2/Got Item.ssc",
-	audioFilePath:String="res://Stages_Reina/Clear_And_Fail/Songs/TestSong2/Got Item!.mp3",
+	pathToSSCFile:String="res://Stages_Reina/Clear_And_Fail/Songs/Breaking The Habit/song.ssc",
+	#audioFilePath:String="res://Stages_Reina/Clear_And_Fail/Songs/Breaking The Habit/song.ogg",
 	offset:float=1.0,
-	playBackSpeed:float=1.0,
-	onReadyToStart=null):
+	playBackSpeed:float=1.0):
 
 	print("Loading SSC!")
 
@@ -55,30 +54,233 @@ func constructor(
 
 	self.globalOffset = offset ;
 
-	self.audioBuf = audioFilePath ;
+	#self.audioBuf = audioFilePath ;
 
 	#self.onReadyToStart = onReadyToStart ;
 
 	loadSSC(SSCFilePath)
 	print("Load SSC fin! "+String(steps.size())+" charts have been loaded.")
+	var songPath = meta["MUSIC"]
+	print("Got song path: "+songPath)
+	var last = pathToSSCFile.find_last("/")
+	songPath = pathToSSCFile.substr(0,last)+"/"+songPath
+	print("Real path is "+songPath)
 	print("Got meter: "+String(steps[0].METER))
 
 	print("Loading song!")
-	self.stream = ExternalAudio.loadfile("res://Stages_Reina/Clear_And_Fail/Songs/Breaking The Habit/song.ogg")
+	self.stream = ExternalAudio.loadfile(songPath)
 
 func loadSSC(sscPath:String)->bool:
-	print("Stubbed SSC loader! Loading BTH.json")
-	sscPath="res://Stages_Reina/Clear_And_Fail/Songs/Breaking The Habit/song.json"
-	#const parse = sscParser.parse(content) ;
-	var save_game = File.new()
-	if not save_game.file_exists(sscPath):
-		return false
-	save_game.open(sscPath, File.READ)
-	var parse:Dictionary=parse_json(save_game.get_as_text())
-	save_game.close()
+	
+	var parse:Dictionary
+	
+	if true:
+		parse = loadSSC_real(sscPath)
+	else:
+		print("Stubbed SSC loader!")
+		#sscPath="res://Stages_Reina/Clear_And_Fail/Songs/Breaking The Habit/song.json"
+		#const parse = sscParser.parse(content) ;
+		var save_game = File.new()
+		if not save_game.file_exists(sscPath):
+			return false
+		save_game.open(sscPath, File.READ)
+		parse=parse_json(save_game.get_as_text())
+		save_game.close()
+
+
 	self.meta = parse.header ;
-	self.steps = parse.levels ;
+	self.steps = parse.steps ;
+
+
 	return true
+
+enum CurrentlyParsing {
+	HEADER
+	PER_STEPS_DATA,
+	NOTEDATA
+}
+
+static func insertIntoHeaderOrSteps(dictByReference:Dictionary,k:String,val,currentlyParsing:int,curSteps:int):
+	if currentlyParsing==CurrentlyParsing.PER_STEPS_DATA:
+		dictByReference['steps'][curSteps][k]=val
+	else:
+		dictByReference['header'][k]=val
+
+static func loadSSC_real(sscPath:String)->Dictionary:
+
+	var sscData:Dictionary = {"header":{},"steps":[]}
+	
+	var f = File.new()
+	if not f.file_exists(sscPath):
+		print("There is no SSC at "+sscPath+". Now the game will crash.")
+		return sscData
+	f.open(sscPath, File.READ)
+
+	var line:String = ""
+	var curParse = CurrentlyParsing.HEADER
+	var curSteps:int = 0
+	var curNotesMeasure:int=0
+
+	while !f.eof_reached():
+		if curParse == CurrentlyParsing.NOTEDATA:
+			line = f.get_line().strip_escapes()
+			if line.begins_with("//"):
+				continue
+			elif line.begins_with(","): #End of current measure
+				curNotesMeasure+=1
+				sscData['steps'][curSteps]["NOTES"].append([])
+			elif line.begins_with(";"):
+				print("Finished parsing notes block with "+String(curNotesMeasure)+" measures.")
+				curParse=CurrentlyParsing.PER_STEPS_DATA
+				line=""
+			else:
+				#https://github.com/RhythmLunatic/stepmania/blob/550b13c4aab9d3e0be66b4baae6865472aee5647/src/NoteDataUtil.cpp#L123-L163
+				var p:int = 0; #pointer... I guess
+				var endLine:int = len(line)
+				var isBadLine:bool=false
+				
+				var notes:Array=[]
+				while p < endLine:
+					var ch = line[p]
+					var hasStepF2Annotation:bool=ch=="{"
+					var sf2NoteAppearance
+					var sf2FakeBit
+					#char StepF2NoteAppearance, StepF2FakeBit;
+					#signed char SF2UnknownBit;
+
+					if hasStepF2Annotation:
+						
+							#const char* separator = p + 2;
+							#const char* annotationEnd = p + 4;
+							var separator = line[p+2]
+							var annotationEnd = line[p+4]
+		
+							if p+4 < endLine && separator == '|' && annotationEnd == '}': #Check if this note is just {a|b}
+								ch = line[p+1];
+								sf2NoteAppearance = line[p+3];
+								sf2FakeBit = '0';
+								#SF2UnknownBit = '0';
+								p = p+8; #Jump to end of this note
+							else:
+								#const char* separator2 = p + 4;
+								#const char* separator3 = p + 6;
+								#annotationEnd = p + 8;
+								var separator2 = line[p+4]
+								var separator3 = line[p+6]
+								annotationEnd = line[p+8]
+		
+								if(p+8 < endLine && separator == '|' && separator2 == '|' && separator3 == '|' && annotationEnd == '}'):
+								
+									ch = line[p+1]
+									sf2NoteAppearance = line[p + 3];
+									sf2FakeBit = line[p+5];
+									#SF2UnknownBit = *(p + 7);
+									p = p+8; #Jump to end of this note
+								
+								else:
+								
+									hasStepF2Annotation = false;
+									isBadLine = true;
+					
+					if isBadLine:
+						print("The line "+line+" at measure "+String(curNotesMeasure)+" is unable to be parsed. Ignoring.")
+						break
+					elif hasStepF2Annotation:
+						notes.append([ch,sf2NoteAppearance,sf2FakeBit,"0"])
+					else:
+						notes.append(ch)
+					p+=1
+				if isBadLine:
+					sscData['steps'][curSteps]["NOTES"][curNotesMeasure].append(['0','0','0','0','0'])
+				else:
+					sscData['steps'][curSteps]["NOTES"][curNotesMeasure].append(notes)
+			#pass
+		else:
+			if line.ends_with(";"):
+				#print(line)
+				var tagStr = line.substr(1,len(line)-2)
+				var tagData=tagStr.split(":",true,1)
+				#print(tagData)
+				if len(tagData)==0:
+					print("WTF????")
+					print(line)
+					line=""
+					continue
+				match tagData[0]:
+					#floats
+					"SAMPLESTART","SAMPLELENGTH","LASTSECONDHINT","VERSION":
+						sscData['header'][tagData[0]]=float(tagData[1])
+					"OFFSET","DISPLAYBPM": #Can be either global or per-steps
+						insertIntoHeaderOrSteps(sscData,tagData[0],float(tagData[1]),curParse,curSteps)
+					"BPMS","SCROLLS","SPEEDS","STOPS","DELAYS","FAKES","WARPS": #[float,*float,]. Speeds is [float,float,float,int] but I'm lazy.
+						var timingData = []
+						var bpms = tagData[1].split(",",false)
+						for bpm in bpms:
+							var tmp = Array(bpm.split("="))
+							for i in range(tmp.size()):
+								tmp[i]=float(tmp[i])
+							timingData.append(tmp)
+						insertIntoHeaderOrSteps(sscData,tagData[0],timingData,curParse,curSteps)
+					"TICKCOUNTS","COMBOS": #[float,int]
+						var timingData = []
+						var bpms = tagData[1].split(",",true)
+						for bpm in bpms:
+							var tmp = bpm.split("=")
+							timingData.append([float(tmp[0]),int(tmp[1])])
+						insertIntoHeaderOrSteps(sscData,tagData[0],timingData,curParse,curSteps)
+					"TIMESIGNATURES": #[float,int,int]
+						var timingData = []
+						var bpms = tagData[1].split(",",true)
+						for bpm in bpms:
+							var tmp = bpm.split("=")
+							timingData.append([float(tmp[0]),int(tmp[1]),int(tmp[2])])
+						insertIntoHeaderOrSteps(sscData,tagData[0],timingData,curParse,curSteps)
+					"LABELS": #[float,string]
+						var timingData = []
+						var bpms = tagData[1].split(",",true)
+						for bpm in bpms:
+							var tmp = bpm.split("=")
+							timingData.append([float(tmp[0]),String(tmp[1])])
+						insertIntoHeaderOrSteps(sscData,tagData[0],timingData,curParse,curSteps)
+					"NOTEDATA":
+						print("==== Parsing per-chart info ====")
+						curParse=CurrentlyParsing.PER_STEPS_DATA
+						sscData['steps'].append({})
+						curSteps=sscData['steps'].size()-1
+					"METER": #In SM this is an unsigned int.
+						if curParse==CurrentlyParsing.HEADER:
+							print("Error! Encountered METER tag in header!")
+						else:
+							sscData['steps'][curSteps][tagData[0]]=int(tagData[1])
+					_:
+						insertIntoHeaderOrSteps(sscData,tagData[0],tagData[1],curParse,curSteps)
+
+				#clear buffer
+				line=""
+			#elif line.begins_with("//"):
+			#	continue
+			else:
+				var tmp_line = f.get_line().strip_escapes()
+				if tmp_line=="#NOTES:": #This is where the fun begins
+					print("==== Parsing notes! ====")
+					sscData['steps'][curSteps]["NOTES"]=[[]]
+					curNotesMeasure=0
+					curParse=CurrentlyParsing.NOTEDATA
+				elif not tmp_line.begins_with("//"): #This should be changed so it cuts off past //
+					line += tmp_line
+	
+	f.close()
+
+	if OS.is_debug_build():
+		var debugOutput = File.new()
+		var dir = Globals.get_save_directory('piured-ssc-debug')
+		var ok = debugOutput.open(dir,File.WRITE)
+		if ok==OK:
+			debugOutput.store_line(to_json(sscData))
+			print("Saved parsed ssc to "+dir)
+		debugOutput.close()
+
+	return sscData
 
 
 func getStepsDifficulty(stepsNum:int)->int:

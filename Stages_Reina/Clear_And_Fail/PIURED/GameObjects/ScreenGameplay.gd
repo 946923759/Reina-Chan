@@ -33,6 +33,8 @@ extends Node2D
 # *
 # */
 
+export(String) var songToLoad = "Gargoyle"
+
 
 
 var animationRate:int=30
@@ -51,10 +53,40 @@ onready var song=$Song
 # * engine.configureStage(stageConfig) ;
 # */
 
+func get_matching_files_extensions(path,fname):
+	#var files = []
+	var dir = Directory.new()
+	print("Opening "+path)
+	var ok = dir.open(path)
+	if ok != OK:
+		printerr("Warning: could not open directory: ERROR ", ok)
+		return null
+	#print(dir.get_current_dir())
+	dir.list_dir_begin(false,true)
+
+	while true:
+		var file = dir.get_next()
+		print(file)
+		if file == "":
+			dir.list_dir_end()
+			return null
+		elif file.ends_with(fname):
+			print("Found file:"+file)
+			#print("Return "+path+file)
+			dir.list_dir_end()
+			return path+file
+
 func _ready():
 	print("ScreenGameplay START!")
+	
+	#var files = 
+	var sscPath:String = get_matching_files_extensions("res://Stages_Reina/Clear_And_Fail/Songs/"+songToLoad+"/",".ssc")
+
+
 	#func constructor( pathToSSCFile:String, audioFilePath:String, offset, playBackSpeed, onReadyToStart ):
-	song.constructor()
+	#song.constructor()
+	song.constructor(sscPath,0,1)
+
 	print("Finish loading Song class, now set up player.")
 	addPlayerStage({
 		inputConfig=null,
