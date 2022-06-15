@@ -1,14 +1,20 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Stages_Reina/Clear_And_Fail/PIURED/GameObjects/Stage/NoteField/Receptor_Single.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Stages_Reina/Clear_And_Fail/PIURED/GameObjects/Stage/NoteField/ReceptorManager.gd" type="Script" id=2]
 [ext_resource path="res://Stages_Reina/Clear_And_Fail/PIURED/GameObjects/Stage/NoteField/Steps.gd" type="Script" id=3]
 [ext_resource path="res://Stages_Reina/Clear_And_Fail/PIURED/GameObjects/Sequence/StepQueue.gd" type="Script" id=4]
+[ext_resource path="res://Stages_Reina/Clear_And_Fail/PIURED/GameObjects/Stage/Note/StepNote.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Stages_Reina/Clear_And_Fail/PIURED/Resources/NoteSkin/PRIME/Center Receptor 1x2.PNG" type="Texture" id=6]
+[ext_resource path="res://Stages_Reina/Clear_And_Fail/PIURED/GameObjects/Stage/NoteField/ReceptorsV3.gd" type="Script" id=7]
+[ext_resource path="res://Stages_Reina/Clear_And_Fail/PIURED/GameObjects/Stage/NoteField/ReceptorExplosions.tscn" type="PackedScene" id=8]
 
 [node name="NoteField" type="Node2D"]
 script = ExtResource( 4 )
+stepShift = 75
 
 [node name="Receptors" type="Node2D" parent="."]
+visible = false
 script = ExtResource( 2 )
 
 [node name="dl" parent="Receptors" instance=ExtResource( 1 )]
@@ -29,5 +35,81 @@ columnToLoad = 3
 position = Vector2( 256, 0 )
 columnToLoad = 4
 
+[node name="ReceptorsButWorse" type="Node2D" parent="."]
+script = ExtResource( 7 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Sprite" type="Sprite" parent="ReceptorsButWorse"]
+position = Vector2( 32, 32 )
+texture = ExtResource( 6 )
+vframes = 2
+
+[node name="Sprite2" type="Sprite" parent="ReceptorsButWorse"]
+position = Vector2( 32, 32 )
+texture = ExtResource( 6 )
+vframes = 2
+frame = 1
+
+[node name="dl" parent="ReceptorsButWorse" instance=ExtResource( 8 )]
+visible = false
+position = Vector2( -128, 32 )
+
+[node name="ul" parent="ReceptorsButWorse" instance=ExtResource( 8 )]
+visible = false
+position = Vector2( -64, 32 )
+
+[node name="c" parent="ReceptorsButWorse" instance=ExtResource( 8 )]
+visible = false
+position = Vector2( 32, 32 )
+
+[node name="ur" parent="ReceptorsButWorse" instance=ExtResource( 8 )]
+visible = false
+position = Vector2( 96, 32 )
+
+[node name="dr" parent="ReceptorsButWorse" instance=ExtResource( 8 )]
+visible = false
+position = Vector2( 192, 32 )
+
+[node name="Tween" type="Tween" parent="ReceptorsButWorse"]
+
+[node name="Label" type="Label" parent="ReceptorsButWorse"]
+margin_left = 11.3265
+margin_top = 74.5661
+margin_right = 51.3265
+margin_bottom = 88.5661
+text = "test"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="Steps" type="Node2D" parent="."]
 script = ExtResource( 3 )
+
+[node name="Test" type="Node2D" parent="."]
+visible = false
+position = Vector2( 32, 160 )
+
+[node name="Note" parent="Test" instance=ExtResource( 5 )]
+position = Vector2( -128, -32 )
+frame = 0
+
+[node name="Note2" parent="Test" instance=ExtResource( 5 )]
+position = Vector2( -64, -32 )
+animation = "UpLeft"
+
+[node name="Note3" parent="Test" instance=ExtResource( 5 )]
+position = Vector2( 0, -32 )
+animation = "Center"
+frame = 1
+
+[node name="Note4" parent="Test" instance=ExtResource( 5 )]
+position = Vector2( 64, -32 )
+animation = "UpRight"
+frame = 4
+
+[node name="Note5" parent="Test" instance=ExtResource( 5 )]
+position = Vector2( 128, -32 )
+animation = "DownRight"
+frame = 4

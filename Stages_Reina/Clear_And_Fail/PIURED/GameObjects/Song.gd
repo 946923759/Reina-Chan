@@ -1,5 +1,5 @@
 extends AudioStreamPlayer
-#class_name Song
+class_name Song
 
 # StepMania's Song class, poorly coded in Godot
 # by taking parts of StepMania and PIURED and gstep
@@ -43,7 +43,7 @@ var globalTimingData
 func constructor(
 	pathToSSCFile:String="res://Stages_Reina/Clear_And_Fail/Songs/Breaking The Habit/song.ssc",
 	#audioFilePath:String="res://Stages_Reina/Clear_And_Fail/Songs/Breaking The Habit/song.ogg",
-	offset:float=1.0,
+	offset:float=0.0,
 	playBackSpeed:float=1.0):
 
 	print("Loading SSC!")
@@ -404,7 +404,7 @@ func getSpeedAndTimeAtBeat(level, beat):
 	return [last[1],last[2], last[3]] ;
 
 
-func getLevelStyle(level)->String:
+func getStepsType(level)->String:
 	return self.steps[level].STEPSTYPE ;
 
 
@@ -440,6 +440,9 @@ func startPlayBack(startDate:int):
 	play(self.startTime + self.delay)
 	self.readyToStart = true ;
 	pass
+
+
+#func _process(delta)
 
 
 #This looks really stupid but SSCs have individual offsets

@@ -44,6 +44,7 @@ func explosion_finished():
 
 #PUBLIC FUNCTIONS
 func animateExplosion():
+	explosion.frame=0
 	explosion.play()
 	explosion.visible=true
 	

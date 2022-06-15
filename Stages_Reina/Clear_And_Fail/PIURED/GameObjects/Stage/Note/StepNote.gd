@@ -22,7 +22,7 @@ class_name StepNote
 
 
 var kind:String ; #DR, DL, C, UL, UR. No idea why this is needed. I guess PIURED makes no distinction between columns?
-var _padId ; #Not sure why this is needed either, if it's in column 6 or above it would be P2 no?
+var padId ; #Not sure why this is needed either, if it's in column 6 or above it would be P2 no?
 
 #???
 var originalYPos:float
@@ -43,17 +43,17 @@ enum NoteDisplay {NORMAL, VANISH, APPEAR, STEALTH}
 var noteDisplay = NoteDisplay.NORMAL
 var isFakeNote:bool=false
 
-var _timeStamp ;
-var _pressed:bool=false ;
+var timeStamp ;
+var pressed:bool=false ;
 
 var id:String ;
 
-func constructor(kind_:String, padId:int, timeStamp:float, noteskin:String, noteDisplay=0,isFake=false):
+func constructor(kind_:String, padId_:int, timeStamp_:float, noteskin:String, noteDisplay=0,isFake=false):
 
 	self.kind = kind_ ;
-	self._padId = padId ;
+	self.padId = padId_ ;
 	#this._mesh = this._resourceManager.constructStepNote( this._kind, noteskin ) ;
-	self._timeStamp = timeStamp ;
+	self.timeStamp = timeStamp_ ;
 	
 	self.noteDisplay=noteDisplay
 	isFakeNote=isFake
@@ -67,3 +67,5 @@ func constructor(kind_:String, padId:int, timeStamp:float, noteskin:String, note
 			set_animation("UpLeft")
 		"ur":
 			set_animation("UpRight")
+
+	$Label.text=String(timeStamp)

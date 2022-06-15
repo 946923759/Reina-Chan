@@ -141,7 +141,7 @@ class Stage extends GameObject {
 		}
 
 		for (let i = 0 ; i < no_stages ; i++ ) {
-			if (  this.song.getLevelStyle(this._playerStages[i]._level) === 'pump-double' || this.song.getLevelStyle(this._playerStages[i]._level) === 'pump-halfdouble' ) {
+			if (  this.song.getStepsType(this._playerStages[i]._level) === 'pump-double' || this.song.getStepsType(this._playerStages[i]._level) === 'pump-halfdouble' ) {
 				distance = 9 ;
 				break ;
 			}

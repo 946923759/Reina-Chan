@@ -58,7 +58,7 @@ var BeatManager = load("res://Stages_Reina/Clear_And_Fail/PIURED/GameObjects/Bea
 var playerConfig:Dictionary
 var beatManager
 var _id:int=1 ;
-var _song:AudioStreamPlayer ;
+var _song:Song ;
 var _level:int=0;
 var _steps;
 const keyboardLag:float = 0.07
@@ -68,11 +68,12 @@ var accuracyMargin:float
 var playbackSpeed:float=1.0; #TODO: Should be kept in ScreenGameplay
 var lifebarOrientation:String #TODO: This should be an enum
 
+var scoreManager:Node
 
 func constructor(song,
-				playerConfig,
+				playerConfig:Dictionary,
 				playBackSpeed:float=1.0,
-				myStageIndex:int=1, #If P1 or P2, 1 indexed.
+				playerNumber:int=1, #If P1 or P2, 1 indexed.
 				lifebarOrientation:String = 'left2right'):
 
 	# Save properties.
@@ -80,7 +81,7 @@ func constructor(song,
 	self._song = song ;
 	self._level = playerConfig.level ;
 	self._userSpeed = playerConfig.speed ;
-	self._id = myStageIndex ;
+	self._id = playerNumber ;
 	self._noteskin = playerConfig.noteskin ;
 	self.accuracyMargin = playerConfig.accuracyMargin ;
 	self.lifebarOrientation = lifebarOrientation ;
@@ -91,6 +92,12 @@ func constructor(song,
 	self.configureInputPlayerStage(playerConfig.inputConfig) ;
 
 	constructStepQueue()
+
+	scoreManager=$ScoreManager
+	scoreManager.constructor(1,accuracyMargin,_song.getStepsType(_level),song.getStepsDifficulty(_level))
+
+	$Label3.text=_song.getStepsType(_level)+"\nidx "+String(_level)+"\nMeter: "+String(song.getStepsDifficulty(_level))
+	
 
 func configureBeatManager():
 	print("Spawning new BeatManager to manage timing for steps given")
@@ -141,7 +148,7 @@ func configureKeyInputPlayerStage(inputConfig):
 #     playerInput.addTouchPad(pad1Id) ;
 
 #     # We only add the other pad if the player selected a pump-double or pump-halfdouble level.
-#     if ( self._song.getLevelStyle(self._level) === 'pump-double' || self._song.getLevelStyle(self._level) === 'pump-halfdouble') {
+#     if ( self._song.getStepsType(self._level) === 'pump-double' || self._song.getStepsType(self._level) === 'pump-halfdouble') {
 #         playerInput.addTouchPad(pad2Id) ;
 #     }
 
@@ -164,7 +171,7 @@ func configureKeyInputPlayerStage(inputConfig):
 #     let pad1Id = '0' ;
 #     let pad2Id = '1' ;
 #     playerInput.addPad(pad1Id) ;
-#     # if ( self._song.getLevelStyle(self._level) === 'pump-double' || self._song.getLevelStyle(self._level) === 'pump-halfdouble') {
+#     # if ( self._song.getStepsType(self._level) === 'pump-double' || self._song.getStepsType(self._level) === 'pump-halfdouble') {
 #     playerInput.addPad(pad2Id) ;
 #     # }
 
@@ -189,6 +196,7 @@ func _process(delta):
 	if is_instance_valid(beatManager):
 		beatManager.process(delta)
 		$Label.text=String(beatManager.currentYDisplacement)+"\n"+String(_song.getCurrentAudioTime(self._level))
+	$Label2.text="delay: "+String(_song.globalOffset)+"\naccuracyMargin: "+String(accuracyMargin)
 
 func logFrame(json):
 	self.keyListener.applyFrameLog(json) ;

@@ -52,7 +52,7 @@ region_rect = Rect2( 0, 0, 320, 45 )
 position = Vector2( 24, 144 )
 frames = ExtResource( 4 )
 animation = "WalkLoop"
-frame = 9
+frame = 11
 playing = true
 
 [node name="NoteTrack" type="Node2D" parent="."]
@@ -60,11 +60,11 @@ playing = true
 [node name="AnimatedSprite" type="AnimatedSprite" parent="NoteTrack"]
 position = Vector2( 312, 80 )
 frames = ExtResource( 5 )
-frame = 1
 playing = true
 
 [node name="AnimatedSprite2" type="AnimatedSprite" parent="NoteTrack"]
 position = Vector2( 216, 144 )
 frames = ExtResource( 6 )
+frame = 1
 playing = true
 offset = Vector2( 0, 2 )

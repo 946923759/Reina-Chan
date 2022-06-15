@@ -127,7 +127,7 @@ class PIURED_Curve:
 
 		return intervals ;
 
-	func findIntervalAtY(y)->Interval:
+	func findIntervalAtY(y:float)->Interval:
 		var p1 = Vector2(0,y) ;
 
 		# find first interval
@@ -164,7 +164,7 @@ class PIURED_Curve:
 		return intervals ;
 
 	
-	func splitIntervalAtY(interval:Interval, y):
+	func splitIntervalAtY(interval:Interval, y:float):
 		if not is_instance_valid(interval):
 			print("Game passed in an invalid interval!")
 
@@ -215,6 +215,7 @@ class PIURED_Curve:
 		return index ;
 	
 
+	#TODO: This is very likely incorrect, I don't know what splice() does to be honest
 	func addIntervalAtIndex(index:int, itvl:Interval):
 		#self._intervalList.splice(index,0,itvl) ;
 		print("Size is "+String(len(_intervalList)))
@@ -272,19 +273,19 @@ class Interval:
 
 	
 
-	func scryY( x ):
+	func scryY( x:float )->float:
 
-		var m = (p2.y - p1.y) / (p2.x - p1.x) ;
+		var m:float = (p2.y - p1.y) / (p2.x - p1.x) ;
 
-		var y = m*(x-p1.x) + p1.y ;
+		var y:float = m*(x-p1.x) + p1.y ;
 
 		return y ;
 
-	func scryX( y ):
+	func scryX( y:float )->float:
 
-		var m = (p2.x - p1.x) / (p2.y - p1.y) ;
+		var m:float = (p2.x - p1.x) / (p2.y - p1.y) ;
 
-		var x = m*(y-p1.y) + p1.x ;
+		var x:float = m*(y-p1.y) + p1.x ;
 
 		return x ;
 
@@ -296,7 +297,7 @@ class Interval:
 	}
 
 	#What's en enum anyways?
-	func sideOfInIntervalAtY(y)->String:
+	func sideOfInIntervalAtY(y:float)->String:
 
 		var leftBoundary = self.scryY(p1.x) ;
 		var rightBoundary = self.scryY(p2.x) ;
@@ -327,20 +328,20 @@ class Second2Beat:
 		var l = _bpms[_bpms.size()-1].duplicate()
 		l[0] += longFloat ;
 		self._bpms.append(l)
-		print(_bpms)
+		#print(_bpms)
 		var prevPoint = Vector2(0.0,0.0) ;
 
 		for i in range(_bpms.size()-1):
 
-			var beat1 = self._bpms[ i ][0] ;
-			var bpm1 = self._bpms[ i ] [1] ;
-			var beat2 = self._bpms[ i+1 ][0] ;
-			var bpm2 = self._bpms[ i+1 ] [1] ;
+			var beat1:float = self._bpms[ i ][0] ;
+			var bpm1:float = self._bpms[ i ] [1] ;
+			var beat2:float = self._bpms[ i+1 ][0] ;
+			var bpm2:float = self._bpms[ i+1 ] [1] ;
 
 
-			var x = self.secondsPerBeat(bpm1) * (beat2 - beat1) + prevPoint.x;
-			var y = beat2 ;
-			var p = Vector2(x,y) ;
+			var x:float = self.secondsPerBeat(bpm1) * (beat2 - beat1) + prevPoint.x;
+			var y:float = beat2 ;
+			var p:Vector2 = Vector2(x,y) ;
 
 			#var interval = new Interval(prevPoint, p , i == 0 ,i  == self._bpms.length -2) ;
 			var interval = Interval.new()
@@ -351,7 +352,7 @@ class Second2Beat:
 			prevPoint = Vector2(p.x, p.y) ;
 		print(len(_curve._intervalList))
 
-	func scry(value)->Vector2:
+	func scry(value:float)->Vector2:
 		var p = Vector2(value, 0 ) ;
 		return self._curve.scryY(p) ;
 
@@ -389,15 +390,15 @@ class Second2Displacement:
 		for i in range(_scrolls.size()-1):
 
 			var beat1:float = self._scrolls[ i ][0] ;
-			var scroll1 = self._scrolls[ i ] [1] ;
+			var scroll1:float = self._scrolls[ i ] [1] ;
 			var beat2:float = self._scrolls[ i+1 ][0] ;
-			var scroll2 = self._scrolls[ i+1 ] [1] ;
+			var scroll2:float = self._scrolls[ i+1 ] [1] ;
 
 			print("Calculating interval between "+String(beat1)+" and "+String(beat2))
 
 
-			var displacement1 = self._curve.scryY(self._s2b.reverseScry(beat1)).y ;
-			var displacement2 = self._curve.scryY(self._s2b.reverseScry(beat2)).y ;
+			var displacement1:float = self._curve.scryY(self._s2b.reverseScry(beat1)).y ;
+			var displacement2:float = self._curve.scryY(self._s2b.reverseScry(beat2)).y ;
 
 
 			var firstInterval = self._curve.findIntervalAtY(displacement1) ;
@@ -463,7 +464,7 @@ class Second2Displacement:
 			prevp1 = Vector2(itvl1.p2.x, itvl1.p2.y) ;
 			prevdiff = itvl1.p2.y - oldy2 ;
 
-	func scry(value)->Vector2:
+	func scry(value:float)->Vector2:
 		var p = Vector2(value, 0 ) ;
 		return self._curve.scryY(p) ;
 
@@ -583,13 +584,13 @@ class SongTime2Second:
 			itvl.p2.x -= diff ;
 	
 	#STOP COPY PASTING THIS -AmWorks
-	func scry(value)->Vector2:
+	func scry(value:float)->Vector2:
 
 		var p = Vector2(value, 0 ) ;
 		return self._curve.scryY(p) ;
 
 
-	func reverseScry(value)->Vector2:
+	func reverseScry(value:float)->Vector2:
 
 		var p = Vector2(0.0, value ) ;
 		return self._curve.scryX(p) ;
@@ -727,17 +728,18 @@ var delaysList:Array
 var warpsList:Array
 var speedsList:Array
 var song
-var level
+var level:int
 var keyboardLag:float=0.0
 var customOffset:float=0.0
 var requiresResync:bool=false
 
-var _currentAudioTime:float=0.0
+var currentAudioTime:float=0.0
 var _currentAudioTimeReal:float=0.0
 var _currentChartAudioTime:float=0.0
 var _currentChartAudioTimeReal:float=0.0
 var currentBPM:float=0.0
-#Not sure if float or int but it doesn't matter
+
+
 var currentYDisplacement:float=-100
 var currentBeat:float=0
 var currentTickCount:float=1
@@ -747,7 +749,7 @@ var second2displacement:Second2Displacement
 var songtime2second:SongTime2Second
 var beat2speed:Beat2Speed
 
-var _speed
+var _speed:float
 
 
 func constructor(song, level, speed, keyBoardLag, playBackSpeed):
@@ -811,16 +813,16 @@ func process(delta):
 
 	var songAudioTime = self.song.getCurrentAudioTime(self.level) - self.customOffset ;
 
-	if false: #if ( songAudioTime <= 0.0 || self.requiresResync):
+	if ( songAudioTime <= 0.0 || self.requiresResync): #
 	## if ( true ) {
 		self.requiresResync = false ;
-		self._currentAudioTime = songAudioTime - keyboardLag;
+		self.currentAudioTime = songAudioTime - keyboardLag;
 		self._currentAudioTimeReal = songAudioTime;
 	else:
-		self._currentAudioTime += delta * self.playBackSpeed ;
+		self.currentAudioTime += delta * self.playBackSpeed ;
 		self._currentAudioTimeReal += delta * self.playBackSpeed;
 
-	self._currentChartAudioTime = self.songtime2second.scry(self._currentAudioTime).y ;
+	self._currentChartAudioTime = self.songtime2second.scry(self.currentAudioTime).y ;
 	self._currentChartAudioTimeReal = self.songtime2second.scry(self._currentAudioTimeReal).y ;
 
 
@@ -877,14 +879,14 @@ func isNoteInWarp(beat)->bool:
 			return false ;
 	return false ;
 
-func getCurrentSpeed():
+func getCurrentSpeed()->float:
 	return self.beat2speed.scry(self.currentBeat).y ;
 
 
-func getYShiftAndCurrentTimeInSongAtBeat( beat )->Array:
+func getYShiftAndCurrentTimeInSongAtBeat( beat:float )->Array:
 
-	var second = self.second2beat.reverseScry(beat).x ;
-	var yShift = self.second2displacement.scry(second).y * self._speed;
+	var second:float = self.second2beat.reverseScry(beat).x ;
+	var yShift:float = self.second2displacement.scry(second).y * self._speed;
 
 
 	return [yShift, second] ;

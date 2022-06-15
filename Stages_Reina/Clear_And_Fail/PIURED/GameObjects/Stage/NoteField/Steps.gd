@@ -19,7 +19,8 @@ extends Node2D
 # # along with piured-engine.If not, see <http:#www.gnu.org/licenses/>.
 # *
 # */
-#"use strict"; # good practice - see https:#developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode
+
+export(bool) var enableHolds=false
 
 
 # Depth of stage elements
@@ -35,8 +36,8 @@ var ulXPos ;
 var cXPos ;
 var urXPos ;
 var drXPos ;
-var receptorsApart ;
-var stepTextureAnimationRate ;
+#var receptorsApart ;
+#var stepTextureAnimationRate ;
 var lastEffectSpeed ;
 var effectSpeed ;
 var effectSpeed2 ;
@@ -63,6 +64,7 @@ func constructor(
 			song,
 			level:int=0,
 			userSpeed:float=1.0,
+			stepColPos:Array=[0,0,0,0,0],
 			idLeftPad:int=1,
 			idRightPad:int=2,
 			keyListener=null,
@@ -71,7 +73,7 @@ func constructor(
 
 
 	# Set up positions for steps
-	self.configureStepConstantsPositions() ;
+	#self.configureStepConstantsPositions() ;
 
 	# For managing changes of SPEED (by tweening)
 	self.lastEffectSpeed = 1;
@@ -90,14 +92,18 @@ func constructor(
 	self.idRightPad = idRightPad ;
 	self.keyListener = keyListener ;
 
-	#
-	#self._object = new THREE.Object3D() ;
-
 	# to store leftmost and rightmost steps.
 	self.padSteps = {} ;
 	self.stepList = [] ;
 
-	configureStepConstantsPositions()
+	#configureStepConstantsPositions()
+	#breakpoint;
+	dlXPos=stepColPos[0]
+	ulXPos=stepColPos[1]
+	cXPos=stepColPos[2]
+	urXPos=stepColPos[3]
+	drXPos=stepColPos[4]
+
 	self.constructSteps() ;
 	set_process(true)
 
@@ -105,7 +111,7 @@ func constructor(
 func constructSteps():
 
 	# if level is single, then we construct only the 5 leftmost steps
-	if self._song.getLevelStyle(self._level) == 'pump-single':
+	if self._song.getStepsType(self._level) == 'pump-single':
 		self.composePad(0, self.idLeftPad) ;
 
 	# clean empty step slots.
@@ -115,23 +121,23 @@ func constructSteps():
 
 
 
-func configureStepConstantsPositions ():
+# func configureStepConstantsPositions ():
 
-	# define position of the notes w.r.t. the receptor
+# 	# define position of the notes w.r.t. the receptor
 
-	# Space to the right or left of a given step.
-	var stepShift = 100;
-	# Note that the receptor steps are a bit overlapped. This measure takes into
-	# acount this overlap.
-	var stepOverlap = 0.02 ;
-	self.dlXPos =  -2*(stepShift - stepOverlap) ;
-	self.ulXPos =  -(stepShift - stepOverlap) ;
-	self.cXPos =  0 ;
-	self.urXPos =  (stepShift - stepOverlap) ;
-	self.drXPos =  2*(stepShift - stepOverlap) ;
+# 	# Space to the right or left of a given step.
+# 	var stepShift = 100;
+# 	# Note that the receptor steps are a bit overlapped. This measure takes into
+# 	# acount this overlap.
+# 	var stepOverlap = 0.02 ;
+# 	self.dlXPos =  -2*(stepShift - stepOverlap) ;
+# 	self.ulXPos =  -(stepShift - stepOverlap) ;
+# 	self.cXPos =  0 ;
+# 	self.urXPos =  (stepShift - stepOverlap) ;
+# 	self.drXPos =  2*(stepShift - stepOverlap) ;
 
-	self.receptorsApart = 1.96 ;
-	self.stepTextureAnimationRate = 30 ;
+# 	#self.receptorsApart = 1.96 ;
+# 	#self.stepTextureAnimationRate = 30 ;
 
 
 #PadId: 1,2,etc
@@ -153,6 +159,7 @@ func composePad(stepDataOffset:int=0, padId:int=1):
 
 		var notesInBar = measure.size();
 
+		#var lastTimeInSong:float = -99999.0
 		# j loops the notes inside the bar
 		for j in range(notesInBar):
 
@@ -160,13 +167,14 @@ func composePad(stepDataOffset:int=0, padId:int=1):
 			var note = measure[j];
 
 			# calculate current beat
-			var beat = (4*i + 4*j/notesInBar) ;
+			var beat:float = (4.0*i + 4.0*j/notesInBar) ;
 			
 			#var [currentYPosition, currentTimeInSong] = 
 			var tmp:Array = self.beatManager.getYShiftAndCurrentTimeInSongAtBeat(beat);
 			var currentYPosition = tmp[0]
 			var currentTimeInSong = tmp[1]
-			
+			#assert(currentTimeInSong!=lastTimeInSong)
+			#lastTimeInSong=currentTimeInSong
 
 			# Add only if the entry is not created already
 			if listIndex > self.stepQueue.getLength():
@@ -268,7 +276,8 @@ func processNote(note:String, kind:String, currentYPosition:float, stepXpos:floa
 			#add_child(step)
 			#var stepMesh = step.object ;
 
-			step.position=Vector2(stepXpos,currentYPosition)
+			#Strange... It should be centered but it's not?
+			step.position=Vector2(stepXpos+32,currentYPosition)
 			#stepMesh.position.y = currentYPosition ;
 			step.originalYPos = currentYPosition ;
 			#stepMesh.position.x = XStepPosition ;
@@ -279,7 +288,7 @@ func processNote(note:String, kind:String, currentYPosition:float, stepXpos:floa
 			#Notice how this is NOT added as a child,
 			#that's because it needs to calculate hold ends and it will
 			#be added when the hold end is found.
-			if note == '2':
+			if enableHolds and note == '2':
 				var stepHold = StepHoldN.instance()
 				stepHold.constructor(kind, padId, currentTimeInSong, self._noteskin )
 				
@@ -306,12 +315,13 @@ func processNote(note:String, kind:String, currentYPosition:float, stepXpos:floa
 				#steps.add(stepMesh) ;
 				self.stepList.append(step) ;
 		'3':
-			var holdObject = self.stepQueue.getHold( kind , padId ) ;
+			if enableHolds:
+				var holdObject = self.stepQueue.getHold( kind , padId ) ;
 
-			holdObject.constructHoldExtensible(currentYPosition) ;
+				holdObject.constructHoldExtensible(currentYPosition) ;
 
-			holdObject.endTimeStamp = currentTimeInSong ;
-			add_child(holdObject) ;
+				holdObject.endTimeStamp = currentTimeInSong ;
+				add_child(holdObject) ;
 
 func updateCurrentSpeed():
 

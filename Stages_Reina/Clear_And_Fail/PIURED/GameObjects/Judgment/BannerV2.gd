@@ -22,6 +22,7 @@ extends Sprite
 
 
 
+onready var t = $Tween
 func _ready():
 	#set_process(Engine.editor_hint)
 	pass
@@ -80,11 +81,21 @@ func _ready():
 #     new TWEEN.Tween(this._mesh.scale).to({x: 0.6, y: 0.6}, time).start();
 #     new TWEEN.Tween(this._mesh.position).to({y: 0}, time).start();
 
-#STUB!
+# You can tell godot is a great engine because it lacks basic
+# features like vertical alignment, something StepMania had in
+# 2001
 func animate():
-	#t.stop_all()
-	#t.interpolate_property(self,
-	pass
+	t.stop_all()
+	# Ah yes because this is SO much more readable than
+	# stoptweening;diffusealpha,1;zoom,2;linear,.3;zoom,1;sleep,1;zoomx,2;diffusealpha,0
+	# Godot's tween system is crap and I'm tired of pretending it's not
+	modulate.a=1
+	t.interpolate_property(self,"scale",Vector2(2,2),Vector2(1,1),.1)
+	t.interpolate_property(self,"scale:x",1,2,1,0,2,1)
+	t.interpolate_property(self,"scale:y",1,0,1,0,2,1)
+	t.interpolate_property(self,"modulate:a",1,0,1,0,2,1)
+	t.start()
+#	pass
 
 #This function is setting what judgment to display
 func setGrade(grade:String):

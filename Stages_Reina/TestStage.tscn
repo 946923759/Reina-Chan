@@ -1,4 +1,4 @@
-[gd_scene load_steps=66 format=2]
+[gd_scene load_steps=65 format=2]
 
 [ext_resource path="res://Stages/IceMan/IceManTileset.tres" type="TileSet" id=1]
 [ext_resource path="res://Stages_Reina/Enemies/Dinergate.tscn" type="PackedScene" id=2]
@@ -45,7 +45,6 @@
 [ext_resource path="res://Stages_Reina/Enemies/nemeum.tscn" type="PackedScene" id=43]
 [ext_resource path="res://Stages_Reina/Enemies/prowler.tscn" type="PackedScene" id=44]
 [ext_resource path="res://Sounds/Akuma Fire.wav" type="AudioStream" id=45]
-[ext_resource path="res://Character Sprites/m16/m16Idle.png" type="Texture" id=46]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 1920, 32 )
@@ -587,8 +586,6 @@ tile_data = PoolIntArray( -1048542, 0, 0, -1048541, 0, 0, -1048540, 0, 0, -78643
 
 [node name="PlayerHolder" parent="." index="4"]
 position = Vector2( -544, 1088 )
-texture = ExtResource( 46 )
-player_to_spawn_in_debug = 1
 
 [node name="EventTile5" type="StaticBody2D" parent="." index="5"]
 position = Vector2( 5984, 320 )

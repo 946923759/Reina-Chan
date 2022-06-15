@@ -34,7 +34,8 @@ extends Node2D
 # */
 
 export(String) var songToLoad = "Gargoyle"
-
+export(int) var levelToLoad = 0
+export(float,0.15,2) var accuracyMargin=0.15
 
 
 var animationRate:int=30
@@ -85,15 +86,15 @@ func _ready():
 
 	#func constructor( pathToSSCFile:String, audioFilePath:String, offset, playBackSpeed, onReadyToStart ):
 	#song.constructor()
-	song.constructor(sscPath,0,1)
+	song.constructor(sscPath,.100,1)
 
 	print("Finish loading Song class, now set up player.")
 	addPlayerStage({
 		inputConfig=null,
 		noteskin="Prime",
-		level=0,
+		level=levelToLoad,
 		speed=1.0,
-		accuracyMargin = 0.15,
+		accuracyMargin = accuracyMargin,
 		receptorX = 0,
 		receptorY = 0,
 		scale = 1.0
@@ -102,6 +103,7 @@ func _ready():
 	var start = OS.get_ticks_msec()
 
 	song.startPlayBack(start)
+	$PlayerStage.beatManager.requiresResync=true
 	pass
 
 
@@ -188,7 +190,7 @@ func adjustPlayerStages():
 # 	}
 
 # 	for (let i = 0 ; i < no_stages ; i++ ) {
-# 		if (  self.song.getLevelStyle(self._playerStages[i]._level) === 'pump-double' || self.song.getLevelStyle(self._playerStages[i]._level) === 'pump-halfdouble' ) {
+# 		if (  self.song.getStepsType(self._playerStages[i]._level) === 'pump-double' || self.song.getStepsType(self._playerStages[i]._level) === 'pump-halfdouble' ) {
 # 			distance = 9 ;
 # 			break ;
 # 		}

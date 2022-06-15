@@ -47,3 +47,9 @@ func animate(grade:String, comboCount:int):
 		self._whiteDigits.displayComboCount(comboCount) ;
 		self._combo.animate() ;
 		self._whiteDigits.animate() ;
+
+
+#JudgmentMessage(PlayerNumber,isOnline,FirstColumn,TapNoteScore,Early,TapNoteOffset,ComboCount,HoldNoteScore)
+func JudgmentMessageCommand(pn:int,isOnline:bool,col:String,score:String,early:bool,offset:float,combo:int,hns:float):
+	animate(score,combo)
+	$ProTiming.text="ProTiming:\n"+String(offset)

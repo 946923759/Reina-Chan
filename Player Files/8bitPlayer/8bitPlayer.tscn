@@ -323,6 +323,7 @@ color = Color( 0.96875, 1, 0, 0.325961 )
 polygon = PoolVector2Array( 500, 200, 780, 200, 780, 520, 500, 520 )
 
 [node name="DebugButtonHelp" type="Label" parent="CanvasLayer"]
+visible = false
 margin_left = 721.264
 margin_top = 158.363
 margin_right = 1522.26

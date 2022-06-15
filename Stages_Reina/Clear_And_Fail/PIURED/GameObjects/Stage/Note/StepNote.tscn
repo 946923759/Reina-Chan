@@ -158,6 +158,16 @@ animations = [ {
 [node name="Note" type="AnimatedSprite"]
 frames = SubResource( 31 )
 animation = "DownLeft"
-frame = 1
+frame = 2
 playing = true
 script = ExtResource( 6 )
+
+[node name="Label" type="Label" parent="."]
+margin_left = 32.0
+margin_top = -32.0
+margin_right = 72.0
+margin_bottom = -18.0
+text = "1231.32132193923"
+__meta__ = {
+"_edit_use_anchors_": false
+}

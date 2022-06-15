@@ -1,4 +1,5 @@
 extends Node2D
+
 # /*
 #  * # Copyright (C) Pedro G. Bascoy
 #  # This file is part of piured-engine <https://github.com/piulin/piured-engine>.
@@ -33,29 +34,54 @@ var _padId;
 #	var explosion:AnimatedSprite
 #	var tapAnim:Sprite
 var receptorColumns:Array = []
-func constructor(beatManager, keyInput, padId, animationRate, noteskin:String):
+func constructor(beatManager, keyInput, padId, noteskin:String):
 	
 	self._noteskin = noteskin ;
 	self._keyInput = keyInput ;
 	self._beatManager = beatManager ;
-	self._animationRate = animationRate ;
 	self._padId = padId ;
 
+	set_process(true)
+
+
+func setColumnPositions(colPos:Array):
+	self.position.x=colPos[2]
 
 #onready var dlTap = $Receptor
 #onready var 
+onready var t:Tween = $Tween
+onready var highlight:Sprite = $Sprite2
 func _ready():
+	set_process(false)
+
+	for k in ['dl','ul','c','ur','dr']:
+		get_node(k).connect("animation_finished",self,"explosion_finished",[get_node(k)])
+
 	pass
 
-func setColumnPositions(colPos:Array):
-	assert(len(colPos)==get_child_count(),"Number of positions given did not match number of receptors.")
-	for i in range(get_child_count()):
-		get_child(i).position.x=colPos[i]
+
+
+var lastBeat = -1
+func _process(delta):
+	$Label.text=String(_beatManager.currentAudioTime)+"\n"+String(_beatManager.song.getCurrentAudioTime(_beatManager.level))
+	if floor(_beatManager.currentBeat) > lastBeat:
+		lastBeat=_beatManager.currentBeat
+		t.stop_all()
+		t.interpolate_property(highlight,"modulate:a",1,0,.3)
+		t.start()
+
+func explosion_finished(node):
+	node.visible=false
 
 func animateExplosionStep(step:String):
+	var explosion = get_node(step)
+	explosion.frame=0
+	explosion.play()
+	explosion.visible=true
+
 	#Ayy lmao
-	var receptorToAnimate=get_node(step)
-	receptorToAnimate.animateExplosion()
+	#var receptorToAnimate=get_node(step)
+	#receptorToAnimate.animateExplosion()
 	
 	
 	#let tapEffect = null ;

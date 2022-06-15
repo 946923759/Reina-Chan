@@ -360,7 +360,7 @@ class PIURED_ENGINE:
 	#  * }
 	#  */
 	queryStageType(level) {
-		return this.song.getLevelStyle(level) ;
+		return this.song.getStepsType(level) ;
 	}
 
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://Stages_Reina/Clear_And_Fail/PIURED/GameObjects/Judgment/Judgment.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Stages_Reina/Clear_And_Fail/PIURED/GameObjects/Lifebar.gd" type="Script" id=2]
@@ -8,14 +8,21 @@
 [ext_resource path="res://Stages_Reina/Clear_And_Fail/PIURED/Resources/LifeMeterBar_S_Front.png" type="Texture" id=6]
 [ext_resource path="res://Stages_Reina/Clear_And_Fail/PIURED/Resources/SG-TIP 1x2.png" type="Texture" id=7]
 [ext_resource path="res://Stages_Reina/Clear_And_Fail/PIURED/GameObjects/Stage/NoteField/NoteField.tscn" type="PackedScene" id=8]
+[ext_resource path="res://Stages_Reina/Clear_And_Fail/PIURED/GameObjects/ScoreManager.gd" type="Script" id=9]
+[ext_resource path="res://FallbackPixelFont.tres" type="DynamicFont" id=10]
 
 [node name="PlayerStage" type="Node2D"]
 script = ExtResource( 3 )
+
+[node name="ScoreManager" type="Node" parent="."]
+script = ExtResource( 9 )
 
 [node name="NoteField" parent="." instance=ExtResource( 8 )]
 position = Vector2( 480, 32 )
 
 [node name="Judgment" parent="." instance=ExtResource( 1 )]
+position = Vector2( 544, 416 )
+z_index = 3
 
 [node name="Lifebar" type="Node2D" parent="."]
 script = ExtResource( 2 )
@@ -48,9 +55,34 @@ region_rect = Rect2( 0, 0, 30, 50 )
 texture = ExtResource( 6 )
 
 [node name="Label" type="Label" parent="."]
-margin_right = 40.0
-margin_bottom = 14.0
+margin_top = 256.0
+margin_right = 180.0
+margin_bottom = 301.0
+custom_fonts/font = ExtResource( 10 )
 text = "TEST"
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Label2" type="Label" parent="."]
+margin_top = 416.0
+margin_right = 180.0
+margin_bottom = 461.0
+custom_fonts/font = ExtResource( 10 )
+text = "TEST"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label3" type="Label" parent="."]
+margin_left = 1152.0
+margin_top = 32.0
+margin_right = 1262.0
+margin_bottom = 46.0
+text = "idx aaaasdasdasd"
+align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="JudgmentMessage" from="ScoreManager" to="Judgment" method="JudgmentMessageCommand"]

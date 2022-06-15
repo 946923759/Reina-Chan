@@ -41,6 +41,8 @@ var HoldsStateC = preload("res://Stages_Reina/Clear_And_Fail/PIURED/HoldStructs.
 var activeHolds:HoldsState
 
 var playerStage
+var scoreManager
+
 var keyInput
 var beatManager
 var accuracyMargin
@@ -49,8 +51,33 @@ var checkForNewHolds:bool=true
 var stepQueue:Array = []
 var stepDict:Dictionary = {}
 
+onready var receptors = $ReceptorsButWorse
 func _ready():
 	set_process(false)
+	configureStepConstantsPositions()
+	receptors.setColumnPositions(stepColumnPositions)
+
+
+
+# Space to the right or left of a given step.
+export(int) var stepShift=100;
+# define position of the notes w.r.t. the receptor
+
+# Note that the receptor steps are a bit overlapped. This measure takes into
+# acount this overlap.
+export(float) var stepOverlap = 0.02 ;
+var stepColumnPositions:Array = [0,0,0,0,0]
+
+func configureStepConstantsPositions ()->Array:
+
+	stepColumnPositions[0] =  -2*(stepShift - stepOverlap) ;
+	stepColumnPositions[1] =  -(stepShift - stepOverlap) ;
+	stepColumnPositions[2] =  0 ;
+	stepColumnPositions[3] =  (stepShift - stepOverlap) ;
+	stepColumnPositions[4] =  2*(stepShift - stepOverlap) ;
+	#self.receptorsApart = 1.96 ;
+
+	return stepColumnPositions
 
 func constructor(playerStage, keyInput, beatManager, accuracyMargin:float=0.15, frameLog=null):
 
@@ -59,6 +86,7 @@ func constructor(playerStage, keyInput, beatManager, accuracyMargin:float=0.15, 
 	self.keyInput = keyInput ;
 
 	self.playerStage = playerStage ;
+	scoreManager = playerStage.get_node("ScoreManager")
 
 	self.beatManager = beatManager ;
 
@@ -73,18 +101,22 @@ func constructor(playerStage, keyInput, beatManager, accuracyMargin:float=0.15, 
 
 	print("NoteField is set up, ready to add new notes.")
 	print("calling $Steps.constructor() to set up note track.")
-	$Steps.constructor(self,beatManager,playerStage._song,0)
+	#breakpoint;
+	print(stepColumnPositions)
+	$Steps.constructor(self,beatManager,playerStage._song,playerStage._level,1.0,stepColumnPositions)
 
+	receptors.constructor(beatManager,null,null,"Prime")
 
+	set_process(true)
 
 
 
 var KEYMAPPINGS_STUB = {
-	KEY_Q:"ul",
-	KEY_S:"c",
-	KEY_E:"ur",
-	KEY_Z:"dl",
-	KEY_C:"dr"
+	KEY_Q:"dl",
+	KEY_W:"ul",
+	KEY_K:"c",
+	KEY_O:"ur",
+	KEY_P:"dr"
 }
 
 func _process(delta):
@@ -101,6 +133,7 @@ func _process(delta):
 
 	for k in KEYMAPPINGS_STUB:
 		if Input.is_key_pressed(k):
+			#print("Key pressed! "+String(currentAudioTime)+" "+String(currentBeat))
 			stepPressed(KEYMAPPINGS_STUB[k],1)
 
 #func input():
@@ -178,8 +211,8 @@ func removeElement(index):
 func getStepFromTopMostStepInfo (index):
 	return self.stepQueue[0].stepList[index] ;
 
-func getTopMostStepListLength():
-	return self.stepQueue[0].stepList.length ;
+func getTopMostStepListLength()->int:
+	return len(self.stepQueue[0].stepList) ;
 
 func getTopMostStepsList():
 	return self.stepQueue[0].stepList ;
@@ -255,7 +288,7 @@ func updateStepQueue( currentAudioTime:float) :
 			if self.areThereOnlyHoldsInTopMostStepInfo() && self.areHoldsBeingPressed() :
 
 				self.needToAnimateReceptorFX(self.getTopMostStepsList()) ;
-				self.playerStage.judgment.perfect() ;
+				scoreManager.perfect() ;
 
 				self.removeFirstElement() ;
 				self.checkForNewHolds = true ;
@@ -264,7 +297,7 @@ func updateStepQueue( currentAudioTime:float) :
 		# we count a miss, if we go beyond the time of the topmost step info, given that there are no holds there
 		if difference < -self.accuracyMargin :
 
-			self.playerStage.judgment.miss() ;
+			scoreManager.miss() ;
 			self.removeFirstElement() ;
 			self.checkForNewHolds = true ;
 
@@ -273,7 +306,7 @@ func needToAnimateReceptorFX(stepList):
 	#self.playerStage.animateReceptorFX(stepList) ;
 	
 	for step in stepList:
-		$Receptors.animateExplosionStep(step)
+		receptors.animateExplosionStep(step.kind)
 
 func needToRemoveStep(step):
 	#self.frameLog.logRemoveStep(step) ;
@@ -317,7 +350,7 @@ func judgeHolds(delta, currentAudioTime, beat, tickCounts):
 			# self.composer.judgmentScale.animateJudgement('p', numberOfHits);
 			# self.composer.animateTapEffect(self.activeHolds.asList());
 			self.needToAnimateReceptorFX(self.activeHolds.asList()) ;
-			self.playerStage.judgment.perfect(numberOfHits) ;
+			scoreManager.perfect(numberOfHits) ;
 			# console.log('perfect') ;
 		# case 2: holds are not pressed. we need to give some margin to do it
 		elif self.activeHolds.beginningHoldChunk && difference < self.accuracyMargin :
@@ -327,7 +360,7 @@ func judgeHolds(delta, currentAudioTime, beat, tickCounts):
 			# case 3: holds are not pressed and we run out of the margin
 		else:
 
-			self.playerStage.judgment.miss(numberOfHits) ;
+			scoreManager.miss(numberOfHits) ;
 			self.activeHolds.beginningHoldChunk = false ;
 		
 
@@ -348,14 +381,14 @@ func endJudgingHolds(remainingTime, tickCounts):
 		if self.areHoldsBeingPressed() && self.activeHolds.wasLastKnowHoldPressed:
 
 			self.needToAnimateReceptorFX(self.activeHolds.asList()) ;
-			self.playerStage.judgment.perfect(numberOfHits) ;
+			scoreManager.perfect(numberOfHits) ;
 			# console.log('perfect') ;
 		else:
 			# TODO: misses should not be in the same count.
 			# TODO:
 			# self.composer.judgmentScale.miss() ;
 			# console.log('miss') ;
-			self.playerStage.judgment.miss(numberOfHits) ;
+			scoreManager.miss(numberOfHits) ;
 		
 
 		#reset
@@ -399,7 +432,7 @@ func removeHoldsIfProceeds(currentAudioTime):
 			if self.keyInput.isHeld(step.kind, step.padId):
 
 
-				self.playerStage.judgment.perfect() ;
+				scoreManager.perfect() ;
 
 				self.needToRemoveStep(step) ;
 
@@ -410,7 +443,7 @@ func removeHoldsIfProceeds(currentAudioTime):
 
 			# otherwise we have a miss.
 			else:
-				self.playerStage.judgment.miss() ;
+				scoreManager.miss() ;
 
 
 
@@ -443,11 +476,11 @@ func getFirstStepWithinMargin(currentAudioTime:float, kind:String, padId:int)->A
 		var stepInfo = self.stepQueue[i] ;
 		var timeStamp = stepInfo.timeStamp ;
 
-		var difference =  abs((timeStamp) - currentAudioTime) ;
+		var difference =  (timeStamp) - currentAudioTime ;
 
 		# console.log(difference) ;
 
-		if difference < self.accuracyMargin :
+		if abs(difference) < self.accuracyMargin :
 
 			for j in range(stepInfo.stepList.size()):
 
@@ -494,7 +527,7 @@ func stepPressed(kind:String, padId:int):
 		# If all steps have been pressed, then we can remove them from the steps to be rendered
 		if self.areStepsInNoteListPressed(stepInfo.stepList):
 
-			var grade = self.playerStage.judgment.grade(difference) ;
+			var grade = scoreManager.grade(step,difference) ;
 
 			#
 			if grade == 'b' || grade == 'go':
@@ -585,7 +618,7 @@ func areThereHolds (currentAudioTime:float)->bool:
 func removeNotesFromStepObject(noteList):
 
 
-	var length =  noteList.length ;
+	var length =  len(noteList) ;
 	for i in range(length):
 		var note = noteList[i] ;
 

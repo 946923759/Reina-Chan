@@ -209,7 +209,7 @@ class Song_unused:
 		return [last[1],last[2], last[3]] ;
 	}
 
-	getLevelStyle(level) {
+	getStepsType(level) {
 		return this.levels[level].STEPSTYPE ;
 	}
 
