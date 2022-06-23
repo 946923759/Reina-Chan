@@ -49,7 +49,7 @@ func move(obj):
 			bottomBound = bottomBound*cameraScale
 		topBound = topBound*cameraScale;
 		print("LEFT: "+ String(leftBound)+ " TOP: "+String(topBound)+" RIGHT: "+String(rightBound) + " BOTTOM: "+String(bottomBound))
-		get_node("/root/Node2D/Player/Camera2D").adjustCamera([leftBound,topBound,rightBound,bottomBound], tweenTime)
+		get_node("/root/Node2D/").get_player().get_node("Camera2D").adjustCamera([leftBound,topBound,rightBound,bottomBound], tweenTime)
 		
 		#Lock player into walking right .5 seconds
 		$Sprite.set_process(true)

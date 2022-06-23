@@ -6,6 +6,7 @@
 [sub_resource type="GDScript" id=1]
 script/source = "extends Node2D
 
+const SPEED=600 #Default is 600
 #TODO: Fix this at some point so it doesn't use AnimatedSprite,
 #it wastes CPU.
 onready var sprite = $AnimatedSprite
@@ -30,7 +31,7 @@ func _physics_process(delta):
 	if isDefaultAnim and sprite.frame==2:
 		sprite.set_animation(\"loop\")
 		isDefaultAnim=false
-	self.position.x+=600*facing*delta
+	self.position.x+=SPEED*facing*delta
 	
 func objectTouched(obj):
 	#print(\"intersecting!\")

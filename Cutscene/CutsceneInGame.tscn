@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=33 format=2]
 
 [ext_resource path="res://Cutscene/DialogueBoxLeft.png" type="Texture" id=1]
 [ext_resource path="res://Cutscene/TextFont.tres" type="DynamicFont" id=2]
@@ -9,13 +9,824 @@
 [ext_resource path="res://Cutscene/ChoiceHandler.gd" type="Script" id=7]
 [ext_resource path="res://Cutscene/Mugshots/test.png" type="Texture" id=8]
 [ext_resource path="res://Cutscene/TextboxSpriteMan.gd" type="Script" id=9]
-[ext_resource path="res://Cutscene/Mugshots/test3.png" type="Texture" id=10]
+[ext_resource path="res://Cutscene/Mugshots/Alchemist.png" type="Texture" id=10]
 [ext_resource path="res://Cutscene/Mugshots/test2.png" type="Texture" id=11]
 [ext_resource path="res://Cutscene/VN MaskOverlay (stretch).png" type="Texture" id=12]
 [ext_resource path="res://Cutscene/maskBox2.png" type="Texture" id=13]
 [ext_resource path="res://Cutscene/MugshotImageHandler.gd" type="Script" id=14]
+[ext_resource path="res://Cutscene/blinky.png" type="Texture" id=15]
 
-[sub_resource type="GDScript" id=2]
+[sub_resource type="GDScript" id=1]
+script/source = "extends Node2D
+
+onready var mugShotActor:Node2D=$Mugshots
+onready var animPlayer:AnimationPlayer = $AnimationPlayer
+onready var textBox=$TextboxBack
+onready var textActor=$textActor_better
+onready var leftCrop=$LeftCrop
+onready var blinky = $Blinky
+
+var lastPosition:int=2
+var isLeftSide:bool=true
+
+var MUGSHOT_X_POSITION:int
+var BLINKY_X_POSITION:int
+
+func _ready():
+	MUGSHOT_X_POSITION=abs(int(mugShotActor.position.x))
+	BLINKY_X_POSITION=int($Blinky.position.x)
+	
+	if not OS.is_debug_build():
+		$testLeft.visible=false
+		$testRight.visible=false
+
+func open()->float:
+	if isLeftSide:
+		animPlayer.queue(\"Open\")
+	else:
+		animPlayer.queue(\"OpenRight\")
+	return .3
+	
+func close()->float:
+	blinky.hide()
+	if isLeftSide:
+		animPlayer.queue(\"Close\")
+	else:
+		animPlayer.play_backwards(\"OpenRight\")
+	return 0.3
+	
+func remove()->float:
+	close()
+	animPlayer.queue(\"Remove_top\")
+	return 0.5
+
+func reposition_vertical(pos:int):
+	match pos:
+		0:
+			animPlayer.queue(\"Pos_bottom\")
+		1:
+			animPlayer.queue(\"Pos_mid\")
+		2:
+			animPlayer.queue(\"Pos_top\")
+		_:
+			print(\"Unknown position...\")
+			return
+	lastPosition=pos
+
+#Scroll in a new textbox. Returns the time it takes before the textbox
+#appears, so the text waits that long before starting.
+func add(leftSide:bool=true)->float:
+	isLeftSide=leftSide
+	#animPlayer.stop(true)
+	#self.modulate.a=0
+	reposition(leftSide)
+	#animPlayer.queue(\"Add\")
+	if isLeftSide:
+		animPlayer.queue(\"Open\")
+	else:
+		animPlayer.queue(\"OpenRight\")
+	return 0.5
+
+func reposition(leftSide:bool=true):
+	#var a = -1 if leftSide else 1
+	#mugShotActor.position.x=MUGSHOT_X_POSITION*a
+	if isLeftSide:
+		animPlayer.queue(\"AddLeft\")
+		reposition_vertical(lastPosition)
+		#animPlayer.play_backwards(\"Open\")
+		#textActor.rect_position.x=-222
+		#$Blinky.position.x=432
+	else:
+		animPlayer.queue(\"AddRight\")
+		reposition_vertical(lastPosition)
+		#animPlayer.play_backwards(\"OpenRight\")
+		#$Blinky.position.x=200
+		#textActor.rect_position.x=-440
+	#animPlayer.seek(0.0)
+	#animPlayer.stop()
+#	var a = -1 if leftSide else 1
+#	mugShotActor.position.x=MUGSHOT_X_POSITION*a
+#	if leftSide:
+#		textBox.offset.x=-120
+#	else:
+#		textBox.offset.x=56
+#	textBox.flip_h=not leftSide
+#	leftCrop.flip_h=not leftSide
+#	leftCrop.position.x=210*a
+
+func skipToOpen(leftSide:bool=true):
+	animPlayer.stop(true)
+	reposition(leftSide)
+	if leftSide:
+		animPlayer.play(\"Open\")
+	else:
+		animPlayer.play(\"OpenRight\")
+	animPlayer.seek(.3)
+
+
+func _on_testLeft_button_down(extra_arg_0):
+	print(\"test left\")
+	add(true)
+
+func _on_testRight_button_down():
+	print(\"test right\")
+	add(false)
+
+
+func _on_testRight2_button_down():
+	remove()
+	add()
+"
+
+[sub_resource type="Animation" id=2]
+resource_name = "Add"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:modulate:a")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 0.0, 1.0 ]
+}
+
+[sub_resource type="Animation" id=3]
+resource_name = "AddLeft"
+length = 0.01
+tracks/0/type = "value"
+tracks/0/path = NodePath("TextboxBack:region_rect")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 0.5 ),
+"update": 0,
+"values": [ Rect2( 0, 0, 64, 53 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("LeftCrop:position")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 0.5 ),
+"update": 0,
+"values": [ Vector2( -210, 0 ) ]
+}
+tracks/2/type = "method"
+tracks/2/path = NodePath("textActor_better")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "reset_custom_width"
+} ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("LeftCrop:flip_h")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ false ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("TextboxBack:flip_h")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ false ]
+}
+tracks/5/type = "value"
+tracks/5/path = NodePath("TextboxBack:offset")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( -120, -26 ) ]
+}
+tracks/6/type = "value"
+tracks/6/path = NodePath("Blinky:position:x")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 432.0 ]
+}
+tracks/7/type = "value"
+tracks/7/path = NodePath("Mugshots:position:x")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ -352.0 ]
+}
+tracks/8/type = "value"
+tracks/8/path = NodePath("textActor_better:rect_position:x")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ -222.0 ]
+}
+tracks/9/type = "value"
+tracks/9/path = NodePath(".:modulate:a")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 0.0 ]
+}
+tracks/10/type = "value"
+tracks/10/path = NodePath("textActor_better:visible_characters")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 0 ]
+}
+
+[sub_resource type="Animation" id=4]
+resource_name = "AddRight"
+length = 0.01
+tracks/0/type = "value"
+tracks/0/path = NodePath("TextboxBack:region_rect")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 0.5 ),
+"update": 1,
+"values": [ Rect2( 0, 0, 64, 53 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("LeftCrop:position")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 0.5 ),
+"update": 1,
+"values": [ Vector2( 210, 0 ) ]
+}
+tracks/2/type = "method"
+tracks/2/path = NodePath("textActor_better")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "reset_custom_width"
+} ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("TextboxBack:flip_h")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ true ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("LeftCrop:flip_h")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ true ]
+}
+tracks/5/type = "value"
+tracks/5/path = NodePath("TextboxBack:offset")
+tracks/5/interp = 2
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 0.5 ),
+"update": 1,
+"values": [ Vector2( 56, -26 ) ]
+}
+tracks/6/type = "value"
+tracks/6/path = NodePath(".:modulate:a")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 0.0 ]
+}
+tracks/7/type = "value"
+tracks/7/path = NodePath("Blinky:position:x")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 200.0 ]
+}
+tracks/8/type = "value"
+tracks/8/path = NodePath("Mugshots:position:x")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 352.0 ]
+}
+tracks/9/type = "value"
+tracks/9/path = NodePath("textActor_better:rect_position:x")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ -440.0 ]
+}
+tracks/10/type = "value"
+tracks/10/path = NodePath("textActor_better:visible_characters")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 0 ]
+}
+
+[sub_resource type="Animation" id=5]
+length = 0.3
+tracks/0/type = "value"
+tracks/0/path = NodePath("TextboxBack:region_rect")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3 ),
+"transitions": PoolRealArray( 0.5, 0.5 ),
+"update": 0,
+"values": [ Rect2( 0, 0, 236, 53 ), Rect2( 0, 0, 64, 53 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("LeftCrop:position")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.3 ),
+"transitions": PoolRealArray( 0.5, 0.5 ),
+"update": 0,
+"values": [ Vector2( 464, 0 ), Vector2( -210, 0 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("Blinky:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ false ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("textActor_better:custom_width")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 0.25 ),
+"transitions": PoolRealArray( 0.5, 1 ),
+"update": 0,
+"values": [ 676.0, 0.0 ]
+}
+
+[sub_resource type="Animation" id=6]
+length = 0.3
+tracks/0/type = "value"
+tracks/0/path = NodePath("TextboxBack:region_rect")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3 ),
+"transitions": PoolRealArray( 0.5, 0.5 ),
+"update": 0,
+"values": [ Rect2( 0, 0, 64, 53 ), Rect2( 0, 0, 236, 53 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("LeftCrop:position")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.3 ),
+"transitions": PoolRealArray( 0.5, 0.5 ),
+"update": 0,
+"values": [ Vector2( -210, 0 ), Vector2( 464, 0 ) ]
+}
+tracks/2/type = "method"
+tracks/2/path = NodePath("textActor_better")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "reset_custom_width"
+} ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("LeftCrop:flip_h")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ false ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("TextboxBack:flip_h")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ false ]
+}
+tracks/5/type = "value"
+tracks/5/path = NodePath("TextboxBack:offset")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( -120, -26 ) ]
+}
+tracks/6/type = "value"
+tracks/6/path = NodePath("textActor_better:modulate:a")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 1.0 ]
+}
+
+[sub_resource type="Animation" id=7]
+resource_name = "OpenRight"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/path = NodePath("TextboxBack:region_rect")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3 ),
+"transitions": PoolRealArray( 0.5, 0.5 ),
+"update": 0,
+"values": [ Rect2( 0, 0, 64, 53 ), Rect2( 0, 0, 240, 53 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("LeftCrop:position")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.3 ),
+"transitions": PoolRealArray( 0.5, 0.5 ),
+"update": 0,
+"values": [ Vector2( 210, 0 ), Vector2( -464, 0 ) ]
+}
+tracks/2/type = "method"
+tracks/2/path = NodePath("textActor_better")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "reset_custom_width"
+} ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("TextboxBack:flip_h")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 0.3 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ true, true ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("LeftCrop:flip_h")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0, 0.3 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ true, true ]
+}
+tracks/5/type = "value"
+tracks/5/path = NodePath("TextboxBack:offset")
+tracks/5/interp = 2
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 0, 0.3 ),
+"transitions": PoolRealArray( 0.5, 0.5 ),
+"update": 0,
+"values": [ Vector2( 56, -26 ), Vector2( -120, -26 ) ]
+}
+tracks/6/type = "value"
+tracks/6/path = NodePath("textActor_better:modulate:a")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/keys = {
+"times": PoolRealArray( 0.2, 0.3 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ 0.0, 1.0 ]
+}
+
+[sub_resource type="Animation" id=8]
+resource_name = "Pos_bottom"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:position:y")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2 ),
+"transitions": PoolRealArray( 0.5, 0.5 ),
+"update": 0,
+"values": [ 830.0, 550.0 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:modulate:a")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.2 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 0.0, 1.0 ]
+}
+
+[sub_resource type="Animation" id=9]
+resource_name = "Pos_mid"
+length = 0.01
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:position:y")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 360.0 ]
+}
+
+[sub_resource type="Animation" id=10]
+resource_name = "Pos_top"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:position:y")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2 ),
+"transitions": PoolRealArray( 0.5, 0.5 ),
+"update": 0,
+"values": [ -110.0, 170.0 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:modulate:a")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.2 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 0.0, 1.0 ]
+}
+
+[sub_resource type="Animation" id=11]
+resource_name = "Remove_bottom"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:position:y")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2 ),
+"transitions": PoolRealArray( 0.5, 0.5 ),
+"update": 0,
+"values": [ 550.0, 830.0 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:modulate:a")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.2 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 1.0, 0.0 ]
+}
+
+[sub_resource type="Animation" id=12]
+resource_name = "Remove_top"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:position:y")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2 ),
+"transitions": PoolRealArray( 0.5, 0.5 ),
+"update": 0,
+"values": [ 170.0, -110.0 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:modulate:a")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.2 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 1.0, 0.0 ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("textActor_better:text")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0.2 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ " " ]
+}
+
+[sub_resource type="GDScript" id=13]
+script/source = "extends Sprite
+
+#var blinky_is_active:bool=false
+
+func _ready():
+	set_process(false)
+
+var timer:float=0.0
+func _process(delta):
+	timer+=delta
+	visible=(timer > .5)
+	if timer>=1:
+		timer=0
+		
+
+func show():
+	#timer=1
+	set_process(true)
+	
+func hide():
+	set_process(false)
+	visible=false
+	timer=.5
+"
+
+[sub_resource type="GDScript" id=14]
 script/source = "extends Node2D
 tool
 
@@ -30,17 +841,66 @@ func _process(delta):
 	line.region_rect.position.y=y
 "
 
-[sub_resource type="CanvasItemMaterial" id=3]
+[sub_resource type="CanvasItemMaterial" id=15]
 blend_mode = 1
 
-[sub_resource type="DynamicFont" id=1]
+[sub_resource type="GDScript" id=16]
+script/source = "extends RichTextLabel
+tool
+
+#DUDE IMAGINE IF WE SUPPORTED CROPPING BUT IT'S ACTUALLY HIDDEN AWAY
+#IN SOME BARELY DOCUMENTED FEATURE NOBODY USES
+
+onready var RECT_WIDTH:float = self.rect_size.x
+onready var RECT_HEIGHT:float = self.rect_size.y
+
+export(float,0,676) var custom_width=676 setget set_custom_width
+
+func _draw():
+	VisualServer.canvas_item_set_custom_rect(get_canvas_item(),true,
+		Rect2(0,0,custom_width,RECT_HEIGHT)
+	)
+		
+func set_custom_width(w:float):
+	if RECT_WIDTH==null:
+		custom_width=w
+		update()
+	elif w > 0:
+		custom_width=min(RECT_WIDTH,w)
+		update()
+		
+	#print(custom_width)
+
+func reset_custom_width():
+	custom_width=RECT_WIDTH
+
+var textToSet:String
+var waitTime:float=0.0
+func waitForSetText(txt:String,time:float):
+	print(\"Got new text, wait \"+String(time)+\" before setting\")
+	if waitTime>0:
+		print(\"WARNING: A timer was already set for removing text! Previous timer was \"+String(waitTime))
+	if time>=0:
+		waitTime=time
+		textToSet=txt
+		set_process(true)
+	else:
+		bbcode_text=txt
+	
+func _process(delta):
+	waitTime-=delta
+	if waitTime<=0:
+		self.bbcode_text=textToSet
+		set_process(false)
+"
+
+[sub_resource type="DynamicFont" id=17]
 size = 34
 font_data = ExtResource( 3 )
 
 [node name="CutscenePlayer" type="CanvasLayer"]
 pause_mode = 2
 script = ExtResource( 4 )
-standalone_message = PoolStringArray( "msg|hello world." )
 
 [node name="Music" type="Node" parent="."]
 
@@ -98,14 +958,83 @@ __meta__ = {
 }
 
 [node name="CenterContainer_v2" type="Node2D" parent="."]
-position = Vector2( 640, 550 )
+modulate = Color( 1, 1, 1, 0 )
+position = Vector2( 640, -110 )
+script = SubResource( 1 )
+
+[node name="testLeft" type="Button" parent="CenterContainer_v2"]
+margin_left = -456.913
+margin_top = -135.484
+margin_right = -353.913
+margin_bottom = -115.484
+button_mask = 7
+text = "Test Open left"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="testRight" type="Button" parent="CenterContainer_v2"]
+margin_left = -334.108
+margin_top = -135.484
+margin_right = -223.108
+margin_bottom = -115.484
+button_mask = 7
+text = "Test Open right"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="testRight2" type="Button" parent="CenterContainer_v2"]
+margin_left = -398.857
+margin_top = -164.915
+margin_right = -287.857
+margin_bottom = -144.915
+button_mask = 7
+text = "Test Close & open"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="CenterContainer_v2"]
+anims/Add = SubResource( 2 )
+anims/AddLeft = SubResource( 3 )
+anims/AddRight = SubResource( 4 )
+anims/Close = SubResource( 5 )
+anims/Open = SubResource( 6 )
+anims/OpenRight = SubResource( 7 )
+anims/Pos_bottom = SubResource( 8 )
+anims/Pos_mid = SubResource( 9 )
+anims/Pos_top = SubResource( 10 )
+anims/Remove_bottom = SubResource( 11 )
+anims/Remove_top = SubResource( 12 )
 
 [node name="TextboxBack" type="Sprite" parent="CenterContainer_v2"]
+position = Vector2( 0, -2 )
 scale = Vector2( 4, 4 )
 texture = ExtResource( 1 )
+centered = false
+offset = Vector2( 56, -26 )
+flip_h = true
+region_enabled = true
+region_rect = Rect2( 0, 0, 64, 53 )
+
+[node name="LeftCrop" type="Sprite" parent="CenterContainer_v2"]
+position = Vector2( 210, 0 )
+scale = Vector2( 4, 4 )
+texture = ExtResource( 1 )
+flip_h = true
+region_enabled = true
+region_rect = Rect2( 232, 0, 8, 53 )
+
+[node name="Blinky" type="Sprite" parent="CenterContainer_v2"]
+visible = false
+position = Vector2( 200, 82 )
+scale = Vector2( 4, 4 )
+texture = ExtResource( 15 )
+script = SubResource( 13 )
 
 [node name="Mugshots" type="Node2D" parent="CenterContainer_v2"]
-position = Vector2( -352, -2 )
+position = Vector2( 352, -2 )
 script = ExtResource( 9 )
 
 [node name="Sprite2" type="Sprite" parent="CenterContainer_v2/Mugshots"]
@@ -114,12 +1043,13 @@ scale = Vector2( 4, 4 )
 texture = ExtResource( 11 )
 
 [node name="Mugshot" type="Sprite" parent="CenterContainer_v2/Mugshots"]
+visible = false
 scale = Vector2( 3, 3 )
 texture = ExtResource( 10 )
 script = ExtResource( 14 )
 
 [node name="MaskOverlay" type="Node2D" parent="CenterContainer_v2/Mugshots"]
-script = SubResource( 2 )
+script = SubResource( 14 )
 
 [node name="Sprite" type="Sprite" parent="CenterContainer_v2/Mugshots/MaskOverlay"]
 texture = ExtResource( 13 )
@@ -127,24 +1057,26 @@ region_enabled = true
 region_rect = Rect2( 0, 0, 192, 192 )
 
 [node name="Sprite2" type="Sprite" parent="CenterContainer_v2/Mugshots/MaskOverlay"]
-material = SubResource( 3 )
+material = SubResource( 15 )
 texture = ExtResource( 12 )
 region_enabled = true
-region_rect = Rect2( 0, 217.737, 192, 192 )
+region_rect = Rect2( 0, 8.14423, 192, 192 )
+
+[node name="Tween" type="Tween" parent="CenterContainer_v2/Mugshots"]
 
 [node name="textActor_better" type="RichTextLabel" parent="CenterContainer_v2"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -222.62
-margin_top = -92.5471
-margin_right = 453.38
-margin_bottom = 89.4529
+margin_left = -440.0
+margin_top = -92.0
+margin_right = 236.0
+margin_bottom = 90.0
 custom_fonts/normal_font = ExtResource( 2 )
 bbcode_enabled = true
-bbcode_text = "\"[color=#ff00ff]Lorem ipsum[/color] dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor  (If you can see this, the cutscene failed to load. File a bug report!)"
-text = "\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor  (If you can see this, the cutscene failed to load. File a bug report!)"
+text = " "
+script = SubResource( 16 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -160,7 +1092,7 @@ margin_top = -147.86
 margin_right = 432.264
 margin_bottom = 32.1399
 rect_pivot_offset = Vector2( 0, 90 )
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = SubResource( 17 )
 text = "Dandelion"
 autowrap = true
 __meta__ = {
@@ -191,3 +1123,7 @@ script = ExtResource( 7 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[connection signal="button_down" from="CenterContainer_v2/testLeft" to="CenterContainer_v2" method="_on_testLeft_button_down" binds= [ true ]]
+[connection signal="button_down" from="CenterContainer_v2/testRight" to="CenterContainer_v2" method="_on_testRight_button_down"]
+[connection signal="button_down" from="CenterContainer_v2/testRight2" to="CenterContainer_v2" method="_on_testRight2_button_down"]

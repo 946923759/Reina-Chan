@@ -38,6 +38,13 @@ func preload_portraits(arr:Array):
 			get_child(i).set_texture_wrapper(arr[i+1])
 			print("Preloaded "+arr[i+1])
 
+func delay_set_portrait(name:String,radioMask:bool=false,delay:float=0.3):
+	if delay<=0.0:
+		set_portrait(name,radioMask)
+	else:
+		$Tween.interpolate_callback(self,delay,"set_portrait",name,radioMask)
+		$Tween.start()
+
 func set_portrait(name: String, radioMask: bool = false)->Node2D:
 	# checks if exist
 	# Unnecessary? CutsceneMain already checks if there's a spare portrait
@@ -57,10 +64,11 @@ func set_portrait(name: String, radioMask: bool = false)->Node2D:
 			p.visible=false
 	if found==false:
 		for p in portraits:
-			if p.is_active==false:
+			if p.visible==false:
 				lastUsed = p
 				print(name)
 				p.set_texture_wrapper(name)
+				p.visible=true
 				break
 				
 	maskOverlay.set_process(radioMask)
@@ -89,6 +97,6 @@ func _ready():
 		var p = Sprite.new()
 		p.set_script(vnPortraithandler)
 		p.visible=false
-		#p.scale=Vector2(.75,.75) #We do it here instead of the whole node because scaling the whole node breaks positioning.
+		p.scale=Vector2(3,3)
 		portraits.append(p)
 		add_child(p)

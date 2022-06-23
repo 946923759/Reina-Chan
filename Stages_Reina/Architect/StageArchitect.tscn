@@ -1,7 +1,7 @@
-[gd_scene load_steps=49 format=2]
+[gd_scene load_steps=50 format=2]
 
 [ext_resource path="res://Stages/IceMan/IceManTileset.tres" type="TileSet" id=1]
-[ext_resource path="res://Player Files/8bitPlayer/8bitPlayer.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Character Sprites/ump9/ump9Idle.png" type="Texture" id=2]
 [ext_resource path="res://Stages_Reina/Enemies/Jaguar.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Stages_Reina/Enemies/Guardian/NotSniperJoe_Alt.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Stages_Reina/Enemies/Dinergate.tscn" type="PackedScene" id=5]
@@ -49,6 +49,62 @@ onready var event_ID = Globals.EVENT_TILES.CUSTOM_EVENT
 func run_event(sender):
 	#print(\"I'm shaking the screen!\")
 	get_node(\"/root/Node2D/Player/Camera2D\").shakeCamera(10)
+"
+
+[sub_resource type="GDScript" id=8]
+script/source = "tool
+extends Sprite
+
+#This object spawns a player as a child and then
+#the base will grab the player variable.
+#There isn't really any reason to have a holder for the player
+#other than maybe adding multiplayer support. Which won't
+#happen.
+
+#A big thanks to the godot team for removing the ability to 
+#set a size of Node2Ds in Godot 3.X, making me do this so I
+#can drag around the player sprite!
+
+#Honestly there is probably a better way to do this than
+#using a Node2D or a sprite
+
+export (int,\"Reina\",\"M16\") var player_to_spawn_in_debug=0 setget update_sprite_editor
+export (Array,Texture) var charTextures
+var player:KinematicBody2D
+
+func update_sprite_editor(new_value):
+	player_to_spawn_in_debug=new_value
+	if charTextures.size()>new_value:
+		self.texture=charTextures[new_value]
+
+#func _process(delta):
+#	update_sprite_editor(player_to_spawn_in_debug)
+#Godot doesn't set exported variables until _ready() so
+#this does not work
+#func _init():
+#	pass
+
+func _ready():
+	if Engine.editor_hint:
+		return
+	var playerToSpawn = player_to_spawn_in_debug
+	if OS.is_debug_build():
+		playerToSpawn = player_to_spawn_in_debug
+		
+	var n:Resource
+	if playerToSpawn==0:
+		n=load(\"res://Player Files/8bitPlayer/UMP9.tscn\")
+	else:
+		n=load(\"res://Player Files/8bitPlayer/M16.tscn\")
+	player = n.instance()
+	#print(self.position)
+	var tempPos = self.position
+	#print(tempPos)
+	self.position=Vector2(0,0)
+	player.position=tempPos
+	self.scale=Vector2(1,1)
+	add_child(player)
+	self.texture=null
 "
 
 [sub_resource type="RectangleShape2D" id=2]
@@ -258,8 +314,14 @@ position = Vector2( 11103, 2208 )
 collision_layer = 18
 collision_mask = 18
 
-[node name="Player" parent="." instance=ExtResource( 2 )]
-position = Vector2( 10367, 640 )
+[node name="PlayerHolder" type="Sprite" parent="."]
+position = Vector2( 63, 512 )
+scale = Vector2( 4, 4 )
+texture = ExtResource( 2 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 0, 0, 26, 32 )
+script = SubResource( 8 )
 
 [node name="BulletHolder" type="Node2D" parent="."]
 

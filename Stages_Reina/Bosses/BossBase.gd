@@ -57,7 +57,10 @@ var whiteTime = 0
 
 # warning-ignore:unused_argument
 func _physics_process(delta):
-	if not enabled:
+
+	#This aligns the boss with the floor for her intro, but
+	#only when she's not enabled.
+	if not enabled: 
 # warning-ignore:return_value_discarded
 		move_and_slide(Vector2(0,200))
 	else:
@@ -118,7 +121,7 @@ func killSelf():
 	#self.queue_free()
 	emit_signal("boss_killed")
 	if stage_finished_when_killed:
-		var player = get_node("/root/Node2D/Player")
+		var player = get_node("/root/Node2D").get_player()
 		player.finishStage()
 		#.lockMovement(999,Vector2())
 		#get_node("/root/Node2D/VictorySound").play()

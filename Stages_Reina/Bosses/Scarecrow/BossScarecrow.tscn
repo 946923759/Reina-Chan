@@ -1,0 +1,157 @@
+[gd_scene load_steps=18 format=2]
+
+[ext_resource path="res://Stages_Reina/Bosses/BossBase.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Stages_Reina/Bosses/Scarecrow/scarecrowIntro 5x1.png" type="Texture" id=2]
+[ext_resource path="res://Sounds/BossSounds/Scarecrow_APPEAR1_JP.wav" type="AudioStream" id=3]
+[ext_resource path="res://Stages_Reina/Bosses/Scarecrow/BossScarecrow.gd" type="Script" id=4]
+[ext_resource path="res://Stages_Reina/Bosses/Scarecrow/ScareCrowIdle 3x1.png" type="Texture" id=5]
+[ext_resource path="res://Stages_Reina/Bosses/Scarecrow/thingy.png" type="Texture" id=6]
+
+[sub_resource type="AtlasTexture" id=1]
+atlas = ExtResource( 2 )
+region = Rect2( 0, 0, 32, 46 )
+
+[sub_resource type="AtlasTexture" id=2]
+atlas = ExtResource( 5 )
+region = Rect2( 68, 0, 34, 36 )
+
+[sub_resource type="AtlasTexture" id=3]
+atlas = ExtResource( 5 )
+region = Rect2( 34, 0, 34, 36 )
+
+[sub_resource type="AtlasTexture" id=4]
+atlas = ExtResource( 5 )
+region = Rect2( 0, 0, 34, 36 )
+
+[sub_resource type="AtlasTexture" id=5]
+atlas = ExtResource( 2 )
+region = Rect2( 0, 0, 32, 46 )
+
+[sub_resource type="AtlasTexture" id=6]
+atlas = ExtResource( 2 )
+region = Rect2( 32, 0, 32, 46 )
+
+[sub_resource type="AtlasTexture" id=7]
+atlas = ExtResource( 2 )
+region = Rect2( 64, 0, 32, 46 )
+
+[sub_resource type="AtlasTexture" id=8]
+atlas = ExtResource( 2 )
+region = Rect2( 96, 0, 32, 46 )
+
+[sub_resource type="AtlasTexture" id=9]
+atlas = ExtResource( 2 )
+region = Rect2( 128, 0, 32, 46 )
+
+[sub_resource type="SpriteFrames" id=10]
+animations = [ {
+"frames": [ SubResource( 1 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 2 ), SubResource( 3 ), SubResource( 4 ), SubResource( 3 ) ],
+"loop": true,
+"name": "idle",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 5 ), SubResource( 6 ), SubResource( 7 ), SubResource( 8 ), SubResource( 9 ), SubResource( 9 ) ],
+"loop": false,
+"name": "intro",
+"speed": 13.0
+} ]
+
+[sub_resource type="GDScript" id=11]
+script/source = "extends Node2D
+
+onready var sprite1 = $Sprite
+onready var sprite2 = $Sprite2
+onready var sprite3 = $Sprite3
+
+export(Vector2) var radius = Vector2(16,0)
+var radius2
+var radius3
+export(float,0.1,5) var speed = 0.5
+
+#HELP HOW DO I TRIG???????? I HAVEN'T DONE THIS IN 8 YEARS
+func _ready():
+	radius2=radius.rotated(2.0 * PI/3)
+	radius3=radius.rotated(4.0 * PI/3)
+	set_physics_process(false)
+	sprite1.modulate.a=0
+	sprite2.modulate.a=0
+	sprite3.modulate.a=0
+	
+func appear():
+	set_physics_process(true)
+	
+	var t:Tween = $Tween
+	t.interpolate_property(sprite1,\"modulate:a\",0.0,1.0,.3,Tween.TRANS_QUAD,Tween.EASE_IN)
+	t.interpolate_property(sprite2,\"modulate:a\",0.0,1.0,.3,Tween.TRANS_QUAD,Tween.EASE_IN,.2)
+	t.interpolate_property(sprite3,\"modulate:a\",0.0,1.0,.3,Tween.TRANS_QUAD,Tween.EASE_IN,.4)
+	t.start()
+
+func _physics_process(delta):
+	# 1 full circle (i.e. 2 * PI) every second, clockwise
+	var rotateBy:float = 2.0 * PI * delta*speed
+	
+	# TODO: I'm pretty sure there's some way to just subtract it from
+	# rotateBy instead of having to create 3 variables
+	radius = radius.rotated(rotateBy)
+	radius2 = radius2.rotated(rotateBy)
+	radius3 = radius3.rotated(rotateBy)
+
+	# 1 full circle (i.e. 2 * PI) every 4 seconds, counter-clockwise
+	# radius = radius.rotated(2 * PI * delta * -0.25)
+
+	$Sprite.position = radius
+	$Sprite2.position= radius2
+	$Sprite3.position= radius3
+
+func getSprite(i:int)->Sprite:
+	print(i)
+	if i==2:
+		return sprite3
+	elif i==1:
+		return sprite2
+	else: #If 0, or 3, or whatever...
+		return sprite1
+"
+
+[node name="BossScarecrow" instance=ExtResource( 1 )]
+script = ExtResource( 4 )
+
+[node name="AnimatedSprite" parent="." index="1"]
+frames = SubResource( 10 )
+animation = "idle"
+frame = 3
+playing = true
+flip_h = true
+
+[node name="IntroSound" parent="." index="3"]
+stream = ExtResource( 3 )
+
+[node name="DebugLabel" parent="." index="7"]
+text = "animation = \"idle\"
+playing = true
+"
+
+[node name="SpinnyFrame" type="Node2D" parent="." index="9"]
+scale = Vector2( 4, 4 )
+script = SubResource( 11 )
+
+[node name="Sprite" type="Sprite" parent="SpinnyFrame" index="0"]
+texture = ExtResource( 6 )
+flip_h = true
+
+[node name="Sprite2" type="Sprite" parent="SpinnyFrame" index="1"]
+texture = ExtResource( 6 )
+flip_h = true
+
+[node name="Sprite3" type="Sprite" parent="SpinnyFrame" index="2"]
+texture = ExtResource( 6 )
+flip_h = true
+
+[node name="Tween" type="Tween" parent="SpinnyFrame" index="3"]
+
+[connection signal="animation_finished" from="AnimatedSprite" to="." method="_on_AnimatedSprite_animation_finished"]

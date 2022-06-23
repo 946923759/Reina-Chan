@@ -7,45 +7,27 @@ msg	If you can read this, you forgot to assign a key for your cutscene and the P
 msg	You assigned a key that doesn't exist! Go check your event block again.
 
 #KEY	Architect
-portrait	Architect
-msgbox_add	right	top
+portrait	pic_UMP9	pic_Architect
 /Architect	Heee-ey, you trash Griffin T-Dolls! Let's have some fun!	O-Oigan!, Muñecas Tacticas de pacotilla! Tengamos algo de diversion!
-msgbox_remove
-portrait	UMP9
-msgbox_add	left	top
-msg	...Who is this weirdo?	...¿Quien es este tipo raro?
-msgbox_remove
-portrait	Architect
-msgbox_add	right	top
+/UMP9	...Who is this weirdo?	...¿Quien es este tipo raro?
 /Architect	Heeeey, I heard that~!	Oye!, escuche eso~!
 
 #KEY	Alchemist1
-portrait	Alchemist	true
-msgbox_add	right	top
-msg	Hahaha! Did you really think you defeated me? That was just a dummy!	JAJAJA! ¿En verdad piensas que me has derrotado? Eso solo fue un secuaz!
+portrait	pic_Alchemist,true,0
+/Alchemist	Hahaha! Did you really think you defeated me? That was just a dummy!	JAJAJA! ¿En verdad piensas que me has derrotado? Eso solo fue un secuaz!
 msg	Take this!	¡Toma esto!
 
 #KEY	AlchemistChicken
-portrait	UMP9
-msgbox_add	left	top
+portrait	pic_UMP9	Dier,true,0
+matchnames	UMP9	Dier
 /UMP9	...A chicken? From the wall? That doesn't seem sanitary.
-msgbox_close
-portrait	Dier	true
-msgbox_open
 /Dier	You're an android, why do you care?
-msgbox_close
-portrait	UMP9
-msgbox_open
 /UMP9	Hey, T-Dolls can have stomach issues too! Somehow.
-msgbox_close
-portrait	Dier	true
-msgbox_open
 /Dier	What kind of feature is that...?
 
 #KEY	Alchemist2
-portrait	Alchemist	false
+portrait	pic_UMP9	pic_Alchemist
 speaker	Alchemist
-msgbox_add	right	top
 nop	Dear translators, this is a reference to the opening of Symphony of the Night (which quotes Andre Malraux). Hopefully it translates accurately?
 nop	https://www.youtube.com/watch?v=zTH6TlCcsu0
 msg	What is a Tactical Doll?	¿Que son los muñecos tacticos?
@@ -53,14 +35,6 @@ nop	msg	A miserable little pile of manpower, ammo, rations, parts, combat report
 msg	A miserable little pile of ammo and parts!	Una miserable pila de armamento y refacciones!
 nop	(ES: 'Have at you' is an English term so it was changed to "Prepare yourself!")
 msg	But enough talk, have at you!	Basta de charlas, preparate!
-
-#KEY	Scarecrow
-msgbox_add	right	top
-msg	Your chances of victory are zero.
-msg	Is that all they can say? Why not something like "I love you UMP9, let's go out for lunch"?
-msg	Alright.
-msgbox_transition
-msg	Nice to meet you UMP9, please die immediately.
 
 #KEY	Demo2Ending
 preload_portraits	Dier	pic_Alchemist	pic_Scarecrow

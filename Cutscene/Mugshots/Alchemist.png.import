@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/test3.png-0dd5920e8e198b3d7f4e7fd4445cc5b7.stex"
+path="res://.import/Alchemist.png-78010798d25e9c2036f1349a0757c62f.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Cutscene/Mugshots/test3.png"
-dest_files=[ "res://.import/test3.png-0dd5920e8e198b3d7f4e7fd4445cc5b7.stex" ]
+source_file="res://Cutscene/Mugshots/Alchemist.png"
+dest_files=[ "res://.import/Alchemist.png-78010798d25e9c2036f1349a0757c62f.stex" ]
 
 [params]
 

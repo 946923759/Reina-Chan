@@ -1,0 +1,54 @@
+#BG	BG-Bar	BG-Wedding	BG-Dorm	black
+#CDAUDIO	zAprilFools
+#LANGUAGES	en
+
+preload_portraits	pic_M4A1_4505	Nyto_7	Dier
+label	start
+bg	BG-Wedding
+label	choice1Begin
+portrait	pic_M4A1_4505
+/M4A1	Commander, would you like to spend the rest of your life with me? After all, I'm the most reliable one of them all, aren't I?
+choice	Yes, I'll love you forever and ever.	No way!
+condjmp_c	c1dest	1
+label	c2dest
+/M4A1	Tch... Oh whatever, I'll just make you forget and try it again.
+nop	bg	black
+jmp	start
+label	c1dest
+msg	I'm glad you've made the right choice, Commander. Now, of course we don't need my sisters in the way, right? And no more Dandelion ruining our fun, right?
+choice	Sure, I guess?	...This seems weird.
+condjmp_c	cc2dest	1
+msg	Stop noticing things and be a good commander, why don't you?
+nop	bg	black
+jmp	start
+label	cc2dest
+msg	Just sit back and let me take care of everything...
+portrait	pic_M4A1_4505	Nyto_7,true,0
+matchnames	M4A1	Dandelion	Dier
+/Dandelion	Lunasia, what are you doing to our game!?
+/M4A1	I just wanted to have some fun!
+/Dandelion	Who taught you to pull pranks like this?
+/M4A1	You did, obviously!
+portrait	pic_M4A1_4505	Nyto_7,true,0	Dier,true,0
+/Dier	Hey, is anyone going to fix this? This code is a mess and it doesn't even work properly!
+portrait	
+bg	black
+
+/ 	Meanwhile, in the griffin dorms...
+preload_portraits	665_006	pic_PP90	pic_Bronya	301	311
+bg	BG-Dorm
+portrait	665_006
+matchnames	???	PP-90	Bronya(?)	Bronya	Herrscher of Reason
+/???	Where the hell am I... My head is killing me. Wait, two Bronyas? No, three? Four? Am I hallucinating?
+portrait	665_006	pic_PP90
+/PP-90	Er, I'm PP-90.
+portrait	665_006	pic_PP90	pic_Bronya
+/Bronya(?)	I'm a Tactical Doll based on Bronya.
+portrait	665_006	pic_PP90	pic_Bronya	301
+/Bronya	And I'm your sister Bronya.
+portrait	665_006	pic_PP90	pic_Bronya	301	311
+/Herrscher of Reason	I'm Bronya after obtaining a Herrscher core.
+/???	Stop, stop! My sprite is going off-screen! And I don't care, get me the hell out of here!
+bg	black
+portrait	
+/ 	April Fools! See you next demo!

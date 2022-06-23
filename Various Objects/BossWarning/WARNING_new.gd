@@ -2,7 +2,7 @@ extends Node2D
 #extends "res://Various Objects/EventTile_Message.tres.gd"
 
 onready var sprite = $CanvasLayer/Sprite
-var gf_cutscene = preload("res://Cutscene/CutsceneMain.tscn")
+var gf_cutscene = preload("res://Cutscene/CutsceneInGame.tscn")
 
 var event_ID = Globals.EVENT_TILES.CUSTOM_EVENT
 export(String) var message_id
@@ -89,17 +89,20 @@ func part1():
 	var newCutscene = gf_cutscene.instance()
 	playerObj.add_child(newCutscene) #Needs to be done first for the _ready()
 	newCutscene.connect("cutscene_finished",self,"part2")
+	#func init_(message, parent,delim="|",msgColumn:int=1):
 	newCutscene.init_(
 		Globals.get_stage_cutscene(message_id),
 		playerObj,
-		true,
-		null,
 		"\t",
 		Globals.stage_cutscene_data['msgColumn']
 	)
 
 func part2():
 	var callback = child.playIntro();
+	if callback.stream == null:
+		print("BossBase.IntroSound: There's no audio file assigned for this boss, idiot.")
+		showWarning()
+		return
 	callback.connect("finished",self,"showWarning")
 	#var t = Timer.new()
 	#t.set_wait_time(.3)
