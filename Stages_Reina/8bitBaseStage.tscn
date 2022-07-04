@@ -23,7 +23,8 @@ extends Sprite
 #Honestly there is probably a better way to do this than
 #using a Node2D or a sprite
 
-export (int,\"Reina\",\"M16\") var player_to_spawn_in_debug=0 setget update_sprite_editor
+#,\"Shin M16\"
+export (int,\"UMP9\",\"M16A1\") var player_to_spawn_in_debug=0 setget update_sprite_editor
 export (Array,Texture) var charTextures
 var player:KinematicBody2D
 
@@ -42,7 +43,7 @@ func update_sprite_editor(new_value):
 func _ready():
 	if Engine.editor_hint:
 		return
-	var playerToSpawn = player_to_spawn_in_debug
+	var playerToSpawn = Globals.playerData.currentCharacter
 	if OS.is_debug_build():
 		playerToSpawn = player_to_spawn_in_debug
 		

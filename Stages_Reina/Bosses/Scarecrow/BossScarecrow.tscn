@@ -68,6 +68,17 @@ onready var sprite1 = $Sprite
 onready var sprite2 = $Sprite2
 onready var sprite3 = $Sprite3
 
+onready var t:Tween = $Tween
+
+enum STATES {
+	spinning,
+	top,
+	danmaku
+}
+var curState = STATES.spinning
+
+var player:KinematicBody2D
+
 export(Vector2) var radius = Vector2(16,0)
 var radius2
 var radius3
@@ -85,28 +96,69 @@ func _ready():
 func appear():
 	set_physics_process(true)
 	
-	var t:Tween = $Tween
 	t.interpolate_property(sprite1,\"modulate:a\",0.0,1.0,.3,Tween.TRANS_QUAD,Tween.EASE_IN)
 	t.interpolate_property(sprite2,\"modulate:a\",0.0,1.0,.3,Tween.TRANS_QUAD,Tween.EASE_IN,.2)
 	t.interpolate_property(sprite3,\"modulate:a\",0.0,1.0,.3,Tween.TRANS_QUAD,Tween.EASE_IN,.4)
 	t.start()
 
+var timer:float=0.0
 func _physics_process(delta):
-	# 1 full circle (i.e. 2 * PI) every second, clockwise
-	var rotateBy:float = 2.0 * PI * delta*speed
+	if timer>=0.0:
+		timer-=delta
+		return
 	
-	# TODO: I'm pretty sure there's some way to just subtract it from
-	# rotateBy instead of having to create 3 variables
-	radius = radius.rotated(rotateBy)
-	radius2 = radius2.rotated(rotateBy)
-	radius3 = radius3.rotated(rotateBy)
+	#sprite1.get_node(\"Label\").text=\"1\\nRot: \"+String(sprite1.rotation_degrees)
+	if curState==STATES.spinning:
+		# 1 full circle (i.e. 2 * PI) every second, clockwise
+		var rotateBy:float = 2.0 * PI * delta*speed
+		
+		# TODO: I'm pretty sure there's some way to just subtract it from
+		# rotateBy instead of having to create 3 variables
+		radius = radius.rotated(rotateBy)
+		radius2 = radius2.rotated(rotateBy)
+		radius3 = radius3.rotated(rotateBy)
 
-	# 1 full circle (i.e. 2 * PI) every 4 seconds, counter-clockwise
-	# radius = radius.rotated(2 * PI * delta * -0.25)
+		# 1 full circle (i.e. 2 * PI) every 4 seconds, counter-clockwise
+		# radius = radius.rotated(2 * PI * delta * -0.25)
 
-	$Sprite.position = radius
-	$Sprite2.position= radius2
-	$Sprite3.position= radius3
+		$Sprite.position = radius
+		$Sprite2.position= radius2
+		$Sprite3.position= radius3
+	elif curState==STATES.top: #I miss preprocessor functions
+		var p_pos = player.global_position
+		sprite1.rotation_degrees=sprite1.global_position.angle_to_point(p_pos)*180/PI
+		sprite2.rotation_degrees=sprite2.global_position.angle_to_point(p_pos)*180/PI
+		sprite3.rotation_degrees=sprite3.global_position.angle_to_point(p_pos)*180/PI
+
+func set_float_to_top(goTowards:Vector2):
+	curState=STATES.top
+	player=get_node(\"/root/Node2D/\").get_player()
+	
+	t.interpolate_property(sprite1,\"global_position\",null,goTowards+Vector2(-1,1)*64,1,Tween.TRANS_CUBIC,Tween.EASE_OUT)
+	t.interpolate_property(sprite2,\"global_position\",null,goTowards,1,Tween.TRANS_CUBIC,Tween.EASE_OUT)
+	t.interpolate_property(sprite3,\"global_position\",null,goTowards+Vector2(1,1)*64,1,Tween.TRANS_CUBIC,Tween.EASE_OUT)
+	
+#	t.interpolate_property(sprite1,\"rotation_degrees\",null,-45,1,Tween.TRANS_CUBIC,Tween.EASE_OUT)
+#	t.interpolate_property(sprite2,\"rotation_degrees\",null,-45,1,Tween.TRANS_CUBIC,Tween.EASE_OUT)
+#	t.interpolate_property(sprite3,\"rotation_degrees\",null,-45,1,Tween.TRANS_CUBIC,Tween.EASE_OUT)
+#
+
+	t.start()
+	#return 1.0
+	
+func set_return_circling(tweenTime:float=1.0):
+	#NOT GLOBAL!!!
+	t.interpolate_property(sprite1,\"position\",null,radius,  tweenTime,Tween.TRANS_CUBIC,Tween.EASE_OUT)
+	t.interpolate_property(sprite2,\"position\",null,radius2, tweenTime,Tween.TRANS_CUBIC,Tween.EASE_OUT)
+	t.interpolate_property(sprite3,\"position\",null,radius3, tweenTime,Tween.TRANS_CUBIC,Tween.EASE_OUT)
+	
+	t.interpolate_property(sprite1,\"rotation_degrees\",null,0.0,tweenTime,Tween.TRANS_CUBIC,Tween.EASE_OUT)
+	t.interpolate_property(sprite2,\"rotation_degrees\",null,0.0,tweenTime,Tween.TRANS_CUBIC,Tween.EASE_OUT)
+	t.interpolate_property(sprite3,\"rotation_degrees\",null,0.0,tweenTime,Tween.TRANS_CUBIC,Tween.EASE_OUT)
+
+	t.start()
+	timer=tweenTime
+	curState=STATES.spinning
 
 func getSprite(i:int)->Sprite:
 	print(i)
@@ -124,7 +176,7 @@ script = ExtResource( 4 )
 [node name="AnimatedSprite" parent="." index="1"]
 frames = SubResource( 10 )
 animation = "idle"
-frame = 3
+frame = 1
 playing = true
 flip_h = true
 
@@ -144,14 +196,47 @@ script = SubResource( 11 )
 texture = ExtResource( 6 )
 flip_h = true
 
+[node name="Label" type="Label" parent="SpinnyFrame/Sprite" index="0"]
+margin_right = 40.0
+margin_bottom = 14.0
+text = "1"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="Sprite2" type="Sprite" parent="SpinnyFrame" index="1"]
 texture = ExtResource( 6 )
 flip_h = true
+
+[node name="Label" type="Label" parent="SpinnyFrame/Sprite2" index="0"]
+margin_right = 40.0
+margin_bottom = 14.0
+text = "2"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Sprite3" type="Sprite" parent="SpinnyFrame" index="2"]
 texture = ExtResource( 6 )
 flip_h = true
 
+[node name="Label" type="Label" parent="SpinnyFrame/Sprite3" index="0"]
+margin_right = 40.0
+margin_bottom = 14.0
+text = "3"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="Tween" type="Tween" parent="SpinnyFrame" index="3"]
+
+[node name="DebugLabel3" type="Label" parent="." index="10"]
+margin_top = -256.0
+margin_right = 49.0
+margin_bottom = -242.0
+text = "topLeft:"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [connection signal="animation_finished" from="AnimatedSprite" to="." method="_on_AnimatedSprite_animation_finished"]

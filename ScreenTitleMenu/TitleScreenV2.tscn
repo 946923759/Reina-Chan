@@ -132,7 +132,7 @@ func mouse_input(event):
 				
 				#It has to be done on start/continue in case the player changed the language
 				Globals.load_stage_cutscenes()
-				get_tree().change_scene(\"res://StageSelectV2/NewBossSelect.tscn\")
+				get_tree().change_scene(\"res://ScreenSelectCharacter/ScreenSelectCharacter.tscn\")
 			else:
 				parent.selectSound.play()
 				Globals.playerData.gameDifficulty=i
@@ -153,7 +153,7 @@ func input():
 		#Globals.nextStage = \"res://Stages_Reina/Architect/StageArchitect.tscn\"
 		#It has to be done on start/continue in case the player changed the language
 		Globals.load_stage_cutscenes()
-		get_tree().change_scene(\"res://StageSelectV2/NewBossSelect.tscn\")
+		get_tree().change_scene(\"res://ScreenSelectCharacter/ScreenSelectCharacter.tscn\")
 	
 func OnCommand():
 	parent.diffusealpha(desc,1)

@@ -52,7 +52,7 @@ func _physics_process(_delta):
 		sprite.flip_h = (facing == DIRECTION.RIGHT)
 		
 	if type==1 and !dropped:
-		var player = get_node_or_null("/root/Node2D/Player")
+		var player = get_node("/root/Node2D/").get_player()
 		if player:
 			if player.global_position.x > global_position.x-5 and player.global_position.x < global_position.x+5:
 				

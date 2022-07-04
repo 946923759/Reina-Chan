@@ -238,3 +238,4 @@ func _on_CameraAdjuster_body_entered(body):
 			print("SKORP: Already obtained a player object, maybe Player 2?")
 		player=body
 		set_process(true)
+		print("SKORP: Player touched activation trigger!")

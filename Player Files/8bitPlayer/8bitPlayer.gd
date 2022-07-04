@@ -271,7 +271,19 @@ func _notification(what):
 		$PauseScreen.OnCommand()
 
 
+# "WTF IS THE FRAME TIMER????"
+# In Mega Man, the character moves about 1 pixel to the right for
+# the first frame you press right, then waits 4 more frames.
+# Therefore we have to pause a bit before Reina/M16 will
+# start moving...
+var frameTimer:float =0.0
+#This one counts how long it's been since the button was let go,
+#Because we only want to reset the frame timer after about 3-4 frames.
+var negativeFrameTimer:float=0.0
+
+var isOnFloor:bool=false
 func get_input(delta):
+	isOnFloor=is_on_floor()
 	#It's here because freeRoam overrides R1
 	if Input.is_action_just_pressed("R1"):
 		var i = currentWeapon+1
@@ -420,11 +432,39 @@ func get_input(delta):
 		velocity = velocity.normalized() * SPEED
 	#Your normal movement processing
 	else:
+		#if left or right and is_on_floor() and frameTimer<5/60:
+		if left==false and right==false:
+			if frameTimer > 0.0:
+				negativeFrameTimer+=delta
+			if negativeFrameTimer>7.0/60.0:
+				frameTimer=0.0
+				negativeFrameTimer=0.0
+		
 		if right and position.x < $Camera2D.destPositions[2]-40:
-			velocity.x = run_speed
+			if is_on_floor() and frameTimer < 5.0/60.0:
+				if frameTimer < 1.0/60.0:
+					velocity.x = 125.0
+				else:
+					velocity.x = 0
+			else:
+				velocity.x = run_speed
+			#Always add to the frameTimer, because even in the air
+			# and landing you want to resume immediately
+			frameTimer+=delta
+				
 			sprite.flip_h = false
 		elif left and position.x > $Camera2D.destPositions[0]+40:
-			velocity.x = -run_speed
+			if is_on_floor() and frameTimer < 5.0/60.0:
+				if frameTimer < 1.0/60.0:
+					velocity.x = -125.0
+				else:
+					velocity.x = 0
+			else:
+				velocity.x = -run_speed
+			#Always add to the frameTimer, because even in the air
+			# and landing you want to resume immediately
+			frameTimer+=delta
+			
 			sprite.flip_h = true
 		elif !movementLocked and state!=State.DASH and state!=State.DASH_ATTACK: #If movement locked, assume velocity should be preserved
 			velocity.x=0
@@ -693,7 +733,7 @@ func _physics_process(delta):
 			footstep.play()
 		state = State.NORMAL
 			
-		if velocity.x != 0:
+		if velocity.x > 125.0 or velocity.x < -125.0:
 			if shoot_sprite_time <= 0:
 				if sprite.animation == "WalkLoopShoot":
 					var prevFrame = sprite.get_frame()

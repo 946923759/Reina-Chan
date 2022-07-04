@@ -54,7 +54,7 @@ script/source = "extends Node2D
 var bosses = {
 	\"StageArchitect.tscn\":\"res://Stages_Reina/Bosses/Architect/BossArchitect_v2.tscn\",
 	\"Alchemist_v2.tscn\":\"res://Stages_Reina/Bosses/Alchemist/BossAlchemist.tscn\",
-	\"Scarecrow.tscn\":\"res://Stages_Reina/Bosses/Alchemist/BossAlchemist.tscn\"
+	\"Scarecrow.tscn\":\"res://Stages_Reina/Bosses/Scarecrow/BossScarecrow.tscn\"
 }
 
 var bi
@@ -66,7 +66,7 @@ func _ready():
 	else:
 		b = load(\"res://Stages_Reina/Bosses/Architect/BossArchitect_v2.tscn\")
 	bi = b.instance()
-	bi.position=Vector2(Globals.SCREEN_CENTER_X,375)
+	bi.position=Vector2(Globals.SCREEN_CENTER_X,315)
 	add_child(bi)
 	bi.HPBar.visible=false
 	
@@ -156,13 +156,13 @@ __meta__ = {
 wait_time = 0.3
 autostart = true
 
-[node name="Node2D" type="Node2D" parent="."]
+[node name="BossSpriteLoader" type="Node2D" parent="."]
 script = SubResource( 4 )
 
-[node name="StaticBody2D" type="StaticBody2D" parent="Node2D"]
+[node name="StaticBody2D" type="StaticBody2D" parent="BossSpriteLoader"]
 collision_layer = 18
 collision_mask = 18
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D/StaticBody2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BossSpriteLoader/StaticBody2D"]
 position = Vector2( 642.318, 428.103 )
 shape = SubResource( 5 )

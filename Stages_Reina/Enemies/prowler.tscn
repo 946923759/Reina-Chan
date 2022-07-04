@@ -7,6 +7,23 @@
 [sub_resource type="GDScript" id=1]
 script/source = "extends \"res://Stages/EnemyBaseScript.gd\"
 
+#export var windowTitle: String = \"<Replace me please>\" setget _sg_windowTitle
+#export var target: String = \"bg_boxOverlay\"
+#export var targetProperty: String = \"editor_description\"
+#
+#func _sg_windowTitle(newVal: String) -> void:
+#	windowTitle = newVal
+#	_findTarget(self)
+#
+#func _findTarget(node: Node) -> void:
+#	if node.name == target:
+#		if targetProperty in node:
+#			print(\"property '\",targetProperty,\"' in node '\",node.name,\"'\")
+#			node[targetProperty] = windowTitle
+#	else:
+#		for n in node.get_children():
+#			_findTarget(n)
+
 export(int, \"Normal\",\"Left\",\"Ceiling\",\"Right\") var gravity
 var facing_vert=1
 
@@ -25,6 +42,7 @@ var player:KinematicBody2D
 #onready var player:KinematicBody2D = get_node(\"/root/Node2D\").player
 
 func _ready():
+	#_findTarget(self)
 	#rotation_degrees=gravity*90
 	if gravity==2:
 		facing_vert=-1

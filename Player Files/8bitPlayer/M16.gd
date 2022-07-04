@@ -6,6 +6,12 @@ onready var a2 = get_node("Sprite/AfterImage2")
 onready var a3 = get_node("Sprite/AfterImage3")
 var oldPositions:PoolVector2Array = PoolVector2Array()
 
+
+var playerChargeShot = preload("res://Player Files/8bitPlayer/PlayerChargeShot.tscn")
+onready var chargeStart:AudioStreamPlayer2D = $ChargeStartSound
+onready var chargeLoop:AudioStreamPlayer2D = $ChargeLoopSound
+onready var chargeShotS:AudioStreamPlayer2D = $ChargeShotFireSound
+
 func _ready():
 	#oldPositions = PoolVector2Array()
 	oldPositions.resize(6)
@@ -22,7 +28,12 @@ func _ready():
 	#sprite.get_material().set_shader_param("colorToSwap1", Color("#c2c2c2"))
 	#sprite.get_material().set_shader_param("colorToSwap2", Color("#f0f0f0"))
 
+	#chargeStart.connect("finished",chargeLoop,"play")
+
+
 #TODO: dude lmao
+var chargeShotTime:float=0.0
+var startedCharging:bool=false
 func get_input(delta):
 	#print("lmao 2")
 	var right = Input.is_action_pressed('ui_right')
@@ -31,8 +42,10 @@ func get_input(delta):
 	var down = Input.is_action_pressed('ui_down')
 	var jump = Input.is_action_just_pressed('ui_select')
 	var shoot = Input.is_action_just_pressed("ui_cancel")
+	var chargeShot = Input.is_action_pressed("ui_cancel") and currentWeapon==Globals.Weapons.Buster
 	if rapidFire and shoot_time > .1:
 		shoot = Input.is_action_pressed("ui_cancel")
+		chargeShot=false #no charge shots when rapidFire!
 	
 	if Globals.flipButtons:
 		jump = Input.is_action_just_pressed('ui_cancel')
@@ -58,14 +71,72 @@ func get_input(delta):
 	if (left and right) or movementLocked or grabbingLadder:
 		left = false;
 		right = false;
-		
+	
+	
+	if chargeShot:
+		chargeShotTime+=delta
+		if startedCharging:
+			if chargeStart.playing and chargeStart.get_playback_position() >= 1.00:
+				#TODO: stop() runs before play() so there's a gap in the audio
+				chargeStart.stop()
+				chargeLoop.play()
+			#pass
+		elif chargeShotTime>.5:
+			$Charging.visible=true
+			chargeStart.play()
+			startedCharging=true
+	elif chargeShotTime>0.0 and chargeShot==false:
+		if chargeShotTime > 2.0:
+			chargeShotS.play()
+			print("Charge shot fired!")
+			
+			var bi = playerChargeShot.instance()
+			var ss
+			if sprite.flip_h:
+				ss = -1.0
+			else:
+				ss = 1.0
+			#Note: $ is shorthand for get_node()
+			#Right here it's doing get_node("bullet_shoot")
+			#ternary: var p = 1 if f else -1
+			var pos = position + Vector2(73*ss, 10)
+			if state == State.ON_LADDER:
+				pos = position + Vector2(95*ss, -20)
+			
+			bi.position = pos
+			#get_parent().add_child(bi)
+			bulletHolder.add_child(bi)
+			#KinematicBody2D only
+			#bi.linear_velocity = Vector2(800.0 * ss, 0)
+			#RigidBody2D only
+			bi.init(int(ss))
+			
+			#add_collision_exception_with(bi) # Make bullet and this not collide
+			
+	#		if Globals.playerData.gameDifficulty > Globals.Difficulty.EASY:
+	#			bulletManager.push_bullet(bi)
+	#		else:
+	#			for child in bulletHolder.get_children():
+	#				if is_instance_valid(child) and child.get_class()=="KinematicBody2D":
+	#					#print(child.get_class())
+	#					#child.add_collision_exception_with(bi)
+	#					bi.add_collision_exception_with(child)
+	#			pass
+			if sprite.animation=="IdleShoot":
+				sprite.frame = 0
+			shoot_sprite_time = 0.3
+			#$ShootSound.play()
+		$Charging.visible=false
+		chargeShotTime=0
+		startedCharging=false
+		chargeStart.stop()
+		chargeLoop.stop()
+	
 	#All this shit is copypasted from the example platformer so I have no idea how it works
 	# A good idea when implementing characters of all kinds,
 	# compensates for physics imprecision, as well as human reaction delay.
 	if shoot:
-		if false:
-			pass
-		else:
+		if true:
 			shoot_time = 0
 			if (Globals.playerData.gameDifficulty <= Globals.Difficulty.EASY or bulletManager.get_num_bullets() < 3) and weaponMeters[currentWeapon]>=Globals.weaponEnergyCost[currentWeapon]:
 				

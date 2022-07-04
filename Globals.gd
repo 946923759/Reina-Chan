@@ -84,8 +84,17 @@ var stagesToString = [ #Yeah it's stupid
 	"Scarecrow"
 ]
 
+enum Characters {
+	UMP9,
+	M16A1,
+	Ultimate_M16
+}
+func characterToString(d:int=playerData.currentCharacter)->String:
+	return Characters.keys()[d]
+
 var playerData={
 	gameDifficulty = Difficulty.EASY,
+	currentCharacter = Characters.UMP9,
 	availableWeapons = [
 		true,
 		true, #Architect Rocket
@@ -111,6 +120,15 @@ var playerData={
 		false
 	]
 }
+
+#EXCLUDING THE OPTIONS! This is the 'extras' in the json.
+var systemData:Dictionary = {
+	if_you_can_see_this_you_are_a_cheater=false, #No, setting it to true won't do anything.
+	unlocked_ZeroMode=false,
+	unlocked_M16A1=true,
+	unlocked_M16_Ultimate=false
+}
+var unlockedZeroMode:bool=false
 
 #DO NOT TRANSLATE WITHIN THIS FUNCTION
 #Some language keys use it for stuff like "desc_SUPERHERO"
@@ -148,7 +166,6 @@ var weaponColorSwaps = [
 	]
 ]
 
-var unlockedZeroMode:bool=false
 
 var playerHasSaveData:bool=false
 var playerHadSystemData:bool=false

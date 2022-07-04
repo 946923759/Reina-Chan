@@ -51,7 +51,7 @@ func run_event(sender):
 	get_node(\"/root/Node2D/Player/Camera2D\").shakeCamera(10)
 "
 
-[sub_resource type="GDScript" id=8]
+[sub_resource type="GDScript" id=2]
 script/source = "tool
 extends Sprite
 
@@ -107,22 +107,22 @@ func _ready():
 	self.texture=null
 "
 
-[sub_resource type="RectangleShape2D" id=2]
-extents = Vector2( 32, 320 )
-
 [sub_resource type="RectangleShape2D" id=3]
-extents = Vector2( 1120, 32 )
+extents = Vector2( 32, 320 )
 
 [sub_resource type="RectangleShape2D" id=4]
 extents = Vector2( 1120, 32 )
 
 [sub_resource type="RectangleShape2D" id=5]
-extents = Vector2( 128, 32 )
+extents = Vector2( 1120, 32 )
 
 [sub_resource type="RectangleShape2D" id=6]
-extents = Vector2( 32, 256 )
+extents = Vector2( 128, 32 )
 
 [sub_resource type="RectangleShape2D" id=7]
+extents = Vector2( 32, 256 )
+
+[sub_resource type="RectangleShape2D" id=8]
 extents = Vector2( 128, 32 )
 
 [node name="Node2D" type="Node2D"]
@@ -321,7 +321,7 @@ texture = ExtResource( 2 )
 centered = false
 region_enabled = true
 region_rect = Rect2( 0, 0, 26, 32 )
-script = SubResource( 8 )
+script = SubResource( 2 )
 
 [node name="BulletHolder" type="Node2D" parent="."]
 
@@ -351,7 +351,7 @@ rightBound = -999
 bottomBound = 12
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="room120-0/CameraAdjuster"]
-shape = SubResource( 2 )
+shape = SubResource( 3 )
 
 [node name="Enemy5" parent="room120-0" instance=ExtResource( 4 )]
 position = Vector2( 512, -64 )
@@ -368,7 +368,7 @@ rightBound = -999
 bottomBound = 12
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CameraAdjuster2"]
-shape = SubResource( 2 )
+shape = SubResource( 3 )
 
 [node name="EventTile5" type="StaticBody2D" parent="."]
 position = Vector2( 12927, 2240 )
@@ -382,7 +382,7 @@ event_ID = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EventTile5"]
 position = Vector2( 32, 32 )
-shape = SubResource( 3 )
+shape = SubResource( 4 )
 
 [node name="EventTile6" type="StaticBody2D" parent="."]
 position = Vector2( 8319, 2304 )
@@ -396,7 +396,7 @@ event_ID = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EventTile6"]
 position = Vector2( 32, 32 )
-shape = SubResource( 4 )
+shape = SubResource( 5 )
 
 [node name="room40-0 to 60-0" type="Node2D" parent="."]
 
@@ -562,7 +562,7 @@ bottomBound = 48
 freeze_player_during_transition = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="room140-24/CameraAdjuster4"]
-shape = SubResource( 5 )
+shape = SubResource( 6 )
 
 [node name="Scout2" parent="room140-24" instance=ExtResource( 38 )]
 position = Vector2( 864, 448 )
@@ -635,7 +635,7 @@ position = Vector2( 9535, 1728 )
 respawn_facing_left = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Checkpoints/Node2D2"]
-shape = SubResource( 6 )
+shape = SubResource( 7 )
 
 [node name="CameraAdjuster6" parent="." instance=ExtResource( 27 )]
 position = Vector2( 11520, -256 )
@@ -677,7 +677,7 @@ __meta__ = {
 }
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Jupiter Cannon miniboss/StaticBody2D"]
-shape = SubResource( 7 )
+shape = SubResource( 8 )
 
 [node name="CameraAdjuster5" parent="." instance=ExtResource( 27 )]
 position = Vector2( 10207, 2752 )

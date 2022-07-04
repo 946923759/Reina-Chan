@@ -10,7 +10,7 @@ enum LanguageType {
 var currentLanguage:String="en"
 var currentLanguageType:int = LanguageType.ASCII
 var translation:Dictionary={}
-var font #No point in preloading it when it gets overwritten on init
+var font:Font #No point in preloading it when it gets overwritten on init
 #var font=preload("res://MM2Font.tres")
 
 func GetLanguageDir()->String:

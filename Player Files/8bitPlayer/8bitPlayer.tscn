@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=2]
+[gd_scene load_steps=40 format=2]
 
 [ext_resource path="res://Player Files/mission start2.png" type="Texture" id=1]
 [ext_resource path="res://Character Sprites/ump9/ump9.tres" type="SpriteFrames" id=2]
@@ -28,6 +28,7 @@
 [ext_resource path="res://Player Files/8bitPlayer/TouchScreenUI/shadedDark09.png" type="Texture" id=26]
 [ext_resource path="res://Player Files/8bitPlayer/TouchScreenDPad.gd" type="Script" id=27]
 [ext_resource path="res://Player Files/8bitPlayer/TouchScreenUI/shadedDark14.png" type="Texture" id=28]
+[ext_resource path="res://addons/godot-next/gui/debug_label.gd" type="Script" id=29]
 
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 19 )
@@ -588,5 +589,20 @@ __meta__ = {
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ChargeDash"]
 shape = SubResource( 10 )
+
+[node name="DebugLabel" type="Label" parent="."]
+margin_left = 14.6301
+margin_top = -99.5787
+margin_right = 128.63
+margin_bottom = -68.5787
+text = "frameTimer = null
+isOnFloor = null
+"
+script = ExtResource( 29 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+target_path = NodePath("..")
+properties = PoolStringArray( "frameTimer", "isOnFloor" )
 
 [connection signal="timeout" from="WeaponSwitch/TimeToShow" to="WeaponSwitch" method="_on_Timer_timeout"]

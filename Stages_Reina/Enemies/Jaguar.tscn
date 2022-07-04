@@ -130,7 +130,6 @@ maxHealth = 6
 shapeOverride = SubResource( 2 )
 
 [node name="AnimatedSprite" parent="." index="0"]
-scale = Vector2( 4, 4 )
 frames = SubResource( 10 )
 
 [node name="DebugLabel" type="Label" parent="." index="6"]

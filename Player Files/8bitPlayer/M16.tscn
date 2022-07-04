@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://Player Files/8bitPlayer/8bitPlayer.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Character Sprites/m16/m16.tres" type="SpriteFrames" id=2]
@@ -6,6 +6,42 @@
 [ext_resource path="res://ParticleEffects/GreyscaleShader.tres" type="Material" id=4]
 [ext_resource path="res://Character Sprites/m16/m16dash.png" type="Texture" id=5]
 [ext_resource path="res://addons/godot-next/gui/debug_label.gd" type="Script" id=6]
+[ext_resource path="res://Character Sprites/m16/charge.png" type="Texture" id=7]
+[ext_resource path="res://Sounds/Classic/Mega Man 6 SRX (34) - Maybe Charge Shot.wav" type="AudioStream" id=8]
+[ext_resource path="res://Sounds/Classic/ChargeBegin.wav" type="AudioStream" id=9]
+[ext_resource path="res://Sounds/Classic/ChargeLoop.wav" type="AudioStream" id=10]
+
+[sub_resource type="AtlasTexture" id=1]
+atlas = ExtResource( 7 )
+region = Rect2( 0, 0, 48, 46 )
+
+[sub_resource type="AtlasTexture" id=2]
+atlas = ExtResource( 7 )
+region = Rect2( 48, 0, 48, 46 )
+
+[sub_resource type="AtlasTexture" id=3]
+atlas = ExtResource( 7 )
+region = Rect2( 96, 0, 48, 46 )
+
+[sub_resource type="AtlasTexture" id=4]
+atlas = ExtResource( 7 )
+region = Rect2( 144, 0, 48, 46 )
+
+[sub_resource type="AtlasTexture" id=5]
+atlas = ExtResource( 7 )
+region = Rect2( 192, 0, 48, 46 )
+
+[sub_resource type="AtlasTexture" id=6]
+atlas = ExtResource( 7 )
+region = Rect2( 240, 0, 48, 46 )
+
+[sub_resource type="SpriteFrames" id=7]
+animations = [ {
+"frames": [ SubResource( 1 ), SubResource( 2 ), SubResource( 3 ), SubResource( 4 ), SubResource( 5 ), SubResource( 6 ) ],
+"loop": true,
+"name": "default",
+"speed": 15.0
+} ]
 
 [node name="M16" instance=ExtResource( 1 )]
 script = ExtResource( 3 )
@@ -13,9 +49,9 @@ dash_multiplier = 2.0
 
 [node name="Sprite" parent="." index="0"]
 frames = ExtResource( 2 )
-animation = "LadderShoot"
 
 [node name="AfterImage1" type="Sprite" parent="Sprite" index="0"]
+visible = false
 modulate = Color( 0.788235, 0.788235, 0.788235, 0.54902 )
 show_behind_parent = true
 material = ExtResource( 4 )
@@ -24,6 +60,7 @@ region_enabled = true
 region_rect = Rect2( 0, 0, 40, 32 )
 
 [node name="AfterImage2" type="Sprite" parent="Sprite" index="1"]
+visible = false
 modulate = Color( 0.788235, 0.788235, 0.788235, 0.305882 )
 show_behind_parent = true
 material = ExtResource( 4 )
@@ -32,6 +69,7 @@ region_enabled = true
 region_rect = Rect2( 0, 0, 40, 32 )
 
 [node name="AfterImage3" type="Sprite" parent="Sprite" index="2"]
+visible = false
 modulate = Color( 0.788235, 0.788235, 0.788235, 0.196078 )
 show_behind_parent = true
 material = ExtResource( 4 )
@@ -64,3 +102,18 @@ text = "Offset = "
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Charging" type="AnimatedSprite" parent="." index="1"]
+scale = Vector2( 2, 2 )
+frames = SubResource( 7 )
+frame = 1
+playing = true
+
+[node name="ChargeStartSound" type="AudioStreamPlayer2D" parent="." index="12"]
+stream = ExtResource( 9 )
+
+[node name="ChargeLoopSound" type="AudioStreamPlayer2D" parent="." index="13"]
+stream = ExtResource( 10 )
+
+[node name="ChargeShotFireSound" type="AudioStreamPlayer2D" parent="." index="14"]
+stream = ExtResource( 8 )
