@@ -1,4 +1,5 @@
 extends Node2D
+signal player_entered_door()
 
 export (bool) var automatically_set_x_bounds = true
 export (bool) var boss_room_door = false
@@ -74,6 +75,8 @@ func move(obj):
 				[.5,Vector2(obj.run_speed*facing,0),"",false],
 				[.3,Vector2(0,0),"Idle"]
 			])
+			
+		emit_signal("player_entered_door")
 		
 #func _process(delta):
 #	var time = 5/16;

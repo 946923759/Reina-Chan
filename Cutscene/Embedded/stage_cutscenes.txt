@@ -54,7 +54,7 @@ msg	A miserable little pile of ammo and parts!	Una miserable pila de armamento y
 nop	(ES: 'Have at you' is an English term so it was changed to "Prepare yourself!")
 msg	But enough talk, have at you!	Basta de charlas, preparate!
 
-#KEY	Scarecrow
+#KEY	Scarecrow2
 msgbox_add	right	top
 msg	Your chances of victory are zero.
 msg	Is that all they can say? Why not something like "I love you UMP9, let's go out for lunch"?

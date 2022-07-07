@@ -117,8 +117,8 @@ func _process(delta):
 var stage=0
 var lastTouchedPlayer:KinematicBody2D
 func run_event(player:KinematicBody2D):
-	if (    player.global_position.y+40<= global_position.y-drawSize.y/2+sandFallProgress
-		and player.global_position.y+40>= global_position.y-drawSize.y/2+sandFallProgress2
+	if (    player.global_position.y+40<= global_position.y-drawSize.y/2+sandFallProgress #bottom
+		and player.global_position.y+40>= global_position.y-drawSize.y/2+sandFallProgress2+32 #top
 		):
 		if stage==0:
 			player.set_collision_mask_bit(0,false)

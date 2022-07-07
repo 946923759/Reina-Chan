@@ -36,6 +36,29 @@ msg	A miserable little pile of ammo and parts!	Una miserable pila de armamento y
 nop	(ES: 'Have at you' is an English term so it was changed to "Prepare yourself!")
 msg	But enough talk, have at you!	Basta de charlas, preparate!
 
+#KEY	Scarecrow1
+portrait	pic_UMP9	pic_VZ61_D
+matchnames	UMP9	Skorpion
+nop	Maybe redo this one so she says something like "Thank you for freeing me"
+/Skorpion	Waaaah, that was my ultimate weapon! I paid 8000 gems to MDR for that!
+/UMP9	Ultimate... Weapon? What a horrifying weapon.
+/Skorpion	Oh well.... Here, take this. It will help you.
+/UMP9	Thanks!
+portrait	
+msgbox_transition
+/SYSTEM	You obtained the air dash! Press UP+Jump in mid-air to dash.
+msg	There are certain locations in other stages that are only possible to cross using the dash. Try searching everywhere, you might find a shortcut!
+nop	msg	There are more power ups throughout the game, but they're hidden. Try searching everywhere to find them all.
+
+#KEY	Scarecrow2
+portrait	pic_UMP9	pic_Scarecrow
+matchnames	UMP9	Scarecrow
+/Scarecrow	Your chances of victory are zero.
+/UMP9	Is that all they can say? Why not something like "I love you UMP9, let's go out for lunch"?
+/Scarecrow	Alright.
+msgbox_transition
+msg	Nice to meet you UMP9, please die immediately.
+
 #KEY	Demo2Ending
 preload_portraits	Dier	pic_Alchemist	pic_Scarecrow
 matchnames	AmWorks	Alchemist	Scarecrow

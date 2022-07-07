@@ -1,10 +1,11 @@
-[gd_resource type="TileSet" load_steps=34 format=2]
+[gd_resource type="TileSet" load_steps=35 format=2]
 
 [ext_resource path="res://Stages_Reina/Scarecrow/tileset.png" type="Texture" id=1]
 [ext_resource path="res://Various Objects/Special Blocks/spikeball.png" type="Texture" id=2]
 [ext_resource path="res://Various Objects/Special Blocks/deathBlock.png" type="Texture" id=3]
 [ext_resource path="res://Stages_Reina/Scarecrow/tileset_2.png" type="Texture" id=4]
 [ext_resource path="res://Stages_Reina/Alchemist/ladderTile.png" type="Texture" id=5]
+[ext_resource path="res://Stages/WaterStageTest/shadow.png" type="Texture" id=6]
 
 [sub_resource type="ConvexPolygonShape2D" id=1]
 points = PoolVector2Array( 64, 16, 0, 16, 0, 0, 64, 0 )
@@ -875,3 +876,17 @@ points = PoolVector2Array( 64, 16, 0, 16, 0, 0, 64, 0 )
 "shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
 } ]
 42/z_index = 0
+43/name = "shadow.png 43"
+43/texture = ExtResource( 6 )
+43/tex_offset = Vector2( 0, 0 )
+43/modulate = Color( 1, 1, 1, 1 )
+43/region = Rect2( 0, 0, 16, 16 )
+43/tile_mode = 0
+43/occluder_offset = Vector2( 0, 0 )
+43/navigation_offset = Vector2( 0, 0 )
+43/shape_offset = Vector2( 0, 0 )
+43/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+43/shape_one_way = false
+43/shape_one_way_margin = 0.0
+43/shapes = [  ]
+43/z_index = 0

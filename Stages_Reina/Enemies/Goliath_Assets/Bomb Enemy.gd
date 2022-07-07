@@ -19,6 +19,9 @@ func _ready():
 		$AnimatedSprite2.playing=true
 		sprite.frame=0
 		#$Carry.frame=0
+	elif type==0 and !Engine.editor_hint:
+		$Carrying.queue_free()
+		
 	#set_process(Engine.editor_hint)
 	set_physics_process(!Engine.editor_hint)
 	

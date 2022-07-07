@@ -19,6 +19,7 @@ use_large_explosion = true
 [node name="AnimatedSprite" parent="." index="0"]
 scale = Vector2( 3, 3 )
 frames = ExtResource( 4 )
+frame = 1
 playing = true
 offset = Vector2( 2, 0 )
 
@@ -31,7 +32,6 @@ visible = false
 scale = Vector2( 3, 3 )
 frames = ExtResource( 4 )
 animation = "legsOnly"
-frame = 1
 playing = true
 offset = Vector2( 2, 0 )
 

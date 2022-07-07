@@ -1,4 +1,4 @@
-[gd_scene load_steps=66 format=2]
+[gd_scene load_steps=67 format=2]
 
 [ext_resource path="res://Stages/IceMan/IceManTileset.tres" type="TileSet" id=1]
 [ext_resource path="res://Stages_Reina/Enemies/Dinergate.tscn" type="PackedScene" id=2]
@@ -46,6 +46,8 @@
 [ext_resource path="res://Stages_Reina/Enemies/prowler.tscn" type="PackedScene" id=44]
 [ext_resource path="res://Sounds/Akuma Fire.wav" type="AudioStream" id=45]
 [ext_resource path="res://Character Sprites/m16/m16Idle.png" type="Texture" id=46]
+[ext_resource path="res://Various Objects/CameraController/CameraScrollRight.tscn" type="PackedScene" id=47]
+[ext_resource path="res://Character Sprites/skorp/skorp.tscn" type="PackedScene" id=48]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 1920, 32 )
@@ -368,43 +370,6 @@ b = Vector2( 0, 192 )
 
 [sub_resource type="RectangleShape2D" id=13]
 extents = Vector2( 32, 32 )
-
-[sub_resource type="GDScript" id=14]
-script/source = "extends Node2D
-
-export (int) var finalLimitLeft
-export (float) var scrollSpeed=.3
-var camera:Camera2D
-var newBounds:Array
-var tmp_limits_as_floats:float
-
-func _ready():
-	finalLimitLeft*=64
-	set_process(false)
-
-func _on_CameraAdjuster2_camera_adjusted(_camera,_newBounds):
-	print(\"Scrolling camera\")
-	camera=_camera
-	newBounds=_newBounds
-	if finalLimitLeft < camera.limit_left:
-		printerr(\"Hey idiot, you put the new left lower than the old one\")
-	else:
-		tmp_limits_as_floats=camera.destPositions[0]
-		set_process(true)
-	
-func _process(delta):
-	if camera.is_tweening:
-		return
-	if camera.limit_left < finalLimitLeft:
-		#print(delta*scrollSpeed*60)
-		tmp_limits_as_floats=min(tmp_limits_as_floats+delta*scrollSpeed*60,finalLimitLeft)
-		#print(tmp_limits_as_floats)
-		camera.limit_left=int(tmp_limits_as_floats)
-		#print(camera.limit_left)
-	else:
-		set_process(false)
-	
-"
 
 [sub_resource type="GDScript" id=15]
 script/source = "extends StaticBody2D
@@ -949,10 +914,7 @@ topBound = 12
 rightBound = 40
 bottomBound = 24
 
-[node name="CustomCameraProcessor" type="Node2D" parent="CameraAdjuster2" index="1"]
-script = SubResource( 14 )
-finalLimitLeft = 20
-scrollSpeed = 3.0
+[node name="CustomCameraProcessor" parent="CameraAdjuster2" index="1" instance=ExtResource( 47 )]
 
 [node name="EventTile12" parent="." index="51" instance=ExtResource( 3 )]
 position = Vector2( 2880, 1472 )
@@ -1115,5 +1077,8 @@ position = Vector2( 8736, 160 )
 [node name="Prowler" parent="." index="67" instance=ExtResource( 44 )]
 position = Vector2( 10976, -320 )
 
-[connection signal="camera_adjusted" from="CameraAdjuster2" to="CameraAdjuster2/CustomCameraProcessor" method="_on_CameraAdjuster2_camera_adjusted"]
+[node name="Skorpion" parent="." index="68" instance=ExtResource( 48 )]
+position = Vector2( 384, -864 )
+spawnType = 0
+
 [connection signal="event_executed" from="EventTile12" to="EventTile12/BlockEnablerDisabler" method="execute"]

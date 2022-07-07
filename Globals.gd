@@ -275,7 +275,7 @@ func load_stage_cutscenes()->bool:
 			if OS.has_feature("standalone"):
 				path = OS.get_executable_path().get_base_dir()+"/GameData/Cutscene/"
 				#break
-	var ok = f.open(path+"stage_cutscenes.txt", File.READ)
+	var ok = f.open(path+"stage_cutscenes_oldSyntax.txt", File.READ)
 	if ok != OK:
 		printerr("Couldn't open the stage cutscenes! Ya done fucked it up! ERROR ", ok)
 		printerr(path)

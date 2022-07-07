@@ -23,6 +23,7 @@ var drawSize:Vector2
 var sandFallProgress:float=0.0
 #var sandFallProgress2:float=0.0
 
+var startingXPosition:float
 func _ready():
 	if get_child_count()>1:
 		#No idea how this works but for some reason
@@ -33,7 +34,9 @@ func _ready():
 		for c in get_children():
 			if c is CollisionShape2D and c.shape is RectangleShape2D:
 				drawSize=c.shape.extents
-		
+	startingXPosition=self.position.x
+	set_process(false)
+	update()
 func _draw():
 	
 	#draw_set_transform(Vector2(0,0),PI*1.5,Vector2(1,1))
@@ -66,6 +69,8 @@ var timer:float = 0.0
 
 var oneSixtyth:float=0.0
 var j:int=0
+
+var player:KinematicBody2D
 func _process(delta):
 	
 	t+=delta
@@ -85,8 +90,17 @@ func _process(delta):
 	#if rising:
 	#	original_global_pos_y-=rising_speed*delta*4
 	#	original_pos_y-=rising_speed*delta*4
-	sandFallProgress+=rising_speed*delta*4.0
+	#sandFallProgress+=rising_speed*delta*4.0
+	
+	# There is no need to increase the sand fall width considering the player
+	# can't possibly see the left side...
+	# Not sure why I didn't think of this sooner
+	self.position.x+=rising_speed*delta*4.0
+	
 	#$Label.text=String(sandFallProgress)+"\n"+String(delta*400.0)
+
+	#if player == null:
+	#	player = 
 
 	if t > .1:
 		t=0
@@ -100,4 +114,4 @@ func _process(delta):
 var stage=0
 var lastTouchedPlayer:KinematicBody2D
 func run_event(player:KinematicBody2D):
-	return
+	player.die()

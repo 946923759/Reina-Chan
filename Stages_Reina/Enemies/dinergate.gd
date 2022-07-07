@@ -13,17 +13,26 @@ var numShots: int = 0
 
 export(bool) var no_movement = false
 
+#export(String) var editor_description_c = "(Insert editor description here)" setget _setCustomDescription
+#func _setCustomDescription(newVal:String)->void:
+#	self['editor_description']=newVal
+#	print(self['editor_description'])
+#	editor_description_c="no"
+
+
+
 var bullet = preload("res://Stages_Reina/Enemies/bulletDinergate.tscn")
 
 func _ready():
-	player = get_node_or_null("/root/Node2D/Player")
-	if !is_instance_valid(player):
-		print("DINERGATE: No player, assuming test mode")
-	#.global_position.x > global_position.x:
+	pass
 
 func _physics_process(delta):
 	#IF DEBUGGING
 	if !is_instance_valid(player):
+		
+		var tmp = get_node_or_null("/root/Node2D/")
+		if tmp!=null:
+			player=tmp.get_player()
 		#push_warning("DINERGATE: There's no player on this stage, are you an idiot?")
 		#set_physics_process(false);
 		if sleepTime >= 0:

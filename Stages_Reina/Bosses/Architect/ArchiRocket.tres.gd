@@ -152,7 +152,7 @@ func _physics_process(delta):
 		timeSinceChange+=delta"""
 	
 	if harderRockets:
-		var playerPos = get_node("/root/Node2D/Player").global_position
+		var playerPos = get_node("/root/Node2D/").get_player().global_position
 		
 		if shouldGoTowards==DIRECTION.LEFT or shouldGoTowards==DIRECTION.RIGHT:
 			lastChange.y=0
