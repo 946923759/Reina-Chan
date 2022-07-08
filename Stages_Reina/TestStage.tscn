@@ -1078,7 +1078,8 @@ position = Vector2( 8736, 160 )
 position = Vector2( 10976, -320 )
 
 [node name="Skorpion" parent="." index="68" instance=ExtResource( 48 )]
-position = Vector2( 384, -864 )
+position = Vector2( 320, -864 )
+collision_layer = 16
 spawnType = 0
 
 [connection signal="event_executed" from="EventTile12" to="EventTile12/BlockEnablerDisabler" method="execute"]

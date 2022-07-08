@@ -1,13 +1,109 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://Character Sprites/skorp/skorp.tres" type="SpriteFrames" id=1]
 [ext_resource path="res://Character Sprites/skorp/skorp.gd" type="Script" id=2]
 [ext_resource path="res://Sounds/Classic/Metroid - Item Acquired.wav" type="AudioStream" id=3]
+[ext_resource path="res://ParticleEffects/AlphaMaskBlack.tres" type="Material" id=4]
+[ext_resource path="res://Character Sprites/skorp/dustCloud 2x1.png" type="Texture" id=5]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 48, 60 )
 
+[sub_resource type="AtlasTexture" id=2]
+atlas = ExtResource( 5 )
+region = Rect2( 0, 0, 8, 10 )
+
+[sub_resource type="AtlasTexture" id=3]
+atlas = ExtResource( 5 )
+region = Rect2( 8, 0, 8, 10 )
+
+[sub_resource type="SpriteFrames" id=4]
+animations = [ {
+"frames": [ SubResource( 2 ), SubResource( 3 ) ],
+"loop": false,
+"name": "default",
+"speed": 0.0
+} ]
+
+[sub_resource type="Animation" id=5]
+resource_name = "default"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/path = NodePath("RightC:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 32, 58 ), Vector2( 96, 48 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("RightC:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.3 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ 0, 1 ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("RightC:modulate:a")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.3, 0.5 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ 1.0, 1.0, 0.0 ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("LeftC:modulate:a")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 0.3, 0.5 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ 1.0, 1.0, 0.0 ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("LeftC:frame")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0, 0.3 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ 0, 1 ]
+}
+tracks/5/type = "value"
+tracks/5/path = NodePath("LeftC:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( -32, 58 ), Vector2( -96, 48 ) ]
+}
+
 [node name="Skorpion" type="KinematicBody2D"]
+collision_layer = 0
+collision_mask = 16
 script = ExtResource( 2 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
@@ -23,3 +119,23 @@ scale = Vector2( 3.2, 3.2 )
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 3 )
+
+[node name="RightC" type="AnimatedSprite" parent="."]
+modulate = Color( 1, 1, 1, 0 )
+material = ExtResource( 4 )
+position = Vector2( 96, 48 )
+scale = Vector2( 4, 4 )
+frames = SubResource( 4 )
+frame = 1
+
+[node name="LeftC" type="AnimatedSprite" parent="."]
+modulate = Color( 1, 1, 1, 0 )
+material = ExtResource( 4 )
+position = Vector2( -96, 48 )
+scale = Vector2( 4, 4 )
+frames = SubResource( 4 )
+frame = 1
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/default = SubResource( 5 )
+"anims/default 2" = SubResource( 5 )
