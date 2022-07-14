@@ -7,13 +7,17 @@ export(float,0,30) var rising_speed=0
 var original_global_pos_y:float
 var original_pos_y:float
 var player
+
+onready var sprite = $Sprite
+
 func _ready():
 	original_pos_y=position.y
 	original_global_pos_y=global_position.y
 	#var node = get_node_or_null("Area2D")
 	#if node:
 	$Area2D.connect("body_entered",self,"set_player")
-	$Area2D.connect("body_exited",self,"disable")
+	if rising_speed==0:
+		$Area2D.connect("body_exited",self,"disable")
 
 func set_player(obj):
 	if obj.has_method("player_touched"):
@@ -34,8 +38,12 @@ func _physics_process(delta):
 	if rising:
 		original_global_pos_y-=rising_speed*delta*4
 		original_pos_y-=rising_speed*delta*4
+		sprite.height+=rising_speed*delta
 	
 	if player==null:
+		#if rising:
+		#	position.y=min(position.y+quicksand_speed*delta,original_pos_y+quicksand_height_in_half_blocks*32)
+		#	$Sprite.position.y = original_pos_y-position.y-64
 		return
 	if player.is_on_floor():
 		position.y=min(position.y+quicksand_speed*delta,original_pos_y+quicksand_height_in_half_blocks*32)
@@ -52,6 +60,7 @@ func _physics_process(delta):
 func _enable_rising(camera, newBounds):
 	print("Rising.,..")
 	rising=true
+	set_physics_process(true)
 	
 func _disable_rising(camera, newBounds):
 	rising=false

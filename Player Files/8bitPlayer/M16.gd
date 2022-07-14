@@ -8,6 +8,7 @@ var oldPositions:PoolVector2Array = PoolVector2Array()
 
 
 var playerChargeShot = preload("res://Player Files/8bitPlayer/PlayerChargeShot.tscn")
+onready var chargingAnim:AnimatedSprite = $Charging
 onready var chargeStart:AudioStreamPlayer2D = $ChargeStartSound
 onready var chargeLoop:AudioStreamPlayer2D = $ChargeLoopSound
 onready var chargeShotS:AudioStreamPlayer2D = $ChargeShotFireSound
@@ -80,13 +81,17 @@ func get_input(delta):
 				#TODO: stop() runs before play() so there's a gap in the audio
 				chargeStart.stop()
 				chargeLoop.play()
+				var tmp_f:int = chargingAnim.frame
+				chargingAnim.play("full")
+				chargingAnim.frame=tmp_f
 			#pass
 		elif chargeShotTime>.5:
-			$Charging.visible=true
+			chargingAnim.visible=true
+			chargingAnim.play("default")
 			chargeStart.play()
 			startedCharging=true
 	elif chargeShotTime>0.0 and chargeShot==false:
-		if chargeShotTime > 2.0:
+		if chargeShotTime > 1.1:
 			chargeShotS.play()
 			print("Charge shot fired!")
 			
@@ -126,7 +131,9 @@ func get_input(delta):
 				sprite.frame = 0
 			shoot_sprite_time = 0.3
 			#$ShootSound.play()
-		$Charging.visible=false
+		elif chargeShotTime > .5: #Not fully charged
+			shoot=true
+		chargingAnim.visible=false
 		chargeShotTime=0
 		startedCharging=false
 		chargeStart.stop()
@@ -240,7 +247,7 @@ func get_input(delta):
 				sprite.set_animation("LadderBegin")
 				#get position of cell then multiply to get actual character position then offset by half of cell width multiplied by scale
 				position.x = pos2cell(position).x*16*4+8*4;
-				velocity.x = 0
+				velocity=Vector2(0,-1)
 				#position = Vector2(round(floor(position.x)/16/4)*16*4+8*4, position.y)
 				state = State.ON_LADDER
 		if down and !movementLocked:
@@ -286,7 +293,7 @@ func get_input(delta):
 					state=State.FALLING
 
 #Return true if processing should stop
-func m16_slide_handler()->bool:
+func dash_handler()->bool:
 	if !is_on_floor():
 		dash_time=0.0
 	a1.visible = dash_time>0
@@ -322,3 +329,17 @@ func m16_slide_handler()->bool:
 		return true
 	else:
 		return false
+
+#Currently we decided m16 can't obtain weapons,
+#so the item get screen is disabled for her.
+func finishStage_2():
+	$CanvasLayer/Fadeout.fadeOut()
+	yield($CanvasLayer/Fadeout/Fadeout_Tween,"tween_completed")
+	var nextScene = "ScreenSelectStage"
+	#CheckpointPlayerStats.lastPlayedStage = stageRoot.weapon_to_unlock
+	#if Globals.playerData.availableWeapons[stageRoot.weapon_to_unlock]: #If this stage is already completed
+	#	nextScene="ScreenSelectStage"
+	#Globals.playerData.availableWeapons[stageRoot.weapon_to_unlock]=true
+	Globals.save_player_game()
+	
+	Globals.change_screen(get_tree(),nextScene)

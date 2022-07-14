@@ -1,12 +1,13 @@
 extends KinematicBody2D
 
 onready var vis = $VisibilityNotifier2D
+onready var shootSound = $ShootSound
 onready var reflectSound = $ReflectSound
 
 func _ready():
 	set_process(false)
 	set_physics_process(false)
-	$ShootSound.play()
+	#$ShootSound.play()
 	
 
 #For KinematicBody2D only.
@@ -19,6 +20,7 @@ func init(t_movement):
 	$Area2D.connect("body_entered",self,"objectTouched")
 # warning-ignore:return_value_discarded
 	#$Area2D.connect("body_exited",self,"clearLastTouched")
+	shootSound.play()
 
 func objectTouched(obj):
 	#print("intersecting!")

@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Stages_Reina/Enemies/bulletDinergate.tscn" type="PackedScene" id=1]
+[ext_resource path="res://bulletDanmaku.gd" type="Script" id=2]
+
+[node name="bullet" instance=ExtResource( 1 )]
+script = ExtResource( 2 )
+
+[node name="sprite" parent="." index="1"]
+modulate = Color( 0, 1, 0.415686, 1 )
+
+[node name="CollisionShape2D" parent="." index="2"]
+visible = false
+
+[node name="VisibilityNotifier2D" parent="." index="5"]
+visible = false

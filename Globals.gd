@@ -84,6 +84,10 @@ var stagesToString = [ #Yeah it's stupid
 	"Scarecrow"
 ]
 
+enum SpecialAbilities {
+	AirDash=0
+}
+
 enum Characters {
 	UMP9,
 	M16A1,
@@ -95,10 +99,13 @@ func characterToString(d:int=playerData.currentCharacter)->String:
 var playerData={
 	gameDifficulty = Difficulty.EASY,
 	currentCharacter = Characters.UMP9,
+	
+	#These values will get overwritten when you start a new save file,
+	#So you can set them all to true for debugging purposes.
 	availableWeapons = [
-		true,
+		true, #Buster (duh)
 		true, #Architect Rocket
-		true,
+		true, #Alchemist Weapon
 		false,
 		false,
 		false,
@@ -107,6 +114,9 @@ var playerData={
 		false,
 		false,
 		false #bonus stage (10)
+	],
+	specialAbilities = [
+		true #AirDash
 	],
 	wilyStageNum = 0,
 	ReinaChanEmblems=[ #U M P 9 C H A N
@@ -120,6 +130,14 @@ var playerData={
 		false
 	]
 }
+
+func reset_player_data():
+	for i in range(len(playerData.availableWeapons)):
+		playerData.availableWeapons[i]=false
+	for i in range(len(playerData.specialAbilities)):
+		playerData.specialAbilities[i]=false
+	for i in range(len(playerData.ReinaChanEmblems)):
+		playerData.ReinaChanEmblems[i]=false
 
 #EXCLUDING THE OPTIONS! This is the 'extras' in the json.
 var systemData:Dictionary = {
@@ -269,7 +287,7 @@ var stage_cutscene_data:Dictionary = {}
 
 func load_stage_cutscenes()->bool:
 	var f = File.new()
-	var path = "res://Cutscene/Embedded/"
+	var path = "res://Screens/ScreenCutscene/Embedded/"
 	match OS.get_name():
 		"Windows","X11","macOS":
 			if OS.has_feature("standalone"):
@@ -438,6 +456,7 @@ func get_matching_files(path,fname):
 			dir.list_dir_end()
 			return path+file
 
+
 func get_custom_music(fname):
 	if !OS.has_feature("standalone"):
 		return null
@@ -579,3 +598,18 @@ func format_time(time, format = FORMAT_DEFAULT, digit_format = "%02d"):
 		#formatted+=String(time)
 
 	return formatted
+
+
+var SCREENS:Dictionary = {
+	"ScreenDisclaimer":"res://Screens/BetaDisclaimer.tscn",
+	"ScreenTitleMenu":"res://Screens/ScreenTitleMenu/ScreenTitleMenu.tscn",
+	"ScreenSelectCharacter":"res://Screens/ScreenSelectCharacter/ScreenSelectCharacter.tscn",
+	"ScreenSelectStage":"res://Screens/ScreenStageSelectV2/ScreenSelectStage.tscn",
+	"ScreenStageIntro":"res://Screens/ScreenStageIntro.tscn",
+	"ScreenItemGet":"res://Screens/ScreenItemGet/ScreenItemGet.tscn",
+	"CutsceneFromFile":"res://Screens/ScreenCutscene/CutsceneFromFile.tscn",
+	"ScreenCredits":"res://Screens/Credits.tscn"
+}
+
+func change_screen(tree,screen:String)->void:
+	tree.change_scene(SCREENS[screen])

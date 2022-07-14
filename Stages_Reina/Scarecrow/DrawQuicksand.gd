@@ -15,7 +15,7 @@ var height
 func _ready():
 	region_rect=Rect2(0,0,region_rect.size.x,32)
 	print(region_rect.size.x)
-	height = get_parent().quicksand_draw_height
+	height = get_parent().quicksand_draw_height*16
 	pass # Replace with function body.
 
 func _draw():
@@ -23,8 +23,8 @@ func _draw():
 	#draw_texture_rect(bottom[j],Rect2(0,16,region_rect.size.x,height*16),false)
 	#tex, dest rect, source rect?
 	draw_texture_rect_region(bottom[j],
-		Rect2(0,16,region_rect.size.x,height*16),
-		Rect2(0,0,region_rect.size.x,height*16)
+		Rect2(0,16,region_rect.size.x,height),
+		Rect2(0,0,region_rect.size.x,height)
 	)
 
 var t:float = 0

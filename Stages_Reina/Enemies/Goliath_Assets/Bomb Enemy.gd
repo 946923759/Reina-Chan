@@ -57,7 +57,10 @@ func _physics_process(_delta):
 	if type==1 and !dropped:
 		var player = get_node("/root/Node2D/").get_player()
 		if player:
-			if player.global_position.x > global_position.x-5 and player.global_position.x < global_position.x+5:
+			if (
+			   (facing==DIRECTION.LEFT and player.global_position.x > global_position.x)
+			or (facing==DIRECTION.RIGHT and player.global_position.x < global_position.x)
+			) and player.global_position.y > global_position.y:
 				
 				#If player runs into it it explodes and it's invalid
 				if is_instance_valid(carrying):

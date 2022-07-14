@@ -1,0 +1,76 @@
+#LANGUAGES	en	es	kr	ja	zh
+
+#KEY	default
+msg	If you can read this, you forgot to assign a key for your cutscene and the PoolStringArray is blank.	Si lees esto, has olvidado asignar alguna tecla para las cinematicas y los "PoolStringArray" estan vacios.
+
+#KEY	error
+msg	You assigned a key that doesn't exist! Go check your event block again.
+
+#KEY	Architect
+portrait	pic_UMP9	pic_Architect
+/Architect	Heee-ey, you trash Griffin T-Dolls! Let's have some fun!	O-Oigan!, Muñecas Tacticas de pacotilla! Tengamos algo de diversion!
+/UMP9	...Who is this weirdo?	...¿Quien es este tipo raro?
+/Architect	Heeeey, I heard that~!	Oye!, escuche eso~!
+
+#KEY	Alchemist1
+portrait	pic_Alchemist,true,0
+/Alchemist	Hahaha! Did you really think you defeated me? That was just a dummy!	JAJAJA! ¿En verdad piensas que me has derrotado? Eso solo fue un secuaz!
+msg	Take this!	¡Toma esto!
+
+#KEY	AlchemistChicken
+portrait	pic_UMP9	Dier,true,0
+matchnames	UMP9	Dier
+/UMP9	...A chicken? From the wall? That doesn't seem sanitary.
+/Dier	You're an android, why do you care?
+/UMP9	Hey, T-Dolls can have stomach issues too! Somehow.
+/Dier	What kind of feature is that...?
+
+#KEY	Alchemist2
+portrait	pic_UMP9	pic_Alchemist
+speaker	Alchemist
+nop	Dear translators, this is a reference to the opening of Symphony of the Night (which quotes Andre Malraux). Hopefully it translates accurately?
+nop	https://www.youtube.com/watch?v=zTH6TlCcsu0
+msg	What is a Tactical Doll?	¿Que son los muñecos tacticos?
+nop	msg	A miserable little pile of manpower, ammo, rations, parts, combat reports, training data, ice cream and cake! And an oath ring!	Una miserable pila de obreros, armamento, refacciones, informes de combate, datos de entrenamiento, helado y pastel! Y un anillo de juramento!
+msg	A miserable little pile of ammo and parts!	Una miserable pila de armamento y refacciones!
+nop	(ES: 'Have at you' is an English term so it was changed to "Prepare yourself!")
+msg	But enough talk, have at you!	Basta de charlas, preparate!
+
+#KEY	Scarecrow1
+portrait	pic_UMP9	pic_VZ61_D
+matchnames	UMP9	Skorpion
+nop	Maybe redo this one so she says something like "Thank you for freeing me"
+/Skorpion	Waaaah, that was my ultimate weapon! I paid 8000 gems to MDR for that!
+/UMP9	Ultimate... Weapon? What a horrifying weapon.
+/Skorpion	Oh well.... Here, take this. It will help you.
+/UMP9	Thanks!
+portrait	
+msgbox_transition
+/SYSTEM	You obtained the air dash! Press DOWN+JUMP in mid-air to dash.
+msg	There are certain locations in other stages that are only possible to cross using the dash. Try searching everywhere, you might find a shortcut!
+nop	msg	There are more power ups throughout the game, but they're hidden. Try searching everywhere to find them all.
+
+#KEY	Scarecrow2
+portrait	pic_UMP9	pic_Scarecrow
+matchnames	UMP9	Scarecrow
+/Scarecrow	Your chances of victory are zero.
+/UMP9	Is that all they can say? Why not something like "I love you UMP9, let's go out for lunch"?
+/Scarecrow	Alright.
+msgbox_transition
+msg	Nice to meet you UMP9, please die immediately.
+
+#KEY	Demo2Ending
+preload_portraits	Dier	pic_Alchemist	pic_Scarecrow
+matchnames	AmWorks	Alchemist	Scarecrow
+portrait	Dier
+/AmWorks	So, did you enjoy the second demo? Hopefully it was worth the wait.
+portrait	Dier	pic_Alchemist
+/Alchemist	/hl[1]We hope you enjoyed the upside-down castle. And the Alchemist boss fights!
+msg	If you've played Mega Man X1 you'll recognize where we got the inspiration from. A big thanks to /gfg/ for all the stage and boss ideas, too.
+portrait	Dier	pic_Alchemist	pic_Scarecrow
+/Scarecrow	/hl[2]Thank you for playing! See you soon for the next demo, featuring me.
+nop	Maybe this should be shown only if they beat it on hard?
+portrait	Dier	pic_Alchemist	pic_Scarecrow	pic_M16A1_Boss_5
+/M16A1	/hl[3]Are you forgetting someone? I'm going to be there too.
+speaker	Dier
+nop	msg	Well, I suppose you are a Sangfis Ferri android... Of sorts...

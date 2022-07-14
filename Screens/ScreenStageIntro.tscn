@@ -1,0 +1,171 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://Screens/ScreenStageIntro/StageIntro.tres.gd" type="Script" id=1]
+[ext_resource path="res://MM2Font.tres" type="DynamicFont" id=2]
+[ext_resource path="res://Screens/ScreenStageIntro/starfilter.png" type="Texture" id=3]
+[ext_resource path="res://Music/Stage Start.ogg" type="AudioStream" id=5]
+[ext_resource path="res://Screens/ScreenCutscene/Portraits/pic_Architect.png" type="Texture" id=6]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Sprite
+
+onready var WIDTH = Globals.gameResolution.x
+onready var HEIGHT = Globals.gameResolution.y
+
+func _process(delta):
+	#region_rect.position = 
+	region_rect = Rect2(region_rect.position.x+500*delta,30,WIDTH,HEIGHT);
+	#print(String(region_rect.position))
+	var sp2 = $Sprite2
+	sp2.region_rect = Rect2(sp2.region_rect.position.x+200*delta,0,WIDTH,HEIGHT)
+"
+
+[sub_resource type="GDScript" id=2]
+script/source = "extends Sprite
+
+func _ready():
+	var t := TweenSequence.new(get_tree())
+	#t._tween.pause_mode = Node.PAUSE_MODE_PROCESS
+	t.append(self,'position:x',Globals.gameResolution.x*.9,6).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+"
+
+[sub_resource type="GDScript" id=3]
+script/source = "extends Label
+
+func _ready():
+	if Globals.nextStage != null:
+		print(Globals.nextStage.rsplit(\"/\",false,1))
+		self.text = INITrans.GetString(\"StageNames\",Globals.nextStage.rsplit(\"/\",false,1)[1])
+	self.visible_characters = 0
+	self.rect_position.x = Globals.SCREEN_CENTER_X - rect_size.x/2
+	$Timer.connect(\"timeout\",self,\"timer\");
+
+func timer():
+	if visible_characters < text.length():
+		visible_characters+=1
+	else:
+		$Timer.stop()
+"
+
+[sub_resource type="GDScript" id=4]
+script/source = "extends Node2D
+
+#What the fuck is this doing here
+var bosses = {
+	\"StageArchitect.tscn\":\"res://Stages_Reina/Bosses/Architect/BossArchitect_v2.tscn\",
+	\"Alchemist_v2.tscn\":\"res://Stages_Reina/Bosses/Alchemist/BossAlchemist.tscn\",
+	\"Scarecrow.tscn\":\"res://Stages_Reina/Bosses/Scarecrow/BossScarecrow.tscn\"
+}
+
+var bi
+func _ready():
+	var b
+	var spawnPosition = Vector2(Globals.SCREEN_CENTER_X,360)
+	if Globals.nextStage:
+		var stg:String = Globals.nextStage.rsplit(\"/\",false,1)[1]
+		b = load(bosses[stg])
+		if stg==\"Scarecrow.tscn\":
+			spawnPosition.y-=30
+	else:
+		b = load(\"res://Stages_Reina/Bosses/Architect/BossArchitect_v2.tscn\")
+	bi = b.instance()
+	bi.position=spawnPosition
+	add_child(bi)
+	bi.HPBar.visible=false
+	
+
+var time:float=0
+func _process(delta):
+	time+=delta
+	if time > .3:
+		bi.playIntro(false,false)
+		set_process(false)
+"
+
+[sub_resource type="SegmentShape2D" id=5]
+a = Vector2( -128, 0 )
+b = Vector2( 128, 0 )
+
+[node name="Node" type="Node2D"]
+script = ExtResource( 1 )
+
+[node name="Timer" type="Timer" parent="."]
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = 1280.0
+margin_bottom = 720.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+color = Color( 0, 0, 0, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 5 )
+bus = "Music"
+
+[node name="Sprite" type="Sprite" parent="."]
+texture = ExtResource( 3 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 0, 0, 1280, 720 )
+script = SubResource( 1 )
+
+[node name="Sprite2" type="Sprite" parent="Sprite"]
+texture = ExtResource( 3 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 250, 0, 1280, 720 )
+
+[node name="ColorRect2" type="ColorRect" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_top = 260.0
+margin_right = 1280.0
+margin_bottom = 460.0
+color = Color( 0, 0.0588235, 0.533333, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Sprite2" type="Sprite" parent="."]
+visible = false
+modulate = Color( 0, 0, 0, 0.513726 )
+position = Vector2( 1200, 360 )
+scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 6 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 1024, 400 )
+script = SubResource( 2 )
+
+[node name="Label" type="Label" parent="."]
+margin_top = 476.0
+margin_right = 1280.0
+margin_bottom = 526.0
+custom_fonts/font = ExtResource( 2 )
+text = "no stage set!"
+align = 1
+script = SubResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Timer" type="Timer" parent="Label"]
+wait_time = 0.3
+autostart = true
+
+[node name="BossSpriteLoader" type="Node2D" parent="."]
+script = SubResource( 4 )
+
+[node name="StaticBody2D" type="StaticBody2D" parent="BossSpriteLoader"]
+collision_layer = 18
+collision_mask = 18
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BossSpriteLoader/StaticBody2D"]
+position = Vector2( 642.318, 428.103 )
+shape = SubResource( 5 )

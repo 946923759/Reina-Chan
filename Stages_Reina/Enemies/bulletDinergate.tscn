@@ -69,3 +69,4 @@ volume_db = 5.0
 
 [node name="ShootSound" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource( 4 )
+bus = "Player/Enemies"

@@ -2,7 +2,7 @@ extends Node2D
 #extends "res://Various Objects/EventTile_Message.tres.gd"
 
 onready var sprite = $CanvasLayer/Sprite
-var gf_cutscene = preload("res://Cutscene/CutsceneInGame.tscn")
+var gf_cutscene = preload("res://Screens/ScreenCutscene/CutsceneInGame.tscn")
 
 var event_ID = Globals.EVENT_TILES.CUSTOM_EVENT
 export(String) var message_id

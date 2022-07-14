@@ -5,5 +5,11 @@
 [node name="UMP9" instance=ExtResource( 1 )]
 
 [node name="Sprite" parent="." index="0"]
-animation = "IdleShoot"
-frame = 1
+animation = "Dash"
+
+[node name="DebugLabel" parent="." index="16"]
+text = "frameTimer = null
+isOnFloor = null
+canAirDash = null
+"
+properties = PoolStringArray( "frameTimer", "isOnFloor", "canAirDash" )

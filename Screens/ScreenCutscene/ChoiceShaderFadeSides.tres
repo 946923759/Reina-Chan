@@ -1,0 +1,33 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=2]
+
+[sub_resource type="Shader" id=1]
+code = "shader_type canvas_item;
+
+//uniform float gl_FragCoord;
+//uniform float ViewportHeight;
+uniform vec4 inputColor : hint_color=vec4(0,0,0,1);
+//uniform float fadeLength = 20.0;
+uniform float fadeLeftAt;
+uniform float fadeRightAt;
+
+void fragment(){
+	vec4 pixel_color = texture(TEXTURE,UV);
+	if (FRAGCOORD.x < fadeLeftAt+20.0)
+	{
+		float clr = 1.0-smoothstep(FRAGCOORD.x-20.0,FRAGCOORD.x+20.0,fadeLeftAt);
+    	COLOR = vec4(inputColor.rgb, clr);
+	}
+	else if (FRAGCOORD.x > fadeRightAt-20.0)
+	{
+		float clr = smoothstep(FRAGCOORD.x-20.0,FRAGCOORD.x+20.0,fadeRightAt);
+    	COLOR = vec4(inputColor.rgb, clr);
+	}
+	else
+		COLOR = inputColor;
+}"
+
+[resource]
+shader = SubResource( 1 )
+shader_param/inputColor = Color( 0, 0, 0, 1 )
+shader_param/fadeLeftAt = 440.0
+shader_param/fadeRightAt = 840.0

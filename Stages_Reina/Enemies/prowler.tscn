@@ -25,7 +25,7 @@ script/source = "extends \"res://Stages/EnemyBaseScript.gd\"
 #			_findTarget(n)
 
 export(int, \"Normal\",\"Left\",\"Ceiling\",\"Right\") var gravity
-var facing_vert=1
+var facing_vert=1 #y-axis multiplier. Or x-axis if left/right?
 
 enum STATES {
 	move_towards,
@@ -44,11 +44,15 @@ var player:KinematicBody2D
 func _ready():
 	#_findTarget(self)
 	#rotation_degrees=gravity*90
-	if gravity==2:
+	if gravity==1 or gravity==3:
+		rotation_degrees=gravity*90
+		$DebugLabel.rect_rotation=rotation_degrees*-1
+	if gravity==2 or gravity==1:
 		facing_vert=-1
 	sprite.flip_v=gravity==2
 	sprite.set_animation(\"default\")
 
+#Unused
 func move_and_slide_based_on_direction()->Vector2:
 	if self.rotation_degrees==0:
 		return Vector2(-100,420)
@@ -78,14 +82,16 @@ func getMovementDirection(moveSpeed)->float:
 		#elif gravity==2 and player.global_position.x > global_position.x-500*facing:
 		#	shouldMove=-1
 	else:
-		if abs(player.global_position.y - global_position.y) < 10:
+		if abs(player.global_position.y - global_position.y-500*facing) < 10:
 			shouldMove=0
-		elif gravity == 1 and player.global_position.y < global_position.y:
+		elif gravity == 1 and player.global_position.y < global_position.y+500*facing:
 			shouldMove=-1
-		elif gravity == 3 and player.global_position.y > global_position.y:
+		elif gravity == 3 and player.global_position.y > global_position.y+500*facing:
 			shouldMove=-1
 	return moveSpeed*shouldMove
 
+
+var velocity:Vector2
 func _physics_process(delta):
 	if !is_instance_valid(player):
 		player=get_node(\"/root/Node2D\").get_player()
@@ -104,7 +110,10 @@ func _physics_process(delta):
 			#else:
 			moveSpeed=min(200.0,10+moveSpeed+moveSpeed*delta) #I hope I programmed this correctly
 
-			move_and_slide(Vector2(getMovementDirection(moveSpeed),420*facing_vert), Vector2(0, -1))
+			if gravity==1 or gravity==3:
+				velocity=move_and_slide(Vector2(420*facing_vert,getMovementDirection(moveSpeed)), Vector2(0, -1))
+			else:
+				velocity=move_and_slide(Vector2(getMovementDirection(moveSpeed),420*facing_vert), Vector2(0, -1))
 			#if is_on_wall():
 			#	facing*=-1
 			#	sprite.flip_h = (facing == DIRECTION.RIGHT)
@@ -112,17 +121,28 @@ func _physics_process(delta):
 				#WHAT THE HELL IS GOING ON??? - The YIIK dude
 				if (
 					((gravity==0 or gravity==2) and abs(player.global_position.x - global_position.x-500*facing) < 300)
-				 or ((gravity==1 or gravity==3) and abs(player.global_position.y - global_position.y-500*facing) < 300)
+				 #or 
 					):
 						curState=STATES.waitShootAnim
+						#readyFire fires in front, so this is checking if the player is in front of the prowler.
 						if (gravity == 0 or gravity==2) and abs(player.global_position.y - global_position.y) < 150:
 							sprite.set_animation(\"readyFire\")
 						else:
 							sprite.set_animation(\"readyAngle\")
+				elif ((gravity==1 or gravity==3) and abs(player.global_position.y - global_position.y-500*facing) < 300):
+					curState=STATES.waitShootAnim
+					#readyFire fires in front, so this is checking if the player is in front of the prowler.
+					if (gravity == 0 or gravity==2) and abs(player.global_position.y - global_position.y) < 150:
+						sprite.set_animation(\"readyFire\")
+					else:
+						sprite.set_animation(\"readyAngle\")
 		STATES.waitShootAnim:
 			#This seems like a bad idea
 			moveSpeed=max(0.0,moveSpeed-moveSpeed*delta*2)
-			move_and_slide(Vector2(getMovementDirection(moveSpeed),420*facing_vert), Vector2(0, -1))
+			if gravity==0 or gravity==2:
+				velocity=move_and_slide(Vector2(getMovementDirection(moveSpeed),420*facing_vert), Vector2(0, -1))
+			else:
+				velocity=move_and_slide(Vector2(420*facing_vert,getMovementDirection(moveSpeed)), Vector2(0, -1))
 			
 			
 			if sprite.frame==2:
@@ -176,18 +196,15 @@ animation = "readyAngle"
 margin_top = -128.0
 margin_right = 201.0
 margin_bottom = -29.0
-text = "xVelo = null
+text = "velocity = null
 curState = null
 gravity = 0
 global_position = Vector2( 0, 0 )
 facing = -1
 "
 script = ExtResource( 3 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 target_path = NodePath("..")
-properties = PoolStringArray( "xVelo", "curState", "gravity", "global_position", "facing" )
+properties = PoolStringArray( "velocity", "curState", "gravity", "global_position", "facing" )
 
 [node name="DebugLabel2" type="Label" parent="." index="7"]
 margin_top = -160.0
@@ -196,8 +213,5 @@ margin_bottom = -129.0
 text = "animation = \"readyAngle\"
 "
 script = ExtResource( 3 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 target_path = NodePath("../AnimatedSprite")
 properties = PoolStringArray( "animation" )

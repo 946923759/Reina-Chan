@@ -1,0 +1,216 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://MM2Font_Small.tres" type="DynamicFont" id=1]
+[ext_resource path="res://Screens/ScreenCutscene/Backgrounds/2021summer_SANGVISFERRI.png" type="Texture" id=2]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Control
+
+#var music_player = FLMusicLib.new();
+onready var music_player = Globals.ReinaAudioPlayer.new(self)
+
+func _ready():
+	#music_player.load_song(\"Credits\",\"Rockman 4MI.nsf\",104)
+	music_player.load_song(\"Credits\",\"3-731_-_espgaluda_stage1.nsf\",0,0)
+	#music_player.load_song(\"Credits\",\"Metroid.nsf\",11)
+	
+	
+	
+	$c2.rect_position.y = Globals.gameResolution.y
+	#var tween2 = $Tween
+	#tween2.interpolate_property($c1, 'modulate',
+	#Color(0,0,0,0), Color(1,1,1,1), .5, Tween.TRANS_QUAD, Tween.EASE_OUT);
+	#tween2.start();
+	
+	$c1.set_modulate(Color(1,1,1,0))
+	var seq := TweenSequence.new(get_tree())
+	#seq.append($c1,'modulate',Color(1,1,1,0),1) #sleep 1
+	seq.append($c1,'modulate',Color(1,1,1,1),1).set_trans(Tween.TRANS_LINEAR)
+	seq.parallel().append($TextureRect,\"modulate\",Color(.5,.5,.5,1),.3)
+	seq.append($c1,'modulate',Color(1,1,1,1),3) #sleep 1
+	seq.append($c1,'modulate',Color(1,1,1,0),1).set_trans(Tween.TRANS_LINEAR)
+	
+	#print(Globals.gameResolution.y-$c2.rect_size.y)
+	seq.append($c2,'rect_position:y',-$c2.rect_size.y,30)
+	seq.append($TextureRect,'modulate',Color(0,0,0,1),1)
+	seq.append_callback(self,'screen_out')
+	
+	#var seq2 := TweenSequence.new(get_tree())
+	#seq2.append($c2,'modulate',Color(1,1,1,1),4) #sleep 1
+	#seq2.append($c2,'rect_position',Vector2(Globals.gameResolution.x/2-$c2.rect_size.x/2,0),10).set_trans(Tween.TRANS_LINEAR).from_current()
+
+func screen_out():
+	Globals.change_screen(get_tree(),\"ScreenTitleMenu\")
+
+func _input(_event):
+	if Input.is_action_just_pressed(\"ui_pause\"):
+		screen_out()
+
+#func _process(delta):
+#	pass
+"
+
+[sub_resource type="DynamicFontData" id=2]
+font_path = "res://megaman_2.ttf"
+
+[sub_resource type="DynamicFont" id=3]
+size = 40
+outline_size = 2
+outline_color = Color( 0, 0, 0, 1 )
+extra_spacing_bottom = 5
+font_data = SubResource( 2 )
+
+[node name="Node2D" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = SubResource( 1 )
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+
+[node name="TextureRect" type="TextureRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 2 )
+expand = true
+stretch_mode = 7
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="c1" type="Label" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -166.0
+margin_top = -36.5
+margin_right = 166.0
+margin_bottom = 36.5
+grow_horizontal = 2
+custom_fonts/font = ExtResource( 1 )
+text = "Reina-Chan
+demo 3"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="c2" type="RichTextLabel" parent="."]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -640.0
+margin_top = 720.0
+margin_right = 640.0
+margin_bottom = 2762.0
+custom_fonts/bold_font = SubResource( 3 )
+custom_fonts/normal_font = ExtResource( 1 )
+bbcode_enabled = true
+bbcode_text = "[center]
+
+[b]Project Lead[/b]
+Amaryllis Works
+
+[b]designers[/b]
+amaryllis works
+vandine
+unfiltered
+
+[b]programmer[/b]
+amaryllis works
+
+[b]artwork[/b]
+vandine
+anonymous
+amaryllis works
+DWAnon
+...and many sprites stolen from
+mighty gunvolt burst, megaman,
+castlevania, and more
+
+[b]Beta Testers[/b]
+Nirvash
+The rest of the team
+
+[b]Translations[/b]
+Nokotarou - Spanish
+KAIMARUZ - Spanish
+
+[b]Libraries[/b]
+GDScriptAudioImport - Giannino Clemente
+Godot Camera Shake - Alex Nagel
+Godot Next - Will Nations
+FLMusicLib - Mighty Prinny
+PIURED - Pedro G. Bascoy
+Grayscale shader - Arcticfqx
+See LICENSES.txt for more information
+
+
+[b]special thanks[/b]
+chaosoup - cutscene stuff
+/gfg/ - Boss ideas and more!
+dwanon - for your support
+nirvash - cool guy
+...and you!
+
+girls' frontline is property of mica
+no copyright infringement intended
+this game is free and open source!
+
+see you next demo...?"
+text = "
+
+Project Lead
+Amaryllis Works
+
+designers
+amaryllis works
+vandine
+unfiltered
+
+programmer
+amaryllis works
+
+artwork
+vandine
+anonymous
+amaryllis works
+DWAnon
+...and many sprites stolen from
+mighty gunvolt burst, megaman,
+castlevania, and more
+
+Beta Testers
+Nirvash
+The rest of the team
+
+Translations
+Nokotarou - Spanish
+KAIMARUZ - Spanish
+
+Libraries
+GDScriptAudioImport - Giannino Clemente
+Godot Camera Shake - Alex Nagel
+Godot Next - Will Nations
+FLMusicLib - Mighty Prinny
+PIURED - Pedro G. Bascoy
+Grayscale shader - Arcticfqx
+See LICENSES.txt for more information
+
+
+special thanks
+chaosoup - cutscene stuff
+/gfg/ - Boss ideas and more!
+dwanon - for your support
+nirvash - cool guy
+...and you!
+
+girls' frontline is property of mica
+no copyright infringement intended
+this game is free and open source!
+
+see you next demo...?"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Tween" type="Tween" parent="."]

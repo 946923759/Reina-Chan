@@ -27,7 +27,7 @@
 [ext_resource path="res://Various Objects/EventTiles/EventTile.tscn" type="PackedScene" id=25]
 [ext_resource path="res://Stages_Reina/Bosses/Architect/BossArchitect_v2.tscn" type="PackedScene" id=26]
 [ext_resource path="res://Various Objects/CameraController/CameraAdjuster_v2_Vertical.tscn" type="PackedScene" id=27]
-[ext_resource path="res://Cutscene/Backgrounds/SFBase.png" type="Texture" id=28]
+[ext_resource path="res://Screens/ScreenCutscene/Backgrounds/SFBase.png" type="Texture" id=28]
 [ext_resource path="res://Various Objects/EventTiles/Checkpoint_Vertical.tscn" type="PackedScene" id=29]
 [ext_resource path="res://Stages/WaterStageTest/background2.png" type="Texture" id=30]
 [ext_resource path="res://Various Objects/BlockAsObject.tscn" type="PackedScene" id=31]
@@ -138,7 +138,6 @@ rightBound = 120
 bottomBound = 12
 custom_music_name = "Architect"
 nsf_music_file = "Rockman 4MI.nsf"
-mute_music_in_debug = true
 mute_boss_music_in_debug = true
 weapon_to_unlock = 1
 debug_warp_points = [ Vector2( 149, 29 ), Vector2( 227, 20 ) ]

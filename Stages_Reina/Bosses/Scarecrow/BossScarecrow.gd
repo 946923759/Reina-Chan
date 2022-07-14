@@ -10,6 +10,7 @@ func _on_AnimatedSprite_animation_finished():
 #Why make new bullet when this one works a million times over right?
 const bullet = preload("res://Stages_Reina/Enemies/EnemyChargeShot.tscn")
 const bulletSmall = preload("res://Stages_Reina/Enemies/bulletDinergate.tscn")
+const b = preload("res://Stages_Reina/Enemies/bulletDanmaku.tscn")
 
 #export(Vector2) var room_top_left=Vector2(108,140)
 
@@ -18,10 +19,15 @@ enum STATE {
 	SHOOTING1,
 	SHOOT_NO_MOVE,
 	SHOOT_TOP_INIT,
-	SHOOT_TOP
-	RETURN_CIRCLING
+	SHOOT_TOP,
+	RETURN_CIRCLING,
+	SHOOT_SPREAD_INIT,
+	SHOOT_SPREAD,
+	GROUND_ATTACK_1,
+	GROUND_ATTACK_2,
+	CURTAINS
 }
-var curState = STATE.SHOOT_TOP_INIT
+var curState = STATE.SHOOT_SPREAD_INIT
 var idleTime:float =0
 var shots:int = 0
 var justShot:bool=false
@@ -76,6 +82,19 @@ func fireBulletSmall():
 		bi.init(v)
 		print("Fired!")
 
+func fire_spread(root:Node2D,startPos:Vector2):
+	var startingAngle = Vector2(0,8)
+	for j in range(5):
+		var bi = b.instance()
+		root.add_child(bi)
+		bi.global_position = startPos
+		bi.CubicSpread=Vector2((j-2)*2,-2)
+		var newAngle = startingAngle
+		newAngle.x=newAngle.x+(j-2)
+		bi.init(newAngle)
+		if j==0:
+			bi.shootSound.play()
+
 func _physics_process(delta):
 	if idleTime>=0:
 		idleTime-=delta
@@ -88,6 +107,7 @@ func _physics_process(delta):
 	
 	if OS.is_debug_build():
 		$DebugLabel3.text=String((global_position-topLeft)/64)
+		$DebugLabel3.text+="\n"+String(position/64)
 
 	match curState:
 		STATE.SHOOTING1:
@@ -95,7 +115,16 @@ func _physics_process(delta):
 				move_and_slide(Vector2(0,200),Vector2(0, -1))
 				if is_on_floor():
 					shots=0
-					curState=STATE.SHOOT_TOP
+					if randi()%2==0:
+						curState=STATE.GROUND_ATTACK_1
+					else:
+						#I like it if it's random.
+						if randi()%2==0:
+							curState=STATE.SHOOT_TOP
+						elif curHP<=14:
+							curState=STATE.SHOOT_SPREAD_INIT
+						else:
+							curState=STATE.SHOOT_TOP_INIT
 			elif shots > 1:
 				move_and_slide(Vector2(0,-200),Vector2(0, -1))
 				if position.y<=startingPosition.y-16*4*3:
@@ -112,7 +141,10 @@ func _physics_process(delta):
 		STATE.IDLE:
 			idleTime=1
 			shots=0
-			curState=STATE.SHOOTING1
+			if curHP < 14:
+				curState=STATE.SHOOT_SPREAD_INIT
+			else:
+				curState=STATE.SHOOTING1
 		STATE.SHOOT_NO_MOVE:
 			fireBullet()
 			idleTime=1.7
@@ -131,9 +163,66 @@ func _physics_process(delta):
 				idleTime=1
 				spinnyFrame.set_return_circling()
 				curState=STATE.IDLE
+		STATE.SHOOT_SPREAD_INIT:
+			spinnyFrame.set_float_to_top_spread((topLeft/64+Vector2(10,2))*64)
+			if position.y > startingPosition.y-300:
+				var movT:int=0
+				if position.x > 11*64 or position.x < 9*64:
+					#If Scarecrow is to the right she moves left,
+					#If she's to the left she moves right.
+					#I'm pretty sure there's some way to do this
+					#using pure math but I couldn't figure it out
+					if 10-position.x/64 > 1:
+						movT=1
+					else:
+						movT=-1
+					
+				move_and_slide(Vector2(movT*200,-200),Vector2(0, -1))
+			else:
+				idleTime=1
+				bulletCounter=0
+				curState=STATE.SHOOT_SPREAD
+		STATE.SHOOT_SPREAD:
+			if bulletCounter<1:
+				fire_spread(get_parent(),spinnyFrame.getSprite(0).global_position)
+				fire_spread(get_parent(),spinnyFrame.getSprite(1).global_position)
+				fire_spread(get_parent(),spinnyFrame.getSprite(2).global_position)
+				bulletCounter+=1
+				idleTime=.5
+			else:
+				curState=STATE.IDLE
+				spinnyFrame.set_return_circling()
+				bulletCounter=0
+				idleTime=1
+		STATE.GROUND_ATTACK_1:
+			#DUDE I JUST LOVE HOW THE BITS ARE 1-INDEXED IN THE GUI
+			#BUT 0-INDEXED WHEN USING THE COMMAND BECAUSE THAT
+			#MAKES SENSE
+			set_collision_mask_bit(4,false)
+			#set_collision_layer_bit(4,false)
+			move_and_slide(Vector2(0,200),Vector2(0, -1))
+			if position.y > startingPosition.y+300:
+				curState=STATE.GROUND_ATTACK_2
+				bulletCounter=0
+				idleTime=.5
+		STATE.GROUND_ATTACK_2:
+			if bulletCounter==0:
+				global_position.x=player.global_position.x
+				#facing=DIRECTION.LEFT if global_position.x > player.global_position.x else DIRECTION.RIGHT
+				facing=DIRECTION.LEFT if position.x > 10*64 else DIRECTION.RIGHT
+				sprite.flip_h=(facing==DIRECTION.LEFT)
+				spinnyFrame.set_flipped(sprite.flip_h)
+				bulletCounter+=1
+			move_and_slide(Vector2(0,-200),Vector2(0, -1))
+			if position.y <= startingPosition.y:
+				get_parent().get_node("DustCloud").position=position
+				get_parent().get_node("DustCloud/AnimationPlayer").play("default")
+				curState=STATE.IDLE
+				set_collision_mask_bit(4,true)
 		#STATE.RETURN_CIRCLING:
 		#	spinnyFrame.set_circling()
 		#	idleTime=1
 				
-	#Not sure why this isn't working automatically
+	#Not sure why this isn't working automatically, because
+	#_physics_process can't normally be overridden (godot will execute both)
 	._physics_process(delta)

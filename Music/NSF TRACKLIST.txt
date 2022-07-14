@@ -28,6 +28,27 @@ R4MI
 104 - Ending 3
 105 - Ending 4 (Rockman World V)
 
+RNC
+0 - ???
+5 - 
+6 - Esperanto (Mega Man Zero 4)
+10 - Departure (Mega Man Zero 2)
+11 - Opening (Mega Man X2)
+15 - Final Boss (MegaMari)
+
+Rockman 6 UH
+3 - Stage Select (Mega Man 10)
+4 - Stage Intro (Mega Man 2)
+10 - Deathtrap Mirage - Theme of Yoku Man (Mega Man Unlimited)
+11 - Temple (Zelda II)
+13 - Volcanic Rim (Street Fighter IV) / Vs. Boss (Mega Man vs Street Fighter)
+18 - Scrap Brain (Sonic The Hedgehog)
+19 - Taking over the Halberd (Kirby Super Star)
+28 - Zero Stage 2 (Mega Man X5)
+30 - Battle Against Myself (Mega Man Battle Network 4)
+31 - Fight Against Smithy, Who Likes Transforming (Super Mario RPG: Legend of the Seven Stars)
+
+
 DMG-CWJ
 0 - Password?
 1 - Success

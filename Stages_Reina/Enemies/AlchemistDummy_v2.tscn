@@ -215,8 +215,14 @@ func _physics_process(delta):
 			sprite.get_material().set_shader_param(\"dir\", Vector2(decelerate*.05,0))
 			warpAnimationProgress-=delta
 
-func _on_EventTile_event_executed():
-	player = get_node(\"/root/Node2D/Player\")
+#func _on_EventTile_event_executed():
+#	player = get_node(\"/root/Node2D/\").get_player()
+#	curHP=14 #lol
+#	enabled=true
+
+#The idea was to support multiple players but is this really necessary?
+func _on_EventTile_event_executed_passPlayer(player_):
+	player=player_
 	curHP=14 #lol
 	enabled=true
 "

@@ -34,7 +34,8 @@ func _ready():
 	$Area2D.connect("area_entered",self,"areaTouched")
 
 
-func playIntro(playSound=true,showHPbar=true):
+onready var introSound:AudioStreamPlayer=$IntroSound
+func playIntro(playSound=true,showHPbar=true)->AudioStreamPlayer:
 	#$AnimatedSprite.animation="intro"
 	sprite.play("intro")
 	if showHPbar:
@@ -46,8 +47,8 @@ func playIntro(playSound=true,showHPbar=true):
 # warning-ignore:return_value_discarded
 		seq.append_callback(HPBar,"set_process",[false])
 	if playSound:
-		$IntroSound.play()
-		return $IntroSound
+		introSound.play()
+	return introSound
 	#1235
 	#$AudioStreamPlayer.connect("finished",callback,)
 

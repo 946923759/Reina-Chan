@@ -48,7 +48,7 @@ func _ready():
 	if CheckpointPlayerStats.checkpointSet:
 		print("There is a checkpoint, not adjusting the camera.")
 	elif adjust_camera: #TODO: WHY IS THIS HERE INSTEAD OF CALLING CAMERACONTROLLERV2
-		var c = $Player/Camera2D
+		var c = player.get_node("Camera2D")
 		#assert(c,"Hey genius, you have to name the player \"Player\" for the camera to work!")
 		
 		#We don't want to overwrite leftBound,rightBound, etc so keep the changed variables in a new array.

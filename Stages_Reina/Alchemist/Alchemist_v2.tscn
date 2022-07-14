@@ -34,7 +34,7 @@
 [ext_resource path="res://Various Objects/1UP_Drop.tscn" type="PackedScene" id=32]
 [ext_resource path="res://Various Objects/Door.tscn" type="PackedScene" id=33]
 [ext_resource path="res://Stages_Reina/Alchemist/moon.png" type="Texture" id=34]
-[ext_resource path="res://Cutscene/Backgrounds/2020white-2.png" type="Texture" id=35]
+[ext_resource path="res://Screens/ScreenCutscene/Backgrounds/2020white-2.png" type="Texture" id=35]
 [ext_resource path="res://Various Objects/BossWarning/WARNING.tscn" type="PackedScene" id=36]
 [ext_resource path="res://Stages_Reina/Alchemist/AlchemistStageHandler.gd" type="Script" id=37]
 [ext_resource path="res://Stages_Reina/Bosses/Alchemist/BossAlchemist.tscn" type="PackedScene" id=38]
@@ -52,7 +52,7 @@ script/source = "extends Node2D
 export(String) var message_id
 export(PoolStringArray) var message
 
-var gf_cutscene = preload(\"res://Cutscene/CutsceneMain.tscn\")
+var gf_cutscene = preload(\"res://Screens/ScreenCutscene/CutsceneMain.tscn\")
 
 onready var tilemap = get_parent().get_parent().get_node(\"Rotation trick room\")
 onready var platform:TileMap = get_parent().get_node(\"platform\")
@@ -199,6 +199,7 @@ LADDER_TILE_ID = 31
 LADDER_TOP_TILE_ID = 30
 SPIKES_TILE_ID = 54
 DEATH_TILE_ID = 112
+adjust_camera = true
 topBound = -999
 rightBound = 48
 bottomBound = 73
@@ -425,10 +426,10 @@ scale = Vector2( 0.25, 0.25 )
 
 [node name="Tween" type="Tween" parent="Rotation trick room/RotateAndTeleport" index="1"]
 
-[node name="0-24" type="Node2D" parent="." index="14"]
+[node name="0-24 vs Alchemist Dummy" type="Node2D" parent="." index="14"]
 position = Vector2( 0, 1536 )
 
-[node name="Door facing left" parent="0-24" index="0" instance=ExtResource( 43 )]
+[node name="Door facing left" parent="0-24 vs Alchemist Dummy" index="0" instance=ExtResource( 43 )]
 position = Vector2( 1216, 192 )
 automatically_set_x_bounds = false
 topBound = 24
@@ -436,38 +437,38 @@ rightBound = 20
 bottomBound = -999
 facing = -1
 
-[node name="CameraAdjuster" parent="0-24" index="1" instance=ExtResource( 23 )]
+[node name="CameraAdjuster" parent="0-24 vs Alchemist Dummy" index="1" instance=ExtResource( 23 )]
 position = Vector2( 672, 736 )
 topBound = 36
 rightBound = 20
 bottomBound = -999
 freeze_player_during_transition = true
 
-[node name="AlchemistDummy_v2" parent="0-24" index="2" instance=ExtResource( 41 )]
+[node name="AlchemistDummy_v2" parent="0-24 vs Alchemist Dummy" index="2" instance=ExtResource( 41 )]
 position = Vector2( 128, 832 )
 facing = 1
 intro_subtitle_key = ""
 stage_finished_when_killed = false
 
-[node name="dg" type="Node2D" parent="0-24/AlchemistDummy_v2" index="9"]
+[node name="dg" type="Node2D" parent="0-24 vs Alchemist Dummy/AlchemistDummy_v2" index="9"]
 position = Vector2( -128, -2368 )
 
-[node name="Dinergate" parent="0-24/AlchemistDummy_v2/dg" index="0" instance=ExtResource( 16 )]
+[node name="Dinergate" parent="0-24 vs Alchemist Dummy/AlchemistDummy_v2/dg" index="0" instance=ExtResource( 16 )]
 position = Vector2( 416, 2976 )
 collision_layer = 18
 collision_mask = 18
 
-[node name="Dinergate2" parent="0-24/AlchemistDummy_v2/dg" index="1" instance=ExtResource( 16 )]
+[node name="Dinergate2" parent="0-24 vs Alchemist Dummy/AlchemistDummy_v2/dg" index="1" instance=ExtResource( 16 )]
 position = Vector2( 992, 2976 )
 collision_layer = 18
 collision_mask = 18
 
-[node name="EventTile" parent="0-24" index="3" instance=ExtResource( 42 )]
+[node name="EventTile" parent="0-24 vs Alchemist Dummy" index="3" instance=ExtResource( 42 )]
 position = Vector2( 448, 768 )
 scale = Vector2( 12, 1 )
 event_ID = 9
 
-[node name="RotateAndTeleport2" type="Node2D" parent="0-24" index="4"]
+[node name="RotateAndTeleport2" type="Node2D" parent="0-24 vs Alchemist Dummy" index="4"]
 script = SubResource( 1 )
 message_id = "Alchemist1"
 leftBound = 140
@@ -476,7 +477,7 @@ rightBound = 160
 bottomBound = 156
 destination_room_offset = Vector2( 7, 7 )
 
-[node name="platform" type="TileMap" parent="0-24" index="5"]
+[node name="platform" type="TileMap" parent="0-24 vs Alchemist Dummy" index="5"]
 scale = Vector2( 4, 4 )
 tile_set = ExtResource( 5 )
 cell_size = Vector2( 16, 16 )
@@ -1379,6 +1380,6 @@ nearestRoomCorner = Vector2( 120, 96 )
 [node name="Checkpoint4" parent="BossArea" index="3" instance=ExtResource( 28 )]
 position = Vector2( 672, 384 )
 
-[connection signal="boss_killed" from="0-24/AlchemistDummy_v2" to="0-24/RotateAndTeleport2" method="_on_AlchemistDummy_v2_boss_killed"]
-[connection signal="event_executed" from="0-24/EventTile" to="0-24/AlchemistDummy_v2" method="_on_EventTile_event_executed"]
+[connection signal="boss_killed" from="0-24 vs Alchemist Dummy/AlchemistDummy_v2" to="0-24 vs Alchemist Dummy/RotateAndTeleport2" method="_on_AlchemistDummy_v2_boss_killed"]
+[connection signal="event_executed_passPlayer" from="0-24 vs Alchemist Dummy/EventTile" to="0-24 vs Alchemist Dummy/AlchemistDummy_v2" method="_on_EventTile_event_executed_passPlayer"]
 [connection signal="block_broken" from="108-40/BreakableBlock" to="108-40/BlockEnablerDisabler" method="execute"]

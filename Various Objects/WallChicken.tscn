@@ -13,7 +13,7 @@ extents = Vector2( 32, 32 )
 [sub_resource type="GDScript" id=3]
 script/source = "extends Area2D
 
-const gf_cutscene = preload(\"res://Cutscene/CutsceneMain.tscn\")
+const gf_cutscene = preload(\"res://Screens/ScreenCutscene/CutsceneMain.tscn\")
 
 func _ready():
 	self.connect(\"body_entered\",self,\"heal\")

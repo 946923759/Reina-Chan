@@ -29,11 +29,11 @@ func _ready():
 	#print($m/CenterContainer/VBoxContainer/Label.rect_global_position)
 
 var time
-func updateTimer(time,timeWithDeath):
-	self.time=time
+func updateTimer(time_,timeWithDeath):
+	self.time=time_
 	var text = INITrans.GetString(\"PauseMenu\",\"YOUR TIME SO FAR\")+\"\\n\"
 	text+=Globals.format_time(
-		time,
+		time_,
 		Globals.TimeFormat.FORMAT_MINUTES|Globals.TimeFormat.FORMAT_SECONDS|Globals.TimeFormat.FORMAT_MILISECONDS
 	)
 	if time!=timeWithDeath:
@@ -125,8 +125,7 @@ func input_accept():
 		Globals.save_player_game()
 		#Globals.save_system_data() #Not sure why this is here
 		get_tree().paused = false
-# warning-ignore:return_value_discarded
-		get_tree().change_scene(\"res://ScreenStageSelectV2/NewBossSelect.tscn\")
+		Globals.change_screen(get_tree(),\"ScreenSelectStage\")
 	elif pos==3:
 		$Fadeout.visible = true
 		$Fadeout_Tween.interpolate_property($Fadeout, \"modulate\", Color(0,0,0,0), Color(0,0,0,1), .5, Tween.TRANS_LINEAR, Tween.EASE_OUT)
@@ -136,7 +135,7 @@ func input_accept():
 		#Globals.save_system_data() #Not sure why this is here
 		get_tree().paused = false
 # warning-ignore:return_value_discarded
-		get_tree().change_scene(\"res://ScreenTitleMenu/TitleScreenV2.tscn\")
+		Globals.change_screen(get_tree(),\"ScreenTitleMenu\")
 "
 
 [node name="PauseScreen" type="CanvasLayer"]

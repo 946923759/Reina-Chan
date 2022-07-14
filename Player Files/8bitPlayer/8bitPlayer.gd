@@ -76,7 +76,7 @@ onready var shotTimer = $ShotTimer
 onready var eventCheck = $EventCheck
 
 #Cutscenes
-var gf_cutscene = preload("res://Cutscene/CutsceneInGame.tscn")
+var gf_cutscene = preload("res://Screens/ScreenCutscene/CutsceneInGame.tscn")
 
 #debug
 var freeRoam = false
@@ -180,7 +180,7 @@ func switchWeapon():
 	#print(Globals.weaponColorSwaps[currentWeapon][0])
 	#print(Globals.weaponColorSwaps[currentWeapon][1])
 
-func get_menu_buttons_input(delta):
+func get_menu_buttons_input(_delta):
 	if Input.is_action_just_pressed('DebugButton1'):
 		freeRoam = !freeRoam
 		setDebugInfoText()
@@ -281,9 +281,19 @@ var frameTimer:float =0.0
 #Because we only want to reset the frame timer after about 3-4 frames.
 var negativeFrameTimer:float=0.0
 
+#Resets if they touch the ground.
+#This will always be false if they haven't
+#unlocked the special weapon.
+var canAirDash:bool=false
+
 var isOnFloor:bool=false
 func get_input(delta):
 	isOnFloor=is_on_floor()
+
+	#I WANT REFERENCE VARIABLES REEEEEEEEE
+	if canAirDash==false and isOnFloor and Globals.playerData.specialAbilities[Globals.SpecialAbilities.AirDash]:
+		canAirDash=true
+	
 	#It's here because freeRoam overrides R1
 	if Input.is_action_just_pressed("R1"):
 		var i = currentWeapon+1
@@ -315,7 +325,10 @@ func get_input(delta):
 	var down = Input.is_action_pressed('ui_down')
 	var jump = Input.is_action_just_pressed('ui_select')
 	var shoot = Input.is_action_just_pressed("ui_cancel")
-	if rapidFire and shoot_time > .1:
+
+	if state==State.DASH: #No shooting while dashing
+		shoot=false
+	elif rapidFire and shoot_time > .1:
 		shoot = Input.is_action_pressed("ui_cancel")
 	
 	if Globals.flipButtons:
@@ -400,14 +413,9 @@ func get_input(delta):
 	else:
 		shoot_time += delta
 		
+	#TODO: This is causing input locks for 1 frame because for the frame
+	#you jump, you aren't moving anymore...
 	if jump and is_on_floor():
-		#print("Jumped")
-		#$FootstepSound.play()
-		#state = State.JUMPING
-		#if shotTimer.is_stopped():
-		#	sprite.set_animation("JumpStart")
-		#else:
-		#	sprite.set_animation("JumpShoot")
 		velocity.y = jump_speed
 		state = State.JUMPING
 	elif state == State.ON_LADDER:
@@ -474,9 +482,10 @@ func get_input(delta):
 				sprite.set_animation("LadderBegin")
 				#get position of cell then multiply to get actual character position then offset by half of cell width multiplied by scale
 				position.x = pos2cell(position).x*16*4+8*4;
-				velocity.x = 0
+				velocity=Vector2(0,-1)
 				#position = Vector2(round(floor(position.x)/16/4)*16*4+8*4, position.y)
 				state = State.ON_LADDER
+				print("Ladder!")
 		if down and !movementLocked:
 			#print(String()))
 			var tilePos = pos2cell(position)
@@ -507,6 +516,11 @@ func get_input(delta):
 			#	velocity.y = 300
 			#	set_collision_mask_bit(0,false)
 			#	set_collision_layer_bit(0,false)
+		if canAirDash and down and jump:
+			state = State.DASH
+			dash_time=.5
+			sprite.set_animation("Dash")
+			canAirDash=false
 		if state == State.JUMPING:
 			var jumpHeld = Input.is_action_pressed("ui_select")
 			if Globals.flipButtons:
@@ -517,7 +531,7 @@ func get_input(delta):
 				velocity.y = 0
 				state=State.FALLING
 
-func get_free_roam_input(delta):
+func get_free_roam_input(_delta):
 	velocity.y = 0
 	velocity.x = 0
 	var m = 3 if Input.is_action_pressed('R1') else 1
@@ -564,7 +578,7 @@ func handleEvents():
 			Globals.EVENT_TILES.NO_EVENT:
 				print("This event has not been assigned an ID!")
 			Globals.EVENT_TILES.SIGNAL:
-				event.signal_event()
+				event.signal_event(self)
 				event.disabled=true
 			Globals.EVENT_TILES.IN_WATER:
 				#print("In water!")
@@ -621,11 +635,13 @@ func set_checkpoint(respawnPosition:Vector2,shouldFaceLeft=false):
 	CheckpointPlayerStats.shouldFaceLeft=shouldFaceLeft
 	CheckpointPlayerStats.checkpointSet=true
 
-#Do nothing, empty function to be defined in m16
-#returns true if _physics_process() should end
-#execution early
-func m16_slide_handler()->bool:
-	return false
+func dash_handler()->bool:
+	if dash_time>0:
+		var ss = -1.0 if sprite.flip_h else 1.0
+		velocity=Vector2(ss*run_speed*dash_multiplier,0)
+		return true
+	else:
+		return false
 
 func _physics_process(delta):
 	if !is_timer_stopped:
@@ -723,7 +739,7 @@ func _physics_process(delta):
 	elif state==State.DASH:
 		if invincible: #Still need to process invincibility frames
 			processInvincible(delta)
-		if m16_slide_handler():
+		if dash_handler():
 			return
 		#return
 		#pass
@@ -731,6 +747,8 @@ func _physics_process(delta):
 	if is_on_floor() and velocity.y >= 0:
 		if state == State.FALLING:
 			footstep.play()
+		#if state!=State.NORMAL:
+		#	print("Resetting state, player touched ground")
 		state = State.NORMAL
 			
 		if velocity.x > 125.0 or velocity.x < -125.0:
@@ -1009,7 +1027,7 @@ func die():
 			get_tree().reload_current_scene()
 		else:
 # warning-ignore:return_value_discarded
-			get_tree().change_scene("res://TitleScreenV2.tscn")
+			Globals.change_screen(get_tree(),"ScreenTitleMenu")
 
 func finishStage():
 	is_timer_stopped=true
@@ -1028,15 +1046,14 @@ func finishStage():
 func finishStage_2():
 	$CanvasLayer/Fadeout.fadeOut()
 	yield($CanvasLayer/Fadeout/Fadeout_Tween,"tween_completed")
-	var nextScene = "res://ItemGet/ItemGet.tscn"
+	var nextScene = "ScreenItemGet"
 	CheckpointPlayerStats.lastPlayedStage = stageRoot.weapon_to_unlock
 	if Globals.playerData.availableWeapons[stageRoot.weapon_to_unlock]: #If this stage is already completed
-		nextScene="res://StageSelectV2/NewBossSelect.tscn"
+		nextScene="ScreenSelectStage"
 	Globals.playerData.availableWeapons[stageRoot.weapon_to_unlock]=true
 	Globals.save_player_game()
 	
-# warning-ignore:return_value_discarded
-	get_tree().change_scene(nextScene)
+	Globals.change_screen(get_tree(),nextScene)
 	
 
 func healPlayer(amount):

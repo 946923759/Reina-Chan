@@ -36,9 +36,9 @@ scale = Vector2( 4, 4 )
 frames = SubResource( 1 )
 
 [node name="Area2D" type="Area2D" parent="."]
-monitoring = false
 collision_layer = 9
 collision_mask = 9
+monitoring = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource( 2 )

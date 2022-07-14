@@ -2,7 +2,7 @@ extends KinematicBody2D
 signal cutscene_finished
 
 
-var gf_cutscene = preload("res://Cutscene/CutsceneMain.tscn")
+var gf_cutscene = preload("res://Screens/ScreenCutscene/CutsceneMain.tscn")
 
 export(int,"AppearFromBoss","Normal") var spawnType = 1
 export(int,"Towards Player","Left","Right") var facing=0
@@ -13,7 +13,7 @@ var gravity = 2000
 var disabled:bool=false
 var just_touched_ground:bool=false
 
-onready var animPlayer:AnimationPlayer = $AnimationPlayer
+onready var animPlayer:AnimationPlayer = $DustCloud/AnimationPlayer
 onready var sprite:AnimatedSprite = $AnimatedSprite
 
 func _ready():

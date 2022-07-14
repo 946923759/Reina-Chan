@@ -91,3 +91,4 @@ anims/shutdown = SubResource( 4 )
 [node name="ReflectSound" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource( 3 )
 volume_db = 5.0
+bus = "Player/Enemies"

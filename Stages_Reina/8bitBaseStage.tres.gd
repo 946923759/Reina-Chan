@@ -16,6 +16,7 @@ var cameraScale:float = 64;
 export (String) var custom_music_name
 export (String) var nsf_music_file
 export (int) var nsf_track_num = 0
+export (float,-8.0,8.0,.1) var nsf_volume_adjustment = 0.0
 export (bool) var mute_music_in_debug=false
 export (bool) var mute_boss_music_in_debug=false
 #export (bool) var completely_disable_music=false
@@ -78,7 +79,7 @@ func _ready():
 	#var music = Globals.get_custom_music(custom_music_name) if custom_music_name != "" else null
 	#load_song(_node:Node, custom_music_name:String, nsf_music_file:String, nsf_track_num:int)
 	if !mute_music_in_debug or !OS.is_debug_build():
-		reinaAudioPlayer.load_song(custom_music_name,nsf_music_file,nsf_track_num)
+		reinaAudioPlayer.load_song(custom_music_name,nsf_music_file,nsf_track_num,nsf_volume_adjustment)
 
 #In case of multiplayer or something, always use this
 #function

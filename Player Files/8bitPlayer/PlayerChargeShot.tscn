@@ -1,22 +1,27 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://Stages_Reina/Enemies/M16Miniboss/chargeShot.png" type="Texture" id=1]
 [ext_resource path="res://Sounds/Classic/Mega Man 6 SRX (34) - Maybe Charge Shot.wav" type="AudioStream" id=2]
+[ext_resource path="res://Sounds/Classic/Dink.wav" type="AudioStream" id=3]
 
 [sub_resource type="GDScript" id=1]
-script/source = "extends Node2D
+script/source = "extends KinematicBody2D
 
-const SPEED=700 #Default is 600
+const SPEED=750 #Default is 600
+
+var reflected:bool=false
+
 #TODO: Fix this at some point so it doesn't use AnimatedSprite,
 #it wastes CPU.
 onready var sprite = $AnimatedSprite
 onready var vis = $VisibilityNotifier2D
+onready var reflectSound = $ReflectSound
 func _ready():
 	sprite.set_animation('default')
 	sprite.frame=0
 	sprite.playing=true
 	# warning-ignore:return_value_discarded
-	$Area2D.connect(\"body_entered\",self,\"objectTouched\")
+	#$Area2D.connect(\"body_entered\",self,\"objectTouched\")
 
 var facing:int=1
 func init(facing:int):
@@ -31,12 +36,34 @@ func _physics_process(delta):
 	if isDefaultAnim and sprite.frame==2:
 		sprite.set_animation(\"loop\")
 		isDefaultAnim=false
-	self.position.x+=SPEED*facing*delta
+	move_and_collide(Vector2(SPEED*facing*delta,0))
 	
-func objectTouched(obj):
-	#print(\"intersecting!\")
-	if obj.has_method(\"enemy_touched\"): #If enemy touched bullet
-		obj.call(\"enemy_touched\",self)
+#func objectTouched(obj):
+#	print(\"ChargeShot: Collided with something.\")
+#	#print(\"intersecting!\")
+#	if obj.has_method(\"enemy_touched\"): #If enemy touched bullet
+#		obj.call(\"enemy_touched\",self)
+#	else:
+#		print(\"Colliding object does not have 'enemy_touched'.\")
+
+func enemy_touched(obj):
+	enemy_touched_alt(obj,obj.get(\"is_reflecting\") == true)
+
+#Because I clearly don't know what I'm doing
+func enemy_touched_alt(obj,reflect):
+	if reflected:
+		return
+	#If whatever called this function can get damaged by a bullet, damage it.
+	#TODO: This doesn't account for damage types or effectiveness or whatever...
+	if reflect:
+		reflected=true
+		#print(String(OS.get_ticks_msec())+\" Bullet reflected!\")
+		reflectSound.play()
+	else:
+		if obj.has_method(\"damage\"):
+			obj.call(\"damage\",1)
+		#This is only supposed to happen for large enemies
+		queue_free()
 "
 
 [sub_resource type="AtlasTexture" id=2]
@@ -83,7 +110,9 @@ animations = [ {
 [sub_resource type="RectangleShape2D" id=10]
 extents = Vector2( 72, 40 )
 
-[node name="Node2D" type="Node2D"]
+[node name="Node2D" type="KinematicBody2D"]
+collision_layer = 0
+collision_mask = 8
 script = SubResource( 1 )
 __meta__ = {
 "_edit_group_": true
@@ -95,16 +124,18 @@ frames = SubResource( 9 )
 animation = "loop"
 frame = 1
 
-[node name="Area2D" type="Area2D" parent="."]
-collision_mask = 2
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-shape = SubResource( 10 )
-
 [node name="VisibilityNotifier2D" type="VisibilityNotifier2D" parent="."]
 position = Vector2( -20, 0 )
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource( 2 )
 autoplay = true
+bus = "Player/Enemies"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 10 )
+
+[node name="ReflectSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 3 )
+volume_db = 5.0
 bus = "Player/Enemies"

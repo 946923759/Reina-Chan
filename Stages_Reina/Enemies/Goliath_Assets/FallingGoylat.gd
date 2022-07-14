@@ -22,7 +22,7 @@ func updateDraw(facing):
 var velo:float=0
 func _process(delta):
 	position.y+=350*delta+velo
-	velo+=delta*2
+	velo+=delta*4
 	
 
 func objTouched(obj):

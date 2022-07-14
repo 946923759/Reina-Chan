@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://Stages_Reina/Bosses/BossBase.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Stages_Reina/Bosses/Scarecrow/scarecrowIntro 5x1.png" type="Texture" id=2]
@@ -6,6 +6,10 @@
 [ext_resource path="res://Stages_Reina/Bosses/Scarecrow/BossScarecrow.gd" type="Script" id=4]
 [ext_resource path="res://Stages_Reina/Bosses/Scarecrow/ScareCrowIdle 3x1.png" type="Texture" id=5]
 [ext_resource path="res://Stages_Reina/Bosses/Scarecrow/thingy.png" type="Texture" id=6]
+
+[sub_resource type="SegmentShape2D" id=12]
+a = Vector2( -30, 77 )
+b = Vector2( 30, 77 )
 
 [sub_resource type="AtlasTexture" id=1]
 atlas = ExtResource( 2 )
@@ -73,6 +77,7 @@ onready var t:Tween = $Tween
 enum STATES {
 	spinning,
 	top,
+	topSpread,
 	danmaku
 }
 var curState = STATES.spinning
@@ -100,6 +105,11 @@ func appear():
 	t.interpolate_property(sprite2,\"modulate:a\",0.0,1.0,.3,Tween.TRANS_QUAD,Tween.EASE_IN,.2)
 	t.interpolate_property(sprite3,\"modulate:a\",0.0,1.0,.3,Tween.TRANS_QUAD,Tween.EASE_IN,.4)
 	t.start()
+	
+func set_flipped(flip:bool):
+	sprite1.flip_h=flip
+	sprite2.flip_h=flip
+	sprite3.flip_h=flip
 
 var timer:float=0.0
 func _physics_process(delta):
@@ -132,6 +142,7 @@ func _physics_process(delta):
 
 func set_float_to_top(goTowards:Vector2):
 	curState=STATES.top
+	#This is needed because they aim towards the player.
 	player=get_node(\"/root/Node2D/\").get_player()
 	
 	t.interpolate_property(sprite1,\"global_position\",null,goTowards+Vector2(-1,1)*64,1,Tween.TRANS_CUBIC,Tween.EASE_OUT)
@@ -145,6 +156,19 @@ func set_float_to_top(goTowards:Vector2):
 
 	t.start()
 	#return 1.0
+	
+func set_float_to_top_spread(goTowards:Vector2):
+	curState=STATES.topSpread
+	
+	t.interpolate_property(sprite1,\"global_position\",null,goTowards+Vector2(-4,0)*64,1,Tween.TRANS_CUBIC,Tween.EASE_OUT)
+	t.interpolate_property(sprite2,\"global_position\",null,goTowards,1,Tween.TRANS_CUBIC,Tween.EASE_OUT)
+	t.interpolate_property(sprite3,\"global_position\",null,goTowards+Vector2(4,0)*64,1,Tween.TRANS_CUBIC,Tween.EASE_OUT)
+	
+	t.interpolate_property(sprite1,\"rotation_degrees\",null,-90,1,Tween.TRANS_CUBIC,Tween.EASE_OUT)
+	t.interpolate_property(sprite2,\"rotation_degrees\",null,-90,1,Tween.TRANS_CUBIC,Tween.EASE_OUT)
+	t.interpolate_property(sprite3,\"rotation_degrees\",null,-90,1,Tween.TRANS_CUBIC,Tween.EASE_OUT)
+	t.start()
+
 	
 func set_return_circling(tweenTime:float=1.0):
 	#NOT GLOBAL!!!
@@ -173,10 +197,13 @@ func getSprite(i:int)->Sprite:
 [node name="BossScarecrow" instance=ExtResource( 1 )]
 script = ExtResource( 4 )
 
+[node name="CollisionShape2D" parent="." index="0"]
+shape = SubResource( 12 )
+
 [node name="AnimatedSprite" parent="." index="1"]
 frames = SubResource( 10 )
 animation = "idle"
-frame = 1
+frame = 2
 playing = true
 flip_h = true
 
@@ -234,9 +261,11 @@ __meta__ = {
 margin_top = -256.0
 margin_right = 49.0
 margin_bottom = -242.0
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 1
+custom_constants/shadow_offset_y = 1
 text = "topLeft:"
-__meta__ = {
-"_edit_use_anchors_": false
-}
+
+[node name="Tween" type="Tween" parent="." index="11"]
 
 [connection signal="animation_finished" from="AnimatedSprite" to="." method="_on_AnimatedSprite_animation_finished"]

@@ -1,0 +1,15 @@
+msg	This is message 0.
+jmp	1
+msg	This is message 1.
+msg	This is message 2... Message 1 was skipped by 'jmp' command.
+msg	This is a choice test. Pick a choice.
+choice	This is the first choice.	This is the second choice.
+nop	skip 2 instructions if choice result was 2
+nop	If you skipped 0 forward then it would be the same as a nop
+nop	argument 1= num to skip, argument 2 = choice to compare
+condjmp_c	2	2
+msg	You picked choice 1.
+jmp	1
+msg	You picked choice 2.
+msg	Now let's jump backwards using a 'jmp' opcode.
+jmp	-8

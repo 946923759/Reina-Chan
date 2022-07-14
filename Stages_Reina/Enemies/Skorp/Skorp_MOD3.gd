@@ -63,9 +63,10 @@ func _ready():
 	update_flip()
 	is_reflecting=true
 
+	debugDistance.visible=OS.is_debug_build()
 
 func spawn_boulders():
-	for i in range(3):
+	for _i in range(3):
 		var range_:int=0
 		if facing==DIRECTION.LEFT:
 			range_=rng.randi_range(1,10)
@@ -78,7 +79,7 @@ func spawn_boulders():
 		#print("Spawned falling boulder at "+String(e.global_position))
 	#Get fucked lol
 	var e = boulder.instance()
-	e.position.y-64*rng.randi_range(0,4)
+	e.position.y-=64*rng.randi_range(0,4)
 	get_parent().add_child(e)
 	e.global_position.x=player.global_position.x
 
@@ -169,7 +170,7 @@ func _process(delta):
 		STATES.FIRE_INIT:
 			if sprite.frame>=5:
 				fireSound.playing=true
-				var distanceFromPlayer=abs(global_position.x-player.global_position.x)/64
+				#var distanceFromPlayer=abs(global_position.x-player.global_position.x)/64
 				if true: #No need for the small one.
 					fireAnimBig.emitting=true
 					#curState=STATES.FIRE_LONG
@@ -228,7 +229,9 @@ func _process(delta):
 			if sprite.frame==3:
 				sprite.set_animation("default")
 				curState=STATES.IDLE
-	debugDistance.text=String(stepify((global_position.x-player.global_position.x)/64,.01))
+				
+	if debugDistance.visible:
+		debugDistance.text=String(stepify((global_position.x-player.global_position.x)/64,.01))
 
 
 #Maybe get_player() should be used instead?
