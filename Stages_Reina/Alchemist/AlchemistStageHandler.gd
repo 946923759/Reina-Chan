@@ -44,6 +44,8 @@ func _ready():
 	
 	get_tree().set_screen_stretch(SceneTree.STRETCH_MODE_2D,SceneTree.STRETCH_ASPECT_KEEP,Vector2(1280,720))
 	
+	update_easytiles()
+	
 	#set_process(true)
 	if CheckpointPlayerStats.checkpointSet:
 		print("There is a checkpoint, not adjusting the camera.")
@@ -84,7 +86,20 @@ func _ready():
 			reinaAudioPlayer.load_song(custom_music_name,nsf_music_file,nsf_track_num)
 		else:
 			reinaAudioPlayer.load_song(custom_music_name_pt2,nsf_music_file_pt2,nsf_track_num_pt2)
-		
+
+func update_easytiles():
+	var easyTiles:TileMap = $EasyTiles
+	if Globals.playerData.gameDifficulty > Globals.Difficulty.EASY:
+		for i in range(8):
+			easyTiles.set_collision_mask_bit(i,false)
+			easyTiles.set_collision_layer_bit(i,false)
+		easyTiles.visible=false
+	else:
+		easyTiles.set_collision_layer_bit(4,true)
+		easyTiles.set_collision_layer_bit(5,true)
+		easyTiles.set_collision_mask_bit(0,true)
+		easyTiles.visible=true
+
 func playBossMusic():
 	if OS.is_debug_build() and mute_boss_music_in_debug:
 		return

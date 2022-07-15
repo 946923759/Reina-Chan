@@ -329,9 +329,9 @@ margin_left = 721.264
 margin_top = 158.363
 margin_right = 1522.26
 margin_bottom = 339.363
-custom_fonts/font = ExtResource( 6 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_constants/shadow_as_outline = 10
+custom_fonts/font = ExtResource( 6 )
 text = "F1 - FREE ROAM
 F2 - NOCLIP
 F3 - cycle test warps
@@ -355,9 +355,9 @@ margin_left = 99.0
 margin_top = 118.0
 margin_right = 900.0
 margin_bottom = 168.0
-custom_fonts/font = ExtResource( 6 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_constants/shadow_as_outline = 10
+custom_fonts/font = ExtResource( 6 )
 text = "PlayerState debug"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -368,9 +368,9 @@ margin_left = 454.816
 margin_top = 50.6725
 margin_right = 1255.82
 margin_bottom = 100.673
-custom_fonts/font = ExtResource( 6 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_constants/shadow_as_outline = 10
+custom_fonts/font = ExtResource( 6 )
 text = "camera debug"
 align = 2
 __meta__ = {
@@ -382,9 +382,9 @@ margin_left = 101.0
 margin_top = 21.0
 margin_right = 739.0
 margin_bottom = 71.0
-custom_fonts/font = ExtResource( 6 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_constants/shadow_as_outline = 10
+custom_fonts/font = ExtResource( 6 )
 text = "Velocity debug"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -395,9 +395,9 @@ margin_left = 99.0
 margin_top = 88.0
 margin_right = 737.0
 margin_bottom = 138.0
-custom_fonts/font = ExtResource( 6 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_constants/shadow_as_outline = 10
+custom_fonts/font = ExtResource( 6 )
 text = "Tile Debug"
 
 [node name="StatePosition" type="Label" parent="CanvasLayer/DebugDisplay"]
@@ -405,9 +405,9 @@ margin_left = 101.0
 margin_top = 53.0
 margin_right = 739.0
 margin_bottom = 103.0
-custom_fonts/font = ExtResource( 6 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_constants/shadow_as_outline = 10
+custom_fonts/font = ExtResource( 6 )
 text = "Position Debug"
 
 [node name="FreeRoam" type="Label" parent="CanvasLayer/DebugDisplay"]
@@ -415,10 +415,10 @@ margin_left = 617.0
 margin_top = 15.0
 margin_right = 1255.0
 margin_bottom = 65.0
-custom_fonts/font = ExtResource( 6 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_constants/shadow_offset_y = 0
 custom_constants/shadow_as_outline = 10
+custom_fonts/font = ExtResource( 6 )
 text = "Free Roam"
 align = 2
 
@@ -427,9 +427,9 @@ margin_left = 103.0
 margin_top = 243.0
 margin_right = 679.0
 margin_bottom = 278.0
-custom_fonts/font = ExtResource( 6 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_constants/shadow_as_outline = 5
+custom_fonts/font = ExtResource( 6 )
 text = "Onscreen pos"
 
 [node name="bar" type="Sprite" parent="CanvasLayer"]
@@ -578,10 +578,10 @@ bus = "Player/Enemies"
 
 [node name="ChargeDash" type="Area2D" parent="."]
 position = Vector2( 60, 23 )
-monitoring = false
-monitorable = false
 collision_layer = 9
 collision_mask = 9
+monitoring = false
+monitorable = false
 script = SubResource( 9 )
 __meta__ = {
 "_edit_group_": true
@@ -606,3 +606,4 @@ target_path = NodePath("..")
 properties = PoolStringArray( "frameTimer", "isOnFloor" )
 
 [connection signal="timeout" from="WeaponSwitch/TimeToShow" to="WeaponSwitch" method="_on_Timer_timeout"]
+[connection signal="unpaused" from="PauseScreen" to="." method="_on_PauseScreen_unpaused"]

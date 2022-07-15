@@ -1077,3 +1077,7 @@ func giveExtraLife():
 	else:
 		CheckpointPlayerStats.playerLivesLeft+=1
 	$OneUpSound.play()
+
+
+func _on_PauseScreen_unpaused():
+	stageRoot.update_easytiles()

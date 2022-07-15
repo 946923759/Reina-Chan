@@ -5,10 +5,10 @@ var expl = preload("res://Stages/EnemyExplosion.tscn")
 
 func _ready():
 	self.connect("body_entered",self,"objTouched")
-	set_process(false)
+	set_physics_process(false)
 	
 func init(facing:int=1):
-	set_process(true)
+	set_physics_process(true)
 	var s = $Sprite
 	updateDraw(facing)
 	s.rotation_degrees=facing*36.5
@@ -20,7 +20,7 @@ func updateDraw(facing):
 	s.offset=Vector2(-2*facing,3*facing)
 
 var velo:float=0
-func _process(delta):
+func _physics_process(delta):
 	position.y+=350*delta+velo
 	velo+=delta*4
 	

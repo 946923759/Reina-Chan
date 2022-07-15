@@ -5,6 +5,7 @@
 
 [sub_resource type="GDScript" id=1]
 script/source = "extends CanvasLayer
+signal unpaused()
 
 onready var optList = $m/CenterContainer/VBoxContainer
 
@@ -61,6 +62,7 @@ func OffCommand():
 	$m.visible=false
 	set_process_input(false)
 	get_tree().paused = false
+	emit_signal(\"unpaused\")
 	#return $Fadeout_Tween
 	
 var pos = 0

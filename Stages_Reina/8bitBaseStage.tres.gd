@@ -42,6 +42,10 @@ func _ready():
 	
 	if debug_warp_points.size()==0:
 		debug_warp_points=[Vector2(0,0)]
+		
+	update_easytiles()
+	#else:
+	#	print("Diff: "+Globals.difficultyToString(Globals.playerData.gameDifficulty))
 	
 	#set_process(true)
 	if CheckpointPlayerStats.checkpointSet:
@@ -80,6 +84,19 @@ func _ready():
 	#load_song(_node:Node, custom_music_name:String, nsf_music_file:String, nsf_track_num:int)
 	if !mute_music_in_debug or !OS.is_debug_build():
 		reinaAudioPlayer.load_song(custom_music_name,nsf_music_file,nsf_track_num,nsf_volume_adjustment)
+
+func update_easytiles():
+	var easyTiles:TileMap = $EasyTiles
+	if Globals.playerData.gameDifficulty > Globals.Difficulty.EASY:
+		for i in range(8):
+			easyTiles.set_collision_mask_bit(i,false)
+			easyTiles.set_collision_layer_bit(i,false)
+		easyTiles.visible=false
+	else:
+		easyTiles.set_collision_layer_bit(4,true)
+		easyTiles.set_collision_layer_bit(5,true)
+		easyTiles.set_collision_mask_bit(0,true)
+		easyTiles.visible=true
 
 #In case of multiplayer or something, always use this
 #function

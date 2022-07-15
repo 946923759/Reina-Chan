@@ -17,8 +17,8 @@ onready var animPlayer:AnimationPlayer = $DustCloud/AnimationPlayer
 onready var sprite:AnimatedSprite = $AnimatedSprite
 
 func _ready():
-	$LeftC.modulate.a=0
-	$RightC.modulate.a=0
+	$DustCloud/LeftC.modulate.a=0
+	$DustCloud/RightC.modulate.a=0
 	
 	if spawnType==0:
 		velocity.y=-1000

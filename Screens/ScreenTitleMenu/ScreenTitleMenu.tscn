@@ -54,7 +54,8 @@ export var hasSubmenu = false
 
 func action():
 	Globals.nextCutscene=\"cutscene1Data.txt\"
-	get_tree().change_scene(\"res://Cutscene/CutsceneFromFile.tscn\")
+	Globals.change_screen(get_tree(),\"CutsceneFromFile\")
+	#get_tree().change_scene(\"res://Cutscene/CutsceneFromFile.tscn\")
 "
 
 [sub_resource type="GDScript" id=4]

@@ -61,7 +61,7 @@ func enemy_touched_alt(obj,reflect):
 		reflectSound.play()
 	else:
 		if obj.has_method(\"damage\"):
-			obj.call(\"damage\",1)
+			obj.call(\"damage\",3)
 		#This is only supposed to happen for large enemies
 		queue_free()
 "

@@ -10,7 +10,7 @@ script/source = "extends Node2D
 var selection:int = 4
 #Name,image,stage,isAvailable
 var whatever:Array=[
-	[\"Architect\",\"res://Screens/ScreenStageSelectV2/Architect.png\",\"res://Stages_Reina/Architect/StageArchitect.tscn\"],
+	[\"Architect\",\"res://Screens/ScreenStageSelectV2/Architect.png\",\"res://Stages_Reina/Architect/StageArchitect_v2.tscn\"],
 	[\"Alchemist\",\"res://Screens/ScreenStageSelectV2/Alchemist.png\",\"res://Stages_Reina/Alchemist/Alchemist_v2.tscn\"],
 	[\"Ouroboros\",\"\",\"\"],
 	[\"Scarecrow\",\"res://Screens/ScreenStageSelectV2/Scarecrow.png\",\"res://Stages_Reina/Scarecrow/Scarecrow.tscn\"],

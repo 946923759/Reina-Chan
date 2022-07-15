@@ -45,7 +45,7 @@ func push_back_from_idx_one(arr,arr2): #Arrays are passed by reference so there'
 
 #This function will load backgrounds and music in advance.
 #It will also split the delimiter in advance.
-func preparse_string_array(arr,delimiter:String="|")->bool:
+func preparse_string_array(arr:PoolStringArray,delimiter:String="|")->bool:
 	var musicToLoad:Array=[]
 	var soundsToLoad:Array=[]
 	var backgrounds_to_load:Array=[]
@@ -400,7 +400,8 @@ func _ready():
 
 
 
-func init_(message, parent,delim="|",msgColumn:int=1):
+func init_(message:PoolStringArray, parent,delim="|",msgColumn:int=1):
+	assert(message.size()>0,"You can't pass an empty message to a cutscene!!!")
 	if parent:
 		parent_node = parent
 		

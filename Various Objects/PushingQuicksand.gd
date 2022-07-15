@@ -127,7 +127,7 @@ func run_event(player:KinematicBody2D):
 			player.set_collision_layer_bit(0,false)
 			player.lockMovementQueue([
 				[0,Vector2(0,0),"",false],
-				[999,Vector2(0,0),"Hurt",true]
+				[10,Vector2(0,0),"Hurt",true]
 			])
 			stage=1
 			lastTouchedPlayer=player

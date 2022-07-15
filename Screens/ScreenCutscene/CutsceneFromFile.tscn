@@ -29,7 +29,7 @@ func get_cutscene_path()->String:
 			if OS.has_feature(\"standalone\"):
 				return OS.get_executable_path().get_base_dir()+\"/GameData/Cutscene/\"
 	#If not compiled or if the platform doesn't allow writing to the game's current directory
-	return \"res://Cutscene/Embedded/\"
+	return \"res://Screens/ScreenCutscene/Embedded/\"
 	
 	
 #func push_back_from_idx_one(arrToFill:Array,arr2:Array)->Array:
@@ -53,6 +53,7 @@ func load_cutscene_data(name:String)->Dictionary:
 		path=name
 	else:
 		path = get_cutscene_path()+name
+	print(\"Opening cutscene \"+path)
 	var ok = f.open(path, File.READ)
 	if ok != OK:
 		printerr(\"Warning: could not open file for reading! ERROR \", ok)
@@ -128,8 +129,8 @@ func _ready():
 				break
 				
 	cutsceneData = load_cutscene_data(Globals.nextCutscene)
-	if OS.is_debug_build():
-		cutsceneData = load_cutscene_data(\"april_fools.txt\")
+	#if OS.is_debug_build():
+	#	cutsceneData = load_cutscene_data(\"april_fools.txt\")
 		#cutsceneData = load_cutscene_data(\"test_Midnight112.txt\")
 	if cutsceneData.size()==0:
 		#var e = load(\"res://savedataError.tscn\").instance()
@@ -218,9 +219,6 @@ func end_cutscene_2():
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = SubResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="ColorRect" type="ColorRect" parent="."]
 anchor_right = 1.0
