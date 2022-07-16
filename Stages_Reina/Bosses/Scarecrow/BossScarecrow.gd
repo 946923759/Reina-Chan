@@ -23,6 +23,7 @@ enum STATE {
 	RETURN_CIRCLING,
 	SHOOT_SPREAD_INIT,
 	SHOOT_SPREAD,
+	SHOOT_CURTAIN, #Alternate to SHOOT_SPREAD
 	GROUND_ATTACK_1,
 	GROUND_ATTACK_2,
 	CURTAINS
@@ -42,6 +43,7 @@ var topLeft:Vector2
 func _ready():
 	topLeft = get_parent().get_parent().global_position
 	startingPosition=self.position
+	print("[Scarecrow] StartPos: "+String(startingPosition))
 	facing=DIRECTION.LEFT
 	
 	$DebugLabel3.visible=OS.is_debug_build()
@@ -94,6 +96,23 @@ func fire_spread(root:Node2D,startPos:Vector2):
 		bi.init(newAngle)
 		if j==0:
 			bi.shootSound.play()
+			
+func gen_curtain(root:Node2D,centerPos:Vector2,numToGenerate:int=9,delay:float=0):
+	var spread = 64
+	var v = Vector2(0,8)
+	for j in range(numToGenerate):
+		var bi = b.instance()
+		root.add_child(bi)
+		bi.position = centerPos
+		
+		bi.special_type=2
+		bi.destination_spread_xpos=Vector2(bi.position.x+(float(j)-numToGenerate/2)*128.0,.3)
+		if numToGenerate%2==0:
+			bi.destination_spread_xpos.x+=64
+		bi.timer-=delay
+		bi.init(v)
+		if j==0:
+			bi.shootSound.play()
 
 func _physics_process(delta):
 	if idleTime>=0:
@@ -139,8 +158,12 @@ func _physics_process(delta):
 				fireBullet()
 				shots+=1
 		STATE.IDLE:
+			facing=DIRECTION.LEFT if global_position.x > player.global_position.x else DIRECTION.RIGHT
+			sprite.flip_h=(facing==DIRECTION.LEFT)
+			spinnyFrame.set_flipped(sprite.flip_h)
 			idleTime=1
 			shots=0
+			bulletCounter=0
 			if curHP < 14:
 				curState=STATE.SHOOT_SPREAD_INIT
 			else:
@@ -165,23 +188,35 @@ func _physics_process(delta):
 				curState=STATE.IDLE
 		STATE.SHOOT_SPREAD_INIT:
 			spinnyFrame.set_float_to_top_spread((topLeft/64+Vector2(10,2))*64)
-			if position.y > startingPosition.y-300:
-				var movT:int=0
-				if position.x > 11*64 or position.x < 9*64:
-					#If Scarecrow is to the right she moves left,
-					#If she's to the left she moves right.
-					#I'm pretty sure there's some way to do this
-					#using pure math but I couldn't figure it out
-					if 10-position.x/64 > 1:
-						movT=1
-					else:
-						movT=-1
-					
-				move_and_slide(Vector2(movT*200,-200),Vector2(0, -1))
-			else:
+			if bulletCounter==0:
+				var t:Tween = $Tween
+				t.interpolate_property(self,"position",null,
+					Vector2(10,6)*64,
+					1.0
+				)
+				t.start()
+				bulletCounter+=1
 				idleTime=1
+#			if position.y > startingPosition.y-300:
+#				var movT:int=0
+#				if position.x > 11*64 or position.x < 9*64:
+#					#If Scarecrow is to the right she moves left,
+#					#If she's to the left she moves right.
+#					#I'm pretty sure there's some way to do this
+#					#using pure math but I couldn't figure it out
+#					if 10-position.x/64 > 1:
+#						movT=1
+#					else:
+#						movT=-1
+#
+#				move_and_slide(Vector2(movT*300,-300),Vector2(0, -1))
+			else:
+				#idleTime=1
 				bulletCounter=0
-				curState=STATE.SHOOT_SPREAD
+				if randi()%2==0:
+					curState=STATE.SHOOT_SPREAD
+				else:
+					curState=STATE.SHOOT_CURTAIN
 		STATE.SHOOT_SPREAD:
 			if bulletCounter<1:
 				fire_spread(get_parent(),spinnyFrame.getSprite(0).global_position)
@@ -189,11 +224,23 @@ func _physics_process(delta):
 				fire_spread(get_parent(),spinnyFrame.getSprite(2).global_position)
 				bulletCounter+=1
 				idleTime=.5
-			else:
-				curState=STATE.IDLE
+			elif position.y < startingPosition.y:
+				move_and_slide(Vector2(0,300),Vector2(0, -1))
 				spinnyFrame.set_return_circling()
+			else:
+				curState=STATE.GROUND_ATTACK_1
 				bulletCounter=0
+		STATE.SHOOT_CURTAIN:
+			if bulletCounter==0:
+				gen_curtain(get_parent(),spinnyFrame.getSprite(1).global_position)
+				gen_curtain(get_parent(),spinnyFrame.getSprite(1).global_position,10,.5)
+				gen_curtain(get_parent(),spinnyFrame.getSprite(1).global_position,9,1)
+				bulletCounter+=1
 				idleTime=1
+			else:
+				spinnyFrame.set_return_circling()
+				idleTime=.5
+				curState=STATE.IDLE
 		STATE.GROUND_ATTACK_1:
 			#DUDE I JUST LOVE HOW THE BITS ARE 1-INDEXED IN THE GUI
 			#BUT 0-INDEXED WHEN USING THE COMMAND BECAUSE THAT

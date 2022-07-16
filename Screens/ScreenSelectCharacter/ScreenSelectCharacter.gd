@@ -1,4 +1,4 @@
-extends Node2D
+extends Control
 
 var selection:int = 0
 
@@ -40,6 +40,7 @@ func _ready():
 	#	child.set("custom_fonts/font",INITrans.font)
 		#child.text=INITrans.GetString("PauseMenu",child.text)
 	update_disp(false)
+	$playerSelect.connect("resized",self,"set_rect_size")
 
 #Have to use _input() func because doing it in process will cause it
 #to think select/enter key is still pressed from previous screen
@@ -61,10 +62,18 @@ func _input(event):
 			Globals.change_screen(get_tree(),"ScreenSelectStage")
 		elif event.is_action("ui_cancel"):
 			Globals.change_screen(get_tree(),"ScreenTitleMenu")
-		
+
+func action_left():
+	pass
+func action_right():
+	pass
 
 func _process(delta):
 
 	charDesc.rect_position.x-=delta*250
 	if charDesc.rect_position.x < -textWidth:
 		charDesc.rect_position.x=Globals.gameResolution.x+20
+
+func set_rect_size():
+	#$playerSelect.
+	pass

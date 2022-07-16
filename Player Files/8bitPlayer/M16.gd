@@ -325,7 +325,7 @@ func dash_handler()->bool:
 		#a3.offset = oldPositions[4] - position
 		#a2.offset = oldPositions[2] - position
 		#a1.offset = oldPositions[0] - position
-		$Sprite/Label.text = "offset: "+String(oldPositions[4]-position)
+		#$Sprite/Label.text = "offset: "+String(oldPositions[4]-position)
 		return true
 	else:
 		return false

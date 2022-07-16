@@ -48,7 +48,7 @@ func _ready():
 	#	Globals.nsf_player.queue_free()
 	music_player = Globals.ReinaAudioPlayer.new(self)
 	music_player.load_song(custom_music_name,nsf_music_file,nsf_track_num)
-	$Cutscene.init_(Globals.get_stage_cutscene(\"Demo2Ending\"),null,false,null,\"\\t\")
+	$Cutscene.init_(Globals.get_stage_cutscene(\"Demo3Ending\"),null,false,null,\"\\t\")
 	$Cutscene.connect(\"cutscene_finished\",self,\"a\")
 
 func a():

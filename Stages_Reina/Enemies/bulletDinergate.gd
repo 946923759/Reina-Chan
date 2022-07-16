@@ -4,6 +4,8 @@ onready var vis = $VisibilityNotifier2D
 onready var shootSound = $ShootSound
 onready var reflectSound = $ReflectSound
 
+var DAMAGE_AMOUNT:int=1
+
 func _ready():
 	set_process(false)
 	set_physics_process(false)
@@ -48,6 +50,6 @@ func _physics_process(delta):
 			move_and_collide(movement)
 		else:
 			if obj.has_method("player_touched"): #If enemy touched player
-				obj.call("player_touched",self,1)
+				obj.call("player_touched",self,DAMAGE_AMOUNT)
 			queue_free()
 		

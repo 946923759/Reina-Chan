@@ -53,7 +53,7 @@ script/source = "extends Node2D
 #What the fuck is this doing here
 var bosses = {
 	\"StageArchitect_v2.tscn\":\"res://Stages_Reina/Bosses/Architect/BossArchitect_v2.tscn\",
-	\"Alchemist.tscn\":\"res://Stages_Reina/Bosses/Alchemist/BossAlchemist.tscn\",
+	\"Alchemist_v2.tscn\":\"res://Stages_Reina/Bosses/Alchemist/BossAlchemist.tscn\",
 	\"Scarecrow.tscn\":\"res://Stages_Reina/Bosses/Scarecrow/BossScarecrow.tscn\"
 }
 

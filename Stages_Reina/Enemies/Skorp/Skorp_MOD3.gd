@@ -87,6 +87,7 @@ var moveTimer:float=0.0
 var stateTimer:float=0.0
 var timesJumped:int=0
 var timesMolotov:int=0
+var justShotFire:bool=false
 #This is NOT facing because we don't need the miniboss to flip its
 #sprite ever
 var moveDirection:int=1
@@ -102,19 +103,33 @@ func _process(delta):
 					curState=STATES.JUMPINIT
 				else:
 					timesJumped=0
-					var distanceFromPlayer=abs(global_position.x-player.global_position.x)/64
-					if distanceFromPlayer>9:
-						if timesMolotov>3:
-							timesMolotov=0
-							#sprite.playing=false
-							sprite.set_animation("jump")
-							curState=STATES.JUMP_INTO_SKY
+					if (Globals.playerData.gameDifficulty < Globals.Difficulty.MEDIUM):
+						if randi()%2==0:
+							if timesMolotov>1:
+								timesMolotov=0
+								sprite.set_animation("jump")
+								curState=STATES.JUMP_INTO_SKY
+							else:
+								timesMolotov+=1
+								curState=STATES.MOLOTOV_INIT
 						else:
-							timesMolotov+=1
-							curState=STATES.MOLOTOV_INIT
+							curState=STATES.FIRE_INIT
+							sprite.set_animation("fire")
 					else:
-						curState=STATES.FIRE_INIT
-						sprite.set_animation("fire")
+						var distanceFromPlayer=abs(global_position.x-player.global_position.x)/64
+						if (distanceFromPlayer>9 or justShotFire):
+							justShotFire=false
+							if timesMolotov>1:
+								timesMolotov=0
+								#sprite.playing=false
+								sprite.set_animation("jump")
+								curState=STATES.JUMP_INTO_SKY
+							else:
+								timesMolotov+=1
+								curState=STATES.MOLOTOV_INIT
+						else:
+							curState=STATES.FIRE_INIT
+							sprite.set_animation("fire")
 				stateTimer=0
 				#moveTimer=0
 			#NOT elif, we still want to reset this!
@@ -189,6 +204,7 @@ func _process(delta):
 				$FireArea2D1.monitoring=false
 				$FireArea2D2.monitoring=false
 				sprite.set_animation("default")
+				justShotFire=true
 				stateTimer=0
 				curState=0
 				is_reflecting=true

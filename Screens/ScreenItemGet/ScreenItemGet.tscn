@@ -99,8 +99,9 @@ func end_screen(_a,_b):
 	#if reinaAudioPlayer.added_nsf_player:
 	#	Globals.nsf_player.queue_free()
 	#
-	if Globals.playerData.availableWeapons[1] and Globals.playerData.availableWeapons[2]:
-		get_tree().change_scene(\"res://Screens/ScreenCutscene/cutsceneWhatever.tscn\")
+	var weapons = Globals.playerData.availableWeapons
+	if weapons[1] and weapons[2] and weapons[3]:
+		Globals.change_screen(get_tree(),\"CutsceneDemoEnd\")
 	else:
 		Globals.change_screen(get_tree(),\"ScreenSelectStage\")
 

@@ -74,3 +74,10 @@ portrait	Dier	pic_Alchemist	pic_Scarecrow	pic_M16A1_Boss_5
 /M16A1	/hl[3]Are you forgetting someone? I'm going to be there too.
 speaker	Dier
 nop	msg	Well, I suppose you are a Sangfis Ferri android... Of sorts...
+
+#KEY	Demo3Ending
+preload_portraits	Dier	pic_Scarecrow	pic_M16A1_Boss_5
+matchnames	AmWorks	Scarecrow	M16A1
+portrait	Dier	pic_Scarecrow	pic_M16A1_Boss_5
+/AmWorks	We hope you enjoyed the third demo. And if you haven't played M16A1 mode yet, give it a try.
+msg	We hope to see you soon for the fourth demo.

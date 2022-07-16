@@ -123,15 +123,13 @@ target_path = NodePath("../..")
 properties = PoolStringArray( "oldPositions" )
 
 [node name="Label" type="Label" parent="Sprite" index="4"]
+visible = false
 margin_left = -83.2606
 margin_top = -42.3812
 margin_right = -28.2606
 margin_bottom = -28.3812
 rect_scale = Vector2( 0.5, 0.5 )
 text = "Offset = "
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Charging" type="AnimatedSprite" parent="." index="1"]
 visible = false

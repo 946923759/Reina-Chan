@@ -132,7 +132,8 @@ var playerData={
 }
 
 func reset_player_data():
-	for i in range(len(playerData.availableWeapons)):
+	#Start at 1, the buster is always available!
+	for i in range(1,len(playerData.availableWeapons)):
 		playerData.availableWeapons[i]=false
 	for i in range(len(playerData.specialAbilities)):
 		playerData.specialAbilities[i]=false
@@ -608,6 +609,7 @@ var SCREENS:Dictionary = {
 	"ScreenStageIntro":"res://Screens/ScreenStageIntro.tscn",
 	"ScreenItemGet":"res://Screens/ScreenItemGet/ScreenItemGet.tscn",
 	"CutsceneFromFile":"res://Screens/ScreenCutscene/CutsceneFromFile.tscn",
+	"CutsceneDemoEnd":"res://Screens/ScreenCutscene/cutsceneWhatever.tscn",
 	"ScreenCredits":"res://Screens/Credits.tscn"
 }
 
