@@ -12,12 +12,13 @@ export(PoolStringArray) var message
 var disabled = false
 
 var playerObj
-var child
+var child:KinematicBody2D
 
 func _ready():
 	if message_id=="" and message.size()==0:
 		message_id="default"
 	child=get_child(get_child_count()-1)
+	assert(child is KinematicBody2D,"You didn't place the boss as the last child of the warning node, please rearrange it in the list.")
 	#run_event(self)
 	#.connect("finished",self,"end_cutscene")
 	#seq.parallel().append(self,'modulate:a',0,.3)

@@ -126,7 +126,7 @@ func _physics_process(delta):
 	
 	if OS.is_debug_build():
 		$DebugLabel3.text=String((global_position-topLeft)/64)
-		$DebugLabel3.text+="\n"+String(position/64)
+		$DebugLabel3.text+="\n"+String(position/64) + String(position)
 
 	match curState:
 		STATE.SHOOTING1:
@@ -190,8 +190,8 @@ func _physics_process(delta):
 			spinnyFrame.set_float_to_top_spread((topLeft/64+Vector2(10,2))*64)
 			if bulletCounter==0:
 				var t:Tween = $Tween
-				t.interpolate_property(self,"position",null,
-					Vector2(10,6)*64,
+				t.interpolate_property(self,"global_position",null,
+					topLeft+Vector2(10,6)*64,
 					1.0
 				)
 				t.start()
@@ -245,7 +245,8 @@ func _physics_process(delta):
 			#DUDE I JUST LOVE HOW THE BITS ARE 1-INDEXED IN THE GUI
 			#BUT 0-INDEXED WHEN USING THE COMMAND BECAUSE THAT
 			#MAKES SENSE
-			set_collision_mask_bit(4,false)
+			set_collision_layer_bit(1,false)
+			#set_collision_mask_bit(4,false)
 			#set_collision_layer_bit(4,false)
 			move_and_slide(Vector2(0,200),Vector2(0, -1))
 			if position.y > startingPosition.y+300:
@@ -265,7 +266,8 @@ func _physics_process(delta):
 				get_parent().get_node("DustCloud").position=position
 				get_parent().get_node("DustCloud/AnimationPlayer").play("default")
 				curState=STATE.IDLE
-				set_collision_mask_bit(4,true)
+				set_collision_layer_bit(1,true)
+				#set_collision_mask_bit(4,true)
 		#STATE.RETURN_CIRCLING:
 		#	spinnyFrame.set_circling()
 		#	idleTime=1

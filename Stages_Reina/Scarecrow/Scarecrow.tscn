@@ -1,4 +1,4 @@
-[gd_scene load_steps=72 format=2]
+[gd_scene load_steps=78 format=2]
 
 [ext_resource path="res://Stages_Reina/8bitBaseStage.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Stages_Reina/Scarecrow/ScarecrowTiles.tres" type="TileSet" id=2]
@@ -49,6 +49,7 @@
 [ext_resource path="res://Stages_Reina/Scarecrow/quicksand_bottom.png" type="Texture" id=47]
 [ext_resource path="res://Various Objects/SmallHeartDrop.tscn" type="PackedScene" id=48]
 [ext_resource path="res://Various Objects/1UP_Drop.tscn" type="PackedScene" id=49]
+[ext_resource path="res://Character Sprites/skorp/dustCloud 2x1.png" type="Texture" id=50]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 88, 32 )
@@ -90,6 +91,11 @@ func unlock_lol():
 
 [sub_resource type="VisualScriptFunction" id=14]
 resource_name = "_ready"
+
+[sub_resource type="VisualScriptFunction" id=15]
+resource_name = "test"
+
+[sub_resource type="VisualScriptReturn" id=16]
 
 [sub_resource type="VisualScriptFunctionCall" id=17]
 base_type = "Node"
@@ -184,11 +190,6 @@ argument_cache = {
 function = "instance"
 use_default_args = 0
 
-[sub_resource type="VisualScriptFunction" id=15]
-resource_name = "test"
-
-[sub_resource type="VisualScriptReturn" id=16]
-
 [sub_resource type="VisualScript" id=13]
 data = {
 "base_type": "Node",
@@ -200,19 +201,19 @@ data = {
 "scroll": Vector2( -50, -100 ),
 "sequence_connections": [  ]
 }, {
-"data_connections": [ 1, 0, 2, 0, 2, 0, 3, 0, 4, 0, 5, 0, 5, 1, 3, 1 ],
-"function_id": -1,
-"name": "f_312843592",
-"nodes": [ 1, Vector2( 820, 60 ), SubResource( 17 ), 2, Vector2( 1060, 0 ), SubResource( 18 ), 3, Vector2( 1720, 0 ), SubResource( 19 ), 4, Vector2( 980, -140 ), SubResource( 20 ), 5, Vector2( 1420, -160 ), SubResource( 21 ) ],
-"scroll": Vector2( 894, -337 ),
-"sequence_connections": [ 2, 0, 3 ]
-}, {
 "data_connections": [  ],
 "function_id": 0,
 "name": "test",
 "nodes": [ 0, Vector2( 560, -20 ), SubResource( 15 ), 6, Vector2( 700, -20 ), SubResource( 16 ) ],
 "scroll": Vector2( -50, -100 ),
 "sequence_connections": [ 0, 0, 6 ]
+}, {
+"data_connections": [ 1, 0, 2, 0, 2, 0, 3, 0, 4, 0, 5, 0, 5, 1, 3, 1 ],
+"function_id": -1,
+"name": "f_312843592",
+"nodes": [ 1, Vector2( 820, 60 ), SubResource( 17 ), 2, Vector2( 1060, 0 ), SubResource( 18 ), 3, Vector2( 1720, 0 ), SubResource( 19 ), 4, Vector2( 980, -140 ), SubResource( 20 ), 5, Vector2( 1420, -160 ), SubResource( 21 ) ],
+"scroll": Vector2( 894, -337 ),
+"sequence_connections": [ 2, 0, 3 ]
 } ],
 "is_tool_script": false,
 "signals": [  ],
@@ -258,12 +259,179 @@ extents = Vector2( 160, 320 )
 [sub_resource type="RectangleShape2D" id=10]
 extents = Vector2( 96, 416 )
 
+[sub_resource type="AtlasTexture" id=24]
+atlas = ExtResource( 50 )
+region = Rect2( 0, 0, 8, 10 )
+
+[sub_resource type="AtlasTexture" id=25]
+atlas = ExtResource( 50 )
+region = Rect2( 8, 0, 8, 10 )
+
+[sub_resource type="SpriteFrames" id=26]
+animations = [ {
+"frames": [ SubResource( 24 ), SubResource( 25 ) ],
+"loop": false,
+"name": "default",
+"speed": 0.0
+} ]
+
+[sub_resource type="Animation" id=27]
+resource_name = "default"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/path = NodePath("RightC:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 32, 58 ), Vector2( 96, 48 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("RightC:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.3 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ 0, 1 ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("RightC:modulate:a")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.3, 0.5 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ 1.0, 1.0, 0.0 ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("LeftC:modulate:a")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 0.3, 0.5 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ 1.0, 1.0, 0.0 ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("LeftC:frame")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0, 0.3 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ 0, 1 ]
+}
+tracks/5/type = "value"
+tracks/5/path = NodePath("LeftC:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( -32, 58 ), Vector2( -96, 48 ) ]
+}
+
+[sub_resource type="Animation" id=28]
+resource_name = "default"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/path = NodePath("RightC:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 32, 58 ), Vector2( 96, 48 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("RightC:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.3 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ 0, 1 ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("RightC:modulate:a")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.3, 0.5 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ 1.0, 1.0, 0.0 ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("LeftC:modulate:a")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 0.3, 0.5 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ 1.0, 1.0, 0.0 ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("LeftC:frame")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0, 0.3 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ 0, 1 ]
+}
+tracks/5/type = "value"
+tracks/5/path = NodePath("LeftC:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( -32, 58 ), Vector2( -96, 48 ) ]
+}
+
 [node name="Node2D" instance=ExtResource( 1 )]
 LADDER_TILE_ID = 48
 LADDER_TOP_TILE_ID = 25
 SPIKES_TILE_ID = 14
 DEATH_TILE_ID = 15
-adjust_camera = true
 topBound = -999
 rightBound = 40
 bottomBound = 12
@@ -575,7 +743,7 @@ region_rect = Rect2( 0, 0, 144, 256 )
 tile_data = PoolIntArray( 589919, 0, 0, 589920, 0, 0, 655384, 0, 0, 655385, 0, 0, 655388, 0, 0, 655389, 0, 0, 655395, 0, 0, 655396, 0, 0, 655399, 0, 0, 655400, 0, 0, 655453, 0, 0, 655454, 0, 0, 655455, 0, 0, 655456, 0, 0, 655467, 0, 0, 655468, 0, 0, 655482, 0, 0, 655483, 0, 0, 721003, 0, 0, 721004, 0, 0, 721018, 0, 0, 721019, 0, 0, 7340100, 0, 0, 7340102, 0, 0, 7405631, 0, 0, 7471159, 0, 0, 7471194, 0, 0, 7536712, 0, 0, 7536728, 0, 0, 7536733, 0, 0, 7602261, 0, 0, 7602263, 0, 0, 7667770, 0, 0, 7667780, 0, 0, 7667782, 0, 0, 7733312, 0, 0, 7733314, 0, 0 )
 
 [node name="PlayerHolder" parent="." index="11"]
-position = Vector2( 8768, 7488 )
+position = Vector2( 8736, 7488 )
 
 [node name="0-0 to 40-0" type="Node2D" parent="." index="12"]
 
@@ -1237,8 +1405,29 @@ region_rect = Rect2( 0, 0, 352, 64 )
 position = Vector2( 256, 640 )
 message_id = "Scarecrow"
 
-[node name="Scarecrow" parent="140-108 Boss Room/WARNING intro" index="3" instance=ExtResource( 29 )]
+[node name="DustCloud" type="Node2D" parent="140-108 Boss Room/WARNING intro" index="3"]
+position = Vector2( 416, -736 )
+
+[node name="RightC" type="AnimatedSprite" parent="140-108 Boss Room/WARNING intro/DustCloud" index="0"]
+material = ExtResource( 26 )
+position = Vector2( 32, 58 )
+scale = Vector2( 4, 4 )
+frames = SubResource( 26 )
+
+[node name="LeftC" type="AnimatedSprite" parent="140-108 Boss Room/WARNING intro/DustCloud" index="1"]
+material = ExtResource( 26 )
+position = Vector2( -32, 58 )
+scale = Vector2( 4, 4 )
+frames = SubResource( 26 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="140-108 Boss Room/WARNING intro/DustCloud" index="2"]
+anims/default = SubResource( 27 )
+"anims/default 2" = SubResource( 28 )
+
+[node name="Scarecrow" parent="140-108 Boss Room/WARNING intro" index="4" instance=ExtResource( 29 )]
 position = Vector2( 736, -32 )
+collision_layer = 2
+collision_mask = 2
 intro_subtitle_key = "Scarecrow_Intro"
 
 [node name="Pushing_Quicksand2" parent="." index="24" instance=ExtResource( 25 )]
