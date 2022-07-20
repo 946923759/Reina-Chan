@@ -26,15 +26,18 @@ const subtractSize:float=110.0
 
 var reinaAudioPlayer
 func _ready():
+	var lastPlayedStage:int = CheckpointPlayerStats.lastPlayedStage
+	#lastPlayedStage=3
+	
 	bottom.position.y=Globals.SCREEN_CENTER_Y
 	top.position.y=Globals.SCREEN_CENTER_Y-160*4
 	l.visible_characters=0
 	if INITrans.currentLanguageType!=INITrans.LanguageType.ASCII:
 		$Label.set(\"custom_fonts/font\",INITrans.font)
-	var text = INITrans.GetString(\"Weapons\",\"YOU GOT\") % [INITrans.GetString(\"Weapons\",Globals.stagesToString[CheckpointPlayerStats.lastPlayedStage]+\"Full\")]
+	var text = INITrans.GetString(\"Weapons\",\"YOU GOT\") % [INITrans.GetString(\"Weapons\",Globals.stagesToString[lastPlayedStage]+\"Full\")]
 	l.text=text
 	
-	newColor = Globals.weaponColorSwaps[CheckpointPlayerStats.lastPlayedStage]
+	newColor = Globals.weaponColorSwaps[lastPlayedStage]
 	
 	#Globals.nsf_player = FLMusicLib.new();
 	#Globals.nsf_player = FLMusicLib.new();

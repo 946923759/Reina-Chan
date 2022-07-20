@@ -37,6 +37,7 @@ var timer:float
 var timerWithDeath:float
 var is_timer_stopped:bool=false
 
+#Weapons go here
 var currentWeapon = Globals.Weapons.Buster;
 # Out of 128 in this game (See Globals.gd for more information)
 var weaponMeters:PoolIntArray = []
@@ -51,6 +52,8 @@ var archiRocket = preload("res://Player Files/8bitPlayer/ArchiRocket_Player.tscn
 #how long UMP9 dashes when using the dash attack, or how long the slide goes
 #if it's above 0 it's currently active.
 var dash_time:float = 0.0
+onready var scarecrowArea:Area2D = $ScarecrowEnemyCheck
+onready var scarecrowSpin:Node2D = $ScarecrowSpin
 
 #This is only used when on normal or higher difficulty. It keeps track of the bullets on screen by storing the variables.
 #When a bullet goes off screen or hits an enemy, the slot is replaced by null and a new one can be inserted.
@@ -164,7 +167,7 @@ func setDebugInfoText():
 	t.text = st
 
 func switchWeapon():
-#	weaponSwitch.showIcon(currentWeapon)
+	weaponSwitch.showIcon(currentWeapon)
 #	if current_character==1 and currentWeapon==0: #lmao
 #		sprite.get_material().set_shader_param("clr1", Color(.749,.749,.749))
 #		sprite.get_material().set_shader_param("clr2", Color(.957,.957,.957))
@@ -356,12 +359,29 @@ func get_input(delta):
 				HPBar.updateAmmo(weaponMeters[currentWeapon]/144.0,false)
 				sprite.set_animation("DashAttack")
 			#else, do nothing
+		elif currentWeapon == Globals.Weapons.Scarecrow and weaponMeters[currentWeapon]>=Globals.weaponEnergyCost[currentWeapon]:
+			#var facing:int = -1 if sprite.flip_h else 1
+			scarecrowArea.position.x = abs(scarecrowArea.position.x)*-1 if sprite.flip_h else abs(scarecrowArea.position.x)
+			
+			scarecrowSpin.set_flipped(sprite.flip_h)
+			
+			weaponMeters[currentWeapon]=max(0,weaponMeters[currentWeapon]-Globals.weaponEnergyCost[currentWeapon])
+			scarecrowArea.start_thread(bullet,scarecrowSpin)
+			
+			scarecrowSpin.appear_quick()
+			scarecrowSpin.disappear()
+			
+			
+			#scarecrowArea.monitoring=false
+			#var t:Tween = scarecrowSpin.t
+			#t.
+			#t.interpolate_callback(scarecrowSpin,0.0,"set_physics_process",false)
 		else:
 			shoot_time = 0
 			if (Globals.playerData.gameDifficulty <= Globals.Difficulty.EASY or bulletManager.get_num_bullets() < 3) and weaponMeters[currentWeapon]>=Globals.weaponEnergyCost[currentWeapon]:
 				
 				var bi
-				var ss
+				var ss:float
 				if sprite.flip_h:
 					ss = -1.0
 				else:
@@ -377,7 +397,13 @@ func get_input(delta):
 					weaponMeters[currentWeapon]=max(0,weaponMeters[currentWeapon]-Globals.weaponEnergyCost[currentWeapon])
 					#print(ceil(weaponMeters[currentWeapon]/128.0*32))
 					HPBar.updateAmmo(weaponMeters[currentWeapon]/144.0,false)
-				if currentWeapon==Globals.Weapons.Buster:
+				if currentWeapon==Globals.Weapons.Architect:
+					bi = archiRocket.instance()
+					bi.position = pos
+					#get_parent().add_child(bi)
+					bulletHolder.add_child(bi)
+					bi.init(int(ss))
+				else: #Should always fall back to bullet!
 					bi = bullet.instance()
 					
 					
@@ -388,12 +414,6 @@ func get_input(delta):
 					#bi.linear_velocity = Vector2(800.0 * ss, 0)
 					#RigidBody2D only
 					bi.init(Vector2(13*ss,0))
-				elif currentWeapon==Globals.Weapons.Architect:
-					bi = archiRocket.instance()
-					bi.position = pos
-					#get_parent().add_child(bi)
-					bulletHolder.add_child(bi)
-					bi.init(int(ss))
 				
 				add_collision_exception_with(bi) # Make bullet and this not collide
 				
@@ -1039,8 +1059,9 @@ func finishStage():
 	invincible=true
 	invincibleTime=9999
 	get_node("/root/Node2D").stopMusic()
-	if is_instance_valid(Globals.nsf_player):
-		Globals.nsf_player.queue_free()
+	#THIS WILL CRASH THE GAME!!!!
+	#if is_instance_valid(Globals.nsf_player):
+	#	Globals.nsf_player.queue_free()
 	$VictorySound.play()
 # warning-ignore:return_value_discarded
 	$VictorySound.connect("finished",self,"finishStage_2")

@@ -33,7 +33,9 @@ static func EaseOut(t:float)->float:
 
 
 var startingPos_x:float=0.0
-func init(t_movement):
+var shouldPlayShoot:bool=false
+func init(t_movement,shouldPlayShoot_:bool=false):
+	shouldPlayShoot=shouldPlayShoot_
 	DAMAGE_AMOUNT=2
 	startingPos_x=self.position.x
 	movement = t_movement
@@ -43,6 +45,8 @@ func init(t_movement):
 		set_process(true)
 		self.visible=false
 	else:
+		if shouldPlayShoot:
+			shootSound.play()
 		set_physics_process(true)
 
 var timer:float = 0.0
@@ -77,3 +81,6 @@ func _process(delta):
 		self.visible=true
 		set_process(false)
 		set_physics_process(true)
+		if shouldPlayShoot:
+			#print("[bulletDanmaku] shoot!")
+			shootSound.play()

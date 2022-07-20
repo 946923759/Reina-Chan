@@ -432,6 +432,7 @@ LADDER_TILE_ID = 48
 LADDER_TOP_TILE_ID = 25
 SPIKES_TILE_ID = 14
 DEATH_TILE_ID = 15
+adjust_camera = true
 topBound = -999
 rightBound = 40
 bottomBound = 12
@@ -440,8 +441,8 @@ nsf_music_file = "Rockman 6 UH.nsf"
 nsf_track_num = 11
 mute_music_in_debug = true
 mute_boss_music_in_debug = true
-weapon_to_unlock = 3
-debug_warp_points = [ Vector2( 138, 6 ), Vector2( 150, 12 ), Vector2( 110, 68 ), Vector2( 102, 90 ), Vector2( 101, 84 ), Vector2( 0, 0 ) ]
+weapon_to_unlock = 4
+debug_warp_points = [ Vector2( 138, 6 ), Vector2( 150, 12 ), Vector2( 124, 118 ), Vector2( 110, 68 ), Vector2( 101, 84 ), Vector2( 102, 90 ) ]
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="." index="1"]
 
@@ -683,7 +684,15 @@ centered = false
 region_enabled = true
 region_rect = Rect2( 0, 0, 320, 144 )
 
-[node name="Sprite25" type="Sprite" parent="FakeTilesFG" index="11"]
+[node name="Sprite26" type="Sprite" parent="FakeTilesFG" index="11"]
+position = Vector2( 10112, 6784 )
+scale = Vector2( 4, 4 )
+texture = ExtResource( 34 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 0, 0, 64, 208 )
+
+[node name="Sprite25" type="Sprite" parent="FakeTilesFG" index="12"]
 position = Vector2( 6592, 7616 )
 scale = Vector2( 4, 4 )
 texture = ExtResource( 34 )
@@ -691,7 +700,7 @@ centered = false
 region_enabled = true
 region_rect = Rect2( 0, 0, 912, 48 )
 
-[node name="Sprite19" type="Sprite" parent="FakeTilesFG" index="12"]
+[node name="Sprite19" type="Sprite" parent="FakeTilesFG" index="13"]
 position = Vector2( 5824, 3648 )
 scale = Vector2( 4, 4 )
 texture = ExtResource( 34 )
@@ -699,7 +708,7 @@ centered = false
 region_enabled = true
 region_rect = Rect2( 0, 0, 160, 144 )
 
-[node name="Sprite20" type="Sprite" parent="FakeTilesFG" index="13"]
+[node name="Sprite20" type="Sprite" parent="FakeTilesFG" index="14"]
 position = Vector2( 5824, 2176 )
 scale = Vector2( 4, 4 )
 texture = ExtResource( 34 )
@@ -707,7 +716,7 @@ centered = false
 region_enabled = true
 region_rect = Rect2( 0, 0, 160, 320 )
 
-[node name="Sprite16" type="Sprite" parent="FakeTilesFG" index="14"]
+[node name="Sprite16" type="Sprite" parent="FakeTilesFG" index="15"]
 position = Vector2( 5952, 4224 )
 scale = Vector2( 4, 4 )
 texture = ExtResource( 33 )
@@ -715,7 +724,7 @@ centered = false
 region_enabled = true
 region_rect = Rect2( 0, 32, 320, 32 )
 
-[node name="Sprite8" type="Sprite" parent="FakeTilesFG" index="15"]
+[node name="Sprite8" type="Sprite" parent="FakeTilesFG" index="16"]
 position = Vector2( 9728, 2944 )
 scale = Vector2( 4, 4 )
 texture = ExtResource( 32 )
@@ -723,7 +732,7 @@ centered = false
 region_enabled = true
 region_rect = Rect2( 32, 0, 128, 112 )
 
-[node name="Sprite9" type="Sprite" parent="FakeTilesFG" index="16"]
+[node name="Sprite9" type="Sprite" parent="FakeTilesFG" index="17"]
 position = Vector2( 10176, 2240 )
 scale = Vector2( 4, 4 )
 texture = ExtResource( 33 )
@@ -731,7 +740,7 @@ centered = false
 region_enabled = true
 region_rect = Rect2( 0, 0, 160, 176 )
 
-[node name="Sprite3" type="Sprite" parent="FakeTilesFG" index="17"]
+[node name="Sprite3" type="Sprite" parent="FakeTilesFG" index="18"]
 position = Vector2( 9664, 832 )
 scale = Vector2( 4, 4 )
 texture = ExtResource( 32 )
@@ -743,7 +752,7 @@ region_rect = Rect2( 0, 0, 144, 256 )
 tile_data = PoolIntArray( 589919, 0, 0, 589920, 0, 0, 655384, 0, 0, 655385, 0, 0, 655388, 0, 0, 655389, 0, 0, 655395, 0, 0, 655396, 0, 0, 655399, 0, 0, 655400, 0, 0, 655453, 0, 0, 655454, 0, 0, 655455, 0, 0, 655456, 0, 0, 655467, 0, 0, 655468, 0, 0, 655482, 0, 0, 655483, 0, 0, 721003, 0, 0, 721004, 0, 0, 721018, 0, 0, 721019, 0, 0, 7340100, 0, 0, 7340102, 0, 0, 7405631, 0, 0, 7471159, 0, 0, 7471194, 0, 0, 7536712, 0, 0, 7536728, 0, 0, 7536733, 0, 0, 7602261, 0, 0, 7602263, 0, 0, 7667770, 0, 0, 7667780, 0, 0, 7667782, 0, 0, 7733312, 0, 0, 7733314, 0, 0 )
 
 [node name="PlayerHolder" parent="." index="11"]
-position = Vector2( 8736, 7488 )
+position = Vector2( 224, 448 )
 
 [node name="0-0 to 40-0" type="Node2D" parent="." index="12"]
 
@@ -1385,9 +1394,10 @@ topBound = -999
 bottomBound = 120
 
 [node name="QuicksandTop" type="Sprite" parent="140-108 Boss Room" index="2"]
-visible = false
 position = Vector2( 768, 672 )
 scale = Vector2( 4, 4 )
+z_index = 2
+z_as_relative = false
 texture = ExtResource( 5 )
 region_enabled = true
 region_rect = Rect2( 16, 0, 320, 16 )
@@ -1403,7 +1413,7 @@ region_rect = Rect2( 0, 0, 352, 64 )
 
 [node name="WARNING intro" parent="140-108 Boss Room" index="3" instance=ExtResource( 30 )]
 position = Vector2( 256, 640 )
-message_id = "Scarecrow"
+message_id = "Scarecrow2"
 
 [node name="DustCloud" type="Node2D" parent="140-108 Boss Room/WARNING intro" index="3"]
 position = Vector2( 416, -736 )
@@ -1429,6 +1439,9 @@ position = Vector2( 736, -32 )
 collision_layer = 2
 collision_mask = 2
 intro_subtitle_key = "Scarecrow_Intro"
+
+[node name="Checkpoint" parent="140-108 Boss Room" index="4" instance=ExtResource( 21 )]
+position = Vector2( -544, 320 )
 
 [node name="Pushing_Quicksand2" parent="." index="24" instance=ExtResource( 25 )]
 material = ExtResource( 26 )

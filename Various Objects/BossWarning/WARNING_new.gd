@@ -96,6 +96,8 @@ func part1():
 	newCutscene.init_(
 		Globals.get_stage_cutscene(message_id),
 		playerObj,
+		true,
+		null, #Backgrounds
 		"\t",
 		Globals.stage_cutscene_data['msgColumn']
 	)

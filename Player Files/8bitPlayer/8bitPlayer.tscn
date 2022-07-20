@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=2]
+[gd_scene load_steps=44 format=2]
 
 [ext_resource path="res://Player Files/mission start2.png" type="Texture" id=1]
 [ext_resource path="res://Character Sprites/ump9/ump9.tres" type="SpriteFrames" id=2]
@@ -29,6 +29,9 @@
 [ext_resource path="res://Player Files/8bitPlayer/TouchScreenDPad.gd" type="Script" id=27]
 [ext_resource path="res://Player Files/8bitPlayer/TouchScreenUI/shadedDark14.png" type="Texture" id=28]
 [ext_resource path="res://addons/godot-next/gui/debug_label.gd" type="Script" id=29]
+[ext_resource path="res://Stages_Reina/Bosses/Scarecrow/thingy.png" type="Texture" id=30]
+[ext_resource path="res://Stages_Reina/Bosses/Scarecrow/ScarecrowSpin.gd" type="Script" id=31]
+[ext_resource path="res://Player Files/8bitPlayer/ScarecrowEnemyCheck.gd" type="Script" id=32]
 
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 19 )
@@ -283,6 +286,9 @@ func enemy_touched_alt(obj,reflect):
 
 [sub_resource type="RectangleShape2D" id=10]
 extents = Vector2( 20, 20 )
+
+[sub_resource type="CircleShape2D" id=11]
+radius = 320.0
 
 [node name="Player" type="KinematicBody2D"]
 script = ExtResource( 7 )
@@ -599,11 +605,36 @@ text = "frameTimer = null
 isOnFloor = null
 "
 script = ExtResource( 29 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 target_path = NodePath("..")
 properties = PoolStringArray( "frameTimer", "isOnFloor" )
+
+[node name="ScarecrowEnemyCheck" type="Area2D" parent="."]
+position = Vector2( 360, 0 )
+collision_layer = 2
+collision_mask = 2
+monitorable = false
+script = ExtResource( 32 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ScarecrowEnemyCheck"]
+shape = SubResource( 11 )
+
+[node name="ScarecrowSpin" type="Node2D" parent="."]
+scale = Vector2( 4, 4 )
+script = ExtResource( 31 )
+
+[node name="Sprite" type="Sprite" parent="ScarecrowSpin"]
+texture = ExtResource( 30 )
+
+[node name="Sprite2" type="Sprite" parent="ScarecrowSpin"]
+texture = ExtResource( 30 )
+
+[node name="Sprite3" type="Sprite" parent="ScarecrowSpin"]
+texture = ExtResource( 30 )
+
+[node name="Tween" type="Tween" parent="ScarecrowSpin"]
 
 [connection signal="timeout" from="WeaponSwitch/TimeToShow" to="WeaponSwitch" method="_on_Timer_timeout"]
 [connection signal="unpaused" from="PauseScreen" to="." method="_on_PauseScreen_unpaused"]

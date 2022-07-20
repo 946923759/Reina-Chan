@@ -764,9 +764,6 @@ text = "this is a free fan game!
 girls' frontline is property of mica"
 align = 2
 valign = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="version" type="Label" parent="logoHolder"]
 anchor_right = 1.0
@@ -776,7 +773,7 @@ margin_top = 10.0
 margin_right = -642.0
 margin_bottom = -0.200001
 custom_fonts/font = ExtResource( 3 )
-text = "developer version"
+text = "developer beta"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -789,7 +786,7 @@ anchor_bottom = 0.5
 margin_top = -230.0
 margin_bottom = -210.0
 custom_fonts/font = ExtResource( 3 )
-text = "Demo 3?"
+text = "Demo 3"
 align = 1
 __meta__ = {
 "_edit_use_anchors_": false

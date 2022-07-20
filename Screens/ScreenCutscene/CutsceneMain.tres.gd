@@ -521,7 +521,7 @@ func _ready():
 
 
 
-func init_(message, parent, dim_background = true,_backgrounds=null,delim="|",msgColumn:int=1):
+func init_(message, parent:Node, dim_background = true,_backgrounds:Control=null,delim:String="|",msgColumn:int=1):
 	if parent:
 		parent_node = parent
 		

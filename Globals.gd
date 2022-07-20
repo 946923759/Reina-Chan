@@ -71,16 +71,19 @@ enum Difficulty {
 	SUPERHERO
 }
 #If you rearrange these for some reason you have to rearrange weaponColorSwaps
+#This has to match the names in ScreenSelectStage too!
 enum Weapons {
 	Buster=0,
 	Architect,
 	Alchemist,
+	Ouroboros,
 	Scarecrow
 }
 var stagesToString = [ #Yeah it's stupid
 	"Buster",
 	"Architect",
 	"Alchemist",
+	"Ouroboros",
 	"Scarecrow"
 ]
 
@@ -103,11 +106,11 @@ var playerData={
 	#These values will get overwritten when you start a new save file,
 	#So you can set them all to true for debugging purposes.
 	availableWeapons = [
-		true, #Buster (duh)
-		true, #Architect Rocket
-		true, #Alchemist Weapon
-		false,
-		false,
+		true,  #Buster (duh)
+		true,  #Architect Rocket
+		true,  #Alchemist Weapon
+		false, #Ouroboros
+		true, #Scarecrow
 		false,
 		false,
 		false,
@@ -163,7 +166,9 @@ func difficultyToString(d=playerData.gameDifficulty)->String:
 var weaponEnergyCost = [
 	0,
 	9, #144/9 = 16 uses
-	0 #6 #24 uses for dash
+	6, # #24 uses for dash
+	0,
+	3
 ]
 
 var weaponColorSwaps = [
@@ -182,6 +187,14 @@ var weaponColorSwaps = [
 	[ #Alchemist
 		Color(.964,.556,.19),
 		Color(1,.718,.522)
+	],
+	[ #Ouroboros
+		Color(.608,.467,.388),
+		Color(.604,.627,.592)
+	],
+	[ #Scarecrow
+		Color(0.235294, 0.235294, 0.235294),
+		Color(0.627451, 0.627451, 0.627451)
 	]
 ]
 

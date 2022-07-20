@@ -41,6 +41,7 @@ var player:KinematicBody2D
 var startingPosition:Vector2
 var topLeft:Vector2
 func _ready():
+	is_reflecting=true
 	topLeft = get_parent().get_parent().global_position
 	startingPosition=self.position
 	print("[Scarecrow] StartPos: "+String(startingPosition))
@@ -58,7 +59,7 @@ func fireBullet():
 	var spr = spinnyFrame.getSprite(bulletCounter)
 	#print(spr.position)
 	var pos = position + spr.position*4 #-Vector2(facing*-18,3)*4
-	print(pos.y)
+	#print(pos.y)
 	if pos.y < -60 and pos.y > -80:
 		pos = position + spinnyFrame.getSprite(bulletCounter+1).position*4 #-Vector2(facing*-18,3)*4
 
@@ -73,16 +74,15 @@ func fireBulletSmall():
 	for i in range(3):
 		var bi = bulletSmall.instance()
 	
-		#In case the shot can't be dodged at this moment switch to the next one
 		var spr = spinnyFrame.getSprite(i)
 		#print(spr.position)
 		var pos = position + spr.position*4 #-Vector2(facing*-18,3)*4
 		bi.position = pos
 		get_parent().add_child(bi)
 		var v:Vector2 = (player.global_position-spr.global_position).normalized()*10
-		print(v)
+		#print(v)
 		bi.init(v)
-		print("Fired!")
+		#print("[Scarecrow] Fired!")
 
 func fire_spread(root:Node2D,startPos:Vector2):
 	var startingAngle = Vector2(0,8)
@@ -93,9 +93,7 @@ func fire_spread(root:Node2D,startPos:Vector2):
 		bi.CubicSpread=Vector2((j-2)*2,-2)
 		var newAngle = startingAngle
 		newAngle.x=newAngle.x+(j-2)
-		bi.init(newAngle)
-		if j==0:
-			bi.shootSound.play()
+		bi.init(newAngle,j==0)
 			
 func gen_curtain(root:Node2D,centerPos:Vector2,numToGenerate:int=9,delay:float=0):
 	var spread = 64
@@ -103,16 +101,14 @@ func gen_curtain(root:Node2D,centerPos:Vector2,numToGenerate:int=9,delay:float=0
 	for j in range(numToGenerate):
 		var bi = b.instance()
 		root.add_child(bi)
-		bi.position = centerPos
+		bi.global_position = centerPos
 		
 		bi.special_type=2
 		bi.destination_spread_xpos=Vector2(bi.position.x+(float(j)-numToGenerate/2)*128.0,.3)
 		if numToGenerate%2==0:
 			bi.destination_spread_xpos.x+=64
 		bi.timer-=delay
-		bi.init(v)
-		if j==0:
-			bi.shootSound.play()
+		bi.init(v,true)
 
 func _physics_process(delta):
 	if idleTime>=0:
@@ -158,6 +154,7 @@ func _physics_process(delta):
 				fireBullet()
 				shots+=1
 		STATE.IDLE:
+			is_reflecting=true
 			facing=DIRECTION.LEFT if global_position.x > player.global_position.x else DIRECTION.RIGHT
 			sprite.flip_h=(facing==DIRECTION.LEFT)
 			spinnyFrame.set_flipped(sprite.flip_h)
@@ -174,6 +171,7 @@ func _physics_process(delta):
 		STATE.SHOOT_TOP_INIT:
 			spinnyFrame.set_float_to_top((topLeft/64+Vector2(10,3))*64)
 			idleTime=1
+			is_reflecting=false
 			bulletCounter=0
 			curState=STATE.SHOOT_TOP
 		STATE.SHOOT_TOP:
@@ -187,6 +185,7 @@ func _physics_process(delta):
 				spinnyFrame.set_return_circling()
 				curState=STATE.IDLE
 		STATE.SHOOT_SPREAD_INIT:
+			is_reflecting=false
 			spinnyFrame.set_float_to_top_spread((topLeft/64+Vector2(10,2))*64)
 			if bulletCounter==0:
 				var t:Tween = $Tween
@@ -213,7 +212,7 @@ func _physics_process(delta):
 			else:
 				#idleTime=1
 				bulletCounter=0
-				if randi()%2==0:
+				if false: #randi()%2==0
 					curState=STATE.SHOOT_SPREAD
 				else:
 					curState=STATE.SHOOT_CURTAIN
@@ -232,14 +231,21 @@ func _physics_process(delta):
 				bulletCounter=0
 		STATE.SHOOT_CURTAIN:
 			if bulletCounter==0:
-				gen_curtain(get_parent(),spinnyFrame.getSprite(1).global_position)
-				gen_curtain(get_parent(),spinnyFrame.getSprite(1).global_position,10,.5)
-				gen_curtain(get_parent(),spinnyFrame.getSprite(1).global_position,9,1)
+				var r = get_parent().get_parent()
+				gen_curtain(r,spinnyFrame.getSprite(1).global_position)
+				gen_curtain(r,spinnyFrame.getSprite(1).global_position,10,1)
+				gen_curtain(r,spinnyFrame.getSprite(1).global_position,9,2)
 				bulletCounter+=1
-				idleTime=1
+				idleTime=2
 			else:
-				spinnyFrame.set_return_circling()
-				idleTime=.5
+				
+				var returnPos:Vector2 = startingPosition
+				if global_position.x < player.global_position.x:
+					returnPos.x-=12*64
+				$Tween.interpolate_property(self,"position",null,returnPos,1)
+				$Tween.start()
+				spinnyFrame.set_return_circling(1.0,2.0)
+				idleTime=3.0
 				curState=STATE.IDLE
 		STATE.GROUND_ATTACK_1:
 			#DUDE I JUST LOVE HOW THE BITS ARE 1-INDEXED IN THE GUI
@@ -256,6 +262,8 @@ func _physics_process(delta):
 		STATE.GROUND_ATTACK_2:
 			if bulletCounter==0:
 				global_position.x=player.global_position.x
+				get_parent().get_node("DustCloud").position=Vector2(position.x,startingPosition.y)
+				get_parent().get_node("DustCloud/AnimationPlayer").play("default")
 				#facing=DIRECTION.LEFT if global_position.x > player.global_position.x else DIRECTION.RIGHT
 				facing=DIRECTION.LEFT if position.x > 10*64 else DIRECTION.RIGHT
 				sprite.flip_h=(facing==DIRECTION.LEFT)
