@@ -735,9 +735,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 rect_min_size = Vector2( 1280, 720 )
 size_flags_horizontal = 3
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Panel" type="ColorRect" parent="logoHolder"]
 anchor_right = 1.0
@@ -773,7 +770,7 @@ margin_top = 10.0
 margin_right = -642.0
 margin_bottom = -0.200001
 custom_fonts/font = ExtResource( 3 )
-text = "developer beta"
+text = "v.2022.07.23"
 __meta__ = {
 "_edit_use_anchors_": false
 }

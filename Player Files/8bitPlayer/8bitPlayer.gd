@@ -366,11 +366,12 @@ func get_input(delta):
 			scarecrowSpin.set_flipped(sprite.flip_h)
 			
 			weaponMeters[currentWeapon]=max(0,weaponMeters[currentWeapon]-Globals.weaponEnergyCost[currentWeapon])
+			HPBar.updateAmmo(weaponMeters[currentWeapon]/144.0,false)
+			
 			scarecrowArea.start_thread(bullet,scarecrowSpin)
 			
 			scarecrowSpin.appear_quick()
 			scarecrowSpin.disappear()
-			
 			
 			#scarecrowArea.monitoring=false
 			#var t:Tween = scarecrowSpin.t
@@ -581,8 +582,8 @@ func cell2pos(pos:Vector2)->Vector2:
 func handleEvents():
 	#if movementLocked: #Maybe need an "Allow events while movement locked" boolean
 	#	return
-	if state==State.INACTIVE:
-		return
+	#if state==State.INACTIVE:
+	#	return
 		
 	if eventCheck.is_colliding():
 		#print("Event touched!")
@@ -591,15 +592,25 @@ func handleEvents():
 		#Some events don't have ".disabled" for some reason... Yeah...
 		if !("event_ID" in event) or ("disabled" in event and event.disabled):
 			return
+		if state==State.INACTIVE and event.trigger_if_player_is_inactive==false:
+			return
 		#assert("event_ID" in collider,"Hey idiot, you have something on the event layer without an assigned ID!")
 		var event_ID = event.event_ID
 		#print(event_ID)
+		
+		#Events that can run while inactive
 		match event_ID:
-			Globals.EVENT_TILES.NO_EVENT:
-				print("This event has not been assigned an ID!")
+			Globals.EVENT_TILES.CUSTOM_EVENT:
+				event.run_event(self)
+				return
 			Globals.EVENT_TILES.SIGNAL:
 				event.signal_event(self)
 				event.disabled=true
+				return
+		
+		match event_ID:
+			Globals.EVENT_TILES.NO_EVENT:
+				print("This event has not been assigned an ID!")
 			Globals.EVENT_TILES.IN_WATER:
 				#print("In water!")
 				if !inWater:
@@ -631,8 +642,6 @@ func handleEvents():
 					get_parent(),
 					true
 				)
-			Globals.EVENT_TILES.CUSTOM_EVENT:
-				event.run_event(self)
 			Globals.EVENT_TILES.CHECKPOINT:
 				set_checkpoint(event.respawn_position,event.respawn_facing_left)
 				event.disabled=true
@@ -685,6 +694,7 @@ func _physics_process(delta):
 	get_menu_buttons_input(delta)
 	
 	if state==State.INACTIVE:
+		handleEvents()
 		sprite.visible=false
 		invincible=true
 		velocity.y += gravity * delta
@@ -1074,6 +1084,7 @@ func finishStage_2():
 	if Globals.playerData.availableWeapons[stageRoot.weapon_to_unlock]: #If this stage is already completed
 		nextScene="ScreenSelectStage"
 	Globals.playerData.availableWeapons[stageRoot.weapon_to_unlock]=true
+	print("Marking stage/item "+String(stageRoot.weapon_to_unlock)+" as cleared.")
 	Globals.save_player_game()
 	
 	Globals.change_screen(get_tree(),nextScene)

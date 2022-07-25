@@ -108,7 +108,7 @@ func gen_curtain(root:Node2D,centerPos:Vector2,numToGenerate:int=9,delay:float=0
 		if numToGenerate%2==0:
 			bi.destination_spread_xpos.x+=64
 		bi.timer-=delay
-		bi.init(v,true)
+		bi.init(v,j==5)
 
 func _physics_process(delta):
 	if idleTime>=0:
@@ -161,7 +161,7 @@ func _physics_process(delta):
 			idleTime=1
 			shots=0
 			bulletCounter=0
-			if curHP < 14:
+			if curHP < 14 and randi()%2==0:
 				curState=STATE.SHOOT_SPREAD_INIT
 			else:
 				curState=STATE.SHOOTING1
@@ -212,7 +212,7 @@ func _physics_process(delta):
 			else:
 				#idleTime=1
 				bulletCounter=0
-				if false: #randi()%2==0
+				if randi()%2==0: #randi()%2==0
 					curState=STATE.SHOOT_SPREAD
 				else:
 					curState=STATE.SHOOT_CURTAIN

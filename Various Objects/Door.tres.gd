@@ -23,6 +23,7 @@ func _ready():
 	
 func move(obj):
 	if obj.has_method("lockMovement"):
+		obj.dash_time=0
 		if newMusic != null and newMusic != "":
 			var music = load(newMusic)
 			get_node("/root/Node2D/AudioStreamPlayer").stream = music;

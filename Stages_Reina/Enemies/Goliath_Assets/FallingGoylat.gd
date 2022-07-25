@@ -21,7 +21,7 @@ func updateDraw(facing):
 
 var velo:float=0
 func _physics_process(delta):
-	position.y+=350*delta+velo
+	position.y+=390*delta+velo
 	velo+=delta*4
 	
 

@@ -5,7 +5,12 @@ extends Node
 #var AudioVolume = 100
 #var SFXVolume = 100
 var isFullscreen = false
+
+# This value is set when you init a stage.
+# Because M16 does not have cutscenes yet. So we need
+# to disable it for her.
 var playCutscenes = true
+
 var flipButtons = false
 #var textSpeed = 100
 
@@ -168,7 +173,7 @@ var weaponEnergyCost = [
 	9, #144/9 = 16 uses
 	6, # #24 uses for dash
 	0,
-	3
+	6
 ]
 
 var weaponColorSwaps = [
@@ -380,7 +385,7 @@ func _ready():
 		set_audio_levels()
 		#INITrans.SetLanguage("kr")
 		INITrans.SetLanguage(Globals.OPTIONS["language"]['value'])
-		playCutscenes=Globals.OPTIONS['playCutscenes']['value']
+		#playCutscenes=Globals.OPTIONS['playCutscenes']['value']
 		flipButtons=Globals.OPTIONS['flipButtons']['value']
 	else:
 		INITrans.SetLanguage("en")

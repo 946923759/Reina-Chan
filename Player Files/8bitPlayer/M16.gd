@@ -111,6 +111,8 @@ func get_input(delta):
 			bi.position = pos
 			#get_parent().add_child(bi)
 			bulletHolder.add_child(bi)
+			#No need to use bulletHolder for charge shots.
+			#stageRoot.add_child(bi)
 			#KinematicBody2D only
 			#bi.linear_velocity = Vector2(800.0 * ss, 0)
 			#RigidBody2D only
@@ -130,6 +132,7 @@ func get_input(delta):
 			if sprite.animation=="IdleShoot":
 				sprite.frame = 0
 			shoot_sprite_time = 0.3
+			shoot_time = -.2
 			#$ShootSound.play()
 		elif chargeShotTime > .5: #Not fully charged
 			shoot=true
@@ -143,7 +146,7 @@ func get_input(delta):
 	# A good idea when implementing characters of all kinds,
 	# compensates for physics imprecision, as well as human reaction delay.
 	if shoot:
-		if true:
+		if shoot_time>0:
 			shoot_time = 0
 			if (Globals.playerData.gameDifficulty <= Globals.Difficulty.EASY or bulletManager.get_num_bullets() < 3) and weaponMeters[currentWeapon]>=Globals.weaponEnergyCost[currentWeapon]:
 				
@@ -336,10 +339,16 @@ func finishStage_2():
 	$CanvasLayer/Fadeout.fadeOut()
 	yield($CanvasLayer/Fadeout/Fadeout_Tween,"tween_completed")
 	var nextScene = "ScreenSelectStage"
-	#CheckpointPlayerStats.lastPlayedStage = stageRoot.weapon_to_unlock
+	CheckpointPlayerStats.lastPlayedStage = stageRoot.weapon_to_unlock
 	#if Globals.playerData.availableWeapons[stageRoot.weapon_to_unlock]: #If this stage is already completed
 	#	nextScene="ScreenSelectStage"
-	#Globals.playerData.availableWeapons[stageRoot.weapon_to_unlock]=true
+	
+	print("Marking stage/item "+String(stageRoot.weapon_to_unlock)+" as cleared.")
+	Globals.playerData.availableWeapons[stageRoot.weapon_to_unlock]=true
 	Globals.save_player_game()
 	
-	Globals.change_screen(get_tree(),nextScene)
+	var weapons = Globals.playerData.availableWeapons
+	if weapons[1] and weapons[2] and weapons[4]:
+		Globals.change_screen(get_tree(),"CutsceneDemoEnd")
+	else:
+		Globals.change_screen(get_tree(),nextScene)

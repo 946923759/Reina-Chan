@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://Stages_Reina/Bosses/BossBase.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Stages_Reina/Bosses/Scarecrow/scarecrowIntro 5x1.png" type="Texture" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://Stages_Reina/Bosses/Scarecrow/ScareCrowIdle 3x1.png" type="Texture" id=5]
 [ext_resource path="res://Stages_Reina/Bosses/Scarecrow/thingy.png" type="Texture" id=6]
 [ext_resource path="res://Stages_Reina/Bosses/Scarecrow/ScarecrowSpin.gd" type="Script" id=7]
+[ext_resource path="res://Stages_Reina/Bosses/Scarecrow/ScarecrowIdle2 3x1.png" type="Texture" id=8]
 
 [sub_resource type="SegmentShape2D" id=12]
 a = Vector2( -30, 77 )
@@ -16,17 +17,17 @@ b = Vector2( 30, 77 )
 atlas = ExtResource( 2 )
 region = Rect2( 0, 0, 32, 46 )
 
-[sub_resource type="AtlasTexture" id=2]
-atlas = ExtResource( 5 )
-region = Rect2( 68, 0, 34, 36 )
+[sub_resource type="AtlasTexture" id=13]
+atlas = ExtResource( 8 )
+region = Rect2( 0, 0, 32, 43 )
 
-[sub_resource type="AtlasTexture" id=3]
-atlas = ExtResource( 5 )
-region = Rect2( 34, 0, 34, 36 )
+[sub_resource type="AtlasTexture" id=14]
+atlas = ExtResource( 8 )
+region = Rect2( 32, 0, 32, 43 )
 
-[sub_resource type="AtlasTexture" id=4]
-atlas = ExtResource( 5 )
-region = Rect2( 0, 0, 34, 36 )
+[sub_resource type="AtlasTexture" id=15]
+atlas = ExtResource( 8 )
+region = Rect2( 64, 0, 32, 43 )
 
 [sub_resource type="AtlasTexture" id=5]
 atlas = ExtResource( 2 )
@@ -48,6 +49,18 @@ region = Rect2( 96, 0, 32, 46 )
 atlas = ExtResource( 2 )
 region = Rect2( 128, 0, 32, 46 )
 
+[sub_resource type="AtlasTexture" id=2]
+atlas = ExtResource( 5 )
+region = Rect2( 68, 0, 34, 36 )
+
+[sub_resource type="AtlasTexture" id=3]
+atlas = ExtResource( 5 )
+region = Rect2( 34, 0, 34, 36 )
+
+[sub_resource type="AtlasTexture" id=4]
+atlas = ExtResource( 5 )
+region = Rect2( 0, 0, 34, 36 )
+
 [sub_resource type="SpriteFrames" id=10]
 animations = [ {
 "frames": [ SubResource( 1 ) ],
@@ -55,7 +68,7 @@ animations = [ {
 "name": "default",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 2 ), SubResource( 3 ), SubResource( 4 ), SubResource( 3 ) ],
+"frames": [ SubResource( 13 ), SubResource( 14 ), SubResource( 15 ), SubResource( 14 ) ],
 "loop": true,
 "name": "idle",
 "speed": 5.0
@@ -64,6 +77,11 @@ animations = [ {
 "loop": false,
 "name": "intro",
 "speed": 13.0
+}, {
+"frames": [ SubResource( 2 ), SubResource( 3 ), SubResource( 4 ), SubResource( 3 ) ],
+"loop": true,
+"name": "idle-o",
+"speed": 5.0
 } ]
 
 [node name="BossScarecrow" instance=ExtResource( 1 )]
@@ -74,17 +92,15 @@ shape = SubResource( 12 )
 
 [node name="AnimatedSprite" parent="." index="1"]
 frames = SubResource( 10 )
-animation = "idle"
-frame = 2
-playing = true
+animation = "intro"
 flip_h = true
 
 [node name="IntroSound" parent="." index="3"]
 stream = ExtResource( 3 )
 
 [node name="DebugLabel" parent="." index="7"]
-text = "animation = \"idle\"
-playing = true
+text = "animation = \"intro\"
+playing = false
 "
 
 [node name="DebugLabel2" parent="." index="8"]

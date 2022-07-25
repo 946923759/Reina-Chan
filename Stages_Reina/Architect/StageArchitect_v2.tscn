@@ -649,15 +649,12 @@ position = Vector2( 9247, 672 )
 
 [node name="Enemy9" parent="room160-0" index="0" instance=ExtResource( 12 )]
 position = Vector2( 11391, 128 )
-collision_mask = 0
 
 [node name="Enemy10" parent="room160-0" index="1" instance=ExtResource( 12 )]
 position = Vector2( 11135, 416 )
-collision_mask = 0
 
 [node name="Enemy11" parent="room160-0" index="2" instance=ExtResource( 12 )]
 position = Vector2( 10783, 512 )
-collision_mask = 0
 
 [node name="room180-12" type="Node2D" parent="." index="33"]
 

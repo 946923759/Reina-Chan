@@ -10,6 +10,7 @@ script/source = "extends Control
 onready var music_player = Globals.ReinaAudioPlayer.new(self)
 
 func _ready():
+	get_tree().set_screen_stretch(SceneTree.STRETCH_MODE_2D,SceneTree.STRETCH_ASPECT_EXPAND,Vector2(1280,720))
 	#music_player.load_song(\"Credits\",\"Rockman 4MI.nsf\",104)
 	music_player.load_song(\"Credits\",\"3-731_-_espgaluda_stage1.nsf\",0,0)
 	#music_player.load_song(\"Credits\",\"Metroid.nsf\",11)

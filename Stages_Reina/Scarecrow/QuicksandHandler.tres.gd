@@ -62,6 +62,16 @@ func _enable_rising(camera, newBounds):
 	rising=true
 	set_physics_process(true)
 	
+func _enable_rising_alt(obj:KinematicBody2D):
+	if obj.has_method("player_touched"):
+		#print("Player entered quicksand..")
+		player=obj
+		#player.inSand=true
+		
+		print("Rising.,..")
+		rising=true
+		set_physics_process(true)
+	
 func _disable_rising(camera, newBounds):
 	rising=false
 	set_physics_process(false)

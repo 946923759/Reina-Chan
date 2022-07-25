@@ -44,7 +44,7 @@ func update_flip():
 	fakeBottle.flip_h=(facing==DIRECTION.LEFT)
 
 func _init():
-	set_process(false)
+	set_physics_process(false)
 
 func _ready():
 	fireAnim.emitting=false
@@ -59,7 +59,7 @@ func _ready():
 	fakeBottle.visible=false
 	sprite.set_animation("default")
 	
-	set_process(false)
+	set_physics_process(false)
 	update_flip()
 	is_reflecting=true
 
@@ -91,7 +91,7 @@ var justShotFire:bool=false
 #This is NOT facing because we don't need the miniboss to flip its
 #sprite ever
 var moveDirection:int=1
-func _process(delta):
+func _physics_process(delta):
 	match curState:
 		STATES.IDLE:
 			var velocity = move_and_slide(Vector2(moveDirection*100,gravity), Vector2(0, -1), true)
@@ -165,6 +165,7 @@ func _process(delta):
 				gravity = 1000
 				stateTimer+=.1
 			elif stateTimer > 1.3:
+				stateTimer+=delta
 				if player.global_position.x<global_position.x:
 					facing=DIRECTION.LEFT
 				else:
@@ -180,6 +181,10 @@ func _process(delta):
 					curState=STATES.FIRE_INIT
 					sprite.playing=true
 					sprite.set_animation("fire")
+				if stateTimer>4:
+					printerr("Skorpion is stuck??? Teleporting downwards as a failsafe.")
+					self.position.y+=100
+					stateTimer=1.31
 			else:
 				stateTimer+=delta
 		STATES.FIRE_INIT:
@@ -218,6 +223,7 @@ func _process(delta):
 			gravity=5
 			curState=STATES.MOLOTOV_WAIT1
 		STATES.MOLOTOV_WAIT1:
+			#TODO: This doesn't work properly, if delta is small it goes faster
 			gravity+=delta*40
 			fakeBottle.position.y=min(fakeBottle.position.y+gravity,-152)
 			if fakeBottle.position.y>=-152:
@@ -256,5 +262,5 @@ func _on_CameraAdjuster_body_entered(body):
 		if is_instance_valid(player):
 			print("SKORP: Already obtained a player object, maybe Player 2?")
 		player=body
-		set_process(true)
+		set_physics_process(true)
 		print("SKORP: Player touched activation trigger!")
