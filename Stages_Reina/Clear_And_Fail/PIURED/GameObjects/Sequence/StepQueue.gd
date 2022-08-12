@@ -131,9 +131,12 @@ func _process(delta):
 	self.updateActiveHolds(currentAudioTime, delta, currentBeat);
 	self.updateStepQueue(currentAudioTime);
 
+	#for k in KEYMAPPINGS_STUB:
+	#	if Input.is_key_pressed(k):
+	#		#print("Key pressed! "+String(currentAudioTime)+" "+String(currentBeat))
+	#		stepPressed(KEYMAPPINGS_STUB[k],1)
 	for k in KEYMAPPINGS_STUB:
-		if Input.is_key_pressed(k):
-			#print("Key pressed! "+String(currentAudioTime)+" "+String(currentBeat))
+		if Input.is_action_pressed("piu_"+KEYMAPPINGS_STUB[k]):
 			stepPressed(KEYMAPPINGS_STUB[k],1)
 
 #func input():

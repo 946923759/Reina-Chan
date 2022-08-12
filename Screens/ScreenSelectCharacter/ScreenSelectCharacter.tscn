@@ -146,7 +146,7 @@ __meta__ = {
 }
 
 [node name="Characters" type="Node2D" parent="."]
-position = Vector2( 1120, 384 )
+position = Vector2( 944, 384 )
 scale = Vector2( 4, 4 )
 __meta__ = {
 "_edit_group_": true
@@ -161,7 +161,11 @@ frames = ExtResource( 12 )
 animation = "WalkLoop"
 
 [node name="arrows" type="Node2D" parent="."]
+position = Vector2( -176, 0 )
 script = SubResource( 1 )
+__meta__ = {
+"_edit_group_": true
+}
 
 [node name="LeftArrow" type="TextureRect" parent="arrows"]
 material = SubResource( 3 )

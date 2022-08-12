@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Sounds/Classic/Door.wav" type="AudioStream" id=1]
 [ext_resource path="res://Various Objects/Door.tres.gd" type="Script" id=2]
@@ -30,6 +30,9 @@ extents = Vector2( 16, 130 )
 a = Vector2( 260, 0 )
 b = Vector2( 0, 0 )
 
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 32, 130 )
+
 [node name="Door" type="Node2D"]
 script = ExtResource( 2 )
 tweenTime = 1.0
@@ -58,3 +61,15 @@ one_way_collision = true
 
 [node name="Sound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 1 )
+
+[node name="LockedDoor" type="StaticBody2D" parent="."]
+visible = false
+position = Vector2( 32, 128 )
+collision_layer = 0
+collision_mask = 0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LockedDoor"]
+shape = SubResource( 4 )

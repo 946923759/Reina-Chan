@@ -9,6 +9,7 @@ var is_reflecting = false;
 #-1 to move left, 1 to move right
 enum DIRECTION {LEFT = -1, RIGHT = 1}
 export(DIRECTION) var facing = DIRECTION.LEFT
+#export(bool) var is_left_or_right_aligned=false
 
 #This is only if you didn't override objectTouched!
 #There might be cases where you need to override it.
@@ -41,7 +42,10 @@ func _ready():
 		assert(sprite.frames)
 		#If you don't have a frameset named "default", it will crash here
 		shape.set_extents(sprite.frames.get_frame("default",0).get_size())
-		
+	
+	if facing==DIRECTION.RIGHT: #Offset assumes facing left so reverse it
+		collisionOffset.x*=-1
+		sprite.offset.x*=-1
 	var area2D = $Area2D
 	#var shapeID = shape.get_rid().get_id()
 	area2D.shape_owner_add_shape(area2D.create_shape_owner(area2D), shape)
@@ -81,6 +85,15 @@ func _physics_process(delta):
 	#label.text = String(curHealth) + "/" + String(maxHealth)
 	#label.text = String(curTime)
 
+	"""
+	You CANNOT use a shader parameter for this, setting a shader param
+	affects all objects using the same shader. Therefore you have to
+	turn the shader off and on like this.
+	However, you can swap shaders by assigning one to the enemy node, and
+	when the enemy is hurt it will swap to the glow shader.
+	The glow shader also supports alpha masking, but due to the global
+	shader issue you'd probably want all the alpha mask values to be the same.
+	"""
 	if !sprite.use_parent_material:
 		whiteTime += delta
 		if whiteTime > .1:

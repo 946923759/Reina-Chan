@@ -79,15 +79,24 @@ func get_matching_files_extensions(path,fname):
 
 func _ready():
 	print("ScreenGameplay START!")
+
 	
+
+func init():
 	#var files = 
-	var sscPath:String = get_matching_files_extensions("res://Stages_Reina/Clear_And_Fail/Songs/"+songToLoad+"/",".ssc")
+	
+	var sscPath:String = songToLoad
+	if !("/" in songToLoad):
+		sscPath = get_matching_files_extensions("res://Stages_Reina/Clear_And_Fail/Songs/"+songToLoad+"/",".ssc")
 
 
 	#func constructor( pathToSSCFile:String, audioFilePath:String, offset, playBackSpeed, onReadyToStart ):
 	#song.constructor()
 	song.constructor(sscPath,.100,1)
-
+	
+	$VBoxContainer.visible=false
+	$VBoxContainer/Button.disabled=true
+	
 	print("Finish loading Song class, now set up player.")
 	addPlayerStage({
 		inputConfig=null,
@@ -105,7 +114,6 @@ func _ready():
 	song.startPlayBack(start)
 	$PlayerStage.beatManager.requiresResync=true
 	pass
-
 
 # This function seems to get the scores?
 #retrievePerformancePlayerStages() {
@@ -218,3 +226,13 @@ func setNewPlayBackSpeed ( newPlayBackSpeed:float ):
 
 func updateOffset(stageId:int, newOffsetOffset:float):
 	self._playerStages[stageId].beatManager.updateOffset(newOffsetOffset) ;
+
+
+func _input(event):
+	if Input.is_action_just_pressed("ui_pause"):
+		get_tree().change_scene("res://Stages_Reina/Clear_And_Fail/PIURED_DebugTest.tscn")
+
+#If Android back button pressed
+func _notification(what):
+	if what == MainLoop.NOTIFICATION_WM_GO_BACK_REQUEST:
+		get_tree().change_scene("res://Stages_Reina/Clear_And_Fail/PIURED_DebugTest.tscn")

@@ -1,0 +1,33 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://ParticleEffects/alphaMask.gdshader" type="Shader" id=1]
+[ext_resource path="res://Various Objects/boulder.png" type="Texture" id=2]
+[ext_resource path="res://Stages_Reina/Ouroboros/RockController.gd" type="Script" id=3]
+
+[sub_resource type="CircleShape2D" id=6]
+
+[sub_resource type="ShaderMaterial" id=7]
+shader = ExtResource( 1 )
+shader_param/clr1 = Color( 0.501961, 0, 0.501961, 1 )
+
+[node name="RockController" type="Node2D"]
+position = Vector2( 2720, -64 )
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_group_": true
+}
+fall_height = 20
+
+[node name="VisibilityEnabler2D" type="VisibilityEnabler2D" parent="."]
+
+[node name="StaticBody2D" type="Area2D" parent="."]
+scale = Vector2( 4, 4 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+shape = SubResource( 6 )
+
+[node name="Sprite" type="Sprite" parent="StaticBody2D"]
+material = SubResource( 7 )
+texture = ExtResource( 2 )
+
+[connection signal="body_entered" from="StaticBody2D" to="." method="_on_StaticBody2D_body_entered"]

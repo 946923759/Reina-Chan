@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/S3K_63 - Checkpoint.wav-526fbe4cc4eed647aef050d2ed408e8f.sample"
+
+[deps]
+
+source_file="res://Sounds/Classic/S3K_63 - Checkpoint.wav"
+dest_files=[ "res://.import/S3K_63 - Checkpoint.wav-526fbe4cc4eed647aef050d2ed408e8f.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

@@ -38,6 +38,7 @@ onready var stepQueue = $NoteField
 func _ready():
 	$Judgment.position=Globals.SCREEN_CENTER
 	$Lifebar.position=Vector2(Globals.SCREEN_CENTER_X,40)
+	set_process(false)
 	
 #	self.configureStepConstantsPositions() ;
 #
@@ -97,7 +98,7 @@ func constructor(song,
 	scoreManager.constructor(1,accuracyMargin,_song.getStepsType(_level),song.getStepsDifficulty(_level))
 
 	$Label3.text=_song.getStepsType(_level)+"\nidx "+String(_level)+"\nMeter: "+String(song.getStepsDifficulty(_level))
-	
+	set_process(true)
 
 func configureBeatManager():
 	print("Spawning new BeatManager to manage timing for steps given")

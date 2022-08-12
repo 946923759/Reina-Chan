@@ -632,6 +632,7 @@ target_path = NodePath("..")
 properties = PoolStringArray( "frameTimer", "isOnFloor" )
 
 [node name="ScarecrowEnemyCheck" type="Area2D" parent="."]
+visible = false
 position = Vector2( 360, 0 )
 collision_layer = 2
 collision_mask = 2

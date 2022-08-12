@@ -867,7 +867,7 @@ format = 1
 tile_data = PoolIntArray( 720896, 7, 0, 720898, 7, 0, 720902, 7, 0, 720904, 7, 0, 720905, 7, 0, 720909, 7, 0, 720910, 7, 0, 720911, 7, 0, 720914, 7, 0, 720917, 7, 0, 720918, 7, 0, 720920, 7, 0, 720921, 7, 0, 720924, 7, 0, 720925, 7, 0, 720927, 7, 0 )
 
 [node name="PlayerHolder" parent="." index="48"]
-position = Vector2( 448, -896 )
+position = Vector2( 2337, 352 )
 texture = ExtResource( 46 )
 player_to_spawn_in_debug = 1
 

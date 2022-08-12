@@ -68,7 +68,12 @@ func constructor(
 	print("Got meter: "+String(steps[0].METER))
 
 	print("Loading song!")
-	self.stream = ExternalAudio.loadfile(songPath)
+	
+	if OS.has_feature("standalone"):
+		print("Game appears to be packed, loading internally.")
+		self.stream = load(songPath)
+	else:
+		self.stream = ExternalAudio.loadfile(songPath)
 
 func loadSSC(sscPath:String)->bool:
 	
@@ -245,14 +250,20 @@ static func loadSSC_real(sscPath:String)->Dictionary:
 					"NOTEDATA":
 						print("==== Parsing per-chart info ====")
 						curParse=CurrentlyParsing.PER_STEPS_DATA
-						sscData['steps'].append({})
+						
+						#Fill with empty fields in case ssc is missing them
+						sscData['steps'].append({
+							"CHARTNAME":"",
+							"DESCRIPTION":"",
+							"CHARTSTYLE":""
+						})
 						curSteps=sscData['steps'].size()-1
 					"METER": #In SM this is an unsigned int.
 						if curParse==CurrentlyParsing.HEADER:
 							print("Error! Encountered METER tag in header!")
 						else:
 							sscData['steps'][curSteps][tagData[0]]=int(tagData[1])
-					_:
+					_: #Anything else, such as DIFFICULTY
 						insertIntoHeaderOrSteps(sscData,tagData[0],tagData[1],curParse,curSteps)
 
 				#clear buffer

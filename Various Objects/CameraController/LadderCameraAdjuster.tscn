@@ -15,6 +15,7 @@ export (int) var bottomBound = 0;
 export (float,-3,3,.5) var center_bound_offset = 0
 export (float) var tweenTime = 1;
 export (bool) var freeze_player_during_transition=true
+export (bool) var only_if_on_ladder=false
 const cameraScale = 64;
 #export(Shape2D) var shape;
 
@@ -58,8 +59,8 @@ func cam(obj):
 	if obj.velocity.y > -4 and obj.velocity.y < 4:
 		return
 	#Have to adjust no matter what because they could drop down
-	#elif !obj.state != 6: #State.ON_LADDER
-	#	return
+	if only_if_on_ladder and obj.state != 6 and obj.velocity.y < 0: #State.ON_LADDER
+		return
 	#disabled = true
 	var cc = get_node(\"/root/Node2D\").get_player().get_node(\"Camera2D\")
 	if cc.is_tweening:

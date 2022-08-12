@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://Stages_Reina/Clear_And_Fail/PIURED/GameObjects/Song.gd" type="Script" id=1]
 [ext_resource path="res://Stages_Reina/Clear_And_Fail/PIURED/GameObjects/PlayerStage.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Stages_Reina/Clear_And_Fail/PIURED/GameObjects/ScreenGameplay.gd" type="Script" id=3]
+[ext_resource path="res://Player Files/8bitPlayer/TouchScreenUI/flatDark35.png" type="Texture" id=4]
 
 [node name="ScreenGameplay" type="Node2D"]
 script = ExtResource( 3 )
@@ -13,3 +14,63 @@ accuracyMargin = 0.2
 
 [node name="Song" type="AudioStreamPlayer" parent="."]
 script = ExtResource( 1 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+margin_left = 832.0
+margin_top = 224.0
+margin_right = 1111.0
+margin_bottom = 279.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Label" type="Label" parent="VBoxContainer"]
+margin_right = 287.0
+margin_bottom = 31.0
+text = "Init hasn't been called from fallback screen...
+click here to do it manually"
+
+[node name="Button" type="Button" parent="VBoxContainer"]
+margin_top = 35.0
+margin_right = 287.0
+margin_bottom = 85.0
+rect_min_size = Vector2( 0, 50 )
+text = "init!!"
+
+[node name="Node2D" type="Node2D" parent="."]
+position = Vector2( 384, 576 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="TouchScreenButton" type="TouchScreenButton" parent="Node2D"]
+position = Vector2( 32, 0 )
+normal = ExtResource( 4 )
+action = "piu_dl"
+visibility_mode = 1
+
+[node name="TouchScreenButton2" type="TouchScreenButton" parent="Node2D"]
+position = Vector2( 128, 0 )
+normal = ExtResource( 4 )
+action = "piu_ul"
+visibility_mode = 1
+
+[node name="TouchScreenButton3" type="TouchScreenButton" parent="Node2D"]
+position = Vector2( 224, 0 )
+normal = ExtResource( 4 )
+action = "piu_c"
+visibility_mode = 1
+
+[node name="TouchScreenButton4" type="TouchScreenButton" parent="Node2D"]
+position = Vector2( 320, 0 )
+normal = ExtResource( 4 )
+action = "piu_ur"
+visibility_mode = 1
+
+[node name="TouchScreenButton5" type="TouchScreenButton" parent="Node2D"]
+position = Vector2( 416, 0 )
+normal = ExtResource( 4 )
+action = "piu_dr"
+visibility_mode = 1
+
+[connection signal="pressed" from="VBoxContainer/Button" to="." method="init"]

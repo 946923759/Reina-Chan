@@ -3,6 +3,7 @@ signal player_entered_door()
 
 export (bool) var automatically_set_x_bounds = true
 export (bool) var boss_room_door = false
+export (bool) var locked = false
 export (int) var leftBound;
 export (int) var topBound;
 export (int) var rightBound;
@@ -19,6 +20,9 @@ export (DOOR_IS_FACING) var facing = DOOR_IS_FACING.RIGHT
 
 func _ready():
 	$Area2D.connect("body_entered",self,"move")
+	if locked:
+		$LockedDoor.set_collision_layer_bit(0,true)
+		$Area2D.monitoring=false
 	
 	
 func move(obj):
@@ -82,3 +86,6 @@ func move(obj):
 #func _process(delta):
 #	var time = 5/16;
 	
+func unlock_door():
+	$LockedDoor.queue_free()
+	$Area2D.monitoring=true

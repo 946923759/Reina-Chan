@@ -1,0 +1,309 @@
+[gd_scene load_steps=5 format=2]
+
+[sub_resource type="GDScript" id=2]
+script/source = "extends Control
+
+
+func get_filelist(scan_dir : String) -> Array:
+	var my_files : Array = []
+	var dir := Directory.new()
+	if dir.open(scan_dir) != OK:
+		printerr(\"Warning: could not open directory: \", scan_dir)
+		return []
+
+	if dir.list_dir_begin(true, true) != OK:
+		printerr(\"Warning: could not list contents of: \", scan_dir)
+		return []
+
+	var file_name := dir.get_next()
+	while file_name != \"\":
+		if dir.current_is_dir():
+			my_files += get_filelist(dir.get_current_dir() + \"/\" + file_name)
+		else:
+			my_files.append(dir.get_current_dir() + \"/\" + file_name)
+
+		file_name = dir.get_next()
+
+	return my_files
+
+
+static func get_matching_file_ext(path,ext):
+	#var files = []
+	var dir = Directory.new()
+	print(\"Opening directory \"+path)
+	var ok = dir.open(path)
+	if ok != OK:
+		printerr(\"Warning: could not open directory: ERROR \", ok)
+		return null
+	#print(dir.get_current_dir())
+	dir.list_dir_begin(false,true)
+
+	while true:
+		var file = dir.get_next()
+		#print(file)
+		if file == \"\":
+			dir.list_dir_end()
+			return null
+		elif file.ends_with(ext):
+			print(\"Found file: \"+file)
+			print(\"Return \"+path+\"/\"+file)
+			dir.list_dir_end()
+			return path+\"/\"+file
+
+func scan_songs_dir(scan_dir:String)->Array:
+	var foundFiles:Array = []
+	var dir:= Directory.new()
+	if dir.open(scan_dir) != OK:
+		printerr(\"Warning: could not open directory: \", scan_dir)
+		return []
+	if dir.list_dir_begin(true, true) != OK:
+		printerr(\"Warning: could not list contents of: \", scan_dir)
+		return []
+		
+	var file_name := dir.get_next()
+	while file_name != \"\":
+		if dir.current_is_dir():
+			var f = get_matching_file_ext(dir.get_current_dir() + \"/\"+file_name,\".ssc\")
+			if f != null:
+				foundFiles.append(f)
+		file_name = dir.get_next()
+	return foundFiles
+
+### END STATIC FUNCS
+
+onready var songListActor:PopupMenu = $GridContainer/Button/PopupMenu
+onready var curSSCLabel:Label = $GridContainer/LabelCurSSC
+onready var numChartsLabel:Label = $GridContainer/LabelNumCharts
+onready var stepsList:PopupMenu = $GridContainer2/SelectStepsButton/SelectStepsPopupMenu
+
+var sscPath:String=\"\"
+var sscSteps:int=0
+var ssc:Dictionary
+
+var ScreenGameplay = preload('res://Stages_Reina/Clear_And_Fail/PIURED/GameObjects/ScreenGameplay.tscn')
+
+func _ready():
+	var SONGS_DIR := \"res://Stages_Reina/Clear_And_Fail/Songs/\"
+	for song in scan_songs_dir(SONGS_DIR):
+		songListActor.add_item(song)
+	
+
+func _on_PopupMenu_index_pressed(index):
+	var item:String = songListActor.get_item_text(index)
+	sscPath=item
+	print(item)
+	curSSCLabel.text=item
+	
+	ssc=Song.loadSSC_real(item)
+	numChartsLabel.text=\"found \"+ String(len(ssc['steps']))+\" steps in ssc\"
+	for c in ssc['steps']:
+		var diffName = \"\"
+		if c['STEPSTYPE']=='pump-single':
+			diffName='S'
+		elif c['STEPSTYPE']==\"pump-double\":
+			diffName=\"D\"
+		else:
+			diffName=c['STEPSTYPE']+\" Lv.\"
+		diffName+=String(c['METER'])
+		stepsList.add_item(diffName)
+	$GridContainer2/SelectStepsButton.disabled=false
+	pass # Replace with function body.
+
+
+func _on_StartGameplayButton_pressed():
+	var gameplay = ScreenGameplay.instance()
+	gameplay.songToLoad=sscPath
+	gameplay.levelToLoad=sscSteps
+	add_child(gameplay)
+	gameplay.init()
+	$GridContainer.queue_free()
+	$GridContainer2.queue_free()
+	#Globals.change_screen(get_tree(),\"PIURED_ScreenGameplay\")
+	pass # Replace with function body.
+
+
+func _on_Button_pressed():
+	pass # Replace with function body.
+
+
+func _on_SelectStepsPopupMenu_index_pressed(index):
+	if index > len(ssc['steps']):
+		print(\"Index was bigger than the amount of steps??? \"+String(index)+\" \"+String(len(ssc['steps'])))
+		return false
+	sscSteps=index
+	$GridContainer2/SelectStepsButton.text = String(ssc['steps'][sscSteps]['METER'])
+	$GridContainer2/ChartName.text=ssc['steps'][sscSteps]['CHARTNAME']
+	$GridContainer2/StepsType.text=ssc['steps'][sscSteps][\"STEPSTYPE\"]
+	$GridContainer2/DifficultyName.text=ssc['steps'][sscSteps][\"DIFFICULTY\"]
+	
+	$GridContainer2/StartGameplayButton.disabled=false
+	pass # Replace with function body.
+"
+
+[sub_resource type="Theme" id=3]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends PopupMenu
+
+func _ready():
+	#for i in range(9):
+	#	self.add_item(String(i))
+	pass
+"
+
+[sub_resource type="GDScript" id=4]
+script/source = "extends PopupMenu
+
+"
+
+[node name="Control" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = SubResource( 2 )
+
+[node name="GridContainer" type="GridContainer" parent="."]
+margin_left = 32.0
+margin_top = 96.0
+margin_right = 256.0
+margin_bottom = 136.0
+theme = SubResource( 3 )
+
+[node name="Label" type="Label" parent="GridContainer"]
+margin_right = 249.0
+margin_bottom = 14.0
+text = "debug panel"
+
+[node name="Button" type="Button" parent="GridContainer"]
+margin_top = 18.0
+margin_right = 249.0
+margin_bottom = 118.0
+rect_min_size = Vector2( 0, 100 )
+size_flags_horizontal = 3
+button_mask = 7
+text = "Select SSC from built in"
+
+[node name="PopupMenu" type="PopupMenu" parent="GridContainer/Button"]
+margin_top = 24.0
+margin_right = 92.0
+margin_bottom = 44.0
+rect_scale = Vector2( 2, 2 )
+script = SubResource( 1 )
+
+[node name="Label2" type="Label" parent="GridContainer"]
+margin_top = 122.0
+margin_right = 249.0
+margin_bottom = 136.0
+text = "OR"
+align = 1
+
+[node name="Button2" type="Button" parent="GridContainer"]
+margin_top = 140.0
+margin_right = 249.0
+margin_bottom = 240.0
+rect_min_size = Vector2( 0, 100 )
+text = "load ssc from file"
+
+[node name="Label3" type="Label" parent="GridContainer"]
+margin_top = 244.0
+margin_right = 249.0
+margin_bottom = 258.0
+text = "Loaded SSC:"
+
+[node name="LabelCurSSC" type="Label" parent="GridContainer"]
+margin_top = 262.0
+margin_right = 249.0
+margin_bottom = 276.0
+text = "NONE"
+
+[node name="LabelNumCharts" type="Label" parent="GridContainer"]
+margin_top = 280.0
+margin_right = 249.0
+margin_bottom = 294.0
+text = "Found ??? charts in ssc (not loaded yet)"
+
+[node name="GridContainer2" type="GridContainer" parent="."]
+margin_left = 736.0
+margin_top = 96.0
+margin_right = 907.0
+margin_bottom = 194.0
+columns = 2
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Label" type="Label" parent="GridContainer2"]
+margin_top = 18.0
+margin_right = 99.0
+margin_bottom = 32.0
+text = "SELECT LEVEL:"
+
+[node name="SelectStepsButton" type="Button" parent="GridContainer2"]
+margin_left = 103.0
+margin_right = 171.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 0, 50 )
+disabled = true
+text = "Level ???"
+
+[node name="SelectStepsPopupMenu" type="PopupMenu" parent="GridContainer2/SelectStepsButton"]
+margin_right = 153.0
+margin_bottom = 256.0
+rect_scale = Vector2( 2, 2 )
+script = SubResource( 4 )
+
+[node name="Label3" type="Label" parent="GridContainer2"]
+margin_top = 54.0
+margin_right = 99.0
+margin_bottom = 68.0
+text = "Chart Name:"
+
+[node name="ChartName" type="Label" parent="GridContainer2"]
+margin_left = 103.0
+margin_top = 54.0
+margin_right = 171.0
+margin_bottom = 68.0
+
+[node name="Label5" type="Label" parent="GridContainer2"]
+margin_top = 72.0
+margin_right = 99.0
+margin_bottom = 86.0
+text = "StepsType: "
+
+[node name="StepsType" type="Label" parent="GridContainer2"]
+margin_left = 103.0
+margin_top = 72.0
+margin_right = 171.0
+margin_bottom = 86.0
+
+[node name="Label7" type="Label" parent="GridContainer2"]
+margin_top = 90.0
+margin_right = 99.0
+margin_bottom = 104.0
+text = "Difficulty Name"
+
+[node name="DifficultyName" type="Label" parent="GridContainer2"]
+margin_left = 103.0
+margin_top = 90.0
+margin_right = 171.0
+margin_bottom = 104.0
+
+[node name="StartGameplayButton" type="Button" parent="GridContainer2"]
+margin_top = 108.0
+margin_right = 99.0
+margin_bottom = 128.0
+size_flags_horizontal = 3
+disabled = true
+text = "play!"
+
+[node name="lmao" type="Label" parent="GridContainer2"]
+margin_left = 171.0
+margin_top = 111.0
+margin_right = 171.0
+margin_bottom = 125.0
+size_flags_horizontal = 12
+
+[connection signal="pressed" from="GridContainer/Button" to="GridContainer/Button/PopupMenu" method="popup"]
+[connection signal="index_pressed" from="GridContainer/Button/PopupMenu" to="." method="_on_PopupMenu_index_pressed"]
+[connection signal="pressed" from="GridContainer2/SelectStepsButton" to="GridContainer2/SelectStepsButton/SelectStepsPopupMenu" method="popup"]
+[connection signal="index_pressed" from="GridContainer2/SelectStepsButton/SelectStepsPopupMenu" to="." method="_on_SelectStepsPopupMenu_index_pressed"]
+[connection signal="pressed" from="GridContainer2/StartGameplayButton" to="." method="_on_StartGameplayButton_pressed"]

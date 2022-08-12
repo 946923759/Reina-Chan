@@ -40,7 +40,8 @@ func report_errors(err, filepath):
 		ERR_FILE_UNRECOGNIZED: "File: Unrecognized error.",
 		ERR_FILE_CORRUPT: "File: Corrupt error.",
 		ERR_FILE_MISSING_DEPENDENCIES: "File: Missing dependencies error.",
-		ERR_FILE_EOF: "File: End of file (EOF) error."
+		ERR_FILE_EOF: "File: End of file (EOF) error.",
+		ERR_CANT_OPEN: "File: Can't open file or directory."
 	}
 	if err in result_hash:
 		print("Error: ", result_hash[err], " ", filepath)

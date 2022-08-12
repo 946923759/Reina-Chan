@@ -628,7 +628,9 @@ var SCREENS:Dictionary = {
 	"ScreenItemGet":"res://Screens/ScreenItemGet/ScreenItemGet.tscn",
 	"CutsceneFromFile":"res://Screens/ScreenCutscene/CutsceneFromFile.tscn",
 	"CutsceneDemoEnd":"res://Screens/ScreenCutscene/cutsceneWhatever.tscn",
-	"ScreenCredits":"res://Screens/Credits.tscn"
+	"ScreenCredits":"res://Screens/Credits.tscn",
+	
+	"PIURED_ScreenGameplay":"res://Stages_Reina/Clear_And_Fail/PIURED/GameObjects/ScreenGameplay.tscn"
 }
 
 func change_screen(tree,screen:String)->void:

@@ -14,11 +14,26 @@
 [node name="PlayerStage" type="Node2D"]
 script = ExtResource( 3 )
 
+[node name="Control" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = 1280.0
+margin_bottom = 720.0
+rect_min_size = Vector2( 1280, 720 )
+
+[node name="ColorRect" type="ColorRect" parent="Control"]
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -3.0
+margin_right = 3.0
+rect_min_size = Vector2( 5, 0 )
+
 [node name="ScoreManager" type="Node" parent="."]
 script = ExtResource( 9 )
 
 [node name="NoteField" parent="." instance=ExtResource( 8 )]
-position = Vector2( 480, 32 )
+position = Vector2( 608, 32 )
 
 [node name="Judgment" parent="." instance=ExtResource( 1 )]
 position = Vector2( 544, 416 )

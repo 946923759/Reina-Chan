@@ -194,6 +194,9 @@ var extras_table = {
 	\"AprilFools2022\":{
 		\"hidden\":false
 	},
+	\"PIURED_Debug\":{
+		\"hidden\":false
+	},
 	\"CustomStage\":{
 		\"hidden\":true #Because we need to check if PC
 	},
@@ -220,6 +223,9 @@ func action_Credits():
 func action_NSF_Test():
 	get_tree().change_scene(\"res://Stages_Reina/TestStage_NSF/TestStage_NSF_2.tscn\")
 
+func action_PIURED_Debug():
+	get_tree().change_scene(\"res://Stages_Reina/Clear_And_Fail/PIURED_DebugTest.tscn\")
+
 func action_CustomStage():
 	var filePicker = parent.get_node(\"FileDialog_stage\")
 	if OS.has_feature(\"standalone\"):
@@ -239,6 +245,9 @@ func action_AprilFools2022():
 	Globals.change_screen(get_tree(),\"CutsceneFromFile\")
 
 func unlock_CustomStage()->bool:
+	return false
+	
+	
 	#if OS.has_feature(\"standalone\"):
 	if true:
 		match OS.get_name():
