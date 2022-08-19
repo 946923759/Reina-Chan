@@ -18,7 +18,7 @@
 [ext_resource path="res://Player Files/mission start1.png" type="Texture" id=16]
 [ext_resource path="res://Player Files/mission start2.png" type="Texture" id=17]
 [ext_resource path="res://Player Files/mission start_EDITOR_ONLY.png" type="Texture" id=18]
-[ext_resource path="res://Player Files/PauseScreenDemo.tscn" type="PackedScene" id=19]
+[ext_resource path="res://Screens/ScreenPauseMenu/PauseScreenDemo.tscn" type="PackedScene" id=19]
 [ext_resource path="res://Player Files/CameraController_v2.gd" type="Script" id=21]
 
 [sub_resource type="RectangleShape2D" id=1]

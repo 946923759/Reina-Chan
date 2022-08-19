@@ -1,0 +1,562 @@
+[gd_scene load_steps=20 format=2]
+
+[ext_resource path="res://Various Objects/life_up.png" type="Texture" id=1]
+[ext_resource path="res://MM2Font_Small.tres" type="DynamicFont" id=2]
+[ext_resource path="res://megaman_2.ttf" type="DynamicFontData" id=3]
+[ext_resource path="res://Screens/ScreenPauseMenu/rockman4_mi_MMC5_2.png" type="Texture" id=4]
+[ext_resource path="res://stepmania-compat/smQuad.gd" type="Script" id=5]
+[ext_resource path="res://Screens/ScreenPauseMenu/startObj.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Screens/ScreenPauseMenu/rockman4_mi_MMC5_c.png" type="Texture" id=7]
+[ext_resource path="res://MM2Font_Smaller.tres" type="DynamicFont" id=8]
+[ext_resource path="res://Screens/ScreenCutscene/TextFont.tres" type="DynamicFont" id=9]
+[ext_resource path="res://Screens/ScreenPauseMenu/letters.png" type="Texture" id=10]
+[ext_resource path="res://Sounds/Classic/QuickSelectWeapon.wav" type="AudioStream" id=11]
+[ext_resource path="res://Sounds/Classic/Mega Man 4 SFX (25) - Menu Help.wav" type="AudioStream" id=12]
+[ext_resource path="res://ParticleEffects/AlphaMaskPurple.tres" type="Material" id=13]
+[ext_resource path="res://Sounds/Classic/Mega Man 4 SFX (26) - Pause.wav" type="AudioStream" id=14]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Control
+signal unpaused(newWeapon)
+
+export(bool) var debuggingPauseMenu=true
+onready var weaponList:Node2D = $Sprite/WeaponList
+onready var pressB:Label = $Sprite/PressB
+var weaponListCount:int
+const WEAPON_LIST_SPLIT_AT=5
+var pos = 0
+
+onready var infoScreen:Node2D=$infoScreen
+onready var select:AudioStreamPlayer = $Select
+onready var info:AudioStreamPlayer = $info
+onready var tw:Tween = $Tween
+
+var showingInfo=false
+
+func _ready():
+	#visible=false
+	set_process_input(false)
+	set_process(false)
+	self.visible=false
+	
+	infoScreen.position=Vector2(Globals.SCREEN_CENTER_X,Globals.SCREEN_CENTER_Y)
+	infoScreen.modulate.a=0
+	weaponListCount=weaponList.get_child_count()
+	weaponList.get_child(pos).GainFocus()
+	#OnCommand()
+	pass
+	
+func UpdateFocus(n:int):
+	for i in range(weaponListCount):
+		var c = weaponList.get_child(i)
+		if i==n:
+			c.GainFocus()
+		else:
+			c.LoseFocus()
+			
+func UpdateAmmo(ammo:PoolIntArray):
+	for i in range(min(len(ammo),weaponListCount)):
+		weaponList.get_child(i).set_ammo(ammo[i]/144.0)
+	$Sprite/LifeCounter._ready()
+	
+func OnCommand(curWeapon:int=0):
+	UpdateFocus(curWeapon)
+	self.visible=true
+	tw.interpolate_property(self,\"modulate:a\",0.0,1.0,.1);
+	tw.start()
+	$pause.play()
+	#print(\"[PauseScreen] OnCommand!\")
+	set_process_input(true)
+	set_process(true)
+	
+func OffCommand()->Tween:
+	tw.interpolate_property(self,\"modulate:a\",1.0,0.0,.1);
+	tw.start()
+	yield(tw,\"tween_completed\")
+	#$m.visible=false
+	set_process_input(false)
+	set_process(false)
+	self.visible=false
+	get_tree().paused = false
+	emit_signal(\"unpaused\",pos)
+	print(\"[PauseScreen] OffCommand!\")
+	return tw
+
+func _input(_ev):
+	if showingInfo:
+		if Input.is_action_just_pressed(\"ui_cancel\") or Input.is_action_just_pressed(\"ui_accept\"):
+			UpdateFocus(pos)
+			showingInfo=false
+			var tween = tw
+			tween.interpolate_property(infoScreen, 'modulate:a',
+			null, 0, .5, Tween.TRANS_QUAD, Tween.EASE_OUT);
+			tween.start();
+		if Input.is_action_just_pressed(\"ui_left\") and pos > 0:
+			pos-=1
+			infoScreen.updateWeaponInfo(pos)
+			info.play()
+		elif Input.is_action_just_pressed(\"ui_right\") and pos < weaponListCount-1:
+			pos+=1
+			infoScreen.updateWeaponInfo(pos)
+			info.play()
+	else:
+		if Input.is_action_just_pressed(\"ui_up\") and pos > 0:
+			pos-=1
+			select.play()
+		elif Input.is_action_just_pressed(\"ui_down\") and pos < weaponListCount-1:
+			pos+=1
+			select.play()
+		elif Input.is_action_just_pressed(\"ui_left\") and pos > WEAPON_LIST_SPLIT_AT-1:
+			pos-=WEAPON_LIST_SPLIT_AT
+			select.play()
+		elif Input.is_action_just_pressed(\"ui_right\") and pos < WEAPON_LIST_SPLIT_AT:
+			pos+=WEAPON_LIST_SPLIT_AT
+			select.play()
+		elif Input.is_action_just_pressed(\"ui_cancel\"):
+			infoScreen.updateWeaponInfo(pos)
+			info.play()
+			showingInfo=true
+			#var seq := TweenSequence.new(get_tree())
+			#seq.append($infoScreen,\"modulate:a\",1,.5)
+			var tween = tw
+			tween.interpolate_property(infoScreen, 'modulate:a',
+			null, 1, .5, Tween.TRANS_QUAD, Tween.EASE_OUT);
+			tween.start();
+		elif Input.is_action_just_pressed(\"ui_select\") or Input.is_action_just_pressed(\"ui_pause\"):
+			OffCommand()
+			
+		UpdateFocus(pos)
+
+
+var t:float=0.0
+func _process(delta):
+	pressB.visible=(t<1)
+	t+=delta
+	if t>2:
+		t=0
+
+func _on_background_resized():
+	var pos:float=(get_viewport().get_visible_rect().size/2).x
+	$Sprite.position.x=pos
+	$infoScreen.position.x=pos
+	pass # Replace with function body.
+"
+
+[sub_resource type="GDScript" id=3]
+script/source = "tool
+extends Node2D
+
+var piece = preload(\"res://Character Sprites/hp_piece.png\")
+export (int,1,20) var curHP = 20 setget update_hp
+
+func update_hp(h):
+	curHP=h
+	update()
+
+func _ready():
+	update()
+	pass
+
+#var icon = preload(\"res://Player Files/mb.png\")
+
+func _draw():
+	draw_set_transform(Vector2(-20,4), PI*1.5, Vector2(1,1))
+	for i in range(curHP):
+		draw_texture(piece,Vector2(0,0+2*i))
+"
+
+[sub_resource type="GDScript" id=4]
+script/source = "extends Sprite
+
+export (Vector2) var numberOffset = Vector2(10,10)
+export (Globals.Characters) var curCharacter = 0
+export (int,-1,99) var lives = 1
+
+var numberTex = load(\"res://Screens/ScreenPauseMenu/mm4_pause_numbers 10x1.png\")
+
+func drawNumber(n:int):
+	pass
+
+func _ready():
+	#print(\"r\")
+	if Globals.playerData.gameDifficulty < Globals.Difficulty.MEDIUM:
+		lives=-1
+	else:
+		lives = CheckpointPlayerStats.playerLivesLeft
+	#print(\"%02d\" % 1)
+	update()
+	#if Engine.editor_hint:
+	#set_process(Engine.editor_hint)
+	set_process(OS.is_debug_build())
+
+func _process(delta):
+	update()
+
+func _draw():
+	var n = lives
+	if n < 0:
+		draw_texture_rect_region(numberTex,
+			Rect2(numberOffset.x,numberOffset.y,18,8),
+			Rect2(9*10,0,18,8)
+		)
+	else:
+		var result:PoolIntArray = []
+		result.resize(2)
+		if n < 10:
+			result[0]=0
+			result[1]=n
+		else:
+			result[0]=n/10
+			result[1]=n%10
+			
+		for i in range(2):
+			#tex, dest, source
+			#Rect2 = x,y,width,height
+			draw_texture_rect_region(numberTex,
+				Rect2(i*9+numberOffset.x,numberOffset.y,9,8),
+				Rect2(9*result[i],0,9,8)
+			)
+"
+
+[sub_resource type="GDScript" id=5]
+script/source = "#tool
+extends Sprite
+
+var numberTex = load(\"res://Screens/ScreenPauseMenu/mm4_pause_numbers 10x1.png\")
+var weaponIcons = load(\"res://Player Files/WeaponIcons.png\")
+onready var title:Label = $title
+onready var desc:Label = $desc
+
+export(int,0,8) var currentWeapon
+var numberOffset = Vector2(240,192)
+var weaponOffset = Vector2(-288,-264)
+
+#ONLY USE INTS FOR THIS!!!!
+onready var weaponInfos:Array = [
+	[ #buster
+		1, #power
+		3, #speed
+		9, #rapidness
+		0
+	],
+	[ #Architect Rocket
+		4,
+		5,
+		9,
+		0
+	],
+	[ #Alchemist dash
+		3,
+		6,
+		5,
+		0
+	],
+	[ #Ouroboros
+		0,
+		0,
+		0,
+		0
+	],
+	[ #Scarecrow
+		3,
+		3,
+		2,
+		0
+	],
+	[
+		0,
+		0,
+		0,
+		0
+	],
+	[
+		0,
+		0,
+		0,
+		0
+	],
+	[
+		0,
+		0,
+		0,
+		0
+	],
+	[
+		0,
+		0,
+		0,
+		0
+	],
+	[ #Glorylight
+		0,
+		0,
+		1,
+		0
+	]
+]
+
+func updateWeaponInfo(w):
+	if Engine.editor_hint:
+		title.text=\"Weapon \"+String(w)+\" title\"
+		desc.text='Weapon '+String(w)+\" placeholder description.\\nLorem Ipsum whatever blah blah blah\"
+	else:
+		title.text=INITrans.GetString(\"Weapons\",Globals.stagesToString[w]+\"Full\")
+		desc.text=INITrans.GetString(\"PauseWeaponDescriptions\",Globals.stagesToString[w])
+	currentWeapon=w
+	update()
+	
+func _ready():
+	if Engine.editor_hint:
+		for i in range(Globals.Weapons.LENGTH_WEAPONS-1):
+			weaponInfos[i][3]=randi()%99
+	else:
+		for i in range(Globals.Weapons.LENGTH_WEAPONS):
+			weaponInfos[i][3]=Globals.weaponEnergyCost[i]
+		
+	update()
+	set_process(false)
+	#set_process(Engine.editor_hint or OS.is_debug_build())
+
+func _process(delta):
+	updateWeaponInfo(currentWeapon)
+	#update()
+
+func _draw():
+	
+	#Tex,dest,src
+	draw_texture_rect_region(weaponIcons,
+		Rect2(weaponOffset.x,weaponOffset.y,48,48),
+		Rect2(16*currentWeapon,0,16,16)
+	)
+	#var n = currentWeapon
+	for i in range(4):
+		var n = weaponInfos[currentWeapon][i]
+		var result:PoolIntArray = []
+		result.resize(2)
+		if n < 10:
+			result[0]=0
+			result[1]=n
+		else:
+			result[0]=n/10
+			result[1]=n%10
+			
+		for j in range(2):
+			if j==0 and result[j]==0: #Left align trick
+				continue
+			#tex, dest, source
+			#Rect2 = x,y,width,height
+			draw_texture_rect_region(numberTex,
+				Rect2(j*8*3+numberOffset.x,numberOffset.y+8*3*i,9*3,8*3),
+				Rect2(9*result[j],0,9,8)
+			)
+"
+
+[sub_resource type="DynamicFont" id=2]
+size = 23
+font_data = ExtResource( 3 )
+
+[node name="PauseScreen" type="Control"]
+pause_mode = 2
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = SubResource( 1 )
+
+[node name="Tween" type="Tween" parent="."]
+
+[node name="pause" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 14 )
+
+[node name="background" type="ColorRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 0.658824 )
+script = ExtResource( 5 )
+
+[node name="Sprite" type="Sprite" parent="."]
+material = ExtResource( 13 )
+position = Vector2( 640, 360 )
+texture = ExtResource( 7 )
+
+[node name="WeaponList" type="Node2D" parent="Sprite"]
+position = Vector2( -352, -392 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Node2D" parent="Sprite/WeaponList" instance=ExtResource( 6 )]
+position = Vector2( 64, 128 )
+
+[node name="Node2D2" parent="Sprite/WeaponList" instance=ExtResource( 6 )]
+position = Vector2( 64, 192 )
+weapon = 1
+
+[node name="Node2D3" parent="Sprite/WeaponList" instance=ExtResource( 6 )]
+position = Vector2( 64, 256 )
+weapon = 2
+
+[node name="Node2D4" parent="Sprite/WeaponList" instance=ExtResource( 6 )]
+position = Vector2( 64, 320 )
+weapon = 3
+
+[node name="Node2D5" parent="Sprite/WeaponList" instance=ExtResource( 6 )]
+position = Vector2( 64, 384 )
+weapon = 4
+
+[node name="Node2D6" parent="Sprite/WeaponList" instance=ExtResource( 6 )]
+position = Vector2( 384, 128 )
+weapon = 5
+
+[node name="Node2D7" parent="Sprite/WeaponList" instance=ExtResource( 6 )]
+position = Vector2( 384, 192 )
+weapon = 6
+
+[node name="Node2D8" parent="Sprite/WeaponList" instance=ExtResource( 6 )]
+position = Vector2( 384, 256 )
+weapon = 7
+
+[node name="Node2D9" parent="Sprite/WeaponList" instance=ExtResource( 6 )]
+position = Vector2( 384, 320 )
+weapon = 8
+
+[node name="Node2D10" parent="Sprite/WeaponList" instance=ExtResource( 6 )]
+position = Vector2( 384, 384 )
+weapon = 9
+
+[node name="LifeDisplay" type="Node2D" parent="Sprite"]
+visible = false
+position = Vector2( 0, -240 )
+scale = Vector2( 4, 4 )
+script = SubResource( 3 )
+
+[node name="LifeLabel" type="Label" parent="Sprite"]
+visible = false
+margin_left = -100.0
+margin_top = -280.0
+margin_right = 100.0
+margin_bottom = -230.0
+custom_fonts/font = ExtResource( 8 )
+text = "LIFE"
+align = 1
+
+[node name="LifeCounter" type="Sprite" parent="Sprite"]
+position = Vector2( 192, 242 )
+scale = Vector2( 3, 3 )
+texture = ExtResource( 1 )
+script = SubResource( 4 )
+numberOffset = Vector2( 16, -0.5 )
+lives = 0
+
+[node name="Sprite" type="Sprite" parent="Sprite"]
+position = Vector2( 0, 75 )
+scale = Vector2( 3, 3 )
+texture = ExtResource( 10 )
+
+[node name="PressB" type="Label" parent="Sprite"]
+margin_left = 140.0
+margin_top = 115.0
+margin_right = 398.0
+margin_bottom = 157.0
+rect_scale = Vector2( 0.75, 0.75 )
+custom_fonts/font = ExtResource( 9 )
+text = "Press B for info"
+align = 2
+valign = 2
+
+[node name="PressB2" type="Label" parent="Sprite"]
+margin_left = -330.0
+margin_top = 115.0
+margin_right = 67.0
+margin_bottom = 157.0
+rect_scale = Vector2( 0.75, 0.75 )
+custom_fonts/font = ExtResource( 9 )
+text = "Press SELECT for options"
+valign = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+visible = false
+margin_left = 448.0
+margin_top = 352.0
+margin_right = 832.0
+margin_bottom = 497.0
+custom_constants/separation = 20
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Label" type="Label" parent="VBoxContainer"]
+margin_right = 384.0
+margin_bottom = 35.0
+custom_fonts/font = ExtResource( 2 )
+text = "retry"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="give up" type="Label" parent="VBoxContainer"]
+margin_top = 55.0
+margin_right = 384.0
+margin_bottom = 90.0
+custom_fonts/font = ExtResource( 2 )
+text = "give up"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="title screen" type="Label" parent="VBoxContainer"]
+margin_top = 110.0
+margin_right = 384.0
+margin_bottom = 145.0
+custom_fonts/font = ExtResource( 2 )
+text = "title screen"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="infoScreen" type="Sprite" parent="."]
+material = ExtResource( 13 )
+position = Vector2( 640, 1080 )
+texture = ExtResource( 4 )
+script = SubResource( 5 )
+currentWeapon = 8
+
+[node name="title" type="Label" parent="infoScreen"]
+margin_left = -202.067
+margin_top = -252.028
+margin_right = -16.067
+margin_bottom = -228.028
+custom_fonts/font = SubResource( 2 )
+text = "ump9"
+
+[node name="desc" type="Label" parent="infoScreen"]
+margin_left = -301.387
+margin_top = -132.039
+margin_right = 304.613
+margin_bottom = 46.9613
+custom_fonts/font = SubResource( 2 )
+text = "ump9's weapon of choice...
+kind of.
+
+in the simulator it has infinite
+ammo and shoots... lemons?
+plasma? what are these
+supposed to be, anyways?"
+autowrap = true
+
+[node name="Select" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 11 )
+
+[node name="info" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 12 )
+
+[node name="quad" type="ColorRect" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color( 0, 0, 0, 0 )
+script = ExtResource( 5 )
+
+[connection signal="resized" from="background" to="." method="_on_background_resized"]

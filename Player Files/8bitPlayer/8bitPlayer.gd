@@ -70,6 +70,7 @@ var currentCam
 
 #UI
 onready var HPBar = $CanvasLayer/bar
+onready var PauseScreen:Control = $pauseLayer/PauseScreen
 
 onready var footstep = $FootstepSound
 #var sprite:AnimatedSprite
@@ -166,8 +167,9 @@ func setDebugInfoText():
 		st = "Rapidfire, "+st
 	t.text = st
 
-func switchWeapon():
-	weaponSwitch.showIcon(currentWeapon)
+func switchWeapon(showIcon:bool=true):
+	if showIcon:
+		weaponSwitch.showIcon(currentWeapon)
 #	if current_character==1 and currentWeapon==0: #lmao
 #		sprite.get_material().set_shader_param("clr1", Color(.749,.749,.749))
 #		sprite.get_material().set_shader_param("clr2", Color(.957,.957,.957))
@@ -260,18 +262,23 @@ func get_menu_buttons_input(_delta):
 	elif Input.is_action_just_pressed("DebugButton12"):
 		set_checkpoint(Vector2(),sprite.flip_h)
 	
-	if Input.is_action_just_pressed("ui_pause"):
-		$PauseScreen.updateTimer(timer,timerWithDeath)
+	if Input.is_action_just_pressed("ui_shift"):
+		$OptionsScreen.updateTimer(timer,timerWithDeath)
 		get_tree().paused = true
-		$PauseScreen.OnCommand()
+		$OptionsScreen.OnCommand()
+	elif Input.is_action_just_pressed("ui_pause"):
+		#PauseScreen.updateTimer(timer,timerWithDeath)
+		PauseScreen.UpdateAmmo(weaponMeters)
+		get_tree().paused = true
+		PauseScreen.OnCommand(currentWeapon)
 
 #If Android back button pressed
 #TODO: Ignore if cutscene playing
 func _notification(what):
 	if what == MainLoop.NOTIFICATION_WM_GO_BACK_REQUEST and get_tree().paused == false:
-		$PauseScreen.updateTimer(timer,timerWithDeath)
+		$OptionsScreen.updateTimer(timer,timerWithDeath)
 		get_tree().paused = true
-		$PauseScreen.OnCommand()
+		$OptionsScreen.OnCommand()
 
 
 # "WTF IS THE FRAME TIMER????"
@@ -1113,5 +1120,12 @@ func giveExtraLife():
 	$OneUpSound.play()
 
 
-func _on_PauseScreen_unpaused():
+func _on_OptionsScreen_unpaused():
 	stageRoot.update_easytiles()
+
+func _on_PauseScreen_unpaused(w):
+	#currentWeapon=w
+	if w!=currentWeapon:
+		currentWeapon=w
+		$GetEquipped.play()
+	switchWeapon(false)

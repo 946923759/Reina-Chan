@@ -35,18 +35,6 @@ region = Rect2( 0, 27, 34, 27 )
 atlas = ExtResource( 1 )
 region = Rect2( 34, 0, 34, 27 )
 
-[sub_resource type="AtlasTexture" id=6]
-atlas = ExtResource( 2 )
-region = Rect2( 32, 0, 32, 38 )
-
-[sub_resource type="AtlasTexture" id=7]
-atlas = ExtResource( 2 )
-region = Rect2( 0, 0, 32, 38 )
-
-[sub_resource type="AtlasTexture" id=11]
-atlas = ExtResource( 2 )
-region = Rect2( 0, 0, 32, 38 )
-
 [sub_resource type="AtlasTexture" id=12]
 atlas = ExtResource( 1 )
 region = Rect2( 34, 27, 34, 27 )
@@ -54,6 +42,18 @@ region = Rect2( 34, 27, 34, 27 )
 [sub_resource type="AtlasTexture" id=13]
 atlas = ExtResource( 1 )
 region = Rect2( 0, 27, 34, 27 )
+
+[sub_resource type="AtlasTexture" id=11]
+atlas = ExtResource( 2 )
+region = Rect2( 0, 0, 32, 38 )
+
+[sub_resource type="AtlasTexture" id=6]
+atlas = ExtResource( 2 )
+region = Rect2( 32, 0, 32, 38 )
+
+[sub_resource type="AtlasTexture" id=7]
+atlas = ExtResource( 2 )
+region = Rect2( 0, 0, 32, 38 )
 
 [resource]
 animations = [ {
@@ -72,9 +72,9 @@ animations = [ {
 "name": "doneFire",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 6 ), SubResource( 7 ) ],
+"frames": [ SubResource( 12 ), SubResource( 13 ) ],
 "loop": true,
-"name": "fireAngle",
+"name": "fire",
 "speed": 5.0
 }, {
 "frames": [ SubResource( 11 ), SubResource( 11 ), SubResource( 11 ) ],
@@ -82,8 +82,8 @@ animations = [ {
 "name": "readyAngle",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 12 ), SubResource( 13 ) ],
+"frames": [ SubResource( 6 ), SubResource( 7 ) ],
 "loop": true,
-"name": "fire",
+"name": "fireAngle",
 "speed": 5.0
 } ]

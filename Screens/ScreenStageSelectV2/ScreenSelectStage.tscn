@@ -12,7 +12,7 @@ var selection:int = 4
 var whatever:Array=[
 	[\"Architect\",\"res://Screens/ScreenStageSelectV2/Architect.png\",\"res://Stages_Reina/Architect/StageArchitect_v2.tscn\"],
 	[\"Alchemist\",\"res://Screens/ScreenStageSelectV2/Alchemist.png\",\"res://Stages_Reina/Alchemist/Alchemist_v2.tscn\"],
-	[\"Ouroboros\",\"\",\"\"],
+	[\"Ouroboros\",\"res://Screens/ScreenSelectCharacter/Ouroboros.png\",\"\"],
 	[\"Scarecrow\",\"res://Screens/ScreenStageSelectV2/Scarecrow.png\",\"res://Stages_Reina/Scarecrow/Scarecrow.tscn\"],
 	[\"\",\"res://Screens/ScreenStageSelectV2/sf icon.png\",\"\"], #Middle, for wily castle
 	[\"Gager\",\"\",\"\"],

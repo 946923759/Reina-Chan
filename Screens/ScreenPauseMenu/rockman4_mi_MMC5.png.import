@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/rockman4_mi_MMC5_2.png-09d29dc76f0d9f2cd8e3de37b9874a88.stex"
+path="res://.import/rockman4_mi_MMC5.png-4d9ef890a0071e66ec90bde33b9ceb6b.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Player Files/rockman4_mi_MMC5_2.png"
-dest_files=[ "res://.import/rockman4_mi_MMC5_2.png-09d29dc76f0d9f2cd8e3de37b9874a88.stex" ]
+source_file="res://Screens/ScreenPauseMenu/rockman4_mi_MMC5.png"
+dest_files=[ "res://.import/rockman4_mi_MMC5.png-4d9ef890a0071e66ec90bde33b9ceb6b.stex" ]
 
 [params]
 
@@ -28,6 +28,7 @@ process/fix_alpha_border=true
 process/premult_alpha=false
 process/HDR_as_SRGB=false
 process/invert_color=false
+process/normal_map_invert_y=false
 stream=false
 size_limit=0
 detect_3d=true

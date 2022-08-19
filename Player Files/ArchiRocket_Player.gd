@@ -82,7 +82,7 @@ func enemy_touched_alt(obj,reflect):
 		killSelf(false,true)
 	else:
 		if obj.has_method("damage"):
-			obj.call("damage",2)
+			obj.call("damage",2,Globals.Weapons.Architect)
 		killSelf()
 
 

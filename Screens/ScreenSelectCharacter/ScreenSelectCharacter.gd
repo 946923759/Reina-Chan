@@ -41,32 +41,37 @@ func _ready():
 		#child.text=INITrans.GetString("PauseMenu",child.text)
 	update_disp(false)
 	$playerSelect.connect("resized",self,"set_rect_size")
+	
+	$OkButton.visible=OS.has_touchscreen_ui_hint()
 
 #Have to use _input() func because doing it in process will cause it
 #to think select/enter key is still pressed from previous screen
 func _input(event):
 	if event.is_pressed() and !event.is_echo():
 		if event.is_action("ui_right"):
-			if selection == 0 and canPickM16:
-				selection=1
-				update_disp()
-			elif selection == 1 and canPickShinM16:
-				selection=2
-				update_disp()
+			action_right()
 		elif event.is_action("ui_left"):
-			if selection > 0:
-				selection-=1
-				update_disp()
+			action_left()
 		elif event.is_action("ui_select") or event.is_action("ui_pause"):
-			Globals.playerData.currentCharacter=selection
-			Globals.change_screen(get_tree(),"ScreenSelectStage")
+			action_accept()
 		elif event.is_action("ui_cancel"):
 			Globals.change_screen(get_tree(),"ScreenTitleMenu")
 
 func action_left():
-	pass
+	if selection > 0:
+		selection-=1
+		update_disp()
 func action_right():
-	pass
+	if selection == 0 and canPickM16:
+		selection=1
+		update_disp()
+	elif selection == 1 and canPickShinM16:
+		selection=2
+		update_disp()
+		
+func action_accept():
+	Globals.playerData.currentCharacter=selection
+	Globals.change_screen(get_tree(),"ScreenSelectStage")
 
 func _process(delta):
 
@@ -77,3 +82,14 @@ func _process(delta):
 func set_rect_size():
 	#$playerSelect.
 	pass
+
+
+func _on_LeftArrow_gui_input(event):
+	if (event is InputEventMouseButton and event.pressed) or (event is InputEventScreenTouch and event.pressed):
+		action_left()
+func _on_RightArrow_gui_input(event):
+	if (event is InputEventMouseButton and event.pressed) or (event is InputEventScreenTouch and event.pressed):
+		action_right()
+func _on_OkButtonTexture_gui_input(event):
+	if (event is InputEventMouseButton and event.pressed) or (event is InputEventScreenTouch and event.pressed):
+		action_accept()

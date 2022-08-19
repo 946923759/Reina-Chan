@@ -1,0 +1,10 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=2]
+
+[ext_resource path="res://ParticleEffects/PaletteSwapShader.gdshader" type="Shader" id=1]
+
+[resource]
+shader = ExtResource( 1 )
+shader_param/colorToSwap1 = Color( 0.608, 0.467, 0.388, 1 )
+shader_param/colorToSwap2 = Color( 0.694, 0.627, 0.592, 1 )
+shader_param/clr1 = Color( 0.608, 0.467, 0.388, 1 )
+shader_param/clr2 = Color( 0.694, 0.627, 0.592, 1 )

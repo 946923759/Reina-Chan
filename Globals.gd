@@ -82,14 +82,70 @@ enum Weapons {
 	Architect,
 	Alchemist,
 	Ouroboros,
-	Scarecrow
+	Scarecrow,
+	NotAssigned,
+	NotAssigned2,
+	NotAssigned3,
+	NotAssigned4,
+	Glorylight,
+	LENGTH_WEAPONS #Put this last
 }
-var stagesToString = [ #Yeah it's stupid
+var stagesToString = [ #Yeah it's stupid, I can't use macros so...
 	"Buster",
 	"Architect",
 	"Alchemist",
 	"Ouroboros",
-	"Scarecrow"
+	"Scarecrow",
+	"???",
+	"???",
+	"???",
+	"???",
+	"Clear And Fail"
+]
+
+# Weapon energy is some unknown number (Metal Blade from MM2 has 112 uses)
+# but I think 144 is enough for everything.
+# I think weapon energy in mega man is a float and it's 32, but since it's
+# 144 here that means ammo restores 45 points.
+# Either that or weapon energy is a different number for each weapon... Idk lol
+var weaponEnergyCost = [
+	0, #Buster
+	9, #144/9 = 16 uses
+	6, # #24 uses for dash
+	0, #Ouroboros
+	6, #Scarecrow
+	0,
+	0,
+	0,
+	0,
+	24  #Glorylight
+]
+
+var weaponColorSwaps = [
+	#R,G,B out of 100
+	#UMP9 has two hair colors, so you have to adjust both!
+	#Also colors are from 0 to 1.0
+	[ #Default.... Also m16 default is in 8bitplayer because I'm dumb
+		Color(.608,.467,.388),
+		Color(.604,.627,.592)
+	],
+	[	#Architect 2
+		Color(.949,.184,.184),
+		Color(1,.51,.51)
+		
+	],
+	[ #Alchemist
+		Color(.964,.556,.19),
+		Color(1,.718,.522)
+	],
+	[ #Ouroboros
+		Color(.608,.467,.388),
+		Color(.604,.627,.592)
+	],
+	[ #Scarecrow
+		Color(0.235294, 0.235294, 0.235294),
+		Color(0.627451, 0.627451, 0.627451)
+	]
 ]
 
 enum SpecialAbilities {
@@ -101,8 +157,13 @@ enum Characters {
 	M16A1,
 	Ultimate_M16
 }
+
 func characterToString(d:int=playerData.currentCharacter)->String:
 	return Characters.keys()[d]
+#DO NOT TRANSLATE WITHIN THIS FUNCTION
+#Some language keys use it for stuff like "desc_SUPERHERO"
+func difficultyToString(d=playerData.gameDifficulty)->String:
+	return Difficulty.keys()[d]
 
 var playerData={
 	gameDifficulty = Difficulty.EASY,
@@ -110,6 +171,7 @@ var playerData={
 	
 	#These values will get overwritten when you start a new save file,
 	#So you can set them all to true for debugging purposes.
+	#Setting a weapon to true that doesn't exist yet will crash the game.
 	availableWeapons = [
 		true,  #Buster (duh)
 		true,  #Architect Rocket
@@ -156,52 +218,6 @@ var systemData:Dictionary = {
 	unlocked_M16_Ultimate=false
 }
 var unlockedZeroMode:bool=false
-
-#DO NOT TRANSLATE WITHIN THIS FUNCTION
-#Some language keys use it for stuff like "desc_SUPERHERO"
-func difficultyToString(d=playerData.gameDifficulty)->String:
-	return Difficulty.keys()[d]
-
-
-# Weapon energy is some unknown number (Metal Blade from MM2 has 112 uses)
-# but I think 144 is enough for everything.
-# I think weapon energy in mega man is a float and it's 32, but since it's
-# 144 here that means ammo restores 45 points.
-# Either that or weapon energy is a different number for each weapon... Idk lol
-var weaponEnergyCost = [
-	0,
-	9, #144/9 = 16 uses
-	6, # #24 uses for dash
-	0,
-	6
-]
-
-var weaponColorSwaps = [
-	#R,G,B out of 100
-	#UMP9 has two hair colors, so you have to adjust both!
-	#Also colors are from 0 to 1.0
-	[ #Default.... Also m16 default is in 8bitplayer because I'm dumb
-		Color(.608,.467,.388),
-		Color(.604,.627,.592)
-	],
-	[	#Architect 2
-		Color(.949,.184,.184),
-		Color(1,.51,.51)
-		
-	],
-	[ #Alchemist
-		Color(.964,.556,.19),
-		Color(1,.718,.522)
-	],
-	[ #Ouroboros
-		Color(.608,.467,.388),
-		Color(.604,.627,.592)
-	],
-	[ #Scarecrow
-		Color(0.235294, 0.235294, 0.235294),
-		Color(0.627451, 0.627451, 0.627451)
-	]
-]
 
 
 var playerHasSaveData:bool=false

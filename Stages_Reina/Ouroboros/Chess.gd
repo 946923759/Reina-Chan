@@ -13,6 +13,7 @@ enum PIECE {
 export(Vector2) var tilemap_grid_size = Vector2(6,6)
 
 var b = preload("res://Various Objects/Special Blocks/breakableBlock.tscn")
+var b2 = preload("res://Various Objects/Special Blocks/BlockAsObject_2.tscn")
 
 onready var breakableTiles = $BreakableTiles
 onready var chessPieces = $ChessPieces
@@ -53,15 +54,20 @@ func init_tilemap(is_reset:bool=false):
 		for x in range(tilemap_grid_size.x):
 			var t = tiles.get_cell(x,y)
 			if t != tiles.INVALID_CELL:
-				var block = b.instance()
-				block.maxHealth=1
+				var block
+				if t==11:
+					block = b2.instance()
+				else:
+					block = b.instance()
+					block.maxHealth=1
+					block.connect("block_broken",self,"block_broken_",[Vector2(x,y)])
 				#e.init(true)
 				#Breakable blocks are centered.
 				block.position = Vector2(x,y)*64+Vector2(32,32)
 				#e.position.y-=32
 				breakableTiles.add_child(block)
 				playfield[y*tilemap_grid_size.x+x]=1
-				block.connect("block_broken",self,"block_broken_",[Vector2(x,y)])
+				
 	tiles.visible=false
 	update_debug_disp()
 	

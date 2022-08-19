@@ -16,6 +16,18 @@ onready var hurtSound = $HurtSound
 #There might be cases where you need to override it.
 export(int,0,25) var player_damage = 1
 
+export(PoolRealArray) var weaponDamageMultiplier = [
+	1.0,
+	1.0,
+	1.0,
+	1.0,
+	1.0,
+	1.0,
+	1.0,
+	1.0
+]
+#export(Array, float,"a","b","c") var weaponDamageMultiplier = [1.0,1.0,1.0]
+
 export(String) var intro_subtitle_key = "Architect_Intro"
 export(bool) var stage_finished_when_killed = true
 
@@ -87,7 +99,7 @@ func clearLastTouched(_obj):
 
 #We want an isAlive var so we can play the death animation only one time
 var isAlive = true
-func damage(amount):
+func damage(amount,damageType:int=0):
 	#It turns out the boss can be shot through the walls sometimes
 	#so make sure you can't shoot it until it's enabled lol
 	if !enabled:

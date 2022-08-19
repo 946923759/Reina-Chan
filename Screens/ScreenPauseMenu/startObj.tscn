@@ -1,0 +1,99 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://Screens/ScreenPauseMenu/tmp.png" type="Texture" id=1]
+[ext_resource path="res://megaman_2.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://Screens/ScreenPauseMenu/rockman4_mi_MMC5.png" type="Texture" id=3]
+[ext_resource path="res://ParticleEffects/GreyscaleShader.tres" type="Material" id=4]
+[ext_resource path="res://Player Files/WeaponIcons.png" type="Texture" id=5]
+[ext_resource path="res://Screens/ScreenPauseMenu/startObj.tres.gd" type="Script" id=6]
+
+[sub_resource type="GDScript" id=3]
+script/source = "tool
+extends Sprite
+
+var weapon=0 setget set_weapon
+
+func _ready():
+	update()
+	pass
+
+#var icon = preload(\"res://Player Files/mb.png\")
+var piece = preload(\"res://Character Sprites/hp_piece.png\")
+var curHP = 30
+var dc:PoolColorArray = [Color(\"#ff8431\"),Color(\"#ffef00\")]
+onready var c:PoolColorArray = dc
+
+func set_weapon(w):
+	region_rect.position.x=weapon*16
+	weapon=w
+	if !Engine.editor_hint:
+		if w==0 or w >= len(Globals.weaponColorSwaps):
+			c=dc
+		else:
+			c = Globals.weaponColorSwaps[weapon]
+		
+	update()
+	
+func set_ammo(a:float):
+	curHP=floor(a*30.0)
+
+func init(weapon,toDraw):
+	#icon=load(sprite)
+	curHP=toDraw
+	#update()
+
+#Because godot is stupid and custom draws can't handle
+#shaders, we have to swap back to the texture
+#when using the greyscale shaders
+func _draw():
+	#draw_set_transform(Vector2(0,0), 0, Vector2(2.5,2.5))
+	#draw_texture(icon,Vector2(0,0))
+	
+	#draw_rect(Rect2(25,10,curHP,6),Color.black,true)
+	
+	if !use_parent_material:
+		draw_set_transform(Vector2(24,17), PI*1.5, Vector2(1,1))
+		for i in range(curHP):
+			draw_texture(piece,Vector2(0,0+2*i))
+	else:
+		for i in range(curHP):
+			draw_rect(Rect2(25+2*i,10,1,6),c[0],true)
+			draw_rect(Rect2(25+2*i,11,1,4),c[1],true)
+	
+"
+
+[sub_resource type="DynamicFont" id=2]
+size = 23
+font_data = ExtResource( 2 )
+
+[node name="WeaponActor" type="Node2D"]
+script = ExtResource( 6 )
+
+[node name="Sprite3" type="Sprite" parent="."]
+visible = false
+position = Vector2( -352.428, -143.984 )
+texture = ExtResource( 3 )
+offset = Vector2( 640, 360 )
+
+[node name="Sprite2" type="Sprite" parent="."]
+visible = false
+scale = Vector2( 3, 3 )
+texture = ExtResource( 1 )
+centered = false
+
+[node name="Sprite" type="Sprite" parent="."]
+material = ExtResource( 4 )
+scale = Vector2( 3, 3 )
+texture = ExtResource( 5 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 0, 0, 16, 16 )
+script = SubResource( 3 )
+
+[node name="Label" type="Label" parent="."]
+margin_left = 75.3268
+margin_top = 0.233263
+margin_right = 261.327
+margin_bottom = 24.2333
+custom_fonts/font = SubResource( 2 )
+text = "Buster"

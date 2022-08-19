@@ -4,6 +4,7 @@ onready var vis = $VisibilityNotifier2D
 onready var reflectSound = $ReflectSound
 
 var reflected = false
+var damageType:int=0
 
 func _ready():
 	#It's already set true in the editor UI...
@@ -20,8 +21,9 @@ func _ready():
 
 #For KinematicBody2D only.
 var movement
-func init(t_movement):
+func init(t_movement,t_damageType:int=0):
 	movement = t_movement
+	damageType=t_damageType
 	set_physics_process(true)
 
 #For KinematicBody2D only.
@@ -63,5 +65,5 @@ func enemy_touched_alt(obj,reflect):
 		move_and_collide(movement)
 	else:
 		if obj.has_method("damage"):
-			obj.call("damage",1)
+			obj.call("damage",1,damageType)
 		queue_free()

@@ -59,6 +59,13 @@ matchnames	UMP9	Scarecrow
 msgbox_transition
 msg	Nice to meet you UMP9, please die immediately.
 
+#KEY	Ouroboros
+/Ouroboros	...
+
+#KEY	ClearAndFail
+/El Fail	Heaven or hell...
+/El Clear	Let's rock!
+
 #KEY	Demo2Ending
 preload_portraits	Dier	pic_Alchemist	pic_Scarecrow
 matchnames	AmWorks	Alchemist	Scarecrow

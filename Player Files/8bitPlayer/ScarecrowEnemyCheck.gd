@@ -31,7 +31,7 @@ func fireBulletSmall(initPosGlobal:Vector2,destPosGlobal:Vector2):
 	bi.global_position=initPosGlobal
 	var v:Vector2 = (destPosGlobal-initPosGlobal).normalized()*10
 	print(v)
-	bi.init(v)
+	bi.init(v,Globals.Weapons.Scarecrow)
 
 #I'd prefer to name this "scarecrow thread"
 func _process(delta):
