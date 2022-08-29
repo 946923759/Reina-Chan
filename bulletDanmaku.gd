@@ -1,7 +1,7 @@
 extends "res://Stages_Reina/Enemies/bulletDinergate.gd"
 #BulletDanmaku - It's like a bullet but COOLER
 
-export(int,"normal","reverse_x_pos","spread_x_pos") var special_type=0
+export(int,"normal","reverse_x_pos","spread_x_pos","spin_circle") var special_type=0
 export(float,0.1,2,.1) var time_to_reverse = 1
 export(float,0.0,0.5,.01) var reverse_time_increase=0.0
 
@@ -10,6 +10,8 @@ export(Vector2) var destination_spread_xpos = Vector2(0,1)
 #export(float,0.0,0.5,.01) var slowdown_speed=0.0
 #export()
 export(Vector2) var CubicSpread = Vector2(0,0)
+
+#var bulletSpin:Vector2 = Vector2(6,1)
 
 #//Stolen from RageUtil
 #/**
@@ -70,7 +72,15 @@ func _physics_process(delta):
 			#math is extremely cheap for the CPU anyways
 			var timeScaled:float = SCALE(timer,0,destination_spread_xpos.y,0,1)
 			self.position.x=startingPos_x+EaseOut(timeScaled)*(destination_spread_xpos.x-startingPos_x)
-
+	elif special_type==3:
+		# 1 full circle (i.e. 2 * PI) every second, clockwise
+		var rotateBy:float = 2.0 * PI * delta*1.0
+		
+		# TODO: I'm pretty sure there's some way to just subtract it from
+		# rotateBy instead of having to create 3 variables
+		movement = movement.rotated(rotateBy)
+		movement.x+=delta*5
+		#move_and_collide(bulletSpin)
 		pass
 	#._physics_process(delta)
 	timer+=delta

@@ -8,7 +8,8 @@ script/source = "extends \"res://Stages/EnemyBaseScript.gd\"
 
 export(NodePath) var bottom_rings_n;
 #onready var bottom_rings = get_node(bottom_rings_p);
-
+var bullet = preload(\"res://Stages_Reina/Enemies/nemeum homing shot.tscn\")
+var player:KinematicBody2D
 
 var bottom_rings:Array
 var bottom_rings_positions:PoolIntArray
@@ -22,9 +23,13 @@ func _ready():
 		bottom_rings[i]=n.get_child(i)
 
 var timer:float=999
+var timer2:float=2
+var shots:int=0
 func _process(delta):
 	timer+=delta
-	if timer>.5:
+	if timer>.3:
+		if not is_instance_valid(player):
+			player=get_node(\"/root/Node2D\").get_player()
 		for i in range(bottom_rings.size()):
 			var n = bottom_rings_positions[i]
 			n+=1
@@ -40,6 +45,37 @@ func _process(delta):
 			bottom_rings[i].position.y=pos
 			bottom_rings_positions[i]=n
 		timer=0
+	
+	timer2-=delta
+	if timer2 <=0:
+		var bi = bullet.instance()
+		#var pos = position + charge.position
+		
+		bi.position = position
+		get_parent().add_child(bi)
+		#Have to adjust it a little since the player's position is at the top left of the collision box,
+		#not the center.
+		#charge.position should be taken into account but it's messing it up right now
+		var v:Vector2 = player.global_position-global_position + Vector2(30,40)
+		v=v.normalized()*400
+		if facing==DIRECTION.LEFT and player.global_position.x > global_position.x:
+			v.x=-400
+		elif facing==DIRECTION.RIGHT and player.global_position.x < global_position.x:
+			v.x=400
+		#v*=3
+		#if abs(v.x) > 100:
+		#	v*=abs(v.x)/100
+		#print(v)
+		#v.x=min(player.global_position.x-global_position.x,500)
+		#v.y=player.global_position.y+(-1 if player.global_position.y<0 else 1)*abs(player.global_position.x-global_position.x-v.x)
+		#print(v.normalized())
+		bi.init(v)
+		shots+=1
+		if shots < 3:
+			timer2=.6
+		else:
+			shots=0
+			timer2=5
 "
 
 [sub_resource type="SpriteFrames" id=2]

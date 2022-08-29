@@ -17,7 +17,7 @@ var bullet = preload("res://Stages_Reina/Enemies/bulletDinergate.tscn")
 const bulletSpeed:float = 15.0
 
 var player:KinematicBody2D
-var timer:float = 0.0
+var timer:float = 3.0
 
 func _physics_process(delta):
 	if not is_instance_valid(player):

@@ -13,10 +13,13 @@
 [sub_resource type="GDScript" id=1]
 script/source = "extends Node2D
 
+export (bool) var enable_scarecrow=false
+
 func _ready():
 	var child = $BossScarecrow
-	var s:AudioStreamPlayer = child.playIntro(true)
-	s.connect(\"finished\",self,'enable')
+	if enable_scarecrow:
+		var s:AudioStreamPlayer = child.playIntro(true)
+		s.connect(\"finished\",self,'enable')
 
 func enable():
 	$BossScarecrow.enabled=true
@@ -40,6 +43,8 @@ func _input(event:InputEvent):
 			gen_curtain(root,p.cell2pos(Vector2(10,2)),9,0)
 			gen_curtain(root,p.cell2pos(Vector2(10,2)),10,.5)
 			gen_curtain(root,p.cell2pos(Vector2(10,2)),9,1)
+		elif Input.is_key_pressed(KEY_4):
+			gen_spin(root,p.cell2pos(Vector2(10,6)))
 		#else:
 		#	print('lol')
 	
@@ -101,6 +106,13 @@ func gen_curtain(root:Node2D,centerPos:Vector2,numToGenerate:int=9,delay:float=0
 		bi.init(v)
 		if j==0:
 			bi.shootSound.play()
+			
+func gen_spin(root:Node2D,centerPos:Vector2,numToGenerate:int=9):
+	var bi = b.instance()
+	root.add_child(bi)
+	bi.position = centerPos-Vector2(0,5*16)
+	bi.special_type=3
+	bi.init(Vector2(10,0))
 #func gen_explode():
 #	for j in range(5):
 		
