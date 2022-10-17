@@ -570,6 +570,7 @@ script = ExtResource( 27 )
 [node name="pauseLayer" type="CanvasLayer" parent="."]
 
 [node name="PauseScreen" parent="pauseLayer" instance=ExtResource( 34 )]
+visible = false
 
 [node name="OptionsScreen" parent="." instance=ExtResource( 14 )]
 

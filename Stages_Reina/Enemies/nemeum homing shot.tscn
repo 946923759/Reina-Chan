@@ -1,7 +1,8 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://ParticleEffects/alphaMask.gdshader" type="Shader" id=1]
 [ext_resource path="res://Stages_Reina/Enemies/nemeum shot2.png" type="Texture" id=2]
+[ext_resource path="res://Stages_Reina/Enemies/nemeum shot_recolored.png" type="Texture" id=3]
 
 [sub_resource type="GDScript" id=1]
 script/source = "extends Area2D
@@ -12,6 +13,10 @@ var velocity:Vector2
 
 func init(velo:Vector2):
 	velocity=velo
+	
+func init2():
+	set_process(false)
+	sprite.play(\"recolor\")
 
 func _ready():
 	# warning-ignore:return_value_discarded
@@ -59,11 +64,24 @@ region = Rect2( 0, 0, 24, 24 )
 atlas = ExtResource( 2 )
 region = Rect2( 24, 0, 24, 24 )
 
+[sub_resource type="AtlasTexture" id=7]
+atlas = ExtResource( 3 )
+region = Rect2( 0, 0, 24, 24 )
+
+[sub_resource type="AtlasTexture" id=8]
+atlas = ExtResource( 3 )
+region = Rect2( 24, 0, 24, 24 )
+
 [sub_resource type="SpriteFrames" id=5]
 animations = [ {
 "frames": [ SubResource( 3 ), SubResource( 4 ) ],
 "loop": true,
 "name": "default",
+"speed": 8.0
+}, {
+"frames": [ SubResource( 7 ), SubResource( 8 ) ],
+"loop": true,
+"name": "recolor",
 "speed": 8.0
 } ]
 
@@ -77,7 +95,7 @@ script = SubResource( 1 )
 material = SubResource( 2 )
 scale = Vector2( 4, 4 )
 frames = SubResource( 5 )
-frame = 1
+animation = "recolor"
 playing = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

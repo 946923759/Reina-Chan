@@ -1,0 +1,170 @@
+[gd_scene load_steps=12 format=2]
+
+[ext_resource path="res://ParticleEffects/AlphaMaskPurple.tres" type="Material" id=1]
+[ext_resource path="res://addons/godot-next/gui/debug_label.gd" type="Script" id=2]
+[ext_resource path="res://Stages_Reina/Ouroboros/ball.png" type="Texture" id=3]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends KinematicBody2D
+
+#var speed:float = -5.0
+#var bounciness:float = -10.0
+
+var expl = preload(\"res://Stages/EnemyExplodeSmall.tscn\")
+onready var raycast = $RayCast2D
+onready var sprite:AnimatedSprite = $AnimatedSprite
+
+#lmao
+var selfObj = load(\"res://Stages_Reina/Ouroboros/BallDrop.tscn\")
+
+var parent:Node2D
+var velocity:Vector2 = Vector2(0,500)
+
+func _ready():
+	sprite.play(\"default\")
+	sprite.connect(\"animation_finished\",sprite,\"play\",[\"loop\"])
+	pass
+	set_physics_process(false)
+	$Label.visible=OS.is_debug_build()
+
+
+var mode:int=0
+func init(p:Node2D,mode:int=0):
+	#assert(p)
+	#print(\"init\")
+	parent=p
+	self.mode=mode
+	set_physics_process(true)
+
+var delayTimer=0.0
+func _physics_process(delta):
+	#assert(parent)
+	#velocity.y += delta*5
+	var collision = move_and_slide(velocity)
+	
+	#Apparently objects only collide from the direction they are pushed
+	if raycast.is_colliding():
+		#print(\"AAAAAAAAAAAA\")
+		objectTouched(raycast.get_collider())
+	elif mode==0 and is_on_wall():
+			
+			self.velocity=Vector2(-500,-0.1)
+			self.mode=1
+			#return
+			
+			var inst = selfObj.instance()
+			inst.velocity=Vector2(500,-0.1)
+			assert(parent)
+			parent.add_child(inst)
+			inst.position=position
+			inst.init(parent,1)
+			#objectTouched(collision.collider)
+			#killSelf()
+	#Stupid hack to get it to ignore the one frame where it's still colliding with the floor
+	elif mode==1 and delayTimer<.3:
+		delayTimer+=delta
+	elif is_on_wall():
+		killSelf()
+		pass
+	
+	if OS.is_debug_build():
+		$Label.text = String(is_on_floor())+\"\\n\"+String(is_on_wall())
+
+func objectTouched(obj):
+	#print(\"AAA\")
+	if obj.has_method(\"player_touched\"): #If enemy touched player
+		obj.call(\"player_touched\",self,3)
+		#Special case for the bomb enemy, we want the enemy to kill itself when it touches the player
+		killSelf()
+	elif obj.has_method(\"enemy_touched\"): #If enemy touched bullet
+		obj.call(\"enemy_touched\",self)
+
+
+func killSelf():
+	set_physics_process(false)
+	sprite.visible=false
+	set_collision_layer_bit(0,false)
+	set_collision_mask_bit(0,false)
+	
+	var e = expl.instance()
+	e.position = position
+	#e.position.y-=32
+	e.get_node(\"s1\").volume_db=-999
+	get_parent().add_child(e)
+	
+	#snd.connect(\"finished\",self,\"queue_free\")
+	#snd.play()
+	self.queue_free()
+"
+
+[sub_resource type="AtlasTexture" id=4]
+atlas = ExtResource( 3 )
+region = Rect2( 32, 0, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=5]
+atlas = ExtResource( 3 )
+region = Rect2( 16, 0, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=6]
+atlas = ExtResource( 3 )
+region = Rect2( 0, 0, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=7]
+atlas = ExtResource( 3 )
+region = Rect2( 16, 0, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=8]
+atlas = ExtResource( 3 )
+region = Rect2( 0, 0, 16, 16 )
+
+[sub_resource type="SpriteFrames" id=9]
+animations = [ {
+"frames": [ SubResource( 4 ), SubResource( 5 ), SubResource( 6 ) ],
+"loop": false,
+"name": "default",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 7 ), SubResource( 8 ) ],
+"loop": true,
+"name": "loop",
+"speed": 5.0
+} ]
+
+[sub_resource type="CircleShape2D" id=3]
+radius = 35.0
+
+[node name="BallDro" type="KinematicBody2D"]
+collision_layer = 2
+collision_mask = 0
+script = SubResource( 1 )
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+material = ExtResource( 1 )
+scale = Vector2( 4, 4 )
+frames = SubResource( 9 )
+animation = "loop"
+frame = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 3 )
+
+[node name="DebugLabel" type="Label" parent="."]
+margin_right = 40.0
+margin_bottom = 14.0
+text = "velocity = null
+"
+script = ExtResource( 2 )
+target_path = NodePath("..")
+properties = PoolStringArray( "velocity" )
+
+[node name="RayCast2D" type="RayCast2D" parent="."]
+enabled = true
+cast_to = Vector2( 0, -30 )
+
+[node name="Label" type="Label" parent="."]
+margin_left = 39.465
+margin_top = -42.1136
+margin_right = 101.465
+margin_bottom = -11.1136
+text = "isOnFloor
+isOnWall"

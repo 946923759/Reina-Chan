@@ -257,12 +257,12 @@ func get_menu_buttons_input(_delta):
 	#and they can restart by pressing start and down+b anyways
 	elif Input.is_action_just_pressed("DebugButton10"):
 		die()
-	elif Input.is_action_pressed("ui_shift") and Input.is_action_just_pressed("DebugButton11"):
+	elif Input.is_action_pressed("L1") and Input.is_action_just_pressed("DebugButton11"):
 		finishStage()
 	elif Input.is_action_just_pressed("DebugButton12"):
 		set_checkpoint(Vector2(),sprite.flip_h)
 	
-	if Input.is_action_just_pressed("ui_shift"):
+	if Input.is_action_just_pressed("ui_options"):
 		$OptionsScreen.updateTimer(timer,timerWithDeath)
 		get_tree().paused = true
 		$OptionsScreen.OnCommand()

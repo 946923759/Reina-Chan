@@ -17,6 +17,7 @@ var usedDebugMode:bool=false
 var shouldFaceLeft:bool=false
 
 #Should this be stored here? Maybe Globals makes more sense?
+const playerStartingLifeCount = 3
 var playerLivesLeft:int=3
 
 #It doesn't really belong in Globals... Anyways, this is only used for the item get screen

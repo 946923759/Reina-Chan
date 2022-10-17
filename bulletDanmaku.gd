@@ -1,7 +1,7 @@
 extends "res://Stages_Reina/Enemies/bulletDinergate.gd"
 #BulletDanmaku - It's like a bullet but COOLER
 
-export(int,"normal","reverse_x_pos","spread_x_pos","spin_circle") var special_type=0
+export(int,"normal","reverse_x_pos","spread_x_pos","spin_circle","external") var special_type=0
 export(float,0.1,2,.1) var time_to_reverse = 1
 export(float,0.0,0.5,.01) var reverse_time_increase=0.0
 
@@ -54,6 +54,8 @@ func init(t_movement,shouldPlayShoot_:bool=false):
 var timer:float = 0.0
 const FLOAT_MAX = 1.79769e308
 func _physics_process(delta):
+	if special_type==4: #If handled by external 
+		set_physics_process(false)
 	
 	#This can also be used to make bullets rebound,
 	#but that's probably not what you want.
@@ -79,7 +81,7 @@ func _physics_process(delta):
 		# TODO: I'm pretty sure there's some way to just subtract it from
 		# rotateBy instead of having to create 3 variables
 		movement = movement.rotated(rotateBy)
-		movement.x+=delta*5
+		#movement.x+=delta*5
 		#move_and_collide(bulletSpin)
 		pass
 	#._physics_process(delta)

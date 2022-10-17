@@ -86,7 +86,7 @@ func _input(_ev):
 		CheckpointPlayerStats.playerLivesLeft-=1
 # warning-ignore:return_value_discarded
 		get_tree().reload_current_scene()
-	elif Input.is_action_just_pressed(\"ui_pause\"):
+	elif Input.is_action_just_pressed(\"ui_pause\") or Input.is_action_just_pressed(\"ui_options\"):
 		OffCommand()
 	elif Input.is_action_just_pressed(\"ui_up\") and pos > 0:
 		optList.get_child(pos).modulate=Color(1,1,1,1)

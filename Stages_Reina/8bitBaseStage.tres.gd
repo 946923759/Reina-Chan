@@ -125,3 +125,6 @@ func pos2cell(pos):
 	#TODO: Offset is wrong, fix it for real
 	#pos minus 30 (why?) divided by quadrant size divided by tile scale
 	return Vector2(round((pos.x-32)/16/tile_scale.x), round((pos.y-32)/16/tile_scale.y));
+
+func cell2pos(pos:Vector2)->Vector2:
+	return pos*16*tile_scale
