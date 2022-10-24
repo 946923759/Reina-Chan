@@ -54,7 +54,8 @@ script/source = "extends Node2D
 var bosses = {
 	\"StageArchitect_v2.tscn\":\"res://Stages_Reina/Bosses/Architect/BossArchitect_v2.tscn\",
 	\"Alchemist_v2.tscn\":\"res://Stages_Reina/Bosses/Alchemist/BossAlchemist.tscn\",
-	\"Scarecrow.tscn\":\"res://Stages_Reina/Bosses/Scarecrow/BossScarecrow.tscn\"
+	\"Scarecrow.tscn\":\"res://Stages_Reina/Bosses/Scarecrow/BossScarecrow.tscn\",
+	#\"Ouroboros.tscn\":\"res://Stages_Reina/Ouroboros/StageOuroboros.tscn\"
 }
 
 var bi
@@ -63,6 +64,9 @@ func _ready():
 	var spawnPosition = Vector2(Globals.SCREEN_CENTER_X,360)
 	if Globals.nextStage:
 		var stg:String = Globals.nextStage.rsplit(\"/\",false,1)[1]
+		if !(stg in bosses):
+			set_process(false)
+			return
 		b = load(bosses[stg])
 		if stg==\"Scarecrow.tscn\":
 			spawnPosition.y-=30

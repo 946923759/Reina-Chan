@@ -93,6 +93,10 @@ func _process(delta):
 			self.modulate.a=max(0,1-tweenTimer)
 			tweenTimer+=delta
 			if tweenTimer>=1:
+				#$Area2D.set_collision_layer_bit(0,false)
+				#$Area2D.set_collision_mask_bit(0,false)
+				$Area2D.monitoring=false
+
 				curState=STATES.APPEAR
 				cooldown=.5
 				tweenTimer=0
@@ -101,6 +105,7 @@ func _process(delta):
 			self.modulate.a=min(1,tweenTimer)
 			tweenTimer+=delta
 			if tweenTimer>=1:
+				$Area2D.monitoring=true
 				tweenTimer=0
 				curState=STATES.RANDOMPICK
 
@@ -177,3 +182,17 @@ func _input(_event):
 	elif _event is InputEventKey and Input.is_key_pressed(KEY_6):
 		spawn_ball()
 	#update()
+
+func damage(amount,damageType=0):
+	#if true: #sprite.modulate.a<.8
+	#	return
+	curHealth -= amount
+	#print("Took damage!")
+	if curHealth <= 0:
+		if isAlive:
+			killSelf()
+	else:
+		#set false so the white tint shader will show up.
+		hurtSound.play()
+		sprite.use_parent_material = false
+		whiteTime = 0

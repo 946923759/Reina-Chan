@@ -159,10 +159,10 @@ func move_pieces_other():
 				if x > tilemap_grid_size.x:
 					#print("Diagonal scan outside range")
 					break
-				var b = get_tile_at(Vector2(x,y))
+				var tmp_b = get_tile_at(Vector2(x,y))
 				#print("Checked pos "+String(Vector2(x,y))+"... "+String(b))
 				$DebugDisplay.debug_highlight_block(Vector2(x,y))
-				if b==0:
+				if tmp_b==0:
 					emptySpacesDownRight+=1
 				else:
 					break
@@ -247,11 +247,11 @@ func scan_check_diagonal()->bool:
 					x+=1
 					if x > tilemap_grid_size.x:
 						break
-					var b = get_tile_at(Vector2(x,y))
+					var b_obj = get_tile_at(Vector2(x,y))
 					$DebugDisplay.debug_highlight_block(Vector2(x,y),Color.blue)
-					if b==PIECE.King:
+					if b_obj==PIECE.King:
 						return true
-					elif b==1:
+					elif b_obj==1:
 						break
 			#_:
 			#	continue
