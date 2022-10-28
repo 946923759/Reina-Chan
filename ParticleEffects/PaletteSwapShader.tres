@@ -4,7 +4,7 @@
 
 [resource]
 shader = ExtResource( 1 )
-shader_param/colorToSwap1 = Color( 0.608, 0.467, 0.388, 1 )
+shader_param/colorToSwap1 = Color( 0, 0.341176, 0.431373, 1 )
 shader_param/colorToSwap2 = Color( 0.694, 0.627, 0.592, 1 )
-shader_param/clr1 = Color( 0.608, 0.467, 0.388, 1 )
+shader_param/clr1 = Color( 0.385254, 0, 0, 1 )
 shader_param/clr2 = Color( 0.694, 0.627, 0.592, 1 )

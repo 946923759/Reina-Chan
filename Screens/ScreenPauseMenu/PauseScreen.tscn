@@ -53,6 +53,7 @@ func UpdateFocus(n:int):
 			c.GainFocus()
 		else:
 			c.LoseFocus()
+	pos=n
 			
 func UpdateAmmo(ammo:PoolIntArray):
 	for i in range(min(len(ammo),weaponListCount)):

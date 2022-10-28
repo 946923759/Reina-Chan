@@ -81,7 +81,7 @@ func _input(_ev):
 					pos = i
 					optList.get_child(pos).modulate =Color(0.21,0.63,1,1)
 				break
-	if Input.is_action_pressed(\"ui_shift\") and Input.is_action_just_pressed(\"ui_down\"):
+	if Input.is_action_pressed(\"L1\") and Input.is_action_just_pressed(\"ui_down\"):
 		get_tree().paused = false
 		CheckpointPlayerStats.playerLivesLeft-=1
 # warning-ignore:return_value_discarded

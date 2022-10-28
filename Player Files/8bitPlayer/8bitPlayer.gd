@@ -270,6 +270,7 @@ func get_menu_buttons_input(_delta):
 		#PauseScreen.updateTimer(timer,timerWithDeath)
 		PauseScreen.UpdateAmmo(weaponMeters)
 		get_tree().paused = true
+		#print("CurrentWeapon is "+String(currentWeapon))
 		PauseScreen.OnCommand(currentWeapon)
 
 #If Android back button pressed
@@ -673,11 +674,14 @@ func set_checkpoint(respawnPosition:Vector2,shouldFaceLeft=false):
 	CheckpointPlayerStats.shouldFaceLeft=shouldFaceLeft
 	CheckpointPlayerStats.checkpointSet=true
 
+#Return true if dashing, false if dash ended.
+#Returning false 
 func dash_handler()->bool:
 	if dash_time>0:
 		var ss = -1.0 if sprite.flip_h else 1.0
 		velocity=Vector2(ss*run_speed*dash_multiplier,0)
 		return true
+		#return 
 	else:
 		return false
 
@@ -779,7 +783,13 @@ func _physics_process(delta):
 		if invincible: #Still need to process invincibility frames
 			processInvincible(delta)
 		if dash_handler():
-			return
+			if (position.x < $Camera2D.destPositions[2]-40 and position.x > $Camera2D.destPositions[0]+40):
+				return
+			#Cancel dash if player is outside camera bounds.
+			else: 
+				dash_time=0
+		#else:
+			
 		#return
 		#pass
 

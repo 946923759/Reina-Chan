@@ -195,7 +195,7 @@ func _physics_process(delta):
 #We want an isAlive var so we can play the death animation only one time
 var isAlive = true
 #damage is called by the player weapon, so don't rename it.
-func damage(amount):
+func damage(amount:int,damageType):
 	curHealth -= amount
 	#print("Took damage!")
 	if curHealth <= 0:
