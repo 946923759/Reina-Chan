@@ -49,6 +49,7 @@ var shoot_time = 1e20
 var shoot_sprite_time = 0
 var bullet = preload("res://Player Files/bullet.tscn")
 var archiRocket = preload("res://Player Files/8bitPlayer/ArchiRocket_Player.tscn")
+var grenade = preload("res://Player Files/8bitPlayer/PlayerGrenade.tscn")
 #how long UMP9 dashes when using the dash attack, or how long the slide goes
 #if it's above 0 it's currently active.
 var dash_time:float = 0.0
@@ -296,6 +297,7 @@ var negativeFrameTimer:float=0.0
 #This will always be false if they haven't
 #unlocked the special weapon.
 var canAirDash:bool=false
+var canThrowGrenade:bool=true
 
 var isOnFloor:bool=false
 func get_input(delta):
@@ -304,6 +306,8 @@ func get_input(delta):
 	#I WANT REFERENCE VARIABLES REEEEEEEEE
 	if canAirDash==false and isOnFloor and Globals.playerData.specialAbilities[Globals.SpecialAbilities.AirDash]:
 		canAirDash=true
+	if canThrowGrenade and Globals.playerData.specialAbilities[Globals.SpecialAbilities.Grenade]:
+		canThrowGrenade=true
 	
 	#It's here because freeRoam overrides R1
 	if Input.is_action_just_pressed("R1"):
@@ -357,7 +361,21 @@ func get_input(delta):
 	#All this shit is copypasted from the example platformer so I have no idea how it works
 	# A good idea when implementing characters of all kinds,
 	# compensates for physics imprecision, as well as human reaction delay.
-	if shoot:
+	if shoot and up and canThrowGrenade:
+		print("Throw!")
+		var inst = grenade.instance()
+		var ss:float
+		if sprite.flip_h:
+			ss = -1.0
+		else:
+			ss = 1.0
+		var pos = position + Vector2(20*ss, 10)
+		if state == State.ON_LADDER:
+			pos = position + Vector2(20*ss, -20)
+		inst.position=pos
+		bulletHolder.add_child(inst)
+		inst.init(ss)
+	elif shoot:
 		if currentWeapon == Globals.Weapons.Alchemist and weaponMeters[currentWeapon]>=Globals.weaponEnergyCost[currentWeapon]:
 			if is_on_floor() and dash_time<=0:
 				state = State.DASH_ATTACK

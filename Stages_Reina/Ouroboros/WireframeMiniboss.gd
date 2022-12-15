@@ -195,4 +195,5 @@ func damage(amount,damageType=0):
 		#set false so the white tint shader will show up.
 		hurtSound.play()
 		sprite.use_parent_material = false
+		
 		whiteTime = 0

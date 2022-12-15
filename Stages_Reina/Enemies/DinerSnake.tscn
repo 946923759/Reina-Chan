@@ -1,0 +1,105 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://Stages/EnemyBase.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Stages_Reina/Ouroboros/2340.png" type="Texture" id=2]
+[ext_resource path="res://addons/godot-next/gui/debug_label.gd" type="Script" id=3]
+
+[sub_resource type="GDScript" id=6]
+script/source = "extends \"res://Stages/EnemyBaseScript.gd\"
+
+#The DinerSnake: It's like the dinergate but instead of shooting it just jumps on you
+#It also shares pretty much all of the same code
+
+enum STATES {
+	RUNNING = 0,
+	JUMP_START,
+	JUMPING,
+	RUNNING_AGAIN
+}
+var curState = 0
+
+var player
+var sleepTime: float = 0
+var numShots: int = 0
+
+export(bool) var no_movement = false
+
+var velocity:Vector2
+
+func _physics_process(delta):
+	#IF DEBUGGING
+	if !is_instance_valid(player):
+		var tmp = get_node_or_null(\"/root/Node2D/\")
+		if tmp!=null:
+			player=tmp.get_player()
+
+	
+	#NORMAL PROCESS
+	#print(player.global_position.x - global_position.x)
+	if curState==0 and (abs(player.global_position.x - global_position.x) < 200 or sleepTime >= 0):
+		if sleepTime >= 0:
+			sleepTime-=delta
+			move_and_slide(Vector2(0,420), Vector2(0, -1))
+		else:
+			
+			facing = DIRECTION.RIGHT if global_position.x<player.global_position.x else DIRECTION.LEFT
+			sprite.flip_h = (facing == DIRECTION.RIGHT)
+			velocity= Vector2(200*facing,-400)
+			curState=STATES.JUMPING
+	elif curState==STATES.JUMPING:
+		velocity.y+=delta*600
+		move_and_slide(velocity, Vector2(0, -1))
+		if is_on_floor():
+			curState=STATES.RUNNING
+	else:
+		if no_movement:
+			move_and_slide(Vector2(0,420), Vector2(0, -1))
+		else:
+			move_and_slide(Vector2(200*facing,200), Vector2(0, -1))
+			#if abs(player.global_position.x - global_position.x) > 200:
+			#	curState=0
+		if is_on_wall():
+			facing = facing*-1
+			sprite.flip_h = (facing == DIRECTION.RIGHT)
+			
+		if global_position.x > player.get_node(\"Camera2D\").limit_right+50:
+			print(\"Dinergate walked offscreen, despawning.\")
+			queue_free()
+"
+
+[sub_resource type="RectangleShape2D" id=7]
+extents = Vector2( 36, 16 )
+
+[sub_resource type="AtlasTexture" id=4]
+atlas = ExtResource( 2 )
+region = Rect2( 0, 0, 18, 8 )
+
+[sub_resource type="AtlasTexture" id=5]
+atlas = ExtResource( 2 )
+region = Rect2( 18, 0, 18, 8 )
+
+[sub_resource type="SpriteFrames" id=3]
+animations = [ {
+"frames": [ SubResource( 4 ), SubResource( 5 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[node name="DinerSnake" instance=ExtResource( 1 )]
+script = SubResource( 6 )
+shapeOverride = SubResource( 7 )
+
+[node name="AnimatedSprite" parent="." index="0"]
+frames = SubResource( 3 )
+
+[node name="DebugLabel" type="Label" parent="." index="6"]
+margin_left = 1.5892
+margin_top = -30.1947
+margin_right = 41.5892
+margin_bottom = -16.1947
+text = "curState = null
+"
+script = ExtResource( 3 )
+target_path = NodePath("..")
+properties = PoolStringArray( "curState" )

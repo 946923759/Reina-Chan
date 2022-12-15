@@ -90,6 +90,11 @@ enum Weapons {
 	Glorylight,
 	LENGTH_WEAPONS #Put this last
 }
+enum SpecialAbilities {
+	AirDash=0,
+	Grenade,
+	LENGTH_ABILITIES #Put this last
+}
 var stagesToString = [ #Yeah it's stupid, I can't use macros so...
 	"Buster",
 	"Architect",
@@ -101,6 +106,17 @@ var stagesToString = [ #Yeah it's stupid, I can't use macros so...
 	"???",
 	"???",
 	"Clear And Fail"
+]
+var abilitiesToString = [
+	"Air Dash",
+	"Grenade",
+	"???",
+	"???",
+	"???",
+	"???",
+	"???",
+	"???",
+	"???"
 ]
 
 # Weapon energy is some unknown number (Metal Blade from MM2 has 112 uses)
@@ -148,10 +164,6 @@ var weaponColorSwaps = [
 	]
 ]
 
-enum SpecialAbilities {
-	AirDash=0
-}
-
 enum Characters {
 	UMP9,
 	M16A1,
@@ -186,7 +198,18 @@ var playerData={
 		false #bonus stage (10)
 	],
 	specialAbilities = [
-		true #AirDash
+		true, #AirDash
+		true, #Grenade
+		
+		#The rest are just in case I need to add future abilities.
+		#But to be honest, I probably should have used a bit field
+		#so this doesn't happen
+		false, 
+		false, 
+		false,
+		false,
+		false,
+		false
 	],
 	wilyStageNum = 0,
 	ReinaChanEmblems=[ #U M P 9 C H A N
@@ -256,6 +279,8 @@ func load_player_game()->bool:
 		return false
 	save_game.open(get_save_directory('playerData'), File.READ)
 	playerData=parse_json(save_game.get_as_text())
+	if playerData.specialAbilities.size()<10:
+		playerData.specialAbilities.resize(10)
 	save_game.close()
 	print("Player save data loaded.")
 	return true
@@ -634,6 +659,18 @@ func format_time(time, format = FORMAT_DEFAULT, digit_format = "%02d"):
 
 	return formatted
 
+# This will 'reverse' your array because binary is 'right' sided.
+# In other words, doing arr[4] would be ret & 1<<4 to check if arr[4] is true.
+func bitArrayToInt32(arr:Array)->int:
+	var ret:int = 0;
+	var tmp:int;
+	for i in range(len(arr)):
+		tmp = arr[i]; #0 or 1
+		# Bitwise inclusive OR...
+		# Shift tmp left by i (so it starts rightmost)
+		# then OR it so it sets that bit on ret. If tmp is 0, no effect.
+		ret |= tmp<<i;
+	return ret;
 
 var SCREENS:Dictionary = {
 	"ScreenDisclaimer":"res://Screens/BetaDisclaimer.tscn",

@@ -9,7 +9,18 @@ script/source = "extends StaticBody2D
 signal block_broken()
 
 export(PackedScene) var drop_on_break
-export(bool) var only_default_weapopn_can_break = false
+export(int, FLAGS, 
+	\"Buster\",
+	\"Architect\",
+	\"Alchemist\",
+	\"Ouroboros\",
+	\"Scarecrow\",
+	\"???\",
+	\"???\",
+	\"???\",
+	\"???\",
+	\"Glorylight\",
+	\"Grenade\") var weaponCanBreak=2047 #Use a calculator in programmer mode for this number
 export(int, 1, 50) var maxHealth = 3
 var curHealth;
 
@@ -37,7 +48,9 @@ func _physics_process(delta):
 			sprite.use_parent_material = true
 
 func damage(amount,type:int=0):
-	if only_default_weapopn_can_break and type!=0:
+	print(type)
+	print(weaponCanBreak)
+	if !(weaponCanBreak & 1<<type):
 		return
 	curHealth -= amount
 	if curHealth <= 0:

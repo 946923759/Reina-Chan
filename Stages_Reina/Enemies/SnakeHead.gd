@@ -40,7 +40,7 @@ func _physics_process(delta):
 			var bi = bullet.instance()
 			var pos = position
 			
-			bi.position = pos
+			bi.position = pos+Vector2(facing*90,10)
 			get_parent().add_child(bi)
 			#Have to adjust it a little since the player's position is at the top left of the collision box,
 			#not the center.

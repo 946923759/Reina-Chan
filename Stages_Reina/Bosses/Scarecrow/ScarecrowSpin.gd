@@ -29,6 +29,7 @@ func _ready():
 	sprite1.modulate.a=0
 	sprite2.modulate.a=0
 	sprite3.modulate.a=0
+	visible=true
 	
 func appear():
 	set_physics_process(true)

@@ -7,9 +7,11 @@
 [node name="Sprite" parent="." index="0"]
 animation = "Dash"
 
-[node name="DebugLabel" parent="." index="16"]
+[node name="DebugLabel" parent="." index="18"]
+visible = true
 text = "frameTimer = null
 isOnFloor = null
 canAirDash = null
+canThrowGrenade = null
 "
-properties = PoolStringArray( "frameTimer", "isOnFloor", "canAirDash" )
+properties = PoolStringArray( "frameTimer", "isOnFloor", "canAirDash", "canThrowGrenade" )

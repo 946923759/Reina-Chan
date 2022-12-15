@@ -1,36 +1,32 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Stages/EnemyBase.tscn" type="PackedScene" id=1]
-[ext_resource path="res://Stages_Reina/Enemies/MiniSnake.png" type="Texture" id=2]
+[ext_resource path="res://Stages_Reina/Enemies/jaeger2x1.png" type="Texture" id=2]
 [ext_resource path="res://Stages_Reina/Enemies/SnakeHead.gd" type="Script" id=3]
 
 [sub_resource type="RectangleShape2D" id=6]
 extents = Vector2( 36, 36 )
 
-[sub_resource type="AtlasTexture" id=1]
+[sub_resource type="AtlasTexture" id=7]
 atlas = ExtResource( 2 )
-region = Rect2( 0, 0, 28, 24 )
+region = Rect2( 0, 0, 48, 36 )
 
-[sub_resource type="AtlasTexture" id=2]
+[sub_resource type="AtlasTexture" id=8]
 atlas = ExtResource( 2 )
-region = Rect2( 28, 0, 28, 24 )
+region = Rect2( 48, 0, 48, 36 )
 
-[sub_resource type="AtlasTexture" id=3]
+[sub_resource type="AtlasTexture" id=9]
 atlas = ExtResource( 2 )
-region = Rect2( 56, 0, 28, 24 )
-
-[sub_resource type="AtlasTexture" id=4]
-atlas = ExtResource( 2 )
-region = Rect2( 0, 0, 28, 24 )
+region = Rect2( 0, 0, 48, 36 )
 
 [sub_resource type="SpriteFrames" id=5]
 animations = [ {
-"frames": [ SubResource( 1 ) ],
+"frames": [ SubResource( 7 ) ],
 "loop": true,
 "name": "default",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 2 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 4 ) ],
+"frames": [ SubResource( 8 ), SubResource( 9 ), SubResource( 9 ), SubResource( 9 ), SubResource( 9 ), SubResource( 9 ), SubResource( 9 ), SubResource( 9 ), SubResource( 9 ), SubResource( 9 ) ],
 "loop": false,
 "name": "shoot",
 "speed": 5.0
@@ -44,4 +40,6 @@ collisionOffset = Vector2( -16, 16 )
 
 [node name="AnimatedSprite" parent="." index="0"]
 frames = SubResource( 5 )
-offset = Vector2( -5, 4 )
+animation = "shoot"
+frame = 6
+offset = Vector2( 0, -2 )

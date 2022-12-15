@@ -5,17 +5,18 @@
 [sub_resource type="GDScript" id=1]
 script/source = "extends Node2D
 
+onready var sound:AudioStreamPlayer2D=$ExplosionSound
 var tex = preload(\"res://Animations/mmExplodeSmall.png\")
 
 func _ready():
 	#$ExplosionParticle.emitting = true
-	$ExplosionSound.play()
+	sound.play()
 # warning-ignore:return_value_discarded
-	$ExplosionSound.connect(\"finished\",self,\"queue_free\")
+	sound.connect(\"finished\",self,\"queue_free\")
 
 func addQueueFreeCallback(obj):
 # warning-ignore:return_value_discarded
-	$ExplosionSound.connect(\"finished\",obj,\"queue_free\")
+	sound.connect(\"finished\",obj,\"queue_free\")
 
 #There are 5 frames and tex goes at 15fps, so it's showing the animation for one third of a second
 #So roughly every 66 milliseconds it changes frames

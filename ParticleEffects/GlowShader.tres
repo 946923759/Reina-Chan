@@ -21,7 +21,8 @@ void fragment(){
 		COLOR.a  = texture(TEXTURE,UV).a;
 	}
 	
-	COLOR.rgb = color*glow;
+	COLOR.rgb = (color+0.05)*glow;
+	//COLOR.rgb=vec3(1.0,1.0,1.0);
 	
 }
 

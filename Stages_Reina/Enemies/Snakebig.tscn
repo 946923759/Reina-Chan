@@ -1,7 +1,7 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Stages/EnemyBase.tscn" type="PackedScene" id=1]
-[ext_resource path="res://Stages_Reina/Ouroboros/snakeHead_tmp.png" type="Texture" id=2]
+[ext_resource path="res://Stages_Reina/Enemies/OuroborosSnake.png" type="Texture" id=2]
 
 [sub_resource type="GDScript" id=1]
 script/source = "extends \"res://Stages/EnemyBaseScript.gd\"
@@ -21,6 +21,7 @@ func _ready():
 	for i in range(n.get_child_count()):
 		bottom_rings_positions[i]=i%4
 		bottom_rings[i]=n.get_child(i)
+	sprite.playing=false
 
 var timer:float=999
 var timer2:float=2
@@ -30,6 +31,7 @@ func _process(delta):
 	if timer>.3:
 		if not is_instance_valid(player):
 			player=get_node(\"/root/Node2D\").get_player()
+			sprite.playing=false
 		for i in range(bottom_rings.size()):
 			var n = bottom_rings_positions[i]
 			n+=1
@@ -48,14 +50,15 @@ func _process(delta):
 	
 	timer2-=delta
 	if timer2 <=0:
+		sprite.frame=1
 		var bi = bullet.instance()
 		#var pos = position + charge.position
 		
-		bi.position = position
+		bi.position = position+Vector2(-50,50)
 		get_parent().add_child(bi)
 		#Have to adjust it a little since the player's position is at the top left of the collision box,
 		#not the center.
-		#charge.position should be taken into account but it's messing it up right now
+		
 		var v:Vector2 = player.global_position-global_position + Vector2(30,40)
 		v=v.normalized()*400
 		if facing==DIRECTION.LEFT and player.global_position.x > global_position.x:
@@ -76,11 +79,21 @@ func _process(delta):
 		else:
 			shots=0
 			timer2=5
+			sprite.frame=0
+	#else:
 "
+
+[sub_resource type="AtlasTexture" id=3]
+atlas = ExtResource( 2 )
+region = Rect2( 0, 0, 84, 60 )
+
+[sub_resource type="AtlasTexture" id=4]
+atlas = ExtResource( 2 )
+region = Rect2( 84, 0, 84, 60 )
 
 [sub_resource type="SpriteFrames" id=2]
 animations = [ {
-"frames": [ ExtResource( 2 ) ],
+"frames": [ SubResource( 3 ), SubResource( 4 ) ],
 "loop": true,
 "name": "default",
 "speed": 5.0
@@ -92,3 +105,4 @@ use_large_explosion = true
 
 [node name="AnimatedSprite" parent="." index="0"]
 frames = SubResource( 2 )
+offset = Vector2( -2, 2 )

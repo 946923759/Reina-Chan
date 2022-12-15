@@ -19,7 +19,28 @@
 script/source = "extends Control
 signal unpaused(newWeapon)
 
-export(bool) var debuggingPauseMenu=true
+#export(bool) var debuggingPauseMenu=true
+export(int, FLAGS, 
+	\"Buster\",
+	\"Architect\",
+	\"Alchemist\",
+	\"Ouroboros\",
+	\"Scarecrow\",
+	\"???\",
+	\"???\",
+	\"???\",
+	\"???\",
+	\"Glorylight\") var unlocked_weapons=0
+export(int, FLAGS,
+	\"Air Dash\",
+	\"Grenade\",
+	\"None\",
+	\"None\",
+	\"None\",
+	\"None\",
+	\"None\",
+	\"None\",
+	\"None\") var unlocked_abilities=0
 onready var weaponList:Node2D = $Sprite/WeaponList
 onready var pressB:Label = $Sprite/PressB
 var weaponListCount:int
@@ -33,22 +54,39 @@ onready var tw:Tween = $Tween
 
 var showingInfo=false
 
+var isStandAlone:bool=true
+
 func _ready():
+	unlocked_weapons+=(unlocked_abilities<<10)
+	print(unlocked_weapons)
+	#print(unlocked_weapons_debug & (1<<2))
+	var stg = get_node_or_null(\"/root/Node2D\")
+	if stg:
+		isStandAlone=false
+		print(\"Not standalone\")
+	
 	#visible=false
-	set_process_input(false)
-	set_process(false)
-	self.visible=false
+	if not isStandAlone:
+		set_process_input(false)
+		set_process(false)
+		self.visible=false
+	#print(Globals.bitArrayToInt32([
+	#	true,true,false,false,false,
+	#	false,false,false,false,false]))
 	
 	infoScreen.position=Vector2(Globals.SCREEN_CENTER_X,Globals.SCREEN_CENTER_Y)
 	infoScreen.modulate.a=0
 	weaponListCount=weaponList.get_child_count()
 	weaponList.get_child(pos).GainFocus()
-	#OnCommand()
+	if isStandAlone:
+		OnCommand()
 	pass
 	
 func UpdateFocus(n:int):
+	
 	for i in range(weaponListCount):
 		var c = weaponList.get_child(i)
+		c.visible=unlocked_weapons & (1<<i)
 		if i==n:
 			c.GainFocus()
 		else:
@@ -61,6 +99,11 @@ func UpdateAmmo(ammo:PoolIntArray):
 	$Sprite/LifeCounter._ready()
 	
 func OnCommand(curWeapon:int=0):
+	if !isStandAlone:
+		#Because the debugging variable at the top uses it
+		unlocked_weapons=Globals.bitArrayToInt32(Globals.playerData.availableWeapons)
+		#Also allows me to pack in unlocked abilities...
+		unlocked_weapons+=(unlocked_abilities<<Globals.Weapons.LENGTH_WEAPONS)
 	UpdateFocus(curWeapon)
 	self.visible=true
 	tw.interpolate_property(self,\"modulate:a\",0.0,1.0,.1);
@@ -83,35 +126,62 @@ func OffCommand()->Tween:
 	print(\"[PauseScreen] OffCommand!\")
 	return tw
 
+
+func getPrevClosestWeapon(start:int,end:int=0,increment:int=-1):
+	#print(\"start: \"+String(start))
+	for i in range(start-1,end,increment):
+		if unlocked_weapons & (1<<i):
+			#print(i)
+			return i
+	return 0
+func getNextClosestWeapon(start:int,end:int,increment:int=1):
+	#print(start)
+	for i in range(start+1,end):
+		#print(i)
+		if unlocked_weapons & (1<<i):
+			#print(i)
+			return i
+	return 0 #The buster is always available, so this should always work
+
 func _input(_ev):
 	if showingInfo:
 		if Input.is_action_just_pressed(\"ui_cancel\") or Input.is_action_just_pressed(\"ui_accept\"):
+			if pos>Globals.Weapons.LENGTH_WEAPONS-1:
+				#print(\"Reset pos..\")
+				pos=getPrevClosestWeapon(Globals.Weapons.LENGTH_WEAPONS)
 			UpdateFocus(pos)
 			showingInfo=false
 			var tween = tw
 			tween.interpolate_property(infoScreen, 'modulate:a',
 			null, 0, .5, Tween.TRANS_QUAD, Tween.EASE_OUT);
 			tween.start();
-		if Input.is_action_just_pressed(\"ui_left\") and pos > 0:
-			pos-=1
+		if Input.is_action_just_pressed(\"ui_left\"):
+			if pos>0:
+				pos=getPrevClosestWeapon(pos)
+			else:
+				pos=getPrevClosestWeapon(Globals.Weapons.LENGTH_WEAPONS+Globals.SpecialAbilities.LENGTH_ABILITIES)
 			infoScreen.updateWeaponInfo(pos)
 			info.play()
-		elif Input.is_action_just_pressed(\"ui_right\") and pos < weaponListCount-1:
-			pos+=1
+		elif Input.is_action_just_pressed(\"ui_right\") and pos < Globals.Weapons.LENGTH_WEAPONS+Globals.SpecialAbilities.LENGTH_ABILITIES:
+			pos=getNextClosestWeapon(pos,Globals.Weapons.LENGTH_WEAPONS+Globals.SpecialAbilities.LENGTH_ABILITIES+1)
 			infoScreen.updateWeaponInfo(pos)
+			#if tmp_pos<Globals.Weapons.LENGTH_WEAPONS:
+			#	pos=tmp_pos
 			info.play()
 	else:
 		if Input.is_action_just_pressed(\"ui_up\") and pos > 0:
-			pos-=1
+			pos=getPrevClosestWeapon(pos)
 			select.play()
 		elif Input.is_action_just_pressed(\"ui_down\") and pos < weaponListCount-1:
-			pos+=1
+			pos=getNextClosestWeapon(pos,weaponListCount)
 			select.play()
 		elif Input.is_action_just_pressed(\"ui_left\") and pos > WEAPON_LIST_SPLIT_AT-1:
-			pos-=WEAPON_LIST_SPLIT_AT
+			#pos-=WEAPON_LIST_SPLIT_AT
+			pos=getPrevClosestWeapon(pos-WEAPON_LIST_SPLIT_AT+1)
 			select.play()
 		elif Input.is_action_just_pressed(\"ui_right\") and pos < WEAPON_LIST_SPLIT_AT:
-			pos+=WEAPON_LIST_SPLIT_AT
+			pos=getNextClosestWeapon(pos+WEAPON_LIST_SPLIT_AT-1,weaponListCount)
+			#pos+=WEAPON_LIST_SPLIT_AT
 			select.play()
 		elif Input.is_action_just_pressed(\"ui_cancel\"):
 			infoScreen.updateWeaponInfo(pos)
@@ -124,6 +194,8 @@ func _input(_ev):
 			null, 1, .5, Tween.TRANS_QUAD, Tween.EASE_OUT);
 			tween.start();
 		elif Input.is_action_just_pressed(\"ui_select\") or Input.is_action_just_pressed(\"ui_pause\"):
+			if isStandAlone:
+				return
 			OffCommand()
 			
 		UpdateFocus(pos)
@@ -137,9 +209,9 @@ func _process(delta):
 		t=0
 
 func _on_background_resized():
-	var pos:float=(get_viewport().get_visible_rect().size/2).x
-	$Sprite.position.x=pos
-	$infoScreen.position.x=pos
+	var center_pos:float=(get_viewport().get_visible_rect().size/2).x
+	$Sprite.position.x=center_pos
+	$infoScreen.position.x=center_pos
 	pass # Replace with function body.
 "
 
@@ -238,7 +310,7 @@ onready var weaponInfos:Array = [
 		1, #power
 		3, #speed
 		9, #rapidness
-		0
+		0  #cost
 	],
 	[ #Architect Rocket
 		4,
@@ -293,13 +365,30 @@ onready var weaponInfos:Array = [
 		0,
 		1,
 		0
+	],
+	[	#Air Dash. Obviously does no damage.
+		0,
+		0,
+		0,
+		0,
+	],
+	[   #Grenade.
+		1,
+		2,
+		0,
+		0
 	]
 ]
 
-func updateWeaponInfo(w):
+func updateWeaponInfo(w:int):
+#	if w>Globals.Weapons.LENGTH_WEAPONS-1:
+#		w-=Globals.Weapons.LENGTH_WEAPONS
 	if Engine.editor_hint:
 		title.text=\"Weapon \"+String(w)+\" title\"
 		desc.text='Weapon '+String(w)+\" placeholder description.\\nLorem Ipsum whatever blah blah blah\"
+	elif w>Globals.Weapons.LENGTH_WEAPONS-1:
+		title.text=INITrans.GetString(\"Weapons\",Globals.abilitiesToString[w-Globals.Weapons.LENGTH_WEAPONS])
+		desc.text=INITrans.GetString(\"PauseWeaponDescriptions\",Globals.abilitiesToString[w-Globals.Weapons.LENGTH_WEAPONS])
 	else:
 		title.text=INITrans.GetString(\"Weapons\",Globals.stagesToString[w]+\"Full\")
 		desc.text=INITrans.GetString(\"PauseWeaponDescriptions\",Globals.stagesToString[w])
@@ -361,6 +450,8 @@ pause_mode = 2
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = SubResource( 1 )
+unlocked_weapons = 21
+unlocked_abilities = 3
 
 [node name="Tween" type="Tween" parent="."]
 

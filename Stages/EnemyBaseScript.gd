@@ -23,6 +23,7 @@ export(bool) var use_large_explosion = false
 
 onready var sprite:AnimatedSprite = $AnimatedSprite
 onready var hurtSound:AudioStreamPlayer2D = $HurtSound
+onready var shader = $AnimatedSprite.material
 
 var explosion = preload("res://Stages/EnemyExplosion.tscn")
 var smallExplosion = preload("res://Stages/EnemyExplodeSmall.tscn")

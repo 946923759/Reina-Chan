@@ -35,6 +35,7 @@ animations = [ {
 [sub_resource type="GDScript" id=7]
 script/source = "extends AnimatedSprite
 
+var sound:AudioStreamPlayer2D
 
 var use_s2:bool=false
 func init(s2=false):
@@ -45,14 +46,13 @@ func _ready():
 	self.playing = true
 	# warning-ignore:return_value_discarded
 	self.connect(\"animation_finished\",self,\"set_visible\",[false])
-	var s:AudioStreamPlayer2D
 	if use_s2:
-		s=$s2
+		sound=$s2
 	else:
-		s=$s1
+		sound=$s1
 	# warning-ignore:return_value_discarded
-	s.connect(\"finished\",self,\"queue_free\")
-	s.play()
+	sound.connect(\"finished\",self,\"queue_free\")
+	sound.play()
 "
 
 [node name="AnimatedSprite" type="AnimatedSprite"]

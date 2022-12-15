@@ -92,14 +92,15 @@ shape = SubResource( 12 )
 
 [node name="AnimatedSprite" parent="." index="1"]
 frames = SubResource( 10 )
-animation = "intro"
+animation = "idle"
+frame = 1
 flip_h = true
 
 [node name="IntroSound" parent="." index="3"]
 stream = ExtResource( 3 )
 
 [node name="DebugLabel" parent="." index="7"]
-text = "animation = \"intro\"
+text = "animation = \"idle\"
 playing = false
 "
 
@@ -113,6 +114,7 @@ idleTime = null
 properties = PoolStringArray( "position", "global_position", "curState", "facing", "idleTime" )
 
 [node name="SpinnyFrame" type="Node2D" parent="." index="9"]
+visible = false
 scale = Vector2( 4, 4 )
 script = ExtResource( 7 )
 
