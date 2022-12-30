@@ -36,15 +36,27 @@ func set_piece_color(c:int):
 	piece_color=c
 	update()
 
-func move_down():
+# I'm sure there is some mathematical way to do this instead of
+# a boolean but I'm running out of time so just deal with it
+var goesUp:bool=false
+func begin_tweening():
+	goesUp=position.y > grid_position.y*64+32
 	set_process(true)
 
 func _process(delta):
-	if position.y < grid_position.y*64+32:
-		position.y+=1000*delta
-	elif position.x < grid_position.x*64+32:
-		position.x+=1000*delta
+	if goesUp:
+		if position.y > grid_position.y*64+32:
+			position.y-=1000*delta
+		elif position.x > grid_position.x*64+32:
+			position.x-=1000*delta
+		else:
+			set_process(false)
 	else:
-		#get_parent().is_empty_space_at(Vector2(grid_position)):
-		
-		set_process(false)
+		if position.y < grid_position.y*64+32:
+			position.y+=1000*delta
+		elif position.x < grid_position.x*64+32:
+			position.x+=1000*delta
+		else:
+			#get_parent().is_empty_space_at(Vector2(grid_position)):
+			
+			set_process(false)

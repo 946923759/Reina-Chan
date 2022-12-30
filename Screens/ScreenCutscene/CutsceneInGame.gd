@@ -27,8 +27,8 @@ var message: Array
 
 onready var PORTRAITMAN:Node2D = $CenterContainer_v2/Mugshots
 
-var musicToLoad:Array=[]
-var soundsToLoad:Array=[]
+#var musicToLoad:Array=[]
+#var soundsToLoad:Array=[]
 
 
 onready var text = $CenterContainer_v2/textActor_better
@@ -48,7 +48,7 @@ func push_back_from_idx_one(arr,arr2): #Arrays are passed by reference so there'
 func preparse_string_array(arr:PoolStringArray,delimiter:String="|")->bool:
 	var musicToLoad:Array=[]
 	var soundsToLoad:Array=[]
-	var backgrounds_to_load:Array=[]
+	#var backgrounds_to_load:Array=[]
 	message = []
 	
 	#if !arr[0].begins_with("msgbox_add"):
@@ -134,7 +134,9 @@ onready var tw = $TextboxTween
 onready var animPlayer = $CenterContainer_v2/AnimationPlayer
 func advance_text()->bool:
 	curPos+=1
+# warning-ignore:unused_variable
 	var tmp_speaker = "NoSpeaker!!"
+# warning-ignore:unused_variable
 	var tmp_tn = ""
 	var tmp_txt:String=""
 	while true:
@@ -346,12 +348,14 @@ func closeTextbox(t:Tween,delay:float=0,animTime:float=.3):
 	return
 	#t.append(textboxSpr,'scale:y',0,.3).set_trans(Tween.TRANS_QUAD)
 	#print("Closing textbox with delay of "+String(delay))
+# warning-ignore:unreachable_code
 	t.interpolate_property(textboxSpr,"rect_scale:y",1,0,animTime,Tween.TRANS_QUAD,Tween.EASE_IN,delay)
 	t.interpolate_property(speakerActor,"rect_scale:y",1,0,animTime,Tween.TRANS_QUAD,Tween.EASE_IN,delay)
 	t.interpolate_property(speakerActor,"modulate:a",1,0,animTime,Tween.TRANS_QUAD,Tween.EASE_IN,delay)
 	
 
-func openTextbox(t:Tween,delay:float=0):
+# warning-ignore:unused_argument
+func openTextbox(t:Tween,_delay:float=0):
 	$CenterContainer_v2.open()
 	return
 	#print("Opening textbox with delay of "+String(delay))
@@ -400,17 +404,17 @@ func _ready():
 
 
 
-func init_(message:PoolStringArray, parent,delim="|",msgColumn:int=1):
-	assert(message.size()>0,"You can't pass an empty message to a cutscene!!!")
+func init_(message_:PoolStringArray, parent,delim="|",msgColumn_:int=1):
+	assert(message_.size()>0,"You can't pass an empty message to a cutscene!!!")
 	if parent:
 		parent_node = parent
 		
 	#var t := TweenSequence.new(get_tree())
 	#t._tween.pause_mode = Node.PAUSE_MODE_PROCESS
 	
-	preparse_string_array(message,delim)
+	preparse_string_array(message_,delim)
 	#self.message=message
-	self.msgColumn=msgColumn
+	self.msgColumn=msgColumn_
 	#parse_string_array(message,delim,msgColumn)
 	text.bbcode_text=""
 	text.visible_characters=0
@@ -438,7 +442,7 @@ var manualTriggerForward=false
 var isHistoryBeingShown=false
 var isWaitingForChoice=false
 
-func _process(delta):
+func _process(_delta):
 	
 	if isHistoryBeingShown:
 		return

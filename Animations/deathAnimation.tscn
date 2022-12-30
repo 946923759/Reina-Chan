@@ -12,7 +12,7 @@ func _process(delta):
 	#return
 	time+=delta
 	totalTime+=delta
-	curFrame = floor(time/0.022)
+	curFrame = int(floor(time/0.022))
 	#curFrame = floor(time*2)
 	if totalTime>10:
 		set_process(false)

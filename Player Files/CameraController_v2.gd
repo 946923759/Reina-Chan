@@ -130,7 +130,7 @@ func _process(_delta):
 
 
 #TODO: It's tied to the update rate which is extremely inconsistent between computers
-func _process_shake(center, angle, delta) -> void:
+func _process_shake(_center, _angle, delta) -> void:
 	shake = stress * stress
 
 	#rotation_degrees = angle + (max_roll * shake *  _get_noise(randi(), delta))

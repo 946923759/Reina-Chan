@@ -13,7 +13,7 @@ enum PIECE {
 export(Vector2) var tilemap_grid_size = Vector2(6,6)
 
 var b = preload("res://Various Objects/Special Blocks/breakableBlock.tscn")
-var b2 = preload("res://Various Objects/Special Blocks/BlockAsObject_2.tscn")
+#var b2 = preload("res://Various Objects/Special Blocks/BlockAsObject_2.tscn")
 
 onready var breakableTiles = $BreakableTiles
 onready var chessPieces = $ChessPieces
@@ -47,28 +47,38 @@ func init_tilemap(is_reset:bool=false):
 	
 	if is_reset:
 		for i in range(0, breakableTiles.get_child_count()):
-			breakableTiles.get_child(i).queue_free()
-	
-	var tiles = $TileMap
-	for y in range(tilemap_grid_size.y):
-		for x in range(tilemap_grid_size.x):
-			var t = tiles.get_cell(x,y)
-			if t != tiles.INVALID_CELL:
-				var block
-				if t==11:
-					block = b2.instance()
-				else:
-					block = b.instance()
-					block.maxHealth=1
-					block.connect("block_broken",self,"block_broken_",[Vector2(x,y)])
-				#e.init(true)
-				#Breakable blocks are centered.
-				block.position = Vector2(x,y)*64+Vector2(32,32)
-				#e.position.y-=32
-				breakableTiles.add_child(block)
-				playfield[y*tilemap_grid_size.x+x]=1
+			var n = breakableTiles.get_child(i)
+			if n.is_class("StaticBody2D"):
+				n.enable()
 				
-	tiles.visible=false
+		var tiles = $TileMap
+		for y in range(tilemap_grid_size.y):
+			for x in range(tilemap_grid_size.x):
+				var t = tiles.get_cell(x,y)
+				if t != tiles.INVALID_CELL:
+					playfield[y*tilemap_grid_size.x+x]=1
+	else:
+		var tiles = $TileMap
+		for y in range(tilemap_grid_size.y):
+			for x in range(tilemap_grid_size.x):
+				var t = tiles.get_cell(x,y)
+				if t != tiles.INVALID_CELL:
+					var block = b.instance()
+					if t==11:
+						block.weaponCanBreak=0
+						block.textureOverride=unbreakableBlockTexture
+					else:
+						block.despawn_on_break=false
+						block.maxHealth=1
+						block.connect("block_broken",self,"block_broken_",[Vector2(x,y)])
+					#e.init(true)
+					#Breakable blocks are centered.
+					block.position = Vector2(x,y)*64+Vector2(32,32)
+					#e.position.y-=32
+					breakableTiles.add_child(block)
+					playfield[y*tilemap_grid_size.x+x]=1
+					
+		tiles.visible=false
 	update_debug_disp()
 	
 func reset_tilemap(): #For compat with signals
@@ -76,8 +86,12 @@ func reset_tilemap(): #For compat with signals
 		return
 	init_tilemap(true)
 
+var unbreakableBlockTexture:Texture
 func _ready():
 	playfield.resize(tilemap_grid_size.x*tilemap_grid_size.y)
+	
+	unbreakableBlockTexture=load("res://Stages_Reina/Alchemist/brick.png")
+	
 	init_tilemap()
 	#update()
 	
@@ -113,8 +127,8 @@ func block_broken_(pos:Vector2):
 	move_pieces_other()
 	
 	update_debug_disp()
-	if scan_check_horizontal() or scan_check_diagonal():
-		print("Checked!")
+	if scan_check_horizontal() or scan_check_diagonal() or scan_check_knight():
+		#print("Checked!")
 		sound.play()
 		completed=true
 		emit_signal("puzzle_completed")
@@ -141,7 +155,7 @@ func move_pieces_down(col:int):
 					p.grid_position.y+=emptySpacesBelow
 					set_tile_at(p.grid_position,p.piece_type+2)
 					#print("piece should move towards "+String(p.grid_position.y))
-					p.move_down()
+					p.begin_tweening()
 			#else:
 			#	print("Unknown chess piece "+String(p.piece_type)+" in column.")
 				#var maxSpacesRight = 
@@ -172,8 +186,30 @@ func move_pieces_other():
 				p.grid_position.x+=emptySpacesDownRight
 				set_tile_at(p.grid_position,p.piece_type+2)
 				#print("piece should move towards "+String(p.grid_position.y))
-				p.move_down()
-
+				p.begin_tweening()
+		elif p.piece_type+2==PIECE.Knight:
+			var pos = p.grid_position
+			#Knights can jump over other pieces, so there
+			#is no need to use a for loop to check if the blocks
+			#are open. Simple math can determine it.
+			for lr in [-1]:
+				for posTocheck in [
+					pos+Vector2(1*lr,-2),
+					#pos+Vector2(1*lr,2),
+					pos+Vector2(2*lr,-1),
+					#pos+Vector2(2*lr,1),
+				]:
+					if posTocheck.x > tilemap_grid_size.x or posTocheck.y > tilemap_grid_size.y:
+						continue
+					elif posTocheck.x<0 or posTocheck.y<0:
+						continue
+					#print("Checking "+String(posTocheck))
+					if get_tile_at(posTocheck)==0:
+						$DebugDisplay.debug_highlight_block(posTocheck,Color.red)
+						set_tile_at(p.grid_position,0)
+						p.grid_position=posTocheck
+						set_tile_at(p.grid_position,p.piece_type+2)
+						p.begin_tweening()
 
 func is_path_towards_horizontal(srcPos:Vector2,destPos:Vector2)->bool:
 	if srcPos.x < destPos.x:
@@ -181,14 +217,14 @@ func is_path_towards_horizontal(srcPos:Vector2,destPos:Vector2)->bool:
 			var b = get_tile_at(Vector2(x,srcPos.y))
 			if b!=0:
 				return false
-			#$DebugDisplay.debug_highlight_block(Vector2(x,srcPos.y),Color.red)
+			$DebugDisplay.debug_highlight_block(Vector2(x,srcPos.y),Color.red)
 		return true
 	else:
 		for x in range(srcPos.x-1,destPos.x,-1):
 			var b = get_tile_at(Vector2(x,srcPos.y))
 			if b!=0:
 				return false
-			#$DebugDisplay.debug_highlight_block(Vector2(x,srcPos.y),Color.red)
+			$DebugDisplay.debug_highlight_block(Vector2(x,srcPos.y),Color.red)
 		return true
 
 func scan_check_horizontal()->bool:
@@ -197,7 +233,7 @@ func scan_check_horizontal()->bool:
 			PIECE.Queen,PIECE.Rook:
 				for x in range(p.grid_position.x+1,tilemap_grid_size.x):
 					var b = get_tile_at(Vector2(x,p.grid_position.y))
-					#$DebugDisplay.debug_highlight_block(Vector2(x,p.grid_position.y),Color.blue)
+					$DebugDisplay.debug_highlight_block(Vector2(x,p.grid_position.y),Color.blue)
 					#print(b)
 					if b==PIECE.King:
 						return true
@@ -255,6 +291,35 @@ func scan_check_diagonal()->bool:
 						break
 			#_:
 			#	continue
+	return false
+
+func scan_check_knight():
+	for p in chessPieces.get_children():
+		var type = p.piece_type+2
+		match type:
+			PIECE.Knight:
+				var pos = p.grid_position
+				
+				#Knights can jump over other pieces, so there
+				#is no need to use a for loop to check if the blocks
+				#are open. Simple math can determine it.
+				for lr in [-1,1]:
+					for posTocheck in [
+						pos+Vector2(1*lr,-2),
+						pos+Vector2(1*lr,2),
+						pos+Vector2(2*lr,-1),
+						pos+Vector2(2*lr,1),
+					]:
+						if posTocheck.x > tilemap_grid_size.x or posTocheck.y >= tilemap_grid_size.y:
+							continue
+						elif posTocheck.x<0 or posTocheck.y<0:
+							continue
+						#print("Checking "+String(posTocheck)+ " | "+String(tilemap_grid_size))
+						$DebugDisplay.debug_highlight_block(posTocheck,Color.blue)
+						
+						var b_obj = get_tile_at(posTocheck)
+						if b_obj==PIECE.King:
+							return true
 	return false
 
 func is_empty_space_at(pos:Vector2)->bool:

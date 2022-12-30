@@ -1,4 +1,4 @@
-[gd_scene load_steps=48 format=2]
+[gd_scene load_steps=49 format=2]
 
 [ext_resource path="res://Player Files/mission start2.png" type="Texture" id=1]
 [ext_resource path="res://Character Sprites/ump9/ump9.tres" type="SpriteFrames" id=2]
@@ -36,6 +36,7 @@
 [ext_resource path="res://Screens/ScreenPauseMenu/PauseScreen.tscn" type="PackedScene" id=34]
 [ext_resource path="res://Sounds/Classic/Mega Man 4 SFX (20) - Weapon Switch.wav" type="AudioStream" id=35]
 [ext_resource path="res://Stages_Reina/Bosses/Alchemist/Pumpkin.png" type="Texture" id=36]
+[ext_resource path="res://Player Files/8bitPlayer/bulletManager.gd" type="Script" id=37]
 
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 19 )
@@ -304,6 +305,9 @@ radius = 320.0
 [node name="Player" type="KinematicBody2D"]
 script = ExtResource( 7 )
 dash_multiplier = 2.5
+
+[node name="BulletManager" type="Node" parent="."]
+script = ExtResource( 37 )
 
 [node name="Sprite" type="AnimatedSprite" parent="."]
 material = SubResource( 1 )

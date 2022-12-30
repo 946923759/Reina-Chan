@@ -1,9 +1,9 @@
-extends Object
+extends Node
 
 var stageRoot:Node2D
 var bullets = [null,null,null]
 
-func _init(_stageRoot):
+func init(_stageRoot):
 	stageRoot=_stageRoot
 
 func push_bullet(ref) -> bool:

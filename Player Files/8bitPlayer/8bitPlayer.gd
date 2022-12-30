@@ -121,10 +121,12 @@ func _ready():
 	else:
 		DEATH_TILE_ID = -999
 	
-	var b = load("res://Player Files/8bitPlayer/bulletManager.gd")
-	bulletManager=b.new(stageRoot)
-	#TODO: This is actually really stupid considering you can spawn a Node2D on the fly...
-	bulletHolder = get_node("/root/Node2D/BulletHolder")
+	#var b = load("res://Player Files/8bitPlayer/bulletManager.gd")
+	#bulletManager=b.new(stageRoot)
+	bulletManager=$BulletManager
+	bulletManager.init(stageRoot)
+	bulletHolder=Node2D.new()
+	stageRoot.call_deferred("add_child",bulletHolder)
 	
 	debugDisplay.visible=OS.is_debug_build()
 	
@@ -350,6 +352,14 @@ func get_input(delta):
 		jump = Input.is_action_just_pressed('ui_cancel')
 		shoot = Input.is_action_just_pressed("ui_select") or rapidFire and (shoot_time > .1 and Input.is_action_pressed("ui_select"))
 
+	var grenade_input = (shoot and up) or (
+		Input.is_action_just_pressed("gameplay_btn3") and
+		state!=State.DASH
+	)
+	#Can't throw grenades if using other weapons because it will
+	#conflict with the alchemist rockets.
+	#...Even though square will also shoot it.
+	grenade_input = grenade_input and currentWeapon==Globals.Weapons.Buster
 	
 	#Cancel it here instead of accounting for it anywhere else
 	#you can move in the split second between Zero falling though the ladder top and grabbing onto
@@ -361,26 +371,33 @@ func get_input(delta):
 	#All this shit is copypasted from the example platformer so I have no idea how it works
 	# A good idea when implementing characters of all kinds,
 	# compensates for physics imprecision, as well as human reaction delay.
-	if shoot and up and canThrowGrenade:
-		print("Throw!")
-		var inst = grenade.instance()
-		var ss:float
-		if sprite.flip_h:
-			ss = -1.0
-		else:
-			ss = 1.0
-		var pos = position + Vector2(20*ss, 10)
-		if state == State.ON_LADDER:
-			pos = position + Vector2(20*ss, -20)
-		inst.position=pos
-		bulletHolder.add_child(inst)
-		inst.init(ss)
+	if grenade_input and canThrowGrenade:
+		if (Globals.playerData.gameDifficulty <= Globals.Difficulty.EASY or bulletManager.get_num_bullets() < 3):
+			
+			#print("Throw!")
+			var inst = grenade.instance()
+			var ss:float
+			if sprite.flip_h:
+				ss = -1.0
+			else:
+				ss = 1.0
+			var pos = position + Vector2(20*ss, 10)
+			if state == State.ON_LADDER:
+				pos = position + Vector2(20*ss, -20)
+			inst.position=pos
+			bulletHolder.add_child(inst)
+			inst.init(ss)
+			shoot_time = 0
+			if Globals.playerData.gameDifficulty > Globals.Difficulty.EASY:
+				bulletManager.push_bullet(inst)
+			
 	elif shoot:
 		if currentWeapon == Globals.Weapons.Alchemist and weaponMeters[currentWeapon]>=Globals.weaponEnergyCost[currentWeapon]:
 			if is_on_floor() and dash_time<=0:
 				state = State.DASH_ATTACK
 				dash_time=.5
 				#var ss = -1.0 if sprite.flip_h else 1.0
+# warning-ignore:narrowing_conversion
 				weaponMeters[currentWeapon]=max(0,weaponMeters[currentWeapon]-Globals.weaponEnergyCost[currentWeapon])
 				HPBar.updateAmmo(weaponMeters[currentWeapon]/144.0,false)
 				sprite.set_animation("DashAttack")
@@ -391,6 +408,7 @@ func get_input(delta):
 			
 			scarecrowSpin.set_flipped(sprite.flip_h)
 			
+# warning-ignore:narrowing_conversion
 			weaponMeters[currentWeapon]=max(0,weaponMeters[currentWeapon]-Globals.weaponEnergyCost[currentWeapon])
 			HPBar.updateAmmo(weaponMeters[currentWeapon]/144.0,false)
 			
@@ -421,6 +439,7 @@ func get_input(delta):
 					pos = position + Vector2(95*ss, -20)
 				
 				if currentWeapon!=Globals.Weapons.Buster:
+# warning-ignore:narrowing_conversion
 					weaponMeters[currentWeapon]=max(0,weaponMeters[currentWeapon]-Globals.weaponEnergyCost[currentWeapon])
 					#print(ceil(weaponMeters[currentWeapon]/128.0*32))
 					HPBar.updateAmmo(weaponMeters[currentWeapon]/144.0,false)
@@ -447,11 +466,11 @@ func get_input(delta):
 				if Globals.playerData.gameDifficulty > Globals.Difficulty.EASY:
 					bulletManager.push_bullet(bi)
 				else:
-					for child in bulletHolder.get_children():
-						if is_instance_valid(child) and child.get_class()=="KinematicBody2D":
-							#print(child.get_class())
-							#child.add_collision_exception_with(bi)
-							bi.add_collision_exception_with(child)
+#					for child in bulletHolder.get_children():
+#						if is_instance_valid(child) and child.get_class()=="KinematicBody2D":
+#							#print(child.get_class())
+#							#child.add_collision_exception_with(bi)
+#							bi.add_collision_exception_with(child)
 					pass
 				if sprite.animation=="IdleShoot":
 					sprite.frame = 0
@@ -595,6 +614,7 @@ func get_free_roam_input(_delta):
 #The world_to_map function does NOT take into account the scale of the tilemap, so we have to calculate
 #the tile's actual mapping ourselves.
 onready var tile_scale = get_node("/root/Node2D/TileMap").scale
+#var tile_scale = Vector2(1.0,1.0)
 func pos2cell(pos:Vector2)->Vector2:
 	#TODO: Offset is wrong, fix it for real
 	#pos minus 30 (why?) divided by quadrant size divided by tile scale
@@ -1008,7 +1028,7 @@ func processInvincible(delta):
 		#$FuckGodot.set_collision_mask_bit(0,true)
 		#$FuckGodot.set_collision_layer_bit(0,true)
 
-func player_touched(obj, amountToDamage:int):
+func player_touched(_obj, amountToDamage:int):
 	if !invincible and state != State.DASH_ATTACK:
 		
 		#End dash immediately
@@ -1029,8 +1049,10 @@ func player_touched(obj, amountToDamage:int):
 				velocity.x = -300
 			lockMovement(.25,velocity,false)
 		if Globals.playerData.gameDifficulty == Globals.Difficulty.HARD:
+# warning-ignore:narrowing_conversion
 			amountToDamage*=1.5
 		elif Globals.playerData.gameDifficulty == Globals.Difficulty.SUPERHERO:
+# warning-ignore:narrowing_conversion
 			amountToDamage*=2.0
 		HP-=amountToDamage;
 		if HP > 0:
@@ -1047,7 +1069,7 @@ func player_touched(obj, amountToDamage:int):
 			die()
 
 # -1 = based on player facing, 0 = left, 1 = right, 2 = down, 3 = up
-func player_send_flying(obj,amountToDamage,direction=-1):
+func player_send_flying(_obj,amountToDamage,direction=-1):
 	if !invincible:
 		HP-=amountToDamage;
 		if HP > 0:
@@ -1134,9 +1156,9 @@ func healPlayer(amount):
 	#$HealAnimation.play()
 	
 func restoreAmmo(amount):
-	#Right now there's only one weapon so let's just pretend...
-	weaponMeters[1]=min(144,weaponMeters[1]+amount)
 	if currentWeapon!=0:
+		# warning-ignore:narrowing_conversion
+		weaponMeters[currentWeapon]=min(144,weaponMeters[currentWeapon]+amount)
 		HPBar.updateAmmo(weaponMeters[currentWeapon]/144.0,true)
 	
 func giveExtraLife():

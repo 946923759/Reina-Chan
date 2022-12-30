@@ -8,7 +8,8 @@
 script/source = "extends \"res://Stages/EnemyBaseScript.gd\"
 
 #The DinerSnake: It's like the dinergate but instead of shooting it just jumps on you
-#It also shares pretty much all of the same code
+#It also has a check so it doesn't jump through walls. Probably should be used in the
+#dinergate too but whatever
 
 enum STATES {
 	RUNNING = 0,
@@ -32,11 +33,13 @@ func _physics_process(delta):
 		var tmp = get_node_or_null(\"/root/Node2D/\")
 		if tmp!=null:
 			player=tmp.get_player()
+			
+	$Label.text=String($RayCast2D.is_colliding())
 
 	
 	#NORMAL PROCESS
 	#print(player.global_position.x - global_position.x)
-	if curState==0 and (abs(player.global_position.x - global_position.x) < 200 or sleepTime >= 0):
+	if curState==0 and $RayCast2D.is_colliding()==false and (abs(player.global_position.x - global_position.x) < 200 or sleepTime >= 0):
 		if sleepTime >= 0:
 			sleepTime-=delta
 			move_and_slide(Vector2(0,420), Vector2(0, -1))
@@ -88,6 +91,7 @@ animations = [ {
 
 [node name="DinerSnake" instance=ExtResource( 1 )]
 script = SubResource( 6 )
+maxHealth = 4
 shapeOverride = SubResource( 7 )
 
 [node name="AnimatedSprite" parent="." index="0"]
@@ -103,3 +107,12 @@ text = "curState = null
 script = ExtResource( 3 )
 target_path = NodePath("..")
 properties = PoolStringArray( "curState" )
+
+[node name="RayCast2D" type="RayCast2D" parent="." index="7"]
+enabled = true
+cast_to = Vector2( -200, 0 )
+collision_mask = 16
+
+[node name="Label" type="Label" parent="." index="8"]
+margin_right = 40.0
+margin_bottom = 14.0

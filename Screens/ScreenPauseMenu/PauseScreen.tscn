@@ -136,7 +136,7 @@ func getPrevClosestWeapon(start:int,end:int=0,increment:int=-1):
 	return 0
 func getNextClosestWeapon(start:int,end:int,increment:int=1):
 	#print(start)
-	for i in range(start+1,end):
+	for i in range(start+1,end,increment):
 		#print(i)
 		if unlocked_weapons & (1<<i):
 			#print(i)
@@ -247,7 +247,7 @@ export (int,-1,99) var lives = 1
 
 var numberTex = load(\"res://Screens/ScreenPauseMenu/mm4_pause_numbers 10x1.png\")
 
-func drawNumber(n:int):
+func drawNumber(_n_:int):
 	pass
 
 func _ready():
@@ -262,7 +262,7 @@ func _ready():
 	#set_process(Engine.editor_hint)
 	set_process(OS.is_debug_build())
 
-func _process(delta):
+func _process(_delta):
 	update()
 
 func _draw():
@@ -407,7 +407,7 @@ func _ready():
 	set_process(false)
 	#set_process(Engine.editor_hint or OS.is_debug_build())
 
-func _process(delta):
+func _process(_delta):
 	updateWeaponInfo(currentWeapon)
 	#update()
 

@@ -584,6 +584,7 @@ class ReinaAudioPlayer:
 		stop_music()
 		return
 		
+# warning-ignore:unreachable_code
 		if added_nsf_player:
 			#nsf_player.stop_music()
 			#print("Stopped NSF player")
@@ -683,7 +684,28 @@ var SCREENS:Dictionary = {
 	"CutsceneDemoEnd":"res://Screens/ScreenCutscene/cutsceneWhatever.tscn",
 	"ScreenCredits":"res://Screens/Credits.tscn",
 	
+	"MMZeroTest":"res://Stages/TestStage/TestStage.tscn",
 	"PIURED_ScreenGameplay":"res://Stages_Reina/Clear_And_Fail/PIURED/GameObjects/ScreenGameplay.tscn"
+}
+
+var STAGES_REINA:Dictionary = {
+	"Alchemist":"res://Stages_Reina/Alchemist/Alchemist_v2.tscn",
+	"Architect":"res://Stages_Reina/Architect/StageArchitect_v2.tscn",
+	"Ouroboros":"res://Stages_Reina/Ouroboros/StageOuroboros.tscn",
+	"Scarecrow":"res://Stages_Reina/Scarecrow/Scarecrow.tscn",
+	"None1":"",
+	"None2":"",
+	"None3":"",
+	"None4":"",
+	"SF_1":"",
+	"SF_2":"",
+	"SF_3":"",
+	"SF_4":"",
+	"TEST_STAGE":"res://Stages_Reina/TestStage.tscn",
+	"NSF_TEST":"res://Stages_Reina/TestStage_NSF/TestStage_NSF.tscn",
+	"NSF_TEST_2":"res://Stages_Reina/TestStage_NSF/TestStage_NSF_2.tscn",
+	"SCARECROW_BOSS_TEST":"res://Stages_Reina/ScarecrowTestRoom.tscn",
+	"mm2wily1":"res://Stages/mm2wily/stgWily.tscn"
 }
 
 func change_screen(tree,screen:String)->void:

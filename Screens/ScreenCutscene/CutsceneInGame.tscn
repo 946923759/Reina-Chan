@@ -33,6 +33,7 @@ var MUGSHOT_X_POSITION:int
 var BLINKY_X_POSITION:int
 
 func _ready():
+# warning-ignore:narrowing_conversion
 	MUGSHOT_X_POSITION=abs(int(mugShotActor.position.x))
 	BLINKY_X_POSITION=int($Blinky.position.x)
 	
@@ -87,7 +88,7 @@ func add(leftSide:bool=true)->float:
 		animPlayer.queue(\"OpenRight\")
 	return 0.5
 
-func reposition(leftSide:bool=true):
+func reposition(_leftSide:bool=true):
 	#var a = -1 if leftSide else 1
 	#mugShotActor.position.x=MUGSHOT_X_POSITION*a
 	if isLeftSide:
@@ -124,7 +125,7 @@ func skipToOpen(leftSide:bool=true):
 	animPlayer.seek(.3)
 
 
-func _on_testLeft_button_down(extra_arg_0):
+func _on_testLeft_button_down(_extra_arg_0):
 	print(\"test left\")
 	add(true)
 
@@ -1065,7 +1066,7 @@ region_rect = Rect2( 0, 0, 192, 192 )
 material = SubResource( 15 )
 texture = ExtResource( 13 )
 region_enabled = true
-region_rect = Rect2( 0, 8.14423, 192, 192 )
+region_rect = Rect2( 0, 112.276, 192, 192 )
 
 [node name="Tween" type="Tween" parent="CenterContainer_v2/Mugshots"]
 
@@ -1080,7 +1081,6 @@ margin_right = 236.0
 margin_bottom = 90.0
 custom_fonts/normal_font = SubResource( 18 )
 bbcode_enabled = true
-text = " "
 script = SubResource( 16 )
 __meta__ = {
 "_edit_use_anchors_": false

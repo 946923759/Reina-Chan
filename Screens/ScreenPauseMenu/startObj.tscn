@@ -37,7 +37,7 @@ func set_weapon(w):
 func set_ammo(a:float):
 	curHP=floor(a*30.0)
 
-func init(weapon,toDraw):
+func init(_UNUSED_ARG_WEAPON,toDraw):
 	#icon=load(sprite)
 	curHP=toDraw
 	#update()

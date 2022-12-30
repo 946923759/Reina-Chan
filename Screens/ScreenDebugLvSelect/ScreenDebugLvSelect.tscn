@@ -1,0 +1,79 @@
+[gd_scene load_steps=12 format=2]
+
+[ext_resource path="res://ubuntu-font-family/PressStart2P.ttf" type="DynamicFontData" id=1]
+[ext_resource path="res://Screens/ScreenDebugLvSelect/ScreenDebugLvSelect.gd" type="Script" id=2]
+[ext_resource path="res://Character Sprites/ump9/ump9.tres" type="SpriteFrames" id=3]
+[ext_resource path="res://Character Sprites/m16/m16.tres" type="SpriteFrames" id=4]
+[ext_resource path="res://Sounds/Classic/Mega Man 4 SFX (20) - Weapon Switch.wav" type="AudioStream" id=5]
+[ext_resource path="res://Sounds/Classic/03 - MenuSelect.wav" type="AudioStream" id=6]
+[ext_resource path="res://Sounds/Classic/S3K_B2 - No Way.wav" type="AudioStream" id=7]
+[ext_resource path="res://FallbackPixelFont.tres" type="DynamicFont" id=8]
+[ext_resource path="res://MM2Font.tres" type="DynamicFont" id=9]
+[ext_resource path="res://Music/CDAudio/TestRoom.mp3" type="AudioStream" id=10]
+
+[sub_resource type="DynamicFont" id=1]
+size = 20
+extra_spacing_space = -12
+font_data = ExtResource( 1 )
+
+[node name="Node2D" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 2 )
+
+[node name="Control" type="Control" parent="."]
+margin_left = 100.0
+margin_top = 200.0
+margin_right = 140.0
+margin_bottom = 240.0
+
+[node name="Characters" type="Node2D" parent="."]
+position = Vector2( 1152, 608 )
+scale = Vector2( 4, 4 )
+
+[node name="UMP9" type="AnimatedSprite" parent="Characters"]
+frames = ExtResource( 3 )
+animation = "WalkLoop"
+
+[node name="M16A1" type="AnimatedSprite" parent="Characters"]
+frames = ExtResource( 4 )
+animation = "WalkLoop"
+
+[node name="Select" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 6 )
+bus = "Player/Enemies"
+
+[node name="Confirm" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 5 )
+volume_db = 4.0
+bus = "Player/Enemies"
+
+[node name="Label" type="Label" parent="."]
+margin_left = 896.0
+margin_top = 672.0
+margin_right = 1240.0
+margin_bottom = 692.0
+custom_fonts/font = SubResource( 1 )
+text = "L1/R1 = Change Char"
+
+[node name="NoWay" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 7 )
+
+[node name="Label2" type="Label" parent="."]
+margin_right = 1280.0
+margin_bottom = 50.0
+custom_fonts/font = ExtResource( 9 )
+text = "Debug Level Select"
+align = 1
+
+[node name="Label3" type="Label" parent="."]
+margin_top = 70.0
+margin_right = 1280.0
+margin_bottom = 115.0
+custom_fonts/font = ExtResource( 8 )
+text = "For lazy people"
+align = 1
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 10 )
+autoplay = true

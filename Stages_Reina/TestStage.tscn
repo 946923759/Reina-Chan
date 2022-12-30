@@ -1,4 +1,4 @@
-[gd_scene load_steps=67 format=2]
+[gd_scene load_steps=66 format=2]
 
 [ext_resource path="res://Stages/IceMan/IceManTileset.tres" type="TileSet" id=1]
 [ext_resource path="res://Stages_Reina/Enemies/Dinergate.tscn" type="PackedScene" id=2]
@@ -184,154 +184,17 @@ func killSelf():
 	.killSelf()
 "
 
-[sub_resource type="GDScript" id=7]
-script/source = "#extends \"res://Stages/EnemyBaseScript.gd\"
-extends KinematicBody2D
+[sub_resource type="RectangleShape2D" id=10]
+extents = Vector2( 992, 32 )
 
-export(int, 1, 50) var maxHealth = 10
-var curHealth;
-# warning-ignore:unused_class_variable
-var is_reflecting = false; #This is unused, it's just because the bullet class expects it to be there
-var _is_reflecting = false;
-#-1 to move left, 1 to move right
-enum DIRECTION {LEFT = -1, RIGHT = 1}
-export(DIRECTION) var facing = DIRECTION.LEFT
-
-#This is only if you didn't override objectTouched!
-#There might be cases where you need to override it.
-export(int,0,25) var player_damage = 1
-
-var bullet = preload(\"res://Stages_Reina/Enemies/bulletDinergate.tscn\")
-var smallExplosion = preload(\"res://Stages/EnemyExplodeSmall.tscn\")
-
-enum STATES {
-	GUARDING = 0,
-	WAIT,
-	SHOT_1,
-	SHOT_2,
-	SHOT_3,
-}
-var stateTimes = [
-	1.5,
-	1.0,
-	.5,
-	.5,
-	.5,
-]
-
-var state: int = 0
-var timer: float = 0.0
-
-onready var sprite = $AnimatedSprite
-onready var hurtSound = $HurtSound
-
-func _ready():
-# warning-ignore:return_value_discarded
-	$Area2D.connect(\"body_entered\",self,\"objectTouched\")
-	#$Area2D2.connect(\"body_entered\",self,\"touched_bullet\")
-	#add_collision_exception_with($Area2D2)
-	curHealth = maxHealth
-	#assert(curHealth)
-	sprite.flip_h = (facing == DIRECTION.RIGHT)
-	set_physics_process(true);
-# warning-ignore:return_value_discarded
-	#$Area2D.connect(\"body_entered\",self,\"objectTouched\")
-	sprite.play()
-	
-	
-#The duration that the sprite has been colored white.
-var whiteTime = 0
-func _process(delta):
-	#move_and_slide(Vector2(0,300))
-	#label.text = String(curHealth) + \"/\" + String(maxHealth)
-	#label.text = String(curTime)
-
-	if !sprite.use_parent_material:
-		whiteTime += delta
-		if whiteTime > .1:
-			sprite.use_parent_material = true
-	#if $DebugShowFacing.visible:
-	#	$DebugShowFacing.text = str(facing)
-	
-	if timer > 0:
-		timer-=delta
-		return
-	
-	print(String(state))
-	match state:
-		STATES.SHOT_1, STATES.SHOT_2, STATES.SHOT_3:
-			_is_reflecting = false
-			var bi = bullet.instance()
-			var pos = position + Vector2(55*facing, 8)
-			
-			bi.position = pos
-			get_parent().add_child(bi)
-			bi.init(Vector2(5*facing,0))
-			
-			self.add_collision_exception_with(bi)# Make bullet and this not collide
-			#print(\"Fired bullet.\")
-		STATES.GUARDING:
-			_is_reflecting=true
-			sprite.set_animation(\"default\")
-		STATES.WAIT:
-			_is_reflecting=false
-			sprite.set_animation(\"shoot\")
-		_:
-			print(\"lol something is broken\")
-			
-	if state == 4:
-		state = 0
-	else:
-		state+=1
-	timer=float(stateTimes[state])
-
-func objectTouched(obj):
-	if obj.has_method(\"enemy_touched\"):
-		obj.enemy_touched_alt(self,false)
-	elif obj.has_method(\"player_touched\"): #If enemy touched player
-		obj.call(\"player_touched\",self,player_damage)
-
-
-#We want an isAlive var so we can play the death animation only one time
-var isAlive = true
-#damage is called by the player weapon, so don't rename it.
-func damage(amount):
-	curHealth -= amount
-	#print(\"Took damage!\")
-	if curHealth <= 0:
-		if isAlive:
-			killSelf()
-	else:
-		#set false so the white tint shader will show up.
-		hurtSound.play()
-		sprite.use_parent_material = false
-		whiteTime = 0
-
-func killSelf():
-	print(self.name+\" queued to be killed.\")
-	isAlive = false
-	set_physics_process(false)
-	sprite.visible = false
-	sprite.stop()
-	var e = smallExplosion.instance()
-	e.position = position
-	#e.position.y-=32
-	get_parent().add_child(e)
-	
-	self.queue_free()
-"
+[sub_resource type="RectangleShape2D" id=11]
+extents = Vector2( 992, 32 )
 
 [sub_resource type="RectangleShape2D" id=8]
 extents = Vector2( 64, 320 )
 
 [sub_resource type="RectangleShape2D" id=9]
 extents = Vector2( 32, 320 )
-
-[sub_resource type="RectangleShape2D" id=10]
-extents = Vector2( 992, 32 )
-
-[sub_resource type="RectangleShape2D" id=11]
-extents = Vector2( 992, 32 )
 
 [sub_resource type="SegmentShape2D" id=12]
 b = Vector2( 0, 192 )
@@ -588,52 +451,27 @@ margin_right = -121.0
 margin_bottom = 210.0
 custom_fonts/font = ExtResource( 9 )
 text = "Welcome to the test room!"
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="EventTile" parent="." index="14" instance=ExtResource( 3 )]
 position = Vector2( -1216, 704 )
+scale = Vector2( 4, 1 )
 event_ID = 2
 
-[node name="EventTile2" parent="." index="15" instance=ExtResource( 3 )]
-position = Vector2( -1152, 704 )
-event_ID = 2
-
-[node name="EventTile3" parent="." index="16" instance=ExtResource( 3 )]
-position = Vector2( -1088, 704 )
-event_ID = 2
-
-[node name="EventTile4" parent="." index="17" instance=ExtResource( 3 )]
-position = Vector2( -1024, 704 )
-event_ID = 2
-
-[node name="EventTile7" parent="." index="18" instance=ExtResource( 3 )]
-position = Vector2( -1088, 768 )
-event_ID = 1
-
-[node name="EventTile8" parent="." index="19" instance=ExtResource( 3 )]
-position = Vector2( -1152, 768 )
-event_ID = 1
-
-[node name="EventTile9" parent="." index="20" instance=ExtResource( 3 )]
+[node name="EventTile7" parent="." index="15" instance=ExtResource( 3 )]
 position = Vector2( -1216, 768 )
+scale = Vector2( 4, 1 )
 event_ID = 1
 
-[node name="EventTile10" parent="." index="21" instance=ExtResource( 3 )]
-position = Vector2( -1024, 768 )
-event_ID = 1
-
-[node name="Polygon2D" type="Polygon2D" parent="." index="22"]
+[node name="Polygon2D" type="Polygon2D" parent="." index="16"]
 position = Vector2( -640, 768 )
 scale = Vector2( 0.421053, 0.8 )
 color = Color( 0.0196078, 0, 0.588235, 0.286275 )
 polygon = PoolVector2Array( -736, 0, -736, 480, -1344, 480, -1344, 0 )
 
-[node name="EventTile11_message" parent="." index="23" instance=ExtResource( 13 )]
+[node name="EventTile11_message" parent="." index="17" instance=ExtResource( 13 )]
 position = Vector2( -704, 1152 )
 
-[node name="Label2" type="Label" parent="." index="24"]
+[node name="Label2" type="Label" parent="." index="18"]
 margin_left = -832.0
 margin_top = 1088.0
 margin_right = -560.0
@@ -644,12 +482,12 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Dinergate5" parent="." index="25" instance=ExtResource( 2 )]
+[node name="Dinergate5" parent="." index="19" instance=ExtResource( 2 )]
 position = Vector2( -1408, 736 )
 collision_mask = 18
 facing = 1
 
-[node name="SpawnerTest" type="VisibilityNotifier2D" parent="." index="26"]
+[node name="SpawnerTest" type="VisibilityNotifier2D" parent="." index="20"]
 position = Vector2( -160, 256 )
 rect = Rect2( 0, 0, 64, 64 )
 script = ExtResource( 37 )
@@ -664,11 +502,11 @@ collision_layer = 18
 collision_mask = 18
 facing = 1
 
-[node name="Enemy2" parent="." index="27" instance=ExtResource( 18 )]
+[node name="Enemy2" parent="." index="21" instance=ExtResource( 18 )]
 position = Vector2( -3040, 736 )
 facing = 1
 
-[node name="CannonEnemyFix" parent="." index="28" instance=ExtResource( 15 )]
+[node name="CannonEnemyFix" parent="." index="22" instance=ExtResource( 15 )]
 position = Vector2( -2432, 704 )
 collision_layer = 26
 collision_mask = 26
@@ -677,23 +515,18 @@ shapeOverride = null
 collisionOffset = Vector2( 0, 0 )
 use_collision = true
 
-[node name="Enemy4" parent="." index="29" instance=ExtResource( 14 )]
-position = Vector2( 768, 704 )
-script = SubResource( 7 )
-maxHealth = 10
-
-[node name="RigidBody2D" parent="." index="30" instance=ExtResource( 6 )]
+[node name="RigidBody2D" parent="." index="23" instance=ExtResource( 6 )]
 position = Vector2( -224, 736 )
 
-[node name="1Up Drop" parent="." index="31" instance=ExtResource( 30 )]
+[node name="1Up Drop" parent="." index="24" instance=ExtResource( 30 )]
 position = Vector2( -672, 736 )
 
-[node name="RipperHalloween" parent="." index="32" instance=ExtResource( 41 )]
+[node name="RipperHalloween" parent="." index="25" instance=ExtResource( 41 )]
 position = Vector2( 12448, 1376 )
 collision_layer = 18
 collision_mask = 18
 
-[node name="room20-0" type="Node2D" parent="." index="33"]
+[node name="room20-0" type="Node2D" parent="." index="26"]
 
 [node name="Dinergate" parent="room20-0" index="0" instance=ExtResource( 2 )]
 position = Vector2( 1696, 736 )
@@ -710,112 +543,42 @@ collision_layer = 18
 collision_mask = 18
 no_movement = true
 
-[node name="Node2D" type="Node2D" parent="." index="34"]
+[node name="YokuBlockRoom" type="Node2D" parent="." index="27"]
 position = Vector2( -2560, 1088 )
 
-[node name="YokuBlock" parent="Node2D" index="0" instance=ExtResource( 12 )]
+[node name="YokuBlock" parent="YokuBlockRoom" index="0" instance=ExtResource( 12 )]
 position = Vector2( 192, 0 )
 start_on = 3
 
-[node name="YokuBlock2" parent="Node2D" index="1" instance=ExtResource( 12 )]
+[node name="YokuBlock2" parent="YokuBlockRoom" index="1" instance=ExtResource( 12 )]
 
-[node name="YokuBlock3" parent="Node2D" index="2" instance=ExtResource( 12 )]
+[node name="YokuBlock3" parent="YokuBlockRoom" index="2" instance=ExtResource( 12 )]
 position = Vector2( 64, 0 )
 start_on = 1
 
-[node name="YokuBlock4" parent="Node2D" index="3" instance=ExtResource( 12 )]
+[node name="YokuBlock4" parent="YokuBlockRoom" index="3" instance=ExtResource( 12 )]
 position = Vector2( 128, 0 )
 start_on = 2
 
-[node name="YokuBlock5" parent="Node2D" index="4" instance=ExtResource( 12 )]
+[node name="YokuBlock5" parent="YokuBlockRoom" index="4" instance=ExtResource( 12 )]
 position = Vector2( 256, 0 )
 
-[node name="TimeBomb" parent="." index="35" instance=ExtResource( 19 )]
+[node name="Scout" parent="YokuBlockRoom" index="5" instance=ExtResource( 11 )]
+position = Vector2( 480, -32 )
+
+[node name="Enemy3" parent="YokuBlockRoom" index="6" instance=ExtResource( 16 )]
+position = Vector2( 960, 32 )
+collision_layer = 18
+collision_mask = 18
+
+[node name="TimeBomb" parent="." index="28" instance=ExtResource( 19 )]
 position = Vector2( -1120, 704 )
 script = SubResource( 4 )
 
-[node name="Door2" parent="." index="36" instance=ExtResource( 22 )]
-position = Vector2( 0, -320 )
-topBound = -12
-bottomBound = -999
-
-[node name="Door" parent="." index="37" instance=ExtResource( 22 )]
-position = Vector2( 1216, -320 )
-boss_room_door = true
-topBound = -12
-bottomBound = -9999
-
-[node name="Node2D" parent="Door" index="4" instance=ExtResource( 17 )]
-position = Vector2( 256, 192 )
-message = PoolStringArray( "portrait|pic_UMP9|pic_Architect", "speaker|Architect", "msg|This is a test intro block.", "speaker|UMP9", "msg|Hello world, I\'m family-chan! aoijsdoaidj" )
-
-[node name="BossArchitect" parent="Door/Node2D" index="3" instance=ExtResource( 26 )]
-position = Vector2( 736, 0 )
-
-[node name="EventTile13" parent="." index="38" instance=ExtResource( 23 )]
-position = Vector2( 0, 1920 )
-topBound = -999
-rightBound = -999
-bottomBound = 36
-
-[node name="CollisionShape2D2" type="CollisionShape2D" parent="EventTile13" index="0"]
-shape = SubResource( 8 )
-
-[node name="EventTile14" type="Area2D" parent="." index="39"]
-position = Vector2( 1248, 1888 )
-collision_layer = 4
-collision_mask = 5
-script = ExtResource( 7 )
-__meta__ = {
-"_edit_group_": true
-}
-leftBound = 20
-topBound = -999
-rightBound = 59
-bottomBound = 36
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="EventTile14" index="0"]
-position = Vector2( 32, 32 )
-shape = SubResource( 8 )
-
-[node name="EventTile15" type="Area2D" parent="." index="40"]
-position = Vector2( 3776, 1888 )
-collision_layer = 4
-collision_mask = 5
-script = ExtResource( 7 )
-__meta__ = {
-"_edit_group_": true
-}
-leftBound = 60
-topBound = -999
-rightBound = -999
-bottomBound = 36
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="EventTile15" index="0"]
-position = Vector2( 32, 32 )
-shape = SubResource( 9 )
-
-[node name="EventTile16" type="Area2D" parent="." index="41"]
-position = Vector2( 4864, 1888 )
-collision_layer = 4
-collision_mask = 5
-script = ExtResource( 7 )
-__meta__ = {
-"_edit_group_": true
-}
-leftBound = 60
-topBound = -999
-rightBound = 100
-bottomBound = 36
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="EventTile16" index="0"]
-position = Vector2( 32, 32 )
-shape = SubResource( 9 )
-
-[node name="RigidBody2D2" parent="." index="42" instance=ExtResource( 4 )]
+[node name="RigidBody2D2" parent="." index="29" instance=ExtResource( 4 )]
 position = Vector2( -288, 736 )
 
-[node name="EventTile17" type="StaticBody2D" parent="." index="43"]
+[node name="EventTile17" type="StaticBody2D" parent="." index="30"]
 position = Vector2( -4160, 640 )
 collision_layer = 4
 collision_mask = 4
@@ -829,7 +592,7 @@ event_ID = 2
 position = Vector2( 32, 32 )
 shape = SubResource( 10 )
 
-[node name="EventTile18" type="StaticBody2D" parent="." index="44"]
+[node name="EventTile18" type="StaticBody2D" parent="." index="31"]
 position = Vector2( -4160, 704 )
 collision_layer = 4
 collision_mask = 4
@@ -843,7 +606,69 @@ event_ID = 1
 position = Vector2( 32, 32 )
 shape = SubResource( 11 )
 
-[node name="CameraAdjuster" parent="." index="45" instance=ExtResource( 23 )]
+[node name="CameraTestRooms" type="Node2D" parent="." index="32"]
+
+[node name="EventTile13" parent="CameraTestRooms" index="0" instance=ExtResource( 23 )]
+position = Vector2( 0, 1920 )
+topBound = -999
+rightBound = -999
+bottomBound = 36
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="CameraTestRooms/EventTile13" index="0"]
+shape = SubResource( 8 )
+
+[node name="EventTile14" type="Area2D" parent="CameraTestRooms" index="1"]
+position = Vector2( 1248, 1888 )
+collision_layer = 4
+collision_mask = 5
+script = ExtResource( 7 )
+__meta__ = {
+"_edit_group_": true
+}
+leftBound = 20
+topBound = -999
+rightBound = 59
+bottomBound = 36
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CameraTestRooms/EventTile14" index="0"]
+position = Vector2( 32, 32 )
+shape = SubResource( 8 )
+
+[node name="EventTile15" type="Area2D" parent="CameraTestRooms" index="2"]
+position = Vector2( 3776, 1888 )
+collision_layer = 4
+collision_mask = 5
+script = ExtResource( 7 )
+__meta__ = {
+"_edit_group_": true
+}
+leftBound = 60
+topBound = -999
+rightBound = -999
+bottomBound = 36
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CameraTestRooms/EventTile15" index="0"]
+position = Vector2( 32, 32 )
+shape = SubResource( 9 )
+
+[node name="EventTile16" type="Area2D" parent="CameraTestRooms" index="3"]
+position = Vector2( 4864, 1888 )
+collision_layer = 4
+collision_mask = 5
+script = ExtResource( 7 )
+__meta__ = {
+"_edit_group_": true
+}
+leftBound = 60
+topBound = -999
+rightBound = 100
+bottomBound = 36
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CameraTestRooms/EventTile16" index="0"]
+position = Vector2( 32, 32 )
+shape = SubResource( 9 )
+
+[node name="CameraAdjuster" parent="." index="33" instance=ExtResource( 23 )]
 position = Vector2( 0, 448 )
 leftBound = -100000
 topBound = -100000
@@ -854,13 +679,13 @@ cameraScale = 1.0
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CameraAdjuster" index="0"]
 shape = SubResource( 12 )
 
-[node name="TestEnemy" parent="." index="46" instance=ExtResource( 21 )]
+[node name="TestEnemy" parent="." index="34" instance=ExtResource( 21 )]
 position = Vector2( 352, 736 )
 collision_layer = 26
 collision_mask = 26
 shapeOverride = SubResource( 13 )
 
-[node name="FGTiles" type="TileMap" parent="." index="47"]
+[node name="FGTiles" type="TileMap" parent="." index="35"]
 scale = Vector2( 4, 4 )
 tile_set = ExtResource( 1 )
 cell_size = Vector2( 16, 16 )
@@ -869,49 +694,14 @@ collision_mask = 0
 format = 1
 tile_data = PoolIntArray( 720896, 7, 0, 720898, 7, 0, 720902, 7, 0, 720904, 7, 0, 720905, 7, 0, 720909, 7, 0, 720910, 7, 0, 720911, 7, 0, 720914, 7, 0, 720917, 7, 0, 720918, 7, 0, 720920, 7, 0, 720921, 7, 0, 720924, 7, 0, 720925, 7, 0, 720927, 7, 0 )
 
-[node name="PlayerHolder" parent="." index="48"]
-position = Vector2( 512, -928 )
+[node name="PlayerHolder" parent="." index="36"]
+position = Vector2( 832, -896 )
 
-[node name="CameraAdjuster2" parent="." index="49" instance=ExtResource( 27 )]
-position = Vector2( 32, 1152 )
-topBound = 12
-rightBound = 40
-bottomBound = 24
-
-[node name="CustomCameraProcessor" parent="CameraAdjuster2" index="1" instance=ExtResource( 47 )]
-
-[node name="EventTile12" parent="." index="50" instance=ExtResource( 3 )]
-position = Vector2( 2880, 1472 )
-event_ID = 9
-
-[node name="BlockEnablerDisabler" parent="EventTile12" index="1" instance=ExtResource( 29 )]
-
-[node name="BlockNode" parent="EventTile12/BlockEnablerDisabler" index="0" instance=ExtResource( 28 )]
-position = Vector2( 160, 32 )
-start_disabled = true
-
-[node name="BlockNode2" parent="EventTile12/BlockEnablerDisabler" index="1" instance=ExtResource( 28 )]
-position = Vector2( 160, -32 )
-start_disabled = true
-
-[node name="BlockNode3" parent="EventTile12/BlockEnablerDisabler" index="2" instance=ExtResource( 28 )]
-position = Vector2( 160, -96 )
-start_disabled = true
-
-[node name="BlockNode4" parent="EventTile12/BlockEnablerDisabler" index="3" instance=ExtResource( 28 )]
-position = Vector2( 160, -160 )
-start_disabled = true
-
-[node name="EventTile19" parent="." index="51" instance=ExtResource( 3 )]
+[node name="EventTile19" parent="." index="37" instance=ExtResource( 3 )]
 position = Vector2( 3136, 1472 )
 event_ID = 9
 
-[node name="Enemy3" parent="." index="52" instance=ExtResource( 16 )]
-position = Vector2( -1600, 1120 )
-collision_layer = 18
-collision_mask = 18
-
-[node name="CameraAdjuster3" parent="." index="53" instance=ExtResource( 31 )]
+[node name="CameraAdjuster3" parent="." index="38" instance=ExtResource( 31 )]
 position = Vector2( 7040, 1760 )
 leftBound = 100
 topBound = -999
@@ -920,62 +710,62 @@ bottomBound = 36
 fade_out_and_warp_player = true
 destination_coordinates_if_warp = Vector2( 0, -8 )
 
-[node name="Door3" parent="." index="54" instance=ExtResource( 22 )]
+[node name="Door3" parent="." index="39" instance=ExtResource( 22 )]
 position = Vector2( 7680, 1280 )
 topBound = 14
 bottomBound = -999
 
-[node name="PickupAmmo" parent="." index="55" instance=ExtResource( 32 )]
+[node name="PickupAmmo" parent="." index="40" instance=ExtResource( 32 )]
 position = Vector2( -96, 736 )
 
-[node name="PickupAmmoSmall" parent="." index="56" instance=ExtResource( 33 )]
+[node name="PickupAmmoSmall" parent="." index="41" instance=ExtResource( 33 )]
 position = Vector2( -160, 736 )
 
-[node name="CameraAdjuster4" parent="." index="57" instance=ExtResource( 27 )]
+[node name="CameraAdjuster4" parent="." index="42" instance=ExtResource( 27 )]
 position = Vector2( 6176, 1152 )
 leftBound = 80
 topBound = 12
 rightBound = 121
 bottomBound = 25
 
-[node name="LadderCameraAdjuster" parent="." index="58" instance=ExtResource( 34 )]
+[node name="LadderCameraAdjuster" parent="." index="43" instance=ExtResource( 34 )]
 position = Vector2( 10880, 1536 )
 leftBound = 160
 topBound = 0
 rightBound = 180
 
-[node name="CameraAdjuster5" parent="." index="59" instance=ExtResource( 27 )]
+[node name="CameraAdjuster5" parent="." index="44" instance=ExtResource( 27 )]
 position = Vector2( 10341.1, -376.282 )
 leftBound = 160
 topBound = -12
 rightBound = -999
 
-[node name="Dinergate" parent="." index="60" instance=ExtResource( 2 )]
+[node name="Dinergate" parent="." index="45" instance=ExtResource( 2 )]
 position = Vector2( 11332.7, -62.6801 )
 collision_layer = 18
 collision_mask = 18
 facing = 1
 
-[node name="Node2D2" type="Node2D" parent="." index="61"]
+[node name="QuicksandTest" type="Node2D" parent="." index="46"]
 position = Vector2( 12800, 0 )
 
-[node name="QuickSand" type="StaticBody2D" parent="Node2D2" index="0"]
+[node name="QuickSand" type="StaticBody2D" parent="QuicksandTest" index="0"]
 collision_layer = 17
 collision_mask = 17
 script = SubResource( 15 )
 quicksand_speed = 30.0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D2/QuickSand" index="0"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="QuicksandTest/QuickSand" index="0"]
 position = Vector2( 1024, 8 )
 shape = SubResource( 16 )
 one_way_collision = true
 
-[node name="Area2D" type="Area2D" parent="Node2D2/QuickSand" index="1"]
+[node name="Area2D" type="Area2D" parent="QuicksandTest/QuickSand" index="1"]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D2/QuickSand/Area2D" index="0"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="QuicksandTest/QuickSand/Area2D" index="0"]
 shape = SubResource( 17 )
 
-[node name="DebugLabel" type="Label" parent="Node2D2/QuickSand" index="2"]
+[node name="DebugLabel" type="Label" parent="QuicksandTest/QuickSand" index="2"]
 margin_top = -96.0
 margin_right = 157.0
 margin_bottom = -65.0
@@ -988,7 +778,7 @@ __meta__ = {
 target_path = NodePath("..")
 properties = PoolStringArray( "position" )
 
-[node name="Sprite" type="Sprite" parent="Node2D2/QuickSand" index="3"]
+[node name="Sprite" type="Sprite" parent="QuicksandTest/QuickSand" index="3"]
 position = Vector2( 0, -64 )
 scale = Vector2( 4, 4 )
 texture = ExtResource( 36 )
@@ -997,13 +787,13 @@ region_enabled = true
 region_rect = Rect2( 0, 0, 512, 16 )
 script = SubResource( 18 )
 
-[node name="Polygon2D" type="Polygon2D" parent="Node2D2" index="1"]
+[node name="Polygon2D" type="Polygon2D" parent="QuicksandTest" index="1"]
 visible = false
 modulate = Color( 1, 1, 1, 0.486275 )
 color = Color( 1, 0.929412, 0.2, 1 )
 polygon = PoolVector2Array( 0, 0, 2048, 0, 2048, 128, 0, 128 )
 
-[node name="DIE ONE THOUSAND DEATHS" type="Area2D" parent="." index="62"]
+[node name="DIE ONE THOUSAND DEATHS" type="Area2D" parent="." index="47"]
 position = Vector2( 1693.48, -1158.3 )
 script = SubResource( 19 )
 
@@ -1030,28 +820,25 @@ stream = ExtResource( 45 )
 [node name="ExpSound" type="AudioStreamPlayer" parent="DIE ONE THOUSAND DEATHS" index="4"]
 stream = ExtResource( 46 )
 
-[node name="Enemy" parent="." index="63" instance=ExtResource( 40 )]
+[node name="Enemy" parent="." index="48" instance=ExtResource( 40 )]
 position = Vector2( 2304, -1088 )
 collision_layer = 18
 collision_mask = 18
 
-[node name="Guardian_SWAP" parent="." index="64" instance=ExtResource( 42 )]
+[node name="Guardian_SWAP" parent="." index="49" instance=ExtResource( 42 )]
 position = Vector2( 2420, -844 )
 
-[node name="Enemy5" parent="." index="65" instance=ExtResource( 43 )]
+[node name="Enemy5" parent="." index="50" instance=ExtResource( 43 )]
 position = Vector2( 8736, 160 )
 
-[node name="Prowler" parent="." index="66" instance=ExtResource( 44 )]
+[node name="Prowler" parent="." index="51" instance=ExtResource( 44 )]
 position = Vector2( 10976, -320 )
 
-[node name="Skorpion" parent="." index="67" instance=ExtResource( 48 )]
+[node name="Skorpion" parent="." index="52" instance=ExtResource( 48 )]
 position = Vector2( 320, -864 )
 collision_layer = 16
 
-[node name="Scout" parent="." index="68" instance=ExtResource( 11 )]
-position = Vector2( -2080, 1056 )
-
-[node name="Label3" type="Label" parent="." index="70"]
+[node name="Label3" type="Label" parent="." index="53"]
 margin_left = -1408.0
 margin_top = 1280.0
 margin_right = -601.0
@@ -1061,7 +848,62 @@ text = "These tiles appear
 if you are playing
 on easy or less"
 
-[node name="BreakableBlock" parent="." index="71" instance=ExtResource( 49 )]
+[node name="BreakableBlock" parent="." index="54" instance=ExtResource( 49 )]
 position = Vector2( 736, -864 )
 
-[connection signal="event_executed" from="EventTile12" to="EventTile12/BlockEnablerDisabler" method="execute"]
+[node name="BossRoomTest" type="Node2D" parent="." index="55"]
+
+[node name="Door2" parent="BossRoomTest" index="0" instance=ExtResource( 22 )]
+position = Vector2( 0, -320 )
+topBound = -12
+bottomBound = -999
+
+[node name="Door" parent="BossRoomTest" index="1" instance=ExtResource( 22 )]
+position = Vector2( 1216, -320 )
+boss_room_door = true
+topBound = -12
+bottomBound = -9999
+
+[node name="Node2D" parent="BossRoomTest/Door" index="4" instance=ExtResource( 17 )]
+position = Vector2( 256, 192 )
+message = PoolStringArray( "portrait|pic_UMP9|pic_Architect", "speaker|Architect", "msg|This is a test intro block.", "speaker|UMP9", "msg|Hello world, I\'m family-chan! aoijsdoaidj" )
+
+[node name="BossArchitect" parent="BossRoomTest/Door/Node2D" index="3" instance=ExtResource( 26 )]
+position = Vector2( 736, 0 )
+
+[node name="MovingCameraTest" type="Node2D" parent="." index="56"]
+
+[node name="CameraAdjuster2" parent="MovingCameraTest" index="0" instance=ExtResource( 27 )]
+position = Vector2( 32, 1152 )
+topBound = 12
+rightBound = 40
+bottomBound = 24
+
+[node name="CustomCameraProcessor" parent="MovingCameraTest/CameraAdjuster2" index="1" instance=ExtResource( 47 )]
+
+[node name="EventTile12" parent="MovingCameraTest" index="1" instance=ExtResource( 3 )]
+position = Vector2( 2880, 1472 )
+event_ID = 9
+
+[node name="BlockEnablerDisabler" parent="MovingCameraTest/EventTile12" index="1" instance=ExtResource( 29 )]
+
+[node name="BlockNode" parent="MovingCameraTest/EventTile12/BlockEnablerDisabler" index="0" instance=ExtResource( 28 )]
+position = Vector2( 160, 32 )
+start_disabled = true
+
+[node name="BlockNode2" parent="MovingCameraTest/EventTile12/BlockEnablerDisabler" index="1" instance=ExtResource( 28 )]
+position = Vector2( 160, -32 )
+start_disabled = true
+
+[node name="BlockNode3" parent="MovingCameraTest/EventTile12/BlockEnablerDisabler" index="2" instance=ExtResource( 28 )]
+position = Vector2( 160, -96 )
+start_disabled = true
+
+[node name="BlockNode4" parent="MovingCameraTest/EventTile12/BlockEnablerDisabler" index="3" instance=ExtResource( 28 )]
+position = Vector2( 160, -160 )
+start_disabled = true
+
+[node name="Guardian" parent="." index="57" instance=ExtResource( 14 )]
+position = Vector2( 724, 692 )
+
+[connection signal="event_executed" from="MovingCameraTest/EventTile12" to="MovingCameraTest/EventTile12/BlockEnablerDisabler" method="execute"]

@@ -34,7 +34,7 @@ func objectTouched(obj):
 	#	obj.call("enemy_touched",self)
 
 #For KinematicBody2D only.
-func _physics_process(delta):
+func _physics_process(_delta):
 	if !vis.is_on_screen():
 		queue_free()
 	var collision = move_and_collide(movement)

@@ -164,6 +164,7 @@ func get_input(delta):
 					pos = position + Vector2(95*ss, -20)
 				
 				if currentWeapon!=Globals.Weapons.Buster:
+# warning-ignore:narrowing_conversion
 					weaponMeters[currentWeapon]=max(0,weaponMeters[currentWeapon]-Globals.weaponEnergyCost[currentWeapon])
 					#print(ceil(weaponMeters[currentWeapon]/128.0*32))
 					HPBar.updateAmmo(weaponMeters[currentWeapon]/144.0,false)

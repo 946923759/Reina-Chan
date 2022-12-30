@@ -40,7 +40,7 @@ func _ready():
 
 #The duration that the sprite has been colored white.
 var lastChange:Vector2
-func _physics_process(delta):
+func _physics_process(_delta):
 	#move_and_slide(Vector2(0,300))
 
 	handle_sprite_direction()
@@ -89,7 +89,7 @@ func enemy_touched_alt(obj,reflect):
 #We want an isAlive var so we can play the death animation only one time
 var isAlive = true
 
-func killSelf(bigExplode=false,noSound=false):
+func killSelf(_bigExplode=false,_noSound=false):
 	#print(self.name+" queued to be killed.")
 	isAlive = false
 	set_physics_process(false)
