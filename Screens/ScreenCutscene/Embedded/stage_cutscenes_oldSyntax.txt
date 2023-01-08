@@ -59,8 +59,26 @@ matchnames	UMP9	Scarecrow
 msgbox_transition
 msg	Nice to meet you UMP9, please die immediately.
 
-#KEY	Ouroboros
-/Ouroboros	...
+#KEY	Ouroboros1
+/SYSTEM	You obtained the grenade. Press UP+SHOOT while the default weapon is equipped to throw a grenade.
+msg	There are some blocks throughout the stages that you can use grenades on.
+
+#KEY	Ouroboros2
+/Ouroboros	Placeholder text
+
+#KEY	Elisa1
+msg	Placeholder text
+
+#KEY	Elisa2
+msg	Placeholder text
+
+#KEY	vs_M16
+nop	M16 and Shin M16 are the same so we will put them first and UMP9 will jump to the end
+condjmp_player	ump9	0
+/M16?	...
+/M16	A clone of me? Don't you know nothing can replace the original?
+/Dandelion	This one is a replica of you when you were allied with Sangvis Ferri.
+
 
 #KEY	ClearAndFail
 /El Fail	Heaven or hell...

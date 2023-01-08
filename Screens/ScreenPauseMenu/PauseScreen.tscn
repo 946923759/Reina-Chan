@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=22 format=2]
 
 [ext_resource path="res://Various Objects/life_up.png" type="Texture" id=1]
 [ext_resource path="res://MM2Font_Small.tres" type="DynamicFont" id=2]
@@ -14,6 +14,8 @@
 [ext_resource path="res://Sounds/Classic/Mega Man 4 SFX (25) - Menu Help.wav" type="AudioStream" id=12]
 [ext_resource path="res://ParticleEffects/AlphaMaskPurple.tres" type="Material" id=13]
 [ext_resource path="res://Sounds/Classic/Mega Man 4 SFX (26) - Pause.wav" type="AudioStream" id=14]
+[ext_resource path="res://Screens/ScreenPauseMenu/Grenade.png" type="Texture" id=15]
+[ext_resource path="res://Screens/ScreenPauseMenu/AirDash.png" type="Texture" id=16]
 
 [sub_resource type="GDScript" id=1]
 script/source = "extends Control
@@ -103,7 +105,11 @@ func OnCommand(curWeapon:int=0):
 		#Because the debugging variable at the top uses it
 		unlocked_weapons=Globals.bitArrayToInt32(Globals.playerData.availableWeapons)
 		#Also allows me to pack in unlocked abilities...
-		unlocked_weapons+=(unlocked_abilities<<Globals.Weapons.LENGTH_WEAPONS)
+		unlocked_weapons+=(Globals.bitArrayToInt32(Globals.playerData.specialAbilities)<<Globals.Weapons.LENGTH_WEAPONS)
+	
+	$Sprite/AbilityList/Sprite.visible=unlocked_weapons & (1<<Globals.Weapons.LENGTH_WEAPONS)
+	$Sprite/AbilityList/Sprite2.visible=unlocked_weapons & (1<<Globals.Weapons.LENGTH_WEAPONS+1)
+	
 	UpdateFocus(curWeapon)
 	self.visible=true
 	tw.interpolate_property(self,\"modulate:a\",0.0,1.0,.1);
@@ -297,6 +303,7 @@ extends Sprite
 
 var numberTex = load(\"res://Screens/ScreenPauseMenu/mm4_pause_numbers 10x1.png\")
 var weaponIcons = load(\"res://Player Files/WeaponIcons.png\")
+var abilityIcons = load(\"res://Screens/ScreenPauseMenu/AbilityIcons.png\")
 onready var title:Label = $title
 onready var desc:Label = $desc
 
@@ -413,11 +420,18 @@ func _process(_delta):
 
 func _draw():
 	
-	#Tex,dest,src
-	draw_texture_rect_region(weaponIcons,
-		Rect2(weaponOffset.x,weaponOffset.y,48,48),
-		Rect2(16*currentWeapon,0,16,16)
-	)
+	if currentWeapon>=Globals.Weapons.LENGTH_WEAPONS:
+		#Tex,dest,src
+		draw_texture_rect_region(abilityIcons,
+			Rect2(weaponOffset.x,weaponOffset.y,48,48),
+			Rect2(16*(currentWeapon-Globals.Weapons.LENGTH_WEAPONS),0,16,16)
+		)
+	else:
+		#Tex,dest,src
+		draw_texture_rect_region(weaponIcons,
+			Rect2(weaponOffset.x,weaponOffset.y,48,48),
+			Rect2(16*currentWeapon,0,16,16)
+		)
 	#var n = currentWeapon
 	for i in range(4):
 		var n = weaponInfos[currentWeapon][i]
@@ -564,6 +578,23 @@ custom_fonts/font = ExtResource( 9 )
 text = "Press SELECT for options"
 valign = 2
 
+[node name="AbilityList" type="Node2D" parent="Sprite"]
+position = Vector2( -85, 212 )
+scale = Vector2( 4, 4 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Sprite" type="Sprite" parent="Sprite/AbilityList"]
+z_index = 1
+texture = ExtResource( 16 )
+centered = false
+
+[node name="Sprite2" type="Sprite" parent="Sprite/AbilityList"]
+texture = ExtResource( 15 )
+centered = false
+offset = Vector2( 15, 0 )
+
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 visible = false
 margin_left = 448.0
@@ -610,6 +641,7 @@ __meta__ = {
 [node name="infoScreen" type="Sprite" parent="."]
 material = ExtResource( 13 )
 position = Vector2( 640, 1080 )
+z_index = 3
 texture = ExtResource( 4 )
 script = SubResource( 5 )
 currentWeapon = 8

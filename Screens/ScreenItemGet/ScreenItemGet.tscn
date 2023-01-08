@@ -103,7 +103,7 @@ func end_screen(_a,_b):
 	#	Globals.nsf_player.queue_free()
 	#
 	var weapons = Globals.playerData.availableWeapons
-	if weapons[1] and weapons[2] and weapons[4]:
+	if weapons[1] and weapons[2] and weapons[3] and weapons[4]:
 		Globals.change_screen(get_tree(),\"CutsceneDemoEnd\")
 	else:
 		Globals.change_screen(get_tree(),\"ScreenSelectStage\")

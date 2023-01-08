@@ -12,7 +12,7 @@ onready var music_player = Globals.ReinaAudioPlayer.new(self)
 func _ready():
 	get_tree().set_screen_stretch(SceneTree.STRETCH_MODE_2D,SceneTree.STRETCH_ASPECT_EXPAND,Vector2(1280,720))
 	#music_player.load_song(\"Credits\",\"Rockman 4MI.nsf\",104)
-	music_player.load_song(\"Credits\",\"3-731_-_espgaluda_stage1.nsf\",0,0)
+	music_player.load_song(\"Credits\",\"92.-Staff Roll - Kirby's Dreamland 3.spc\",0,0)
 	#music_player.load_song(\"Credits\",\"Metroid.nsf\",11)
 	
 	
@@ -90,7 +90,7 @@ margin_bottom = 36.5
 grow_horizontal = 2
 custom_fonts/font = ExtResource( 1 )
 text = "Reina-Chan
-demo 3"
+demo 4"
 align = 1
 __meta__ = {
 "_edit_use_anchors_": false

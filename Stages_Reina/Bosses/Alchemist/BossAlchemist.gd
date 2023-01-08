@@ -124,7 +124,9 @@ func _physics_process(delta):
 			else:
 				justShot=false
 		STATES.DASHING:
-			is_reflecting=true
+			#It was deemed too difficult, so now she's only invlunerable during this move
+			#if the player is playing above easy mode.
+			is_reflecting=Globals.playerData.gameDifficulty > Globals.Difficulty.EASY
 			if stateProgress >=3:
 				is_reflecting=false
 				#print(randi()%2)

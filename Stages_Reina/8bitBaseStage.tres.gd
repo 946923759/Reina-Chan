@@ -31,6 +31,7 @@ export (Array,Vector2) var debug_warp_points
 #var last_warped=0
 
 var reinaAudioPlayer
+#var curCharacter
 var player:KinematicBody2D
 
 func _ready():
@@ -103,11 +104,20 @@ func update_easytiles():
 func get_player()->KinematicBody2D:
 	return player
 
-func playBossMusic():
+func playBossMusic(isM16:bool=false):
 	if OS.is_debug_build() and mute_boss_music_in_debug:
 		return
 	print("playing boss music")
-	reinaAudioPlayer.load_song("Boss","Rockman 6 UH.nsf",30)
+	if isM16:
+		if $PlayerHolder.currentCharacter==Globals.Characters.UMP9:
+			reinaAudioPlayer.load_song("Elisa3 - UMP9 vs M16","X vs Zero.nsf",0)
+		else:
+			reinaAudioPlayer.load_song("Elisa3 - M16 vs M16","Cannonball.nsf",0)
+	else:
+		reinaAudioPlayer.load_song("Boss","Rockman 6 UH.nsf",30)
+
+func playMusic(cdAudioFileName:String,nsfAudioFileName:String,nsfAudioTrack:int=0):
+	reinaAudioPlayer.load_song(cdAudioFileName,nsfAudioFileName,nsfAudioTrack)
 
 #This is only ever used for the boss doors honestly
 func fadeMusic(time:float=2):

@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Grenade.png-57c575a0144ec2e68b02ddffd8ccba5b.stex"
+path="res://.import/AirDash.png-ab86652f27ea41eb01ab9dd3feff4c0e.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Stages_Reina/Enemies/Grenade.png"
-dest_files=[ "res://.import/Grenade.png-57c575a0144ec2e68b02ddffd8ccba5b.stex" ]
+source_file="res://Screens/ScreenPauseMenu/AirDash.png"
+dest_files=[ "res://.import/AirDash.png-ab86652f27ea41eb01ab9dd3feff4c0e.stex" ]
 
 [params]
 

@@ -54,6 +54,7 @@ extends Sprite
 export (int,\"UMP9\",\"M16A1\") var player_to_spawn_in_debug=0 setget update_sprite_editor
 export (Array,Texture) var charTextures
 var player:KinematicBody2D
+var currentCharacter:int=0
 
 func update_sprite_editor(new_value):
 	player_to_spawn_in_debug=new_value
@@ -70,17 +71,17 @@ func update_sprite_editor(new_value):
 func _ready():
 	if Engine.editor_hint:
 		return
-	var playerToSpawn = Globals.playerData.currentCharacter
-	if OS.is_debug_build() and playerToSpawn==0:
-		playerToSpawn = player_to_spawn_in_debug
+	currentCharacter = Globals.playerData.currentCharacter
+	if OS.is_debug_build() and currentCharacter==0:
+		currentCharacter = player_to_spawn_in_debug
 
-	if playerToSpawn==Globals.Characters.UMP9:
+	if currentCharacter==Globals.Characters.UMP9:
 		Globals.playCutscenes=Globals.OPTIONS['playCutscenes']['value']
 	else:
 		Globals.playCutscenes=false
 		
 	var n:Resource
-	if playerToSpawn==0:
+	if currentCharacter==0:
 		n=load(\"res://Player Files/8bitPlayer/UMP9.tscn\")
 	else:
 		n=load(\"res://Player Files/8bitPlayer/M16.tscn\")

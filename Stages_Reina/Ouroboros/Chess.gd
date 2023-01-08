@@ -68,6 +68,7 @@ func init_tilemap(is_reset:bool=false):
 						block.weaponCanBreak=0
 						block.textureOverride=unbreakableBlockTexture
 					else:
+						#block.weaponCanBreak=1 #Buster only
 						block.despawn_on_break=false
 						block.maxHealth=1
 						block.connect("block_broken",self,"block_broken_",[Vector2(x,y)])

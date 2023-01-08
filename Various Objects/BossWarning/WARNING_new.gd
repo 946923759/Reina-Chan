@@ -9,6 +9,7 @@ var gf_cutscene = preload("res://Screens/ScreenCutscene/CutsceneMain.tscn")
 var event_ID = Globals.EVENT_TILES.CUSTOM_EVENT
 export(String) var message_id
 export(PoolStringArray) var message
+export(bool) var play_M16_boss_music=false
 var disabled = false
 
 var playerObj
@@ -68,7 +69,10 @@ func playSound():
 	$AudioStreamPlayer.play()
 
 func hideWarning():
-	get_node("/root/Node2D").playBossMusic()
+	if play_M16_boss_music:
+		get_node("/root/Node2D").playBossMusic()
+	else:
+		get_node("/root/Node2D").playBossMusic()
 	sprite.cropright=true
 	var seq := TweenSequence.new(get_tree())
 	seq.append(sprite,"toDraw",0,.5).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)

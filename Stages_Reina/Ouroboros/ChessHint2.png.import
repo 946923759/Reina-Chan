@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Grenade.png-57c575a0144ec2e68b02ddffd8ccba5b.stex"
+path="res://.import/ChessHint2.png-dc65d2e0e92cc0e5e62ba92c0b28c44d.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Stages_Reina/Enemies/Grenade.png"
-dest_files=[ "res://.import/Grenade.png-57c575a0144ec2e68b02ddffd8ccba5b.stex" ]
+source_file="res://Stages_Reina/Ouroboros/ChessHint2.png"
+dest_files=[ "res://.import/ChessHint2.png-dc65d2e0e92cc0e5e62ba92c0b28c44d.stex" ]
 
 [params]
 

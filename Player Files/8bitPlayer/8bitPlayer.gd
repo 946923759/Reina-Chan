@@ -260,8 +260,16 @@ func get_menu_buttons_input(_delta):
 	#and they can restart by pressing start and down+b anyways
 	elif Input.is_action_just_pressed("DebugButton10"):
 		die()
-	elif Input.is_action_pressed("L1") and Input.is_action_just_pressed("DebugButton11"):
+	elif Input.is_action_pressed("R1") and Input.is_action_just_pressed("DebugButton11"):
 		finishStage()
+		
+	#L+R+Down+Start
+	elif Input.is_action_just_pressed("L1") and \
+		 Input.is_action_pressed("R1") and \
+		 Input.is_action_pressed("ui_down") and \
+		 Input.is_action_just_pressed("ui_pause"):
+			finishStage()
+			return
 	elif Input.is_action_just_pressed("DebugButton12"):
 		set_checkpoint(Vector2(),sprite.flip_h)
 	
@@ -299,7 +307,7 @@ var negativeFrameTimer:float=0.0
 #This will always be false if they haven't
 #unlocked the special weapon.
 var canAirDash:bool=false
-var canThrowGrenade:bool=true
+var canThrowGrenade:bool=false
 
 var isOnFloor:bool=false
 func get_input(delta):
@@ -308,7 +316,7 @@ func get_input(delta):
 	#I WANT REFERENCE VARIABLES REEEEEEEEE
 	if canAirDash==false and isOnFloor and Globals.playerData.specialAbilities[Globals.SpecialAbilities.AirDash]:
 		canAirDash=true
-	if canThrowGrenade and Globals.playerData.specialAbilities[Globals.SpecialAbilities.Grenade]:
+	if canThrowGrenade==false and Globals.playerData.specialAbilities[Globals.SpecialAbilities.Grenade]:
 		canThrowGrenade=true
 	
 	#It's here because freeRoam overrides R1
