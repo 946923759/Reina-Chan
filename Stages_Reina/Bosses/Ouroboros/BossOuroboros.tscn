@@ -1,5 +1,84 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://Stages_Reina/Bosses/BossBase.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Stages_Reina/Bosses/Ouroboros/BossOuroboros_Ready 4x1.png" type="Texture" id=2]
+[ext_resource path="res://Stages_Reina/Bosses/Ouroboros/Wheel_SpriteFrames.tres" type="SpriteFrames" id=3]
+[ext_resource path="res://Stages_Reina/Bosses/Ouroboros/WheelSpriteControl.gd" type="Script" id=4]
+[ext_resource path="res://Stages_Reina/Bosses/Ouroboros/BossOuroboros.gd" type="Script" id=5]
+[ext_resource path="res://Sounds/BossSounds/Ouroboros_APPEAR1_JP.ogg" type="AudioStream" id=6]
+[ext_resource path="res://Sounds/Classic/Explosion2.wav" type="AudioStream" id=7]
+
+[sub_resource type="AtlasTexture" id=1]
+atlas = ExtResource( 2 )
+region = Rect2( 0, 0, 55, 34 )
+
+[sub_resource type="AtlasTexture" id=2]
+atlas = ExtResource( 2 )
+region = Rect2( 0, 0, 55, 34 )
+
+[sub_resource type="AtlasTexture" id=3]
+atlas = ExtResource( 2 )
+region = Rect2( 55, 0, 55, 34 )
+
+[sub_resource type="SpriteFrames" id=4]
+animations = [ {
+"frames": [ SubResource( 1 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 2 ), SubResource( 3 ) ],
+"loop": false,
+"name": "intro",
+"speed": 5.0
+} ]
 
 [node name="BossOuroboros" instance=ExtResource( 1 )]
+script = ExtResource( 5 )
+intro_subtitle_key = "Ouroboros_Intro"
+
+[node name="AnimatedSprite" parent="." index="1"]
+position = Vector2( 8, -19 )
+frames = SubResource( 4 )
+animation = "intro"
+
+[node name="Wheels" type="Node2D" parent="." index="2"]
+script = ExtResource( 4 )
+radius = Vector2( 13.5009, 8.582 )
+speed = 0.8
+
+[node name="Wheel1" type="AnimatedSprite" parent="Wheels" index="0"]
+position = Vector2( 77.5009, 8.582 )
+scale = Vector2( 4, 4 )
+frames = ExtResource( 3 )
+animation = "shoot"
+
+[node name="Wheel2" type="AnimatedSprite" parent="Wheels" index="1"]
+position = Vector2( -77.5021, -8.58007 )
+scale = Vector2( 4, 4 )
+z_index = -1
+frames = ExtResource( 3 )
+
+[node name="Area2D" parent="." index="3"]
+visible = false
+
+[node name="IntroSound" parent="." index="4"]
+stream = ExtResource( 6 )
+
+[node name="DebugLabel" parent="." index="8"]
+text = "animation = \"intro\"
+playing = false
+"
+
+[node name="DebugLabel2" parent="." index="9"]
+text = "position = Vector2( 0, 0 )
+global_position = Vector2( 0, 0 )
+curState = null
+facing = -1
+shots = null
+"
+properties = PoolStringArray( "position", "global_position", "curState", "facing", "shots" )
+
+[node name="LaunchRocket" type="AudioStreamPlayer2D" parent="." index="10"]
+stream = ExtResource( 7 )
+bus = "Player/Enemies"

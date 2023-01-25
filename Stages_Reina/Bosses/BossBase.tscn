@@ -22,25 +22,33 @@ b = Vector2( 30, 48 )
 atlas = ExtResource( 1 )
 region = Rect2( 0, 0, 55, 32 )
 
-[sub_resource type="AtlasTexture" id=10]
-atlas = ExtResource( 3 )
+[sub_resource type="AtlasTexture" id=3]
+atlas = ExtResource( 1 )
 region = Rect2( 0, 0, 55, 32 )
 
-[sub_resource type="AtlasTexture" id=11]
-atlas = ExtResource( 3 )
+[sub_resource type="AtlasTexture" id=4]
+atlas = ExtResource( 1 )
 region = Rect2( 55, 0, 55, 32 )
 
-[sub_resource type="AtlasTexture" id=12]
-atlas = ExtResource( 3 )
+[sub_resource type="AtlasTexture" id=5]
+atlas = ExtResource( 1 )
 region = Rect2( 110, 0, 55, 32 )
 
-[sub_resource type="AtlasTexture" id=13]
-atlas = ExtResource( 3 )
+[sub_resource type="AtlasTexture" id=6]
+atlas = ExtResource( 1 )
 region = Rect2( 165, 0, 55, 32 )
 
-[sub_resource type="AtlasTexture" id=14]
-atlas = ExtResource( 3 )
+[sub_resource type="AtlasTexture" id=7]
+atlas = ExtResource( 1 )
 region = Rect2( 220, 0, 55, 32 )
+
+[sub_resource type="AtlasTexture" id=8]
+atlas = ExtResource( 1 )
+region = Rect2( 275, 0, 55, 32 )
+
+[sub_resource type="AtlasTexture" id=9]
+atlas = ExtResource( 1 )
+region = Rect2( 330, 0, 55, 32 )
 
 [sub_resource type="AtlasTexture" id=18]
 atlas = ExtResource( 1 )
@@ -90,33 +98,25 @@ region = Rect2( 110, 0, 55, 32 )
 atlas = ExtResource( 13 )
 region = Rect2( 165, 0, 55, 32 )
 
-[sub_resource type="AtlasTexture" id=3]
-atlas = ExtResource( 1 )
+[sub_resource type="AtlasTexture" id=10]
+atlas = ExtResource( 3 )
 region = Rect2( 0, 0, 55, 32 )
 
-[sub_resource type="AtlasTexture" id=4]
-atlas = ExtResource( 1 )
+[sub_resource type="AtlasTexture" id=11]
+atlas = ExtResource( 3 )
 region = Rect2( 55, 0, 55, 32 )
 
-[sub_resource type="AtlasTexture" id=5]
-atlas = ExtResource( 1 )
+[sub_resource type="AtlasTexture" id=12]
+atlas = ExtResource( 3 )
 region = Rect2( 110, 0, 55, 32 )
 
-[sub_resource type="AtlasTexture" id=6]
-atlas = ExtResource( 1 )
+[sub_resource type="AtlasTexture" id=13]
+atlas = ExtResource( 3 )
 region = Rect2( 165, 0, 55, 32 )
 
-[sub_resource type="AtlasTexture" id=7]
-atlas = ExtResource( 1 )
+[sub_resource type="AtlasTexture" id=14]
+atlas = ExtResource( 3 )
 region = Rect2( 220, 0, 55, 32 )
-
-[sub_resource type="AtlasTexture" id=8]
-atlas = ExtResource( 1 )
-region = Rect2( 275, 0, 55, 32 )
-
-[sub_resource type="AtlasTexture" id=9]
-atlas = ExtResource( 1 )
-region = Rect2( 330, 0, 55, 32 )
 
 [sub_resource type="SpriteFrames" id=27]
 animations = [ {
@@ -125,10 +125,10 @@ animations = [ {
 "name": "default",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 10 ), SubResource( 11 ), SubResource( 12 ), SubResource( 13 ), SubResource( 14 ) ],
-"loop": true,
-"name": "WalkLoop",
-"speed": 12.0
+"frames": [ SubResource( 3 ), SubResource( 4 ), SubResource( 5 ), SubResource( 6 ), SubResource( 7 ), SubResource( 8 ), SubResource( 9 ) ],
+"loop": false,
+"name": "intro",
+"speed": 15.0
 }, {
 "frames": [ SubResource( 18 ), SubResource( 19 ), SubResource( 20 ), SubResource( 19 ) ],
 "loop": true,
@@ -160,10 +160,10 @@ animations = [ {
 "name": "JumpFall",
 "speed": 15.0
 }, {
-"frames": [ SubResource( 3 ), SubResource( 4 ), SubResource( 5 ), SubResource( 6 ), SubResource( 7 ), SubResource( 8 ), SubResource( 9 ) ],
-"loop": false,
-"name": "intro",
-"speed": 15.0
+"frames": [ SubResource( 10 ), SubResource( 11 ), SubResource( 12 ), SubResource( 13 ), SubResource( 14 ) ],
+"loop": true,
+"name": "WalkLoop",
+"speed": 12.0
 } ]
 
 [sub_resource type="RectangleShape2D" id=28]
@@ -217,7 +217,6 @@ collision_mask = 11
 shape = SubResource( 28 )
 
 [node name="IntroSound" type="AudioStreamPlayer" parent="."]
-volume_db = -5.0
 bus = "Voices"
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]

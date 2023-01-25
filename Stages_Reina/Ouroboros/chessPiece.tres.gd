@@ -54,9 +54,10 @@ func _process(delta):
 	else:
 		if position.y < grid_position.y*64+32:
 			position.y+=1000*delta
-		elif position.x < grid_position.x*64+32:
+		if position.x < grid_position.x*64+32:
 			position.x+=1000*delta
-		else:
+		
+		if position.x >=grid_position.x*64+32 and position.y >= grid_position.y*64+32:
 			#get_parent().is_empty_space_at(Vector2(grid_position)):
 			
 			set_process(false)

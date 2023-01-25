@@ -34,12 +34,17 @@ func _physics_process(delta):
 		if tmp!=null:
 			player=tmp.get_player()
 			
-	$Label.text=String($RayCast2D.is_colliding())
+	#$Label.text=String($RayCast2D.is_colliding())
 
 	
 	#NORMAL PROCESS
 	#print(player.global_position.x - global_position.x)
-	if curState==0 and $RayCast2D.is_colliding()==false and (abs(player.global_position.x - global_position.x) < 200 or sleepTime >= 0):
+	if curState==0 and \\
+	$RayCast2D.is_colliding()==false and \\
+	(
+		abs(player.global_position.x - global_position.x) < 200 and 
+		abs(player.global_position.y - global_position.y) < 100
+	):
 		if sleepTime >= 0:
 			sleepTime-=delta
 			move_and_slide(Vector2(0,420), Vector2(0, -1))
@@ -66,7 +71,7 @@ func _physics_process(delta):
 			sprite.flip_h = (facing == DIRECTION.RIGHT)
 			
 		if global_position.x > player.get_node(\"Camera2D\").limit_right+50:
-			print(\"Dinergate walked offscreen, despawning.\")
+			print(\"Dinersnake walked offscreen, despawning.\")
 			queue_free()
 "
 
@@ -114,5 +119,6 @@ cast_to = Vector2( -200, 0 )
 collision_mask = 16
 
 [node name="Label" type="Label" parent="." index="8"]
+visible = false
 margin_right = 40.0
 margin_bottom = 14.0

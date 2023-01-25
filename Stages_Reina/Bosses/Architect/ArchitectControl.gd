@@ -1,6 +1,6 @@
 extends "res://Stages_Reina/Bosses/BossBase.gd"
 
-var rocket = preload("res://Stages_Reina/Bosses/Architect/ArchiRocket.tscn")
+var rocket = preload("res://Stages_Reina/Bosses/Architect/ArchiRocket_v2.tscn")
 
 enum STATE {
 	IDLE,

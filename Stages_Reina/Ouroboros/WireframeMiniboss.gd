@@ -28,6 +28,7 @@ var stageRoot:Node2D
 
 func _ready():
 	$Sprite.visible=true
+	$Label.visible=OS.is_debug_build()
 
 func _process(delta):
 	ti+=delta

@@ -467,6 +467,10 @@ func _ready():
 	else:
 		print("Fullscreen setting is ignored in debug.")
 
+func _input(_event):
+	if Input.is_action_just_pressed("FullscreenButton"):
+		set_fullscreen(!OS.window_fullscreen)
+
 func set_fullscreen(b):
 	if b:
 		OS.set_window_fullscreen(true)

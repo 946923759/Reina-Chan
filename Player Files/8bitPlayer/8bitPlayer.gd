@@ -277,7 +277,7 @@ func get_menu_buttons_input(_delta):
 		$OptionsScreen.updateTimer(timer,timerWithDeath)
 		get_tree().paused = true
 		$OptionsScreen.OnCommand()
-	elif Input.is_action_just_pressed("ui_pause"):
+	elif !movementLocked and Input.is_action_just_pressed("ui_pause"):
 		#PauseScreen.updateTimer(timer,timerWithDeath)
 		PauseScreen.UpdateAmmo(weaponMeters)
 		get_tree().paused = true
@@ -590,11 +590,12 @@ func get_input(delta):
 			#	velocity.y = 300
 			#	set_collision_mask_bit(0,false)
 			#	set_collision_layer_bit(0,false)
-		if canAirDash and down and jump:
-			state = State.DASH
-			dash_time=.5
-			sprite.set_animation("Dash")
-			canAirDash=false
+		if canAirDash:
+			if (down and jump) or Input.is_action_pressed("gameplay_dash"):
+				state = State.DASH
+				dash_time=.5
+				sprite.set_animation("Dash")
+				canAirDash=false
 		if state == State.JUMPING:
 			var jumpHeld = Input.is_action_pressed("ui_select")
 			if Globals.flipButtons:
@@ -1068,8 +1069,8 @@ func player_touched(_obj, amountToDamage:int):
 			$HurtSound.play()
 			sprite.set_animation("Hurt")
 			sprite.modulate.a = .5
-			
-			Input.start_joy_vibration(0,.5,.3,.1)
+			#device, weak magnitude, strong magnitude, duration
+			Input.start_joy_vibration(0,.5,.3*amountToDamage,.1)
 			
 			invincibleTime = 1
 			invincible = true

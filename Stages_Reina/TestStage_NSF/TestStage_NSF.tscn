@@ -29,6 +29,9 @@ func _ready():
 	var mus = Globals.NSF_location+\"Mega Man X7 - Our Blood Boils.nsf\"
 	music_player.play_music(mus,trackNum,loop,loopStart,loopEnd,0);
 	music_player.set_volume(vol);
+
+func update_easytiles():
+	return
 "
 
 [node name="Node2D" type="Node2D"]

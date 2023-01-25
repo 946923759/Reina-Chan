@@ -44,6 +44,7 @@ __meta__ = {
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 pause_mode = 2
 stream = ExtResource( 3 )
+volume_db = -1.0
 bus = "Voices"
 script = ExtResource( 1 )
 

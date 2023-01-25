@@ -831,9 +831,6 @@ margin_right = 636.0
 margin_bottom = 761.0
 focus_mode = 2
 custom_constants/separation = 30
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="StartLabel" type="Label" parent="MainMenu" groups=["TEST"]]
 margin_right = 601.0

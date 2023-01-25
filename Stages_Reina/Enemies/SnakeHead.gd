@@ -14,10 +14,11 @@ var curState = 0
 #Testing
 #var bullet = preload("res://Stages_Reina/Enemies/nemeum homing shot.tscn")
 var bullet = preload("res://Stages_Reina/Enemies/bulletDinergate.tscn")
-const bulletSpeed:float = 15.0
+const bulletSpeed:float = 13.0
+const cooldown:float = 1.0
 
 var player:KinematicBody2D
-var timer:float = 3.0
+var timer:float = 3.0 #Starting cooldown
 
 func _physics_process(delta):
 	if not is_instance_valid(player):
@@ -29,7 +30,7 @@ func _physics_process(delta):
 	match curState:
 		STATES.WAIT:
 			sprite.play("default")
-			timer=.5
+			timer=cooldown
 			curState=STATES.SHOOTING
 			pass
 		#STATES.INIT_SHOOT:

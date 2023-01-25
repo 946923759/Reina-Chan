@@ -177,7 +177,11 @@ func _physics_process(delta):
 					spawn_boulders()
 					stateTimer=0
 					heavyLanding.play()
-					player.get_node("Camera2D").shakeCamera(4.0)
+					
+					player.get_node("Camera2D").shakeCamera(4.0) #Magnitude
+					#device, weak magnitude, strong magnitude, duration
+					Input.start_joy_vibration(0,.5,.5,.2)
+					
 					curState=STATES.FIRE_INIT
 					sprite.playing=true
 					sprite.set_animation("fire")

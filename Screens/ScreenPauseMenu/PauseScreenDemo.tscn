@@ -142,6 +142,7 @@ func input_accept():
 
 [node name="PauseScreen" type="CanvasLayer"]
 pause_mode = 2
+layer = 5
 script = SubResource( 1 )
 
 [node name="m" type="Control" parent="."]

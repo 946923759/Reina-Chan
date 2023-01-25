@@ -125,130 +125,127 @@ func getBPMs():
 	else:
 		return parent.timingData.BPM_SEGMENT
 
-getTickCounts(level) {
-	if ( 'TICKCOUNTS' in this.levels[level] ) {
-		return this.levels[level].TICKCOUNTS;
-	} else if ('TICKCOUNTS' in this.meta) {
-		return this.meta['TICKCOUNTS'] ;
-	} else {
-		return [[0.0,4]] ;
-	}
-}
+#func getTickCounts(level):
+#	if 'TICKCOUNTS' in this.levels[level]:
+#		return this.levels[level].TICKCOUNTS;
+#	elif 'TICKCOUNTS' in self.meta:
+#		return this.meta['TICKCOUNTS'] ;
+#	else:
+#		return [[0.0,4]] ;
+#
+#
+#func getScrolls(level):
+#	if 'SCROLLS' in self.levels[level]:
+#		return this.levels[level].SCROLLS ;
+#	elif  'SCROLLS' in self.meta:
+#		return this.meta['SCROLLS'] ;
+#	else:
+#		return [[0.0,1.0]] ;
+#
+#
+#func getStops(level):
+#	var arr = [];
+#	if 'STOPS' in this.levels[level]:
+#		arr = this.levels[level].STOPS ;
+#	elif 'STOPS' in this.meta:
+#		arr = this.meta['STOPS'] ;
+#	else:
+#		return [] ;
+#
+#	return arr ;
 
-getScrolls(level) {
-	if ( 'SCROLLS' in this.levels[level] ) {
-		return this.levels[level].SCROLLS ;
-	} else if ( 'SCROLLS' in this.meta) {
-		return this.meta['SCROLLS'] ;
-	} else {
-		return [[0.0,1.0]] ;
-	}
-}
-
-getStops(level) {
-	let arr ;
-	if ( 'STOPS' in this.levels[level] ) {
-		arr = this.levels[level].STOPS ;
-	} else if ('STOPS' in this.meta) {
-		arr = this.meta['STOPS'] ;
-	} else {
-		return [] ;
-	}
-	return arr ;
-}
-
-getDelays(level) {
-	let arr ;
-	if ( 'DELAYS' in this.levels[level] ) {
-		arr = this.levels[level].DELAYS;
-	} else if ( 'DELAYS' in this.meta) {
-		arr = this.meta['DELAYS'] ;
-	} else {
-		return [] ;
-	}
-	return arr ;
-}
-
-getSpeeds(level) {
-	if ( 'SPEEDS' in this.levels[level] ) {
-		return this.levels[level].SPEEDS;
-	} else if ( 'SPEEDS' in this.meta ) {
-		return this.meta['SPEEDS'] ;
-	} else {
-		return [[0.0,1.0,0.0,0.0]] ;
-	}
-}
-
-getOffset(level) {
-	if ( 'OFFSET' in this.levels[level] ) {
-		return this.levels[level].OFFSET ;
-	} else {
-		return this.meta['OFFSET'];
-	}
-}
-
-getTickCountAtBeat(level, beat) {
-
-	const tickCounts = this.getTickCounts(level) ;
-	let last = tickCounts[0][1];
-	for ( const tickCount of tickCounts ) {
-		const beatInTick = tickCount[0] ;
-		const tick = tickCount[1] ;
-		if ( beat >= beatInTick ) {
-			last = tick ;
-		} else {
-			return last ;
-		}
-
-	}
-	return last ;
-}
-
-getBPMAtBeat(level, beat) {
-
-	const tickCounts = this.getBMPs(level) ;
-	let last = tickCounts[0][1];
-	for ( const tickCount of tickCounts ) {
-		const beatInTick = tickCount[0] ;
-		const tick = tickCount[1] ;
-		if ( beat >= beatInTick ) {
-			last = tick ;
-		} else {
-			return last ;
-		}
-
-	}
-	return last ;
-}
-
-getSpeedAndTimeAtBeat(level, beat) {
-
-	const speeds = this.getSpeeds(level) ;
-	let last = speeds[0];
-	for ( const speed of speeds ) {
-		const beatInSpeed = speed[0] ;
-		if ( beat >= beatInSpeed ) {
-			last = speed ;
-		} else {
-
-			# we also return the type: time in seconds or beats.
-			return [last[1],last[2], last[3]] ;
-		}
-
-	}
-	return [last[1],last[2], last[3]] ;
-}
-
-getStepsType(level) {
-	return this.levels[level].STEPSTYPE ;
-}
-
-
-
-getMusicPath() {
-	return this.pathToSSCFile.substr(0, this.pathToSSCFile.lastIndexOf("/")) + '/' + this.meta['MUSIC'] ;
-	# return this.musicPath ;
-}
+#func getDelays(level):
+#	let arr ;
+#	if ( 'DELAYS' in this.levels[level] ) {
+#		arr = this.levels[level].DELAYS;
+#	elif  'DELAYS' in this.meta) {
+#		arr = this.meta['DELAYS'] ;
+#	else:
+#		return [] ;
+#	}
+#	return arr ;
+#}
+#
+#getSpeeds(level) {
+#	if ( 'SPEEDS' in this.levels[level] ) {
+#		return this.levels[level].SPEEDS;
+#	elif  'SPEEDS' in this.meta ) {
+#		return this.meta['SPEEDS'] ;
+#	else:
+#		return [[0.0,1.0,0.0,0.0]] ;
+#	}
+#}
+#
+#getOffset(level) {
+#	if ( 'OFFSET' in this.levels[level] ) {
+#		return this.levels[level].OFFSET ;
+#	else:
+#		return this.meta['OFFSET'];
+#	}
+#}
+#
+#getTickCountAtBeat(level, beat) {
+#
+#	const tickCounts = this.getTickCounts(level) ;
+#	let last = tickCounts[0][1];
+#	for ( const tickCount of tickCounts ) {
+#		const beatInTick = tickCount[0] ;
+#		const tick = tickCount[1] ;
+#		if ( beat >= beatInTick ) {
+#			last = tick ;
+#		else:
+#			return last ;
+#		}
+#
+#	}
+#	return last ;
+#}
+#
+#getBPMAtBeat(level, beat) {
+#
+#	const tickCounts = this.getBMPs(level) ;
+#	let last = tickCounts[0][1];
+#	for ( const tickCount of tickCounts ) {
+#		const beatInTick = tickCount[0] ;
+#		const tick = tickCount[1] ;
+#		if ( beat >= beatInTick ) {
+#			last = tick ;
+#		else:
+#			return last ;
+#		}
+#
+#	}
+#	return last ;
+#}
+#
+#getSpeedAndTimeAtBeat(level, beat) {
+#
+#	const speeds = this.getSpeeds(level) ;
+#	let last = speeds[0];
+#	for ( const speed of speeds ) {
+#		const beatInSpeed = speed[0] ;
+#		if ( beat >= beatInSpeed ) {
+#			last = speed ;
+#		else:
+#
+#			# we also return the type: time in seconds or beats.
+#			return [last[1],last[2], last[3]] ;
+#		}
+#
+#	}
+#	return [last[1],last[2], last[3]] ;
+#}
+#
+#getStepsType(level) {
+#	return this.levels[level].STEPSTYPE ;
+#}
+#
+#
+#
+#getMusicPath() {
+#	return this.pathToSSCFile.substr(0, this.pathToSSCFile.lastIndexOf("/")) + '/' + this.meta['MUSIC'] ;
+#	# return this.musicPath ;
+#}
 
 #/**
 # * @file

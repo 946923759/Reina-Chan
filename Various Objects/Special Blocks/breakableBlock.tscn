@@ -21,7 +21,7 @@ export(int, FLAGS,
 	\"???\",
 	\"Glorylight\",
 	\"Grenade\") var weaponCanBreak=2047 #Use a calculator in programmer mode for this number
-export(bool) var despawn_on_break = true
+var despawn_on_break:bool = true
 export(int, 1, 50) var maxHealth = 3
 export(Texture) var textureOverride
 var curHealth;

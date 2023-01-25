@@ -1,0 +1,19 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://Stages_Reina/Bosses/BaseRocket.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Stages_Reina/Bosses/Architect/ArchiRocket_v2.gd" type="Script" id=2]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 30, 30 )
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 20, 20 )
+
+[node name="ArchiRocket_Enemy" instance=ExtResource( 1 )]
+script = ExtResource( 2 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" index="0"]
+shape = SubResource( 1 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." index="3"]
+shape = SubResource( 2 )
