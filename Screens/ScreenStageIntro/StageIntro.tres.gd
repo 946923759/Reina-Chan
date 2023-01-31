@@ -1,4 +1,4 @@
-extends Node2D
+extends Control
 
 var loader
 var wait_frames:int
@@ -6,6 +6,8 @@ var time_max:float = 1 # msec
 var current_scene
 onready var audio = $AudioStreamPlayer
 var stageToLoad:String
+
+var isStandAlone:bool=true
 
 func _ready():
 	
@@ -33,8 +35,11 @@ func _ready():
 		show_error()
 		return
 	"""
-	$ColorRect.rect_size=Globals.gameResolution
-	$ColorRect2.rect_size.x=Globals.gameResolution.x
+	#$ColorRect.rect_size=Globals.gameResolution
+	#$ColorRect2.rect_size.x=Globals.gameResolution.x
+	#VisualServer.canvas_item_set_z_index($ColorRect.get_canvas_item(),-999)
+	#VisualServer.canvas_item_set_z_index($ColorRect2.get_canvas_item(),-1)
+	
 	set_process(false)
 
 func done():

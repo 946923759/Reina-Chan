@@ -35,9 +35,9 @@ onready var hurtSound = $HurtSound
 var explosion = preload("res://Stages/EnemyExplosion.tscn")
 var smallExplosion = preload("res://Stages/EnemyExplodeSmall.tscn")
 
-func init(startingDirection=DIRECTION.LEFT,canChangeDirections=false,_harderRockets=false):
+func init(startingDirection_=DIRECTION.LEFT,canChangeDirections=false,_harderRockets=false):
 	#shouldGoTowards=DIRECTION.LEFT if facingLeft else DIRECTION.RIGHT
-	shouldGoTowards=startingDirection
+	shouldGoTowards=startingDirection_
 	#harderRockets=_harderRockets
 	handle_sprite_direction()
 

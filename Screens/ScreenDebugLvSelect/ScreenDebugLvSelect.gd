@@ -7,7 +7,13 @@ var stgLen:int=0
 var charSel:int = 0
 onready var lvSel:Control=$Control
 
+var reinaAudioPlayer
+
 func _ready():
+	
+	reinaAudioPlayer=Globals.ReinaAudioPlayer.new(self)
+	reinaAudioPlayer.load_song("StageSelect","Mega Man 10 (recreated).nsf",8)
+	
 	var font = load("res://FallbackPixelFont.tres")
 	stages = Globals.STAGES_REINA.keys()
 	stgLen = len(stages)
@@ -55,6 +61,9 @@ func _input(event):
 		else:
 			$NoWay.play()
 		#Globals.change_screen(get_tree(),Globals.STAGES_REINA[stages[pos]])
+		return
+	elif Input.is_action_just_pressed("ui_cancel"):
+		Globals.change_screen(get_tree(),"ScreenTitleMenu")
 		return
 	
 	if Input.is_action_just_pressed("ui_down") and pos<stgLen-1:

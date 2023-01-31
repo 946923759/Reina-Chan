@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://ubuntu-font-family/PressStart2P.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://Screens/ScreenDebugLvSelect/ScreenDebugLvSelect.gd" type="Script" id=2]
@@ -9,7 +9,6 @@
 [ext_resource path="res://Sounds/Classic/S3K_B2 - No Way.wav" type="AudioStream" id=7]
 [ext_resource path="res://FallbackPixelFont.tres" type="DynamicFont" id=8]
 [ext_resource path="res://MM2Font.tres" type="DynamicFont" id=9]
-[ext_resource path="res://Music/CDAudio/TestRoom.mp3" type="AudioStream" id=10]
 
 [sub_resource type="DynamicFont" id=1]
 size = 20
@@ -75,5 +74,3 @@ text = "For lazy people"
 align = 1
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
-stream = ExtResource( 10 )
-autoplay = true

@@ -10,6 +10,7 @@
 [sub_resource type="GDScript" id=1]
 script/source = "extends Node2D
 
+onready var quad = $smQuad
 onready var hl = $AnimatedSprite
 onready var portrait = $smSprite
 onready var tex = $Label

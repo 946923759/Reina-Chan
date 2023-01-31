@@ -42,7 +42,8 @@ var startingPosition:Vector2
 var topLeft:Vector2
 func _ready():
 	is_reflecting=true
-	topLeft = get_parent().get_parent().global_position
+	if get_parent().get_parent().is_class("Node2D"):
+		topLeft = get_parent().get_parent().global_position
 	startingPosition=self.position
 	print("[Scarecrow] StartPos: "+String(startingPosition))
 	facing=DIRECTION.LEFT

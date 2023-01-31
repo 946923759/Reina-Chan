@@ -146,6 +146,7 @@ func _physics_process(delta):
 				
 				spawn_boulders()
 				footstep.play()
+				Input.start_joy_vibration(0,.4,.4,.2)
 				player.get_node("Camera2D").shakeCamera(2.0)
 				curState=STATES.IDLE
 		STATES.JUMP_INTO_SKY:
@@ -180,7 +181,7 @@ func _physics_process(delta):
 					
 					player.get_node("Camera2D").shakeCamera(4.0) #Magnitude
 					#device, weak magnitude, strong magnitude, duration
-					Input.start_joy_vibration(0,.5,.5,.2)
+					Input.start_joy_vibration(0,.5,.6,.3)
 					
 					curState=STATES.FIRE_INIT
 					sprite.playing=true

@@ -281,6 +281,9 @@ func load_player_game()->bool:
 	playerData=parse_json(save_game.get_as_text())
 	if playerData.specialAbilities.size()<10:
 		playerData.specialAbilities.resize(10)
+	for i in range(10):
+		if typeof(playerData.specialAbilities[i])!=TYPE_BOOL:
+			playerData.specialAbilities[i]=false
 	save_game.close()
 	print("Player save data loaded.")
 	return true

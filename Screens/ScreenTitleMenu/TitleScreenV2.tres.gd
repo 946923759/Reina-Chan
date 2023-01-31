@@ -106,7 +106,7 @@ func setTranslated():
 #			l.set("custom_fonts/font",fallbackFont)
 
 func _input(event):
-	if event is InputEventJoypadMotion or event is InputEventMouseMotion: #XInput controllers are broken on Windows :P
+	if event is InputEventJoypadMotion or event is InputEventMouseMotion:
 		return
 	elif (event is InputEventMouseButton and event.pressed) or (event is InputEventScreenTouch and event.pressed):
 		#print(event.button_index)
@@ -156,6 +156,10 @@ func _input(event):
 				if selection == 1 and !Globals.playerHasSaveData:
 					selection = 2;
 				highlightList(mainMenu,selection);
+			else:
+				selectSound.play()
+				selection = 0
+				highlightList(mainMenu,selection);
 				
 		if Input.is_action_pressed("ui_up"):
 			if selection > 0:
@@ -163,6 +167,10 @@ func _input(event):
 				selection = selection - 1;
 				if selection == 1 and !Globals.playerHasSaveData:
 					selection = 0;
+				highlightList(mainMenu, selection);
+			else:
+				selection = mainMenu.get_child_count() - 1
+				selectSound.play()
 				highlightList(mainMenu, selection);
 				
 		if Input.is_action_just_pressed("ui_select"):

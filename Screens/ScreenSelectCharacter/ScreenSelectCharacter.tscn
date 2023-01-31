@@ -136,11 +136,10 @@ __meta__ = {
 
 [node name="charDesc" type="Label" parent="."]
 anchor_right = 1.0
-anchor_bottom = 1.0
 margin_left = -1024.0
 margin_top = 448.0
 margin_right = -10.0
-margin_bottom = -176.0
+margin_bottom = 544.0
 rect_min_size = Vector2( 1280, 96 )
 custom_fonts/font = ExtResource( 2 )
 text = "The star of Reina-Chan, Reina herself! Jump and shoot just like the classics."

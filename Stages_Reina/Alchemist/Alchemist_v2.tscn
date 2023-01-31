@@ -104,6 +104,9 @@ func execute():
 			null,
 			\"\\t\"
 		)
+		newCutscene.connect(\"cutscene_finished\",self,\"teleport_1\")
+		
+func teleport_1():
 	#player.lockMovement(3,Vector2(0,0))
 	#Queue is structured like time,vector2,animation,freeze_y_velocity
 	#obj.call(\"lockMovementQueue\",[
@@ -127,6 +130,9 @@ func execute():
 
 	var seq := TweenSequence.new(get_tree())
 	seq.append(tilemap,'rotation_degrees',180,3).set_trans(Tween.TRANS_QUAD)
+	#device, weak magnitude, strong magnitude, duration
+	Input.start_joy_vibration(0,.5,.6,3)
+	
 	root.reinaAudioPlayer.fade_music()
 	#var tween = $Tween;
 	#tween.interpolate_property(tilemap, 'rotation_degrees',

@@ -1,7 +1,8 @@
-[gd_resource type="SpriteFrames" load_steps=16 format=2]
+[gd_resource type="SpriteFrames" load_steps=23 format=2]
 
 [ext_resource path="res://Stages_Reina/Bosses/Ouroboros/BossOuroboros_WheelReady 5x1.png" type="Texture" id=1]
-[ext_resource path="res://Stages_Reina/Bosses/Ouroboros/BossOuroboros_Attack 7x1.png" type="Texture" id=2]
+[ext_resource path="res://Stages_Reina/Bosses/Ouroboros/BossOuroboros_Attack 5x2.png" type="Texture" id=2]
+[ext_resource path="res://Stages_Reina/Bosses/Ouroboros/BossOuroboros ShootAngle 3x1.png" type="Texture" id=3]
 
 [sub_resource type="AtlasTexture" id=10]
 atlas = ExtResource( 1 )
@@ -29,11 +30,11 @@ region = Rect2( 96, 0, 24, 28 )
 
 [sub_resource type="AtlasTexture" id=16]
 atlas = ExtResource( 2 )
-region = Rect2( 120, 0, 24, 28 )
+region = Rect2( 0, 28, 24, 28 )
 
 [sub_resource type="AtlasTexture" id=17]
 atlas = ExtResource( 2 )
-region = Rect2( 144, 0, 24, 28 )
+region = Rect2( 24, 28, 24, 28 )
 
 [sub_resource type="AtlasTexture" id=5]
 atlas = ExtResource( 1 )
@@ -55,6 +56,30 @@ region = Rect2( 72, 0, 24, 18 )
 atlas = ExtResource( 1 )
 region = Rect2( 96, 0, 24, 18 )
 
+[sub_resource type="AtlasTexture" id=18]
+atlas = ExtResource( 2 )
+region = Rect2( 0, 0, 24, 28 )
+
+[sub_resource type="AtlasTexture" id=19]
+atlas = ExtResource( 2 )
+region = Rect2( 24, 0, 24, 28 )
+
+[sub_resource type="AtlasTexture" id=20]
+atlas = ExtResource( 2 )
+region = Rect2( 48, 0, 24, 28 )
+
+[sub_resource type="AtlasTexture" id=21]
+atlas = ExtResource( 3 )
+region = Rect2( 0, 0, 27, 28 )
+
+[sub_resource type="AtlasTexture" id=22]
+atlas = ExtResource( 3 )
+region = Rect2( 27, 0, 27, 28 )
+
+[sub_resource type="AtlasTexture" id=23]
+atlas = ExtResource( 3 )
+region = Rect2( 54, 0, 27, 28 )
+
 [resource]
 animations = [ {
 "frames": [ SubResource( 10 ) ],
@@ -71,4 +96,9 @@ animations = [ {
 "loop": false,
 "name": "intro",
 "speed": 20.0
+}, {
+"frames": [ SubResource( 18 ), SubResource( 19 ), SubResource( 20 ), SubResource( 21 ), SubResource( 22 ), SubResource( 23 ) ],
+"loop": false,
+"name": "shootAngle",
+"speed": 5.0
 } ]

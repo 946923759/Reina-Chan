@@ -6,7 +6,10 @@ enum DIRECTION {LEFT = -1, RIGHT = 1}
 export(DIRECTION) var facing = DIRECTION.LEFT
 var lastTouched
 var enabled:bool = false
+
 var curHP:int = 28 #All bosses in mega man have 28 health.
+#const MAX_HP = 28
+
 var is_reflecting:bool=false
 onready var sprite:AnimatedSprite = $AnimatedSprite
 onready var HPBar = $CanvasLayer/bar

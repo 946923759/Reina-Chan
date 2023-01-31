@@ -72,7 +72,7 @@ func _process(delta):
 		#v.x=min(player.global_position.x-global_position.x,500)
 		#v.y=player.global_position.y+(-1 if player.global_position.y<0 else 1)*abs(player.global_position.x-global_position.x-v.x)
 		#print(v.normalized())
-		bi.init(v)
+		bi.init(v,true)
 		shots+=1
 		if shots < 3:
 			timer2=.6

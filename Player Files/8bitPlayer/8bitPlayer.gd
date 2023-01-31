@@ -1069,8 +1069,13 @@ func player_touched(_obj, amountToDamage:int):
 			$HurtSound.play()
 			sprite.set_animation("Hurt")
 			sprite.modulate.a = .5
+
 			#device, weak magnitude, strong magnitude, duration
-			Input.start_joy_vibration(0,.5,.3*amountToDamage,.1)
+			Input.start_joy_vibration(0,
+				min(.2+.1*amountToDamage,1.0),
+				min(.4+.1*amountToDamage,1.0),
+				.1
+			)
 			
 			invincibleTime = 1
 			invincible = true
@@ -1112,6 +1117,9 @@ func die():
 		HPBar.updateHP(HP)
 		CheckpointPlayerStats.playerLivesLeft-=1
 		sprite.visible = false
+		
+		#device, weak magnitude, strong magnitude, duration
+		Input.start_joy_vibration(0,.5,.5,.3)
 		
 		var sp = deathAnimation.instance()
 		sp.position=position-Vector2(48,16)
