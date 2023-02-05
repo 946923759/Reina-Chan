@@ -121,6 +121,7 @@ func spawn():
 		bi.position=bi.position.rotated(rotateBy)
 		#bi.special_type=4
 		bi.init2()
+		#bi.init()
 		objects[i]=bi
 	#bi.init(Vector2(radius/4,0))
 	#bi.init(Vector2(0,0))
@@ -178,10 +179,11 @@ func _input(_event):
 		radius-=10
 		#print("ayy lmao")
 	
-	if _event is InputEventKey and Input.is_key_pressed(KEY_5):
-		spawn()
-	elif _event is InputEventKey and Input.is_key_pressed(KEY_6):
-		spawn_ball()
+	#TODO: These keys shouldn't work unless the miniboss is on screen
+	#if _event is InputEventKey and Input.is_key_pressed(KEY_5):
+	#	spawn()
+	#elif _event is InputEventKey and Input.is_key_pressed(KEY_6):
+	#	spawn_ball()
 	#update()
 
 func damage(amount,damageType=0):

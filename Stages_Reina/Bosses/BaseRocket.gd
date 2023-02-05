@@ -7,7 +7,7 @@ var is_reflecting = false;
 
 enum DIRECTION {
 	UPLEFT,   UP,   UPRIGHT,
-	LEFT,           RIGHT
+	LEFT,     NONE, RIGHT     #NONE is needed for left to right remapping
 	DOWNLEFT, DOWN, DOWNRIGHT
 }
 var shouldGoTowards:int=DIRECTION.LEFT

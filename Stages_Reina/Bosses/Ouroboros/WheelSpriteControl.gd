@@ -6,6 +6,7 @@ onready var w1 = $Wheel1
 onready var w2 = $Wheel2
 
 var frame setget set_frame,get_frame
+var flip_h:bool setget set_flip,get_flip
 
 export(Vector2) var radius = Vector2(16,0)
 var radius2:Vector2
@@ -40,6 +41,12 @@ func set_frame(f):
 	w2.frame=f
 func get_frame():
 	return w1.frame
+
+func set_flip(b):
+	w1.flip_h=b
+	w2.flip_h=b
+func get_flip():
+	return w1.flip_h
 
 var rot:float = 0
 func _process(delta):

@@ -47,7 +47,7 @@ func _physics_process(delta):
 			get_parent().add_child(e)
 			
 			#DIRECTION enum in the rocket, homing rockets, and if rockets should speed up
-			e.init(3 if facing==-1 else 4,false,curHP<=14) 
+			e.init(3 if facing==-1 else 5,false,curHP<=14) 
 			
 			add_collision_exception_with(e) # Make bullet and this not collide
 # warning-ignore:return_value_discarded
@@ -124,7 +124,7 @@ func _physics_process(delta):
 		get_parent().add_child(e)
 		
 		#DIRECTION enum in the rocket, homing rockets, and if rockets should speed up
-		e.init(6,true,true)
+		e.init(7,true,true)
 		
 		add_collision_exception_with(e) # Make bullet and this not collide
 		tempVelocity=Vector2(facing*350,-500)

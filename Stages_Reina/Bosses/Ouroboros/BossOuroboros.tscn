@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://Stages_Reina/Bosses/BossBase.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Stages_Reina/Bosses/Ouroboros/BossOuroboros_Ready 4x1.png" type="Texture" id=2]
@@ -7,18 +7,11 @@
 [ext_resource path="res://Stages_Reina/Bosses/Ouroboros/BossOuroboros.gd" type="Script" id=5]
 [ext_resource path="res://Sounds/BossSounds/Ouroboros_APPEAR1_JP.ogg" type="AudioStream" id=6]
 [ext_resource path="res://Sounds/Classic/Explosion2.wav" type="AudioStream" id=7]
+[ext_resource path="res://ubuntu-font-family/JP_KR_font.tres" type="DynamicFont" id=8]
 
 [sub_resource type="AtlasTexture" id=1]
 atlas = ExtResource( 2 )
 region = Rect2( 0, 0, 55, 34 )
-
-[sub_resource type="AtlasTexture" id=5]
-atlas = ExtResource( 2 )
-region = Rect2( 110, 0, 55, 34 )
-
-[sub_resource type="AtlasTexture" id=6]
-atlas = ExtResource( 2 )
-region = Rect2( 165, 0, 55, 34 )
 
 [sub_resource type="AtlasTexture" id=2]
 atlas = ExtResource( 2 )
@@ -36,16 +29,19 @@ region = Rect2( 110, 34, 55, 34 )
 atlas = ExtResource( 2 )
 region = Rect2( 165, 34, 55, 34 )
 
+[sub_resource type="AtlasTexture" id=5]
+atlas = ExtResource( 2 )
+region = Rect2( 110, 0, 55, 34 )
+
+[sub_resource type="AtlasTexture" id=6]
+atlas = ExtResource( 2 )
+region = Rect2( 165, 0, 55, 34 )
+
 [sub_resource type="SpriteFrames" id=4]
 animations = [ {
 "frames": [ SubResource( 1 ) ],
 "loop": true,
 "name": "default",
-"speed": 5.0
-}, {
-"frames": [ SubResource( 5 ), SubResource( 6 ) ],
-"loop": true,
-"name": "jump forward",
 "speed": 5.0
 }, {
 "frames": [ SubResource( 2 ), SubResource( 3 ) ],
@@ -56,6 +52,11 @@ animations = [ {
 "frames": [ SubResource( 7 ), SubResource( 8 ) ],
 "loop": true,
 "name": "jump backward",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 5 ), SubResource( 6 ) ],
+"loop": true,
+"name": "jump forward",
 "speed": 5.0
 } ]
 
@@ -69,18 +70,18 @@ frames = SubResource( 4 )
 
 [node name="Wheels" type="Node2D" parent="." index="2"]
 script = ExtResource( 4 )
-radius = Vector2( -3.35503, -15.6418 )
+radius = Vector2( -11.231, -11.3925 )
 speed = 0.8
 
 [node name="Wheel1" type="AnimatedSprite" parent="Wheels" index="0"]
-position = Vector2( 60.645, -15.6418 )
+position = Vector2( 51.5157, -10.0033 )
 scale = Vector2( 4, 4 )
 frames = ExtResource( 3 )
 animation = "shootAngle"
 frame = 3
 
 [node name="Wheel2" type="AnimatedSprite" parent="Wheels" index="1"]
-position = Vector2( -60.645, 15.6418 )
+position = Vector2( -51.5153, 10.0028 )
 scale = Vector2( 4, 4 )
 z_index = -1
 frames = ExtResource( 3 )
@@ -91,6 +92,25 @@ visible = false
 
 [node name="IntroSound" parent="." index="4"]
 stream = ExtResource( 6 )
+
+[node name="Label" type="Label" parent="CanvasLayer" index="1"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_left = 80.0
+margin_top = -322.0
+margin_right = 1265.0
+margin_bottom = -50.0
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/shadow_offset_y = 2
+custom_constants/shadow_as_outline = 1
+custom_fonts/font = ExtResource( 8 )
+text = "DEBUG DISPLAY
+POS DISPLAY
+asdadasdasd
+asdasdasd
+asd"
+valign = 2
 
 [node name="DebugLabel2" parent="." index="9"]
 text = "position = Vector2( 0, 0 )

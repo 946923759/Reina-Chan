@@ -11,17 +11,14 @@ export (int,1,25) var player_damage = 3
 onready var sprite = $AnimatedSprite
 var velocity:Vector2
 
-func init(velo:Vector2,altColor:bool=false):
-	if altColor:
-		sprite.play(\"recolor\")
-	else:
-		sprite.play(\"default\")
+func init(velo:Vector2):
+	sprite.play(\"default\")
 	velocity=velo
-	
-#What is this for???
-#func init2():
-#	set_process(false)
-#	sprite.play(\"recolor\")
+
+#This is for the wireframe miniboss in Ouroboros
+func init2():
+	set_process(false)
+	sprite.play(\"recolor\")
 
 func _ready():
 	# warning-ignore:return_value_discarded
