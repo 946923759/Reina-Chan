@@ -167,7 +167,8 @@ var weaponColorSwaps = [
 enum Characters {
 	UMP9,
 	M16A1,
-	Ultimate_M16
+	Ultimate_M16,
+	LENGTH_CHARACTERS
 }
 
 func characterToString(d:int=playerData.currentCharacter)->String:
@@ -309,6 +310,9 @@ func save_system_data()->bool:
 	return true
 	
 func save_player_game()->bool:
+	if !playerHasSaveData:
+		printerr("Attempted to save the player's game, but there's no savedata loaded!")
+		return false
 	var save_game = File.new()
 	var ok = save_game.open(get_save_directory('playerData'),File.WRITE)
 	if ok != OK:
@@ -717,6 +721,8 @@ var SCREENS:Dictionary = {
 	"CutsceneDemoEnd":"res://Screens/ScreenCutscene/cutsceneWhatever.tscn",
 	"ScreenCredits":"res://Screens/Credits.tscn",
 	
+	"ScreenDebugSelect":"res://Screens/ScreenDebugLvSelect/ScreenDebugLvSelect.tscn",
+	
 	"MMZeroTest":"res://Stages/TestStage/TestStage.tscn",
 	"PIURED_ScreenGameplay":"res://Stages_Reina/Clear_And_Fail/PIURED/GameObjects/ScreenGameplay.tscn"
 }
@@ -738,7 +744,8 @@ var STAGES_REINA:Dictionary = {
 	"NSF_TEST":"res://Stages_Reina/TestStage_NSF/TestStage_NSF.tscn",
 	"NSF_TEST_2":"res://Stages_Reina/TestStage_NSF/TestStage_NSF_2.tscn",
 	"SCARECROW_BOSS_TEST":"res://Stages_Reina/ScarecrowTestRoom.tscn",
-	"mm2wily1":"res://Stages/mm2wily/stgWily.tscn"
+	"mm2wily1":"res://Stages/mm2wily/stgWily.tscn",
+	"CAMERA_ZOOM_TEST":"res://Stages/IntroStageTest/Stage.tscn"
 }
 
 func change_screen(tree,screen:String)->void:

@@ -21,7 +21,8 @@ func _ready():
 	sprite.frame=0
 	sprite.playing=true
 	# warning-ignore:return_value_discarded
-	#$Area2D.connect(\"body_entered\",self,\"objectTouched\")
+	$Area2D.connect(\"body_entered\",self,\"enemy_touched\")
+	#$Area2D.connect(\"area_entered\",self,\"enemy_touched\")
 
 var facing:int=1
 func init(facing:int):
@@ -36,7 +37,13 @@ func _physics_process(delta):
 	if isDefaultAnim and sprite.frame==2:
 		sprite.set_animation(\"loop\")
 		isDefaultAnim=false
-	move_and_collide(Vector2(SPEED*facing*delta,0))
+
+	#You might have noticed this doesn't even collide because
+	#there's no collision box.
+	#That is because I am not a smart programmer.
+	var collision = move_and_collide(Vector2(SPEED*facing*delta,0))
+	
+
 	
 #func objectTouched(obj):
 #	print(\"ChargeShot: Collided with something.\")
@@ -47,6 +54,7 @@ func _physics_process(delta):
 #		print(\"Colliding object does not have 'enemy_touched'.\")
 
 func enemy_touched(obj):
+	print(\"Collide\")
 	enemy_touched_alt(obj,obj.get(\"is_reflecting\") == true)
 
 #Because I clearly don't know what I'm doing
@@ -63,7 +71,7 @@ func enemy_touched_alt(obj,reflect):
 		if obj.has_method(\"damage\"):
 			obj.call(\"damage\",3)
 		#This is only supposed to happen for large enemies
-		queue_free()
+		#queue_free()
 "
 
 [sub_resource type="AtlasTexture" id=2]
@@ -112,7 +120,7 @@ extents = Vector2( 72, 40 )
 
 [node name="Node2D" type="KinematicBody2D"]
 collision_layer = 0
-collision_mask = 8
+collision_mask = 0
 script = SubResource( 1 )
 __meta__ = {
 "_edit_group_": true
@@ -132,10 +140,14 @@ stream = ExtResource( 2 )
 autoplay = true
 bus = "Player/Enemies"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource( 10 )
-
 [node name="ReflectSound" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource( 3 )
 volume_db = 5.0
 bus = "Player/Enemies"
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_layer = 8
+collision_mask = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource( 10 )

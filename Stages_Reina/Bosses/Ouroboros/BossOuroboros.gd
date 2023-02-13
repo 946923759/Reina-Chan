@@ -105,7 +105,7 @@ func shootRocket(rocketDirection:int,offset:Vector2,rightWheel:bool=false)->Node
 	get_parent().add_child(e)
 	
 	#DIRECTION enum in the rocket, homing rockets, and if rockets should speed up
-	e.init(rocketDirection,false,curHP<=14) 
+	e.init(rocketDirection,false,curHP<=14) # 
 	
 	add_collision_exception_with(e) # Make bullet and this not collide
 	return e
@@ -123,7 +123,12 @@ func shootRocketSky(destXPos:float,offset:Vector2,rightWheel:bool=false,waitTime
 	e.position = pos
 	get_parent().add_child(e)
 	
-	e.init2(ROCKET_DIRECTION.UPLEFT,destXPos,waitTime) 
+	var spd = 24.5
+	if Globals.playerData.gameDifficulty > Globals.Difficulty.MEDIUM:
+		spd=28.0
+		waitTime-=.9
+	
+	e.init2(ROCKET_DIRECTION.UPLEFT,destXPos,waitTime,spd) 
 	
 	add_collision_exception_with(e) # Make bullet and this not collide
 
@@ -200,7 +205,7 @@ func _physics_process(delta):
 				
 			velocity = move_and_slide(velocity,Vector2(0,-1),true)
 			if is_on_floor():
-				if (curState==STATE.HOP_TO_LEFT and get_pos_relative_to_room().x/64 > 6) or \
+				if (curState==STATE.HOP_TO_LEFT and get_pos_relative_to_room().x/64 > 4) or \
 				   (curState==STATE.HOP_TO_RIGHT and get_pos_relative_to_room().x/64 < 14):
 					sprite.play("jump forward")
 					sprite.frame=0
@@ -295,6 +300,8 @@ func _physics_process(delta):
 			var shotX:float=STATE.SHOOT_SKY_3-curState+3+4*shots
 			if shots>=4:
 				shotX=STATE.SHOOT_SKY_3-curState+2+4*(shots-4)
+			#randf returns a value between 0 and 1
+			shotX+=randf()-.5
 			var waitTimer:float=.2
 			
 			#if shots>4:

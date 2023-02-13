@@ -20,6 +20,11 @@ var shouldFaceLeft:bool=false
 const playerStartingLifeCount = 3
 var playerLivesLeft:int=3
 
+#Store anything you want here!
+#Used in Ouroboros' stage to unlock the miniboss door after dying.
+var temporaryStageStats:int=0
+
+
 #It doesn't really belong in Globals... Anyways, this is only used for the item get screen
 var lastPlayedStage:int=0
 
@@ -56,3 +61,4 @@ func clearEverything():
 	playerLivesLeft=3
 	shouldFaceLeft=false
 	lastPlayedStage=0
+	temporaryStageStats=0

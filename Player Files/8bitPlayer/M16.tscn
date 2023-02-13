@@ -77,7 +77,13 @@ animations = [ {
 script = ExtResource( 3 )
 dash_multiplier = 2.0
 
-[node name="Sprite" parent="." index="0"]
+[node name="Charging" type="AnimatedSprite" parent="." index="1"]
+visible = false
+scale = Vector2( 2, 2 )
+frames = SubResource( 7 )
+animation = "full"
+
+[node name="Sprite" parent="." index="2"]
 frames = ExtResource( 2 )
 
 [node name="AfterImage1" type="Sprite" parent="Sprite" index="0"]
@@ -130,12 +136,6 @@ margin_right = -28.2606
 margin_bottom = -28.3812
 rect_scale = Vector2( 0.5, 0.5 )
 text = "Offset = "
-
-[node name="Charging" type="AnimatedSprite" parent="." index="1"]
-visible = false
-scale = Vector2( 2, 2 )
-frames = SubResource( 7 )
-animation = "full"
 
 [node name="ChargeStartSound" type="AudioStreamPlayer2D" parent="." index="12"]
 stream = ExtResource( 9 )

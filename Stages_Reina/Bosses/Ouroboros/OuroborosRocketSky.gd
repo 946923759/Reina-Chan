@@ -10,10 +10,12 @@ func init(startingDirection_=DIRECTION.LEFT,canChangeDirections=false,_harderRoc
 	
 var destXpos:float
 var waitTime:float
-func init2(startingDirection_=DIRECTION.LEFT,destXPos_:float=5.0,waitTime_:float=1.0):
+var speed:float
+func init2(startingDirection_=DIRECTION.LEFT,destXPos_:float=5.0,waitTime_:float=1.0,speed_:float=24.0):
 	shouldGoTowards=startingDirection_
 	startingDirection=startingDirection_
 	destXpos=destXPos_
+	speed=speed_
 	print("Wait for "+String(waitTime_))
 	waitTime=waitTime_
 	handle_sprite_direction()
@@ -57,7 +59,7 @@ func _physics_process(delta):
 		DIRECTION.DOWN:
 			marker.visible=true
 			if waitTime<0:
-				curVelocity=Vector2(0,24)
+				curVelocity=Vector2(0,speed)
 				set_pos_relative_to_room(marker,Vector2(destXpos,11)*64-position)
 				
 			waitTime-=delta

@@ -36,6 +36,8 @@ func _ready():
 var chargeShotTime:float=0.0
 var startedCharging:bool=false
 func get_input(delta):
+	if canThrowGrenade==false and Globals.playerData.specialAbilities[Globals.SpecialAbilities.Grenade]:
+		canThrowGrenade=true
 	#print("lmao 2")
 	var right = Input.is_action_pressed('ui_right')
 	var left = Input.is_action_pressed('ui_left')
@@ -51,6 +53,15 @@ func get_input(delta):
 	if Globals.flipButtons:
 		jump = Input.is_action_just_pressed('ui_cancel')
 		shoot = Input.is_action_just_pressed("ui_select") or rapidFire and (shoot_time > .1 and Input.is_action_pressed("ui_select"))
+
+	var grenade_input = (shoot and up) or (
+		Input.is_action_just_pressed("gameplay_btn3") and
+		state!=State.DASH
+	)
+		#Can't throw grenades if using other weapons because it will
+	#conflict with the alchemist rockets.
+	#...Even though square will also shoot it.
+	grenade_input = grenade_input and currentWeapon==Globals.Weapons.Buster
 
 	if dash_time>0:
 		jump=false
@@ -142,10 +153,30 @@ func get_input(delta):
 		chargeStart.stop()
 		chargeLoop.stop()
 	
+	
+	if grenade_input and canThrowGrenade:
+		if (Globals.playerData.gameDifficulty <= Globals.Difficulty.EASY or bulletManager.get_num_bullets() < 3):
+			
+			#print("Throw!")
+			var inst = grenade.instance()
+			var ss:float
+			if sprite.flip_h:
+				ss = -1.0
+			else:
+				ss = 1.0
+			var pos = position + Vector2(20*ss, 10)
+			if state == State.ON_LADDER:
+				pos = position + Vector2(20*ss, -20)
+			inst.position=pos
+			bulletHolder.add_child(inst)
+			inst.init(ss)
+			shoot_time = 0
+			if Globals.playerData.gameDifficulty > Globals.Difficulty.EASY:
+				bulletManager.push_bullet(inst)
 	#All this shit is copypasted from the example platformer so I have no idea how it works
 	# A good idea when implementing characters of all kinds,
 	# compensates for physics imprecision, as well as human reaction delay.
-	if shoot:
+	elif shoot:
 		if shoot_time>0:
 			shoot_time = 0
 			if (Globals.playerData.gameDifficulty <= Globals.Difficulty.EASY or bulletManager.get_num_bullets() < 3) and weaponMeters[currentWeapon]>=Globals.weaponEnergyCost[currentWeapon]:

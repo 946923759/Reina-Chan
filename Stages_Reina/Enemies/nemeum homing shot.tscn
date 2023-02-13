@@ -11,14 +11,18 @@ export (int,1,25) var player_damage = 3
 onready var sprite = $AnimatedSprite
 var velocity:Vector2
 
-func init(velo:Vector2):
+func init(velo:Vector2,altMode:bool=false):
+	if altMode:
+		#	set_process(false)
+		sprite.play(\"recolor\")
 	sprite.play(\"default\")
 	velocity=velo
 
-#This is for the wireframe miniboss in Ouroboros
+#This is for the wireframe miniboss in Ouroboros,
+#DONT GET RID OF IT!!!
 func init2():
 	set_process(false)
-	sprite.play(\"recolor\")
+	sprite.play(\"default\")
 
 func _ready():
 	# warning-ignore:return_value_discarded
@@ -98,7 +102,6 @@ material = SubResource( 2 )
 scale = Vector2( 4, 4 )
 frames = SubResource( 5 )
 animation = "recolor"
-frame = 1
 playing = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

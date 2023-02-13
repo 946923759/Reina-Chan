@@ -51,9 +51,11 @@ animations = [ {
 [node name="OuroborosWheel" instance=ExtResource( 1 )]
 script = SubResource( 5 )
 shapeOverride = SubResource( 6 )
+use_large_explosion = true
 
 [node name="AnimatedSprite" parent="." index="0"]
 frames = SubResource( 3 )
+frame = 1
 playing = true
 
 [node name="VisibilityEnabler2D" parent="." index="4"]

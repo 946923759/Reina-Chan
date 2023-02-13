@@ -22,6 +22,7 @@ func _ready():
 	
 	if spawnType==0:
 		velocity.y=-1000
+		sprite.play("falling")
 		#add_central_force(Vector2(0,-200))
 	sprite.flip_h=facing==1
 
@@ -43,6 +44,7 @@ func _physics_process(delta):
 			timer+=delta
 		if just_touched_ground==false:
 			animPlayer.play("default")
+			sprite.play("default")
 			just_touched_ground=true
 	
 	if facing==0:

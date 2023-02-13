@@ -32,8 +32,6 @@ func _ready():
 
 func _process(delta):
 	ti+=delta
-	if stageRoot==null:
-		stageRoot=get_node_or_null("/root/Node2D")
 	
 	#sprite.rotation_degrees+=delta*600
 	#return
@@ -46,6 +44,10 @@ func _process(delta):
 	
 	if cooldown>0:
 		cooldown-=delta
+		return
+	
+	if stageRoot==null:
+		stageRoot=get_node_or_null("/root/Node2D")
 		return
 
 	match curState:

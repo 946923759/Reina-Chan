@@ -9,6 +9,21 @@ onready var lvSel:Control=$Control
 
 var reinaAudioPlayer
 
+func set_character(n):
+	#$Characters/UMP9.visible=n==0
+	#$Characters/M16A1.visible=n==1
+	#$Characters/Shin_M16A1.visible=n==2
+	var curChar:String = Globals.characterToString(charSel)
+	for c in $Characters.get_children():
+		if c.name==curChar:
+			c.visible=true
+			c.playing=true
+		else:
+			c.visible=false
+			c.playing=false
+	Globals.playerData.currentCharacter=charSel
+	charSel=n
+
 func _ready():
 	
 	reinaAudioPlayer=Globals.ReinaAudioPlayer.new(self)
@@ -30,14 +45,7 @@ func _ready():
 		lvSel.add_child(f)
 	GainFocusCommand(pos)
 
-	var curChar:String = Globals.characterToString(charSel)
-	for c in $Characters.get_children():
-		if c.name==curChar:
-			c.visible=true
-			c.playing=true
-		else:
-			c.visible=false
-			c.playing=false
+	set_character(charSel)
 
 func GainFocusCommand(p:int):
 	for i in range(stgLen):
@@ -78,5 +86,14 @@ func _input(event):
 	elif Input.is_action_just_pressed("ui_left") and pos>=jump:
 		pos-=jump
 		$Select.play()
+		
+	if Input.is_action_just_pressed("R1"):
+		if charSel<Globals.Characters.LENGTH_CHARACTERS-1:
+			set_character(charSel+1)
+		else:
+			set_character(0)
+	elif Input.is_action_just_pressed("L1"):
+		if charSel>0:
+			set_character(charSel-1)
 	GainFocusCommand(pos)
 

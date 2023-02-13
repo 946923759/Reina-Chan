@@ -38,6 +38,12 @@ animation = "WalkLoop"
 frames = ExtResource( 4 )
 animation = "WalkLoop"
 
+[node name="Ultimate_M16" type="AnimatedSprite" parent="Characters"]
+modulate = Color( 1, 0.843137, 0, 1 )
+frames = ExtResource( 4 )
+animation = "WalkLoop"
+frame = 8
+
 [node name="Select" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 6 )
 bus = "Player/Enemies"

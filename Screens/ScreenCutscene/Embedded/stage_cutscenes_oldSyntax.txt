@@ -60,6 +60,14 @@ msgbox_transition
 msg	Nice to meet you UMP9, please die immediately.
 
 #KEY	Ouroboros1
+portrait	pic_UMP9	pic_T5000
+matchnames	UMP9	T5000
+/T5000	Thanks for rescuing me! Here, have this item, it allows you to transform into a superhero and save the day!
+msg	All you have to do is hold it in front of you and yell "Henshin a go go, baby"!
+/UMP9	Wow, that sounds awesome!
+/T5000	....Oops! I lost it! Um, here, have these grenades instead!
+/UMP9	Aww. Thanks anyways!
+portrait
 /SYSTEM	You obtained the grenade. Press UP+SHOOT while the default weapon is equipped to throw a grenade.
 msg	There are some blocks throughout the stages that you can use grenades on.
 
