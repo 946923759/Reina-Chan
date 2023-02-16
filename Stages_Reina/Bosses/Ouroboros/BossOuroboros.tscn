@@ -21,14 +21,6 @@ region = Rect2( 0, 0, 55, 34 )
 atlas = ExtResource( 2 )
 region = Rect2( 55, 0, 55, 34 )
 
-[sub_resource type="AtlasTexture" id=5]
-atlas = ExtResource( 2 )
-region = Rect2( 110, 0, 55, 34 )
-
-[sub_resource type="AtlasTexture" id=6]
-atlas = ExtResource( 2 )
-region = Rect2( 165, 0, 55, 34 )
-
 [sub_resource type="AtlasTexture" id=7]
 atlas = ExtResource( 2 )
 region = Rect2( 110, 34, 55, 34 )
@@ -36,6 +28,14 @@ region = Rect2( 110, 34, 55, 34 )
 [sub_resource type="AtlasTexture" id=8]
 atlas = ExtResource( 2 )
 region = Rect2( 165, 34, 55, 34 )
+
+[sub_resource type="AtlasTexture" id=5]
+atlas = ExtResource( 2 )
+region = Rect2( 110, 0, 55, 34 )
+
+[sub_resource type="AtlasTexture" id=6]
+atlas = ExtResource( 2 )
+region = Rect2( 165, 0, 55, 34 )
 
 [sub_resource type="SpriteFrames" id=4]
 animations = [ {
@@ -49,14 +49,14 @@ animations = [ {
 "name": "intro",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 5 ), SubResource( 6 ) ],
-"loop": true,
-"name": "jump forward",
-"speed": 5.0
-}, {
 "frames": [ SubResource( 7 ), SubResource( 8 ) ],
 "loop": true,
 "name": "jump backward",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 5 ), SubResource( 6 ) ],
+"loop": true,
+"name": "jump forward",
 "speed": 5.0
 } ]
 
@@ -70,22 +70,22 @@ frames = SubResource( 4 )
 
 [node name="Wheels" type="Node2D" parent="." index="2"]
 script = ExtResource( 4 )
-radius = Vector2( -15.9046, 1.72276 )
+radius = Vector2( -13.7294, 8.21126 )
 speed = 0.8
 
 [node name="Wheel1" type="AnimatedSprite" parent="Wheels" index="0"]
-position = Vector2( 48.0954, 1.72276 )
+position = Vector2( 50.2706, 8.21126 )
 scale = Vector2( 4, 4 )
 frames = ExtResource( 3 )
-animation = "shootAngle"
-frame = 3
+animation = "die"
+frame = 4
 
 [node name="Wheel2" type="AnimatedSprite" parent="Wheels" index="1"]
-position = Vector2( -48.0954, -1.72268 )
+position = Vector2( -50.2706, -8.21143 )
 scale = Vector2( 4, 4 )
 z_index = -1
 frames = ExtResource( 3 )
-animation = "shootAngle"
+animation = "die"
 
 [node name="Area2D" parent="." index="3"]
 visible = false

@@ -55,7 +55,10 @@ func LoseFocus():
 func _ready():
 	set_weapon(weapon)
 	if !Engine.editor_hint:
-		$Label.text=INITrans.GetString("Weapons",Globals.stagesToString[weapon])
+		if weapon==0:
+			$Label.text=INITrans.GetString("Weapons","Buster"+Globals.characterToString(Globals.playerData.currentCharacter))
+		else:
+			$Label.text=INITrans.GetString("Weapons",Globals.stagesToString[weapon])
 	pass
 #func _ready():
 #	$Label.text=INITrans.GetString("Weapons",Globals.stagesToString[weapon])

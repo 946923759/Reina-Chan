@@ -97,6 +97,8 @@ func part1():
 	playerObj.add_child(newCutscene) #Needs to be done first for the _ready()
 	newCutscene.connect("cutscene_finished",self,"part2")
 	#func init_(message, parent,delim="|",msgColumn:int=1):
+	
+	print("Playing boss cutscene!")
 	newCutscene.init_(
 		Globals.get_stage_cutscene(message_id),
 		playerObj,

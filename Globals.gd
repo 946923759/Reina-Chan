@@ -164,6 +164,7 @@ var weaponColorSwaps = [
 	]
 ]
 
+#Renaming this enum will break language files, so DON'T DO IT!
 enum Characters {
 	UMP9,
 	M16A1,
@@ -310,9 +311,10 @@ func save_system_data()->bool:
 	return true
 	
 func save_player_game()->bool:
-	if !playerHasSaveData:
-		printerr("Attempted to save the player's game, but there's no savedata loaded!")
-		return false
+	#This doesn't work, playerHasSaveData will always be false!
+	#if !playerHasSaveData:
+	#	printerr("Attempted to save the player's game, but there's no savedata loaded!")
+	#	return false
 	var save_game = File.new()
 	var ok = save_game.open(get_save_directory('playerData'),File.WRITE)
 	if ok != OK:
@@ -399,9 +401,12 @@ func load_stage_cutscenes()->bool:
 func get_stage_cutscene(key:String):
 	if stage_cutscene_data.size() == 0:
 		load_stage_cutscenes()
-	if !(key in stage_cutscene_data):
+	if Globals.playerData.currentCharacter>0: #Search for M16 cutscene first
+		if key+"_M16" in stage_cutscene_data:
+			return stage_cutscene_data[key+"_M16"]
+	if !(key in stage_cutscene_data): #Search for normal cutscene
 		return stage_cutscene_data['error']
-	return stage_cutscene_data[key]
+	return stage_cutscene_data[key] #If we got here there is a cutscene, return it
 
 func _ready():
 	#print(OS.window_size)

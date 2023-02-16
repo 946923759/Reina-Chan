@@ -22,6 +22,7 @@ script/source = "extends Control
 signal unpaused(newWeapon)
 
 #export(bool) var debuggingPauseMenu=true
+export(int, \"UMP9\",\"M16A1\",\"Shin M16\") var currentCharacter=0
 export(int, FLAGS, 
 	\"Buster\",
 	\"Architect\",
@@ -106,6 +107,8 @@ func OnCommand(curWeapon:int=0):
 		unlocked_weapons=Globals.bitArrayToInt32(Globals.playerData.availableWeapons)
 		#Also allows me to pack in unlocked abilities...
 		unlocked_weapons+=(Globals.bitArrayToInt32(Globals.playerData.specialAbilities)<<Globals.Weapons.LENGTH_WEAPONS)
+	else:
+		Globals.playerData.currentCharacter=currentCharacter
 	
 	$Sprite/AbilityList/Sprite.visible=unlocked_weapons & (1<<Globals.Weapons.LENGTH_WEAPONS)
 	$Sprite/AbilityList/Sprite2.visible=unlocked_weapons & (1<<Globals.Weapons.LENGTH_WEAPONS+1)
@@ -396,6 +399,10 @@ func updateWeaponInfo(w:int):
 	elif w>Globals.Weapons.LENGTH_WEAPONS-1:
 		title.text=INITrans.GetString(\"Weapons\",Globals.abilitiesToString[w-Globals.Weapons.LENGTH_WEAPONS])
 		desc.text=INITrans.GetString(\"PauseWeaponDescriptions\",Globals.abilitiesToString[w-Globals.Weapons.LENGTH_WEAPONS])
+	elif w==0:
+		var charName=Globals.characterToString(Globals.playerData.currentCharacter)
+		title.text=INITrans.GetString(\"Weapons\",\"Buster\"+charName+\"Full\")
+		desc.text=INITrans.GetString(\"PauseWeaponDescriptions\",\"Buster\"+charName)
 	else:
 		title.text=INITrans.GetString(\"Weapons\",Globals.stagesToString[w]+\"Full\")
 		desc.text=INITrans.GetString(\"PauseWeaponDescriptions\",Globals.stagesToString[w])
@@ -464,6 +471,7 @@ pause_mode = 2
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = SubResource( 1 )
+currentCharacter = 1
 unlocked_weapons = 21
 unlocked_abilities = 3
 

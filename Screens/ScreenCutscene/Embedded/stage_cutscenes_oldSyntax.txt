@@ -12,6 +12,12 @@ portrait	pic_UMP9	pic_Architect
 /UMP9	...Who is this weirdo?	...¿Quien es este tipo raro?
 /Architect	Heeeey, I heard that~!	Oye!, escuche eso~!
 
+#KEY	Architect_M16
+portrait	pic_M16A1_Boss_5	pic_Architect
+/Architect	Heee-ey, you t... Oh, M16? You want to fight me?
+/M16A1	Of course. Don't you want a rematch? The last time we fought was way back when you were with Sangvis Ferri.
+/Architect	Y-yeah, but I'm not really suited for direct combat... (And you look like you could crush me now!)
+
 #KEY	Alchemist1
 portrait	pic_Alchemist,true,0
 /Alchemist	Hahaha! Did you really think you defeated me? That was just a dummy!	JAJAJA! ¿En verdad piensas que me has derrotado? Eso solo fue un secuaz!
@@ -25,6 +31,13 @@ matchnames	UMP9	Dier
 /UMP9	Hey, T-Dolls can have stomach issues too! Somehow.
 /Dier	What kind of feature is that...?
 
+#KEY	AlchemistChicken
+portrait	pic_M16A1_Boss_5	Dier,true,0
+matchnames	M16A1	Dier
+/M16A1	Why the heck is there a chicken in the wall? Is this a glitch?
+/Dier	No, no, it's intended!
+/M16A1	...If you say so.
+
 #KEY	Alchemist2
 portrait	pic_UMP9	pic_Alchemist
 speaker	Alchemist
@@ -35,6 +48,11 @@ nop	msg	A miserable little pile of manpower, ammo, rations, parts, combat report
 msg	A miserable little pile of ammo and parts!	Una miserable pila de armamento y refacciones!
 nop	(ES: 'Have at you' is an English term so it was changed to "Prepare yourself!")
 msg	But enough talk, have at you!	Basta de charlas, preparate!
+
+#KEY	Alchemist2_M16_Disabled
+portrait	pic_M16A1_Boss_5	pic_Alchemist
+/Alchemist	What is a Tactical Doll?
+msg	A misterable little pile of ammo and parts!
 
 #KEY	Scarecrow1
 portrait	pic_UMP9	pic_VZ61_D
@@ -50,6 +68,19 @@ msgbox_transition
 msg	There are certain locations in other stages that are only possible to cross using the dash. Try searching everywhere, you might find a shortcut!
 nop	msg	There are more power ups throughout the game, but they're hidden. Try searching everywhere to find them all.
 
+#KEY	Scarecrow1_M16
+portrait	pic_M16A1_Boss_5	pic_VZ61_D
+matchnames	M16A1	Skorpion
+/Skorpion	I... I lost again!? I thought this was supposed to make me super powerful!
+/M16A1	Huh?
+/Skorpion	I had to pay another 4000 gems for that... On top of the 8000 I paid before...
+/M16A1	I think you got scammed.
+/Skorpion	...Oh. Um... Here, take this. I'm supposed to give them out when I lose. I wasn't supposed to lose, though...
+portrait	
+msgbox_transition
+/SYSTEM	You obtained the air dash! Press DOWN+JUMP in mid-air to dash.
+msg	There are certain locations in other stages that are only possible to cross using the dash. Try searching everywhere, you might find a shortcut!
+
 #KEY	Scarecrow2
 portrait	pic_UMP9	pic_Scarecrow
 matchnames	UMP9	Scarecrow
@@ -58,6 +89,12 @@ matchnames	UMP9	Scarecrow
 /Scarecrow	Alright.
 msgbox_transition
 msg	Nice to meet you UMP9, please die immediately.
+
+#KEY	Scarecrow2_M16
+portrait	pic_M16A1_Boss_5	pic_Scarecrow
+/Scarecrow	Your chances of victory... Are far too high! Why are you here!?
+/M16A1	Because I'm bored.
+/Scarecrow	Hmph... I promise I'll provide an entertaining fight. Come at me!
 
 #KEY	Ouroboros1
 portrait	pic_UMP9	pic_T5000
@@ -71,6 +108,17 @@ portrait
 /SYSTEM	You obtained the grenade. Press UP+SHOOT while the default weapon is equipped to throw a grenade.
 msg	There are some blocks throughout the stages that you can use grenades on.
 
+#KEY	Ouroboros1_M16
+portrait	pic_M16A1_Boss_5	pic_T5000
+/T5000	Thanks for rescuing me! I'd give you a transformation item, but you already look like a supervillian... Or I guess an anti-hero?
+/M16A1	Thanks? Is that a compliment?
+/T5000	You Sangvis dolls always look so intimidating... I mean, I know you're friendly, but still... Ahem! Here, take these.
+/M16A1	I already have grenades. I don't need them.
+/T5000	These ones are stronger!
+portrait
+/SYSTEM	You obtained the grenade. Press UP+SHOOT while the default weapon is equipped to throw a grenade.
+msg	Unlike M16's regular weapon, grenades cannot be charged.
+
 #KEY	Ouroboros2
 /Ouroboros	Placeholder text
 
@@ -80,12 +128,16 @@ msg	Placeholder text
 #KEY	Elisa2
 msg	Placeholder text
 
+
 #KEY	vs_M16
-nop	M16 and Shin M16 are the same so we will put them first and UMP9 will jump to the end
-condjmp_player	ump9	0
+/UMP9	M16, are you planning on winning the grand prize too?
+/M16A1	Hahaha, no way. If I wanted a day with the commander, I could just ask him. Can't you?
+/UMP9	[idk whatever nobody is going to read this anyways]
+
+#KEY	vs_M16_M16
 /M16?	...
 /M16	A clone of me? Don't you know nothing can replace the original?
-/Dandelion	This one is a replica of you when you were allied with Sangvis Ferri.
+/Dandelion	This one is a replica of you when you were allied with Sangvis Ferri. She's controlled by me, so don't expect an easy fight.
 
 
 #KEY	ClearAndFail
@@ -106,7 +158,7 @@ nop	Maybe this should be shown only if they beat it on hard?
 portrait	Dier	pic_Alchemist	pic_Scarecrow	pic_M16A1_Boss_5
 /M16A1	/hl[3]Are you forgetting someone? I'm going to be there too.
 speaker	Dier
-nop	msg	Well, I suppose you are a Sangfis Ferri android... Of sorts...
+nop	msg	Well, I suppose you are a Sangvis Ferri android... Of sorts...
 
 #KEY	Demo3Ending
 preload_portraits	Dier	pic_Scarecrow	pic_M16A1_Boss_5
@@ -114,3 +166,8 @@ matchnames	AmWorks	Scarecrow	M16A1
 portrait	Dier	pic_Scarecrow	pic_M16A1_Boss_5
 /AmWorks	We hope you enjoyed the third demo. And if you haven't played M16A1 mode yet, give it a try.
 msg	We hope to see you soon for the fourth demo.
+
+#KEY	Demo4Ending
+preload_portraits	Dier	pic_Scarecrow	pic_M16A1_Boss_5
+matchnames	AmWorks	Scarecrow	M16A1
+/AmWorks	We hope you liked the 4th demo! Kept you waiting, huh?

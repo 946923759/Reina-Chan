@@ -83,7 +83,7 @@ func _ready():
 		
 		#topLeftRelative = get_parent().position
 		
-func get_pos_relative_to_room()->Vector2:
+func getPosRelativeToRoom()->Vector2:
 	return get_parent().position + position
 
 #Override this so the wheels intro anim gets played too
@@ -157,7 +157,7 @@ func _physics_process(delta):
 	$CanvasLayer/Label.text = stateToString[curState]
 	var stageRoot = get_node_or_null("/root/Node2D")
 	if stageRoot:
-		$CanvasLayer/Label.text+="\n"+String(stageRoot.pos2cell(get_pos_relative_to_room()))+String(get_pos_relative_to_room()/64)
+		$CanvasLayer/Label.text+="\n"+String(stageRoot.pos2cell(getPosRelativeToRoom()))+String(getPosRelativeToRoom()/64)
 	
 	
 	match curState:
@@ -189,7 +189,7 @@ func _physics_process(delta):
 				shots+=1
 			elif shots >=4:
 				shots=0
-				if get_pos_relative_to_room().x/64>10:
+				if getPosRelativeToRoom().x/64>10:
 					if curHP<14: # and randi()%2==0
 						curState=STATE.SHOOT_SKY_1
 					else:
@@ -205,8 +205,8 @@ func _physics_process(delta):
 				
 			velocity = move_and_slide(velocity,Vector2(0,-1),true)
 			if is_on_floor():
-				if (curState==STATE.HOP_TO_LEFT and get_pos_relative_to_room().x/64 > 4) or \
-				   (curState==STATE.HOP_TO_RIGHT and get_pos_relative_to_room().x/64 < 14):
+				if (curState==STATE.HOP_TO_LEFT and getPosRelativeToRoom().x/64 > 4) or \
+				   (curState==STATE.HOP_TO_RIGHT and getPosRelativeToRoom().x/64 < 14):
 					sprite.play("jump forward")
 					sprite.frame=0
 					velocity=Vector2(400*facing,-220)
@@ -220,7 +220,7 @@ func _physics_process(delta):
 #			facing=DIRECTION.RIGHT
 #			velocity = move_and_slide(velocity,Vector2(0,-1),true)
 #			if is_on_floor():
-#				if get_pos_relative_to_room().x/64 < 16:
+#				if getPosRelativeToRoom().x/64 < 16:
 #					sprite.play("jump forward")
 #					sprite.frame=0
 #					velocity=Vector2(400*facing,-220)
@@ -287,7 +287,7 @@ func _physics_process(delta):
 				sprite.play("default")
 				$Wheels.play("shootAngle")
 				#Just in case physics doesn't work
-				if get_pos_relative_to_room().x/64 < 18 or get_pos_relative_to_room().y/64 > 4:
+				if getPosRelativeToRoom().x/64 < 18 or getPosRelativeToRoom().y/64 > 4:
 					global_position = Vector2(319*64,99.3*64)
 				idleTime=.5
 				shots=0
@@ -332,3 +332,8 @@ func _physics_process(delta):
 	#We can't do the -1 scale trick because it flips the positions
 	#of the left and the right wheel
 	$Wheels.flip_h = (facing == DIRECTION.RIGHT)
+
+
+func killSelf():
+	$Wheels.is_dead=true
+	.killSelf()

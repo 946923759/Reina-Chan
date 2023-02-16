@@ -8,6 +8,8 @@ onready var w2 = $Wheel2
 var frame setget set_frame,get_frame
 var flip_h:bool setget set_flip,get_flip
 
+var is_dead:bool=false
+
 export(Vector2) var radius = Vector2(16,0)
 var radius2:Vector2
 export(float,0.1,5) var speed = 0.5
@@ -50,6 +52,12 @@ func get_flip():
 
 var rot:float = 0
 func _process(delta):
+	
+	if is_dead:
+		play("die")
+		if get_frame()>=4:
+			visible=false
+		return
 	
 	var rotateBy:float = 2.0 * PI * delta*speed
 		

@@ -100,10 +100,8 @@ func _ready():
 	if OS.is_debug_build() and currentCharacter==0:
 		currentCharacter = player_to_spawn_in_debug
 
-	if currentCharacter==Globals.Characters.UMP9:
-		Globals.playCutscenes=Globals.OPTIONS['playCutscenes']['value']
-	else:
-		Globals.playCutscenes=false
+	#TODO: WHY IS THIS HERE??????
+	Globals.playCutscenes=Globals.OPTIONS['playCutscenes']['value']
 		
 	var n:Resource
 	if currentCharacter==0:
