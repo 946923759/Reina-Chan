@@ -155,8 +155,8 @@ var weaponColorSwaps = [
 		Color(1,.718,.522)
 	],
 	[ #Ouroboros
-		Color(.608,.467,.388),
-		Color(.604,.627,.592)
+		Color(0.07451, 0.482353, 0),
+		Color(0.070588, 0.615686, 0.039216)
 	],
 	[ #Scarecrow
 		Color(0.235294, 0.235294, 0.235294),
@@ -190,7 +190,7 @@ var playerData={
 		true,  #Buster (duh)
 		true,  #Architect Rocket
 		true,  #Alchemist Weapon
-		false, #Ouroboros
+		true, #Ouroboros
 		true,  #Scarecrow
 		false,
 		false,

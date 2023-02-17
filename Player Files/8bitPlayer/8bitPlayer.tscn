@@ -31,12 +31,12 @@
 [ext_resource path="res://addons/godot-next/gui/debug_label.gd" type="Script" id=29]
 [ext_resource path="res://Stages_Reina/Bosses/Scarecrow/thingy.png" type="Texture" id=30]
 [ext_resource path="res://Stages_Reina/Bosses/Scarecrow/ScarecrowSpin.gd" type="Script" id=31]
-[ext_resource path="res://Player Files/8bitPlayer/ScarecrowEnemyCheck.gd" type="Script" id=32]
+[ext_resource path="res://Player Files/Weapons/ScarecrowEnemyCheck.gd" type="Script" id=32]
 [ext_resource path="res://Screens/ScreenCutscene/TextFont.tres" type="DynamicFont" id=33]
 [ext_resource path="res://Screens/ScreenPauseMenu/PauseScreen.tscn" type="PackedScene" id=34]
 [ext_resource path="res://Sounds/Classic/Mega Man 4 SFX (20) - Weapon Switch.wav" type="AudioStream" id=35]
 [ext_resource path="res://Stages_Reina/Bosses/Alchemist/Pumpkin.png" type="Texture" id=36]
-[ext_resource path="res://Player Files/8bitPlayer/bulletManager.gd" type="Script" id=37]
+[ext_resource path="res://Player Files/Weapons/bulletManager.gd" type="Script" id=37]
 
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 19 )
@@ -517,8 +517,6 @@ script = ExtResource( 21 )
 
 [node name="Fadeout_Tween" type="Tween" parent="CanvasLayer/Fadeout"]
 
-[node name="Warning" type="Node2D" parent="CanvasLayer"]
-
 [node name="Timer" type="Label" parent="CanvasLayer"]
 margin_left = 1108.08
 margin_top = 640.028
@@ -528,15 +526,10 @@ custom_fonts/font = SubResource( 7 )
 text = "00:00.00
 00:00.00"
 script = SubResource( 8 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
-[node name="LivesCounter" type="Node2D" parent="CanvasLayer"]
+[node name="TouchscreenButtons" type="Node2D" parent="CanvasLayer"]
 
-[node name="Sprite" type="Sprite" parent="CanvasLayer/LivesCounter"]
-
-[node name="TouchScreenButton" type="TouchScreenButton" parent="CanvasLayer"]
+[node name="TouchScreenButton" type="TouchScreenButton" parent="CanvasLayer/TouchscreenButtons"]
 modulate = Color( 1, 1, 1, 0.627451 )
 position = Vector2( 885.166, 500 )
 scale = Vector2( 2, 2 )
@@ -546,7 +539,7 @@ passby_press = true
 action = "ui_select"
 visibility_mode = 1
 
-[node name="TouchScreenButton2" type="TouchScreenButton" parent="CanvasLayer"]
+[node name="TouchScreenButton2" type="TouchScreenButton" parent="CanvasLayer/TouchscreenButtons"]
 modulate = Color( 1, 1, 1, 0.627451 )
 position = Vector2( 1070.47, 500 )
 scale = Vector2( 2, 2 )
@@ -556,7 +549,7 @@ passby_press = true
 action = "ui_cancel"
 visibility_mode = 1
 
-[node name="TouchScreenButton3" type="TouchScreenButton" parent="CanvasLayer"]
+[node name="TouchScreenButton3" type="TouchScreenButton" parent="CanvasLayer/TouchscreenButtons"]
 modulate = Color( 1, 1, 1, 0.627451 )
 position = Vector2( 592, 21.382 )
 scale = Vector2( 2, 2 )
@@ -564,7 +557,7 @@ normal = ExtResource( 28 )
 action = "ui_pause"
 visibility_mode = 1
 
-[node name="TouchScreenDPad" type="Sprite" parent="CanvasLayer"]
+[node name="TouchScreenDPad" type="Sprite" parent="CanvasLayer/TouchscreenButtons"]
 modulate = Color( 1, 1, 1, 0.627451 )
 position = Vector2( 25, 457.747 )
 scale = Vector2( 1.5, 1.5 )

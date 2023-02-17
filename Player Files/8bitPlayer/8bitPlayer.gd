@@ -47,9 +47,12 @@ onready var weaponSwitch =$WeaponSwitch
 var shoot_time = 1e20
 #How long to display the shoot sprite
 var shoot_sprite_time = 0
-var bullet = preload("res://Player Files/bullet.tscn")
-var archiRocket = preload("res://Player Files/8bitPlayer/ArchiRocket_Player.tscn")
-var grenade = preload("res://Player Files/8bitPlayer/PlayerGrenade.tscn")
+
+var bullet = preload("res://Player Files/Weapons/bullet.tscn")
+var archiRocket = preload("res://Player Files/Weapons/ArchiRocket_Player.tscn")
+var wpnSnake = preload("res://Player Files/Weapons/WpnSnake.tscn")
+
+var grenade = preload("res://Player Files/Weapons/PlayerGrenade.tscn")
 #how long UMP9 dashes when using the dash attack, or how long the slide goes
 #if it's above 0 it's currently active.
 var dash_time:float = 0.0
@@ -453,6 +456,14 @@ func get_input(delta):
 					HPBar.updateAmmo(weaponMeters[currentWeapon]/144.0,false)
 				if currentWeapon==Globals.Weapons.Architect:
 					bi = archiRocket.instance()
+					bi.position = pos
+					#get_parent().add_child(bi)
+					bulletHolder.add_child(bi)
+					bi.init(int(ss))
+					
+				#Same copypasted code as Architect
+				elif currentWeapon==Globals.Weapons.Ouroboros:
+					bi = wpnSnake.instance()
 					bi.position = pos
 					#get_parent().add_child(bi)
 					bulletHolder.add_child(bi)

@@ -67,6 +67,7 @@ func _process(delta):
 		get_parent().add_child(e)
 		
 		set_process(false)
+		queue_free()
 "
 
 [sub_resource type="RectangleShape2D" id=2]

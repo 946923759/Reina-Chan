@@ -1,4 +1,4 @@
-[gd_scene load_steps=67 format=2]
+[gd_scene load_steps=66 format=2]
 
 [ext_resource path="res://Stages/IceMan/IceManTileset.tres" type="TileSet" id=1]
 [ext_resource path="res://Stages_Reina/Enemies/Dinergate.tscn" type="PackedScene" id=2]
@@ -49,7 +49,6 @@
 [ext_resource path="res://Various Objects/CameraController/CameraScrollRight.tscn" type="PackedScene" id=47]
 [ext_resource path="res://Character Sprites/skorp/skorp.tscn" type="PackedScene" id=48]
 [ext_resource path="res://Various Objects/Special Blocks/breakableBlock.tscn" type="PackedScene" id=49]
-[ext_resource path="res://Character Sprites/m16/m16Idle.png" type="Texture" id=50]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 1920, 32 )
@@ -697,8 +696,6 @@ tile_data = PoolIntArray( 720896, 7, 0, 720898, 7, 0, 720902, 7, 0, 720904, 7, 0
 
 [node name="PlayerHolder" parent="." index="36"]
 position = Vector2( 3488, -256 )
-texture = ExtResource( 50 )
-player_to_spawn_in_debug = 1
 
 [node name="EventTile19" parent="." index="37" instance=ExtResource( 3 )]
 position = Vector2( 3136, 1472 )

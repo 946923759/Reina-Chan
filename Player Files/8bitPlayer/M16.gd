@@ -7,7 +7,7 @@ onready var a3 = get_node("Sprite/AfterImage3")
 var oldPositions:PoolVector2Array = PoolVector2Array()
 
 
-var playerChargeShot = preload("res://Player Files/8bitPlayer/PlayerChargeShot.tscn")
+var playerChargeShot = preload("res://Player Files/Weapons/PlayerChargeShot.tscn")
 onready var chargingAnim:AnimatedSprite = $Charging
 onready var chargeStart:AudioStreamPlayer2D = $ChargeStartSound
 onready var chargeLoop:AudioStreamPlayer2D = $ChargeLoopSound

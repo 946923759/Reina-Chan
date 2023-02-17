@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Grenade_Player.png-a8bbd693f57bd5a36d2b5894f795a4f2.stex"
+path="res://.import/Grenade_Player.png-8f410043a02bc3920ecfa00bcbeca71d.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Player Files/8bitPlayer/Grenade_Player.png"
-dest_files=[ "res://.import/Grenade_Player.png-a8bbd693f57bd5a36d2b5894f795a4f2.stex" ]
+source_file="res://Player Files/Weapons/Grenade_Player.png"
+dest_files=[ "res://.import/Grenade_Player.png-8f410043a02bc3920ecfa00bcbeca71d.stex" ]
 
 [params]
 

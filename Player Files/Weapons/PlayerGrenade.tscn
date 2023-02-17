@@ -1,6 +1,6 @@
 [gd_scene load_steps=13 format=2]
 
-[ext_resource path="res://Player Files/8bitPlayer/Grenade_Player.png" type="Texture" id=1]
+[ext_resource path="res://Player Files/Weapons/Grenade_Player.png" type="Texture" id=1]
 
 [sub_resource type="GDScript" id=1]
 script/source = "extends KinematicBody2D
@@ -133,7 +133,6 @@ __meta__ = {
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 scale = Vector2( 4, 4 )
 frames = SubResource( 11 )
-frame = 5
 playing = true
 offset = Vector2( -0.5, -0.5 )
 flip_h = true
