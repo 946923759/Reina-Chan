@@ -13,13 +13,13 @@
 atlas = ExtResource( 2 )
 region = Rect2( 0, 0, 55, 34 )
 
-[sub_resource type="AtlasTexture" id=2]
+[sub_resource type="AtlasTexture" id=5]
 atlas = ExtResource( 2 )
-region = Rect2( 0, 0, 55, 34 )
+region = Rect2( 110, 0, 55, 34 )
 
-[sub_resource type="AtlasTexture" id=3]
+[sub_resource type="AtlasTexture" id=6]
 atlas = ExtResource( 2 )
-region = Rect2( 55, 0, 55, 34 )
+region = Rect2( 165, 0, 55, 34 )
 
 [sub_resource type="AtlasTexture" id=7]
 atlas = ExtResource( 2 )
@@ -29,13 +29,13 @@ region = Rect2( 110, 34, 55, 34 )
 atlas = ExtResource( 2 )
 region = Rect2( 165, 34, 55, 34 )
 
-[sub_resource type="AtlasTexture" id=5]
+[sub_resource type="AtlasTexture" id=2]
 atlas = ExtResource( 2 )
-region = Rect2( 110, 0, 55, 34 )
+region = Rect2( 0, 0, 55, 34 )
 
-[sub_resource type="AtlasTexture" id=6]
+[sub_resource type="AtlasTexture" id=3]
 atlas = ExtResource( 2 )
-region = Rect2( 165, 0, 55, 34 )
+region = Rect2( 55, 0, 55, 34 )
 
 [sub_resource type="SpriteFrames" id=4]
 animations = [ {
@@ -44,9 +44,9 @@ animations = [ {
 "name": "default",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 2 ), SubResource( 3 ) ],
-"loop": false,
-"name": "intro",
+"frames": [ SubResource( 5 ), SubResource( 6 ) ],
+"loop": true,
+"name": "jump forward",
 "speed": 5.0
 }, {
 "frames": [ SubResource( 7 ), SubResource( 8 ) ],
@@ -54,9 +54,9 @@ animations = [ {
 "name": "jump backward",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 5 ), SubResource( 6 ) ],
-"loop": true,
-"name": "jump forward",
+"frames": [ SubResource( 2 ), SubResource( 3 ) ],
+"loop": false,
+"name": "intro",
 "speed": 5.0
 } ]
 
@@ -67,25 +67,23 @@ intro_subtitle_key = "Ouroboros_Intro"
 [node name="AnimatedSprite" parent="." index="1"]
 position = Vector2( 8, -22 )
 frames = SubResource( 4 )
+animation = "jump backward"
 
 [node name="Wheels" type="Node2D" parent="." index="2"]
 script = ExtResource( 4 )
-radius = Vector2( -13.7294, 8.21126 )
+radius = Vector2( 6.55926, -14.5911 )
 speed = 0.8
 
 [node name="Wheel1" type="AnimatedSprite" parent="Wheels" index="0"]
-position = Vector2( 50.2706, 8.21126 )
+position = Vector2( 70.5593, -14.5911 )
 scale = Vector2( 4, 4 )
 frames = ExtResource( 3 )
-animation = "die"
-frame = 4
 
 [node name="Wheel2" type="AnimatedSprite" parent="Wheels" index="1"]
-position = Vector2( -50.2706, -8.21143 )
+position = Vector2( -70.5588, 14.5913 )
 scale = Vector2( 4, 4 )
 z_index = -1
 frames = ExtResource( 3 )
-animation = "die"
 
 [node name="Area2D" parent="." index="3"]
 visible = false
@@ -112,6 +110,11 @@ asdadasdasd
 asdasdasd
 asd"
 valign = 2
+
+[node name="DebugLabel" parent="." index="8"]
+text = "animation = \"jump backward\"
+playing = false
+"
 
 [node name="DebugLabel2" parent="." index="9"]
 text = "position = Vector2( 0, 0 )

@@ -22,8 +22,8 @@ shader_param/clr2 = Color( 0.694, 0.627, 0.592, 1 )
 shader = ExtResource( 3 )
 shader_param/colorToSwap1 = Color( 0.608, 0.467, 0.388, 1 )
 shader_param/colorToSwap2 = Color( 0.694, 0.627, 0.592, 1 )
-shader_param/clr1 = Color( 0.0627451, 0.4, 0, 1 )
-shader_param/clr2 = Color( 0.0705882, 0.615686, 0.0392157, 1 )
+shader_param/clr1 = Color( 0.564706, 0.027451, 0.368627, 1 )
+shader_param/clr2 = Color( 0.768627, 0.313726, 0.752941, 1 )
 
 [sub_resource type="Shader" id=4]
 code = "shader_type canvas_item;

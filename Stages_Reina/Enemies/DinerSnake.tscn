@@ -1,7 +1,7 @@
 [gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Stages/EnemyBase.tscn" type="PackedScene" id=1]
-[ext_resource path="res://Stages_Reina/Ouroboros/2340.png" type="Texture" id=2]
+[ext_resource path="res://Stages_Reina/Enemies/DinerSnake.png" type="Texture" id=2]
 [ext_resource path="res://addons/godot-next/gui/debug_label.gd" type="Script" id=3]
 
 [sub_resource type="GDScript" id=6]

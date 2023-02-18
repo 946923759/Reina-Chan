@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/2340.png-d179ae4b76ea57c61026a8fdd3f4f1fd.stex"
+path="res://.import/Wpn_DinerSnake.png-538d05dc41090478ea01b4001b61c421.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Stages_Reina/Ouroboros/2340.png"
-dest_files=[ "res://.import/2340.png-d179ae4b76ea57c61026a8fdd3f4f1fd.stex" ]
+source_file="res://Player Files/Weapons/Wpn_DinerSnake.png"
+dest_files=[ "res://.import/Wpn_DinerSnake.png-538d05dc41090478ea01b4001b61c421.stex" ]
 
 [params]
 

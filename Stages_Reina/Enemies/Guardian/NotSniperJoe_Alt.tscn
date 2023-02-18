@@ -377,15 +377,15 @@ __meta__ = {
 }
 
 [node name="Area2D" type="Area2D" parent="."]
-collision_layer = 9
-collision_mask = 9
+collision_layer = 2
+collision_mask = 8
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 position = Vector2( 0, -28 )
 shape = SubResource( 4 )
 
 [node name="Area2D2" type="Area2D" parent="."]
-collision_layer = 8
+collision_layer = 2
 collision_mask = 8
 script = SubResource( 5 )
 

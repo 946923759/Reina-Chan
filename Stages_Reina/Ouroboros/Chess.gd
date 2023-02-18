@@ -140,7 +140,7 @@ func move_pieces_down(col:int):
 	for p in chessPieces.get_children():
 		#print(p.grid_position)
 		if p.grid_position.x==col:
-			if p.piece_type+2==PIECE.Queen:
+			if p.piece_type+2==PIECE.Queen or p.piece_type+2==PIECE.Rook:
 				#print("col match!")
 				var emptySpacesBelow:int=0
 				for y in range(p.grid_position.y+1,tilemap_grid_size.y,1):

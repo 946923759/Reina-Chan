@@ -126,10 +126,10 @@ var abilitiesToString = [
 # Either that or weapon energy is a different number for each weapon... Idk lol
 var weaponEnergyCost = [
 	0, #Buster
-	9, #144/9 = 16 uses
-	6, # #24 uses for dash
-	0, #Ouroboros
-	6, #Scarecrow
+	9, #Architect 144/9 = 16 uses
+	6, #Alchemist, 24 uses for dash
+	6, #Ouroboros
+	8, #Scarecrow
 	0,
 	0,
 	0,
@@ -155,8 +155,8 @@ var weaponColorSwaps = [
 		Color(1,.718,.522)
 	],
 	[ #Ouroboros
-		Color(0.07451, 0.482353, 0),
-		Color(0.070588, 0.615686, 0.039216)
+		Color(0.564706, 0.027451, 0.368627),
+		Color(0.768627, 0.313726, 0.752941)
 	],
 	[ #Scarecrow
 		Color(0.235294, 0.235294, 0.235294),

@@ -568,8 +568,10 @@ tile_data = PoolIntArray( 1, 536870922, 0, 2, 536870922, 0, 3, 536870922, 0, 4, 
 [node name="ChessPieces" type="Node2D" parent="room 100-0/InsaneChessThing" index="2"]
 
 [node name="chessPiece" parent="room 100-0/InsaneChessThing/ChessPieces" index="0" instance=ExtResource( 7 )]
+scale = Vector2( 1.1, 1.1 )
 collision_layer = 0
 collision_mask = 0
+piece_type = 4
 alternate_win_conditions = PoolStringArray( "1,2 h 5,2" )
 
 [node name="chessPiece2" parent="room 100-0/InsaneChessThing/ChessPieces" index="1" instance=ExtResource( 7 )]

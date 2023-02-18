@@ -10,6 +10,7 @@ func init(dir_:int):
 	dir=dir_
 	raycast.cast_to.x=40*dir_
 	enemyRaycast.cast_to.x=35*dir_
+	$Sprite.flip_h=dir_==1
 	
 var totalTime:float=0
 var cooldown:float=0
@@ -21,14 +22,15 @@ func _physics_process(delta):
 		killSelf(true)
 		return
 	
-	move_and_slide(Vector2(dir*250,220).rotated(rotation),Vector2(0,-1),false)
+	move_and_slide(Vector2(dir*300,220).rotated(rotation),Vector2(0,-1),false)
 	if raycast.is_colliding() and cooldown<=0:
-		self.rotation_degrees-=90
+		self.rotation_degrees-=90*dir
 		cooldown=.1
 
-	var obj=enemyRaycast.get_collider()
-	if obj:
-		enemy_touched_alt(obj,obj.get("is_reflecting") == true)
+	#var obj=enemyRaycast.get_collider()
+	#if obj:
+	#	print("Collide!")
+	#	enemy_touched_alt(obj,obj.get("is_reflecting") == true)
 		
 	
 # If bullet touched an enemy, the enemy hitbox will call this function.
@@ -42,11 +44,14 @@ func enemy_touched_alt(obj,reflect):
 	#If whatever called this function can get damaged by a bullet, damage it.
 	#TODO: This doesn't account for damage types or effectiveness or whatever...
 	if reflect:
-		if obj.has_method("add_collision_exception_with"):
-			obj.add_collision_exception_with(self)
+		if cooldown<=0:
+			self.dir*=-1
+			self.rotation_degrees*=-1
+			$Sprite.flip_h=dir==1
+			cooldown=.1
 	else:
 		if obj.has_method("damage"):
-			obj.call("damage",1,Globals.Weapons.Ouroboros)
+			obj.call("damage",2,Globals.Weapons.Ouroboros)
 		killSelf()
 
 func killSelf(silent:bool=false):
