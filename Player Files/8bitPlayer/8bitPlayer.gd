@@ -463,6 +463,13 @@ func get_input(delta):
 					
 				#Same copypasted code as Architect
 				elif currentWeapon==Globals.Weapons.Ouroboros:
+					#print("Checked tile "+String(pos2cell(position)+Vector2(ss,0))+", got "+String(tile))
+					
+					# Check if the tile where the snake would spawn is a wall.
+					# If it is, spawn the snake at the player's position instead.
+					if tiles.get_cellv(pos2cell(position)+Vector2(ss,0)) >= 0:
+						pos.x=position.x
+					
 					bi = wpnSnake.instance()
 					bi.position = pos
 					#get_parent().add_child(bi)

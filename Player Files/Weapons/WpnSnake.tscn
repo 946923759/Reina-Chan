@@ -50,3 +50,11 @@ visible = false
 cast_to = Vector2( 35, 0 )
 collision_mask = 10
 collide_with_areas = true
+
+[node name="Label" type="Label" parent="."]
+visible = false
+margin_left = 0.8909
+margin_top = -44.545
+margin_right = 99.8909
+margin_bottom = -30.545
+text = "get_slide_count"

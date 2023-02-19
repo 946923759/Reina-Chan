@@ -31,7 +31,7 @@ matchnames	UMP9	Dier
 /UMP9	Hey, T-Dolls can have stomach issues too! Somehow.
 /Dier	What kind of feature is that...?
 
-#KEY	AlchemistChicken
+#KEY	AlchemistChicken_M16
 portrait	pic_M16A1_Boss_5	Dier,true,0
 matchnames	M16A1	Dier
 /M16A1	Why the heck is there a chicken in the wall? Is this a glitch?
@@ -120,7 +120,17 @@ portrait
 msg	Unlike M16's regular weapon, grenades cannot be charged.
 
 #KEY	Ouroboros2
-/Ouroboros	Placeholder text
+portrait	pic_UMP9	pic_Ouroboros
+matchnames	PIC9	Ouroboros
+/Ouroboros	Hmph... So you've made it past my puzzles. No matter, my battle strategries are flawless!
+/UMP9	We'll see about that!
+
+#KEY	Ouroboros2_M16
+portrait	pic_M16A1_Boss_5	pic_Ouroboros
+matchnames	M16A1	Ouroboros
+/Ouroboros	Hmph... So you've made it past my puzzles. You didn't just smash through them, right...?
+/M16A1	Would you be sad if I cheated? Don't worry, I solved them properly. Now, let's see what you've got!
+/Ouroboros	(Who's battling who here?)
 
 #KEY	Elisa1
 msg	Placeholder text
@@ -170,4 +180,6 @@ msg	We hope to see you soon for the fourth demo.
 #KEY	Demo4Ending
 preload_portraits	Dier	pic_Scarecrow	pic_M16A1_Boss_5
 matchnames	AmWorks	Scarecrow	M16A1
+portrait	Dier	pic_M16A1_Boss_5
 /AmWorks	We hope you liked the 4th demo! Kept you waiting, huh?
+/M16A1	Try out M16 mode! I have cutscenes now.

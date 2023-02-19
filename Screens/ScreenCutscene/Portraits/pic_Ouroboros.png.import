@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/castlevania 3 stage 1.png-d31b827576c9d7220b4285c6ff034794.stex"
+path="res://.import/pic_Ouroboros.png-aabecc4e2c666787db0a872582b88886.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Stages_Reina/Alchemist/castlevania 3 stage 1.png"
-dest_files=[ "res://.import/castlevania 3 stage 1.png-d31b827576c9d7220b4285c6ff034794.stex" ]
+source_file="res://Screens/ScreenCutscene/Portraits/pic_Ouroboros.png"
+dest_files=[ "res://.import/pic_Ouroboros.png-aabecc4e2c666787db0a872582b88886.stex" ]
 
 [params]
 
@@ -28,6 +28,7 @@ process/fix_alpha_border=true
 process/premult_alpha=false
 process/HDR_as_SRGB=false
 process/invert_color=false
+process/normal_map_invert_y=false
 stream=false
 size_limit=0
 detect_3d=true

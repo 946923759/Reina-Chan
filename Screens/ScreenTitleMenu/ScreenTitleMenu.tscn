@@ -782,7 +782,7 @@ margin_top = 10.0
 margin_right = -642.0
 margin_bottom = -0.200001
 custom_fonts/font = ExtResource( 3 )
-text = "v.2022.12.30"
+text = "v.2023.02.19"
 
 [node name="Label" type="Label" parent="logoHolder"]
 anchor_left = 0.136

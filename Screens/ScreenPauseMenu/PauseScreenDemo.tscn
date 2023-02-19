@@ -237,6 +237,7 @@ __meta__ = {
 }
 
 [node name="Label" type="Label" parent="m"]
+visible = false
 anchor_top = 1.0
 anchor_bottom = 1.0
 margin_left = 10.0
@@ -281,9 +282,6 @@ text = "Debug: Press F1 to
 cycle difficulty."
 align = 2
 uppercase = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="currentDifficulty" type="Label" parent="m"]
 anchor_left = 1.0
@@ -296,9 +294,6 @@ custom_fonts/font = ExtResource( 2 )
 text = "??? mode"
 align = 2
 uppercase = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Fadeout" type="Polygon2D" parent="."]
 visible = false

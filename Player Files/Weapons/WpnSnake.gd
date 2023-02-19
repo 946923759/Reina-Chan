@@ -14,6 +14,9 @@ func init(dir_:int):
 	
 var totalTime:float=0
 var cooldown:float=0
+
+var gravity:Vector2=Vector2(0,0)
+
 func _physics_process(delta):
 	totalTime+=delta
 	cooldown-=delta
@@ -22,9 +25,21 @@ func _physics_process(delta):
 		killSelf(true)
 		return
 	
-	move_and_slide(Vector2(dir*300,220).rotated(rotation),Vector2(0,-1),false)
+	move_and_slide(Vector2(dir*300,220).rotated(rotation)+gravity,Vector2(0,-1),false)
+	#$Label.text=String(get_slide_count())
+	
+	if !is_on_floor() and !is_on_ceiling() and !is_on_wall():
+		gravity.y+=delta*500
+		if gravity.y>100:
+			rotation_degrees=0
+	else:
+		gravity.y=0
+	
+	#if get_slide_count()>3:
+	#	position.x+=50
 	if raycast.is_colliding() and cooldown<=0:
 		self.rotation_degrees-=90*dir
+		gravity.y=0
 		cooldown=.1
 
 	#var obj=enemyRaycast.get_collider()
