@@ -155,6 +155,9 @@ func getNextClosestWeapon(start:int,end:int,increment:int=1):
 	return 0 #The buster is always available, so this should always work
 
 func _input(_ev):
+	if _ev is InputEventJoypadMotion or _ev is InputEventMouseMotion:
+		return
+	
 	if showingInfo:
 		if Input.is_action_just_pressed(\"ui_cancel\") or Input.is_action_just_pressed(\"ui_select\"):
 			if pos>Globals.Weapons.LENGTH_WEAPONS-1:
