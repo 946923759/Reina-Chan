@@ -17,3 +17,5 @@ A "release" will also be created here for the source code when a new demo comes 
 GPLv3 except for the cutscene interpreter ported to Godot which is CC-BY-NC-SA (Similar to GPL, but noncommercial).
 
 This game uses translated code from https://github.com/piulin/piured-engine which is also GPLv3
+
+Game controller images from https://thoseawesomeguys.com/prompts/, CC0.

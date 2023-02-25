@@ -1,0 +1,151 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://ParticleEffects/AlphaMaskPurple.tres" type="Material" id=1]
+
+[sub_resource type="GDScript" id=1]
+script/source = "tool
+extends Node2D
+
+
+var font = load(\"res://ubuntu-font-family/mm3bitmap.png\")
+export(String) var text = \"ABCDEFGZ.,'!:\" setget set_text
+export(int,0,500) var wrap_at = 1
+export(int,1,10) var scale_by = 2
+export(int,\"Left\",\"Center\",\"Right\") var alignment = 0
+
+func set_text(s):
+	text=s
+	update()
+
+func _ready():
+	print(\"!?\".to_ascii())
+	print(\"test\".split(\"\\n\",true))
+	set_process(Engine.editor_hint)
+	update()
+	
+func _process(delta):
+	update()
+
+func _draw():
+	var scale_internal:int = scale_by*8
+	if wrap_at<1:
+		wrap_at=92233720368
+	
+	var tmp = PoolByteArray()
+	var spaceLeft = wrap_at
+	var curLine:int=0
+	
+	var realWords = []
+	for w in text.split(\" \",true):
+		var wds = w.replace(\"\\\\n\",\"\\n\").split(\"\\n\",true)
+		#print(wds)
+		#var ii=0
+		for ii in range(len(wds)):
+#			var sw
+#			print(\"append \"+sw)
+			#if wds[ii]==\"\" and ii==0:
+			#	realWords.append(\"$\")
+			#	continue
+			if ii>0:
+				realWords.append(\"$\")
+			realWords.append(wds[ii])
+		#if len(wds)>1:
+		#	for lbw in wds:
+		#		if len(lbw)>0:
+		#			realWords
+		#	pass
+	#print(realWords)
+	for word in realWords:
+		if word==\"$\":
+			#print(\"Line break!\")
+			#if spaceLeft==0:
+			
+			for j in range(spaceLeft):
+				tmp.append(32)
+			spaceLeft=wrap_at
+			continue
+		#if \"\\\\n\" in word:
+		
+		#FUCK HOW DO I CODE LINE BREAKS
+#		word.replace(\"\\\\n\",\"\\n\") #No idea why this happens
+		var w_bytes = word.to_upper().to_ascii()
+#		for i in range(len(w_bytes)):
+#			if w_bytes[i]==10:
+#				for j in range(spaceLeft):
+#					tmp.append(32)
+#				spaceLeft=0
+#				w_bytes=w_bytes
+		
+		if len(w_bytes) > spaceLeft:
+			for i in range(spaceLeft):
+				tmp.append(32)
+			tmp.append_array(w_bytes)
+			spaceLeft=wrap_at-len(w_bytes)
+		else:
+			tmp.append_array(w_bytes)
+			spaceLeft-=len(w_bytes)
+		
+		if spaceLeft>0:
+			tmp.append(32)
+			spaceLeft-=1
+	#.to_ascii()
+	#print(tmp)
+	for i in range(len(tmp)):
+		
+		if tmp[i]==32: #Space
+			continue
+		
+		var x_pos:int=i%wrap_at
+		var y_pos:int=0
+		if i >= wrap_at:
+			y_pos = int(i/wrap_at)
+			
+		
+		var col = tmp[i]
+		var row:int = 0
+		
+			
+		
+		if col == 46:
+			col = 4
+			row = 2
+		elif col == 44:
+			col = 5
+			row = 2
+		elif col == 39: # 
+			col = 6
+			row = 2
+		elif col == 33: # !
+			col = 7
+			row = 2
+		elif col == 63: # ?
+			col = 8
+			row = 2
+		elif col == 58: # :
+			col = 10
+			row = 2
+		
+		elif col <= 57:
+			col=max(0,col-48)
+		elif col >=65:
+			col-=55 #Starts at 10
+			#Wraps at 16
+			if col>=16:
+				row = int(col/16)
+				col=col%16
+				#print(col,'x',row)
+			
+		#print(col)
+		#tex, dest, source
+		draw_texture_rect_region(font,
+			Rect2(x_pos*scale_internal,y_pos*scale_internal,scale_internal,scale_internal),
+			Rect2(col*9,row*9,8,8)
+		)
+"
+
+[node name="BitmapSprite" type="Node2D"]
+material = ExtResource( 1 )
+script = SubResource( 1 )
+text = "abcd efgh 1234 5678 ,.?!:"
+wrap_at = 10
+scale_by = 7
