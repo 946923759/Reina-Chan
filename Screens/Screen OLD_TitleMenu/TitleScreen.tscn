@@ -80,7 +80,7 @@ func _input(event):
 					selection = 0;
 				highlightList(selection+1, selection);
 				
-		if Input.is_action_just_pressed(\"ui_select\"):
+		if Input.is_action_just_pressed(\"ui_select\") or Input.is_action_just_pressed(\"ui_pause\"):
 			#self.get_node(\"Debug\").text = list.get_child(selection).text;
 			confirmSound.play()
 			var sel = list.get_child(selection);
@@ -434,7 +434,7 @@ __meta__ = {
 
 [node name="StartLabel" type="Label" parent="ItemList"]
 margin_right = 601.0
-margin_bottom = 52.0
+margin_bottom = 45.0
 custom_fonts/font = ExtResource( 5 )
 text = "New Game"
 uppercase = true
@@ -442,9 +442,9 @@ script = SubResource( 3 )
 submenuNode = "DifficultySelect"
 
 [node name="ContinueLabel" type="Label" parent="ItemList"]
-margin_top = 82.0
+margin_top = 75.0
 margin_right = 601.0
-margin_bottom = 134.0
+margin_bottom = 120.0
 custom_fonts/font = ExtResource( 5 )
 text = "Continue"
 uppercase = true
@@ -452,27 +452,27 @@ script = SubResource( 4 )
 enabled = false
 
 [node name="OptionsLabel" type="Label" parent="ItemList"]
-margin_top = 164.0
+margin_top = 150.0
 margin_right = 601.0
-margin_bottom = 216.0
+margin_bottom = 195.0
 custom_fonts/font = ExtResource( 5 )
 text = "Options"
 uppercase = true
 script = SubResource( 5 )
 
 [node name="JukeboxLabel" type="Label" parent="ItemList"]
-margin_top = 246.0
+margin_top = 225.0
 margin_right = 601.0
-margin_bottom = 298.0
+margin_bottom = 270.0
 custom_fonts/font = ExtResource( 5 )
 text = "Jukebox"
 uppercase = true
 script = SubResource( 6 )
 
 [node name="QuitLabel" type="Label" parent="ItemList"]
-margin_top = 328.0
+margin_top = 300.0
 margin_right = 601.0
-margin_bottom = 380.0
+margin_bottom = 345.0
 custom_fonts/font = ExtResource( 5 )
 text = "Quit"
 uppercase = true
@@ -518,11 +518,11 @@ margin_left = 2.0
 margin_top = 1.0
 margin_right = 1281.0
 margin_bottom = 282.0
-custom_fonts/font = SubResource( 10 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_constants/shadow_offset_x = 5
 custom_constants/shadow_offset_y = 5
 custom_constants/shadow_as_outline = 1
+custom_fonts/font = SubResource( 10 )
 text = "asdf"
 align = 1
 autowrap = true
@@ -657,39 +657,39 @@ __meta__ = {
 
 [node name="EZ" type="Label" parent="DifficultySelect"]
 margin_right = 548.0
-margin_bottom = 52.0
+margin_bottom = 45.0
 custom_fonts/font = ExtResource( 5 )
 text = "Super Easy"
 uppercase = true
 
 [node name="EZ2" type="Label" parent="DifficultySelect"]
-margin_top = 82.0
+margin_top = 75.0
 margin_right = 548.0
-margin_bottom = 134.0
+margin_bottom = 120.0
 custom_fonts/font = ExtResource( 5 )
 text = "Easy"
 uppercase = true
 
 [node name="EZ3" type="Label" parent="DifficultySelect"]
-margin_top = 164.0
+margin_top = 150.0
 margin_right = 548.0
-margin_bottom = 216.0
+margin_bottom = 195.0
 custom_fonts/font = ExtResource( 5 )
 text = "Medium"
 uppercase = true
 
 [node name="EZ4" type="Label" parent="DifficultySelect"]
-margin_top = 246.0
+margin_top = 225.0
 margin_right = 548.0
-margin_bottom = 298.0
+margin_bottom = 270.0
 custom_fonts/font = ExtResource( 5 )
 text = "Hard"
 uppercase = true
 
 [node name="EZ5" type="Label" parent="DifficultySelect"]
-margin_top = 328.0
+margin_top = 300.0
 margin_right = 548.0
-margin_bottom = 380.0
+margin_bottom = 345.0
 custom_fonts/font = ExtResource( 5 )
 text = "Custom"
 uppercase = true

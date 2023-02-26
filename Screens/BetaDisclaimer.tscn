@@ -2,76 +2,55 @@
 
 [ext_resource path="res://ubuntu-font-family/Ubuntu-B.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://loopingTextFade.gd" type="Script" id=2]
+[ext_resource path="res://Screens/ScreenWithMenuElements.tscn" type="PackedScene" id=3]
 
-[sub_resource type="GDScript" id=1]
-script/source = "extends Node
-
-func _input(_event):
-	#Ignore alt key on this screen so Alt+Enter doesn't go forward
-	if (Input.is_action_just_pressed(\"ui_pause\") or Input.is_action_just_pressed(\"ui_select\")) or (_event is InputEventMouseButton and _event.button_index == 1) or (_event is InputEventScreenTouch) and !Input.is_key_pressed(KEY_ALT):
-		Globals.change_screen(get_tree(),\"ScreenTitleMenu\")
-	elif !(_event is InputEventMouseMotion):
-		print(String(_event.get_device())+\" \"+_event.as_text())
-"
-
-[sub_resource type="DynamicFont" id=2]
+[sub_resource type="DynamicFont" id=1]
 size = 30
 use_mipmaps = true
 use_filter = true
 font_data = ExtResource( 1 )
 
-[sub_resource type="GDScript" id=3]
+[sub_resource type="GDScript" id=2]
 script/source = "extends Label
 
 func _ready():
 	if OS.has_feature(\"mobile\"):
 		self.text = INITrans.GetString(\"Startup\",\"TopHeader\")+'\\n\\n'+INITrans.GetString(\"Startup\",'Controls for a mobile device')+\":\\n\"+INITrans.GetString(\"Startup\",'mobile_desc')
-	$Tween.interpolate_property(self, \"modulate:a\",
-		0, 1, .3, Tween.TRANS_LINEAR, Tween.EASE_IN);
-	$Tween.start();
+	#$Tween.interpolate_property(self, \"modulate:a\",
+	#	0, 1, .3, Tween.TRANS_LINEAR, Tween.EASE_IN);
+	#$Tween.start();
 "
 
-[node name="Node" type="Control"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-size_flags_horizontal = 3
-script = SubResource( 1 )
+[node name="BetaDisclaimer" instance=ExtResource( 3 )]
+PrevScreen = "ScreenHowToPlay"
+NextScreen = "ScreenHowToPlay"
+HandlePhysicalBButton = false
+HandlePhysicalAButton = true
 
-[node name="Panel" type="Panel" parent="."]
+[node name="Panel" type="Panel" parent="." index="0"]
 modulate = Color( 0, 0, 0, 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
-
-[node name="CenterContainer" type="CenterContainer" parent="."]
+[node name="CenterContainer" type="CenterContainer" parent="." index="1"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 rect_clip_content = true
 size_flags_horizontal = 0
 size_flags_vertical = 0
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
-[node name="Label" type="Label" parent="CenterContainer"]
+[node name="Label" type="Label" parent="CenterContainer" index="0"]
 margin_right = 1280.0
 margin_bottom = 720.0
 rect_min_size = Vector2( 1280, 720 )
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = SubResource( 1 )
 text = "Thanks for trying the fourth demo of Reina-Chan!
 Please report bugs or feedback at PatchouliSama765@gmail.com
 or on the itch.io page
 
-Controls for keyboard:
-Z is forward/jump, X is back/shoot
-Enter is start/weapon select, Backspace is select/pause
+Controls for keyboard or controller are on the next screen.
+If you forget, press pause during a stage to view them again.
 
-Controls for a game controller:
-A is shoot, B is jump, C is grenades (if unlocked), L1/R1 switches weapons
 Due to a Godot Engine bug the control sticks do not work on Windows, please use
 Steam input remapping. Vibration also does not work for non-XInput controllers.
 
@@ -81,14 +60,12 @@ The debug menu can be toggled with F9 during a stage."
 align = 1
 autowrap = true
 clip_text = true
-script = SubResource( 3 )
+script = SubResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Tween" type="Tween" parent="CenterContainer/Label"]
-
-[node name="press_key_dialogue" type="Label" parent="."]
+[node name="press_key_dialogue" type="Label" parent="." index="2"]
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
@@ -97,13 +74,13 @@ margin_left = -640.0
 margin_top = -50.0
 margin_right = 640.0
 margin_bottom = -16.0
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = SubResource( 1 )
 text = "press_key_dialogue"
 align = 1
 valign = 1
 script = ExtResource( 2 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
-[node name="Tween" type="Tween" parent="press_key_dialogue"]
+[node name="Tween" type="Tween" parent="press_key_dialogue" index="0"]
+
+[node name="smScreenInOut" parent="." index="3"]
+timeToTweenOut = 0.25

@@ -609,7 +609,8 @@ func get_input(delta):
 			#	set_collision_mask_bit(0,false)
 			#	set_collision_layer_bit(0,false)
 		if canAirDash:
-			if (down and jump) or Input.is_action_pressed("gameplay_dash"):
+			#Allowing dash on R2 was way too powerful
+			if (down and jump): #or Input.is_action_pressed("gameplay_dash"):
 				state = State.DASH
 				dash_time=.5
 				sprite.set_animation("Dash")

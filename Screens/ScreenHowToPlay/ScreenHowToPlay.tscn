@@ -1,60 +1,30 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://Screens/ScreenHowToPlay/XboxSeriesX_Diagram.png" type="Texture" id=1]
-[ext_resource path="res://ubuntu-font-family/BitmapFont.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Screens/ScreenWithMenuElements.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Screens/ScreenHowToPlay/HowToPlay.tscn" type="PackedScene" id=2]
 
-[node name="Control" type="Control"]
+[sub_resource type="GDScript" id=1]
+script/source = "extends \"res://Screens/ScreenWithMenuElements.gd\"
+
+func _input(event):
+	$HowToPlay.input(event)
+	
+	#._input(event)
+"
+
+[node name="ScreenHowToPlay" instance=ExtResource( 1 )]
+script = SubResource( 1 )
+PrevScreen = "ScreenTitleMenu"
+NextScreen = "ScreenTitleMenu"
+HandlePhysicalAButton = true
+
+[node name="Panel" type="ColorRect" parent="." index="0"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+color = Color( 0, 0, 0, 1 )
 
-[node name="XboxSeriesXDiagram" type="TextureRect" parent="."]
-anchor_right = 1.0
-anchor_bottom = 1.0
-texture = ExtResource( 1 )
-stretch_mode = 4
+[node name="HowToPlay" parent="." index="1" instance=ExtResource( 2 )]
 
-[node name="BitmapSprite" parent="." instance=ExtResource( 2 )]
-modulate = Color( 0.054902, 1, 0, 1 )
-position = Vector2( 762.087, 388.241 )
-text = "jump"
-scale_by = 4
-
-[node name="BitmapSprite2" parent="." instance=ExtResource( 2 )]
-modulate = Color( 1, 0, 0, 1 )
-position = Vector2( 890.875, 310.926 )
-text = "shoot"
-scale_by = 4
-
-[node name="BitmapSprite3" parent="." instance=ExtResource( 2 )]
-modulate = Color( 0, 0.952941, 1, 1 )
-position = Vector2( 532.696, 313.154 )
-text = "grenade"
-scale_by = 4
-
-[node name="BitmapSprite4" parent="." instance=ExtResource( 2 )]
-position = Vector2( 877.991, 183.004 )
-text = "next wpn"
-scale_by = 4
-
-[node name="BitmapSprite5" parent="." instance=ExtResource( 2 )]
-position = Vector2( 143.329, 183.587 )
-text = "prev wpn"
-scale_by = 4
-
-[node name="BitmapSprite6" parent="." instance=ExtResource( 2 )]
-position = Vector2( 332.876, 602.727 )
-text = "start: weapon screen"
-wrap_at = 24
-scale_by = 4
-
-[node name="BitmapSprite7" parent="." instance=ExtResource( 2 )]
-position = Vector2( 318.193, 653.45 )
-text = "select: STAGE OPTIONS"
-wrap_at = 24
-scale_by = 4
-
-[node name="BitmapSprite8" parent="." instance=ExtResource( 2 )]
-position = Vector2( 421.537, 24.476 )
-text = "how to play"
-wrap_at = 24
-scale_by = 5
+[node name="smScreenInOut" parent="." index="2"]
+timeToTweenIn = 0.25
+timeToTweenOut = 0.0

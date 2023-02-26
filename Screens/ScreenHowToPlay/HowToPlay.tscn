@@ -1,0 +1,205 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://Screens/ScreenHowToPlay/XboxSeriesX_Diagram.png" type="Texture" id=1]
+[ext_resource path="res://ubuntu-font-family/BitmapFont.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Screens/ScreenHowToPlay/Blank_QWERTkeyboard_for_input_methods.svg.png" type="Texture" id=3]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Control
+
+export(int, FLAGS,
+	\"Air Dash\",
+	\"Grenade\",
+	\"None\",
+	\"None\",
+	\"None\",
+	\"None\",
+	\"None\",
+	\"None\",
+	\"None\") var unlocked_abilities=0
+
+func _ready():
+	$Keyboard.visible=false
+	$Keyboard.rect_position.y=0
+
+#func _input(event):
+#	if 
+
+#Passed by the pause screen.
+func input(_event):
+	if _event is InputEventMouseButton or _event is InputEventMouseMotion:
+		return
+	$Keyboard.visible=(_event is InputEventKey)
+	$Controller.visible=(_event is InputEventJoypadButton)
+	#if _event is InputEventKey:
+"
+
+[node name="HowToPlay" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = SubResource( 1 )
+unlocked_abilities = 3
+
+[node name="BitmapSprite8" parent="." instance=ExtResource( 2 )]
+position = Vector2( 421.537, 24.476 )
+text = "how to play"
+wrap_at = 24
+scale_by = 5
+
+[node name="Controller" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="XboxSeriesXDiagram" type="TextureRect" parent="Controller"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 1 )
+stretch_mode = 4
+
+[node name="Jump" parent="Controller" instance=ExtResource( 2 )]
+modulate = Color( 0.054902, 1, 0, 1 )
+position = Vector2( 762.087, 388.241 )
+text = "jump"
+scale_by = 4
+
+[node name="Jump2" parent="Controller" instance=ExtResource( 2 )]
+modulate = Color( 1, 0.890196, 0, 1 )
+position = Vector2( 697.87, 239.59 )
+text = "air dash"
+scale_by = 4
+
+[node name="Shoot" parent="Controller" instance=ExtResource( 2 )]
+modulate = Color( 1, 0, 0, 1 )
+position = Vector2( 890.875, 310.926 )
+text = "shoot"
+scale_by = 4
+
+[node name="Grenade" parent="Controller" instance=ExtResource( 2 )]
+modulate = Color( 0, 0.952941, 1, 1 )
+position = Vector2( 532.696, 313.154 )
+text = "grenade"
+scale_by = 4
+
+[node name="BitmapSprite4" parent="Controller" instance=ExtResource( 2 )]
+position = Vector2( 877.991, 183.004 )
+text = "next wpn"
+scale_by = 4
+
+[node name="BitmapSprite5" parent="Controller" instance=ExtResource( 2 )]
+position = Vector2( 143.329, 183.587 )
+text = "prev wpn"
+scale_by = 4
+
+[node name="BitmapSprite8" parent="Controller" instance=ExtResource( 2 )]
+position = Vector2( 235.433, 86.1437 )
+text = "    alt grenade"
+scale_by = 4
+
+[node name="BitmapSprite9" parent="Controller" instance=ExtResource( 2 )]
+position = Vector2( 820.093, 84.8089 )
+text = "alt shoot"
+wrap_at = 8
+scale_by = 4
+
+[node name="BitmapSprite6" parent="Controller" instance=ExtResource( 2 )]
+position = Vector2( 332.876, 602.727 )
+text = "start: weapon screen"
+wrap_at = 24
+scale_by = 4
+
+[node name="BitmapSprite7" parent="Controller" instance=ExtResource( 2 )]
+position = Vector2( 318.193, 653.45 )
+text = "select: STAGE OPTIONS"
+wrap_at = 24
+scale_by = 4
+
+[node name="Keyboard" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 720.0
+margin_bottom = 720.0
+
+[node name="TextureRect" type="TextureRect" parent="Keyboard"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 3 )
+stretch_mode = 4
+
+[node name="Jump" parent="Keyboard" instance=ExtResource( 2 )]
+modulate = Color( 0.054902, 1, 0, 1 )
+position = Vector2( 315.774, 482.748 )
+text = "jump"
+scale_by = 4
+
+[node name="Shoot" parent="Keyboard" instance=ExtResource( 2 )]
+modulate = Color( 1, 0, 0, 1 )
+position = Vector2( 379.657, 528.062 )
+text = "shoot"
+scale_by = 4
+
+[node name="Grenade" parent="Keyboard" instance=ExtResource( 2 )]
+modulate = Color( 0, 0.952941, 1, 1 )
+position = Vector2( 483.939, 483.211 )
+text = "grenade"
+scale_by = 4
+
+[node name="BitmapSprite6" parent="Keyboard" instance=ExtResource( 2 )]
+position = Vector2( 317.74, 596 )
+text = "enter: Weapon screen"
+wrap_at = 24
+scale_by = 4
+
+[node name="BitmapSprite7" parent="Keyboard" instance=ExtResource( 2 )]
+position = Vector2( 261.012, 648.405 )
+text = "backspace: stage options"
+wrap_at = 24
+scale_by = 4
+
+[node name="BitmapSprite5" parent="Keyboard" instance=ExtResource( 2 )]
+modulate = Color( 0.905882, 0.462745, 1, 1 )
+position = Vector2( 50.955, 375.617 )
+text = "prev wpn----"
+wrap_at = 13
+scale_by = 3
+
+[node name="BitmapSprite8" parent="Keyboard" instance=ExtResource( 2 )]
+modulate = Color( 1, 0.470588, 0.968627, 1 )
+position = Vector2( 1040.55, 429.458 )
+text = "next wpn"
+scale_by = 3
+
+[node name="BitmapSprite9" parent="Keyboard" instance=ExtResource( 2 )]
+modulate = Color( 0.717647, 0.717647, 0.717647, 1 )
+position = Vector2( 1039.79, 380.19 )
+text = "start"
+scale_by = 3
+
+[node name="BitmapSprite10" parent="Keyboard" instance=ExtResource( 2 )]
+modulate = Color( 0.619608, 0.670588, 0.501961, 1 )
+position = Vector2( 1040.09, 272.116 )
+text = "select"
+scale_by = 3
+
+[node name="Shoot2" parent="Keyboard" instance=ExtResource( 2 )]
+position = Vector2( 8, 696 )
+text = "Have a controller? press the d-pad to show controller help."
+wrap_at = 92233720368
+scale_by = 2
+
+[node name="Control" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 1440.0
+margin_bottom = 1440.0
+
+[node name="BitmapSprite9" parent="Control" instance=ExtResource( 2 )]
+position = Vector2( 240.354, 305.226 )
+text = "you're using a phone!"
+wrap_at = 24
+scale_by = 5
+
+[node name="BitmapSprite10" parent="Control" instance=ExtResource( 2 )]
+position = Vector2( 208.44, 370.742 )
+text = "controls are on-screen."
+wrap_at = 24
+scale_by = 5

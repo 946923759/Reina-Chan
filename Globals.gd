@@ -717,6 +717,7 @@ func bitArrayToInt32(arr:Array)->int:
 
 var SCREENS:Dictionary = {
 	"ScreenDisclaimer":"res://Screens/BetaDisclaimer.tscn",
+	"ScreenHowToPlay":"res://Screens/ScreenHowToPlay/ScreenHowToPlay.tscn",
 	"ScreenTitleMenu":"res://Screens/ScreenTitleMenu/ScreenTitleMenu.tscn",
 	"ScreenSelectCharacter":"res://Screens/ScreenSelectCharacter/ScreenSelectCharacter.tscn",
 	"ScreenSelectStage":"res://Screens/ScreenStageSelectV2/ScreenSelectStage.tscn",

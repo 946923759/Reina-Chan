@@ -1,0 +1,40 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Screens/ScreenWithMenuElements.gd" type="Script" id=2]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends ColorRect
+
+export(float,0,5,.05) var timeToTweenIn=.5
+export(float,0,5,.05) var timeToTweenOut=.5
+var t:Tween
+func _init():
+	t=Tween.new()
+	self.add_child(t)
+	
+	mouse_filter=Control.MOUSE_FILTER_IGNORE
+	if timeToTweenIn>0 or timeToTweenOut>0:
+		visible=true
+
+func _ready():
+	t.interpolate_property(self,\"modulate:a\",1,0,timeToTweenIn)
+	t.start()
+	
+func OffCommand(next_screen:String):
+	t.interpolate_property(self,\"modulate:a\",0,1,timeToTweenOut)
+	t.start()
+	yield(t,\"tween_completed\")
+	Globals.change_screen(get_tree(),next_screen)
+"
+
+[node name="ScreenWithMenuElements" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 2 )
+
+[node name="smScreenInOut" type="ColorRect" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 1 )
+script = SubResource( 1 )

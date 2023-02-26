@@ -18,8 +18,8 @@ func set_text(s):
 	update()
 
 func _ready():
-	print(\"!?\".to_ascii())
-	print(\"test\".split(\"\\n\",true))
+	#print(\"-\".to_ascii())
+	#print(\"test\".split(\"\\n\",true))
 	set_process(Engine.editor_hint)
 	update()
 	
@@ -112,6 +112,9 @@ func _draw():
 		elif col == 44:
 			col = 5
 			row = 2
+		elif col == 45: # -
+			col= 9
+			row = 2
 		elif col == 39: # 
 			col = 6
 			row = 2
@@ -146,6 +149,6 @@ func _draw():
 [node name="BitmapSprite" type="Node2D"]
 material = ExtResource( 1 )
 script = SubResource( 1 )
-text = "abcd efgh 1234 5678 ,.?!:"
+text = "abcd efgh 1234 5678 ,.:-"
 wrap_at = 10
 scale_by = 7

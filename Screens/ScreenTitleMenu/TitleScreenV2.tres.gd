@@ -173,7 +173,7 @@ func _input(event):
 				selectSound.play()
 				highlightList(mainMenu, selection);
 				
-		if Input.is_action_just_pressed("ui_select"):
+		if Input.is_action_just_pressed("ui_select") or Input.is_action_just_pressed("ui_pause"):
 			input_select()
 
 func input_select():

@@ -866,7 +866,7 @@ bottomBound = -9999
 
 [node name="Node2D" parent="BossRoomTest/Door" index="4" instance=ExtResource( 17 )]
 position = Vector2( 256, 192 )
-message = PoolStringArray( "portrait|pic_UMP9|pic_Architect", "speaker|Architect", "msg|This is a test intro block.", "speaker|UMP9", "msg|Hello world, I\'m family-chan! aoijsdoaidj" )
+message_id = "TestStageCutscene"
 
 [node name="BossArchitect" parent="BossRoomTest/Door/Node2D" index="3" instance=ExtResource( 26 )]
 position = Vector2( 736, 0 )

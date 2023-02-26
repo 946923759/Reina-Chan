@@ -17,7 +17,7 @@
 [ext_resource path="res://Screens/ScreenPauseMenu/Grenade.png" type="Texture" id=15]
 [ext_resource path="res://Screens/ScreenPauseMenu/AirDash.png" type="Texture" id=16]
 [ext_resource path="res://ubuntu-font-family/BitmapFont.tscn" type="PackedScene" id=17]
-[ext_resource path="res://Screens/ScreenHowToPlay/ScreenHowToPlay.tscn" type="PackedScene" id=18]
+[ext_resource path="res://Screens/ScreenHowToPlay/HowToPlay.tscn" type="PackedScene" id=18]
 
 [sub_resource type="GDScript" id=1]
 script/source = "extends Control
@@ -104,7 +104,7 @@ func UpdateFocus(n:int):
 func UpdateAmmo(ammo:PoolIntArray):
 	for i in range(min(len(ammo),weaponListCount)):
 		weaponList.get_child(i).set_ammo(ammo[i]/144.0)
-	$Sprite/LifeCounter._ready()
+	$Page1/Sprite/LifeCounter._ready()
 	
 func OnCommand(curWeapon:int=0):
 	if !isStandAlone:
@@ -121,8 +121,13 @@ func OnCommand(curWeapon:int=0):
 	UpdateFocus(curWeapon)
 	self.visible=true
 	tw.interpolate_property(self,\"modulate:a\",0.0,1.0,.1);
-	tw.start()
+	
+	pauseMenuPage=0
+	switchPages(0)
+	#tw.start() #switchPages will do it for us
+	
 	$pause.play()
+	
 	#print(\"[PauseScreen] OnCommand!\")
 	set_process_input(true)
 	set_process(true)
@@ -140,10 +145,10 @@ func OffCommand()->Tween:
 	print(\"[PauseScreen] OffCommand!\")
 	return tw
 
-func switchPages():
+func switchPages(time:float=.5):
 	var xPos = -1280*pauseMenuPage
-	tw.interpolate_property($Page1,\"position:x\",null,xPos,.5,Tween.TRANS_CUBIC,Tween.EASE_OUT)
-	tw.interpolate_property($Page2,\"rect_position:x\",null,xPos+1280,.5,Tween.TRANS_CUBIC,Tween.EASE_OUT)
+	tw.interpolate_property($Page1,\"position:x\",null,xPos,time,Tween.TRANS_CUBIC,Tween.EASE_OUT)
+	tw.interpolate_property($Page2,\"rect_position:x\",null,xPos+1280,time,Tween.TRANS_CUBIC,Tween.EASE_OUT)
 	tw.start()
 
 
@@ -194,6 +199,7 @@ func _input(_ev):
 			#	pos=tmp_pos
 			info.play()
 	elif pauseMenuPage>0:
+		$Page2.input(_ev)
 		if Input.is_action_just_pressed(\"R1\") or Input.is_action_just_pressed(\"L1\"):
 			pauseMenuPage=0
 			switchPages()
@@ -231,6 +237,7 @@ func _input(_ev):
 				return
 			OffCommand()
 		elif Input.is_action_just_pressed(\"R1\"):
+			$Page2.input(_ev)
 			if pauseMenuPage < NUM_PAGES-1:
 				pauseMenuPage +=1
 			else:
