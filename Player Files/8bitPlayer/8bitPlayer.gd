@@ -165,7 +165,7 @@ func _ready():
 
 func _process(delta):
 	grenadeThrower.update(delta);
-	if hasGrenadeAbility and !grenadeThrower.isReadyToThrow() and currentWeapon==0:
+	if hasGrenadeAbility and currentWeapon==0 and !grenadeThrower.isReadyToThrow():
 		HPBar.show_weapon(true,grenadeThrower.getCooldownPercent())
 	pass
 
@@ -191,10 +191,7 @@ func switchWeapon(showIcon:bool=true):
 	sprite.get_material().set_shader_param("clr2", Globals.weaponColorSwaps[currentWeapon][1])
 	#print(weaponMeters[currentWeapon]/144.0)
 	HPBar.show_weapon(currentWeapon!=0 or hasGrenadeAbility,weaponMeters[currentWeapon]/144.0)
-	if currentWeapon!=0:
-		HPBar.get_material().set_shader_param("clr1", Globals.weaponColorSwaps[currentWeapon][0])
-		HPBar.get_material().set_shader_param("clr2", Globals.weaponColorSwaps[currentWeapon][1])
-	elif hasGrenadeAbility:
+	if currentWeapon!=0 or hasGrenadeAbility:
 		HPBar.get_material().set_shader_param("clr1", Globals.weaponColorSwaps[currentWeapon][0])
 		HPBar.get_material().set_shader_param("clr2", Globals.weaponColorSwaps[currentWeapon][1])
 		
