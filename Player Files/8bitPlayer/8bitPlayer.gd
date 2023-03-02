@@ -8,7 +8,6 @@ export (int) var jump_speed = -1200
 export (float,1,10,.5) var dash_multiplier
 export (int,100,10000) var gravity = 3500
 export (float,0,5) var time_before_active=.3
-#export (int,"UMP9","M16") var character_in_debug_mode=0
 
 #0 = UMP9
 #1 = M16 (can charge and dash, no other difference)
@@ -111,7 +110,7 @@ var grenadeThrower: PlayerGrenadeThrower;
 func _ready():
 	
 	stageRoot = get_node("/root/Node2D/")
-	tiles = self.get_node("/root/Node2D/TileMap");
+	tiles = get_node("/root/Node2D/TileMap");
 	LADDER_TILE_ID = stageRoot.LADDER_TILE_ID
 	LADDER_TOP_TILE_ID = stageRoot.LADDER_TOP_TILE_ID
 	
@@ -166,6 +165,8 @@ func _ready():
 
 func _process(delta):
 	grenadeThrower.update(delta);
+	if hasGrenadeAbility and !grenadeThrower.isReadyToThrow() and currentWeapon==0:
+		HPBar.show_weapon(true,grenadeThrower.getCooldownPercent())
 	pass
 
 func setDebugInfoText():
@@ -189,10 +190,14 @@ func switchWeapon(showIcon:bool=true):
 	sprite.get_material().set_shader_param("clr1", Globals.weaponColorSwaps[currentWeapon][0])
 	sprite.get_material().set_shader_param("clr2", Globals.weaponColorSwaps[currentWeapon][1])
 	#print(weaponMeters[currentWeapon]/144.0)
-	HPBar.show_weapon(currentWeapon!=0,weaponMeters[currentWeapon]/144.0)
+	HPBar.show_weapon(currentWeapon!=0 or hasGrenadeAbility,weaponMeters[currentWeapon]/144.0)
 	if currentWeapon!=0:
 		HPBar.get_material().set_shader_param("clr1", Globals.weaponColorSwaps[currentWeapon][0])
 		HPBar.get_material().set_shader_param("clr2", Globals.weaponColorSwaps[currentWeapon][1])
+	elif hasGrenadeAbility:
+		HPBar.get_material().set_shader_param("clr1", Globals.weaponColorSwaps[currentWeapon][0])
+		HPBar.get_material().set_shader_param("clr2", Globals.weaponColorSwaps[currentWeapon][1])
+		
 	
 	#print(Globals.weaponColorSwaps[currentWeapon][0])
 	#print(Globals.weaponColorSwaps[currentWeapon][1])
@@ -327,6 +332,8 @@ func get_input(delta):
 		canAirDash=true
 	if hasGrenadeAbility==false and Globals.playerData.specialAbilities[Globals.SpecialAbilities.Grenade]:
 		hasGrenadeAbility=true
+		#Refresh to show grenade meter after unlocking it
+		switchWeapon(false)
 	
 	#It's here because freeRoam overrides R1
 	if Input.is_action_just_pressed("R1"):
@@ -860,14 +867,12 @@ func _physics_process(delta):
 			#Cancel dash if player is outside camera bounds.
 			else: 
 				dash_time=0
-		#else:
-			
-		#return
-		#pass
+
 
 	if is_on_floor() and velocity.y >= 0:
 		if state == State.FALLING:
 			footstep.play()
+			sprite.playing=true #If sprite was paused at any point
 		#if state!=State.NORMAL:
 		#	print("Resetting state, player touched ground")
 		state = State.NORMAL

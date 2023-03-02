@@ -18,6 +18,11 @@ func _init(cooldownDuration: float, bulletHolderReference: Node2D):
 func isReadyToThrow() -> bool:
 	return currentCooldownTimer <= 0.0;
 	
+#For weapon meter
+#TODO: SCALE() isn't even needed for this, is it?
+func getCooldownPercent() -> float:
+	return Def.SCALE(cooldownDuration-currentCooldownTimer,0,cooldownDuration,0,1)
+	
 func update(deltaTime: float) -> void:
 	if (currentCooldownTimer > 0.0):
 		currentCooldownTimer -= deltaTime;

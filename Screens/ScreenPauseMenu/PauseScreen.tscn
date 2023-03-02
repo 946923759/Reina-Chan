@@ -423,7 +423,7 @@ onready var weaponInfos:Array = [
 	[   #Grenade.
 		1,
 		2,
-		9,
+		1,
 		0
 	]
 ]

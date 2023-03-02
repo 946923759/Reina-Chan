@@ -143,7 +143,7 @@ func show_weapon(b,newValue:float=-1):
 		texture=normalBar
 	showingWeapon=b
 	currentAmmo=ceil(newValue*24.0)
-	print(currentAmmo)
+	#print(currentAmmo)
 	update()
 
 var timer:float=0.0

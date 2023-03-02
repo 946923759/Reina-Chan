@@ -39,3 +39,15 @@ static func Sprite(d)->smSprite:
 		else:
 			s.set(property,d[property])
 	return s
+
+#//Stolen from RageUtil
+#/**
+# * @brief Scales x so that l1 corresponds to l2 and h1 corresponds to h2.
+# *
+# * This does not modify x, so it MUST assign the result to something!
+# * Do the multiply before the divide to that integer scales have more precision.
+# *
+# * One such example: SCALE(x, 0, 1, L, H); interpolate between L and H.
+# */
+static func SCALE(x:float, l1:float, h1:float, l2:float, h2:float)->float:
+	return (((x) - (l1)) * ((h2) - (l2)) / ((h1) - (l1)) + (l2))
