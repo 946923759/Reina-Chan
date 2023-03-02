@@ -12,6 +12,6 @@ visible = true
 text = "frameTimer = null
 isOnFloor = null
 canAirDash = null
-canThrowGrenade = null
+hasGrenadeAbility = null
 "
-properties = PoolStringArray( "frameTimer", "isOnFloor", "canAirDash", "canThrowGrenade" )
+properties = PoolStringArray( "frameTimer", "isOnFloor", "canAirDash", "hasGrenadeAbility" )
