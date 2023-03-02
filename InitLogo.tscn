@@ -83,9 +83,6 @@ margin_top = -360.0
 margin_right = 640.0
 margin_bottom = 360.0
 texture = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 2 )

@@ -27,7 +27,8 @@ func animationFinished():
 	
 func _physics_process(delta):
 	move_and_slide(Vector2(0,300))
-	#pass"
+	#pass
+"
 
 [sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 15, 17 )
@@ -42,6 +43,6 @@ frames = ExtResource( 2 )
 frame = 16
 offset = Vector2( -10, 0 )
 
-[node name="Timer" type="Timer" parent="." index="7"]
+[node name="Timer" type="Timer" parent="." index="6"]
 wait_time = 0.5
 one_shot = true
