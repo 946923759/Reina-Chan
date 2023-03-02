@@ -2,6 +2,7 @@ extends KinematicBody2D
 
 const SPEED = 250;
 
+export (float) var grenade_throw_cooldown = 1.5;
 export (int) var run_speed = 350
 export (int) var jump_speed = -1200
 export (float,1,10,.5) var dash_multiplier
@@ -51,8 +52,6 @@ var shoot_sprite_time = 0
 var bullet = preload("res://Player Files/Weapons/bullet.tscn")
 var archiRocket = preload("res://Player Files/Weapons/ArchiRocket_Player.tscn")
 var wpnSnake = preload("res://Player Files/Weapons/WpnSnake.tscn")
-
-var grenade = preload("res://Player Files/Weapons/PlayerGrenade.tscn")
 #how long UMP9 dashes when using the dash attack, or how long the slide goes
 #if it's above 0 it's currently active.
 var dash_time:float = 0.0
@@ -107,6 +106,8 @@ var SPIKES_TILE_ID
 var DEATH_TILE_ID
 var lastDebugWarped=-1
 
+var grenadeThrower: PlayerGrenadeThrower;
+
 func _ready():
 	
 	stageRoot = get_node("/root/Node2D/")
@@ -130,6 +131,8 @@ func _ready():
 	bulletManager.init(stageRoot)
 	bulletHolder=Node2D.new()
 	stageRoot.call_deferred("add_child",bulletHolder)
+	
+	grenadeThrower = PlayerGrenadeThrower.new(grenade_throw_cooldown, bulletHolder);
 	
 	debugDisplay.visible=OS.is_debug_build()
 	
@@ -160,7 +163,10 @@ func _ready():
 	sprite.frame=0
 	
 	setDebugInfoText()
-	
+
+func _process(delta):
+	grenadeThrower.update(delta);
+	pass
 
 func setDebugInfoText():
 	var t = $CanvasLayer/DebugDisplay/FreeRoam
@@ -310,7 +316,7 @@ var negativeFrameTimer:float=0.0
 #This will always be false if they haven't
 #unlocked the special weapon.
 var canAirDash:bool=false
-var canThrowGrenade:bool=false
+var hasGrenadeAbility:bool=false
 
 var isOnFloor:bool=false
 func get_input(delta):
@@ -319,8 +325,8 @@ func get_input(delta):
 	#I WANT REFERENCE VARIABLES REEEEEEEEE
 	if canAirDash==false and isOnFloor and Globals.playerData.specialAbilities[Globals.SpecialAbilities.AirDash]:
 		canAirDash=true
-	if canThrowGrenade==false and Globals.playerData.specialAbilities[Globals.SpecialAbilities.Grenade]:
-		canThrowGrenade=true
+	if hasGrenadeAbility==false and Globals.playerData.specialAbilities[Globals.SpecialAbilities.Grenade]:
+		hasGrenadeAbility=true
 	
 	#It's here because freeRoam overrides R1
 	if Input.is_action_just_pressed("R1"):
@@ -382,26 +388,9 @@ func get_input(delta):
 	#All this shit is copypasted from the example platformer so I have no idea how it works
 	# A good idea when implementing characters of all kinds,
 	# compensates for physics imprecision, as well as human reaction delay.
-	if grenade_input and canThrowGrenade:
+	if grenade_input and hasGrenadeAbility:
 		if (Globals.playerData.gameDifficulty <= Globals.Difficulty.EASY or bulletManager.get_num_bullets() < 3):
-			
-			#print("Throw!")
-			var inst = grenade.instance()
-			var ss:float
-			if sprite.flip_h:
-				ss = -1.0
-			else:
-				ss = 1.0
-			var pos = position + Vector2(20*ss, 10)
-			if state == State.ON_LADDER:
-				pos = position + Vector2(20*ss, -20)
-			inst.position=pos
-			bulletHolder.add_child(inst)
-			inst.init(ss)
-			shoot_time = 0
-			if Globals.playerData.gameDifficulty > Globals.Difficulty.EASY:
-				bulletManager.push_bullet(inst)
-			
+			throwGrenade();
 	elif shoot:
 		if currentWeapon == Globals.Weapons.Alchemist and weaponMeters[currentWeapon]>=Globals.weaponEnergyCost[currentWeapon]:
 			if is_on_floor() and dash_time<=0:
@@ -638,6 +627,23 @@ func get_free_roam_input(_delta):
 	if Input.is_action_pressed('ui_up'):
 		velocity.y = -500*m
 	#velocity = velocity.normalized() * SPEED
+
+func throwGrenade() -> void:
+	var spriteOrientation:float
+	if sprite.flip_h:
+		spriteOrientation = -1.0
+	else:
+		spriteOrientation = 1.0
+		
+	var nadePosition = position + Vector2(20 * spriteOrientation, 10)
+	if state == State.ON_LADDER:
+		nadePosition = position + Vector2(20 * spriteOrientation, -20)
+	
+	var grenadeInstance = grenadeThrower.tryThrowGrenade(nadePosition, spriteOrientation);
+	if (grenadeInstance != null):
+		shoot_time = 0
+		if Globals.playerData.gameDifficulty > Globals.Difficulty.EASY:
+			bulletManager.push_bullet(grenadeInstance)
 
 #The world_to_map function does NOT take into account the scale of the tilemap, so we have to calculate
 #the tile's actual mapping ourselves.
