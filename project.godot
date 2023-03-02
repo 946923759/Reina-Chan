@@ -150,6 +150,11 @@ _global_script_classes=[ {
 "path": "res://addons/godot-next/global/physics_layers.gd"
 }, {
 "base": "Reference",
+"class": "PlayerGrenadeThrower",
+"language": "GDScript",
+"path": "res://Player Files/Weapons/PlayerGrenadeThrower.gd"
+}, {
+"base": "Reference",
 "class": "ProjectTools",
 "language": "GDScript",
 "path": "res://addons/godot-next/global/project_tools.gd"
@@ -303,6 +308,7 @@ _global_script_class_icons={
 "MessageDispatcherWrapper": "",
 "PIURED_ID": "",
 "PhysicsLayers": "",
+"PlayerGrenadeThrower": "",
 "ProjectTools": "",
 "PropertyInfo": "",
 "PropertyInfoFactory": "",

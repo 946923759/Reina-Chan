@@ -22,7 +22,7 @@ func _ready():
 	#a1.offset=Vector2(0,0)
 	#a2.offset=Vector2(0,0)
 	#a3.offset=Vector2(0,0)
-	
+
 	#I DON'T UNDERSTAND WHY THIS WILL OVERRIDE THE BASE
 	#SCENES IF YOU CHANGE IT IN THE EDITOR WHO THE FUCK
 	#DESIGNED THIS
@@ -49,7 +49,7 @@ func get_input(delta):
 	if rapidFire and shoot_time > .1:
 		shoot = Input.is_action_pressed("ui_cancel")
 		chargeShot=false #no charge shots when rapidFire!
-	
+
 	if Globals.flipButtons:
 		jump = Input.is_action_just_pressed('ui_cancel')
 		shoot = Input.is_action_just_pressed("ui_select") or rapidFire and (shoot_time > .1 and Input.is_action_pressed("ui_select"))
@@ -76,15 +76,15 @@ func get_input(delta):
 			for i in range(oldPositions.size()):
 				oldPositions[i] = position
 			return
-	
+
 	#Cancel it here instead of accounting for it anywhere else
 	#you can move in the split second between Zero falling though the ladder top and grabbing onto
 	#the ladder, so cancel it here so they actually snap on correctly
 	if (left and right) or movementLocked or grabbingLadder:
 		left = false;
 		right = false;
-	
-	
+
+
 	if chargeShot:
 		chargeShotTime+=delta
 		if startedCharging:
@@ -105,7 +105,7 @@ func get_input(delta):
 		if chargeShotTime > 1.1:
 			chargeShotS.play()
 			print("Charge shot fired!")
-			
+
 			var bi = playerChargeShot.instance()
 			var ss
 			if sprite.flip_h:
@@ -118,7 +118,7 @@ func get_input(delta):
 			var pos = position + Vector2(73*ss, 10)
 			if state == State.ON_LADDER:
 				pos = position + Vector2(95*ss, -20)
-			
+
 			bi.position = pos
 			#get_parent().add_child(bi)
 			bulletHolder.add_child(bi)
@@ -128,9 +128,9 @@ func get_input(delta):
 			#bi.linear_velocity = Vector2(800.0 * ss, 0)
 			#RigidBody2D only
 			bi.init(int(ss))
-			
+
 			#add_collision_exception_with(bi) # Make bullet and this not collide
-			
+
 	#		if Globals.playerData.gameDifficulty > Globals.Difficulty.EASY:
 	#			bulletManager.push_bullet(bi)
 	#		else:
@@ -152,11 +152,11 @@ func get_input(delta):
 		startedCharging=false
 		chargeStart.stop()
 		chargeLoop.stop()
-	
-	
+
+
 	if grenade_input and canThrowGrenade:
 		if (Globals.playerData.gameDifficulty <= Globals.Difficulty.EASY or bulletManager.get_num_bullets() < 3):
-			
+
 			#print("Throw!")
 			var inst = grenade.instance()
 			var ss:float
@@ -180,7 +180,7 @@ func get_input(delta):
 		if shoot_time>0:
 			shoot_time = 0
 			if (Globals.playerData.gameDifficulty <= Globals.Difficulty.EASY or bulletManager.get_num_bullets() < 3) and weaponMeters[currentWeapon]>=Globals.weaponEnergyCost[currentWeapon]:
-				
+
 				var bi
 				var ss
 				if sprite.flip_h:
@@ -193,7 +193,7 @@ func get_input(delta):
 				var pos = position + Vector2(73*ss, 10)
 				if state == State.ON_LADDER:
 					pos = position + Vector2(95*ss, -20)
-				
+
 				if currentWeapon!=Globals.Weapons.Buster:
 # warning-ignore:narrowing_conversion
 					weaponMeters[currentWeapon]=max(0,weaponMeters[currentWeapon]-Globals.weaponEnergyCost[currentWeapon])
@@ -201,8 +201,8 @@ func get_input(delta):
 					HPBar.updateAmmo(weaponMeters[currentWeapon]/144.0,false)
 				if currentWeapon==Globals.Weapons.Buster:
 					bi = bullet.instance()
-					
-					
+
+
 					bi.position = pos
 					#get_parent().add_child(bi)
 					bulletHolder.add_child(bi)
@@ -216,9 +216,9 @@ func get_input(delta):
 					#get_parent().add_child(bi)
 					bulletHolder.add_child(bi)
 					bi.init(int(ss))
-				
+
 				add_collision_exception_with(bi) # Make bullet and this not collide
-				
+
 				if Globals.playerData.gameDifficulty > Globals.Difficulty.EASY:
 					bulletManager.push_bullet(bi)
 				else:
@@ -234,7 +234,7 @@ func get_input(delta):
 				$ShootSound.play()
 	else:
 		shoot_time += delta
-		
+
 	if jump and is_on_floor():
 		#print("Jumped")
 		#$FootstepSound.play()
@@ -255,7 +255,7 @@ func get_input(delta):
 			velocity.y += 100
 		#Don't allow pressing jump while climbing up the ladder because
 		#it creates one frame of the jump animation
-		if jump and !up: 
+		if jump and !up:
 			state = State.FALLING
 			sprite.play()
 		#This may have been a bad idea
@@ -263,7 +263,7 @@ func get_input(delta):
 			sprite.flip_h = true
 		if right:
 			sprite.flip_h = false
-		
+
 		velocity = velocity.normalized() * SPEED
 	#Your normal movement processing
 	else:
@@ -299,7 +299,7 @@ func get_input(delta):
 				position.x = pos2cell(position).x*16*4+8*4;
 				set_collision_mask_bit(0,false)
 				set_collision_layer_bit(0,false)
-				#velocity = 
+				#velocity =
 				lockMovement(.05,Vector2(0, 500),false)
 				#position = Vector2(round(floor(position.x)/16/4)*16*4+8*4, position.y)
 				#grabbingLadder = true
@@ -337,7 +337,7 @@ func dash_handler()->bool:
 	if dash_time>0:
 		var ss = -1.0 if sprite.flip_h else 1.0
 		velocity=Vector2(ss*run_speed*dash_multiplier,5)
-		
+
 		var t = sprite.frames.get_frame(sprite.get_animation(), sprite.frame)
 		var f = sprite.flip_h
 		#var p = 1 if f else -1
@@ -349,11 +349,11 @@ func dash_handler()->bool:
 		a1.texture = t
 		a2.texture = t
 		a3.texture = t
-		
+
 		a1.flip_h = f
 		a2.flip_h = f
 		a3.flip_h = f
-		
+
 		a1.position=oldPositions[4]-position
 		a2.position=oldPositions[3]-position
 		a3.position=oldPositions[2]-position
@@ -374,11 +374,11 @@ func finishStage_2():
 	CheckpointPlayerStats.lastPlayedStage = stageRoot.weapon_to_unlock
 	#if Globals.playerData.availableWeapons[stageRoot.weapon_to_unlock]: #If this stage is already completed
 	#	nextScene="ScreenSelectStage"
-	
+
 	print("Marking stage/item "+String(stageRoot.weapon_to_unlock)+" as cleared.")
 	Globals.playerData.availableWeapons[stageRoot.weapon_to_unlock]=true
 	Globals.save_player_game()
-	
+
 	var weapons = Globals.playerData.availableWeapons
 	if weapons[1] and weapons[2] and weapons[4]:
 		Globals.change_screen(get_tree(),"CutsceneDemoEnd")
