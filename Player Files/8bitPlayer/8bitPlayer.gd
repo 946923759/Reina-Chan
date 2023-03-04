@@ -167,6 +167,12 @@ func _process(delta):
 	grenadeThrower.update(delta);
 	if hasGrenadeAbility and currentWeapon==0 and !grenadeThrower.isReadyToThrow():
 		HPBar.show_weapon(true,grenadeThrower.getCooldownPercent())
+	#Not really necessary when we can just not make stages that use the left side
+#	var onscreen_pos = stageRoot.position + position + stageRoot.get_canvas_transform().origin
+#	if onscreen_pos.x < 150:
+#		HPBar.modulate.a=max(.3,onscreen_pos.x/150)
+#	else:
+#		HPBar.modulate.a=1
 	pass
 
 func setDebugInfoText():

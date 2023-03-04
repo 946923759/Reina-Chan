@@ -1,5 +1,13 @@
 R4MI
 0 -  Dream Chaser (BrightMan)
+1 -  Frog Man
+2 -  Ring Man
+3 -  Drill Man
+4 -  Pharoh Man
+5 -  Dive Man
+6 -  Skull Man
+7 -  Dust Man
+8 -  Cossack 1
 11 - Intro
 16 - Stage Select
 17 - Boss
@@ -11,7 +19,7 @@ R4MI
 67 - Title Screen
 69 - Final Boss
 80 - Cossack stage?
-81 - Bonus Boss
+81 - Bonus Boss (Vs. Shadow Man)
 82 - Title Screen?
 85 - Wily Boss
 87 - final wily stage
