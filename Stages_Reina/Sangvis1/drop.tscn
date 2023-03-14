@@ -1,0 +1,146 @@
+[gd_scene load_steps=17 format=2]
+
+[ext_resource path="res://Stages_Reina/Sangvis1/drop.png" type="Texture" id=1]
+[ext_resource path="res://Stages_Reina/Sangvis1/water drop.png" type="Texture" id=2]
+[ext_resource path="res://ParticleEffects/AlphaMaskPurple.tres" type="Material" id=3]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Node2D
+
+# TODO: I coded this stupid thing wrong and collision shapes
+# won't work because they will stop the player if the player
+# touches it
+
+onready var sprite = $AnimatedSprite
+onready var drop = $KinematicBody2D
+onready var dropSpr=$KinematicBody2D/Sprite
+
+var dropState = 0
+var collision
+
+func _ready():
+	sprite.play(\"default\")
+	drop.position.y=-999
+	drop.visible=false
+	dropSpr.playing=false
+	collision = drop.collision_mask
+
+#func _process(delta):
+#	if sprite.frame>=5:
+#		pass
+func setProcess():
+	#print(\"Process\")
+	drop.position=Vector2(0,8) #Need to reset x position too
+	dropState=1
+	drop.visible=true
+		
+func _physics_process(delta):
+	if sprite.frame>=3:
+		setProcess()
+	
+	if dropState==1:
+		if sprite.animation!=\"loop\":
+			sprite.play(\"loop\")
+		var collision = drop.move_and_collide(Vector2(0,10))
+		if collision:
+			dropState=2
+	elif dropState==2:
+		drop.collision_mask=0
+		dropSpr.playing=true
+		if dropSpr.frame==3:
+			drop.position.y=-999
+			dropState=0
+			sprite.play(\"default\")
+			dropSpr.playing=false
+			dropSpr.frame=0
+			drop.collision_mask=collision
+"
+
+[sub_resource type="AtlasTexture" id=3]
+atlas = ExtResource( 2 )
+region = Rect2( 16, 0, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=4]
+atlas = ExtResource( 2 )
+region = Rect2( 32, 0, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=5]
+atlas = ExtResource( 2 )
+region = Rect2( 48, 0, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=6]
+atlas = ExtResource( 2 )
+region = Rect2( 64, 0, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=7]
+atlas = ExtResource( 2 )
+region = Rect2( 80, 0, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=11]
+atlas = ExtResource( 2 )
+region = Rect2( 16, 0, 16, 16 )
+
+[sub_resource type="SpriteFrames" id=8]
+animations = [ {
+"frames": [ SubResource( 3 ), SubResource( 4 ), SubResource( 5 ), SubResource( 6 ), SubResource( 7 ) ],
+"loop": true,
+"name": "default",
+"speed": 8.0
+}, {
+"frames": [ SubResource( 11 ) ],
+"loop": true,
+"name": "loop",
+"speed": 3.0
+} ]
+
+[sub_resource type="AtlasTexture" id=12]
+atlas = ExtResource( 1 )
+region = Rect2( 0, 0, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=13]
+atlas = ExtResource( 1 )
+region = Rect2( 16, 0, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=14]
+atlas = ExtResource( 1 )
+region = Rect2( 32, 0, 16, 16 )
+
+[sub_resource type="SpriteFrames" id=15]
+animations = [ {
+"frames": [ SubResource( 12 ), SubResource( 13 ), SubResource( 14 ), SubResource( 14 ) ],
+"loop": false,
+"name": "default",
+"speed": 15.0
+} ]
+
+[sub_resource type="RectangleShape2D" id=9]
+extents = Vector2( 16, 24 )
+
+[node name="Node2D" type="Node2D"]
+script = SubResource( 1 )
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+scale = Vector2( 4, 4 )
+frames = SubResource( 8 )
+animation = "loop"
+
+[node name="KinematicBody2D" type="KinematicBody2D" parent="."]
+position = Vector2( 0, 8 )
+collision_layer = 2
+collision_mask = 19
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Sprite" type="AnimatedSprite" parent="KinematicBody2D"]
+material = ExtResource( 3 )
+position = Vector2( 0, 32 )
+scale = Vector2( 4, 4 )
+frames = SubResource( 15 )
+offset = Vector2( 0, -10 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="KinematicBody2D"]
+shape = SubResource( 9 )
+__meta__ = {
+"_edit_group_": true
+}
