@@ -43,19 +43,19 @@ func _ready():
 	#Globals.nsf_player = FLMusicLib.new();
 	#Globals.nsf_player = FLMusicLib.new();
 	
-	reinaAudioPlayer=Globals.ReinaAudioPlayer.new(self)
+	reinaAudioPlayer=ReinaAudioPlayer.new(self)
 	#reinaAudioPlayer.load_song(\"ItemGet\",\"Mega Man 10 (recreated).nsf\",20)
 	#return
 	#bottom.region_rect.position.y=120
 	#var t = $Tween
 	#t.interpolate_property(bottom,\"region_rect:position:y\",0,120,.3,Tween.TRANS_QUAD,Tween.EASE_IN)
-	var seq := TweenSequence.new(get_tree())
-	#seq._tween.pause_mode = Node.PAUSE_MODE_PROCESS
+	var seq := get_tree().create_tween()
+	#seq.set_pause_mode(SceneTreeTween.TWEEN_PAUSE_PROCESS)
 # warning-ignore:return_value_discarded
-	seq.append(bottom,'region_rect:position:y',subtractSize,1).set_trans(Tween.TRANS_QUAD)
+	seq.tween_property(bottom,'region_rect:position:y',subtractSize,1).set_trans(Tween.TRANS_QUAD)
 	seq.parallel().append(top,'region_rect:size:y',160-subtractSize,1).set_trans(Tween.TRANS_QUAD)
 	seq.parallel().append(top,'position:y',Globals.SCREEN_CENTER_Y-160*4+subtractSize*4,1).set_trans(Tween.TRANS_QUAD)
-	seq.append(player,\"modulate:a\",1.0,.5)
+	seq.tween_property(player,\"modulate:a\",1.0,.5)
 	seq.parallel().append(l,\"visible_characters\",text.length(),3)
 	
 	#seq.parallel().append($SpeakerActor,'modulate:a',0,.3)

@@ -409,8 +409,8 @@ func init_(message_:PoolStringArray, parent,delim="|",msgColumn_:int=1):
 	if parent:
 		parent_node = parent
 		
-	#var t := TweenSequence.new(get_tree())
-	#t._tween.pause_mode = Node.PAUSE_MODE_PROCESS
+	#var t := get_tree().create_tween()
+	#t.set_pause_mode(SceneTreeTween.TWEEN_PAUSE_PROCESS)
 	
 	preparse_string_array(message_,delim)
 	#self.message=message
@@ -429,10 +429,10 @@ func end_cutscene():
 	tw.interpolate_callback(self,.6,"end_cutscene_2")
 	tw.start()
 	
-#	var seq := TweenSequence.new(get_tree())
-#	seq._tween.pause_mode = Node.PAUSE_MODE_PROCESS
+#	var seq := get_tree().create_tween()
+#	seq.set_pause_mode(SceneTreeTween.TWEEN_PAUSE_PROCESS)
 #	seq.append_interval(.6)
-#	seq.append_callback(self,"end_cutscene_2")
+#	seq.tween_callback(self,"end_cutscene_2")
 
 # Honestly, this is a mess. When it was in lua the input handling and the VN processing
 # wasn't coupled together, instead vntext:advance() would be called and if it returned

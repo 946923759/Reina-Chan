@@ -15,7 +15,7 @@ onready var parent = get_parent()
 # func _ready():
 # 	return
 # 	if !mute_music_in_debug or !OS.is_debug_build():
-# 		parent.reinaAudioPlayer = Globals.ReinaAudioPlayer.new(parent)
+# 		parent.reinaAudioPlayer = ReinaAudioPlayer.new(parent)
 # 		if parent.get_node("Player").global_position.y < 84*64:
 # 			parent.reinaAudioPlayer.load_song(custom_music_name,nsf_music_file,nsf_track_num)
 # 		else:

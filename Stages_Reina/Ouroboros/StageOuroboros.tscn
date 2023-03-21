@@ -201,6 +201,7 @@ position = Vector2( 1498.2, 1821.82 )
 [node name="Dinergate" parent="0-24" index="2" instance=ExtResource( 4 )]
 material = null
 position = Vector2( 1600, 2144 )
+no_movement = false
 
 [node name="room 20-12" type="Node2D" parent="." index="7"]
 
@@ -231,6 +232,7 @@ position = Vector2( 1280, 0 )
 position = Vector2( 864, 128 )
 collision_layer = 18
 collision_mask = 16
+fall_height = 14
 
 [node name="Enemy4" parent="room 20-0" index="1" instance=ExtResource( 13 )]
 position = Vector2( 992, 512 )
@@ -249,31 +251,37 @@ only_if_on_ladder = true
 position = Vector2( 3040, -96 )
 collision_layer = 18
 collision_mask = 16
+fall_height = 14
 
 [node name="OuroborosWheel3" parent="room 40-0 to 60-0" index="1" instance=ExtResource( 5 )]
 position = Vector2( 3360, -96 )
 collision_layer = 18
 collision_mask = 16
+fall_height = 14
 
 [node name="OuroborosWheel4" parent="room 40-0 to 60-0" index="2" instance=ExtResource( 5 )]
 position = Vector2( 3744, -96 )
 collision_layer = 18
 collision_mask = 16
+fall_height = 14
 
 [node name="OuroborosWheel5" parent="room 40-0 to 60-0" index="3" instance=ExtResource( 5 )]
 position = Vector2( 4128, -96 )
 collision_layer = 18
 collision_mask = 16
+fall_height = 14
 
 [node name="OuroborosWheel6" parent="room 40-0 to 60-0" index="4" instance=ExtResource( 5 )]
 position = Vector2( 4416, -96 )
 collision_layer = 18
 collision_mask = 16
+fall_height = 14
 
 [node name="OuroborosWheel7" parent="room 40-0 to 60-0" index="5" instance=ExtResource( 5 )]
 position = Vector2( 4672, -64 )
 collision_layer = 18
 collision_mask = 16
+fall_height = 14
 
 [node name="Checkpoint" parent="room 40-0 to 60-0" index="6" instance=ExtResource( 22 )]
 position = Vector2( 2592, 128 )
@@ -618,6 +626,7 @@ position = Vector2( 2112, 512 )
 [node name="Prowler" parent="Room 120-0" index="1" instance=ExtResource( 10 )]
 material = null
 position = Vector2( 704, 640 )
+gravity = 0
 
 [node name="Guardian" parent="Room 120-0" index="2" instance=ExtResource( 11 )]
 position = Vector2( 1536, 512 )
@@ -1300,6 +1309,7 @@ position = Vector2( 14080, 6080 )
 
 [node name="DinerSnake" parent="Room 220-96" index="0" instance=ExtResource( 25 )]
 position = Vector2( 928, 736 )
+no_movement = false
 
 [node name="CameraAdjuster" parent="Room 220-96" index="1" instance=ExtResource( 14 )]
 position = Vector2( 0, 480 )
@@ -1387,13 +1397,16 @@ bottomBound = 96
 
 [node name="DinerSnake" parent="Room 200-72 to Room 200-84" index="1" instance=ExtResource( 25 )]
 position = Vector2( 320, -160 )
+no_movement = false
 
 [node name="DinerSnake2" parent="Room 200-72 to Room 200-84" index="2" instance=ExtResource( 25 )]
 position = Vector2( 864, -160 )
+no_movement = false
 
 [node name="DinerSnake3" parent="Room 200-72 to Room 200-84" index="3" instance=ExtResource( 25 )]
 position = Vector2( 992, 288 )
 facing = 1
+no_movement = false
 
 [node name="EventTile" parent="Room 200-72 to Room 200-84" index="4" instance=ExtResource( 34 )]
 position = Vector2( 1024, -192 )
@@ -1465,6 +1478,7 @@ position = Vector2( 416, 128 )
 
 [node name="DinerSnake" parent="Room 260-96" index="4" instance=ExtResource( 25 )]
 position = Vector2( 960, 416 )
+no_movement = false
 
 [node name="Checkpoint" parent="Room 260-96" index="5" instance=ExtResource( 22 )]
 position = Vector2( 1920, 288 )

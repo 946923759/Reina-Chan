@@ -46,20 +46,20 @@ func adjustCamera(np,secs):
 		cam.limit_top = cPos.y - SCREEN_CENTER_Y
 		cam.limit_bottom = cPos.y + SCREEN_CENTER_Y
 		
-		#seq._tween.pause_mode = Node.PAUSE_MODE_PROCESS
+		#seq.set_pause_mode(SceneTreeTween.TWEEN_PAUSE_PROCESS)
 		is_tweening=true
-		var seq := TweenSequence.new(get_tree())
+		var seq := get_tree().create_tween()
 		# Wondering WTF this is? The TRANS_QUAD tween does not work if
 		# left+right is larger than the size of the screen. So we have to tween it one
 		# screen over and then set it to the destination.
 		if np[0] < limit_left: #Camera is moving left?
-			seq.append(           cam,'limit_left',  cam.limit_left-SCREEN_WIDTH,secs).set_trans(Tween.TRANS_QUAD)
+			seq.tween_property(           cam,'limit_left',  cam.limit_left-SCREEN_WIDTH,secs).set_trans(Tween.TRANS_QUAD)
 			seq.parallel().append(cam,'limit_right', np[2],secs).set_trans(Tween.TRANS_QUAD)
 		elif np[0] > limit_left: #Camera is moving right?
-			seq.append(           cam,'limit_left',  np[0],secs).set_trans(Tween.TRANS_QUAD)
+			seq.tween_property(           cam,'limit_left',  np[0],secs).set_trans(Tween.TRANS_QUAD)
 			seq.parallel().append(cam,'limit_right', cam.limit_right+SCREEN_WIDTH,secs).set_trans(Tween.TRANS_QUAD)
 		else: #Left border didn't change at all, just tween right border
-			seq.append(cam,'limit_right', np[2],secs).set_trans(Tween.TRANS_QUAD)
+			seq.tween_property(cam,'limit_right', np[2],secs).set_trans(Tween.TRANS_QUAD)
 			#cam.limit_left = destPositions[0]
 			#cam.limit_right = destPositions[2]
 		
@@ -73,7 +73,7 @@ func adjustCamera(np,secs):
 		else:
 			seq.parallel().append(cam,'limit_top',   np[1],secs).set_trans(Tween.TRANS_QUAD)
 			seq.parallel().append(cam,'limit_bottom',np[3],secs).set_trans(Tween.TRANS_QUAD)
-		seq.append_callback(self,"finish_tweening_camera")
+		seq.tween_callback(self,"finish_tweening_camera")
 
 	else:
 		cam.limit_left = np[0]

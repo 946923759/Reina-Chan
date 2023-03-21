@@ -25,8 +25,8 @@ func _process(delta):
 script/source = "extends Sprite
 
 func _ready():
-	var t := TweenSequence.new(get_tree())
-	#t._tween.pause_mode = Node.PAUSE_MODE_PROCESS
+	var t := get_tree().create_tween()
+	#t.set_pause_mode(SceneTreeTween.TWEEN_PAUSE_PROCESS)
 	t.append(self,'position:x',Globals.gameResolution.x*.9,6).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 "
 

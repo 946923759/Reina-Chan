@@ -129,9 +129,9 @@ func fireLaser():
 	$laserArea2D.monitoring=true
 	$LaserFire.play()
 	#$Tween.
-	var seq := TweenSequence.new(get_tree())
+	var seq := get_tree().create_tween()
 	sprite_laser.scale.y=1
-	seq.append(sprite_laser,'toDraw',64+16+16+5,.1).set_trans(Tween.TRANS_QUAD)
+	seq.tween_property(sprite_laser,'toDraw',64+16+16+5,.1).set_trans(Tween.TRANS_QUAD)
 	sprite.animation="fire"
 	sprite2.visible=true
 	curState=STATES.COOLDOWN
@@ -141,8 +141,8 @@ func recharge():
 	sprite2.visible=false
 	sprite_laser.toDraw=0
 	sprite.animation="wait"
-	#var seq := TweenSequence.new(get_tree())
-	#seq.append($Sprite,'scale:y',0,.1).set_trans(Tween.TRANS_QUAD)
+	#var seq := get_tree().create_tween()
+	#seq.tween_property($Sprite,'scale:y',0,.1).set_trans(Tween.TRANS_QUAD)
 	curState=STATES.WAIT
 
 var exploded=false

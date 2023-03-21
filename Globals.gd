@@ -263,7 +263,7 @@ func load_system_data()->bool:
 				OPTIONS[option]['value'] = dataToLoad['options'][option]
 			else:
 				OPTIONS[option]['value'] = OPTIONS[option]['default']
-		flipButtons=Globals.OPTIONS['flipButtons']['value']
+		flipButtons=OPTIONS['flipButtons']['value']
 		
 		#Actually, this should only be set when the player pressed continue
 		#gameDifficulty=dataToLoad['playerdata']['difficulty']
@@ -324,7 +324,7 @@ func save_player_game()->bool:
 	save_game.store_line(to_json(playerData))
 	save_game.close()
 	print("Saved to "+get_save_directory('playerData'))
-	Globals.playerHasSaveData=true
+	playerHasSaveData=true
 	return true
 
 var gameResolution:Vector2;
@@ -344,7 +344,7 @@ var nextStageWeaponNum:int=0
 # if we're using the "cutscene from file" scene
 var nextCutscene:String="cutscene1Data.txt"
 
-func get_save_directory(fName:String)->String:
+static func get_save_directory(fName:String)->String:
 	match OS.get_name():
 		"Windows","X11","macOS":
 			if OS.has_feature("standalone"):
@@ -401,7 +401,7 @@ func load_stage_cutscenes()->bool:
 func get_stage_cutscene(key:String):
 	if stage_cutscene_data.size() == 0:
 		load_stage_cutscenes()
-	if Globals.playerData.currentCharacter>0: #Search for M16 cutscene first
+	if playerData.currentCharacter>0: #Search for M16 cutscene first
 		if key+"_M16" in stage_cutscene_data:
 			return stage_cutscene_data[key+"_M16"]
 	if !(key in stage_cutscene_data): #Search for normal cutscene
@@ -461,9 +461,9 @@ func _ready():
 	if playerHadSystemData:
 		set_audio_levels()
 		#INITrans.SetLanguage("kr")
-		INITrans.SetLanguage(Globals.OPTIONS["language"]['value'])
-		#playCutscenes=Globals.OPTIONS['playCutscenes']['value']
-		flipButtons=Globals.OPTIONS['flipButtons']['value']
+		INITrans.SetLanguage(OPTIONS["language"]['value'])
+		#playCutscenes=OPTIONS['playCutscenes']['value']
+		flipButtons=OPTIONS['flipButtons']['value']
 	else:
 		INITrans.SetLanguage("en")
 
@@ -493,7 +493,7 @@ func set_fullscreen(b):
 		
 #func set_language(new_lang:String=""):
 #	if new_lang=="":
-#		new_lang=Globals.OPTIONS['language']['value']
+#		new_lang=OPTIONS['language']['value']
 #	if new_lang!="system":
 #		TranslationServer.set_locale(new_lang)
 		
@@ -504,9 +504,9 @@ func set_audio_levels():
 	
 	var audios = {
 		#The number corresponds to the position in default_bus_layout
-		3:Globals.OPTIONS['AudioVolume']['value'],
-		2:Globals.OPTIONS['SFXVolume']['value'],
-		1:Globals.OPTIONS['VoiceVolume']['value']
+		3:OPTIONS['AudioVolume']['value'],
+		2:OPTIONS['SFXVolume']['value'],
+		1:OPTIONS['VoiceVolume']['value']
 	}
 	for d in audios:
 		var realVolumeLevel = audios[d]*.3-30
@@ -535,7 +535,7 @@ enum EVENT_TILES {
 
 
 # HELPERS
-func get_matching_files(path,fname):
+static func get_matching_files(path,fname):
 	#var files = []
 	var dir = Directory.new()
 	print("Opening "+path)
@@ -559,12 +559,12 @@ func get_matching_files(path,fname):
 			return path+file
 
 
-func get_custom_music(fname):
+static func get_custom_music(fname):
 	if !OS.has_feature("standalone"):
 		return null
 	elif OS.has_feature("console"):
-		return Globals.get_matching_files("res://Music/CDAudio/",fname)
-	return Globals.get_matching_files(OS.get_executable_path().get_base_dir()+"/CustomMusic/",fname)
+		return get_matching_files("res://Music/CDAudio/",fname)
+	return get_matching_files(OS.get_executable_path().get_base_dir()+"/CustomMusic/",fname)
 
 var nsf_player
 func _init():
@@ -572,93 +572,6 @@ func _init():
 		nsf_player = FLMusicLib.new();
 		nsf_player.set_gme_buffer_size(2048*5);#optional
 		#print("Init!!")
-
-class ReinaAudioPlayer:
-	var node:Node;
-	var audioStreamPlayer;
-	var nsf_player
-	var added_nsf_player:bool=false
-	#var is_fading_music:bool=false
-	
-	func _init(_node:Node):
-		node = _node;
-		audioStreamPlayer=node.get_node("AudioStreamPlayer")
-		#Remember to comment this out at some point...
-		if false:
-			var gs = load("res://greenStripe.tscn")
-			node.add_child(gs.instance())
-	
-	func load_song(custom_music_name:String, nsf_music_file:String, nsf_track_num:int,nsf_volume_adjustment:float=0):
-		#return
-		var music = Globals.get_custom_music(custom_music_name) if custom_music_name != "" else null
-		if music != null:
-			print("Attempting to load "+music)
-			if music.ends_with(".import"):
-				audioStreamPlayer.stream = load(music.replace('.import', ''))
-			else:
-				audioStreamPlayer.stream = ExternalAudio.loadfile(music)
-			audioStreamPlayer.play()
-			audioStreamPlayer.volume_db=0.0
-		elif nsf_music_file != "" and !OS.has_feature("console"):
-			if !is_instance_valid(Globals.nsf_player):
-				print("The NSF player has expired somehow... Trying to re-init")
-				Globals.nsf_player = FLMusicLib.new();
-				Globals.nsf_player.set_gme_buffer_size(2048*5);#optional
-				
-			nsf_player = Globals.nsf_player
-			if !added_nsf_player:
-				print("adding NSF player")
-				node.add_child(nsf_player);
-				nsf_player.set_pause_mode(2) #Node.PAUSE_MODE_PROCESS
-				added_nsf_player=true
-			#print(Globals.NSF_location+nsf_music_file)
-			print("(NSF) Trying to play "+Globals.NSF_location+nsf_music_file)
-			nsf_player.play_music(Globals.NSF_location+nsf_music_file,nsf_track_num,false,0,0,0);
-			var realVolumeLevel = Globals.OPTIONS['AudioVolume']['value']*.3-30
-			#print("Volume level is "+String(realVolumeLevel))
-			nsf_player.set_volume(realVolumeLevel+nsf_volume_adjustment);
-		else:
-			print("No custom music specified and this platform doesn't support NSF. That means there's no music!")
-	
-	#This is actually a terrible idea because if you play a new song before this tween finishes
-	#the music stays at a really low volume
-	func fade_music(time:float=3.0):
-		stop_music()
-		return
-		
-# warning-ignore:unreachable_code
-		if added_nsf_player:
-			#nsf_player.stop_music()
-			#print("Stopped NSF player")
-			var t := Tween.new()
-			node.add_child(t)
-			t.set_pause_mode(2) #Node.PAUSE_MODE_PROCESS
-			#var realVolumeLevel = Globals.OPTIONS['AudioVolume']['value']*.3-30
-			t.interpolate_method(nsf_player,"set_volume",0,-15.0,time)
-			t.start()
-			yield(t,"tween_completed")
-			nsf_player.stop_music()
-			#nsf_player.set_volume(realVolumeLevel)
-			#seq.append(nsf_player,"toDraw",CONST_IMG_WIDTH,2).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-		elif audioStreamPlayer.is_playing():
-			var seq := TweenSequence.new(node.get_tree())
-			seq._tween.pause_mode = Node.PAUSE_MODE_PROCESS
-			seq.append(audioStreamPlayer,"volume_db",-10,time).set_trans(Tween.TRANS_LINEAR).set_ease(Tween.EASE_OUT)
-# warning-ignore:return_value_discarded
-			seq.append_callback(audioStreamPlayer,"stop")
-			
-	func stop_music():
-		#return
-		#print("Stopping ReinaAudioPlayer")
-		if added_nsf_player and is_instance_valid(Globals.nsf_player):
-			#print("Stopped NSF")
-			nsf_player.stop_music()
-		else:
-			#print("Stopped CDAudio")
-			audioStreamPlayer.stop()
-			
-	func pause_music():
-		pass
 
 
 #https://godotengine.org/qa/32785/is-there-simple-way-to-convert-seconds-to-hh-mm-ss-format-godot

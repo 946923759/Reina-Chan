@@ -8,7 +8,7 @@ export (int) var leftBound;
 export (int) var topBound;
 export (int) var rightBound;
 export (int) var bottomBound;
-export (float) var cameraScale = 64;
+export (float) var cameraScale = 64.0;
 export (float) var tweenTime = .5;
 export(String, FILE, "*.ogg") var newMusic
 
@@ -60,12 +60,12 @@ func move(obj):
 		#Lock player into walking right .5 seconds
 		$Sprite.set_process(true)
 		#$Sprite.piecesToDraw=0
-		var seq := TweenSequence.new(get_tree())
+		var seq := get_tree().create_tween()
 		$Sound.play()
-		seq.append($Sprite,'piecesToDraw',0,.3)
-		seq.append($Sprite,'piecesToDraw',0,.4)
-		seq.append_callback($Sound,"play")
-		seq.append($Sprite,'piecesToDraw',16,.3)
+		seq.tween_property($Sprite,'piecesToDraw',0,.3)
+		seq.tween_property($Sprite,'piecesToDraw',0,.4)
+		seq.tween_callback($Sound,"play")
+		seq.tween_property($Sprite,'piecesToDraw',16,.3)
 		seq.connect("finished",$Sprite,"set_process",[false])
 		if boss_room_door:
 			get_node("/root/Node2D").fadeMusic()

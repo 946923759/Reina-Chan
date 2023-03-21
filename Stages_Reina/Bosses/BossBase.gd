@@ -54,13 +54,13 @@ func playIntro(playSound=true,showHPbar=true)->AudioStreamPlayer:
 	#$AnimatedSprite.animation="intro"
 	sprite.play("intro")
 	if showHPbar:
-		var seq := TweenSequence.new(get_tree())
+		var seq := get_tree().create_tween()
 		HPBar.set_process(true)
-		seq.append(HPBar,"position:x",1235,.1)
+		seq.tween_property(HPBar,"position:x",1235,.1)
 # warning-ignore:return_value_discarded
-		seq.append(HPBar,"curHP",1,1.5)
+		seq.tween_property(HPBar,"curHP",1,1.5)
 # warning-ignore:return_value_discarded
-		seq.append_callback(HPBar,"set_process",[false])
+		seq.tween_callback(HPBar,"set_process",[false])
 	if playSound:
 		introSound.play()
 	return introSound

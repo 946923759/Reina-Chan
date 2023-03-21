@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://ubuntu-font-family/Ubuntu-B.ttf" type="DynamicFontData" id=1]
-[ext_resource path="res://loopingTextFade.gd" type="Script" id=2]
+[ext_resource path="res://Screens/loopingTextFade.gd" type="Script" id=2]
 [ext_resource path="res://Screens/ScreenWithMenuElements.tscn" type="PackedScene" id=3]
 
 [sub_resource type="DynamicFont" id=1]

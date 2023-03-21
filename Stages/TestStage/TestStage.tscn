@@ -1,6 +1,6 @@
 [gd_scene load_steps=20 format=2]
 
-[ext_resource path="res://gridDisplay.png" type="Texture" id=2]
+[ext_resource path="res://Stages/gridDisplay.png" type="Texture" id=2]
 [ext_resource path="res://Stages/TestStage/Tileset.tres" type="TileSet" id=3]
 [ext_resource path="res://Player Files/OLD_Zero/Player.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Stages/TestStage/8886.jpg" type="Texture" id=5]
@@ -28,7 +28,7 @@ var SPIKES_TILE_ID = 12
 
 var reinaAudioPlayer
 func _ready():
-	reinaAudioPlayer = Globals.ReinaAudioPlayer.new(self)
+	reinaAudioPlayer = ReinaAudioPlayer.new(self)
 	reinaAudioPlayer.load_song(\"TestRoom\",\"test.vgm\",0)
 	if reinaAudioPlayer.added_nsf_player:
 		reinaAudioPlayer.nsf_player.set_volume(3);

@@ -56,7 +56,7 @@ func _ready():
 	
 	#print(OS.get_executable_path().get_base_dir()+"/CustomMusic/")
 	print("Starting music...")
-	reinaAudioPlayer=Globals.ReinaAudioPlayer.new(self)
+	reinaAudioPlayer=ReinaAudioPlayer.new(self)
 	reinaAudioPlayer.load_song("TitleScreen",nsf_music,nsf_track_num)
 	print("Success.")
 	#var music = Globals.get_custom_music("TitleScreen")

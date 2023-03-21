@@ -7,7 +7,7 @@
 script/source = "extends Control
 
 #var music_player = FLMusicLib.new();
-onready var music_player = Globals.ReinaAudioPlayer.new(self)
+onready var music_player = ReinaAudioPlayer.new(self)
 
 func _ready():
 	get_tree().set_screen_stretch(SceneTree.STRETCH_MODE_2D,SceneTree.STRETCH_ASPECT_EXPAND,Vector2(1280,720))
@@ -25,19 +25,19 @@ func _ready():
 	#tween2.start();
 	
 	$c1.set_modulate(Color(1,1,1,0))
-	var seq := TweenSequence.new(get_tree())
-	#seq.append($c1,'modulate',Color(1,1,1,0),1) #sleep 1
-	seq.append($c1,'modulate',Color(1,1,1,1),1).set_trans(Tween.TRANS_LINEAR)
+	var seq := get_tree().create_tween()
+	#seq.tween_property($c1,'modulate',Color(1,1,1,0),1) #sleep 1
+	seq.tween_property($c1,'modulate',Color(1,1,1,1),1).set_trans(Tween.TRANS_LINEAR)
 	seq.parallel().append($TextureRect,\"modulate\",Color(.5,.5,.5,1),.3)
-	seq.append($c1,'modulate',Color(1,1,1,1),3) #sleep 1
-	seq.append($c1,'modulate',Color(1,1,1,0),1).set_trans(Tween.TRANS_LINEAR)
+	seq.tween_property($c1,'modulate',Color(1,1,1,1),3) #sleep 1
+	seq.tween_property($c1,'modulate',Color(1,1,1,0),1).set_trans(Tween.TRANS_LINEAR)
 	
 	#print(Globals.gameResolution.y-$c2.rect_size.y)
-	seq.append($c2,'rect_position:y',-$c2.rect_size.y,30)
-	seq.append($TextureRect,'modulate',Color(0,0,0,1),1)
-	seq.append_callback(self,'screen_out')
+	seq.tween_property($c2,'rect_position:y',-$c2.rect_size.y,30)
+	seq.tween_property($TextureRect,'modulate',Color(0,0,0,1),1)
+	seq.tween_callback(self,'screen_out')
 	
-	#var seq2 := TweenSequence.new(get_tree())
+	#var seq2 := get_tree().create_tween()
 	#seq2.append($c2,'modulate',Color(1,1,1,1),4) #sleep 1
 	#seq2.append($c2,'rect_position',Vector2(Globals.gameResolution.x/2-$c2.rect_size.x/2,0),10).set_trans(Tween.TRANS_LINEAR).from_current()
 

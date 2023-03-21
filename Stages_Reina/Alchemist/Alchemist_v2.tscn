@@ -128,8 +128,8 @@ func teleport_1():
 	])
 	#return
 
-	var seq := TweenSequence.new(get_tree())
-	seq.append(tilemap,'rotation_degrees',180,3).set_trans(Tween.TRANS_QUAD)
+	var seq := get_tree().create_tween()
+	seq.tween_property(tilemap,'rotation_degrees',180,3).set_trans(Tween.TRANS_QUAD)
 	#device, weak magnitude, strong magnitude, duration
 	Input.start_joy_vibration(0,.5,.6,3)
 	
@@ -138,7 +138,7 @@ func teleport_1():
 	#tween.interpolate_property(tilemap, 'rotation_degrees',
 	#null, 90, .25, Tween.TRANS_QUAD, Tween.EASE_OUT);
 	#tween.start();
-	seq.append_callback(self,\"teleport_2\")
+	seq.tween_callback(self,\"teleport_2\")
 		
 func teleport_2():
 		var cc = player.get_node(\"Camera2D\")

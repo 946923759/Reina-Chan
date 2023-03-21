@@ -26,7 +26,7 @@ func set_character(n):
 
 func _ready():
 	
-	reinaAudioPlayer=Globals.ReinaAudioPlayer.new(self)
+	reinaAudioPlayer=ReinaAudioPlayer.new(self)
 	reinaAudioPlayer.load_song("StageSelect","Mega Man 10 (recreated).nsf",8)
 	
 	var font = load("res://FallbackPixelFont.tres")

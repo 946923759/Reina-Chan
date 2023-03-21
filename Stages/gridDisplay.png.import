@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/icon_trail_2d.svg-d47bf3d7df5294a0d532782f6dd5fa94.stex"
+path="res://.import/gridDisplay.png-21fc8d31d13410a4c9ccdd3bed91838c.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/godot-next-cs/icons/icon_trail_2d.svg"
-dest_files=[ "res://.import/icon_trail_2d.svg-d47bf3d7df5294a0d532782f6dd5fa94.stex" ]
+source_file="res://Stages/gridDisplay.png"
+dest_files=[ "res://.import/gridDisplay.png-21fc8d31d13410a4c9ccdd3bed91838c.stex" ]
 
 [params]
 
@@ -19,8 +19,8 @@ compress/lossy_quality=0.7
 compress/hdr_mode=0
 compress/bptc_ldr=0
 compress/normal_map=0
-flags/repeat=0
-flags/filter=true
+flags/repeat=1
+flags/filter=false
 flags/mipmaps=false
 flags/anisotropic=false
 flags/srgb=2

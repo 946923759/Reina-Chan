@@ -46,7 +46,7 @@ func _ready():
 	#init_(message, parent, dim_background = true)
 	#if is_instance_valid(Globals.nsf_player):
 	#	Globals.nsf_player.queue_free()
-	music_player = Globals.ReinaAudioPlayer.new(self)
+	music_player = ReinaAudioPlayer.new(self)
 	music_player.load_song(custom_music_name,nsf_music_file,nsf_track_num)
 	$Cutscene.init_(Globals.get_stage_cutscene(\"Demo4Ending\"),null,false,null,\"\\t\")
 	$Cutscene.connect(\"cutscene_finished\",self,\"a\")
@@ -57,8 +57,8 @@ func a():
 	# And miraculously this is the only time I've had two consecutive screens with NSFs playing and I guess they're close enough that it's trying to play the new audio before stopping the old audio
 	music_player.stop_music()
 	print(\"Tweening to credits...\")
-	var t := TweenSequence.new(get_tree())
-	t._tween.pause_mode = Node.PAUSE_MODE_PROCESS
+	var t := get_tree().create_tween()
+	t.set_pause_mode(SceneTreeTween.TWEEN_PAUSE_PROCESS)
 	t.append($TextureRect,'modulate:a',1,.5).set_trans(Tween.TRANS_QUAD)
 	#t.append_callback(self,\"toCredits\")
 	yield(t,\"finished\")

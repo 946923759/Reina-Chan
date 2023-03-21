@@ -531,12 +531,12 @@ func init_(message, parent:Node, dim_background = true,_backgrounds:Control=null
 		backgrounds = $Backgrounds
 	$dim.color.a=0
 	textboxSpr.rect_scale.y=0
-	var t := TweenSequence.new(get_tree())
-	t._tween.pause_mode = Node.PAUSE_MODE_PROCESS
-	t.append(textboxSpr,'rect_scale:y',1,.5).set_trans(Tween.TRANS_QUAD)
+	var t := get_tree().create_tween()
+	t.set_pause_mode(SceneTreeTween.TWEEN_PAUSE_PROCESS)
+	t.tween_property(textboxSpr,'rect_scale:y',1,.5).set_trans(Tween.TRANS_QUAD)
 	if dim_background:
 # warning-ignore:return_value_discarded
-		t.parallel().append($dim,'color:a',.6,.5).from_current()
+		t.parallel().tween_property($dim,'color:a',.6,.5).from_current()
 	
 	parse_string_array(message,delim,msgColumn)
 	
@@ -569,16 +569,16 @@ func end_cutscene():
 		if p.is_active:
 			p.stop()
 	#https://github.com/godot-extended-libraries/godot-next/pull/50
-	var seq := TweenSequence.new(get_tree())
-	seq._tween.pause_mode = Node.PAUSE_MODE_PROCESS
+	var seq := get_tree().create_tween()
+	seq.set_pause_mode(SceneTreeTween.TWEEN_PAUSE_PROCESS)
 # warning-ignore:return_value_discarded
-	seq.append(textboxSpr,'rect_scale:y',0,.5).set_trans(Tween.TRANS_QUAD)
-	seq.parallel().append(text,'modulate:a',0,.3)
-	seq.parallel().append(speakerActor,'modulate:a',0,.3)
+	seq.tween_property(textboxSpr,'rect_scale:y',0,.5).set_trans(Tween.TRANS_QUAD)
+	seq.parallel().tween_property(text,'modulate:a',0,.3)
+	seq.parallel().tween_property(speakerActor,'modulate:a',0,.3)
 	#seq.parallel().append($SpeakerActor,'position:y',600,.3)
-	seq.parallel().append($dim,'color:a',0,.5).set_trans(Tween.TRANS_QUAD)
+	seq.parallel().tween_property($dim,'color:a',0,.5).set_trans(Tween.TRANS_QUAD)
 	#seq.parallel().append($PressStartToSkip,'rect_position:x',-$PressStartToSkip.rect_size.x,.5).set_trans(Tween.TRANS_QUAD)
-	seq.parallel().append($PressStartToSkip,'modulate:a',0,.5)
+	seq.parallel().tween_property($PressStartToSkip,'modulate:a',0,.5)
 # warning-ignore:return_value_discarded
 	seq.connect("finished",self,"end_cutscene_2")
 	#seq.tween_callback()

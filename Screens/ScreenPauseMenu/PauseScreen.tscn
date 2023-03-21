@@ -226,8 +226,8 @@ func _input(_ev):
 			infoScreen.updateWeaponInfo(pos)
 			info.play()
 			showingInfo=true
-			#var seq := TweenSequence.new(get_tree())
-			#seq.append($infoScreen,\"modulate:a\",1,.5)
+			#var seq := get_tree().create_tween()
+			#seq.tween_property($infoScreen,\"modulate:a\",1,.5)
 			var tween = tw
 			tween.interpolate_property(infoScreen, 'modulate:a',
 			null, 1, .5, Tween.TRANS_QUAD, Tween.EASE_OUT);

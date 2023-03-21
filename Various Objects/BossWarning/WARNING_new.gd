@@ -48,21 +48,21 @@ func run_event(sender):
 func showWarning(playLonger=true):
 	#playerObj.lockMovement(3,Vector2(0,0))
 	var CONST_IMG_WIDTH = sprite.CONST_IMG_WIDTH
-	var seq := TweenSequence.new(get_tree())
-	seq.append(sprite,"toDraw",CONST_IMG_WIDTH,2.0 if playLonger else .5).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	var seq := get_tree().create_tween()
+	seq.tween_property(sprite,"toDraw",CONST_IMG_WIDTH,2.0 if playLonger else .5).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 # warning-ignore:return_value_discarded
-	seq.append_callback(self,"playSound")
+	seq.tween_callback(self,"playSound")
 # warning-ignore:return_value_discarded
-	seq.append(sprite,"modulate:r", .8, .25)
+	seq.tween_property(sprite,"modulate:r", .8, .25)
 # warning-ignore:return_value_discarded
-	seq.append(sprite,"modulate:r", 1,  .25)
+	seq.tween_property(sprite,"modulate:r", 1,  .25)
 # warning-ignore:return_value_discarded
-	seq.append(sprite,"modulate:r", .8, .25)
+	seq.tween_property(sprite,"modulate:r", .8, .25)
 # warning-ignore:return_value_discarded
-	seq.append(sprite,"modulate:r", 1,  .25)
+	seq.tween_property(sprite,"modulate:r", 1,  .25)
 # warning-ignore:return_value_discarded
-	#seq.append_callback(self,"part2")
-	seq.append_callback(self,"hideWarning")
+	#seq.tween_callback(self,"part2")
+	seq.tween_callback(self,"hideWarning")
 	
 
 func playSound():
@@ -74,11 +74,11 @@ func hideWarning():
 	else:
 		get_node("/root/Node2D").playBossMusic()
 	sprite.cropright=true
-	var seq := TweenSequence.new(get_tree())
-	seq.append(sprite,"toDraw",0,.5).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	var seq := get_tree().create_tween()
+	seq.tween_property(sprite,"toDraw",0,.5).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 # warning-ignore:return_value_discarded
 	#seq.connect("finished",playerObj,"clearLockedMovement")
-	seq.append_callback(self,"part5")
+	seq.tween_callback(self,"part5")
 	#seq.connect("finished",self,"part5")
 	#$AudioStreamPlayer.connect("finished",self,"part3")
 	

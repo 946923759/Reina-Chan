@@ -29,14 +29,14 @@ func run_event(_player:KinematicBody2D):
 		player.lockMovement(3,Vector2(0,0))
 		set_process(true)
 		#Doesn't work
-		var seq := TweenSequence.new(get_tree())
-		seq.append(tilemap,'rotation_degrees',180,3).set_trans(Tween.TRANS_QUAD)
+		var seq := get_tree().create_tween()
+		seq.tween_property(tilemap,'rotation_degrees',180,3).set_trans(Tween.TRANS_QUAD)
 		root.reinaAudioPlayer.fade_music()
 		#var tween = $Tween;
 		#tween.interpolate_property(tilemap, 'rotation_degrees',
 		#null, 90, .25, Tween.TRANS_QUAD, Tween.EASE_OUT);
 		#tween.start();
-		seq.append_callback(self,"teleport_2")
+		seq.tween_callback(self,"teleport_2")
 		
 func teleport_2():
 		var cc = player.get_node("Camera2D")

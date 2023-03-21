@@ -80,7 +80,7 @@ func _ready():
 		assert(boundsArray[1] < boundsArray[3]);
 		c.adjustCamera(boundsArray, 0)
 	
-	reinaAudioPlayer = Globals.ReinaAudioPlayer.new(self)
+	reinaAudioPlayer = ReinaAudioPlayer.new(self)
 	#var music = Globals.get_custom_music(custom_music_name) if custom_music_name != "" else null
 	#load_song(_node:Node, custom_music_name:String, nsf_music_file:String, nsf_track_num:int)
 	if !mute_music_in_debug or !OS.is_debug_build():
@@ -123,7 +123,7 @@ func playMusic(cdAudioFileName:String,nsfAudioFileName:String,nsfAudioTrack:int=
 func fadeMusic(time:float=2):
 	print("Got FadeMusic command")
 	reinaAudioPlayer.fade_music(time)
-	#var seq := TweenSequence.new(get_tree())
+	#var seq := get_tree().create_tween()
 
 		#$AudioStreamPlayer.stop()
 		

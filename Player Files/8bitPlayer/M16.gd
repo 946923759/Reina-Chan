@@ -36,8 +36,8 @@ func _ready():
 var chargeShotTime:float=0.0
 var startedCharging:bool=false
 func get_input(delta):
-	if canThrowGrenade==false and Globals.playerData.specialAbilities[Globals.SpecialAbilities.Grenade]:
-		canThrowGrenade=true
+	if hasGrenadeAbility==false and Globals.playerData.specialAbilities[Globals.SpecialAbilities.Grenade]:
+		hasGrenadeAbility=true
 	#print("lmao 2")
 	var right = Input.is_action_pressed('ui_right')
 	var left = Input.is_action_pressed('ui_left')
@@ -154,7 +154,7 @@ func get_input(delta):
 		chargeLoop.stop()
 
 
-	if grenade_input and canThrowGrenade:
+	if grenade_input and hasGrenadeAbility:
 		if (Globals.playerData.gameDifficulty <= Globals.Difficulty.EASY or bulletManager.get_num_bullets() < 3):
 
 			#print("Throw!")
