@@ -116,7 +116,7 @@ animations = [ {
 [sub_resource type="RectangleShape2D" id=9]
 extents = Vector2( 16, 24 )
 
-[node name="Node2D" type="Node2D"]
+[node name="Droplet" type="Node2D"]
 script = SubResource( 1 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]

@@ -58,15 +58,13 @@ func move(obj):
 		get_node("/root/Node2D/").get_player().get_node("Camera2D").adjustCamera([leftBound,topBound,rightBound,bottomBound], tweenTime)
 		
 		#Lock player into walking right .5 seconds
-		$Sprite.set_process(true)
 		#$Sprite.piecesToDraw=0
 		var seq := get_tree().create_tween()
 		$Sound.play()
+		
 		seq.tween_property($Sprite,'piecesToDraw',0,.3)
-		seq.tween_property($Sprite,'piecesToDraw',0,.4)
-		seq.tween_callback($Sound,"play")
+		seq.tween_callback($Sound,"play").set_delay(.4)
 		seq.tween_property($Sprite,'piecesToDraw',16,.3)
-		seq.connect("finished",$Sprite,"set_process",[false])
 		if boss_room_door:
 			get_node("/root/Node2D").fadeMusic()
 			obj.call("lockMovementQueue",[

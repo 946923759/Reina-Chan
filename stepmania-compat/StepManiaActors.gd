@@ -50,4 +50,5 @@ static func Sprite(d)->smSprite:
 # * One such example: SCALE(x, 0, 1, L, H); interpolate between L and H.
 # */
 static func SCALE(x:float, l1:float, h1:float, l2:float, h2:float)->float:
-	return (((x) - (l1)) * ((h2) - (l2)) / ((h1) - (l1)) + (l2))
+	return (x - l1) * (h2 - l2) / (h1 - l1) + l2
+	#return (((x) - (l1)) * ((h2) - (l2)) / ((h1) - (l1)) + (l2))

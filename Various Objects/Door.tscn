@@ -10,7 +10,7 @@ extends Sprite
 #There are 16 of these door thingies
 var piece = preload(\"res://Various Objects/doorGraphic.png\")
 var CONST_MAX_PIECES_TO_DRAW = 16
-var piecesToDraw = CONST_MAX_PIECES_TO_DRAW
+var piecesToDraw = CONST_MAX_PIECES_TO_DRAW setget set_pieces
 
 func _ready():
 	set_process(false)
@@ -19,7 +19,10 @@ func _draw():
 	for i in range(piecesToDraw):
 		draw_texture(piece,Vector2(0,4*i))
 
-func _process(_delta):
+#func _process(_delta):
+#	update()
+func set_pieces(p):
+	piecesToDraw=p
 	update()
 "
 

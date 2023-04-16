@@ -184,9 +184,11 @@ position = Vector2( 224, 512 )
 
 [node name="Dinergate3" parent="room0-0 to 20-0" index="0" instance=ExtResource( 29 )]
 position = Vector2( 1632, 608 )
+no_movement = false
 
 [node name="Dinergate4" parent="room0-0 to 20-0" index="1" instance=ExtResource( 29 )]
 position = Vector2( 1120, 608 )
+no_movement = false
 
 [node name="Room140-12 Yoku Room 1" type="Node2D" parent="." index="9"]
 position = Vector2( 0, 768 )
@@ -302,12 +304,15 @@ position = Vector2( 4448, 96 )
 
 [node name="Dinergate" parent="room40-0 to 60-0" index="4" instance=ExtResource( 29 )]
 position = Vector2( 4480, 672 )
+no_movement = false
 
 [node name="Enemy" parent="room40-0 to 60-0" index="5" instance=ExtResource( 12 )]
 position = Vector2( 4576, 96 )
+type = 0
 
 [node name="Dinergate2" parent="room40-0 to 60-0" index="6" instance=ExtResource( 29 )]
 position = Vector2( 3808, 672 )
+no_movement = false
 
 [node name="room80-0 to 100-0" type="Node2D" parent="." index="14"]
 
@@ -596,6 +601,7 @@ modulate = Color( 1, 1, 1, 1 )
 
 [node name="Dinergate5" parent="room140-0" index="0" instance=ExtResource( 29 )]
 position = Vector2( 9888, 672 )
+no_movement = false
 
 [node name="CameraAdjuster7" parent="room140-0" index="1" instance=ExtResource( 22 )]
 position = Vector2( 10208, 320 )
@@ -618,12 +624,15 @@ position = Vector2( 9247, 672 )
 
 [node name="Enemy9" parent="room160-0" index="0" instance=ExtResource( 12 )]
 position = Vector2( 11391, 128 )
+type = 0
 
 [node name="Enemy10" parent="room160-0" index="1" instance=ExtResource( 12 )]
 position = Vector2( 11135, 416 )
+type = 0
 
 [node name="Enemy11" parent="room160-0" index="2" instance=ExtResource( 12 )]
 position = Vector2( 10783, 512 )
+type = 0
 
 [node name="room180-12" type="Node2D" parent="." index="32"]
 
@@ -657,6 +666,7 @@ position = Vector2( 96, -672 )
 [node name="Dinergate" parent="room200-12" index="1" instance=ExtResource( 29 )]
 position = Vector2( 352, 608 )
 facing = 1
+no_movement = false
 
 [node name="Scout" parent="room200-12" index="2" instance=ExtResource( 25 )]
 position = Vector2( 480, 160 )

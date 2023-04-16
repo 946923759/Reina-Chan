@@ -55,7 +55,7 @@ func playIntro(playSound=true,showHPbar=true)->AudioStreamPlayer:
 	sprite.play("intro")
 	if showHPbar:
 		var seq := get_tree().create_tween()
-		HPBar.set_process(true)
+		#HPBar.set_process(true)
 		seq.tween_property(HPBar,"position:x",1235,.1)
 # warning-ignore:return_value_discarded
 		seq.tween_property(HPBar,"curHP",1,1.5)

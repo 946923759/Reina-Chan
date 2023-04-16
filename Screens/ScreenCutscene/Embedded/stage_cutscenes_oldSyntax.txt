@@ -148,7 +148,8 @@ msg	Placeholder text
 #KEY	vs_M16
 /UMP9	M16, are you planning on winning the grand prize too?
 /M16A1	Hahaha, no way. If I wanted a day with the commander, I could just ask him. Can't you?
-/UMP9	[idk whatever nobody is going to read this anyways]
+/UMP9	Where's the fun in that?
+/M16A1	And that's exactly why I'm here. Prepare yourself!
 
 #KEY	vs_M16_M16
 /M16?	...

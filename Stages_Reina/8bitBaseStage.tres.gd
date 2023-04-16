@@ -108,13 +108,7 @@ func playBossMusic(isM16:bool=false):
 	if OS.is_debug_build() and mute_boss_music_in_debug:
 		return
 	print("playing boss music")
-	if isM16:
-		if $PlayerHolder.currentCharacter==Globals.Characters.UMP9:
-			reinaAudioPlayer.load_song("Elisa3 - UMP9 vs M16","X vs Zero.nsf",0)
-		else:
-			reinaAudioPlayer.load_song("Elisa3 - M16 vs M16","Cannonball.nsf",0)
-	else:
-		reinaAudioPlayer.load_song("Boss","Rockman 6 UH.nsf",30)
+	reinaAudioPlayer.load_song("Boss","Rockman 6 UH.nsf",30)
 
 func playMusic(cdAudioFileName:String,nsfAudioFileName:String,nsfAudioTrack:int=0):
 	reinaAudioPlayer.load_song(cdAudioFileName,nsfAudioFileName,nsfAudioTrack)

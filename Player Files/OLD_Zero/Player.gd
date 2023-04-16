@@ -70,7 +70,7 @@ onready var dashSound = $DashSound
 onready var HPBar = $CanvasLayer/bar
 
 #preload is for res:// objects apparently
-var bullet = preload("res://Player Files/bullet.tscn")
+var bullet = preload("res://Player Files/Weapons/bullet.tscn")
 var sword = preload("res://Player Files/OLD_Zero/SwordHitbox.tscn")
 
 var tiles;

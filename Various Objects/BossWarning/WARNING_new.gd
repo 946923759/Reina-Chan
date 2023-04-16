@@ -69,10 +69,7 @@ func playSound():
 	$AudioStreamPlayer.play()
 
 func hideWarning():
-	if play_M16_boss_music:
-		get_node("/root/Node2D").playBossMusic()
-	else:
-		get_node("/root/Node2D").playBossMusic()
+	get_node("/root/Node2D").playBossMusic(play_M16_boss_music)
 	sprite.cropright=true
 	var seq := get_tree().create_tween()
 	seq.tween_property(sprite,"toDraw",0,.5).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
@@ -111,7 +108,7 @@ func part1():
 func part2():
 	var callback = child.playIntro();
 	if callback.stream == null:
-		print("BossBase.IntroSound: There's no audio file assigned for this boss, idiot.")
+		print("BossBase.IntroSound: There's no audio file assigned for this boss, idiot. Change IntroSound actor in the boss class.")
 		showWarning()
 		return
 	callback.connect("finished",self,"showWarning")

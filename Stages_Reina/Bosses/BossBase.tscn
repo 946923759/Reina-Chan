@@ -18,9 +18,53 @@
 a = Vector2( -30, 48 )
 b = Vector2( 30, 48 )
 
-[sub_resource type="AtlasTexture" id=2]
+[sub_resource type="AtlasTexture" id=22]
 atlas = ExtResource( 1 )
+region = Rect2( 165, 32, 55, 32 )
+
+[sub_resource type="AtlasTexture" id=23]
+atlas = ExtResource( 1 )
+region = Rect2( 220, 32, 55, 32 )
+
+[sub_resource type="AtlasTexture" id=24]
+atlas = ExtResource( 1 )
+region = Rect2( 275, 32, 55, 32 )
+
+[sub_resource type="AtlasTexture" id=18]
+atlas = ExtResource( 1 )
+region = Rect2( 0, 32, 55, 32 )
+
+[sub_resource type="AtlasTexture" id=19]
+atlas = ExtResource( 1 )
+region = Rect2( 55, 32, 55, 32 )
+
+[sub_resource type="AtlasTexture" id=20]
+atlas = ExtResource( 1 )
+region = Rect2( 110, 32, 55, 32 )
+
+[sub_resource type="AtlasTexture" id=15]
+atlas = ExtResource( 13 )
 region = Rect2( 0, 0, 55, 32 )
+
+[sub_resource type="AtlasTexture" id=16]
+atlas = ExtResource( 13 )
+region = Rect2( 55, 0, 55, 32 )
+
+[sub_resource type="AtlasTexture" id=17]
+atlas = ExtResource( 13 )
+region = Rect2( 110, 0, 55, 32 )
+
+[sub_resource type="AtlasTexture" id=21]
+atlas = ExtResource( 13 )
+region = Rect2( 165, 0, 55, 32 )
+
+[sub_resource type="AtlasTexture" id=25]
+atlas = ExtResource( 1 )
+region = Rect2( 220, 32, 55, 32 )
+
+[sub_resource type="AtlasTexture" id=26]
+atlas = ExtResource( 1 )
+region = Rect2( 165, 32, 55, 32 )
 
 [sub_resource type="AtlasTexture" id=10]
 atlas = ExtResource( 3 )
@@ -42,53 +86,9 @@ region = Rect2( 165, 0, 55, 32 )
 atlas = ExtResource( 3 )
 region = Rect2( 220, 0, 55, 32 )
 
-[sub_resource type="AtlasTexture" id=18]
+[sub_resource type="AtlasTexture" id=2]
 atlas = ExtResource( 1 )
-region = Rect2( 0, 32, 55, 32 )
-
-[sub_resource type="AtlasTexture" id=19]
-atlas = ExtResource( 1 )
-region = Rect2( 55, 32, 55, 32 )
-
-[sub_resource type="AtlasTexture" id=20]
-atlas = ExtResource( 1 )
-region = Rect2( 110, 32, 55, 32 )
-
-[sub_resource type="AtlasTexture" id=21]
-atlas = ExtResource( 13 )
-region = Rect2( 165, 0, 55, 32 )
-
-[sub_resource type="AtlasTexture" id=25]
-atlas = ExtResource( 1 )
-region = Rect2( 220, 32, 55, 32 )
-
-[sub_resource type="AtlasTexture" id=26]
-atlas = ExtResource( 1 )
-region = Rect2( 165, 32, 55, 32 )
-
-[sub_resource type="AtlasTexture" id=22]
-atlas = ExtResource( 1 )
-region = Rect2( 165, 32, 55, 32 )
-
-[sub_resource type="AtlasTexture" id=23]
-atlas = ExtResource( 1 )
-region = Rect2( 220, 32, 55, 32 )
-
-[sub_resource type="AtlasTexture" id=24]
-atlas = ExtResource( 1 )
-region = Rect2( 275, 32, 55, 32 )
-
-[sub_resource type="AtlasTexture" id=15]
-atlas = ExtResource( 13 )
 region = Rect2( 0, 0, 55, 32 )
-
-[sub_resource type="AtlasTexture" id=16]
-atlas = ExtResource( 13 )
-region = Rect2( 55, 0, 55, 32 )
-
-[sub_resource type="AtlasTexture" id=17]
-atlas = ExtResource( 13 )
-region = Rect2( 110, 0, 55, 32 )
 
 [sub_resource type="AtlasTexture" id=3]
 atlas = ExtResource( 1 )
@@ -120,19 +120,19 @@ region = Rect2( 330, 0, 55, 32 )
 
 [sub_resource type="SpriteFrames" id=27]
 animations = [ {
-"frames": [ SubResource( 2 ) ],
+"frames": [ SubResource( 22 ), SubResource( 23 ), SubResource( 24 ) ],
 "loop": false,
-"name": "default",
+"name": "Fire",
 "speed": 5.0
-}, {
-"frames": [ SubResource( 10 ), SubResource( 11 ), SubResource( 12 ), SubResource( 13 ), SubResource( 14 ) ],
-"loop": true,
-"name": "WalkLoop",
-"speed": 12.0
 }, {
 "frames": [ SubResource( 18 ), SubResource( 19 ), SubResource( 20 ), SubResource( 19 ) ],
 "loop": true,
 "name": "Idle",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 15 ), SubResource( 16 ), SubResource( 17 ) ],
+"loop": false,
+"name": "Jump",
 "speed": 5.0
 }, {
 "frames": [ SubResource( 21 ) ],
@@ -145,14 +145,14 @@ animations = [ {
 "name": "ReturnToIdle",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 22 ), SubResource( 23 ), SubResource( 24 ) ],
-"loop": false,
-"name": "Fire",
-"speed": 5.0
+"frames": [ SubResource( 10 ), SubResource( 11 ), SubResource( 12 ), SubResource( 13 ), SubResource( 14 ) ],
+"loop": true,
+"name": "WalkLoop",
+"speed": 12.0
 }, {
-"frames": [ SubResource( 15 ), SubResource( 16 ), SubResource( 17 ) ],
+"frames": [ SubResource( 2 ) ],
 "loop": false,
-"name": "Jump",
+"name": "default",
 "speed": 5.0
 }, {
 "frames": [ SubResource( 3 ), SubResource( 4 ), SubResource( 5 ), SubResource( 6 ), SubResource( 7 ), SubResource( 8 ), SubResource( 9 ) ],
@@ -173,10 +173,10 @@ extents = Vector2( 30, 48 )
 script/source = "extends Sprite
 
 var piece = preload(\"res://Character Sprites/hp_piece.png\")
-var curHP:float = 0
+var curHP:float = 0 setget updateHP
 
-func _ready():
-	set_process(false)
+#func _ready():
+#	set_process(false)
 
 func _draw():
 	for i in range(floor(curHP*32)):
@@ -186,8 +186,8 @@ func updateHP(percentHP):
 	curHP = percentHP
 	update()
 
-func _process(_delta):
-	update()
+#func _process(_delta):
+#	update()
 "
 
 [node name="BossBase" type="KinematicBody2D"]

@@ -48,16 +48,16 @@ func adjustCamera(np,secs):
 		
 		#seq.set_pause_mode(SceneTreeTween.TWEEN_PAUSE_PROCESS)
 		is_tweening=true
-		var seq := get_tree().create_tween()
+		var seq := get_tree().create_tween().set_parallel(true)
 		# Wondering WTF this is? The TRANS_QUAD tween does not work if
 		# left+right is larger than the size of the screen. So we have to tween it one
 		# screen over and then set it to the destination.
 		if np[0] < limit_left: #Camera is moving left?
 			seq.tween_property(           cam,'limit_left',  cam.limit_left-SCREEN_WIDTH,secs).set_trans(Tween.TRANS_QUAD)
-			seq.parallel().append(cam,'limit_right', np[2],secs).set_trans(Tween.TRANS_QUAD)
+			seq.tween_property(cam,'limit_right', np[2],secs).set_trans(Tween.TRANS_QUAD)
 		elif np[0] > limit_left: #Camera is moving right?
 			seq.tween_property(           cam,'limit_left',  np[0],secs).set_trans(Tween.TRANS_QUAD)
-			seq.parallel().append(cam,'limit_right', cam.limit_right+SCREEN_WIDTH,secs).set_trans(Tween.TRANS_QUAD)
+			seq.tween_property(cam,'limit_right', cam.limit_right+SCREEN_WIDTH,secs).set_trans(Tween.TRANS_QUAD)
 		else: #Left border didn't change at all, just tween right border
 			seq.tween_property(cam,'limit_right', np[2],secs).set_trans(Tween.TRANS_QUAD)
 			#cam.limit_left = destPositions[0]
@@ -65,14 +65,14 @@ func adjustCamera(np,secs):
 		
 		if np[0] == limit_left and np[2]== limit_right: #If only top and bottom is being adjusted...
 			if np[1] > limit_top: #Camera moving down?
-				seq.parallel().append(cam,'limit_top',   np[1],secs).set_trans(Tween.TRANS_QUAD)
-				seq.parallel().append(cam,'limit_bottom',limit_bottom+SCREEN_HEIGHT,secs).set_trans(Tween.TRANS_QUAD)
+				seq.tween_property(cam,'limit_top',   np[1],secs).set_trans(Tween.TRANS_QUAD)
+				seq.tween_property(cam,'limit_bottom',limit_bottom+SCREEN_HEIGHT,secs).set_trans(Tween.TRANS_QUAD)
 			else: #Camera moving up?
-				seq.parallel().append(cam,'limit_top',  limit_top-SCREEN_HEIGHT,secs).set_trans(Tween.TRANS_QUAD)
-				seq.parallel().append(cam,'limit_bottom',np[3],secs).set_trans(Tween.TRANS_QUAD)
+				seq.tween_property(cam,'limit_top',  limit_top-SCREEN_HEIGHT,secs).set_trans(Tween.TRANS_QUAD)
+				seq.tween_property(cam,'limit_bottom',np[3],secs).set_trans(Tween.TRANS_QUAD)
 		else:
-			seq.parallel().append(cam,'limit_top',   np[1],secs).set_trans(Tween.TRANS_QUAD)
-			seq.parallel().append(cam,'limit_bottom',np[3],secs).set_trans(Tween.TRANS_QUAD)
+			seq.tween_property(cam,'limit_top',   np[1],secs).set_trans(Tween.TRANS_QUAD)
+			seq.tween_property(cam,'limit_bottom',np[3],secs).set_trans(Tween.TRANS_QUAD)
 		seq.tween_callback(self,"finish_tweening_camera")
 
 	else:
