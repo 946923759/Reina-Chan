@@ -26,7 +26,7 @@ export (Globals.Weapons) var weapon_to_unlock=0
 #Why don't I just enumerate checkpoints?
 #Because the checkpoints aren't in order and adding them to a checkpoint
 #group or something takes more effort
-export (Array,Vector2) var debug_warp_points
+var debug_warp_points
 #This should probably be stored in the player right? I dunno lol
 #var last_warped=0
 
@@ -41,8 +41,12 @@ func _ready():
 	
 	get_tree().set_screen_stretch(SceneTree.STRETCH_MODE_2D,SceneTree.STRETCH_ASPECT_KEEP,Vector2(1280,720))
 	
-	if debug_warp_points.size()==0:
+	if $DebugWarpPoints.get_child_count()==0:
 		debug_warp_points=[Vector2(0,0)]
+	else:
+		debug_warp_points = []
+		for c in $DebugWarpPoints.get_children():
+			debug_warp_points.append(c.global_position)
 		
 	update_easytiles()
 	#else:

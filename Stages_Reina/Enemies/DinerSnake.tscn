@@ -98,6 +98,7 @@ animations = [ {
 script = SubResource( 6 )
 maxHealth = 4
 shapeOverride = SubResource( 7 )
+no_movement = false
 
 [node name="AnimatedSprite" parent="." index="0"]
 frames = SubResource( 3 )

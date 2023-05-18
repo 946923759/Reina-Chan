@@ -230,8 +230,8 @@ func get_menu_buttons_input(_delta):
 		else:
 			lastDebugWarped=0
 		#print(tile_scale)
-		print("Warped player to "+String(stageRoot.debug_warp_points[lastDebugWarped]*tile_scale))
-		position = stageRoot.debug_warp_points[lastDebugWarped]*64
+		print("Warped player to "+String(stageRoot.debug_warp_points[lastDebugWarped]))
+		position = stageRoot.debug_warp_points[lastDebugWarped]
 		$Camera2D.adjustCamera([-10000000,-10000000,10000000,10000000],0)
 
 	

@@ -1,0 +1,79 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://ParticleEffects/AlphaMaskPurple.tres" type="Material" id=1]
+
+[sub_resource type="GDScript" id=2]
+script/source = "tool
+extends StaticBody2D
+
+export (float,.1,10) var speed = 1
+export (bool) var reverse = false
+var drawSize:Vector2
+var spr = preload(\"res://Stages_Reina/Sangvis1/waterfall1.png\")
+var frame:int = 0
+
+func _ready():
+	if get_child_count()>0:
+		#No idea how this works but for some reason
+		#AudioStreamPlayer2D isn't always child 0 and
+		#the shape isn't always child 1?
+		#I know there's room for optimization here but
+		#this is good enough for now
+		for c in get_children():
+			if c is CollisionShape2D and c.shape is RectangleShape2D:
+				drawSize=c.shape.extents*2
+				#print(drawSize)
+				
+func _draw():
+	var realTopLeft:Vector2 = drawSize/-2
+	#var realDrawSize:Vector2 = drawSize*2
+	#draw_texture_rect(bottom[j],Rect2(0,16,region_rect.size.x,height*16),false)
+	#tex, dest rect, source rect
+	for x in range(0,drawSize.x,64):
+		draw_texture_rect_region(spr,
+			#x,y,width,height
+			Rect2(realTopLeft.x+x,realTopLeft.y,64,64),
+			Rect2(frame*16,0,16,16)
+		)
+		draw_texture_rect_region(spr,
+			#x,y,width,height
+			Rect2(realTopLeft.x+x,realTopLeft.y+64,64,64),
+			Rect2(frame*16,16,16,16)
+		)
+		for y in range(128,drawSize.y,128):
+			draw_texture_rect_region(spr,
+				#x,y,width,height
+				Rect2(realTopLeft.x+x,realTopLeft.y+y,64,64*2),
+				Rect2(frame*16,32,16,32)
+			)
+	
+var elapsed:float = 0.0
+func _process(delta):
+	elapsed+=delta
+	if elapsed > 1/speed:
+		elapsed -= 1/speed
+		if reverse:
+			frame-=1
+			if frame < 0:
+				frame = 2
+		else:
+			frame+=1
+			if frame>2:
+				frame=0
+		
+		update()
+	if Engine.editor_hint:
+		_ready()
+"
+
+[node name="waterfall" type="StaticBody2D"]
+material = ExtResource( 1 )
+position = Vector2( 384, 448 )
+collision_layer = 0
+collision_mask = 0
+script = SubResource( 2 )
+__meta__ = {
+"_edit_group_": true
+}
+speed = 10.0
+reverse = true

@@ -1,5 +1,5 @@
 # Reina-Chan
-A Girls' Frontline fangame programmed by me, mostly drawn by VanDine, and partially designed by Unfiltered.
+A Girls' Frontline fangame by the fans, for the fans.
 
 Oh, and it has a bunch of stolen music and sprites from Mega Man.
 
@@ -14,7 +14,7 @@ The latest game demo is available at https://amaryllis-works.itch.io/reina-chan
 A "release" will also be created here for the source code when a new demo comes out.
 
 ## License
-GPLv3 except for the cutscene interpreter ported to Godot which is CC-BY-NC-SA (Similar to GPL, but noncommercial).
+GPLv3 except for cutscene handling code from RepliCant which is CC-BY-NC-SA (Similar to GPL, but noncommercial).
 
 This game uses translated code from https://github.com/piulin/piured-engine which is also GPLv3
 

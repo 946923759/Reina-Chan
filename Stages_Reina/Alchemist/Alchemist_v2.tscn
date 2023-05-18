@@ -215,7 +215,6 @@ nsf_music_file_pt2 = "DMG-CWJ.gbs"
 nsf_track_num_pt2 = 8
 mute_boss_music_in_debug = true
 weapon_to_unlock = 2
-debug_warp_points = [ Vector2( 81, 26 ), Vector2( 22, 26 ), Vector2( 142, 144 ), Vector2( 81, 138 ), Vector2( 102, 105 ), Vector2( 98, 67 ) ]
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="." index="0"]
 
@@ -459,9 +458,11 @@ position = Vector2( -128, -2368 )
 
 [node name="Dinergate" parent="0-24 vs Alchemist Dummy/AlchemistDummy_v2/dg" index="0" instance=ExtResource( 16 )]
 position = Vector2( 416, 2976 )
+no_movement = false
 
 [node name="Dinergate2" parent="0-24 vs Alchemist Dummy/AlchemistDummy_v2/dg" index="1" instance=ExtResource( 16 )]
 position = Vector2( 992, 2976 )
+no_movement = false
 
 [node name="EventTile" parent="0-24 vs Alchemist Dummy" index="3" instance=ExtResource( 42 )]
 position = Vector2( 448, 768 )
@@ -543,6 +544,7 @@ position = Vector2( 2560, 128 )
 
 [node name="Dinergate" parent="60-40 to 60-100" index="7" instance=ExtResource( 16 )]
 position = Vector2( 1216, 288 )
+no_movement = false
 
 [node name="ELID" parent="60-40 to 60-100" index="8" instance=ExtResource( 20 )]
 position = Vector2( 896, 256 )
@@ -580,6 +582,7 @@ never_disable = true
 [node name="Vespid Bride" parent="48-80" index="3" instance=ExtResource( 29 )]
 position = Vector2( 800, 448 )
 facing = 1
+moveAfter = 0.7
 
 [node name="Vespid Bride2" parent="48-80" index="4" instance=ExtResource( 29 )]
 position = Vector2( 544, 320 )
@@ -602,6 +605,7 @@ position = Vector2( 6304, 2944 )
 
 [node name="Vespid Bride" parent="36-80 to 36-120" index="4" instance=ExtResource( 29 )]
 position = Vector2( 6976, 2688 )
+moveAfter = 0.7
 
 [node name="48-100 to 48-140" type="Node2D" parent="." index="23"]
 position = Vector2( 6400, 3072 )
@@ -677,6 +681,7 @@ position = Vector2( 2080, 224 )
 
 [node name="Dinergate" parent="48-100 to 48-140" index="11" instance=ExtResource( 16 )]
 position = Vector2( 1760, 672 )
+no_movement = false
 
 [node name="36-120" type="Node2D" parent="." index="24"]
 
@@ -765,62 +770,77 @@ position = Vector2( 1280, 768 )
 [node name="Ghost Dinergate" parent="The blue room" index="0" instance=ExtResource( 14 )]
 position = Vector2( 2720, 992 )
 facing = 1
+no_movement = false
 
 [node name="Ghost Dinergate2" parent="The blue room" index="1" instance=ExtResource( 14 )]
 position = Vector2( 3552, 928 )
 facing = 1
+no_movement = false
 
 [node name="Ghost Dinergate3" parent="The blue room" index="2" instance=ExtResource( 14 )]
 position = Vector2( 2976, 800 )
 facing = 1
+no_movement = false
 
 [node name="Ghost Dinergate4" parent="The blue room" index="3" instance=ExtResource( 14 )]
 position = Vector2( 3488, 736 )
 facing = 1
+no_movement = false
 
 [node name="Ghost Dinergate5" parent="The blue room" index="4" instance=ExtResource( 14 )]
 position = Vector2( 3616, 544 )
 facing = 1
+no_movement = false
 
 [node name="Ghost Dinergate6" parent="The blue room" index="5" instance=ExtResource( 14 )]
 position = Vector2( 3552, 224 )
 facing = 1
+no_movement = false
 
 [node name="Ghost Dinergate7" parent="The blue room" index="6" instance=ExtResource( 14 )]
 position = Vector2( 3104, 480 )
 facing = 1
+no_movement = false
 
 [node name="Ghost Dinergate8" parent="The blue room" index="7" instance=ExtResource( 14 )]
 position = Vector2( 2592, 736 )
 facing = 1
+no_movement = false
 
 [node name="Ghost Dinergate9" parent="The blue room" index="8" instance=ExtResource( 14 )]
 position = Vector2( 2144, 672 )
 facing = 1
+no_movement = false
 
 [node name="Ghost Dinergate10" parent="The blue room" index="9" instance=ExtResource( 14 )]
 position = Vector2( 1952, 928 )
 facing = 1
+no_movement = false
 
 [node name="Ghost Dinergate11" parent="The blue room" index="10" instance=ExtResource( 14 )]
 position = Vector2( 1440, 992 )
 facing = 1
+no_movement = false
 
 [node name="Ghost Dinergate12" parent="The blue room" index="11" instance=ExtResource( 14 )]
 position = Vector2( 800, 928 )
 facing = 1
+no_movement = false
 
 [node name="Ghost Dinergate13" parent="The blue room" index="12" instance=ExtResource( 14 )]
 position = Vector2( 736, 352 )
 facing = 1
+no_movement = false
 
 [node name="Ghost Dinergate14" parent="The blue room" index="13" instance=ExtResource( 14 )]
 position = Vector2( 544, 544 )
 facing = 1
+no_movement = false
 
 [node name="Ghost Dinergate15" parent="The blue room" index="14" instance=ExtResource( 14 )]
 position = Vector2( 416, 288 )
 facing = 1
+no_movement = false
 
 [node name="FloorMaster" parent="The blue room" index="15" instance=ExtResource( 18 )]
 position = Vector2( 1728, 1184 )
@@ -973,6 +993,7 @@ frozen_movement_direction = 1
 
 [node name="Ghost Dinergate" parent="108-40" index="5" instance=ExtResource( 14 )]
 position = Vector2( 992, 160 )
+no_movement = false
 
 [node name="The blue room but upside down" type="Node2D" parent="." index="35"]
 position = Vector2( 5120, 8448 )
@@ -982,96 +1003,112 @@ position = Vector2( 3424, 1120 )
 collision_layer = 18
 collision_mask = 18
 facing = 1
+no_movement = false
 
 [node name="Ghost Dinergate2" parent="The blue room but upside down" index="1" instance=ExtResource( 14 )]
 position = Vector2( 1888, 480 )
 collision_layer = 18
 collision_mask = 18
 facing = 1
+no_movement = false
 
 [node name="Ghost Dinergate8" parent="The blue room but upside down" index="2" instance=ExtResource( 14 )]
 position = Vector2( 1696, 736 )
 collision_layer = 18
 collision_mask = 18
 facing = 1
+no_movement = false
 
 [node name="Ghost Dinergate9" parent="The blue room but upside down" index="3" instance=ExtResource( 14 )]
 position = Vector2( 1120, 416 )
 collision_layer = 18
 collision_mask = 18
 facing = 1
+no_movement = false
 
 [node name="Ghost Dinergate11" parent="The blue room but upside down" index="4" instance=ExtResource( 14 )]
 position = Vector2( 864, 608 )
 collision_layer = 18
 collision_mask = 18
 facing = 1
+no_movement = false
 
 [node name="Ghost Dinergate12" parent="The blue room but upside down" index="5" instance=ExtResource( 14 )]
 position = Vector2( 736, 928 )
 collision_layer = 18
 collision_mask = 18
 facing = 1
+no_movement = false
 
 [node name="Ghost Dinergate13" parent="The blue room but upside down" index="6" instance=ExtResource( 14 )]
 position = Vector2( 288, 1184 )
 collision_layer = 18
 collision_mask = 18
 facing = 1
+no_movement = false
 
 [node name="Ghost Dinergate14" parent="The blue room but upside down" index="7" instance=ExtResource( 14 )]
 position = Vector2( 224, 864 )
 collision_layer = 18
 collision_mask = 18
 facing = 1
+no_movement = false
 
 [node name="Ghost Dinergate15" parent="The blue room but upside down" index="8" instance=ExtResource( 14 )]
 position = Vector2( 352, 672 )
 collision_layer = 18
 collision_mask = 18
 facing = 1
+no_movement = false
 
 [node name="Ghost Dinergate16" parent="The blue room but upside down" index="9" instance=ExtResource( 14 )]
 position = Vector2( 288, 480 )
 collision_layer = 18
 collision_mask = 18
 facing = 1
+no_movement = false
 
 [node name="Ghost Dinergate10" parent="The blue room but upside down" index="10" instance=ExtResource( 14 )]
 position = Vector2( 1248, 672 )
 collision_layer = 18
 collision_mask = 18
 facing = 1
+no_movement = false
 
 [node name="Ghost Dinergate3" parent="The blue room but upside down" index="11" instance=ExtResource( 14 )]
 position = Vector2( 2400, 416 )
 collision_layer = 18
 collision_mask = 18
 facing = 1
+no_movement = false
 
 [node name="Ghost Dinergate4" parent="The blue room but upside down" index="12" instance=ExtResource( 14 )]
 position = Vector2( 2400, 992 )
 collision_layer = 18
 collision_mask = 18
 facing = 1
+no_movement = false
 
 [node name="Ghost Dinergate5" parent="The blue room but upside down" index="13" instance=ExtResource( 14 )]
 position = Vector2( 3040, 480 )
 collision_layer = 18
 collision_mask = 18
 facing = 1
+no_movement = false
 
 [node name="Ghost Dinergate6" parent="The blue room but upside down" index="14" instance=ExtResource( 14 )]
 position = Vector2( 3296, 864 )
 collision_layer = 18
 collision_mask = 18
 facing = 1
+no_movement = false
 
 [node name="Ghost Dinergate7" parent="The blue room but upside down" index="15" instance=ExtResource( 14 )]
 position = Vector2( 3104, 1056 )
 collision_layer = 18
 collision_mask = 18
 facing = 1
+no_movement = false
 
 [node name="108-60" type="Node2D" parent="." index="36"]
 position = Vector2( 3840, 6912 )
@@ -1100,10 +1137,12 @@ facing = 1
 [node name="Vespid Bride" parent="132-0 to 132-60" index="1" instance=ExtResource( 29 )]
 position = Vector2( 3488, 8832 )
 facing = 1
+moveAfter = 0.7
 
 [node name="Vespid Bride2" parent="132-0 to 132-60" index="2" instance=ExtResource( 29 )]
 position = Vector2( 2400, 8832 )
 facing = 1
+moveAfter = 0.7
 
 [node name="RipperHalloween" parent="132-0 to 132-60" index="3" instance=ExtResource( 27 )]
 position = Vector2( 448, 9152 )
@@ -1124,6 +1163,7 @@ facing = 1
 [node name="Vespid Bride3" parent="132-0 to 132-60" index="7" instance=ExtResource( 29 )]
 position = Vector2( 1568, 8640 )
 facing = 1
+moveAfter = 0.7
 
 [node name="CameraAdjuster" parent="132-0 to 132-60" index="8" instance=ExtResource( 7 )]
 position = Vector2( 5120, 8832 )
@@ -1198,6 +1238,7 @@ position = Vector2( 3040, 8320 )
 
 [node name="Vespid Bride" parent="120-40 to 120-60" index="5" instance=ExtResource( 29 )]
 position = Vector2( 3360, 8000 )
+moveAfter = 0.7
 
 [node name="Checkpoint2" parent="." index="40" instance=ExtResource( 28 )]
 position = Vector2( 4480, 8832 )
@@ -1296,6 +1337,21 @@ nearestRoomCorner = Vector2( 120, 96 )
 
 [node name="Checkpoint4" parent="BossArea" index="3" instance=ExtResource( 28 )]
 position = Vector2( 672, 384 )
+
+[node name="Position2D" type="Position2D" parent="DebugWarpPoints" index="0"]
+position = Vector2( 5216, 1856 )
+
+[node name="Position2D2" type="Position2D" parent="DebugWarpPoints" index="1"]
+position = Vector2( 1408, 1856 )
+
+[node name="Position2D3" type="Position2D" parent="DebugWarpPoints" index="2"]
+position = Vector2( 9152, 9472 )
+
+[node name="Position2D4" type="Position2D" parent="DebugWarpPoints" index="3"]
+position = Vector2( 5216, 9120 )
+
+[node name="Position2D5" type="Position2D" parent="DebugWarpPoints" index="4"]
+position = Vector2( 6528, 6720 )
 
 [connection signal="boss_killed" from="0-24 vs Alchemist Dummy/AlchemistDummy_v2" to="0-24 vs Alchemist Dummy/RotateAndTeleport2" method="_on_AlchemistDummy_v2_boss_killed"]
 [connection signal="event_executed_passPlayer" from="0-24 vs Alchemist Dummy/EventTile" to="0-24 vs Alchemist Dummy/AlchemistDummy_v2" method="_on_EventTile_event_executed_passPlayer"]

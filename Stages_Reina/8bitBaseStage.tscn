@@ -150,3 +150,5 @@ region_enabled = true
 region_rect = Rect2( 0, 0, 26, 32 )
 script = SubResource( 1 )
 charTextures = [ ExtResource( 1 ), ExtResource( 5 ) ]
+
+[node name="DebugWarpPoints" type="Node" parent="."]

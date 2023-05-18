@@ -380,9 +380,6 @@ custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_constants/shadow_as_outline = 10
 custom_fonts/font = ExtResource( 6 )
 text = "PlayerState debug"
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="CameraInfo" type="Label" parent="CanvasLayer/DebugDisplay"]
 margin_left = 454.816

@@ -76,7 +76,6 @@ bottomBound = 12
 custom_music_name = "Architect"
 nsf_music_file = "Rockman 4MI.nsf"
 weapon_to_unlock = 1
-debug_warp_points = [ Vector2( 149, 29 ), Vector2( 227, 20 ) ]
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="." index="1"]
 
@@ -744,5 +743,11 @@ collision_mask = 49
 [node name="1up4" parent="bonusRoom" index="4" instance=ExtResource( 2 )]
 position = Vector2( 13439, 608 )
 collision_mask = 49
+
+[node name="Position2D" type="Position2D" parent="DebugWarpPoints" index="0"]
+position = Vector2( 9536, 1856 )
+
+[node name="Position2D2" type="Position2D" parent="DebugWarpPoints" index="1"]
+position = Vector2( 14480, 1360 )
 
 [connection signal="event_executed" from="bonusRoom/EventTileB" to="bonusRoom/EventTileB/BlockEnablerDisabler" method="execute"]

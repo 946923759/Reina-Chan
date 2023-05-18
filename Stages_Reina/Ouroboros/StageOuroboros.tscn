@@ -157,7 +157,6 @@ nsf_volume_adjustment = -3.0
 mute_music_in_debug = true
 mute_boss_music_in_debug = true
 weapon_to_unlock = 3
-debug_warp_points = [ Vector2( 25, 0 ), Vector2( 80, 0 ), Vector2( 100, 0 ), Vector2( 143, 23 ), Vector2( 0, 0 ), Vector2( 298, 100 ) ]
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="." index="1"]
 
@@ -1309,7 +1308,6 @@ position = Vector2( 14080, 6080 )
 
 [node name="DinerSnake" parent="Room 220-96" index="0" instance=ExtResource( 25 )]
 position = Vector2( 928, 736 )
-no_movement = false
 
 [node name="CameraAdjuster" parent="Room 220-96" index="1" instance=ExtResource( 14 )]
 position = Vector2( 0, 480 )
@@ -1397,16 +1395,13 @@ bottomBound = 96
 
 [node name="DinerSnake" parent="Room 200-72 to Room 200-84" index="1" instance=ExtResource( 25 )]
 position = Vector2( 320, -160 )
-no_movement = false
 
 [node name="DinerSnake2" parent="Room 200-72 to Room 200-84" index="2" instance=ExtResource( 25 )]
 position = Vector2( 864, -160 )
-no_movement = false
 
 [node name="DinerSnake3" parent="Room 200-72 to Room 200-84" index="3" instance=ExtResource( 25 )]
 position = Vector2( 992, 288 )
 facing = 1
-no_movement = false
 
 [node name="EventTile" parent="Room 200-72 to Room 200-84" index="4" instance=ExtResource( 34 )]
 position = Vector2( 1024, -192 )
@@ -1478,7 +1473,6 @@ position = Vector2( 416, 128 )
 
 [node name="DinerSnake" parent="Room 260-96" index="4" instance=ExtResource( 25 )]
 position = Vector2( 960, 416 )
-no_movement = false
 
 [node name="Checkpoint" parent="Room 260-96" index="5" instance=ExtResource( 22 )]
 position = Vector2( 1920, 288 )
@@ -1501,6 +1495,21 @@ material = ExtResource( 39 )
 position = Vector2( 1080, 360 )
 scale = Vector2( 4, 4 )
 texture = ExtResource( 45 )
+
+[node name="Position2D" type="Position2D" parent="DebugWarpPoints" index="0"]
+position = Vector2( 2400, 416 )
+
+[node name="Position2D2" type="Position2D" parent="DebugWarpPoints" index="1"]
+position = Vector2( 5120, 128 )
+
+[node name="Position2D3" type="Position2D" parent="DebugWarpPoints" index="2"]
+position = Vector2( 6400, 160 )
+
+[node name="Position2D4" type="Position2D" parent="DebugWarpPoints" index="3"]
+position = Vector2( 9376, 1440 )
+
+[node name="Position2D5" type="Position2D" parent="DebugWarpPoints" index="4"]
+position = Vector2( 19040, 6464 )
 
 [connection signal="ready" from="." to="GOSign" method="_on_Node2D_ready"]
 [connection signal="puzzle_completed" from="room 100-0/InsaneChessThing" to="room 100-0/Door" method="unlock_door"]
