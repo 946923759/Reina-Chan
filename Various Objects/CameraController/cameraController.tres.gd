@@ -36,7 +36,7 @@ func cam(obj):
 	if obj.has_method("player_touched") and not disabled:
 		disabled = !never_disable
 		var cc = get_node("/root/Node2D/").get_player().get_node("Camera2D")
-		print("Touched camera trigger!")
+		print("Touched camera trigger at "+String(self.global_position))
 		
 		#We don't want to overwrite leftBound,rightBound, etc so keep the changed variables in a new array.
 		var boundsArray = [null,null,null,null]

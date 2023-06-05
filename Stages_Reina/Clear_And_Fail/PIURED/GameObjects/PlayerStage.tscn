@@ -9,7 +9,7 @@
 [ext_resource path="res://Stages_Reina/Clear_And_Fail/PIURED/Resources/SG-TIP 1x2.png" type="Texture" id=7]
 [ext_resource path="res://Stages_Reina/Clear_And_Fail/PIURED/GameObjects/Stage/NoteField/NoteField.tscn" type="PackedScene" id=8]
 [ext_resource path="res://Stages_Reina/Clear_And_Fail/PIURED/GameObjects/ScoreManager.gd" type="Script" id=9]
-[ext_resource path="res://FallbackPixelFont.tres" type="DynamicFont" id=10]
+[ext_resource path="res://ubuntu-font-family/FallbackPixelFont.tres" type="DynamicFont" id=10]
 
 [node name="PlayerStage" type="Node2D"]
 script = ExtResource( 3 )

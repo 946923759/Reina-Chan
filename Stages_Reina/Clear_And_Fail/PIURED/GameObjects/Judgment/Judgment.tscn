@@ -5,7 +5,7 @@
 [ext_resource path="res://Stages_Reina/Clear_And_Fail/PIURED/Resources/Combo 1x2_XX.png" type="Texture" id=3]
 [ext_resource path="res://Stages_Reina/Clear_And_Fail/PIURED/GameObjects/Judgment/Combo.gd" type="Script" id=4]
 [ext_resource path="res://Stages_Reina/Clear_And_Fail/PIURED/GameObjects/Judgment/Judgment.gd" type="Script" id=5]
-[ext_resource path="res://FallbackPixelFont.tres" type="DynamicFont" id=6]
+[ext_resource path="res://ubuntu-font-family/FallbackPixelFont.tres" type="DynamicFont" id=6]
 [ext_resource path="res://Stages_Reina/Clear_And_Fail/PIURED/GameObjects/Judgment/ComboDigits.gd" type="Script" id=7]
 
 [node name="Judgment" type="Node2D"]

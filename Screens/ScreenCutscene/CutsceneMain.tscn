@@ -2,7 +2,7 @@
 
 [ext_resource path="res://Screens/ScreenCutscene/NotoSans-Bold.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://ubuntu-font-family/pkmndp.ttf" type="DynamicFontData" id=2]
-[ext_resource path="res://MM2Font_Smaller.tres" type="DynamicFont" id=3]
+[ext_resource path="res://ubuntu-font-family/MM2Font_Smaller.tres" type="DynamicFont" id=3]
 [ext_resource path="res://Screens/ScreenCutscene/ChoiceHandler.gd" type="Script" id=4]
 [ext_resource path="res://Screens/ScreenCutscene/CutsceneHistory.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Screens/ScreenCutscene/textbox.png" type="Texture" id=6]
@@ -19,6 +19,7 @@ font_data = ExtResource( 2 )
 
 [node name="CutscenePlayer" type="CanvasLayer"]
 pause_mode = 2
+layer = 2
 script = ExtResource( 7 )
 
 [node name="dim" type="ColorRect" parent="."]

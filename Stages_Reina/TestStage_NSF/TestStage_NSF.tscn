@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=2]
 
-[ext_resource path="res://MM2Font.tres" type="DynamicFont" id=1]
+[ext_resource path="res://ubuntu-font-family/MM2Font.tres" type="DynamicFont" id=1]
 [ext_resource path="res://Stages/TestStage/Tileset.tres" type="TileSet" id=2]
 [ext_resource path="res://Player Files/8bitPlayer/8bitPlayer.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Stages_Reina/Enemies/Scout.tscn" type="PackedScene" id=5]

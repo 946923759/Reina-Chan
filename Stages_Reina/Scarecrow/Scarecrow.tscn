@@ -7,7 +7,7 @@
 [ext_resource path="res://Stages_Reina/Scarecrow/quicksand_top.png" type="Texture" id=5]
 [ext_resource path="res://Stages_Reina/Enemies/Guardian/NotSniperJoe_Alt.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Stages_Reina/Enemies/Jaguar.tscn" type="PackedScene" id=7]
-[ext_resource path="res://MM2Font.tres" type="DynamicFont" id=8]
+[ext_resource path="res://ubuntu-font-family/MM2Font.tres" type="DynamicFont" id=8]
 [ext_resource path="res://Various Objects/CameraController/CameraAdjuster_v2_Vertical.tscn" type="PackedScene" id=9]
 [ext_resource path="res://Stages_Reina/Scarecrow/QuicksandHandler.tres.gd" type="Script" id=10]
 [ext_resource path="res://Stages_Reina/Scarecrow/DrawQuicksand.gd" type="Script" id=11]

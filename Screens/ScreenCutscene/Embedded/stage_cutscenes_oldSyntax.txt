@@ -12,6 +12,11 @@ portrait	pic_UMP9	pic_Architect
 /Architect	This is a boss intro test. You can translate boss cutscenes by separating them with tab in stage_cutscenes.txt.
 /UMP9	Hello world, I'm family-chan! aoijsdoaidj
 
+#KEY	TestStage_Sk
+portrait	pic_UMP9	pic_VZ61
+/Skorpion	I'm inside a test stage!
+/UMP9	Hey kiddos, remember to hydrate. Haha funny joke.
+
 #KEY	Architect
 portrait	pic_UMP9	pic_Architect
 /Architect	Heee-ey, you trash Griffin T-Dolls! Let's have some fun!	O-Oigan!, Muñecas Tacticas de pacotilla! Tengamos algo de diversion!
@@ -23,6 +28,13 @@ portrait	pic_M16A1_Boss_5	pic_Architect
 /Architect	Heee-ey, you t... Oh, M16? You want to fight me?
 /M16A1	Of course. Don't you want a rematch? The last time we fought was way back when you were with Sangvis Ferri.
 /Architect	Y-yeah, but I'm not really suited for direct combat... (And you look like you could crush me now!)
+
+#KEY	ArchitectNPC
+portrait	pic_9A91	pic_UMP9
+matchnames	9A-91	UMP9
+/9A-91	It's f-f-freezing out here! Especially down B-b-below!
+/UMP9	If only there was something out there to cover your... Waist. And stomach. Can't remember what they're called, though.
+/9A-91	Huh? N-n-no idea what you're talking about. I c-can't take this anymore, I'm outta here!
 
 #KEY	Alchemist1
 portrait	pic_Alchemist,true,0
@@ -160,6 +172,35 @@ msg	Placeholder text
 #KEY	ClearAndFail
 /El Fail	Heaven or hell...
 /El Clear	Let's rock!
+
+
+#KEY	TalkHub_Skorp
+portrait	pic_VZ61
+/Skorpion	Hey, UMP9!
+
+#KEY	TalkHub_T5000
+portrait	pic_T5000
+/T-5000	Hmm... I don't think I've seen you in the dorms too often. Hey, have you ever played a game called Viewtiful Joe?
+/UMP9	Maybe G11 has...?
+
+#KEY	TalkHub_9A91
+portrait	pic_9A91
+/9A-91	I'm so glad to be out of that frozen wasteland...
+
+#KEY	TalkHub_Architect
+portrait	pic_Architect
+/Architect	Heeeey! Wanna play again after this? It's so boring, all the T-Dolls are too scared to talk to me!
+
+#KEY	TalkHub_Alchemist
+portrait	pic_Alchemist
+/Alchemist	...What? You gonna ask me for some candy? I'll impale you.
+
+#KEY	TalkHub_Ouroboros
+portrait	pic_Ouroboros
+/Ouroboros	Ever played Gal Gun Double Peace? (Just kidding, I'll change this for the demo)
+
+#KEY	TalkHub_Scarecrow
+/Scarecrow	...
 
 #KEY	Demo2Ending
 preload_portraits	Dier	pic_Alchemist	pic_Scarecrow

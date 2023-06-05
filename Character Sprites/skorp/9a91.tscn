@@ -1,0 +1,50 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://Character Sprites/skorp/9a-91 5x1.png" type="Texture" id=1]
+[ext_resource path="res://Character Sprites/skorp/skorp.tscn" type="PackedScene" id=2]
+
+[sub_resource type="GDScript" id=5]
+script/source = "extends \"res://Character Sprites/skorp/skorp.gd\"
+"
+
+[sub_resource type="AtlasTexture" id=1]
+atlas = ExtResource( 1 )
+region = Rect2( 78, 0, 26, 36 )
+
+[sub_resource type="AtlasTexture" id=2]
+atlas = ExtResource( 1 )
+region = Rect2( 104, 0, 26, 36 )
+
+[sub_resource type="AtlasTexture" id=3]
+atlas = ExtResource( 1 )
+region = Rect2( 0, 0, 26, 36 )
+
+[sub_resource type="AtlasTexture" id=6]
+atlas = ExtResource( 1 )
+region = Rect2( 26, 0, 26, 36 )
+
+[sub_resource type="SpriteFrames" id=4]
+animations = [ {
+"frames": [ SubResource( 1 ), SubResource( 1 ), SubResource( 1 ), SubResource( 1 ), SubResource( 1 ), SubResource( 1 ), SubResource( 1 ), SubResource( 2 ), SubResource( 1 ), SubResource( 2 ) ],
+"loop": true,
+"name": "cold",
+"speed": 15.0
+}, {
+"frames": [ SubResource( 3 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 6 ) ],
+"loop": true,
+"name": "hat",
+"speed": 5.0
+} ]
+
+[node name="9a91" instance=ExtResource( 2 )]
+script = SubResource( 5 )
+
+[node name="AnimatedSprite" parent="." index="0"]
+position = Vector2( 0, -10 )
+frames = SubResource( 4 )
+animation = "hat"

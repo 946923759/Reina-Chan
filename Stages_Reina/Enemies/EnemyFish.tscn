@@ -1,17 +1,21 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Stages/EnemyBase.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Stages_Reina/Enemies/EnemyFish.gd" type="Script" id=2]
-[ext_resource path="res://Stages_Reina/Enemies/placeholder.png" type="Texture" id=3]
+[ext_resource path="res://Stages_Reina/Enemies/dinnerfish 2x1.png" type="Texture" id=3]
 [ext_resource path="res://addons/godot-next/gui/debug_label.gd" type="Script" id=4]
 
 [sub_resource type="AtlasTexture" id=2]
 atlas = ExtResource( 3 )
-region = Rect2( 0, 0, 16, 16 )
+region = Rect2( 0, 0, 27, 24 )
+
+[sub_resource type="AtlasTexture" id=3]
+atlas = ExtResource( 3 )
+region = Rect2( 27, 0, 27, 24 )
 
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
-"frames": [ SubResource( 2 ) ],
+"frames": [ SubResource( 2 ), SubResource( 3 ) ],
 "loop": true,
 "name": "default",
 "speed": 5.0
@@ -24,6 +28,7 @@ script = ExtResource( 2 )
 frames = SubResource( 1 )
 
 [node name="DebugLabel" type="Label" parent="." index="6"]
+visible = false
 margin_right = 40.0
 margin_bottom = 14.0
 text = "idleTime = null

@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=2]
 
-[ext_resource path="res://MM2Font.tres" type="DynamicFont" id=1]
+[ext_resource path="res://ubuntu-font-family/MM2Font.tres" type="DynamicFont" id=1]
 [ext_resource path="res://Music/Intro.ogg" type="AudioStream" id=2]
 [ext_resource path="res://ubuntu-font-family/Ubuntu-B.ttf" type="DynamicFontData" id=3]
 

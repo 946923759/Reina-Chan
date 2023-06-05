@@ -5,7 +5,7 @@
 [ext_resource path="res://Player Files/mission start_EDITOR_ONLY.png" type="Texture" id=3]
 [ext_resource path="res://Character Sprites/HPBar_Player.png" type="Texture" id=4]
 [ext_resource path="res://Player Files/mission start1.png" type="Texture" id=5]
-[ext_resource path="res://MM2Font_Smaller.tres" type="DynamicFont" id=6]
+[ext_resource path="res://ubuntu-font-family/MM2Font_Smaller.tres" type="DynamicFont" id=6]
 [ext_resource path="res://Player Files/8bitPlayer/8bitPlayer.gd" type="Script" id=7]
 [ext_resource path="res://Player Files/CameraController_v2.gd" type="Script" id=8]
 [ext_resource path="res://Sounds/Classic/Die.wav" type="AudioStream" id=9]
@@ -303,6 +303,7 @@ extents = Vector2( 20, 20 )
 radius = 320.0
 
 [node name="Player" type="KinematicBody2D"]
+z_index = 1
 script = ExtResource( 7 )
 dash_multiplier = 2.5
 

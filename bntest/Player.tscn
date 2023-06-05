@@ -56,7 +56,7 @@
 [ext_resource path="res://bntest/shoot/vz61_attack_25_005.png" type="Texture" id=54]
 [ext_resource path="res://bntest/shoot/vz61_attack_25_004.png" type="Texture" id=55]
 [ext_resource path="res://bntest/shoot/vz61_attack_25_006.png" type="Texture" id=56]
-[ext_resource path="res://MM2Font.tres" type="DynamicFont" id=57]
+[ext_resource path="res://ubuntu-font-family/MM2Font.tres" type="DynamicFont" id=57]
 
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {

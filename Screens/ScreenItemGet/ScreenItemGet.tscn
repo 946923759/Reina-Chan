@@ -3,7 +3,7 @@
 [ext_resource path="res://ParticleEffects/alphaMask.gdshader" type="Shader" id=1]
 [ext_resource path="res://ParticleEffects/PaletteSwapShader.gdshader" type="Shader" id=2]
 [ext_resource path="res://Screens/ScreenItemGet/top.png" type="Texture" id=3]
-[ext_resource path="res://MM2Font.tres" type="DynamicFont" id=4]
+[ext_resource path="res://ubuntu-font-family/MM2Font.tres" type="DynamicFont" id=4]
 [ext_resource path="res://Music/ItemGet.ogg" type="AudioStream" id=5]
 [ext_resource path="res://Character Sprites/ump9/ump9.tres" type="SpriteFrames" id=6]
 [ext_resource path="res://Screens/ScreenItemGet/bottom.png" type="Texture" id=7]

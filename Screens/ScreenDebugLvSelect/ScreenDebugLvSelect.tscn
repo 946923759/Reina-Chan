@@ -7,8 +7,8 @@
 [ext_resource path="res://Sounds/Classic/Mega Man 4 SFX (20) - Weapon Switch.wav" type="AudioStream" id=5]
 [ext_resource path="res://Sounds/Classic/03 - MenuSelect.wav" type="AudioStream" id=6]
 [ext_resource path="res://Sounds/Classic/S3K_B2 - No Way.wav" type="AudioStream" id=7]
-[ext_resource path="res://FallbackPixelFont.tres" type="DynamicFont" id=8]
-[ext_resource path="res://MM2Font.tres" type="DynamicFont" id=9]
+[ext_resource path="res://ubuntu-font-family/FallbackPixelFont.tres" type="DynamicFont" id=8]
+[ext_resource path="res://ubuntu-font-family/MM2Font.tres" type="DynamicFont" id=9]
 
 [sub_resource type="DynamicFont" id=1]
 size = 20

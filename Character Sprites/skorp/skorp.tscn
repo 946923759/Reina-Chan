@@ -1,10 +1,11 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://Character Sprites/skorp/skorp.tres" type="SpriteFrames" id=1]
 [ext_resource path="res://Character Sprites/skorp/skorp.gd" type="Script" id=2]
 [ext_resource path="res://Sounds/Classic/Metroid - Item Acquired.wav" type="AudioStream" id=3]
 [ext_resource path="res://ParticleEffects/AlphaMaskBlack.tres" type="Material" id=4]
 [ext_resource path="res://Character Sprites/skorp/dustCloud 2x1.png" type="Texture" id=5]
+[ext_resource path="res://ubuntu-font-family/BitmapFont.tscn" type="PackedScene" id=6]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 48, 60 )
@@ -109,7 +110,6 @@ script = ExtResource( 2 )
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 scale = Vector2( 4, 4 )
 frames = ExtResource( 1 )
-animation = "falling"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource( 1 )
@@ -117,6 +117,8 @@ shape = SubResource( 1 )
 [node name="VisibilityEnabler2D" type="VisibilityEnabler2D" parent="."]
 position = Vector2( -1.90735e-06, 0 )
 scale = Vector2( 3.2, 3.2 )
+process_parent = true
+physics_process_parent = true
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 3 )
@@ -142,3 +144,9 @@ frame = 1
 [node name="AnimationPlayer" type="AnimationPlayer" parent="DustCloud"]
 anims/default = SubResource( 5 )
 "anims/default 2" = SubResource( 5 )
+
+[node name="TalkHelp" parent="." instance=ExtResource( 6 )]
+visible = false
+position = Vector2( -96, -128 )
+text = "^ talk"
+scale_by = 4

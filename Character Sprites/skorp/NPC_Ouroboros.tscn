@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Stages_Reina/Bosses/Ouroboros/BossOuroboros_SpriteFrames.tres" type="SpriteFrames" id=1]
+[ext_resource path="res://Character Sprites/skorp/skorp.tscn" type="PackedScene" id=2]
+
+[node name="NPC_Ouroboros" instance=ExtResource( 2 )]
+
+[node name="AnimatedSprite" parent="." index="0"]
+frames = ExtResource( 1 )
+offset = Vector2( 4, -2 )

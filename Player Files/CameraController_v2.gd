@@ -30,6 +30,7 @@ func finish_tweening_camera(_write_destinations:bool=false):
 	cam.limit_top = destPositions[1]
 	cam.limit_right = destPositions[2]
 	cam.limit_bottom = destPositions[3]
+	#print("finish tweening, limit is "+String(destPositions))
 
 func adjustCamera(np,secs):
 	destPositions=np
@@ -48,7 +49,8 @@ func adjustCamera(np,secs):
 		
 		#seq.set_pause_mode(SceneTreeTween.TWEEN_PAUSE_PROCESS)
 		is_tweening=true
-		var seq := get_tree().create_tween().set_parallel(true)
+		var seq := get_tree().create_tween()
+		seq.set_parallel(true)
 		# Wondering WTF this is? The TRANS_QUAD tween does not work if
 		# left+right is larger than the size of the screen. So we have to tween it one
 		# screen over and then set it to the destination.
@@ -73,7 +75,7 @@ func adjustCamera(np,secs):
 		else:
 			seq.tween_property(cam,'limit_top',   np[1],secs).set_trans(Tween.TRANS_QUAD)
 			seq.tween_property(cam,'limit_bottom',np[3],secs).set_trans(Tween.TRANS_QUAD)
-		seq.tween_callback(self,"finish_tweening_camera")
+		seq.tween_callback(self,"finish_tweening_camera").set_delay(secs)
 
 	else:
 		cam.limit_left = np[0]

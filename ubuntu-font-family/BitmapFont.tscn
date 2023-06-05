@@ -127,6 +127,9 @@ func _draw():
 		elif col == 58: # :
 			col = 10
 			row = 2
+		elif col == 94: # ^
+			col = 0
+			row = 3
 		
 		elif col <= 57:
 			col=max(0,col-48)

@@ -1,7 +1,7 @@
 [gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://Screens/ScreenStageIntro/StageIntro.tres.gd" type="Script" id=1]
-[ext_resource path="res://MM2Font.tres" type="DynamicFont" id=2]
+[ext_resource path="res://ubuntu-font-family/MM2Font.tres" type="DynamicFont" id=2]
 [ext_resource path="res://Screens/ScreenStageIntro/starfilter.png" type="Texture" id=3]
 [ext_resource path="res://Music/Stage Start.ogg" type="AudioStream" id=5]
 [ext_resource path="res://Screens/ScreenCutscene/Portraits/pic_Architect.png" type="Texture" id=6]

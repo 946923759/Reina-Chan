@@ -1,0 +1,92 @@
+[gd_scene load_steps=13 format=2]
+
+[ext_resource path="res://Stages/NeedleManDemo/NeedleManTiles.tres" type="TileSet" id=1]
+[ext_resource path="res://Stages_Reina/8bitBaseStage.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Stages/NeedleManDemo/backdrop2.png" type="Texture" id=3]
+[ext_resource path="res://Stages/NeedleManDemo/backdrop.png" type="Texture" id=4]
+[ext_resource path="res://Character Sprites/skorp/NPC_Architect.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Character Sprites/skorp/NPC_T5000.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Character Sprites/skorp/skorp.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Character Sprites/skorp/9a91.tscn" type="PackedScene" id=8]
+[ext_resource path="res://Character Sprites/skorp/NPC_Ouroboros.tscn" type="PackedScene" id=9]
+[ext_resource path="res://Character Sprites/skorp/NPC_Alchemist.tscn" type="PackedScene" id=10]
+[ext_resource path="res://Character Sprites/skorp/NPC_Scarecrow.tscn" type="PackedScene" id=11]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends \"res://Stages_Reina/8bitBaseStage.tres.gd\"
+
+func _ready():
+	#._ready()
+	#print(\"a\")
+	var p = get_player()
+	p.get_node(\"CanvasLayer/bar\").visible=false
+"
+
+[node name="Node2D" instance=ExtResource( 2 )]
+script = SubResource( 1 )
+adjust_camera = true
+rightBound = 40
+bottomBound = -999
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="." index="1"]
+scroll_ignore_camera_zoom = true
+
+[node name="ParallaxLayer2" type="ParallaxLayer" parent="ParallaxBackground" index="0"]
+motion_scale = Vector2( 0.1, 0 )
+motion_offset = Vector2( 0, -400 )
+
+[node name="Sprite" type="Sprite" parent="ParallaxBackground/ParallaxLayer2" index="0"]
+scale = Vector2( 4, 4 )
+texture = ExtResource( 3 )
+centered = false
+offset = Vector2( -300, 0 )
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground" index="1"]
+motion_scale = Vector2( 0.6, 1 )
+
+[node name="Sprite" type="Sprite" parent="ParallaxBackground/ParallaxLayer" index="0"]
+scale = Vector2( 4, 4 )
+texture = ExtResource( 4 )
+centered = false
+offset = Vector2( -100, 0 )
+
+[node name="TileMap" parent="." index="2"]
+tile_set = ExtResource( 1 )
+tile_data = PoolIntArray( -65535, 19, 0, -65534, 19, 0, -65533, 19, 0, -65532, 19, 0, -65531, 19, 0, -65489, 12, 0, -65488, 35, 0, 65535, 12, 0, 47, 12, 0, 131071, 12, 0, 65583, 12, 0, 65584, 35, 0, 196607, 12, 0, 131119, 12, 0, 262143, 12, 0, 196655, 12, 0, 196656, 35, 0, 327679, 12, 0, 262191, 12, 0, 393215, 12, 0, 327727, 12, 0, 327728, 35, 0, 458751, 12, 0, 393256, 11, 0, 393258, 11, 0, 393263, 12, 0, 524287, 12, 0, 458792, 7, 0, 458794, 8, 0, 458799, 12, 0, 458800, 35, 0, 589823, 12, 0, 524310, 11, 0, 524312, 11, 0, 524322, 11, 0, 524324, 11, 0, 524326, 11, 0, 524328, 9, 0, 524330, 10, 0, 524335, 12, 0, 655359, 12, 0, 589846, 9, 0, 589848, 10, 0, 589858, 9, 0, 589860, 7, 0, 589862, 8, 0, 589864, 7, 0, 589866, 8, 0, 589871, 12, 0, 589872, 35, 0, 720895, 12, 0, 655382, 7, 0, 655384, 8, 0, 655394, 7, 0, 655396, 8, 0, 655398, 7, 0, 655400, 8, 0, 655402, 10, 0, 655407, 12, 0, 720896, 11, 0, 720898, 11, 0, 720900, 11, 0, 720902, 11, 0, 720904, 11, 0, 720906, 11, 0, 720908, 11, 0, 720910, 11, 0, 720912, 11, 0, 720914, 11, 0, 720916, 11, 0, 720918, 9, 0, 720920, 10, 0, 720922, 11, 0, 720924, 11, 0, 720926, 11, 0, 720928, 11, 0, 720930, 9, 0, 720932, 7, 0, 720934, 8, 0, 720936, 7, 0, 720938, 8, 0, 720940, 11, 0, 720943, 12, 0, 720944, 35, 0, 786432, 9, 0, 786434, 7, 0, 786436, 8, 0, 786438, 7, 0, 786440, 8, 0, 786442, 7, 0, 786444, 8, 0, 786446, 7, 0, 786448, 8, 0, 786450, 7, 0, 786452, 8, 0, 786454, 7, 0, 786456, 8, 0, 786458, 7, 0, 786460, 8, 0, 786462, 7, 0, 786464, 8, 0, 786466, 7, 0, 786468, 8, 0, 786470, 7, 0, 786472, 8, 0, 786474, 7, 0, 786476, 8, 0, 786479, 12, 0, 851968, 7, 0, 851970, 8, 0, 851972, 7, 0, 851974, 8, 0, 851976, 7, 0, 851978, 8, 0, 851980, 7, 0, 851982, 8, 0, 851984, 7, 0, 851986, 8, 0, 851988, 7, 0, 851990, 8, 0, 851992, 7, 0, 851994, 8, 0, 851996, 7, 0, 851998, 8, 0, 852000, 7, 0, 852002, 8, 0, 852004, 7, 0, 852006, 8, 0, 852008, 7, 0, 852010, 8, 0, 852012, 7, 0, 852015, 12, 0, 852016, 35, 0, 917504, 9, 0, 917506, 7, 0, 917508, 8, 0, 917510, 7, 0, 917512, 8, 0, 917514, 7, 0, 917516, 8, 0, 917518, 7, 0, 917520, 8, 0, 917522, 7, 0, 917524, 8, 0, 917526, 7, 0, 917528, 8, 0, 917530, 7, 0, 917532, 8, 0, 917534, 7, 0, 917536, 2, 0, 917537, 2, 0, 917538, 2, 0, 917539, 2, 0, 917540, 2, 0, 917541, 2, 0, 917542, 2, 0, 917543, 2, 0, 917544, 2, 0, 917545, 2, 0, 917546, 2, 0, 917547, 2, 0, 917548, 2, 0, 917549, 13, 0, 917551, 12, 0 )
+
+[node name="PlayerHolder" parent="." index="5"]
+position = Vector2( 32, 576 )
+
+[node name="Skorpion" parent="." index="7" instance=ExtResource( 7 )]
+position = Vector2( 544, 640 )
+facing = 1
+message_id = "TalkHub_Skorp"
+
+[node name="NPC_T5000" parent="." index="8" instance=ExtResource( 6 )]
+position = Vector2( 800, 640 )
+facing = 1
+message_id = "TalkHub_T5000"
+
+[node name="9a91" parent="." index="9" instance=ExtResource( 8 )]
+position = Vector2( 1056, 640 )
+facing = 1
+message_id = "TalkHub_9A91"
+
+[node name="NPC_Alchemist" parent="." index="10" instance=ExtResource( 10 )]
+position = Vector2( 1760, 640 )
+facing = 2
+message_id = "TalkHub_Alchemist"
+
+[node name="Skorpion2" parent="." index="11" instance=ExtResource( 5 )]
+position = Vector2( 1504, 448 )
+facing = 2
+message_id = "TalkHub_Architect"
+
+[node name="NPC_Ouroboros" parent="." index="12" instance=ExtResource( 9 )]
+position = Vector2( 2016, 640 )
+facing = 2
+message_id = "TalkHub_Ouroboros"
+
+[node name="Skorpion3" parent="." index="13" instance=ExtResource( 11 )]
+position = Vector2( 2304, 448 )
+message_id = "TalkHub_Scarecrow"

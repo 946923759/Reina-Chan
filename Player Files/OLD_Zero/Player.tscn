@@ -13,7 +13,7 @@
 [ext_resource path="res://Character Sprites/zero/ZeroSpriteAnim.tres" type="SpriteFrames" id=11]
 [ext_resource path="res://Character Sprites/zero/ZeroDash1.png" type="Texture" id=12]
 [ext_resource path="res://ParticleEffects/Explosion.tscn" type="PackedScene" id=13]
-[ext_resource path="res://MM2Font_Smaller.tres" type="DynamicFont" id=14]
+[ext_resource path="res://ubuntu-font-family/MM2Font_Smaller.tres" type="DynamicFont" id=14]
 [ext_resource path="res://Character Sprites/HPBar.png" type="Texture" id=15]
 [ext_resource path="res://Player Files/mission start1.png" type="Texture" id=16]
 [ext_resource path="res://Player Files/mission start2.png" type="Texture" id=17]

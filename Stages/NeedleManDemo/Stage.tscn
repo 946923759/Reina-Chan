@@ -5,7 +5,7 @@
 [ext_resource path="res://Stages/NeedleManDemo/backdrop.png" type="Texture" id=4]
 [ext_resource path="res://Stages/NeedleManDemo/NeedleManTiles.tres" type="TileSet" id=5]
 [ext_resource path="res://Player Files/OLD_Zero/Player.tscn" type="PackedScene" id=6]
-[ext_resource path="res://MM2Font_Small.tres" type="DynamicFont" id=7]
+[ext_resource path="res://ubuntu-font-family/MM2Font_Small.tres" type="DynamicFont" id=7]
 [ext_resource path="res://Various Objects/CameraController/CameraAdjuster.tscn" type="PackedScene" id=8]
 [ext_resource path="res://Various Objects/CameraController/cameraController.tres.gd" type="Script" id=9]
 [ext_resource path="res://Stages/NeedleManDemo/EnemyNeedle/Enemy.tscn" type="PackedScene" id=10]
@@ -189,9 +189,9 @@ margin_left = 1500.0
 margin_top = 2000.0
 margin_right = 2309.0
 margin_bottom = 2035.0
-custom_fonts/font = ExtResource( 7 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_constants/shadow_as_outline = 5
+custom_fonts/font = ExtResource( 7 )
 text = "You think you're smart huh?"
 
 [node name="Node" type="Node" parent="."]

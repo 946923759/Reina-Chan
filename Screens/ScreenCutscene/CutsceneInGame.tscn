@@ -8,7 +8,7 @@
 [ext_resource path="res://Screens/ScreenCutscene/DialogueBoxLeft.png" type="Texture" id=6]
 [ext_resource path="res://Screens/ScreenCutscene/Mugshots/Alchemist.png" type="Texture" id=7]
 [ext_resource path="res://Screens/ScreenCutscene/TextboxSpriteMan.gd" type="Script" id=8]
-[ext_resource path="res://MM2Font_Smaller.tres" type="DynamicFont" id=9]
+[ext_resource path="res://ubuntu-font-family/MM2Font_Smaller.tres" type="DynamicFont" id=9]
 [ext_resource path="res://Screens/ScreenCutscene/MugshotImageHandler.gd" type="Script" id=10]
 [ext_resource path="res://Screens/ScreenCutscene/maskBox2.png" type="Texture" id=11]
 [ext_resource path="res://Screens/ScreenCutscene/Mugshots/test.png" type="Texture" id=12]
@@ -913,7 +913,6 @@ script = ExtResource( 4 )
 [node name="SoundEffects" type="Node" parent="."]
 
 [node name="CenterContainer" type="Control" parent="."]
-visible = false
 anchor_right = 1.0125
 anchor_bottom = 1.0
 margin_top = 460.0
@@ -997,9 +996,6 @@ margin_right = -287.857
 margin_bottom = -144.915
 button_mask = 7
 text = "Test Close & open"
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="CenterContainer_v2"]
 anims/Add = SubResource( 2 )
@@ -1066,7 +1062,7 @@ region_rect = Rect2( 0, 0, 192, 192 )
 material = SubResource( 15 )
 texture = ExtResource( 13 )
 region_enabled = true
-region_rect = Rect2( 0, 112.276, 192, 192 )
+region_rect = Rect2( 0, 45.849, 192, 192 )
 
 [node name="Tween" type="Tween" parent="CenterContainer_v2/Mugshots"]
 

@@ -4,11 +4,11 @@
 [ext_resource path="res://Stages_Reina/Enemies/Dinergate.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Various Objects/EventTiles/EventTile.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Various Objects/SmallHeartDrop.tscn" type="PackedScene" id=4]
-[ext_resource path="res://MM2Font_Smaller.tres" type="DynamicFont" id=5]
+[ext_resource path="res://ubuntu-font-family/MM2Font_Smaller.tres" type="DynamicFont" id=5]
 [ext_resource path="res://Various Objects/HeartDrop.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Various Objects/CameraController/cameraController.tres.gd" type="Script" id=7]
 [ext_resource path="res://Various Objects/EventTiles/EventTile.gd" type="Script" id=8]
-[ext_resource path="res://MM2Font.tres" type="DynamicFont" id=9]
+[ext_resource path="res://ubuntu-font-family/MM2Font.tres" type="DynamicFont" id=9]
 [ext_resource path="res://Stages_Reina/8bitBaseStage.tscn" type="PackedScene" id=10]
 [ext_resource path="res://Stages_Reina/Enemies/Scout.tscn" type="PackedScene" id=11]
 [ext_resource path="res://Various Objects/Special Blocks/Yoku Block.tscn" type="PackedScene" id=12]
@@ -361,7 +361,6 @@ SPIKES_TILE_ID = 4
 custom_music_name = "TestRoom"
 nsf_music_file = "test.vgm"
 mute_music_in_debug = true
-debug_warp_points = [ Vector2( 1, 1 ), Vector2( -6, -6 ), Vector2( -1, 20 ) ]
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="." index="0"]
 
@@ -711,14 +710,11 @@ collision_mask = 0
 format = 1
 tile_data = PoolIntArray( 720896, 7, 0, 720898, 7, 0, 720902, 7, 0, 720904, 7, 0, 720905, 7, 0, 720909, 7, 0, 720910, 7, 0, 720911, 7, 0, 720914, 7, 0, 720917, 7, 0, 720918, 7, 0, 720920, 7, 0, 720921, 7, 0, 720924, 7, 0, 720925, 7, 0, 720927, 7, 0 )
 
-[node name="PlayerHolder" parent="." index="36"]
-position = Vector2( 3488, -256 )
-
-[node name="EventTile19" parent="." index="37" instance=ExtResource( 3 )]
+[node name="EventTile19" parent="." index="36" instance=ExtResource( 3 )]
 position = Vector2( 3136, 1472 )
 event_ID = 9
 
-[node name="CameraAdjuster3" parent="." index="38" instance=ExtResource( 31 )]
+[node name="CameraAdjuster3" parent="." index="37" instance=ExtResource( 31 )]
 position = Vector2( 7040, 1760 )
 leftBound = 100
 topBound = -999
@@ -727,44 +723,44 @@ bottomBound = 36
 fade_out_and_warp_player = true
 destination_coordinates_if_warp = Vector2( 0, -8 )
 
-[node name="Door3" parent="." index="39" instance=ExtResource( 22 )]
+[node name="Door3" parent="." index="38" instance=ExtResource( 22 )]
 position = Vector2( 7680, 1280 )
 topBound = 14
 bottomBound = -999
 
-[node name="PickupAmmo" parent="." index="40" instance=ExtResource( 32 )]
+[node name="PickupAmmo" parent="." index="39" instance=ExtResource( 32 )]
 position = Vector2( -96, 736 )
 
-[node name="PickupAmmoSmall" parent="." index="41" instance=ExtResource( 33 )]
+[node name="PickupAmmoSmall" parent="." index="40" instance=ExtResource( 33 )]
 position = Vector2( -160, 736 )
 
-[node name="CameraAdjuster4" parent="." index="42" instance=ExtResource( 27 )]
+[node name="CameraAdjuster4" parent="." index="41" instance=ExtResource( 27 )]
 position = Vector2( 6176, 1152 )
 leftBound = 80
 topBound = 12
 rightBound = 121
 bottomBound = 25
 
-[node name="LadderCameraAdjuster" parent="." index="43" instance=ExtResource( 34 )]
+[node name="LadderCameraAdjuster" parent="." index="42" instance=ExtResource( 34 )]
 position = Vector2( 10880, 1536 )
 leftBound = 160
 topBound = 0
 rightBound = 180
 
-[node name="CameraAdjuster5" parent="." index="44" instance=ExtResource( 27 )]
+[node name="CameraAdjuster5" parent="." index="43" instance=ExtResource( 27 )]
 position = Vector2( 10341.1, -376.282 )
 leftBound = 160
 topBound = -12
 rightBound = -999
 
-[node name="Dinergate" parent="." index="45" instance=ExtResource( 2 )]
+[node name="Dinergate" parent="." index="44" instance=ExtResource( 2 )]
 position = Vector2( 11332.7, -62.6801 )
 collision_layer = 18
 collision_mask = 18
 facing = 1
 no_movement = false
 
-[node name="QuicksandTest" type="Node2D" parent="." index="46"]
+[node name="QuicksandTest" type="Node2D" parent="." index="45"]
 position = Vector2( 12800, 0 )
 
 [node name="QuickSand" type="StaticBody2D" parent="QuicksandTest" index="0"]
@@ -811,7 +807,7 @@ modulate = Color( 1, 1, 1, 0.486275 )
 color = Color( 1, 0.929412, 0.2, 1 )
 polygon = PoolVector2Array( 0, 0, 2048, 0, 2048, 128, 0, 128 )
 
-[node name="DIE ONE THOUSAND DEATHS" type="Area2D" parent="." index="47"]
+[node name="DIE ONE THOUSAND DEATHS" type="Area2D" parent="." index="46"]
 position = Vector2( 1693.48, -1158.3 )
 script = SubResource( 19 )
 
@@ -838,27 +834,28 @@ stream = ExtResource( 45 )
 [node name="ExpSound" type="AudioStreamPlayer" parent="DIE ONE THOUSAND DEATHS" index="4"]
 stream = ExtResource( 46 )
 
-[node name="Enemy" parent="." index="48" instance=ExtResource( 40 )]
+[node name="Enemy" parent="." index="47" instance=ExtResource( 40 )]
 position = Vector2( 2304, -1088 )
 collision_layer = 18
 collision_mask = 18
 moveAfter = 0.7
 
-[node name="Guardian_SWAP" parent="." index="49" instance=ExtResource( 42 )]
+[node name="Guardian_SWAP" parent="." index="48" instance=ExtResource( 42 )]
 position = Vector2( 2420, -844 )
 
-[node name="Enemy5" parent="." index="50" instance=ExtResource( 43 )]
+[node name="Enemy5" parent="." index="49" instance=ExtResource( 43 )]
 position = Vector2( 8736, 160 )
 
-[node name="Prowler" parent="." index="51" instance=ExtResource( 44 )]
+[node name="Prowler" parent="." index="50" instance=ExtResource( 44 )]
 position = Vector2( 10976, -320 )
 gravity = 0
 
-[node name="Skorpion" parent="." index="52" instance=ExtResource( 48 )]
+[node name="Skorpion" parent="." index="51" instance=ExtResource( 48 )]
 position = Vector2( 320, -864 )
 collision_layer = 16
+message_id = "TestStage_Sk"
 
-[node name="Label3" type="Label" parent="." index="53"]
+[node name="Label3" type="Label" parent="." index="52"]
 margin_left = -1408.0
 margin_top = 1280.0
 margin_right = -601.0
@@ -868,10 +865,10 @@ text = "These tiles appear
 if you are playing
 on easy or less"
 
-[node name="BreakableBlock" parent="." index="54" instance=ExtResource( 49 )]
+[node name="BreakableBlock" parent="." index="53" instance=ExtResource( 49 )]
 position = Vector2( 736, -864 )
 
-[node name="BossRoomTest" type="Node2D" parent="." index="55"]
+[node name="BossRoomTest" type="Node2D" parent="." index="54"]
 
 [node name="Door2" parent="BossRoomTest" index="0" instance=ExtResource( 22 )]
 position = Vector2( 0, -320 )
@@ -891,7 +888,7 @@ message_id = "TestStageCutscene"
 [node name="BossArchitect" parent="BossRoomTest/Door/Node2D" index="3" instance=ExtResource( 26 )]
 position = Vector2( 736, 0 )
 
-[node name="MovingCameraTest" type="Node2D" parent="." index="56"]
+[node name="MovingCameraTest" type="Node2D" parent="." index="55"]
 
 [node name="CameraAdjuster2" parent="MovingCameraTest" index="0" instance=ExtResource( 27 )]
 position = Vector2( 32, 1152 )
@@ -923,10 +920,10 @@ start_disabled = true
 position = Vector2( 160, -160 )
 start_disabled = true
 
-[node name="Guardian" parent="." index="57" instance=ExtResource( 14 )]
+[node name="Guardian" parent="." index="56" instance=ExtResource( 14 )]
 position = Vector2( 724, 692 )
 
-[node name="DamageTestRoom" type="Node2D" parent="." index="58"]
+[node name="DamageTestRoom" type="Node2D" parent="." index="57"]
 position = Vector2( 2560, -768 )
 
 [node name="TestEnemy" parent="DamageTestRoom" index="0" instance=ExtResource( 21 )]
@@ -952,7 +949,7 @@ player_damage = 6
 position = Vector2( 1120, 672 )
 player_damage = 8
 
-[node name="Node2D" type="Node2D" parent="." index="59"]
+[node name="Node2D" type="Node2D" parent="." index="58"]
 position = Vector2( 3840, -768 )
 
 [node name="BreakableBlock" parent="Node2D" index="0" instance=ExtResource( 49 )]
@@ -968,7 +965,7 @@ position = Vector2( 544, 96 )
 collision_layer = 17
 collision_mask = 17
 
-[node name="Area2D" type="StaticBody2D" parent="." index="60"]
+[node name="Area2D" type="StaticBody2D" parent="." index="59"]
 position = Vector2( -896, 5152 )
 collision_layer = 4
 collision_mask = 4
@@ -978,5 +975,8 @@ __meta__ = {
 }
 
 [node name="h" parent="Area2D" index="0" instance=ExtResource( 50 )]
+
+[node name="PlayerHolder" parent="." index="60"]
+position = Vector2( 512, -960 )
 
 [connection signal="event_executed" from="MovingCameraTest/EventTile12" to="MovingCameraTest/EventTile12/BlockEnablerDisabler" method="execute"]
