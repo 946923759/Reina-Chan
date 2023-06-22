@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://Stages/NeedleManDemo/NeedleManTiles.tres" type="TileSet" id=1]
 [ext_resource path="res://Stages_Reina/8bitBaseStage.tscn" type="PackedScene" id=2]
@@ -22,11 +22,29 @@ func _ready():
 	p.get_node(\"CanvasLayer/bar\").visible=false
 "
 
+[sub_resource type="GDScript" id=2]
+script/source = "extends Node
+
+func _on_Node2D_ready():
+	var parent = get_parent()
+	
+	if !Globals.playerData.availableWeapons[Globals.Weapons.Ouroboros]:
+		parent.get_node(\"NPC_T5000\").queue_free()
+		parent.get_node(\"NPC_Ouroboros\").queue_free()
+	
+	
+	
+	pass # Replace with function body.
+"
+
 [node name="Node2D" instance=ExtResource( 2 )]
 script = SubResource( 1 )
 adjust_camera = true
 rightBound = 40
 bottomBound = -999
+custom_music_name = "DollLobby"
+nsf_music_file = "sonic3k.nsf"
+nsf_track_num = 2
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="." index="1"]
 scroll_ignore_camera_zoom = true
@@ -59,34 +77,47 @@ position = Vector2( 32, 576 )
 
 [node name="Skorpion" parent="." index="7" instance=ExtResource( 7 )]
 position = Vector2( 544, 640 )
+animToPlayIfNormal = "idle"
 facing = 1
 message_id = "TalkHub_Skorp"
+unlocksOrRequiresEmblem = 12
 
 [node name="NPC_T5000" parent="." index="8" instance=ExtResource( 6 )]
 position = Vector2( 800, 640 )
 facing = 1
 message_id = "TalkHub_T5000"
+unlocksOrRequiresEmblem = 11
 
 [node name="9a91" parent="." index="9" instance=ExtResource( 8 )]
 position = Vector2( 1056, 640 )
 facing = 1
 message_id = "TalkHub_9A91"
+unlocksOrRequiresEmblem = 1
 
 [node name="NPC_Alchemist" parent="." index="10" instance=ExtResource( 10 )]
 position = Vector2( 1760, 640 )
 facing = 2
 message_id = "TalkHub_Alchemist"
+unlocksOrRequiresEmblem = 10
 
-[node name="Skorpion2" parent="." index="11" instance=ExtResource( 5 )]
+[node name="Architect" parent="." index="11" instance=ExtResource( 5 )]
 position = Vector2( 1504, 448 )
 facing = 2
 message_id = "TalkHub_Architect"
+unlocksOrRequiresEmblem = 9
 
 [node name="NPC_Ouroboros" parent="." index="12" instance=ExtResource( 9 )]
 position = Vector2( 2016, 640 )
 facing = 2
 message_id = "TalkHub_Ouroboros"
+unlocksOrRequiresEmblem = 11
 
-[node name="Skorpion3" parent="." index="13" instance=ExtResource( 11 )]
+[node name="Scarecrow" parent="." index="13" instance=ExtResource( 11 )]
 position = Vector2( 2304, 448 )
 message_id = "TalkHub_Scarecrow"
+unlocksOrRequiresEmblem = 12
+
+[node name="Node" type="Node" parent="." index="14"]
+script = SubResource( 2 )
+
+[connection signal="ready" from="." to="Node" method="_on_Node2D_ready"]

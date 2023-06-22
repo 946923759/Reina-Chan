@@ -9,6 +9,8 @@ export (String) var animToPlayIfNormal = "default"
 export(int,"Towards Player","Left","Right") var facing=0
 export(String) var message_id = "Scarecrow1"
 
+export(int,"None","U","M","P","9","C","H","A","N", "Architect","Alchemist","Ouroboros","Scarecrow") var unlocksOrRequiresEmblem = 0
+
 var velocity:Vector2
 var gravity = 2000
 var disabled:bool=false

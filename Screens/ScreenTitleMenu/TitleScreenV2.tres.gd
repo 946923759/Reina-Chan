@@ -1,7 +1,7 @@
 extends Node2D
 
-var font = preload("res://FallbackPixelFont.tres")
-var fallbackFont = preload("res://FallbackPixelFont.tres")
+var font = preload("res://ubuntu-font-family/FallbackPixelFont.tres")
+var fallbackFont = preload("res://ubuntu-font-family/FallbackPixelFont.tres")
 var currentlyHandledMenu;
 var selection = 0;
 onready var mainMenu = $MainMenu

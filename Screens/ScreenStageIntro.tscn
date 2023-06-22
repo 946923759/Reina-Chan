@@ -27,7 +27,7 @@ script/source = "extends Sprite
 func _ready():
 	var t := get_tree().create_tween()
 	#t.set_pause_mode(SceneTreeTween.TWEEN_PAUSE_PROCESS)
-	t.append(self,'position:x',Globals.gameResolution.x*.9,6).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	t.tween_property(self,'position:x',Globals.gameResolution.x*.9,6).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 "
 
 [sub_resource type="GDScript" id=3]

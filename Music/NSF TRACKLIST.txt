@@ -21,6 +21,8 @@ R4MI
 80 - Cossack stage?
 81 - Bonus Boss (Vs. Shadow Man)
 82 - Title Screen?
+83 - Balloon Item Get 
+84 - Stage Intro
 85 - Wily Boss
 87 - final wily stage
 88 - Wily Gauntlet (Gradius II: Overheat)
@@ -35,6 +37,10 @@ R4MI
 103 - Ending 2
 104 - Ending 3
 105 - Ending 4 (Rockman World V)
+106 - Extras Menu
+107 - The Arena (Fire Field from F-Zero Climax)
+108 - True Arena boss
+109 - Cleared the True Arena (Final Fantasy victory)
 
 RNC
 0 - ???

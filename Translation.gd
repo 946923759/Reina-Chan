@@ -71,10 +71,10 @@ func SetLanguage(lang:String)->bool:
 	print(GetString("TitleScreen","START_GAME"))
 	match lang:
 		"en":
-			font=load("res://MM2Font.tres")
+			font=load("res://ubuntu-font-family/MM2Font.tres")
 			currentLanguageType=LanguageType.ASCII
 		"es":
-			font=load("res://FallbackPixelFont.tres")
+			font=load("res://ubuntu-font-family/FallbackPixelFont.tres")
 			currentLanguageType=LanguageType.ACCENTED
 		_:
 			font=load("res://ubuntu-font-family/JP_KR_font.tres")

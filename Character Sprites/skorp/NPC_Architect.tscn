@@ -8,3 +8,4 @@
 [node name="AnimatedSprite" parent="." index="0"]
 position = Vector2( 0, -4 )
 frames = ExtResource( 2 )
+animation = "default"
