@@ -27,6 +27,7 @@ func _process(delta):
 	update()
 
 func _draw():
+	#We only draw 8x8 so force integer scale by 8px
 	var scale_internal:int = scale_by*8
 	if wrap_at<1:
 		wrap_at=92233720368
@@ -130,6 +131,9 @@ func _draw():
 		elif col == 94: # ^
 			col = 0
 			row = 3
+		elif col == 60: # <
+			col = 3
+			row = 3
 		
 		elif col <= 57:
 			col=max(0,col-48)
@@ -142,11 +146,22 @@ func _draw():
 				#print(col,'x',row)
 			
 		#print(col)
+		var subpixel_offset:float=0.0
+		if alignment==1:
+			if wrap_at > 0:
+				var text_pixel_with = len(text)*scale_internal
+				#print(text_pixel_with)
+				subpixel_offset = -text_pixel_with/2+3
 		#tex, dest, source
 		draw_texture_rect_region(font,
-			Rect2(x_pos*scale_internal,y_pos*scale_internal,scale_internal,scale_internal),
+			Rect2(x_pos*scale_internal+subpixel_offset,y_pos*scale_internal,scale_internal,scale_internal),
 			Rect2(col*9,row*9,8,8)
 		)
+
+func position_based_on_center(x_offset:float):
+	if wrap_at <= 0:
+		var text_pixel_with = len(text)*scale_by*8
+		self.position.x = x_offset/2-text_pixel_with/2
 "
 
 [node name="BitmapSprite" type="Node2D"]

@@ -29,7 +29,7 @@ func _ready():
 	reinaAudioPlayer=ReinaAudioPlayer.new(self)
 	reinaAudioPlayer.load_song("StageSelect","Mega Man 10 (recreated).nsf",8)
 	
-	var font = load("res://FallbackPixelFont.tres")
+	var font = load("res://ubuntu-font-family/FallbackPixelFont.tres")
 	stages = Globals.STAGES_REINA.keys()
 	stgLen = len(stages)
 	for i in range(stgLen):
