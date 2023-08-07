@@ -103,7 +103,7 @@ func update_easytiles():
 		easyTiles.set_collision_mask_bit(0,true)
 		easyTiles.visible=true
 
-#In case of multiplayer or something, always use this
+#In case of multiplayer or future changes, always use this
 #function
 func get_player()->KinematicBody2D:
 	return player

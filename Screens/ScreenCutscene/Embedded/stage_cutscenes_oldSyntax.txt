@@ -181,7 +181,7 @@ portrait	pic_VZ61
 #KEY	TalkHub_T5000
 portrait	pic_T5000
 /T-5000	Hmm... I don't think I've seen you in the dorms too often. Hey, have you ever played a game called Viewtiful Joe?
-/UMP9	Maybe G11 has...?
+nop	/UMP9	Maybe G11 has...?
 
 #KEY	TalkHub_9A91
 portrait	pic_9A91
@@ -201,6 +201,7 @@ portrait	pic_Ouroboros
 
 #KEY	TalkHub_Scarecrow
 /Scarecrow	...
+/Scarecrow	No, I'm not taking off this mask. Stop asking.
 
 #KEY	Demo2Ending
 preload_portraits	Dier	pic_Alchemist	pic_Scarecrow

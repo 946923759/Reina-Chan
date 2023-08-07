@@ -1,25 +1,34 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://ubuntu-font-family/MM2Font_Small.tres" type="DynamicFont" id=1]
 [ext_resource path="res://ubuntu-font-family/MM2Font_Smaller.tres" type="DynamicFont" id=2]
+[ext_resource path="res://Sounds/Classic/03 - MenuSelect.wav" type="AudioStream" id=3]
+[ext_resource path="res://ubuntu-font-family/MM2Font.tres" type="DynamicFont" id=4]
+[ext_resource path="res://ubuntu-font-family/BitmapFont.tscn" type="PackedScene" id=5]
+[ext_resource path="res://ubuntu-font-family/JP_KR_font.tres" type="DynamicFont" id=6]
 
 [sub_resource type="GDScript" id=1]
 script/source = "extends CanvasLayer
 signal unpaused()
 
 onready var optList = $m/CenterContainer/VBoxContainer
+var OPLIST_SIZE = 4 #5 if debug
 
 func _ready():
-	$m.visible=Engine.editor_hint #If true ingame mouse will break
+	self.visible=Engine.editor_hint #If true ingame mouse will break
 	
 	optList.get_child(0).modulate =Color(0.21,0.63,1,1)
 	$m.modulate.a=0
 	set_process_input(false)
 	#print(INITrans.GetString(\"PauseMenu\",\"DebugHelp\"))
-	if OS.is_debug_build():
+	if OS.is_debug_build() or CheckpointPlayerStats.isFromStageSelect:
 		$m/debugHelp.text = INITrans.GetString(\"PauseMenu\",\"DebugHelp\").replace(\"\\\\n\",\"\\n\")
+		optList.get_node(\"debug\").visible=true
+		OPLIST_SIZE=5
+		$d.construct()
 	else:
 		$m/debugHelp.visible=false
+		optList.get_node(\"debug\").visible=false
 	
 	if INITrans.currentLanguage!=\"en\":
 		#if INITrans.currentLanguageType!=INITrans.LanguageType.ASCII:
@@ -45,7 +54,8 @@ func updateTimer(time_,timeWithDeath):
 	$m/timerLabel.text=text
 
 func OnCommand():
-	$m.visible=true
+	self.visible=true
+	$Fadeout_Tween.interpolate_property($ColorRect,\"modulate:a\",null,1,.2)
 	$Fadeout_Tween.interpolate_property($m, \"modulate:a\", null, 1, .2, Tween.TRANS_LINEAR, Tween.EASE_OUT)
 	$Fadeout_Tween.start()
 	set_process_input(true)
@@ -56,10 +66,11 @@ func OnCommand():
 	
 
 func OffCommand():
+	$Fadeout_Tween.interpolate_property($ColorRect,\"modulate:a\",null,0,.2)
 	$Fadeout_Tween.interpolate_property($m, \"modulate:a\", null, 0, .2, Tween.TRANS_LINEAR, Tween.EASE_OUT)
 	$Fadeout_Tween.start()
 	yield($Fadeout_Tween,\"tween_completed\")
-	$m.visible=false
+	#self.visible=false
 	set_process_input(false)
 	get_tree().paused = false
 	emit_signal(\"unpaused\")
@@ -67,7 +78,13 @@ func OffCommand():
 	
 var pos = 0
 func _input(_ev):
+	#$Label.text = String($d.isHandlingInput)
+	#print(\"input\")
+	
 	if _ev is InputEventJoypadMotion or _ev is InputEventMouseMotion: #XInput controllers are broken on Windows :P
+		return
+	elif $d.isHandlingInput:
+		$d.input(_ev)
 		return
 	elif (_ev is InputEventMouseButton and _ev.pressed) or (_ev is InputEventScreenTouch and _ev.pressed):
 		var opts = $m/CenterContainer/VBoxContainer
@@ -88,13 +105,21 @@ func _input(_ev):
 		get_tree().reload_current_scene()
 	elif Input.is_action_just_pressed(\"ui_pause\") or Input.is_action_just_pressed(\"ui_options\"):
 		OffCommand()
-	elif Input.is_action_just_pressed(\"ui_up\") and pos > 0:
+	elif Input.is_action_just_pressed(\"ui_up\"):
+		$SFX.play()
 		optList.get_child(pos).modulate=Color(1,1,1,1)
-		pos-=1
+		if pos > 0:
+			pos-=1
+		else:
+			pos=3
 		optList.get_child(pos).modulate =Color(0.21,0.63,1,1)
-	elif Input.is_action_just_pressed(\"ui_down\") and pos < 3:
+	elif Input.is_action_just_pressed(\"ui_down\"):
+		$SFX.play()
 		optList.get_child(pos).modulate=Color(1,1,1,1)
-		pos+=1
+		if pos < OPLIST_SIZE-1:
+			pos+=1
+		else:
+			pos=0
 		optList.get_child(pos).modulate =Color(0.21,0.63,1,1)
 	elif Input.is_action_just_pressed(\"ui_cancel\"):
 		OffCommand()
@@ -138,6 +163,153 @@ func input_accept():
 		get_tree().paused = false
 # warning-ignore:return_value_discarded
 		Globals.change_screen(get_tree(),\"ScreenTitleMenu\")
+	elif pos==4:
+		$d.isHandlingInput=true
+		var t:Tween = $Fadeout_Tween
+		t.interpolate_property($m,\"rect_position:x\",null,-1280,.3,Tween.TRANS_CUBIC,Tween.EASE_OUT)
+		t.interpolate_property($d,\"rect_position:x\",null,0,.3,Tween.TRANS_CUBIC,Tween.EASE_OUT)
+		#t.interpolate_callback()
+		#t.interpolate_callback($d,.3,\"set_input_true\")
+		t.start()
+
+func exited_debug():
+	#print(\"a\")
+	var t:Tween = $Fadeout_Tween
+	t.remove_all()
+	t.interpolate_property($m,\"rect_position:x\",null,0,.3,Tween.TRANS_CUBIC,Tween.EASE_OUT)
+	t.interpolate_property($d,\"rect_position:x\",null,1280,.3,Tween.TRANS_CUBIC,Tween.EASE_OUT)
+	#t.interpolate_callback()
+	#t.interpolate_callback($d,.3,\"set_input_true\")
+	t.start()
+"
+
+[sub_resource type="GDScript" id=2]
+script/source = "extends Control
+
+var isHandlingInput:bool=false
+onready var SFX = $\"../SFX\"
+
+const WPN_STR_PAD_LENGTH = 9
+var wpnLength:int = 0
+var itemLength:int = 0
+var ADDITIONAL_OPTIONS:int = 2
+
+var selection:int = 0
+
+var bitmapFont = preload(\"res://ubuntu-font-family/BitmapFont.tscn\")
+
+func Def_Bitmap(txt:String):
+	var inst = bitmapFont.instance()
+	inst.text = txt
+	inst.scale_by=4
+	inst.wrap_at=-1
+	return inst
+
+func getWpnString(sel:int)->String:
+	var wpnString:String
+	if sel > wpnLength+itemLength:
+		wpnString = \"Lives: \"+String(CheckpointPlayerStats.playerLivesLeft)
+		pass
+	elif sel >= Globals.Weapons.LENGTH_WEAPONS: #if sel >= 10
+		wpnString = INITrans.GetString(\"Weapons\",Globals.abilitiesToString[sel-Globals.Weapons.LENGTH_WEAPONS])
+		while len(wpnString) < WPN_STR_PAD_LENGTH:
+			wpnString+=\" \"
+		if Globals.playerData['specialAbilities'][sel-Globals.Weapons.LENGTH_WEAPONS]:
+			wpnString+=\" ON\"
+		else:
+			wpnString+=\" OFF\"
+	else:
+		wpnString = INITrans.GetString(\"Weapons\",Globals.stagesToString[sel])
+		while len(wpnString) < WPN_STR_PAD_LENGTH:
+			wpnString+=\" \"
+		
+		if Globals.playerData['availableWeapons'][sel]:
+			wpnString+=\" ON\"
+		else:
+			wpnString+=\" OFF\"
+	return String(sel)+\" \"+wpnString
+	#return wpnString
+
+func construct():
+
+	var weaponActorFrame = $PlayerWeapons
+	wpnLength = Globals.Weapons.LENGTH_WEAPONS-1
+	#print(wpnLength)
+	
+	for i in range(wpnLength):
+		var wpnString = getWpnString(i+1)
+			
+		
+		var inst = Def_Bitmap(wpnString)
+		weaponActorFrame.add_child(inst)
+		inst.position = Vector2(0,36*(i-1))
+	
+	var abilityFrame = $PlayerAbilities
+	itemLength = Globals.SpecialAbilities.LENGTH_ABILITIES
+	for i in range(itemLength):
+		var wpnString = getWpnString(Globals.Weapons.LENGTH_WEAPONS+i)
+		#wpnString=String(wpnLength+i)+\" \"+wpnString
+		
+		var inst = Def_Bitmap(wpnString)
+		abilityFrame.add_child(inst)
+		inst.position = Vector2(0,36*i)
+		
+	$BitmapSprite.text = \"Wpn length: \"+String(wpnLength)
+	$BitmapSprite2.text = \"Ability length: \"+String(itemLength)
+	
+	set_selection(0,false)
+		
+func set_selection(sel,play_sound:bool=true):
+	
+	if sel > wpnLength+itemLength+ADDITIONAL_OPTIONS:
+		sel = 0
+	elif sel < 0:
+		sel = wpnLength+itemLength+ADDITIONAL_OPTIONS
+	
+	if play_sound:
+		SFX.play()
+	#	
+	for i in range($PlayerWeapons.get_child_count()):
+		var c = $PlayerWeapons.get_child(i)
+		c.modulate=Color.aqua if i==sel else Color.white
+		
+	for i in range($PlayerAbilities.get_child_count()):
+		var c = $PlayerAbilities.get_child(i)
+		c.modulate=Color.aqua if i+wpnLength==sel else Color.white
+	
+	selection=sel
+	
+
+func set_input_true():
+	isHandlingInput=true
+
+func _ready():
+	#construct()
+	pass
+
+func input(event):
+	if event.is_action_pressed(\"ui_down\"):
+		set_selection(selection+1)
+	elif event.is_action_pressed(\"ui_up\"):
+		set_selection(selection-1)
+	elif event.is_action_pressed(\"ui_select\"):
+		#set_selection()
+		
+		if selection >= wpnLength:
+			var offset = selection-wpnLength
+			#print(offset, \" \", selection)
+			Globals.playerData['specialAbilities'][offset] = !Globals.playerData['specialAbilities'][offset]
+			$PlayerAbilities.get_child(offset).text = getWpnString(selection+1)
+		
+		else:
+			Globals.playerData['availableWeapons'][selection+1] = !Globals.playerData['availableWeapons'][selection+1]
+			$PlayerWeapons.get_child(selection).text = getWpnString(selection+1)
+		
+			
+	elif event.is_action_pressed(\"ui_cancel\"):
+		isHandlingInput=false
+		get_parent().exited_debug()
+	pass
 "
 
 [node name="PauseScreen" type="CanvasLayer"]
@@ -145,25 +317,16 @@ pause_mode = 2
 layer = 5
 script = SubResource( 1 )
 
+[node name="ColorRect" type="ColorRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+input_pass_on_modal_close_click = false
+color = Color( 0, 0, 0, 0.658824 )
+
 [node name="m" type="Control" parent="."]
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="bg" type="Polygon2D" parent="m"]
-color = Color( 0, 0, 0, 0.658824 )
-polygon = PoolVector2Array( 0, 0, 1280, 0, 1280, 720, 0, 720 )
-
-[node name="ColorRect" type="ColorRect" parent="m"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-color = Color( 0, 0, 0, 0.658824 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="CenterContainer" type="CenterContainer" parent="m"]
 anchor_left = 0.5
@@ -230,6 +393,19 @@ margin_right = 388.0
 margin_bottom = 200.0
 custom_fonts/font = ExtResource( 1 )
 text = "TITLE SCREEN"
+align = 1
+uppercase = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="debug" type="Label" parent="m/CenterContainer/VBoxContainer"]
+visible = false
+margin_top = 220.0
+margin_right = 388.0
+margin_bottom = 255.0
+custom_fonts/font = ExtResource( 1 )
+text = "debug"
 align = 1
 uppercase = true
 __meta__ = {
@@ -303,3 +479,69 @@ polygon = PoolVector2Array( 0, 0, 1280, 0, 1280, 720, 0, 720 )
 
 [node name="Fadeout_Tween" type="Tween" parent="."]
 pause_mode = 2
+
+[node name="SFX" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 3 )
+bus = "Player/Enemies"
+
+[node name="d" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 1280.0
+margin_right = 1280.0
+script = SubResource( 2 )
+
+[node name="Label2" type="Label" parent="d"]
+margin_right = 1280.0
+margin_bottom = 50.0
+custom_fonts/font = ExtResource( 4 )
+text = "Debug menu"
+align = 1
+
+[node name="PlayerWeapons" type="Node2D" parent="d"]
+position = Vector2( 46.0345, 141.279 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="PlayerAbilities" type="Node2D" parent="d"]
+position = Vector2( 661.946, 134.929 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="PlayerStats" type="Node2D" parent="d"]
+position = Vector2( 657.184, 479.395 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="BitmapSprite" parent="d/PlayerStats" instance=ExtResource( 5 )]
+text = "Lives: ??"
+wrap_at = 20
+scale_by = 4
+
+[node name="BitmapSprite2" parent="d/PlayerStats" instance=ExtResource( 5 )]
+position = Vector2( 0, 36 )
+text = "difficulty: ???"
+wrap_at = 20
+scale_by = 4
+
+[node name="BitmapSprite" parent="d" instance=ExtResource( 5 )]
+position = Vector2( 16.789, 590 )
+text = "wpn length: "
+wrap_at = 92233720368
+scale_by = 4
+
+[node name="BitmapSprite2" parent="d" instance=ExtResource( 5 )]
+position = Vector2( 16.789, 626 )
+text = "ability length: "
+wrap_at = 92233720368
+scale_by = 4
+
+[node name="Label" type="Label" parent="."]
+visible = false
+margin_right = 40.0
+margin_bottom = 14.0
+custom_fonts/font = ExtResource( 6 )
+text = "isHandlingInput"

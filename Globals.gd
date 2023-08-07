@@ -659,6 +659,7 @@ var STAGES_REINA:Dictionary = {
 	"SF_2":"",
 	"SF_3":"res://Stages_Reina/Sangvis3/Sangvis3.tscn",
 	"SF_4":"",
+	"Talk Hub":"res://Stages_Reina/StageTalkHub.tscn",
 	"TEST_STAGE":"res://Stages_Reina/TestStage.tscn",
 	"NSF_TEST":"res://Stages_Reina/TestStage_NSF/TestStage_NSF.tscn",
 	"NSF_TEST_2":"res://Stages_Reina/TestStage_NSF/TestStage_NSF_2.tscn",

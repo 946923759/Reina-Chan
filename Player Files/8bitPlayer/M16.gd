@@ -156,23 +156,7 @@ func get_input(delta):
 
 	if grenade_input and hasGrenadeAbility:
 		if (Globals.playerData.gameDifficulty <= Globals.Difficulty.EASY or bulletManager.get_num_bullets() < 3):
-
-			#print("Throw!")
-			var inst = grenade.instance()
-			var ss:float
-			if sprite.flip_h:
-				ss = -1.0
-			else:
-				ss = 1.0
-			var pos = position + Vector2(20*ss, 10)
-			if state == State.ON_LADDER:
-				pos = position + Vector2(20*ss, -20)
-			inst.position=pos
-			bulletHolder.add_child(inst)
-			inst.init(ss)
-			shoot_time = 0
-			if Globals.playerData.gameDifficulty > Globals.Difficulty.EASY:
-				bulletManager.push_bullet(inst)
+			throwGrenade()
 	#All this shit is copypasted from the example platformer so I have no idea how it works
 	# A good idea when implementing characters of all kinds,
 	# compensates for physics imprecision, as well as human reaction delay.

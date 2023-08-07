@@ -28,6 +28,9 @@ var temporaryStageStats:int=0
 #It doesn't really belong in Globals... Anyways, this is only used for the item get screen
 var lastPlayedStage:int=0
 
+#Should debug menu be shown
+var isFromStageSelect:bool=false
+
 #Timer gets assigned every checkpoint, but timerWithDeath should
 #get assigned every death
 
@@ -60,5 +63,6 @@ func clearEverything():
 	checkpointSet=false
 	playerLivesLeft=3
 	shouldFaceLeft=false
-	lastPlayedStage=0
 	temporaryStageStats=0
+	lastPlayedStage=0
+	isFromStageSelect=false

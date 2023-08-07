@@ -7,23 +7,21 @@
 [sub_resource type="GDScript" id=1]
 script/source = "extends Node2D
 
-# TODO: I coded this stupid thing wrong and collision shapes
-# won't work because they will stop the player if the player
-# touches it
+export(int,0,25) var player_damage = 1
 
 onready var sprite = $AnimatedSprite
 onready var drop = $KinematicBody2D
 onready var dropSpr=$KinematicBody2D/Sprite
 
 var dropState = 0
-var collision
+var collisionMask
 
 func _ready():
 	sprite.play(\"default\")
 	drop.position.y=-999
 	drop.visible=false
 	dropSpr.playing=false
-	collision = drop.collision_mask
+	collisionMask = drop.collision_mask
 
 #func _process(delta):
 #	if sprite.frame>=5:
@@ -32,20 +30,22 @@ func setProcess():
 	#print(\"Process\")
 	drop.position=Vector2(0,8) #Need to reset x position too
 	dropState=1
+	dropSpr.frame=0
 	drop.visible=true
 		
 func _physics_process(delta):
 	if sprite.frame>=3:
 		setProcess()
 	
-	if dropState==1:
+	if dropState==1: #Falling down
 		if sprite.animation!=\"loop\":
 			sprite.play(\"loop\")
+		#drop.position.y+=200*delta
 		var collision = drop.move_and_collide(Vector2(0,10))
 		if collision:
 			dropState=2
-	elif dropState==2:
-		drop.collision_mask=0
+	elif dropState==2: #Touched something
+		#drop.collision_mask=0
 		dropSpr.playing=true
 		if dropSpr.frame==3:
 			drop.position.y=-999
@@ -53,7 +53,17 @@ func _physics_process(delta):
 			sprite.play(\"default\")
 			dropSpr.playing=false
 			dropSpr.frame=0
-			drop.collision_mask=collision
+			#drop.collision_mask=collisionMask
+
+#func handle_collision():
+#	
+
+func _on_KinematicBody2D_body_entered(body):
+	if dropState==2:
+		return
+	if body.has_method(\"player_touched\"): #If enemy touched player
+		#lastTouched = body
+		body.call(\"player_touched\",self,player_damage)
 "
 
 [sub_resource type="AtlasTexture" id=3]
@@ -124,23 +134,40 @@ scale = Vector2( 4, 4 )
 frames = SubResource( 8 )
 animation = "loop"
 
+[node name="VisibilityEnabler2D" type="VisibilityEnabler2D" parent="."]
+process_parent = true
+physics_process_parent = true
+
 [node name="KinematicBody2D" type="KinematicBody2D" parent="."]
-position = Vector2( 0, 8 )
-collision_layer = 2
-collision_mask = 19
-__meta__ = {
-"_edit_group_": true
-}
+collision_layer = 16
+collision_mask = 16
 
 [node name="Sprite" type="AnimatedSprite" parent="KinematicBody2D"]
 material = ExtResource( 3 )
-position = Vector2( 0, 32 )
+position = Vector2( 0, 40 )
 scale = Vector2( 4, 4 )
 frames = SubResource( 15 )
 offset = Vector2( 0, -10 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="KinematicBody2D"]
+position = Vector2( 0, 8 )
 shape = SubResource( 9 )
 __meta__ = {
 "_edit_group_": true
 }
+
+[node name="Area2D" type="Area2D" parent="KinematicBody2D"]
+position = Vector2( 0, 8 )
+collision_layer = 2
+monitorable = false
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="KinematicBody2D/Area2D"]
+shape = SubResource( 9 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[connection signal="body_entered" from="KinematicBody2D/Area2D" to="." method="_on_KinematicBody2D_body_entered"]

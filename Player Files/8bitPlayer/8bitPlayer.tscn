@@ -569,6 +569,7 @@ script = ExtResource( 27 )
 visible = false
 
 [node name="OptionsScreen" parent="." instance=ExtResource( 14 )]
+visible = false
 
 [node name="ShotTimer" type="Timer" parent="."]
 wait_time = 0.5
@@ -589,6 +590,7 @@ bus = "Player/Enemies"
 
 [node name="ShootSound" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource( 12 )
+volume_db = 5.0
 bus = "Player/Enemies"
 
 [node name="SplashSound" type="AudioStreamPlayer2D" parent="."]
