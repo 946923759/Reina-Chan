@@ -197,9 +197,11 @@ portrait	pic_Alchemist
 
 #KEY	TalkHub_Ouroboros
 portrait	pic_Ouroboros
-/Ouroboros	Ever played Gal Gun Double Peace? (Just kidding, I'll change this for the demo)
+/Ouroboros	My clothes? What about them?
+/Ouroboros	I don't know who designed this outfit, but I think it looks fine. If anything, Architect's outfit looks weird...
 
 #KEY	TalkHub_Scarecrow
+portrait	pic_Scarecrow
 /Scarecrow	...
 /Scarecrow	No, I'm not taking off this mask. Stop asking.
 
