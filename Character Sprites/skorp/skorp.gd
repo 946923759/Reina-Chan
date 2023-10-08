@@ -3,13 +3,15 @@ signal cutscene_finished
 
 
 var gf_cutscene = preload("res://Screens/ScreenCutscene/CutsceneMain.tscn")
+var emblem_drop = preload("res://Various Objects/UMP9CHAN Drop.tscn")
 
 export(int,"AppearFromBoss","Normal") var spawnType = 1
 export (String) var animToPlayIfNormal = "default"
 export(int,"Towards Player","Left","Right") var facing=0
 export(String) var message_id = "Scarecrow1"
 
-export(int,"None","U","M","P","9","C","H","A","N", "Architect","Alchemist","Ouroboros","Scarecrow") var unlocksOrRequiresEmblem = 0
+export(int,"None","U","M","P","9","C","H","A","N") var unlocksEmblem = 0
+#export(int,"Unlocks","Requires") var unlocksOrRequires = 1
 
 var velocity:Vector2
 var gravity = 2000
@@ -106,3 +108,9 @@ func play_optional_cutscene():
 	)
 	#disabled=true
 	emit_signal("cutscene_finished")
+	if unlocksEmblem > 0:
+		var inst:RigidBody2D = emblem_drop.instance()
+		inst.emblem = unlocksEmblem-1
+		get_parent().add_child(inst)
+		inst.global_position = global_position
+		inst.apply_central_impulse(Vector2(0,-100))

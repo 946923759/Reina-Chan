@@ -215,6 +215,7 @@ nsf_music_file_pt2 = "DMG-CWJ.gbs"
 nsf_track_num_pt2 = 8
 mute_boss_music_in_debug = true
 weapon_to_unlock = 2
+debug_warp_points = [  ]
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="." index="0"]
 

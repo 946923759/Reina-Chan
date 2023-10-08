@@ -621,7 +621,7 @@ func bitArrayToInt32(arr:Array)->int:
 	var ret:int = 0;
 	var tmp:int;
 	for i in range(len(arr)):
-		tmp = arr[i]; #0 or 1
+		tmp = arr[i]; #0 or 1, this abuses the fact that booleans are '1' if you cast them as ints
 		# Bitwise inclusive OR...
 		# Shift tmp left by i (so it starts rightmost)
 		# then OR it so it sets that bit on ret. If tmp is 0, no effect.
@@ -656,7 +656,7 @@ var STAGES_REINA:Dictionary = {
 	"None3":"",
 	"None4":"",
 	"SF_1":"res://Stages_Reina/Sangvis1/StageSangvis1.tscn",
-	"SF_2":"",
+	"SF_2":"res://Stages_Reina/Sangvis2/StageSangvis2.tscn",
 	"SF_3":"res://Stages_Reina/Sangvis3/Sangvis3.tscn",
 	"SF_4":"",
 	"Talk Hub":"res://Stages_Reina/StageTalkHub.tscn",

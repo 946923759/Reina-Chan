@@ -44,6 +44,13 @@ func _ready():
 	
 	get_tree().set_screen_stretch(SceneTree.STRETCH_MODE_2D,SceneTree.STRETCH_ASPECT_KEEP,Vector2(1280,720))
 	
+	if $DebugWarpPoints.get_child_count()==0:
+		debug_warp_points=[Vector2(0,0)]
+	else:
+		debug_warp_points = []
+		for c in $DebugWarpPoints.get_children():
+			debug_warp_points.append(c.global_position)
+	
 	update_easytiles()
 	
 	#set_process(true)

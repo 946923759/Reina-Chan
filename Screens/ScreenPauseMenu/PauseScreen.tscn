@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=2]
+[gd_scene load_steps=25 format=2]
 
 [ext_resource path="res://Various Objects/life_up.png" type="Texture" id=1]
 [ext_resource path="res://ubuntu-font-family/MM2Font_Small.tres" type="DynamicFont" id=2]
@@ -66,7 +66,7 @@ var isStandAlone:bool=true
 
 func _ready():
 	unlocked_weapons+=(unlocked_abilities<<10)
-	print(unlocked_weapons)
+	#print(unlocked_weapons)
 	#print(unlocked_weapons_debug & (1<<2))
 	var stg = get_node_or_null(\"/root/Node2D\")
 	if stg:
@@ -112,6 +112,9 @@ func OnCommand(curWeapon:int=0):
 		unlocked_weapons=Globals.bitArrayToInt32(Globals.playerData.availableWeapons)
 		#Also allows me to pack in unlocked abilities...
 		unlocked_weapons+=(Globals.bitArrayToInt32(Globals.playerData.specialAbilities)<<Globals.Weapons.LENGTH_WEAPONS)
+		
+		#This is only here because there isn't any better place to put it
+		$Page1/Sprite/UMP9CHAN.obtained_emblems = Globals.bitArrayToInt32(Globals.playerData.ReinaChanEmblems)
 	else:
 		Globals.playerData.currentCharacter=currentCharacter
 	
@@ -335,6 +338,30 @@ func _draw():
 				Rect2(i*9+numberOffset.x,numberOffset.y,9,8),
 				Rect2(9*result[i],0,9,8)
 			)
+"
+
+[sub_resource type="GDScript" id=6]
+script/source = "extends Sprite
+
+export(int, FLAGS, 
+	\"U\",\"M\",\"P\",\"9\",\"C\",\"H\",\"A\",\"N\"
+	) var obtained_emblems=0 setget update_draw
+
+func _draw():
+	var offset = self.texture.get_size()/-2
+	
+	for i in range(8):
+		if obtained_emblems & 1<<i: #Bitwise check for slot 'i' in obtained_emblems
+			#tex, dest rect, source rect
+			draw_texture_rect_region(
+				self.texture,
+				Rect2(offset.x+16*i,-8,16,16),
+				Rect2(i*16,16,16,16)
+			)
+
+func update_draw(i:int):
+	obtained_emblems=i
+	update()
 "
 
 [sub_resource type="GDScript" id=5]
@@ -599,10 +626,12 @@ script = SubResource( 4 )
 numberOffset = Vector2( 16, -0.5 )
 lives = 0
 
-[node name="Sprite" type="Sprite" parent="Page1/Sprite"]
+[node name="UMP9CHAN" type="Sprite" parent="Page1/Sprite"]
 position = Vector2( 0, 75 )
 scale = Vector2( 3, 3 )
 texture = ExtResource( 10 )
+vframes = 2
+script = SubResource( 6 )
 
 [node name="PressB" type="Label" parent="Page1/Sprite"]
 margin_left = 140.0

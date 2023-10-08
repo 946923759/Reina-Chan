@@ -1,0 +1,40 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://ParticleEffects/AlphaMaskPurple.tres" type="Material" id=1]
+[ext_resource path="res://Various Objects/1UP_Drop.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Various Objects/letters.png" type="Texture" id=3]
+
+[sub_resource type="GDScript" id=1]
+script/source = "tool
+extends RigidBody2D
+
+onready var area2d = $Area2D
+
+export(int,\"U\",\"M\",\"P\",\"9\",\"C\",\"H\",\"A\",\"N\") var emblem = 0 setget set_emblem
+
+func set_emblem(i):
+	emblem = i
+	var n = get_node_or_null(\"Sprite\")
+	if n:
+		n.frame = i
+
+func _ready():
+	area2d.connect(\"body_entered\",self,\"give_emblem\")
+
+func give_emblem(body:KinematicBody2D):
+	if body and body.has_node(\"OneUpSound\"):
+		body.get_node(\"OneUpSound\").play()
+		Globals.playerData.ReinaChanEmblems[emblem] = true
+		self.queue_free()
+"
+
+[node name="1Up Drop" instance=ExtResource( 2 )]
+script = SubResource( 1 )
+
+[node name="Sprite" parent="." index="1"]
+material = ExtResource( 1 )
+texture = ExtResource( 3 )
+hframes = 8
+
+[node name="Area2D" parent="." index="2"]
+script = null

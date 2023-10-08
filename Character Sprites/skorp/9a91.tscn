@@ -40,7 +40,7 @@ animations = [ {
 "frames": [ SubResource( 1 ), SubResource( 1 ), SubResource( 1 ), SubResource( 1 ), SubResource( 1 ), SubResource( 1 ), SubResource( 1 ), SubResource( 2 ), SubResource( 1 ), SubResource( 2 ) ],
 "loop": true,
 "name": "cold",
-"speed": 5.0
+"speed": 15.0
 }, {
 "frames": [ SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 8 ), SubResource( 9 ), SubResource( 8 ), SubResource( 7 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ), SubResource( 3 ) ],
 "loop": true,
@@ -59,4 +59,5 @@ script = SubResource( 5 )
 [node name="AnimatedSprite" parent="." index="0"]
 position = Vector2( 0, -10 )
 frames = SubResource( 4 )
-frame = 21
+animation = "cold"
+frame = 4

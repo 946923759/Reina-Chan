@@ -18,7 +18,7 @@ var whatever:Array=[
 	[\"Alchemist\",\"res://Screens/ScreenStageSelectV2/Alchemist.png\",\"res://Stages_Reina/Alchemist/Alchemist_v2.tscn\"],
 	[\"Ouroboros\",\"res://Screens/ScreenCutscene/Mugshots/Ouroboros.png\",\"res://Stages_Reina/Ouroboros/StageOuroboros.tscn\"],
 	[\"Scarecrow\",\"res://Screens/ScreenStageSelectV2/Scarecrow.png\",\"res://Stages_Reina/Scarecrow/Scarecrow.tscn\"],
-	[\"\",\"res://Screens/ScreenStageSelectV2/sf icon.png\",\"\"], #Middle, for wily castle
+	[\"\",\"res://Screens/ScreenStageSelectV2/sf icon.png\",\"res://Stages_Reina/Sangvis1/StageSangvis1.tscn\"], #Middle, for wily castle
 	[\"Gager\",\"\",\"\"],
 	[\"Executioner\",\"\",\"\"],
 	[\"Judge\",\"\",\"\"],
@@ -135,6 +135,9 @@ func _input(event):
 
 func input_accept():
 	if selection==4:
+		if Globals.bitArrayToInt32(Globals.playerData.availableWeapons) >= 31:
+			Globals.nextStage=whatever[selection][2]
+			get_tree().change_scene(Globals.nextStage)
 		return
 	elif whatever[selection][2]!=\"\":
 		Globals.nextStage=whatever[selection][2]

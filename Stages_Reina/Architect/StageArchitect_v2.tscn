@@ -676,10 +676,11 @@ facing = 1
 [node name="bonusRoom" type="Node2D" parent="." index="34"]
 
 [node name="Label6" type="Label" parent="bonusRoom" index="0"]
-margin_left = 13184.0
-margin_top = 384.0
-margin_right = 13778.0
-margin_bottom = 699.0
+visible = false
+margin_left = 13182.0
+margin_top = 192.0
+margin_right = 13776.0
+margin_bottom = 507.0
 custom_fonts/font = ExtResource( 16 )
 text = "thx 4 playing!
 
@@ -735,6 +736,7 @@ start_disabled = true
 position = Vector2( 13440, 640 )
 animToPlayIfNormal = "cold"
 message_id = "ArchitectNPC"
+unlocksEmblem = 1
 
 [node name="1up2" parent="bonusRoom" index="3" instance=ExtResource( 2 )]
 position = Vector2( 13632, 672 )
