@@ -1,8 +1,0 @@
-[gd_resource type="DynamicFont" load_steps=2 format=2]
-
-[sub_resource type="DynamicFontData" id=1]
-font_path = "res://megaman_2.ttf"
-
-[resource]
-size = 35
-font_data = SubResource( 1 )
