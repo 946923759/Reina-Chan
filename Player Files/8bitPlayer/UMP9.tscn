@@ -1,6 +1,78 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Player Files/8bitPlayer/8bitPlayer.tscn" type="PackedScene" id=1]
+[ext_resource path="res://ParticleEffects/AlphaMaskPurple.tres" type="Material" id=2]
+[ext_resource path="res://ubuntu-font-family/BitmapFont.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Character Sprites/idle/chat1.png" type="Texture" id=4]
+[ext_resource path="res://Character Sprites/idle/chat2.png" type="Texture" id=5]
+[ext_resource path="res://Character Sprites/idle/chat3.png" type="Texture" id=6]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Node2D
+
+var text:String = \"Hey, what are you waiting for?\"
+
+export (float,0,1,.05) var delay = .05
+var time:float = 0.0
+var toDisplay:int = 0
+
+onready var left = $Sprite
+onready var right = $Sprite2
+onready var middle = $Sprite3
+onready var letters = $BitmapSprite
+
+#func _ready():
+#	init()
+
+func init():
+	var character = Globals.characterToString()
+	var stage = Globals.stagesToString[get_parent().stageRoot.weapon_to_unlock]
+	text = INITrans.GetString(\"Idle\"+character,stage)
+	#text = Globals.stagesToString(stage)
+#	var 
+	
+	var width = text.length()*8+4
+	var onscreen = get_parent().get_onscreen_pos()
+	#print(onscreen)
+	if onscreen.x + width*4 > Globals.gameResolution.x:
+		letters.position.x = width*-4+(Globals.gameResolution.x-onscreen.x)-128
+	elif letters.position.x < -48:
+		letters.position.x = -48
+	#elif onscreen.x < 
+	#	letters.position.x = 0
+
+	#var pos = letters.position
+	left.position.x = letters.position.x-12
+	left.region_rect=Rect2(0,0,width,17)
+	right.position = Vector2(left.position.x+width*4,left.position.y)
+	
+	toDisplay = 0
+	visible=true
+	set_text()
+	set_process(true)
+	
+func stop():
+	visible=false
+	set_process(false)
+
+func _process(delta):
+	time+=delta
+	if time>=delay:
+		time=delta
+		if toDisplay <= text.length():
+			toDisplay+=1
+			set_text()
+		else:
+			#print(\"Finished!\")
+			set_process(false)
+	
+func set_text():
+	if toDisplay > 0:
+		letters.visible=true
+		letters.text = text.substr(0,toDisplay)
+	else:
+		letters.visible=false
+"
 
 [node name="UMP9" instance=ExtResource( 1 )]
 
@@ -10,8 +82,46 @@ animation = "Dash"
 [node name="DebugLabel" parent="." index="19"]
 visible = true
 text = "frameTimer = null
+idleTimer = null
 isOnFloor = null
 canAirDash = null
 hasGrenadeAbility = null
 "
-properties = PoolStringArray( "frameTimer", "isOnFloor", "canAirDash", "hasGrenadeAbility" )
+properties = PoolStringArray( "frameTimer", "idleTimer", "isOnFloor", "canAirDash", "hasGrenadeAbility" )
+
+[node name="Idle" type="Node2D" parent="." index="23"]
+visible = false
+material = ExtResource( 2 )
+position = Vector2( 0, -8 )
+script = SubResource( 1 )
+
+[node name="Sprite" type="Sprite" parent="Idle" index="0"]
+use_parent_material = true
+position = Vector2( -60, -139 )
+scale = Vector2( 4, 4 )
+texture = ExtResource( 4 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 0, 0, 40, 17 )
+
+[node name="Sprite2" type="Sprite" parent="Idle" index="1"]
+use_parent_material = true
+position = Vector2( 100, -139 )
+scale = Vector2( 4, 4 )
+texture = ExtResource( 5 )
+centered = false
+region_rect = Rect2( 0, 0, 40, 17 )
+
+[node name="Sprite3" type="Sprite" parent="Idle" index="2"]
+use_parent_material = true
+position = Vector2( -16, -75 )
+scale = Vector2( 4, 4 )
+texture = ExtResource( 6 )
+centered = false
+region_rect = Rect2( 0, 0, 40, 17 )
+
+[node name="BitmapSprite" parent="Idle" index="3" instance=ExtResource( 3 )]
+position = Vector2( -48, -123 )
+text = "hurry up!!!"
+wrap_at = 92233720368
+scale_by = 4

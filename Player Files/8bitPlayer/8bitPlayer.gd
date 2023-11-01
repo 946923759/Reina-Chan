@@ -300,6 +300,9 @@ func get_menu_buttons_input(_delta):
 		get_tree().paused = true
 		#print("CurrentWeapon is "+String(currentWeapon))
 		PauseScreen.OnCommand(currentWeapon)
+		
+	elif Input.is_key_pressed(KEY_0):
+		idleTimer+=15
 
 #If Android back button pressed
 #TODO: Ignore if cutscene playing
@@ -319,6 +322,10 @@ var frameTimer:float =0.0
 #This one counts how long it's been since the button was let go,
 #Because we only want to reset the frame timer after about 3-4 frames.
 var negativeFrameTimer:float=0.0
+
+# It's too hard to reuse negativeFrameTimer for this, and
+# negatimeFrameTimer only checks left an right
+var idleTimer:float=0.0
 
 #Resets if they touch the ground.
 #This will always be false if they haven't
@@ -394,6 +401,15 @@ func get_input(delta):
 	if (left and right) or movementLocked or grabbingLadder:
 		left = false;
 		right = false;
+		
+	if (left or right or up or down or jump or shoot):
+		if idleTimer>=15.0:
+			$Idle.stop()
+		idleTimer=0.0
+	else:
+		idleTimer+=delta
+		if idleTimer>=15.0 and $Idle.visible==false:
+			$Idle.init()
 		
 	#All this shit is copypasted from the example platformer so I have no idea how it works
 	# A good idea when implementing characters of all kinds,
@@ -540,6 +556,7 @@ func get_input(delta):
 				negativeFrameTimer=0.0
 		
 		if right and position.x < $Camera2D.destPositions[2]-40:
+			#In short, freeze x position for 5 frames here
 			if is_on_floor() and frameTimer < 5.0/60.0:
 				if frameTimer < 1.0/60.0:
 					velocity.x = 125.0
@@ -666,6 +683,12 @@ func pos2cell(pos:Vector2)->Vector2:
 
 func cell2pos(pos:Vector2)->Vector2:
 	return pos*16*tile_scale
+	
+func get_onscreen_pos() -> Vector2:
+	if stageRoot:
+		return stageRoot.position + position + stageRoot.get_canvas_transform().origin
+	else:
+		return position
 
 #Aka "This will have to be rewritten at some point because the player node is
 # not supposed to handle events"
