@@ -6,7 +6,9 @@ func playBossMusic(isM16:bool=false):
 	print("playing boss music")
 	
 	if $PlayerHolder.currentCharacter==Globals.Characters.UMP9:
-		$AudioStreamPlayer2.play()
+		reinaAudioPlayer.load_song("Elisa3 - UMP9 vs M16","Mega Man Unlimited - Division by Zero.nsf",0)
+		#if 
+		#$AudioStreamPlayer2.play()
 #		if OS.has_feature("standalone"):
 #			
 #		else:

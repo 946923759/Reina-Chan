@@ -758,6 +758,8 @@ func handleEvents():
 			Globals.EVENT_TILES.CHECKPOINT:
 				set_checkpoint(event.respawn_position,event.respawn_facing_left)
 				event.disabled=true
+			Globals.EVENT_TILES.STAGE_COMPLETED:
+				finishStage()
 			_:
 				print("Unknown event ID: "+String(event_ID))
 

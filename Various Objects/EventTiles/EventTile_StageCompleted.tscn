@@ -1,0 +1,35 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://ParticleEffects/AlphaMaskPurple.tres" type="Material" id=1]
+[ext_resource path="res://Various Objects/EventTiles/EventTile.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Various Objects/marker 3x1.png" type="Texture" id=3]
+
+[sub_resource type="AtlasTexture" id=1]
+atlas = ExtResource( 3 )
+region = Rect2( 0, 0, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=2]
+atlas = ExtResource( 3 )
+region = Rect2( 16, 0, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=3]
+atlas = ExtResource( 3 )
+region = Rect2( 32, 0, 16, 16 )
+
+[sub_resource type="SpriteFrames" id=4]
+animations = [ {
+"frames": [ SubResource( 1 ), SubResource( 2 ), SubResource( 3 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[node name="EventTile_StageComplete" instance=ExtResource( 2 )]
+event_ID = 10
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="." index="0"]
+material = ExtResource( 1 )
+scale = Vector2( 4, 4 )
+frames = SubResource( 4 )
+frame = 2
+centered = false

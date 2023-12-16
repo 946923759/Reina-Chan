@@ -508,15 +508,15 @@ func set_audio_levels():
 		2:OPTIONS['SFXVolume']['value'],
 		1:OPTIONS['VoiceVolume']['value']
 	}
-	for d in audios:
-		var realVolumeLevel = audios[d]*.3-30
+	for bus_idx in audios:
+		var realVolumeLevel = audios[bus_idx]*.3-30
 		#print(realVolumeLevel)
 		if realVolumeLevel == -30:
 			#instead of setting it to -80 just mute the bus to free up CPU
-			AudioServer.set_bus_mute(d,true);
+			AudioServer.set_bus_mute(bus_idx,true);
 		else:
-			AudioServer.set_bus_volume_db(d,realVolumeLevel)
-			AudioServer.set_bus_mute(d,false)
+			AudioServer.set_bus_volume_db(bus_idx,realVolumeLevel)
+			AudioServer.set_bus_mute(bus_idx,false)
 
 #DO NOT REARRANGE THIS OR IT WILL BREAK EVERYTHING!!!!!
 #The event tile parameters are stored as ints!
@@ -531,6 +531,7 @@ enum EVENT_TILES {
 	CHECKPOINT,
 	CUSTOM_EVENT, #Runs a function run_event() if a player touched it. The player is passed to the event.
 	SIGNAL, #It triggers a signal
+	STAGE_COMPLETED
 }
 
 
