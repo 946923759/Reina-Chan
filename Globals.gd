@@ -549,7 +549,7 @@ static func get_matching_files(path,fname):
 
 	while true:
 		var file = dir.get_next()
-		print(file)
+		#print(file)
 		if file == "":
 			dir.list_dir_end()
 			return null
@@ -561,15 +561,14 @@ static func get_matching_files(path,fname):
 
 
 static func get_custom_music(fname):
-	if !OS.has_feature("standalone"):
-		return null
-	elif OS.has_feature("console"):
+	if !ReinaAudioPlayer.is_nsf_supported():
 		return get_matching_files("res://Music/CDAudio/",fname)
-	return get_matching_files(OS.get_executable_path().get_base_dir()+"/CustomMusic/",fname)
+	elif OS.has_feature("standalone"):
+		return get_matching_files(OS.get_executable_path().get_base_dir()+"/CustomMusic/",fname)
 
 var nsf_player
 func _init():
-	if !OS.has_feature("console"):
+	if ReinaAudioPlayer.is_nsf_supported():
 		nsf_player = FLMusicLib.new();
 		nsf_player.set_gme_buffer_size(2048*5);#optional
 		#print("Init!!")

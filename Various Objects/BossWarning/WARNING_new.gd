@@ -16,6 +16,7 @@ var playerObj
 var child:KinematicBody2D
 
 func _ready():
+	sprite.set_process(false)
 	if message_id=="" and message.size()==0:
 		message_id="default"
 	child=get_child(get_child_count()-1)
@@ -46,6 +47,7 @@ func run_event(sender):
 		#part2()
 	
 func showWarning(playLonger=true):
+	sprite.set_process(true)
 	#playerObj.lockMovement(3,Vector2(0,0))
 	var CONST_IMG_WIDTH = sprite.CONST_IMG_WIDTH
 	var seq := get_tree().create_tween()
@@ -83,6 +85,8 @@ func part5():
 	CheckpointPlayerStats.watchedBossIntro=true
 	child.enabled=true
 	playerObj.clearLockedMovement()
+	sprite.set_process(false)
+	sprite.visible=false
 
 func part1():
 	#get_node("/root/Node2D").stopMusic()

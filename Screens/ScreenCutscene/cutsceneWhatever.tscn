@@ -59,7 +59,7 @@ func a():
 	print(\"Tweening to credits...\")
 	var t := get_tree().create_tween()
 	t.set_pause_mode(SceneTreeTween.TWEEN_PAUSE_PROCESS)
-	t.append($TextureRect,'modulate:a',1,.5).set_trans(Tween.TRANS_QUAD)
+	t.tween_property($TextureRect,'modulate:a',1,.5).set_trans(Tween.TRANS_QUAD)
 	#t.append_callback(self,\"toCredits\")
 	yield(t,\"finished\")
 	print(\"Going to credits...\")

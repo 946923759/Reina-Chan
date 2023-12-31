@@ -23,7 +23,7 @@ func _ready():
 	set_process(Engine.editor_hint)
 	update()
 	
-func _process(delta):
+func _process(_delta):
 	update()
 
 func _draw():
@@ -34,7 +34,7 @@ func _draw():
 	
 	var tmp = PoolByteArray()
 	var spaceLeft = wrap_at
-	var curLine:int=0
+	#var curLine:int=0
 	
 	var realWords = []
 	for w in text.split(\" \",true):
@@ -61,7 +61,7 @@ func _draw():
 			#print(\"Line break!\")
 			#if spaceLeft==0:
 			
-			for j in range(spaceLeft):
+			for _j in range(spaceLeft):
 				tmp.append(32)
 			spaceLeft=wrap_at
 			continue
@@ -78,7 +78,7 @@ func _draw():
 #				w_bytes=w_bytes
 		
 		if len(w_bytes) > spaceLeft:
-			for i in range(spaceLeft):
+			for _i in range(spaceLeft):
 				tmp.append(32)
 			tmp.append_array(w_bytes)
 			spaceLeft=wrap_at-len(w_bytes)

@@ -1,10 +1,11 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Stages_Reina/8bitBaseStage.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Stages_Reina/Sangvis1/Tileset.tres" type="TileSet" id=2]
 [ext_resource path="res://Stages_Reina/Sangvis1/bossPlatform.png" type="Texture" id=3]
 [ext_resource path="res://Stages_Reina/Sangvis1/outsideBGTop.png" type="Texture" id=4]
 [ext_resource path="res://Various Objects/CameraController/CameraAdjuster_v2_Horizontal.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Various Objects/EventTiles/EventTile_StageCompleted.tscn" type="PackedScene" id=6]
 
 [sub_resource type="GDScript" id=1]
 script/source = "tool
@@ -39,7 +40,7 @@ scale = Vector2( 4, 4 )
 texture = ExtResource( 3 )
 centered = false
 region_enabled = true
-region_rect = Rect2( 368.739, 0, 480, 16 )
+region_rect = Rect2( 427.208, 0, 480, 16 )
 script = SubResource( 1 )
 
 [node name="ScrollControl" type="Node" parent="." index="8"]
@@ -50,3 +51,6 @@ topBound = -999
 rightBound = 20
 bottomBound = 24
 freeze_player_during_transition = true
+
+[node name="EventTile_StageComplete" parent="." index="10" instance=ExtResource( 6 )]
+position = Vector2( 1024, 1280 )

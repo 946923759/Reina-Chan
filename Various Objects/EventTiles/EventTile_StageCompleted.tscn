@@ -31,5 +31,5 @@ event_ID = 10
 material = ExtResource( 1 )
 scale = Vector2( 4, 4 )
 frames = SubResource( 4 )
-frame = 2
+playing = true
 centered = false

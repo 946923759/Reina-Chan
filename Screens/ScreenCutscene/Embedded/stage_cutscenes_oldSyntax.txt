@@ -156,6 +156,10 @@ msg	Placeholder text
 #KEY	Elisa2
 msg	Placeholder text
 
+#KEY	Elisa3
+portrait	pic_UMP9
+msg	Placeholder text
+
 
 #KEY	vs_M16
 /UMP9	M16, are you planning on winning the grand prize too?

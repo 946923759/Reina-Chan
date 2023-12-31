@@ -6,6 +6,11 @@ var nsf_player
 var added_nsf_player:bool=false
 #var is_fading_music:bool=false
 
+static func is_nsf_supported() -> bool:
+	if OS.has_feature("console"):
+		return false
+	return OS.has_feature("x86") or OS.has_feature("x86_64")
+
 func _init(_node:Node):
 	node = _node;
 	audioStreamPlayer=node.get_node("AudioStreamPlayer")
@@ -25,7 +30,7 @@ func load_song(custom_music_name:String, nsf_music_file:String, nsf_track_num:in
 			audioStreamPlayer.stream = ExternalAudio.loadfile(music)
 		audioStreamPlayer.play()
 		audioStreamPlayer.volume_db=0.0
-	elif nsf_music_file != "" and !OS.has_feature("console"):
+	elif nsf_music_file != "" and is_nsf_supported():
 		if !is_instance_valid(nsf_player):
 			print("The NSF player has expired somehow... Trying to re-init")
 			nsf_player = FLMusicLib.new();

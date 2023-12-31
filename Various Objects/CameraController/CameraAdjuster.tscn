@@ -6,7 +6,6 @@
 b = Vector2( 16, 0 )
 
 [node name="Area2D" type="Area2D"]
-position = Vector2( 2912, 832 )
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_group_": true
