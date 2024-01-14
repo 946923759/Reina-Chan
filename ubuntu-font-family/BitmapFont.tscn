@@ -114,7 +114,7 @@ func _draw():
 			col = 5
 			row = 2
 		elif col == 45: # -
-			col= 9
+			col = 9
 			row = 2
 		elif col == 39: # 
 			col = 6
@@ -147,7 +147,7 @@ func _draw():
 			
 		#print(col)
 		var subpixel_offset:float=0.0
-		if alignment==1:
+		if alignment==1: #Center
 			if wrap_at > 0:
 				var text_pixel_with = len(text)*scale_internal
 				#print(text_pixel_with)

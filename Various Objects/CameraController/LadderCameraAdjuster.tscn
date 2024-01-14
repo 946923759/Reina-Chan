@@ -16,6 +16,8 @@ export (float,-3,3,.5) var center_bound_offset = 0
 export (float) var tweenTime = 1;
 export (bool) var freeze_player_during_transition=true
 export (bool) var only_if_on_ladder=false
+
+
 const cameraScale = 64;
 #export(Shape2D) var shape;
 

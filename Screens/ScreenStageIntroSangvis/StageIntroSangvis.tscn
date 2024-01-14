@@ -61,7 +61,7 @@ func _process(delta):
 
 [node name="Node2D" type="Node2D"]
 script = SubResource( 1 )
-sangvis_stage_num = 2
+sangvis_stage_num = 3
 
 [node name="ColorRect" type="ColorRect" parent="."]
 visible = false

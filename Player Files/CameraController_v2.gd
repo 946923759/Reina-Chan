@@ -1,4 +1,5 @@
 extends Camera2D
+signal camera_finished_tween()
 
 var cam = self
 var oldPosition;
@@ -30,6 +31,8 @@ func finish_tweening_camera(_write_destinations:bool=false):
 	cam.limit_top = destPositions[1]
 	cam.limit_right = destPositions[2]
 	cam.limit_bottom = destPositions[3]
+	
+	emit_signal("camera_finished_tween")
 	#print("finish tweening, limit is "+String(destPositions))
 
 func adjustCamera(np,secs):
@@ -42,8 +45,6 @@ func adjustCamera(np,secs):
 		
 		#lock the camera to the current position so the tween works correctly
 		var cPos = cam.get_camera_screen_center()
-		cam.limit_left = cPos.x - SCREEN_CENTER_X
-		cam.limit_right = cPos.x + SCREEN_CENTER_X
 		cam.limit_top = cPos.y - SCREEN_CENTER_Y
 		cam.limit_bottom = cPos.y + SCREEN_CENTER_Y
 		
@@ -51,6 +52,20 @@ func adjustCamera(np,secs):
 		is_tweening=true
 		var seq := get_tree().create_tween()
 		seq.set_parallel(true)
+		
+		if np[0] == limit_left and np[2] == limit_right: #If only top and bottom is being adjusted...
+			if np[1] > limit_top: #Camera moving down?
+				seq.tween_property(cam,'limit_top',   np[1],secs).set_trans(Tween.TRANS_QUAD)
+				seq.tween_property(cam,'limit_bottom',limit_bottom+SCREEN_HEIGHT,secs).set_trans(Tween.TRANS_QUAD)
+			else: #Camera moving up?
+				#Use np[1] for this one since it is unlikely to have snapping issues?
+				seq.tween_property(cam,'limit_top',  np[1],secs).set_trans(Tween.TRANS_QUAD)
+				seq.tween_property(cam,'limit_bottom',np[3],secs).set_trans(Tween.TRANS_QUAD)
+		else:
+			cam.limit_left = cPos.x - SCREEN_CENTER_X
+			cam.limit_right = cPos.x + SCREEN_CENTER_X
+			seq.tween_property(cam,'limit_top',   np[1],secs).set_trans(Tween.TRANS_QUAD)
+			seq.tween_property(cam,'limit_bottom',np[3],secs).set_trans(Tween.TRANS_QUAD)
 		# Wondering WTF this is? The TRANS_QUAD tween does not work if
 		# left+right is larger than the size of the screen. So we have to tween it one
 		# screen over and then set it to the destination.
@@ -60,21 +75,13 @@ func adjustCamera(np,secs):
 		elif np[0] > limit_left: #Camera is moving right?
 			seq.tween_property(           cam,'limit_left',  np[0],secs).set_trans(Tween.TRANS_QUAD)
 			seq.tween_property(cam,'limit_right', cam.limit_right+SCREEN_WIDTH,secs).set_trans(Tween.TRANS_QUAD)
+			#seq.tween_property(np[2])
 		else: #Left border didn't change at all, just tween right border
 			seq.tween_property(cam,'limit_right', np[2],secs).set_trans(Tween.TRANS_QUAD)
 			#cam.limit_left = destPositions[0]
 			#cam.limit_right = destPositions[2]
 		
-		if np[0] == limit_left and np[2]== limit_right: #If only top and bottom is being adjusted...
-			if np[1] > limit_top: #Camera moving down?
-				seq.tween_property(cam,'limit_top',   np[1],secs).set_trans(Tween.TRANS_QUAD)
-				seq.tween_property(cam,'limit_bottom',limit_bottom+SCREEN_HEIGHT,secs).set_trans(Tween.TRANS_QUAD)
-			else: #Camera moving up?
-				seq.tween_property(cam,'limit_top',  limit_top-SCREEN_HEIGHT,secs).set_trans(Tween.TRANS_QUAD)
-				seq.tween_property(cam,'limit_bottom',np[3],secs).set_trans(Tween.TRANS_QUAD)
-		else:
-			seq.tween_property(cam,'limit_top',   np[1],secs).set_trans(Tween.TRANS_QUAD)
-			seq.tween_property(cam,'limit_bottom',np[3],secs).set_trans(Tween.TRANS_QUAD)
+
 		seq.tween_callback(self,"finish_tweening_camera").set_delay(secs)
 
 	else:

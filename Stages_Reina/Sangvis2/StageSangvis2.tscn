@@ -40,7 +40,7 @@ scale = Vector2( 4, 4 )
 texture = ExtResource( 3 )
 centered = false
 region_enabled = true
-region_rect = Rect2( 427.208, 0, 480, 16 )
+region_rect = Rect2( 177.412, 0, 480, 16 )
 script = SubResource( 1 )
 
 [node name="ScrollControl" type="Node" parent="." index="8"]

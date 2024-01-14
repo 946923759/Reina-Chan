@@ -1,0 +1,61 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://ubuntu-font-family/BitmapFont.tscn" type="PackedScene" id=1]
+
+[sub_resource type="GDScript" id=1]
+script/source = "tool
+extends Node2D
+
+export(int,\"Enter\",\"Exit\") var type setget set_type
+export(int,0,50) var warp_num setget set_warp_num
+
+func _draw():
+	var c = Color.from_hsv(float(warp_num)/50.0,1,1)
+	draw_rect(Rect2(0,0,64,64), c)
+
+#func set_txt():
+#	update()
+
+func set_type(i):
+	type = i
+	var n = get_node_or_null(\"txt\")
+	if n:
+		if type==0:
+			#n.modulate = Color.aqua
+			n.text = \"ENTR\"
+		else:
+			#n.modulate = Color.pink
+			n.text = \"EXIT\"
+	#update()
+
+func set_warp_num(i):
+	warp_num = i
+	
+	var n = get_node_or_null(\"number\")
+	if n:
+		n.text = String(warp_num).pad_zeros(2)
+	update()
+
+func _ready():
+	if not OS.is_debug_build():
+		queue_free()
+	set_type(type)
+	set_warp_num(warp_num)
+"
+
+[node name="WarpHelpBlock" type="Node2D"]
+z_index = 2
+z_as_relative = false
+script = SubResource( 1 )
+warp_num = 6
+
+[node name="txt" parent="." instance=ExtResource( 1 )]
+text = "ENTR"
+wrap_at = 4
+scale_by = 2
+
+[node name="number" parent="." instance=ExtResource( 1 )]
+position = Vector2( 0, 32 )
+text = "06"
+wrap_at = 4
+scale_by = 4

@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Various Objects/shapes/CollsionShape2D_h.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Various Objects/CameraController/LadderCameraAdjuster_Warp_v2.gd" type="Script" id=2]
+
+[node name="WarpLadderCamera" type="Area2D"]
+z_index = 2
+z_as_relative = false
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_group_": true,
+"_editor_description_": "Place this where you want the camera to transition while on a ladder.
+The top/bottom limit will be determined based on the location of where this is placed."
+}
+
+[node name="h" parent="." instance=ExtResource( 1 )]
