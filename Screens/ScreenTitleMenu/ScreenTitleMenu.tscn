@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=2]
+[gd_scene load_steps=27 format=2]
 
 [ext_resource path="res://ubuntu-font-family/MM2Font.tres" type="DynamicFont" id=1]
 [ext_resource path="res://Screens/ScreenTitleMenu/reina_logo.png" type="Texture" id=2]
@@ -12,6 +12,8 @@
 [ext_resource path="res://Sounds/Classic/03 - MenuSelect.wav" type="AudioStream" id=10]
 [ext_resource path="res://Sounds/Classic/37 - Chaos Emerald.ogg" type="AudioStream" id=11]
 [ext_resource path="res://ubuntu-font-family/BitmapFont.tscn" type="PackedScene" id=12]
+[ext_resource path="res://Screens/_transition/transition.tscn" type="PackedScene" id=13]
+[ext_resource path="res://Sounds/Classic/Mega Man 4 SFX (20) - Weapon Switch.wav" type="AudioStream" id=14]
 
 [sub_resource type="GDScript" id=1]
 script/source = "extends Label
@@ -44,6 +46,8 @@ func action():
 	Globals.load_stage_cutscenes()
 	
 	if Globals.load_player_game():
+		var t = get_node(\"/root/Node2D/Transition\").OnCommand(Globals.playerData.currentCharacter)
+		yield(t,\"finished\")
 		Globals.change_screen(get_tree(),\"ScreenSelectStage\")
 	else:
 		Globals.change_screen(get_tree(),\"ScreenSaveDataError\")
@@ -743,6 +747,9 @@ script = ExtResource( 8 )
 nsf_music = "MM2.nsf"
 nsf_track_num = 1
 
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+bus = "Music"
+
 [node name="logoHolder" type="Control" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -962,14 +969,14 @@ stream = ExtResource( 4 )
 volume_db = 4.0
 bus = "Player/Enemies"
 
+[node name="Continue_Sound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 14 )
+
 [node name="Tween" type="Tween" parent="."]
 
 [node name="Tween2" type="Tween" parent="."]
 
 [node name="Tween3" type="Tween" parent="."]
-
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
-bus = "Music"
 
 [node name="FileDialog_stage" type="FileDialog" parent="."]
 margin_left = 486.274
@@ -1006,6 +1013,10 @@ script = SubResource( 12 )
 [node name="CheatCodeHandler" type="Node" parent="AudioStreamPlayer2"]
 script = ExtResource( 6 )
 codes = [ "UUDDLRLR", "LLLRRRUUU" ]
+
+[node name="Transition" parent="." instance=ExtResource( 13 )]
+margin_right = 1280.0
+margin_bottom = 720.0
 
 [connection signal="file_selected" from="FileDialog_stage" to="Extras" method="_on_FileDialog_file_selected"]
 [connection signal="file_selected" from="FileDialog_cutscene" to="Extras" method="_on_FileDialog_cutscene_file_selected"]

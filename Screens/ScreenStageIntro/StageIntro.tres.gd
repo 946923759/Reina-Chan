@@ -10,6 +10,9 @@ var stageToLoad:String
 var isStandAlone:bool=true
 
 func _ready():
+	var t = get_tree().create_tween()
+	t.tween_property($FadeIn,"visible",true,0.0)
+	t.tween_property($FadeIn,"modulate:a",0.0,.25).set_delay(.1)
 	
 	var music = Globals.get_custom_music("StageIntro")
 	if music != null:

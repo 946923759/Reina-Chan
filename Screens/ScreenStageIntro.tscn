@@ -70,7 +70,7 @@ func _ready():
 			return
 		b = load(bosses[stg])
 		if stg==\"Scarecrow.tscn\":
-			spawnPosition.y-=30
+			spawnPosition.y-=20
 	else:
 		b = load(\"res://Stages_Reina/Bosses/Architect/BossArchitect_v2.tscn\")
 	bi = b.instance()
@@ -178,5 +178,11 @@ __meta__ = {
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BossSpriteLoader/StaticBody2D"]
 shape = SubResource( 5 )
+
+[node name="FadeIn" type="ColorRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color( 0, 0, 0, 1 )
 
 [connection signal="item_rect_changed" from="." to="BossSpriteLoader" method="_on_Node_item_rect_changed"]

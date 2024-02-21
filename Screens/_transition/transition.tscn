@@ -1,0 +1,49 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://Screens/_transition/SFA3_LOGO_UMP.png" type="Texture" id=1]
+[ext_resource path="res://Screens/_transition/out.gd" type="Script" id=2]
+[ext_resource path="res://Sounds/Classic/S3K_B4 - small rocks.wav" type="AudioStream" id=3]
+[ext_resource path="res://ParticleEffects/AlphaMaskPurple.tres" type="Material" id=4]
+[ext_resource path="res://Screens/_transition/SFA3_LOGO_M16.png" type="Texture" id=5]
+
+[node name="Transition" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource( 2 )
+m16_tex = ExtResource( 5 )
+
+[node name="ColorRect" type="ColorRect" parent="."]
+modulate = Color( 1, 1, 1, 0 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 1 )
+
+[node name="Node2D" type="Node2D" parent="."]
+position = Vector2( 640, 360 )
+
+[node name="U" type="Sprite" parent="Node2D"]
+material = ExtResource( 4 )
+scale = Vector2( 3, 3 )
+texture = ExtResource( 1 )
+offset = Vector2( -143, 0 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 143, 240 )
+
+[node name="M" type="Sprite" parent="Node2D"]
+material = ExtResource( 4 )
+scale = Vector2( 3, 3 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 143, 0, 143, 240 )
+
+[node name="P" type="Sprite" parent="Node2D"]
+material = ExtResource( 4 )
+scale = Vector2( 3, 3 )
+texture = ExtResource( 1 )
+offset = Vector2( 143, 0 )
+region_enabled = true
+region_rect = Rect2( 286, 0, 143, 240 )
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 3 )
