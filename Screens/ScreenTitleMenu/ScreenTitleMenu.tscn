@@ -199,6 +199,9 @@ var extras_table = {
 	\"AprilFools2022\":{
 		\"hidden\":false
 	},
+	\"AprilFools2023\":{
+		\"hidden\":false
+	},
 	\"PIURED_Debug\":{
 		\"hidden\":false
 	},
@@ -248,6 +251,9 @@ func action_CustomCutscene():
 func action_AprilFools2022():
 	Globals.nextCutscene=OS.get_executable_path().get_base_dir()+\"/GameData/Cutscene/april_fools_2022.txt\"
 	Globals.change_screen(get_tree(),\"CutsceneFromFile\")
+
+func action_AprilFools2023():
+	OS.shell_open(\"https://objects-us-east-1.dream.io/smbuilds/SM5/Windows/M4A1-Chan%202023.zip\")
 
 func unlock_CustomStage()->bool:
 	return false
@@ -936,9 +942,6 @@ margin_right = 78.255
 margin_bottom = 240.0
 custom_constants/separation = 30
 script = SubResource( 10 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="OptionsList" type="Node2D" parent="."]
 position = Vector2( 0, 200 )

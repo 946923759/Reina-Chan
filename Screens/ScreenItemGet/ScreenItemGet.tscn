@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://ParticleEffects/alphaMask.gdshader" type="Shader" id=1]
 [ext_resource path="res://ParticleEffects/PaletteSwapShader.gdshader" type="Shader" id=2]
@@ -8,6 +8,7 @@
 [ext_resource path="res://Character Sprites/ump9/ump9.tres" type="SpriteFrames" id=6]
 [ext_resource path="res://Screens/ScreenItemGet/bottom.png" type="Texture" id=7]
 [ext_resource path="res://Screens/ScreenStageIntro/starfilter.png" type="Texture" id=8]
+[ext_resource path="res://Screens/_transition/transition.tscn" type="PackedScene" id=9]
 
 [sub_resource type="GDScript" id=1]
 script/source = "extends Node2D
@@ -53,10 +54,10 @@ func _ready():
 	#seq.set_pause_mode(SceneTreeTween.TWEEN_PAUSE_PROCESS)
 # warning-ignore:return_value_discarded
 	seq.tween_property(bottom,'region_rect:position:y',subtractSize,1).set_trans(Tween.TRANS_QUAD)
-	seq.parallel().append(top,'region_rect:size:y',160-subtractSize,1).set_trans(Tween.TRANS_QUAD)
-	seq.parallel().append(top,'position:y',Globals.SCREEN_CENTER_Y-160*4+subtractSize*4,1).set_trans(Tween.TRANS_QUAD)
+	seq.parallel().tween_property(top,'region_rect:size:y',160-subtractSize,1).set_trans(Tween.TRANS_QUAD)
+	seq.parallel().tween_property(top,'position:y',Globals.SCREEN_CENTER_Y-160*4+subtractSize*4,1).set_trans(Tween.TRANS_QUAD)
 	seq.tween_property(player,\"modulate:a\",1.0,.5)
-	seq.parallel().append(l,\"visible_characters\",text.length(),3)
+	seq.parallel().tween_property(l,\"visible_characters\",text.length(),3)
 	
 	#seq.parallel().append($SpeakerActor,'modulate:a',0,.3)
 	#seq.parallel().append($SpeakerActor,'position:y',600,.3)
@@ -71,11 +72,9 @@ func _process(delta):
 	
 	#Surely there is a less stupid way to do this right
 	if timer >= 5.0:
-		$Tween.interpolate_property($FadeOut, \"modulate:a\", null, 1, .5, Tween.TRANS_LINEAR, Tween.EASE_OUT,3)
-		#reinaAudioPlayer.stop_music()
-		$Tween.start()
-		$Tween.connect(\"tween_completed\",self,\"end_screen\")
+		end_screen()
 		set_process(false)
+		
 	if timer >= 2.5:
 		return
 	elif timer >= 2.4:
@@ -94,7 +93,7 @@ func _process(delta):
 		player.get_material().set_shader_param(\"clr1\", newColor[0])
 		player.get_material().set_shader_param(\"clr2\", newColor[1])
 	
-func end_screen(_a,_b):
+func end_screen():
 	reinaAudioPlayer.stop_music()
 	#if is_instance_valid(Globals.nsf_player):
 	#	Globals.nsf_player.queue_free()
@@ -102,19 +101,20 @@ func end_screen(_a,_b):
 	#if reinaAudioPlayer.added_nsf_player:
 	#	Globals.nsf_player.queue_free()
 	#
-	var weapons = Globals.playerData.availableWeapons
-	if weapons[1] and weapons[2] and weapons[3] and weapons[4]:
-		Globals.change_screen(get_tree(),\"CutsceneDemoEnd\")
-	else:
-		Globals.change_screen(get_tree(),\"ScreenSelectStage\")
+	var next = \"ScreenSelectStage\"
+	#var weapons = Globals.playerData.availableWeapons
+	#if weapons[1] and weapons[2] and weapons[3] and weapons[4]:
+	#	next = \"CutsceneDemoEnd\"
+	
+	var t:SceneTreeTween = $Transition.OnCommand()
+	t.tween_callback(Globals,\"change_screen\",[get_tree(),next])
+	
 
 func _input(event):
 	if Input.is_action_just_pressed(\"ui_pause\"):
-		$Tween.interpolate_property($FadeOut, \"modulate:a\", null, 1, .5, Tween.TRANS_LINEAR, Tween.EASE_OUT)
-		#reinaAudioPlayer.stop_music()
-		$Tween.start()
-		$Tween.connect(\"tween_completed\",self,\"end_screen\")
 		set_process(false)
+		set_process_input(false)
+		end_screen()
 "
 
 [sub_resource type="GDScript" id=2]
@@ -215,6 +215,11 @@ stream = ExtResource( 5 )
 autoplay = true
 
 [node name="FadeOut" type="Polygon2D" parent="."]
+visible = false
 modulate = Color( 1, 1, 1, 0 )
 color = Color( 0, 0, 0, 1 )
 polygon = PoolVector2Array( 0, 0, 0, 720, 1280, 720, 1280, 0 )
+
+[node name="Transition" parent="." instance=ExtResource( 9 )]
+margin_right = 1280.0
+margin_bottom = 720.0

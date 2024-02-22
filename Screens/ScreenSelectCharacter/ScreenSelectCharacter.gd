@@ -72,8 +72,8 @@ func action_right():
 func action_accept():
 	set_process_input(false)
 	Globals.playerData.currentCharacter=selection
-	var t:SceneTreeTween = $ScreenTransition.OnCommand(selection)
-	yield(t,"finished")
+	var t2:SceneTreeTween = $ScreenTransition.OnCommand(selection)
+	yield(t2,"finished")
 	Globals.change_screen(get_tree(),"ScreenSelectStage")
 
 func _process(delta):

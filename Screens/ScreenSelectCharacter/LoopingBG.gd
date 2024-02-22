@@ -1,6 +1,6 @@
 extends Sprite
 
-export(float,0,100,1) var looping_speed = 0
+export(float,0,100,1) var looping_speed = 0.0
 
 var region_size = region_rect.size
 func _ready():

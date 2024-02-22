@@ -635,7 +635,9 @@ var SCREENS:Dictionary = {
 	"ScreenSelectCharacter":"res://Screens/ScreenSelectCharacter/ScreenSelectCharacter.tscn",
 	"ScreenSelectStage":"res://Screens/ScreenStageSelectV2/ScreenSelectStage.tscn",
 	"ScreenStageIntro":"res://Screens/ScreenStageIntro.tscn",
+	"ScreenSangvisIntro":"res://Screens/ScreenStageIntroSangvis/StageIntroSangvis.tscn",
 	"ScreenItemGet":"res://Screens/ScreenItemGet/ScreenItemGet.tscn",
+
 	"CutsceneFromFile":"res://Screens/ScreenCutscene/CutsceneFromFile.tscn",
 	"CutsceneDemoEnd":"res://Screens/ScreenCutscene/cutsceneWhatever.tscn",
 	"ScreenCredits":"res://Screens/Credits.tscn",
@@ -668,6 +670,6 @@ var STAGES_REINA:Dictionary = {
 	"CAMERA_ZOOM_TEST":"res://Stages/IntroStageTest/Stage.tscn"
 }
 
-#var previous_screen = ""
+var previous_screen = ""
 func change_screen(tree,screen:String)->void:
 	tree.change_scene(SCREENS[screen])

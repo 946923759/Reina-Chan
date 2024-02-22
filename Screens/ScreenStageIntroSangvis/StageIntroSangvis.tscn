@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://ubuntu-font-family/BitmapFont.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Various Objects/Item_BigHealth.png" type="Texture" id=2]
@@ -9,14 +9,19 @@
 [ext_resource path="res://Screens/ScreenStageIntroSangvis/Untitled 12-20-2023 08-21-46.png" type="Texture" id=7]
 [ext_resource path="res://Music/mm2wilymap.wav" type="AudioStream" id=8]
 [ext_resource path="res://ubuntu-font-family/JP_KR_font.tres" type="DynamicFont" id=9]
+[ext_resource path="res://Screens/ScreenStageIntroSangvis/44d43b7cc9d590f16c63a84d4accdca3.jpg" type="Texture" id=10]
 
 [sub_resource type="GDScript" id=1]
-script/source = "extends Node2D
+script/source = "extends Control
 
 export(int,0,4) var sangvis_stage_num = 0
 var go_to_stage:String = \"\"
 
 func _ready():
+	VisualServer.canvas_item_set_z_index($ColorRect.get_canvas_item(),100)
+	var fadeTw = get_tree().create_tween()
+	fadeTw.tween_property($ColorRect,\"modulate:a\",0.0,.25)
+	
 	#var player_stg_num = sangvis_stage
 	if sangvis_stage_num == 0:
 		sangvis_stage_num = Globals.playerData.wilyStageNum
@@ -24,6 +29,8 @@ func _ready():
 	#	print(\"debug stg: \", sangvis_stage_num)
 	
 	var i = 0
+	
+	#To get idx from dict entry...
 	for stg in Globals.STAGES_REINA:
 		i+=1
 		if i == sangvis_stage_num+8:
@@ -31,7 +38,7 @@ func _ready():
 			break
 	
 	for stg_i in range(1,4):
-		var actorFrame = get_node(\"stg\"+String(stg_i))
+		var actorFrame = get_node(\"Node2D/stg\"+String(stg_i))
 		actorFrame.visible= (stg_i <= sangvis_stage_num)
 		if stg_i == sangvis_stage_num:
 			#print(\"Animating stg \",stg_i)
@@ -55,65 +62,73 @@ func _process(delta):
 	if timeout<=0:
 		get_tree().change_scene(go_to_stage)
 	elif timeout<=4:
-		var n:Sprite = get_node(\"stg\"+String(sangvis_stage_num)+\"icon\")
+		var n:Sprite = get_node(\"Node2D/stg\"+String(sangvis_stage_num)+\"icon\")
 		n.frame = int(timeout*6) % 2
 "
 
-[node name="Node2D" type="Node2D"]
-script = SubResource( 1 )
-sangvis_stage_num = 3
-
-[node name="ColorRect" type="ColorRect" parent="."]
-visible = false
+[node name="Node2D" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-color = Color( 0, 0, 0, 1 )
+script = SubResource( 1 )
+sangvis_stage_num = 1
 
-[node name="BitmapSprite" parent="." instance=ExtResource( 1 )]
+[node name="Sprite2" type="TextureRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 10 )
+expand = true
+stretch_mode = 7
+
+[node name="Node2D" type="Node2D" parent="."]
+z_index = 3
+
+[node name="BitmapSprite" parent="Node2D" instance=ExtResource( 1 )]
+visible = false
 position = Vector2( 26, 30 )
 text = "wily stage placeholder"
 wrap_at = 500
 
-[node name="Sprite" type="Sprite" parent="."]
+[node name="Sprite" type="Sprite" parent="Node2D"]
 position = Vector2( 128, 384 )
 scale = Vector2( 4, 4 )
 texture = ExtResource( 3 )
 hframes = 2
 
-[node name="stg1icon" type="Sprite" parent="."]
+[node name="stg1icon" type="Sprite" parent="Node2D"]
 position = Vector2( 384, 448 )
 scale = Vector2( 4, 4 )
 texture = ExtResource( 3 )
 hframes = 2
 
-[node name="stg2icon" type="Sprite" parent="."]
+[node name="stg2icon" type="Sprite" parent="Node2D"]
 position = Vector2( 768, 448 )
 scale = Vector2( 4, 4 )
 texture = ExtResource( 3 )
 hframes = 2
 
-[node name="stg3icon" type="Sprite" parent="."]
+[node name="stg3icon" type="Sprite" parent="Node2D"]
 position = Vector2( 672, 128 )
 scale = Vector2( 4, 4 )
 texture = ExtResource( 3 )
 hframes = 2
 
-[node name="stg4icon" type="Sprite" parent="."]
+[node name="stg4icon" type="Sprite" parent="Node2D"]
 position = Vector2( 512, 128 )
 scale = Vector2( 4, 4 )
 texture = ExtResource( 2 )
 hframes = 2
 frame = 1
 
-[node name="BitmapSprite2" parent="." instance=ExtResource( 1 )]
+[node name="BitmapSprite2" parent="Node2D" instance=ExtResource( 1 )]
+visible = false
 position = Vector2( 672, 544 )
 text = "Insert background here"
 
-[node name="stg1" type="Node2D" parent="."]
+[node name="stg1" type="Node2D" parent="Node2D"]
 position = Vector2( 256, 320 )
 z_index = -1
 
-[node name="Sprite6" type="Sprite" parent="stg1"]
+[node name="Sprite6" type="Sprite" parent="Node2D/stg1"]
 position = Vector2( -128, 32 )
 scale = Vector2( 4, 4 )
 texture = ExtResource( 5 )
@@ -121,7 +136,7 @@ centered = false
 region_enabled = true
 region_rect = Rect2( 0, 0, 8, 16 )
 
-[node name="Sprite7" type="Sprite" parent="stg1"]
+[node name="Sprite7" type="Sprite" parent="Node2D/stg1"]
 position = Vector2( -96, 32 )
 scale = Vector2( 4, 4 )
 texture = ExtResource( 5 )
@@ -129,7 +144,7 @@ centered = false
 region_enabled = true
 region_rect = Rect2( 0, 0, 8, 16 )
 
-[node name="Sprite9" type="Sprite" parent="stg1"]
+[node name="Sprite9" type="Sprite" parent="Node2D/stg1"]
 position = Vector2( -64, 32 )
 scale = Vector2( 4, 4 )
 texture = ExtResource( 5 )
@@ -137,12 +152,12 @@ centered = false
 region_enabled = true
 region_rect = Rect2( 0, 0, 8, 16 )
 
-[node name="Sprite5" type="Sprite" parent="stg1"]
+[node name="Sprite5" type="Sprite" parent="Node2D/stg1"]
 position = Vector2( 0, 64 )
 scale = Vector2( 4, 4 )
 texture = ExtResource( 4 )
 
-[node name="Sprite10" type="Sprite" parent="stg1"]
+[node name="Sprite10" type="Sprite" parent="Node2D/stg1"]
 position = Vector2( 32, 64 )
 rotation = 1.5708
 scale = Vector2( 4, 4 )
@@ -152,7 +167,7 @@ centered = false
 region_enabled = true
 region_rect = Rect2( 0, 0, 8, 16 )
 
-[node name="Sprite11" type="Sprite" parent="stg1"]
+[node name="Sprite11" type="Sprite" parent="Node2D/stg1"]
 position = Vector2( 32, 96 )
 rotation = 1.5708
 scale = Vector2( 4, 4 )
@@ -162,13 +177,13 @@ centered = false
 region_enabled = true
 region_rect = Rect2( 0, 0, 8, 16 )
 
-[node name="Sprite8" type="Sprite" parent="stg1"]
+[node name="Sprite8" type="Sprite" parent="Node2D/stg1"]
 position = Vector2( 0, 128 )
 rotation = -3.14159
 scale = Vector2( 4, 4 )
 texture = ExtResource( 4 )
 
-[node name="Sprite12" type="Sprite" parent="stg1"]
+[node name="Sprite12" type="Sprite" parent="Node2D/stg1"]
 position = Vector2( 32, 96 )
 scale = Vector2( 4, 4 )
 texture = ExtResource( 5 )
@@ -176,7 +191,7 @@ centered = false
 region_enabled = true
 region_rect = Rect2( 0, 0, 8, 16 )
 
-[node name="Sprite13" type="Sprite" parent="stg1"]
+[node name="Sprite13" type="Sprite" parent="Node2D/stg1"]
 position = Vector2( 64, 96 )
 scale = Vector2( 4, 4 )
 texture = ExtResource( 5 )
@@ -184,7 +199,7 @@ centered = false
 region_enabled = true
 region_rect = Rect2( 0, 0, 8, 16 )
 
-[node name="Sprite14" type="Sprite" parent="stg1"]
+[node name="Sprite14" type="Sprite" parent="Node2D/stg1"]
 position = Vector2( 96, 96 )
 scale = Vector2( 4, 4 )
 texture = ExtResource( 5 )
@@ -192,18 +207,18 @@ centered = false
 region_enabled = true
 region_rect = Rect2( 0, 0, 8, 16 )
 
-[node name="stg2" type="Node2D" parent="."]
+[node name="stg2" type="Node2D" parent="Node2D"]
 position = Vector2( 384, 416 )
 z_index = -1
 
-[node name="Sprite15" type="Sprite" parent="stg2"]
+[node name="Sprite15" type="Sprite" parent="Node2D/stg2"]
 scale = Vector2( 4, 4 )
 texture = ExtResource( 5 )
 centered = false
 region_enabled = true
 region_rect = Rect2( 0, 0, 8, 16 )
 
-[node name="Sprite16" type="Sprite" parent="stg2"]
+[node name="Sprite16" type="Sprite" parent="Node2D/stg2"]
 position = Vector2( 32, 0 )
 scale = Vector2( 4, 4 )
 texture = ExtResource( 5 )
@@ -211,7 +226,7 @@ centered = false
 region_enabled = true
 region_rect = Rect2( 0, 0, 8, 16 )
 
-[node name="Sprite17" type="Sprite" parent="stg2"]
+[node name="Sprite17" type="Sprite" parent="Node2D/stg2"]
 position = Vector2( 64, 0 )
 scale = Vector2( 4, 4 )
 texture = ExtResource( 5 )
@@ -219,7 +234,7 @@ centered = false
 region_enabled = true
 region_rect = Rect2( 0, 0, 8, 16 )
 
-[node name="Sprite" type="Sprite" parent="stg2"]
+[node name="Sprite" type="Sprite" parent="Node2D/stg2"]
 position = Vector2( 96, 0 )
 scale = Vector2( 4, 4 )
 texture = ExtResource( 7 )
@@ -227,7 +242,7 @@ centered = false
 region_enabled = true
 region_rect = Rect2( 0, 0, 8, 16 )
 
-[node name="Sprite2" type="Sprite" parent="stg2"]
+[node name="Sprite2" type="Sprite" parent="Node2D/stg2"]
 position = Vector2( 160, 64 )
 rotation = -3.14159
 scale = Vector2( 4, 4 )
@@ -236,7 +251,7 @@ centered = false
 region_enabled = true
 region_rect = Rect2( 0, 0, 8, 16 )
 
-[node name="Sprite3" type="Sprite" parent="stg2"]
+[node name="Sprite3" type="Sprite" parent="Node2D/stg2"]
 position = Vector2( 160, 0 )
 scale = Vector2( 4, 4 )
 texture = ExtResource( 7 )
@@ -244,7 +259,7 @@ centered = false
 region_enabled = true
 region_rect = Rect2( 0, 0, 8, 16 )
 
-[node name="Sprite4" type="Sprite" parent="stg2"]
+[node name="Sprite4" type="Sprite" parent="Node2D/stg2"]
 position = Vector2( 224, 64 )
 rotation = 3.14159
 scale = Vector2( 4, 4 )
@@ -253,7 +268,7 @@ centered = false
 region_enabled = true
 region_rect = Rect2( 0, 0, 8, 16 )
 
-[node name="Sprite5" type="Sprite" parent="stg2"]
+[node name="Sprite5" type="Sprite" parent="Node2D/stg2"]
 position = Vector2( 224, 0 )
 scale = Vector2( 4, 4 )
 texture = ExtResource( 7 )
@@ -261,7 +276,7 @@ centered = false
 region_enabled = true
 region_rect = Rect2( 0, 0, 8, 16 )
 
-[node name="Sprite6" type="Sprite" parent="stg2"]
+[node name="Sprite6" type="Sprite" parent="Node2D/stg2"]
 position = Vector2( 288, 64 )
 rotation = -3.14159
 scale = Vector2( 4, 4 )
@@ -270,7 +285,7 @@ centered = false
 region_enabled = true
 region_rect = Rect2( 0, 0, 8, 16 )
 
-[node name="Sprite18" type="Sprite" parent="stg2"]
+[node name="Sprite18" type="Sprite" parent="Node2D/stg2"]
 position = Vector2( 288, 0 )
 scale = Vector2( 4, 4 )
 texture = ExtResource( 5 )
@@ -278,7 +293,7 @@ centered = false
 region_enabled = true
 region_rect = Rect2( 0, 0, 8, 16 )
 
-[node name="Sprite19" type="Sprite" parent="stg2"]
+[node name="Sprite19" type="Sprite" parent="Node2D/stg2"]
 position = Vector2( 320, 0 )
 scale = Vector2( 4, 4 )
 texture = ExtResource( 5 )
@@ -286,7 +301,7 @@ centered = false
 region_enabled = true
 region_rect = Rect2( 0, 0, 8, 16 )
 
-[node name="Sprite20" type="Sprite" parent="stg2"]
+[node name="Sprite20" type="Sprite" parent="Node2D/stg2"]
 position = Vector2( 352, 0 )
 scale = Vector2( 4, 4 )
 texture = ExtResource( 5 )
@@ -294,11 +309,11 @@ centered = false
 region_enabled = true
 region_rect = Rect2( 0, 0, 8, 16 )
 
-[node name="stg3" type="Node2D" parent="."]
+[node name="stg3" type="Node2D" parent="Node2D"]
 position = Vector2( 768, 128 )
 z_index = -1
 
-[node name="Sprite15" type="Sprite" parent="stg3"]
+[node name="Sprite15" type="Sprite" parent="Node2D/stg3"]
 position = Vector2( 32, 288 )
 rotation = 1.5708
 scale = Vector2( 4, 4 )
@@ -307,7 +322,7 @@ centered = false
 region_enabled = true
 region_rect = Rect2( 0, 0, 8, 16 )
 
-[node name="Sprite16" type="Sprite" parent="stg3"]
+[node name="Sprite16" type="Sprite" parent="Node2D/stg3"]
 position = Vector2( 32, 256 )
 rotation = 1.5708
 scale = Vector2( 4, 4 )
@@ -316,7 +331,7 @@ centered = false
 region_enabled = true
 region_rect = Rect2( 0, 0, 8, 16 )
 
-[node name="Sprite17" type="Sprite" parent="stg3"]
+[node name="Sprite17" type="Sprite" parent="Node2D/stg3"]
 position = Vector2( 32, 224 )
 rotation = 1.5708
 scale = Vector2( 4, 4 )
@@ -325,7 +340,7 @@ centered = false
 region_enabled = true
 region_rect = Rect2( 0, 0, 8, 16 )
 
-[node name="Sprite18" type="Sprite" parent="stg3"]
+[node name="Sprite18" type="Sprite" parent="Node2D/stg3"]
 position = Vector2( 32, 192 )
 rotation = 1.5708
 scale = Vector2( 4, 4 )
@@ -334,7 +349,7 @@ centered = false
 region_enabled = true
 region_rect = Rect2( 0, 0, 8, 16 )
 
-[node name="Sprite2" type="Sprite" parent="stg3"]
+[node name="Sprite2" type="Sprite" parent="Node2D/stg3"]
 position = Vector2( -64, 128 )
 scale = Vector2( 4, 4 )
 texture = ExtResource( 6 )
@@ -342,7 +357,7 @@ centered = false
 region_enabled = true
 region_rect = Rect2( 0, 16, 32, 16 )
 
-[node name="Sprite" type="Sprite" parent="stg3"]
+[node name="Sprite" type="Sprite" parent="Node2D/stg3"]
 position = Vector2( -64, 64 )
 scale = Vector2( 4, 4 )
 texture = ExtResource( 6 )
@@ -350,7 +365,7 @@ centered = false
 region_enabled = true
 region_rect = Rect2( 0, 0, 32, 16 )
 
-[node name="Sprite19" type="Sprite" parent="stg3"]
+[node name="Sprite19" type="Sprite" parent="Node2D/stg3"]
 position = Vector2( 32, 32 )
 rotation = 1.5708
 scale = Vector2( 4, 4 )
@@ -359,7 +374,7 @@ centered = false
 region_enabled = true
 region_rect = Rect2( 0, 0, 8, 16 )
 
-[node name="Sprite21" type="Sprite" parent="stg3"]
+[node name="Sprite21" type="Sprite" parent="Node2D/stg3"]
 position = Vector2( 32, 0 )
 rotation = 1.5708
 scale = Vector2( 4, 4 )
@@ -368,13 +383,13 @@ centered = false
 region_enabled = true
 region_rect = Rect2( 0, 0, 8, 16 )
 
-[node name="Sprite20" type="Sprite" parent="stg3"]
+[node name="Sprite20" type="Sprite" parent="Node2D/stg3"]
 position = Vector2( -32, -32 )
 scale = Vector2( 4, 4 )
 texture = ExtResource( 4 )
 centered = false
 
-[node name="Sprite22" type="Sprite" parent="stg3"]
+[node name="Sprite22" type="Sprite" parent="Node2D/stg3"]
 position = Vector2( -64, -32 )
 scale = Vector2( 4, 4 )
 texture = ExtResource( 5 )
@@ -382,7 +397,7 @@ centered = false
 region_enabled = true
 region_rect = Rect2( 0, 0, 8, 16 )
 
-[node name="Sprite23" type="Sprite" parent="stg3"]
+[node name="Sprite23" type="Sprite" parent="Node2D/stg3"]
 position = Vector2( -96, -32 )
 scale = Vector2( 4, 4 )
 texture = ExtResource( 5 )
@@ -402,3 +417,9 @@ margin_right = 40.0
 margin_bottom = 142.0
 custom_fonts/font = ExtResource( 9 )
 text = "TIMER"
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color( 0, 0, 0, 1 )

@@ -164,7 +164,7 @@ func position_based_on_center(x_offset:float):
 		self.position.x = x_offset/2-text_pixel_with/2
 "
 
-[node name="BitmapSprite" type="Node2D"]
+[node name="BitmapFont" type="Node2D"]
 material = ExtResource( 1 )
 script = SubResource( 1 )
 text = "abcd efgh 1234 5678 ,.:-"

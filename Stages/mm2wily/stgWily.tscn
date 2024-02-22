@@ -70,12 +70,15 @@ position = Vector2( 5120, 6144 )
 
 [node name="Dinergate" parent="room 96-80" index="0" instance=ExtResource( 11 )]
 position = Vector2( 288, 672 )
+no_movement = false
 
 [node name="Dinergate2" parent="room 96-80" index="1" instance=ExtResource( 11 )]
 position = Vector2( 672, 608 )
+no_movement = false
 
 [node name="Dinergate3" parent="room 96-80" index="2" instance=ExtResource( 11 )]
 position = Vector2( 1120, 608 )
+no_movement = false
 
 [node name="room 24-120" type="Node2D" parent="." index="13"]
 position = Vector2( 7680, 864 )

@@ -1,7 +1,7 @@
 #LANGUAGES	en	es	kr	ja	zh
 
 #KEY	default
-msg	If you can read this, you forgot to assign a key for your cutscene and the PoolStringArray is blank.	Si lees esto, has olvidado asignar alguna tecla para las cinematicas y los "PoolStringArray" estan vacios.
+msg	If you can read this, you forgot to assign a key for your cutscene and the PoolStringArray is empty.	Si lees esto, has olvidado asignar alguna tecla para las cinematicas y los "PoolStringArray" estan vacios.
 
 #KEY	error
 msg	This cutscene specified a key that does not exist in stage_cutscenes.txt. If you are the stage creator, check your event block for typos.
@@ -180,7 +180,7 @@ msg	Placeholder text
 
 #KEY	TalkHub_Skorp
 portrait	pic_VZ61
-/Skorpion	Hey, UMP9!
+/Skorpion	Hey, UMP9! suco suco suco suco suco suco suco
 
 #KEY	TalkHub_T5000
 portrait	pic_T5000
@@ -203,6 +203,7 @@ portrait	pic_Alchemist
 portrait	pic_Ouroboros
 /Ouroboros	My clothes? What about them?
 /Ouroboros	I don't know who designed this outfit, but I think it looks fine. If anything, Architect's outfit looks weird...
+
 
 #KEY	TalkHub_Scarecrow
 portrait	pic_Scarecrow

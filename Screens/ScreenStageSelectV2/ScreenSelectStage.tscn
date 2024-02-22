@@ -77,7 +77,7 @@ func _ready():
 
 	set_process(OS.has_feature(\"pc\"))
 
-func _process(delta):
+func _process(_delta):
 	var SCREEN_SIZE = get_viewport().get_visible_rect().size
 	#$Label.text=String(SCREEN_SIZE)
 	$Sprite.region_rect.size.x=SCREEN_SIZE.x
@@ -91,6 +91,21 @@ func mouse_input(event,new_sel):
 		else:
 			setter(new_sel)
 	pass
+
+func fade_to_next_screen(scr_name:String = \"ScreenStageIntro\", raw_name:bool = false):
+	#if raw_name:
+	#	scr_name = 
+	set_process_input(false)
+	var t = get_tree().create_tween()
+	t.tween_property($FadeOut,\"visible\",true, 0.0)
+	t.tween_property($FadeOut,\"modulate:a\",1.0, .25)
+
+	Globals.previous_screen = self.name
+	if raw_name:
+		t.tween_callback(get_tree(),\"change_scene\",[scr_name])
+	else:
+		t.tween_callback(Globals,\"change_screen\",[get_tree(),scr_name])
+
 
 func _input(event):
 	if event is InputEventJoypadMotion or event is InputEventMouseMotion:
@@ -116,9 +131,10 @@ func _input(event):
 	if Input.is_action_pressed(\"ui_pause\") or Input.is_action_pressed(\"ui_select\"):
 		input_accept()
 	elif Input.is_action_pressed(\"ui_options\") and Globals.bitArrayToInt32(Globals.playerData.availableWeapons)>1:
-		get_tree().change_scene(\"res://Stages_Reina/StageTalkHub.tscn\")
+		fade_to_next_screen(\"res://Stages_Reina/StageTalkHub.tscn\",true)
+		#get_tree().change_scene(\"res://Stages_Reina/StageTalkHub.tscn\")
 	elif Input.is_action_just_pressed(\"ui_cancel\") or (event is InputEventScreenTouch and event.index==1):
-		Globals.change_screen(get_tree(),\"ScreenTitleMenu\")
+		fade_to_next_screen(\"ScreenTitleMenu\")
 	elif Input.is_action_just_pressed(\"ui_up\"):
 		if selection > 2:
 			setter(selection-3)
@@ -138,22 +154,19 @@ func _input(event):
 			setter(selection+3)
 
 func input_accept():
-	if selection==4:
+	if selection==4: #SANGVIS_FERRI
 		if Globals.bitArrayToInt32(Globals.playerData.availableWeapons) >= 31:
-			Globals.nextStage=whatever[selection][2]
-			get_tree().change_scene(Globals.nextStage)
+			fade_to_next_screen(\"ScreenSangvisIntro\")
+			#Globals.nextStage=whatever[selection][2]
+			#fade_to_next_screen(Globals.nextStage,true)
+			#get_tree().change_scene()
 		return
 	elif whatever[selection][2]!=\"\":
 		Globals.nextStage=whatever[selection][2]
 		
 		#I don't like this, I wish it was played across screens
 		$Confirm.play()
-		
-		var t = get_tree().create_tween()
-		t.tween_property($FadeOut,\"visible\",true, 0.0)
-		t.tween_property($FadeOut,\"modulate:a\",1.0, .25)
-		t.tween_callback(Globals,\"change_screen\",[get_tree(),\"ScreenStageIntro\"])
-		#Globals.change_screen(get_tree(),\"ScreenStageIntro\")
+		fade_to_next_screen()
 	else:
 		$No.play()
 

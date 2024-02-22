@@ -49,6 +49,8 @@ func _ready():
 	#p.camera
 	#parent.get_node(\"Camera2D\").current=true
 	pass # Replace with function body.
+	
+	Globals.previous_screen = \"StageTalkHub\"
 "
 
 [sub_resource type="GDScript" id=2]

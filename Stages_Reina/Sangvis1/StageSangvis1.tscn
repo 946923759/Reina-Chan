@@ -200,7 +200,7 @@ scale = Vector2( 4, 4 )
 texture = ExtResource( 31 )
 centered = false
 region_enabled = true
-region_rect = Rect2( 3, 0, 3, 32 )
+region_rect = Rect2( 18, 0, 3, 32 )
 script = SubResource( 42 )
 
 [node name="Sprite4" type="Sprite" parent="." index="6"]
@@ -209,7 +209,7 @@ scale = Vector2( 4, 4 )
 texture = ExtResource( 31 )
 centered = false
 region_enabled = true
-region_rect = Rect2( 3, 0, 3, 32 )
+region_rect = Rect2( 18, 0, 3, 32 )
 script = SubResource( 42 )
 
 [node name="Sprite5" type="Sprite" parent="." index="7"]
@@ -218,7 +218,7 @@ scale = Vector2( 4, 4 )
 texture = ExtResource( 31 )
 centered = false
 region_enabled = true
-region_rect = Rect2( 3, 0, 3, 524 )
+region_rect = Rect2( 18, 0, 3, 524 )
 script = SubResource( 42 )
 
 [node name="Sprite6" type="Sprite" parent="." index="8"]
@@ -227,7 +227,7 @@ scale = Vector2( 4, 4 )
 texture = ExtResource( 31 )
 centered = false
 region_enabled = true
-region_rect = Rect2( 3, 0, 3, 524 )
+region_rect = Rect2( 18, 0, 3, 524 )
 script = SubResource( 42 )
 
 [node name="Polygon2D" type="Polygon2D" parent="." index="9"]
