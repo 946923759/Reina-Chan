@@ -36,10 +36,11 @@ func OnCommand(character:int = 0):
 	
 	t.tween_callback($AudioStreamPlayer,"play").set_delay(1)
 	for n in [U,M,P]:
-		t.tween_property(n,"region_rect:position:y",-3,.05).from_current().set_delay(1).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
-		t.tween_property(n,"region_rect:position:y",0,.05).from_current().set_delay(1.05)
+		t.tween_property(n,"region_rect:position:y",-4,.07).from_current().set_delay(1).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+		t.tween_property(n,"region_rect:position:y",4,.07).from_current().set_delay(1.07).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+		t.tween_property(n,"region_rect:position:y",0,.07).from_current().set_delay(1.14)
 
-	t.tween_property(fade,"modulate:a",1.0,.2).set_delay(1.05)
+	t.tween_property(fade,"modulate:a",1.0,.2).set_delay(1.21)
 	t.set_parallel(false)
 	return t
 

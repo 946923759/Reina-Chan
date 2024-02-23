@@ -379,7 +379,7 @@ func get_input(delta):
 
 	if state==State.DASH: #No shooting while dashing
 		shoot=false
-	elif rapidFire and shoot_time > .1:
+	elif rapidFire and shoot_time > .1 and currentWeapon != 1:
 		shoot = Input.is_action_pressed("ui_cancel")
 	
 	if Globals.flipButtons:
@@ -403,12 +403,12 @@ func get_input(delta):
 		right = false;
 		
 	if (left or right or up or down or jump or shoot):
-		if idleTimer>=15.0:
+		if idleTimer>=10.0:
 			$Idle.stop()
 		idleTimer=0.0
 	else:
 		idleTimer+=delta
-		if idleTimer>=15.0 and $Idle.visible==false:
+		if idleTimer>=10.0 and $Idle.visible==false:
 			$Idle.init()
 		
 	#All this shit is copypasted from the example platformer so I have no idea how it works
@@ -434,15 +434,16 @@ func get_input(delta):
 			
 			scarecrowSpin.set_flipped(sprite.flip_h)
 			
+			
+			if scarecrowArea.start_thread(bullet, scarecrowSpin, .1):
 # warning-ignore:narrowing_conversion
-			weaponMeters[currentWeapon]=max(0,weaponMeters[currentWeapon]-Globals.weaponEnergyCost[currentWeapon])
-			HPBar.updateAmmo(weaponMeters[currentWeapon]/144.0,false)
-			
-			scarecrowArea.start_thread(bullet,scarecrowSpin)
-			
-			scarecrowSpin.appear_quick()
-			scarecrowSpin.disappear()
-			
+				weaponMeters[currentWeapon]=max(0,weaponMeters[currentWeapon]-Globals.weaponEnergyCost[currentWeapon])
+				HPBar.updateAmmo(weaponMeters[currentWeapon]/144.0,false)
+				
+				
+				scarecrowSpin.appear_quick()
+				scarecrowSpin.disappear()
+				
 			#scarecrowArea.monitoring=false
 			#var t:Tween = scarecrowSpin.t
 			#t.
@@ -756,7 +757,8 @@ func handleEvents():
 					true
 				)
 			Globals.EVENT_TILES.CHECKPOINT:
-				set_checkpoint(event.respawn_position,event.respawn_facing_left)
+				if Globals.playerData.gameDifficulty <= event.maximum_difficulty:
+					set_checkpoint(event.respawn_position,event.respawn_facing_left)
 				event.disabled=true
 			Globals.EVENT_TILES.STAGE_COMPLETED:
 				finishStage()
@@ -1184,8 +1186,12 @@ func die():
 		get_parent().add_child(sp)
 		$DieSound.play()
 		yield($DieSound,"finished")
-		$CanvasLayer/Fadeout.fadeOut()
-		yield($CanvasLayer/Fadeout/Fadeout_Tween,"tween_completed")
+		
+		var t = $CanvasLayer/TransitionOut.OnCommand()
+		yield(t,"finished")
+		#$CanvasLayer/Fadeout.fadeOut()
+		#yield($CanvasLayer/Fadeout/Fadeout_Tween,"tween_completed")
+		
 		if Globals.playerData.gameDifficulty < Globals.Difficulty.MEDIUM or CheckpointPlayerStats.playerLivesLeft >= 0:
 # warning-ignore:return_value_discarded
 			get_tree().reload_current_scene()

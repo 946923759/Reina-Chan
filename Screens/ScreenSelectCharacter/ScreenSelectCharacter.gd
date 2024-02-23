@@ -35,6 +35,7 @@ func loop_description():
 	charDesc.rect_position.x=Globals.gameResolution.x+20
 
 func _ready():
+	Globals.previous_screen = self.name
 	#if INITrans.currentLanguage!="en":
 	#	var child = $charDesc
 	#	child.set("custom_fonts/font",INITrans.font)

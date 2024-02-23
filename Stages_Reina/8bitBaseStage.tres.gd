@@ -35,6 +35,7 @@ var reinaAudioPlayer
 var player:KinematicBody2D
 
 func _ready():
+	
 	assert($PlayerHolder,"Hey genius, PlayerHolder is invalid!")
 	assert($PlayerHolder.player,"Hey genius, there's no player!")
 	player = $PlayerHolder.player

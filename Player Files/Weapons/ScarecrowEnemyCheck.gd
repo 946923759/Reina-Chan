@@ -14,7 +14,9 @@ func _ready():
 	monitoring=false
 
 var root:Node2D
-func start_thread(bs,ss:Node2D,limit:float=0.1):
+func start_thread(bs,ss:Node2D,limit:float=0.1) -> bool:
+	if is_processing():
+		return false
 	bulletSmall=bs
 	scarecrowSpin=ss
 	timer= -limit
@@ -22,6 +24,7 @@ func start_thread(bs,ss:Node2D,limit:float=0.1):
 	set_process(true)
 	root=get_node("/root/Node2D")
 	#print("Threading!")
+	return true
 
 #This probably shouldn't be here in the first place
 func fireBulletSmall(initPosGlobal:Vector2,destPosGlobal:Vector2):

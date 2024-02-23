@@ -10,6 +10,8 @@ var stageToLoad:String
 var isStandAlone:bool=true
 
 func _ready():
+	Globals.previous_screen = "Stage"
+	
 	var t = get_tree().create_tween()
 	t.tween_property($FadeIn,"visible",true,0.0)
 	t.tween_property($FadeIn,"modulate:a",0.0,.25).set_delay(.1)
@@ -42,11 +44,14 @@ func _ready():
 	#$ColorRect2.rect_size.x=Globals.gameResolution.x
 	#VisualServer.canvas_item_set_z_index($ColorRect.get_canvas_item(),-999)
 	#VisualServer.canvas_item_set_z_index($ColorRect2.get_canvas_item(),-1)
+	VisualServer.canvas_item_set_z_index($TransitionOut.get_canvas_item(),10)
 	
 	set_process(false)
 
 func done():
-	get_tree().change_scene(stageToLoad)
+	var t:SceneTreeTween = $TransitionOut.OnCommand()
+	t.tween_callback(get_tree(),"change_scene",[stageToLoad])
+	#get_tree().change_scene(stageToLoad)
 
 #Async loader
 func _process(time):
@@ -86,5 +91,7 @@ func _process(time):
 
 func _input(event):
 	if event.is_action_pressed("ui_pause"):
-		$AudioStreamPlayer.stop()
+		audio.disconnect("finished",self,"done")
+		done()
+		#$AudioStreamPlayer.stop()
 		#Will automatically call done() since it's connected

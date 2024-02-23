@@ -27,8 +27,15 @@ const subtractSize:float=110.0
 
 var reinaAudioPlayer
 func _ready():
+	Globals.previous_screen = self.name
 	var lastPlayedStage:int = CheckpointPlayerStats.lastPlayedStage
 	#lastPlayedStage=3
+	
+	#$FadeIn.visible =true;
+	var t = get_tree().create_tween()
+	t.tween_property($FadeIn,\"visible\",true,0.0)
+	t.tween_property($FadeIn,\"modulate:a\",0.0,.3)
+	t.tween_property($FadeIn,\"visible\",false,0.0)
 	
 	bottom.position.y=Globals.SCREEN_CENTER_Y
 	top.position.y=Globals.SCREEN_CENTER_Y-160*4
@@ -143,8 +150,13 @@ shader_param/colorToSwap2 = Color( 0.694, 0.627, 0.592, 1 )
 shader_param/clr1 = Color( 0.608, 0.467, 0.388, 1 )
 shader_param/clr2 = Color( 0.694, 0.627, 0.592, 1 )
 
-[node name="Node2D" type="Node2D"]
+[node name="ScreenItemGet" type="Node2D"]
 script = SubResource( 1 )
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 5 )
+autoplay = true
+bus = "Music"
 
 [node name="Polygon2D" type="Polygon2D" parent="."]
 color = Color( 0, 0, 0, 1 )
@@ -206,13 +218,6 @@ custom_fonts/font = ExtResource( 4 )
 text = "THIS IS PLACEHOLDER TEXT"
 align = 1
 uppercase = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
-stream = ExtResource( 5 )
-autoplay = true
 
 [node name="FadeOut" type="Polygon2D" parent="."]
 visible = false
@@ -221,5 +226,12 @@ color = Color( 0, 0, 0, 1 )
 polygon = PoolVector2Array( 0, 0, 0, 720, 1280, 720, 1280, 0 )
 
 [node name="Transition" parent="." instance=ExtResource( 9 )]
+visible = false
 margin_right = 1280.0
 margin_bottom = 720.0
+
+[node name="FadeIn" type="ColorRect" parent="."]
+visible = false
+margin_right = 1920.0
+margin_bottom = 1080.0
+color = Color( 0, 0, 0, 1 )

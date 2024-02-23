@@ -10,7 +10,7 @@ export (int) var rightBound;
 export (int) var bottomBound;
 export (float) var cameraScale = 64.0;
 export (float) var tweenTime = .5;
-export(String, FILE, "*.ogg") var newMusic
+export(AudioStream) var newMusic
 
 enum DOOR_IS_FACING {
 	LEFT = -1,

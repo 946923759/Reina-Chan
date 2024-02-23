@@ -124,6 +124,7 @@ func block_broken_(pos:Vector2):
 			if cond[1]=='h':
 				if is_path_towards_horizontal(srcPoint,dstPoint):
 					p.grid_position=dstPoint
+# warning-ignore:narrowing_conversion
 	move_pieces_down(pos.x)
 	move_pieces_other()
 	
@@ -215,15 +216,15 @@ func move_pieces_other():
 func is_path_towards_horizontal(srcPos:Vector2,destPos:Vector2)->bool:
 	if srcPos.x < destPos.x:
 		for x in range(srcPos.x+1,destPos.x):
-			var b = get_tile_at(Vector2(x,srcPos.y))
-			if b!=0:
+			var blockAt = get_tile_at(Vector2(x,srcPos.y))
+			if blockAt!=0:
 				return false
 			$DebugDisplay.debug_highlight_block(Vector2(x,srcPos.y),Color.red)
 		return true
 	else:
 		for x in range(srcPos.x-1,destPos.x,-1):
-			var b = get_tile_at(Vector2(x,srcPos.y))
-			if b!=0:
+			var blockAt = get_tile_at(Vector2(x,srcPos.y))
+			if blockAt!=0:
 				return false
 			$DebugDisplay.debug_highlight_block(Vector2(x,srcPos.y),Color.red)
 		return true
@@ -233,19 +234,19 @@ func scan_check_horizontal()->bool:
 		match p.piece_type+2:
 			PIECE.Queen,PIECE.Rook:
 				for x in range(p.grid_position.x+1,tilemap_grid_size.x):
-					var b = get_tile_at(Vector2(x,p.grid_position.y))
+					var blockAt = get_tile_at(Vector2(x,p.grid_position.y))
 					$DebugDisplay.debug_highlight_block(Vector2(x,p.grid_position.y),Color.blue)
 					#print(b)
-					if b==PIECE.King:
+					if blockAt==PIECE.King:
 						return true
-					elif b==1:
+					elif blockAt==1:
 						break
 				for x in range(p.grid_position.x-1,0,-1):
-					var b = get_tile_at(Vector2(x,p.grid_position.y))
+					var blockAt = get_tile_at(Vector2(x,p.grid_position.y))
 					#print(b)
-					if b==PIECE.King:
+					if blockAt==PIECE.King:
 						return true
-					elif b==1:
+					elif blockAt==1:
 						break
 	return false
 	
@@ -260,9 +261,9 @@ func scan_check_diagonal()->bool:
 					x+=1
 					if x > tilemap_grid_size.x:
 						break
-					var b = get_tile_at(Vector2(x,y))
+					var blockAt = get_tile_at(Vector2(x,y))
 					$DebugDisplay.debug_highlight_block(Vector2(x,y),Color.blue)
-					if b==PIECE.King:
+					if blockAt==PIECE.King:
 						return true
 					elif b==1:
 						break
@@ -272,11 +273,11 @@ func scan_check_diagonal()->bool:
 					x-=1
 					if x < 0:
 						break
-					var b = get_tile_at(Vector2(x,y))
+					var blockAt = get_tile_at(Vector2(x,y))
 					$DebugDisplay.debug_highlight_block(Vector2(x,y),Color.blue)
-					if b==PIECE.King:
+					if blockAt==PIECE.King:
 						return true
-					elif b==1:
+					elif blockAt==1:
 						break
 				
 				x = p.grid_position.x
@@ -284,11 +285,11 @@ func scan_check_diagonal()->bool:
 					x+=1
 					if x > tilemap_grid_size.x:
 						break
-					var b_obj = get_tile_at(Vector2(x,y))
+					var blockAt = get_tile_at(Vector2(x,y))
 					$DebugDisplay.debug_highlight_block(Vector2(x,y),Color.blue)
-					if b_obj==PIECE.King:
+					if blockAt==PIECE.King:
 						return true
-					elif b_obj==1:
+					elif blockAt==1:
 						break
 			#_:
 			#	continue

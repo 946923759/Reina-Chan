@@ -36,7 +36,11 @@ var reinaAudioPlayer
 func _ready():
 	CheckpointPlayerStats.clearEverything()
 	
-	$Transition.visible = true
+	if Globals.previous_screen.begins_with(\"Stage\"):
+		$Transition.queue_free()
+	else:
+		$Transition.visible = true
+		$Transition.OffCommand()
 	get_tree().set_screen_stretch(SceneTree.STRETCH_MODE_2D,SceneTree.STRETCH_ASPECT_EXPAND,Vector2(1280,720))
 	
 	$Sprite.region_rect.size.x=Globals.gameResolution.x
@@ -70,7 +74,6 @@ func _ready():
 	#print(c.position)
 	var bossesDefeated = Globals.bitArrayToInt32(Globals.playerData.availableWeapons)
 	if bossesDefeated > 1:
-		$Hub.position = Vector2(portraitFrame.position.x,portraitFrame.position.y+120)
 		$Hub.visible=true
 	else:
 		$Hub.visible=false
@@ -83,6 +86,8 @@ func _process(_delta):
 	$Sprite.region_rect.size.x=SCREEN_SIZE.x
 	$Sprite.position=SCREEN_SIZE/2
 	portraitFrame.position=SCREEN_SIZE/2
+	$Hub.position = Vector2(portraitFrame.position.x,portraitFrame.position.y+100)
+
 
 func mouse_input(event,new_sel):
 	if (event is InputEventMouseButton and event.pressed) or (event is InputEventScreenTouch and event.pressed):
@@ -268,5 +273,3 @@ color = Color( 0, 0, 0, 1 )
 [node name="Transition" parent="." instance=ExtResource( 9 )]
 visible = false
 transition_type = 1
-
-[connection signal="ready" from="." to="Transition" method="OffCommand"]

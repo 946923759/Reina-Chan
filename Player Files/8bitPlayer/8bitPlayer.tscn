@@ -1,4 +1,4 @@
-[gd_scene load_steps=49 format=2]
+[gd_scene load_steps=50 format=2]
 
 [ext_resource path="res://Player Files/mission start2.png" type="Texture" id=1]
 [ext_resource path="res://Character Sprites/ump9/ump9.tres" type="SpriteFrames" id=2]
@@ -37,6 +37,7 @@
 [ext_resource path="res://Sounds/Classic/Mega Man 4 SFX (20) - Weapon Switch.wav" type="AudioStream" id=35]
 [ext_resource path="res://Stages_Reina/Bosses/Alchemist/Pumpkin.png" type="Texture" id=36]
 [ext_resource path="res://Player Files/Weapons/bulletManager.gd" type="Script" id=37]
+[ext_resource path="res://Screens/_transition/transition.tscn" type="PackedScene" id=38]
 
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 19 )
@@ -327,6 +328,7 @@ one_shot = true
 [node name="SwitchSound" type="AudioStreamPlayer" parent="WeaponSwitch"]
 stream = ExtResource( 17 )
 volume_db = -5.0
+bus = "Player/Enemies"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2( 0, 16 )
@@ -563,6 +565,13 @@ texture = ExtResource( 26 )
 centered = false
 script = ExtResource( 27 )
 
+[node name="TransitionIn" parent="CanvasLayer" instance=ExtResource( 38 )]
+visible = false
+transition_type = 1
+
+[node name="TransitionOut" parent="CanvasLayer" instance=ExtResource( 38 )]
+visible = false
+
 [node name="pauseLayer" type="CanvasLayer" parent="."]
 
 [node name="PauseScreen" parent="pauseLayer" instance=ExtResource( 34 )]
@@ -612,6 +621,7 @@ bus = "Player/Enemies"
 
 [node name="GetEquipped" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 35 )
+bus = "Player/Enemies"
 
 [node name="ChargeDash" type="Area2D" parent="."]
 position = Vector2( 60, 23 )
@@ -676,6 +686,7 @@ position = Vector2( 0, -32 )
 scale = Vector2( 4, 4 )
 texture = ExtResource( 36 )
 
+[connection signal="ready" from="." to="CanvasLayer/TransitionIn" method="OffCommand"]
 [connection signal="timeout" from="WeaponSwitch/TimeToShow" to="WeaponSwitch" method="_on_Timer_timeout"]
 [connection signal="unpaused" from="pauseLayer/PauseScreen" to="." method="_on_PauseScreen_unpaused"]
 [connection signal="unpaused" from="OptionsScreen" to="." method="_on_OptionsScreen_unpaused"]

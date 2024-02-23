@@ -1,8 +1,9 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://Screens/ScreenStageIntro/StageIntro.tres.gd" type="Script" id=1]
 [ext_resource path="res://ubuntu-font-family/MM2Font.tres" type="DynamicFont" id=2]
 [ext_resource path="res://Screens/ScreenStageIntro/starfilter.png" type="Texture" id=3]
+[ext_resource path="res://Screens/_transition/transition.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Music/Stage Start.ogg" type="AudioStream" id=5]
 [ext_resource path="res://Screens/ScreenCutscene/Portraits/pic_Architect.png" type="Texture" id=6]
 
@@ -185,5 +186,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
 color = Color( 0, 0, 0, 1 )
+
+[node name="TransitionOut" parent="." instance=ExtResource( 4 )]
 
 [connection signal="item_rect_changed" from="." to="BossSpriteLoader" method="_on_Node_item_rect_changed"]

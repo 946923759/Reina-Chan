@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://Character Sprites/ump9/ump9Idle.png" type="Texture" id=1]
 [ext_resource path="res://ubuntu-font-family/Ubuntu-B.ttf" type="DynamicFontData" id=2]
@@ -6,6 +6,8 @@
 [ext_resource path="res://ParticleEffects/GlowShader.tres" type="Material" id=4]
 [ext_resource path="res://Stages_Reina/Bosses/Alchemist/Alchemist 7x1.png" type="Texture" id=5]
 [ext_resource path="res://ParticleEffects/MotionBlur.tres" type="Material" id=6]
+[ext_resource path="res://Character Sprites/m16/m16.tres" type="SpriteFrames" id=7]
+[ext_resource path="res://ParticleEffects/PaletteSwapShader.tres" type="Material" id=8]
 
 [sub_resource type="DynamicFont" id=1]
 size = 32
@@ -101,6 +103,10 @@ __meta__ = {
 }
 
 [node name="Node2D" type="Node2D" parent="."]
+position = Vector2( 7, -190 )
+__meta__ = {
+"_edit_group_": true
+}
 
 [node name="Sprite" type="Sprite" parent="Node2D"]
 material = SubResource( 2 )
@@ -135,3 +141,12 @@ material = ExtResource( 6 )
 position = Vector2( 937.225, 361.705 )
 scale = Vector2( 4, 4 )
 frames = SubResource( 16 )
+
+[node name="Node2D2" type="Node2D" parent="."]
+position = Vector2( 30, 310 )
+
+[node name="Sprite" type="AnimatedSprite" parent="Node2D2"]
+material = ExtResource( 8 )
+position = Vector2( 98, 81 )
+scale = Vector2( 4, 4 )
+frames = ExtResource( 7 )

@@ -122,7 +122,9 @@ func _ready():
 		$Door.unlock_door()
 
 func unlock_door():
-	CheckpointPlayerStats.temporaryStageStats=1
+	#Bitwise assign slot 1 true
+	CheckpointPlayerStats.temporaryStageStats |= 1
+	
 	var stageRoot = get_node_or_null(\"/root/Node2D\")
 	stageRoot.get_player().set_checkpoint(Vector2(158,33))
 	#func set_checkpoint(respawnPosition:Vector2,shouldFaceLeft=false):
@@ -740,6 +742,9 @@ z_index = -1
 texture = ExtResource( 28 )
 centered = false
 offset = Vector2( 0, 64 )
+__meta__ = {
+"_edit_lock_": true
+}
 
 [node name="Wireframe" parent="Room 160-24 Wireframe Boss" index="1" instance=ExtResource( 19 )]
 position = Vector2( 640, 384 )
@@ -1032,21 +1037,25 @@ position = Vector2( 608, 544 )
 [node name="BreakableBlock" parent="Room 180-24 spike room/BreakableBlockContainer" index="0" instance=ExtResource( 30 )]
 position = Vector2( 32, 32 )
 weaponCanBreak = 1536
+maxHealth = 2
 textureOverride = SubResource( 5 )
 
 [node name="BreakableBlock2" parent="Room 180-24 spike room/BreakableBlockContainer" index="1" instance=ExtResource( 30 )]
 position = Vector2( 96, 32 )
 weaponCanBreak = 1536
+maxHealth = 2
 textureOverride = SubResource( 5 )
 
 [node name="BreakableBlock3" parent="Room 180-24 spike room/BreakableBlockContainer" index="2" instance=ExtResource( 30 )]
 position = Vector2( 160, 32 )
 weaponCanBreak = 1536
+maxHealth = 2
 textureOverride = SubResource( 5 )
 
 [node name="BreakableBlock4" parent="Room 180-24 spike room/BreakableBlockContainer" index="3" instance=ExtResource( 30 )]
 position = Vector2( 224, 32 )
 weaponCanBreak = 1536
+maxHealth = 2
 textureOverride = SubResource( 5 )
 
 [node name="BreakableBlockContainer2" parent="Room 180-24 spike room" index="6" instance=ExtResource( 31 )]
@@ -1081,6 +1090,10 @@ textureOverride = SubResource( 7 )
 position = Vector2( -32, 160 )
 weaponCanBreak = 1536
 textureOverride = SubResource( 7 )
+
+[node name="Checkpoint" parent="Room 180-24 spike room" index="7" instance=ExtResource( 22 )]
+position = Vector2( 672, 2624 )
+maximum_difficulty = 1
 
 [node name="Room 200-96 SnakeEnemy3" type="Node2D" parent="." index="18"]
 position = Vector2( 13824, 6560 )
@@ -1417,6 +1430,10 @@ collision_mask = 2
 position = Vector2( 768, 160 )
 collision_layer = 2
 collision_mask = 2
+
+[node name="Checkpoint" parent="Room 200-72 to Room 200-84" index="7" instance=ExtResource( 22 )]
+position = Vector2( 608, 208 )
+maximum_difficulty = 1
 
 [node name="Room 200-96" type="Node2D" parent="." index="22"]
 position = Vector2( 12800, 6144 )

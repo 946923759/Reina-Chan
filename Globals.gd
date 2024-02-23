@@ -127,9 +127,9 @@ var abilitiesToString = [
 var weaponEnergyCost = [
 	0, #Buster
 	9, #Architect 144/9 = 16 uses
-	6, #Alchemist, 24 uses for dash
+	4, #Alchemist, 24 uses for dash
 	6, #Ouroboros
-	8, #Scarecrow
+	6, #Scarecrow
 	0,
 	0,
 	0,
@@ -436,7 +436,7 @@ func _ready():
 							gameResolution=Vector2(w,h)
 							OS.window_size = gameResolution
 							OS.center_window()
-			elif kv[1]=="--fullscreen":
+			elif kv[0]=="--fullscreen":
 				if kv[1].to_lower()=="true":
 					forcedFullscreen=2
 				else:
@@ -472,11 +472,12 @@ func _ready():
 	playerHasSaveData=save_game.file_exists(get_save_directory('playerData'))
 	
 	if forcedFullscreen>0:
+		print("User specified --fullscreen=true")
 		set_fullscreen(forcedFullscreen==2)
 	#It's annoying when I'm debugging
 	elif !OS.is_debug_build():
 		set_fullscreen(OPTIONS['isFullscreen']['value'])
-	else:
+	elif OPTIONS['isFullscreen']['value']:
 		print("Fullscreen setting is ignored in debug.")
 
 func _input(_event):

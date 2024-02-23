@@ -26,11 +26,26 @@ func _ready():
 	#I DON'T UNDERSTAND WHY THIS WILL OVERRIDE THE BASE
 	#SCENES IF YOU CHANGE IT IN THE EDITOR WHO THE FUCK
 	#DESIGNED THIS
-	#sprite.get_material().set_shader_param("colorToSwap1", Color("#c2c2c2"))
-	#sprite.get_material().set_shader_param("colorToSwap2", Color("#f0f0f0"))
+	sprite.get_material().set_shader_param("colorToSwap1", Color("#c2c2c2"))
+	sprite.get_material().set_shader_param("colorToSwap2", Color("#f0f0f0"))
 
 	#chargeStart.connect("finished",chargeLoop,"play")
 
+func switchWeapon(showIcon:bool=true):
+	if showIcon:
+		weaponSwitch.showIcon(currentWeapon)
+	if currentWeapon==0: #lmao
+		sprite.get_material().set_shader_param("clr1", Color(.749,.749,.749))
+		sprite.get_material().set_shader_param("clr2", Color(.957,.957,.957))
+	else:
+		sprite.get_material().set_shader_param("clr1", Globals.weaponColorSwaps[currentWeapon][0])
+		sprite.get_material().set_shader_param("clr2", Globals.weaponColorSwaps[currentWeapon][1])
+	#print(weaponMeters[currentWeapon]/144.0)
+	HPBar.show_weapon(currentWeapon!=0 or hasGrenadeAbility,weaponMeters[currentWeapon]/144.0)
+	if currentWeapon!=0 or hasGrenadeAbility:
+		HPBar.get_material().set_shader_param("clr1", Globals.weaponColorSwaps[currentWeapon][0])
+		HPBar.get_material().set_shader_param("clr2", Globals.weaponColorSwaps[currentWeapon][1])
+		
 
 #TODO: dude lmao
 var chargeShotTime:float=0.0

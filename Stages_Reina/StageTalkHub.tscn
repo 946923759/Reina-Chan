@@ -20,8 +20,10 @@
 script/source = "extends \"res://Stages_Reina/8bitBaseStage.tres.gd\"
 
 func _ready():
+	Globals.previous_screen = \"StageTalkHub\"
 	#._ready()
 	#print(\"a\")
+
 	var p = get_player()
 	p.get_node(\"CanvasLayer/bar\").visible=false
 
@@ -49,8 +51,6 @@ func _ready():
 	#p.camera
 	#parent.get_node(\"Camera2D\").current=true
 	pass # Replace with function body.
-	
-	Globals.previous_screen = \"StageTalkHub\"
 "
 
 [sub_resource type="GDScript" id=2]
