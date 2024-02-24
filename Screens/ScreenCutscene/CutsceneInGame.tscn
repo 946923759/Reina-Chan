@@ -860,7 +860,7 @@ tool
 onready var RECT_WIDTH:float = self.rect_size.x
 onready var RECT_HEIGHT:float = self.rect_size.y
 
-export(float,0,676) var custom_width=676 setget set_custom_width
+export(float,0,676) var custom_width=676.0 setget set_custom_width
 
 func _draw():
 	VisualServer.canvas_item_set_custom_rect(get_canvas_item(),true,
@@ -1062,7 +1062,7 @@ region_rect = Rect2( 0, 0, 192, 192 )
 material = SubResource( 15 )
 texture = ExtResource( 13 )
 region_enabled = true
-region_rect = Rect2( 0, 45.849, 192, 192 )
+region_rect = Rect2( 0, 187.048, 192, 192 )
 
 [node name="Tween" type="Tween" parent="CenterContainer_v2/Mugshots"]
 
@@ -1081,6 +1081,7 @@ script = SubResource( 16 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+custom_width = 676
 
 [node name="SpeakerActor" type="Label" parent="CenterContainer_v2"]
 visible = false

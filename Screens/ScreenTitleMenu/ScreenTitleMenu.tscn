@@ -781,7 +781,7 @@ anchor_bottom = 0.5
 margin_top = -230.0
 margin_bottom = -210.0
 custom_fonts/font = ExtResource( 3 )
-text = "Demo 4"
+text = "Demo 5"
 align = 1
 
 [node name="Logo" type="TextureRect" parent="logoHolder"]
@@ -824,7 +824,7 @@ scale_by = 3
 
 [node name="VersionNum" parent="logoHolder" instance=ExtResource( 12 )]
 position = Vector2( 10, 10 )
-text = "v.2024.01.14"
+text = "v.2024.02.23"
 wrap_at = 92233720368
 scale_by = 3
 
@@ -1018,6 +1018,7 @@ script = ExtResource( 6 )
 codes = [ "UUDDLRLR", "LLLRRRUUU" ]
 
 [node name="Transition" parent="." instance=ExtResource( 13 )]
+visible = false
 margin_right = 1280.0
 margin_bottom = 720.0
 

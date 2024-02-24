@@ -64,6 +64,7 @@ func _physics_process(delta):
 	
 	match curState:
 		STATES.RANDOMPICK:
+			stateProgress=0
 			tempVelocity=Vector2(0,1000)
 			var rand = randi()%3
 			#var rand:bool = randi()%2==1
@@ -80,7 +81,7 @@ func _physics_process(delta):
 			match rand:
 				0:
 					if curHP <= 14:
-						stateProgress=0
+						#stateProgress=0
 						curState = STATES.JUMPING_TOWARDS_WALL
 						if (global_position/64-nearestRoomCorner).x < 10:
 							facing=-1
@@ -98,7 +99,6 @@ func _physics_process(delta):
 					curState=STATES.DASHING
 				2:
 					
-					stateProgress=0
 					sprite.set_animation("twoShoot")
 					sprite.frame=0
 					curState=STATES.SHOOTING
@@ -129,7 +129,16 @@ func _physics_process(delta):
 			is_reflecting=Globals.playerData.gameDifficulty > Globals.Difficulty.EASY
 			if stateProgress >=3:
 				is_reflecting=false
+				sprite.set_animation('idle')
+				
+				# Beginner = .4
+				# Easy = .3
+				# Medium = .2
+				# Hard and above = .1
+				cooldown = max(4 - Globals.playerData.gameDifficulty, 1)/10.0
+				#print(cooldown)
 				#print(randi()%2)
+				#stateProgress = 0
 				curState = STATES.RANDOMPICK
 			elif dashTime < .8 and (
 					((global_position/64-nearestRoomCorner).x < 17 and facing==DIRECTION.RIGHT)

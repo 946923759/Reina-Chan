@@ -1215,17 +1215,24 @@ func finishStage():
 	$VictorySound.connect("finished",self,"finishStage_2")
 	
 func finishStage_2():
-	$CanvasLayer/Fadeout.fadeOut()
-	yield($CanvasLayer/Fadeout/Fadeout_Tween,"tween_completed")
+
 	var nextScene = "ScreenItemGet"
 	CheckpointPlayerStats.lastPlayedStage = stageRoot.weapon_to_unlock
+	
+	var tween:SceneTreeTween
 	if Globals.playerData.availableWeapons[stageRoot.weapon_to_unlock]: #If this stage is already completed
 		nextScene="ScreenSelectStage"
-	Globals.playerData.availableWeapons[stageRoot.weapon_to_unlock]=true
-	print("Marking stage/item "+String(stageRoot.weapon_to_unlock)+" as cleared.")
+		tween = $CanvasLayer/TransitionOut.OnCommand()
+	else:
+		tween = $CanvasLayer/Fadeout.fadeOut()
+	
+		Globals.playerData.availableWeapons[stageRoot.weapon_to_unlock]=true
+		print("Marking stage/item "+String(stageRoot.weapon_to_unlock)+" as cleared.")
+	
 	Globals.save_player_game()
 	
-	Globals.change_screen(get_tree(),nextScene)
+	tween.tween_callback(Globals,"change_screen",[get_tree(),nextScene])
+	#Globals.change_screen(get_tree(),nextScene)
 	
 
 func healPlayer(amount):

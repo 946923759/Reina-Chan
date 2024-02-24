@@ -46,9 +46,9 @@ func OnCommand(character:int = 0):
 
 func OffCommand():
 	var t = get_tree().create_tween()
-	t.tween_property(self,"visible",true,0.0)
-	t.tween_property(fade,"modulate:a",0.0,.25/2)
-	t.tween_property($Node2D,"modulate:a",0.0,.25/2)
+	#t.tween_property(self,"visible",true,0.0)
+	t.tween_property(fade,"modulate:a", 0.0, .25) #.25/2
+	t.tween_property($Node2D,"modulate:a",0.0,.25/2).set_delay(.25/2)
 	t.tween_property(self,"visible",false,0.0)
 	#t.tween
 	return t
@@ -64,6 +64,7 @@ func _ready():
 			M.texture = m16_tex
 			P.texture = m16_tex
 		fade.modulate.a = 1.0
+		visible=true
 	#OnCommand()
 	pass
 	

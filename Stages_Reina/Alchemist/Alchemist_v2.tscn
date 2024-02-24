@@ -213,7 +213,6 @@ nsf_music_file = "Castlevania3_NES.nsf"
 custom_music_name_pt2 = "Alchemist2"
 nsf_music_file_pt2 = "DMG-CWJ.gbs"
 nsf_track_num_pt2 = 8
-mute_boss_music_in_debug = true
 weapon_to_unlock = 2
 debug_warp_points = [  ]
 

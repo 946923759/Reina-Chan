@@ -12,7 +12,7 @@
 [ext_resource path="res://Stages_Reina/Enemies/prowler.tscn" type="PackedScene" id=10]
 [ext_resource path="res://Stages_Reina/Enemies/Guardian/NotSniperJoe_Alt.tscn" type="PackedScene" id=11]
 [ext_resource path="res://Stages_Reina/Enemies/Jaguar.tscn" type="PackedScene" id=12]
-[ext_resource path="res://Stages_Reina/Enemies/SnakeHead.tscn" type="PackedScene" id=13]
+[ext_resource path="res://Stages_Reina/Enemies/Jaeger.tscn" type="PackedScene" id=13]
 [ext_resource path="res://Various Objects/CameraController/CameraAdjuster_v2_Vertical.tscn" type="PackedScene" id=14]
 [ext_resource path="res://Stages_Reina/Ouroboros/bg.png" type="Texture" id=15]
 [ext_resource path="res://Various Objects/CameraController/LadderCameraAdjuster.tscn" type="PackedScene" id=16]

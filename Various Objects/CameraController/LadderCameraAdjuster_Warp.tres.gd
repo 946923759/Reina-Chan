@@ -2,8 +2,8 @@
 extends Area2D
 signal camera_adjusted(camera,newBounds)
 
-export (float,-3,3,.5) var center_bound_offset = 0
-export (float) var tweenTime = 1;
+export (float,-3,3,.5) var center_bound_offset = 0.0
+export (float) var tweenTime = 1.0;
 export (bool) var freeze_player_during_transition=true
 export (bool) var only_if_on_ladder=false
 export (int,"Relative","Absolute") var warp_type = 0;

@@ -59,8 +59,15 @@ func enemy_touched_alt(obj,reflect):
 		reflected=true
 		#print(String(OS.get_ticks_msec())+" Bullet reflected!")
 		reflectSound.play()
-		if obj.has_method("add_collision_exception_with"):
-			obj.add_collision_exception_with(self)
+		#if obj.has_method("add_collision_exception_with"):
+		#	obj.add_collision_exception_with(self)
+		
+		# No reason not to do this, a reflected
+		# bullet should no longer affect the
+		# stage
+		collision_layer = 0
+		collision_mask = 0
+		
 		movement = Vector2(movement.x*-1,-10)
 		move_and_collide(movement)
 	else:

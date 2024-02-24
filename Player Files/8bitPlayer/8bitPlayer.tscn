@@ -565,10 +565,6 @@ texture = ExtResource( 26 )
 centered = false
 script = ExtResource( 27 )
 
-[node name="TransitionIn" parent="CanvasLayer" instance=ExtResource( 38 )]
-visible = false
-transition_type = 1
-
 [node name="TransitionOut" parent="CanvasLayer" instance=ExtResource( 38 )]
 visible = false
 
@@ -686,7 +682,6 @@ position = Vector2( 0, -32 )
 scale = Vector2( 4, 4 )
 texture = ExtResource( 36 )
 
-[connection signal="ready" from="." to="CanvasLayer/TransitionIn" method="OffCommand"]
 [connection signal="timeout" from="WeaponSwitch/TimeToShow" to="WeaponSwitch" method="_on_Timer_timeout"]
 [connection signal="unpaused" from="pauseLayer/PauseScreen" to="." method="_on_PauseScreen_unpaused"]
 [connection signal="unpaused" from="OptionsScreen" to="." method="_on_OptionsScreen_unpaused"]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://Character Sprites/ump9/ump9Idle.png" type="Texture" id=1]
 [ext_resource path="res://Stages/TestStage/Tileset.tres" type="TileSet" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://Character Sprites/m16/m16Idle.png" type="Texture" id=5]
 [ext_resource path="res://Various Objects/Special Blocks/EasyModeHelper.png" type="Texture" id=6]
 [ext_resource path="res://Various Objects/Special Blocks/EasyModeHelper_OneWay.png" type="Texture" id=7]
+[ext_resource path="res://Screens/_transition/transition.tscn" type="PackedScene" id=8]
 
 [sub_resource type="ConvexPolygonShape2D" id=2]
 points = PoolVector2Array( 16, 16, 0, 16, 0, 0, 16, 0 )
@@ -152,3 +153,10 @@ script = SubResource( 1 )
 charTextures = [ ExtResource( 1 ), ExtResource( 5 ) ]
 
 [node name="DebugWarpPoints" type="Node" parent="."]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="TransitionIn" parent="CanvasLayer" instance=ExtResource( 8 )]
+transition_type = 1
+
+[connection signal="ready" from="." to="CanvasLayer/TransitionIn" method="OffCommand"]

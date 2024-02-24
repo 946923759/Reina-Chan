@@ -14,7 +14,7 @@ var curState = 0
 #Testing
 #var bullet = preload("res://Stages_Reina/Enemies/nemeum homing shot.tscn")
 var bullet = preload("res://Stages_Reina/Enemies/bulletDinergate.tscn")
-const bulletSpeed:float = 13.0
+const bulletSpeed:float = 10.0
 const cooldown:float = 1.0
 
 var player:KinematicBody2D

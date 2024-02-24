@@ -69,7 +69,7 @@ var OPTIONS = {
 }
 
 enum Difficulty {
-	BEGINNER,
+	BEGINNER=0,
 	EASY,
 	MEDIUM,
 	HARD,
