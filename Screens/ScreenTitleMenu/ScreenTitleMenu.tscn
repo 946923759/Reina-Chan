@@ -497,12 +497,29 @@ func _ready():
 	\"\"\"
 	existing_children=get_child_count()
 	
+	
+	var thisSystem:int = 0
+	if OS.has_feature(\"pc\"):
+		thisSystem |= Globals.OPTION_FLAG.PC
+	elif OS.has_feature(\"console\"):
+		thisSystem |= Globals.OPTION_FLAG.CONSOLE
+	elif OS.has_feature(\"mobile\"):
+		thisSystem |= Globals.OPTION_FLAG.MOBILE
+	print(\"This device's capabilities are: \"+String(thisSystem))
+	
 	var i = 0
 	for option in Globals.OPTIONS:
 		
-		#Skip the fullscreen option on consoles
-		if OS.has_feature(\"console\") and option == \"isFullscreen\":
-			continue
+		if \"flag\" in Globals.OPTIONS[option]:
+			var flag = Globals.OPTIONS[option]['flag']
+			
+			#If any of the flags matched any of the capabilities of this system
+			if (flag & thisSystem) == 0:
+				continue
+			print(\"Option \"+option+\" matched capibilites \"+String(thisSystem))
+		##Skip the fullscreen option on consoles
+		#if OS.has_feature(\"console\") and option == \"isFullscreen\":
+		#	continue
 		
 		var optionItem = Node2D.new()
 		optionItem.name=\"Item\"+str(i)

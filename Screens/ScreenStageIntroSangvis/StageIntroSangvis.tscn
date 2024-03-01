@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://ubuntu-font-family/BitmapFont.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Various Objects/Item_BigHealth.png" type="Texture" id=2]
@@ -10,23 +10,31 @@
 [ext_resource path="res://Music/mm2wilymap.wav" type="AudioStream" id=8]
 [ext_resource path="res://ubuntu-font-family/JP_KR_font.tres" type="DynamicFont" id=9]
 [ext_resource path="res://Screens/ScreenStageIntroSangvis/44d43b7cc9d590f16c63a84d4accdca3.jpg" type="Texture" id=10]
+[ext_resource path="res://Screens/_transition/transition.tscn" type="PackedScene" id=11]
 
 [sub_resource type="GDScript" id=1]
 script/source = "extends Control
 
 export(int,0,4) var sangvis_stage_num = 0
+export(float,0,8) var delay_before_anim = 4.0
+export(float,0,8) var delay_after_anim = 4.0
 var go_to_stage:String = \"\"
 
+var timeout:float = 6.0
 func _ready():
-	VisualServer.canvas_item_set_z_index($ColorRect.get_canvas_item(),100)
+	VisualServer.canvas_item_set_z_index($ColorRect.get_canvas_item(),50)
+	VisualServer.canvas_item_set_z_index($Transition.get_canvas_item(),51)
+
 	var fadeTw = get_tree().create_tween()
 	fadeTw.tween_property($ColorRect,\"modulate:a\",0.0,.25)
 	
 	#var player_stg_num = sangvis_stage
-	if sangvis_stage_num == 0:
+	if Globals.previous_screen != \"\":
 		sangvis_stage_num = Globals.playerData.wilyStageNum
+		print(\"Not debugging screen\")
 	#else:
 	#	print(\"debug stg: \", sangvis_stage_num)
+	print(\"Got stg \"+String(sangvis_stage_num)+\"\")
 	
 	var i = 0
 	
@@ -54,14 +62,19 @@ func _ready():
 				if first:
 					res.set_delay(4.0)
 					first=false
+				
+				timeout+=.1
 
-var timeout:float = 8.0
+#var timeout:float = delay_before_anim+delay_after_anim+1
 func _process(delta):
 	$Label.text = String(timeout)
 	timeout-=delta
 	if timeout<=0:
+		set_process(false)
+		var t = $Transition.OnCommand()
+		yield(t,\"finished\")
 		get_tree().change_scene(go_to_stage)
-	elif timeout<=4:
+	elif timeout <= 2.0:
 		var n:Sprite = get_node(\"Node2D/stg\"+String(sangvis_stage_num)+\"icon\")
 		n.frame = int(timeout*6) % 2
 "
@@ -423,3 +436,5 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
 color = Color( 0, 0, 0, 1 )
+
+[node name="Transition" parent="." instance=ExtResource( 11 )]

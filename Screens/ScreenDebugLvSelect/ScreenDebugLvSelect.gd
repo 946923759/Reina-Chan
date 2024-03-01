@@ -26,8 +26,8 @@ func set_character(n):
 
 func _ready():
 	
-	reinaAudioPlayer=ReinaAudioPlayer.new(self)
-	reinaAudioPlayer.load_song("StageSelect","Mega Man 10 (recreated).nsf",8)
+	#reinaAudioPlayer=ReinaAudioPlayer.new(self)
+	#reinaAudioPlayer.load_song("StageSelect","Mega Man 10 (recreated).nsf",8)
 	
 	var font = load("res://ubuntu-font-family/FallbackPixelFont.tres")
 	stages = Globals.STAGES_REINA.keys()
@@ -97,3 +97,7 @@ func _input(event):
 			set_character(charSel-1)
 	GainFocusCommand(pos)
 
+#If Android back button pressed
+func _notification(what):
+	if what == MainLoop.NOTIFICATION_WM_GO_BACK_REQUEST:
+		Globals.change_screen(get_tree(),"ScreenTitleMenu")

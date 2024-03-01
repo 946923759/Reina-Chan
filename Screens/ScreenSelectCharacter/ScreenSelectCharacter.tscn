@@ -199,10 +199,9 @@ margin_bottom = 326.0
 text = "asdadasdasd"
 
 [node name="charName" type="Label" parent="."]
-margin_left = 376.0
-margin_top = 192.0
-margin_right = 900.0
-margin_bottom = 320.0
+anchor_right = 1.0
+margin_top = 202.0
+margin_bottom = 458.0
 rect_min_size = Vector2( 0, 128 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_constants/shadow_offset_x = 4

@@ -1,4 +1,4 @@
-[gd_resource type="SpriteFrames" load_steps=55 format=2]
+[gd_resource type="SpriteFrames" load_steps=56 format=2]
 
 [ext_resource path="res://Character Sprites/m16/m16shoot.png" type="Texture" id=1]
 [ext_resource path="res://Character Sprites/m16/m16fall.png" type="Texture" id=2]
@@ -11,6 +11,7 @@
 [ext_resource path="res://Character Sprites/m16/m16ladder.png" type="Texture" id=9]
 [ext_resource path="res://Character Sprites/m16/m16ladder_shoot.png" type="Texture" id=10]
 [ext_resource path="res://Character Sprites/m16/m16_grenade.png" type="Texture" id=11]
+[ext_resource path="res://Character Sprites/m16/m16_RagingDemon.png" type="Texture" id=12]
 
 [sub_resource type="AtlasTexture" id=29]
 atlas = ExtResource( 5 )
@@ -254,6 +255,11 @@ animations = [ {
 "frames": [ ExtResource( 10 ) ],
 "loop": false,
 "name": "LadderShoot",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 12 ) ],
+"loop": true,
+"name": "RagingDemon",
 "speed": 5.0
 }, {
 "frames": [ SubResource( 30 ), SubResource( 30 ), SubResource( 31 ), SubResource( 32 ), SubResource( 33 ), SubResource( 33 ), SubResource( 34 ), SubResource( 34 ), SubResource( 35 ), SubResource( 36 ), SubResource( 37 ), SubResource( 37 ) ],

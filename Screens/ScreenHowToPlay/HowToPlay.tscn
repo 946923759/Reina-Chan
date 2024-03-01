@@ -32,6 +32,15 @@ func input(_event):
 	$Keyboard.visible=(_event is InputEventKey)
 	$Controller.visible=(_event is InputEventJoypadButton)
 	#if _event is InputEventKey:
+
+
+func _on_HowToPlay_item_rect_changed():
+	#print(\"rect\")
+	var rect = get_viewport().get_visible_rect().size
+	print(rect)
+	$LabelHowToPlay.position_based_on_center(rect.x/2.0)
+	$Controller/LabelStart.position_based_on_center(rect.x/2.0)
+	$Controller/LabelSelect.position_based_on_center(rect.x/2.0)
 "
 
 [node name="HowToPlay" type="Control"]
@@ -40,10 +49,10 @@ anchor_bottom = 1.0
 script = SubResource( 1 )
 unlocked_abilities = 3
 
-[node name="BitmapSprite8" parent="." instance=ExtResource( 2 )]
+[node name="LabelHowToPlay" parent="." instance=ExtResource( 2 )]
 position = Vector2( 421.537, 24.476 )
 text = "how to play"
-wrap_at = 24
+wrap_at = 92233720368
 scale_by = 5
 
 [node name="Controller" type="Control" parent="."]
@@ -101,16 +110,16 @@ text = "alt shoot"
 wrap_at = 8
 scale_by = 4
 
-[node name="BitmapSprite6" parent="Controller" instance=ExtResource( 2 )]
+[node name="LabelStart" parent="Controller" instance=ExtResource( 2 )]
 position = Vector2( 332.876, 602.727 )
 text = "start: weapon screen"
-wrap_at = 24
+wrap_at = 92233720368
 scale_by = 4
 
-[node name="BitmapSprite7" parent="Controller" instance=ExtResource( 2 )]
+[node name="LabelSelect" parent="Controller" instance=ExtResource( 2 )]
 position = Vector2( 318.193, 653.45 )
 text = "select: STAGE OPTIONS"
-wrap_at = 24
+wrap_at = 92233720368
 scale_by = 4
 
 [node name="Keyboard" type="Control" parent="."]
@@ -203,3 +212,5 @@ position = Vector2( 208.44, 370.742 )
 text = "controls are on-screen."
 wrap_at = 24
 scale_by = 5
+
+[connection signal="item_rect_changed" from="." to="." method="_on_HowToPlay_item_rect_changed"]

@@ -14,7 +14,7 @@ func _ready():
 	get_tree().set_screen_stretch(SceneTree.STRETCH_MODE_2D,SceneTree.STRETCH_ASPECT_EXPAND,Vector2(1280,720))
 	#music_player.load_song(\"Credits\",\"Rockman 4MI.nsf\",104)
 	#load_song(custom_music_name:String, nsf_music_file:String, nsf_track_num:int,nsf_volume_adjustment:float=0):
-	music_player.load_song(\"Credits\",\"92.-Staff Roll - Kirby's Dreamland 3.spc\",0,6)
+	music_player.load_song(\"Credits\",\"sonic3k.nsf\",35,6)
 	#music_player.load_song(\"Credits\",\"Metroid.nsf\",11)
 	
 	

@@ -14,6 +14,14 @@ var playCutscenes = true
 var flipButtons = false
 #var textSpeed = 100
 
+enum OPTION_FLAG {
+	PC = 1
+	MOBILE = 2,
+	CONSOLE = 4,
+	
+	ALL = 7 #If not specified, will be this
+}
+
 var OPTIONS = {
 	"AudioVolume":{
 		"type":"int",
@@ -33,7 +41,7 @@ var OPTIONS = {
 	"isFullscreen":{
 		"type":"bool",
 		"default":false,
-		#pc_only=true #It's probably faster to just delete this one
+		"flag":OPTION_FLAG.PC
 	},
 	"language":{
 		"type":"list",
@@ -62,10 +70,11 @@ var OPTIONS = {
 		"type":"bool",
 		"default":true
 	},
-	#"Touchscreen":{
-	#	"type":"bool",
-	#	"default":(OS.has_feature("mobile"))
-	#}
+	"Touchscreen":{
+		"type":"bool",
+		"default":true,
+		"flag" : OPTION_FLAG.MOBILE
+	}
 }
 
 enum Difficulty {
@@ -661,7 +670,7 @@ var STAGES_REINA:Dictionary = {
 	"SF_1":"res://Stages_Reina/Sangvis1/StageSangvis1.tscn",
 	"SF_2":"res://Stages_Reina/Sangvis2/StageSangvis2.tscn",
 	"SF_3":"res://Stages_Reina/Sangvis3/Sangvis3.tscn",
-	"SF_4":"",
+	"SF_4":"res://Stages_Reina/Sangvis4/Sangvis4.tscn",
 	"Talk Hub":"res://Stages_Reina/StageTalkHub.tscn",
 	"TEST_STAGE":"res://Stages_Reina/TestStage.tscn",
 	"NSF_TEST":"res://Stages_Reina/TestStage_NSF/TestStage_NSF.tscn",

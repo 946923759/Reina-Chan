@@ -721,7 +721,6 @@ leftBound = 100
 topBound = -999
 rightBound = 120
 bottomBound = 36
-fade_out_and_warp_player = true
 destination_coordinates_if_warp = Vector2( 0, -8 )
 
 [node name="Door3" parent="." index="38" instance=ExtResource( 22 )]

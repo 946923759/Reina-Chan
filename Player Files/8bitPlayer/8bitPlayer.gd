@@ -1210,9 +1210,13 @@ func finishStage():
 	#THIS WILL CRASH THE GAME!!!!
 	#if is_instance_valid(Globals.nsf_player):
 	#	Globals.nsf_player.queue_free()
+	
 	$VictorySound.play()
 # warning-ignore:return_value_discarded
-	$VictorySound.connect("finished",self,"finishStage_2")
+	#$VictorySound.connect("finished",self,"finishStage_2")
+	
+	var timer = get_tree().create_timer(4.5)
+	timer.connect("timeout",self,"finishStage_2")
 	
 func finishStage_2():
 
@@ -1220,7 +1224,14 @@ func finishStage_2():
 	CheckpointPlayerStats.lastPlayedStage = stageRoot.weapon_to_unlock
 	
 	var tween:SceneTreeTween
-	if Globals.playerData.availableWeapons[stageRoot.weapon_to_unlock]: #If this stage is already completed
+	if stageRoot.wily_stage_num>0:
+		Globals.previous_screen = "StageSangvis"
+		nextScene="ScreenSangvisIntro"
+		#CheckpointPlayerStats.lastPlayedStage = Globals.Weapons.LENGTH_WEAPONS+stageRoot.wily_stage_num
+		Globals.playerData.wilyStageNum = stageRoot.wily_stage_num+1
+		tween = $CanvasLayer/Fadeout.fadeOut()
+		
+	elif Globals.playerData.availableWeapons[stageRoot.weapon_to_unlock]: #If this stage is already completed
 		nextScene="ScreenSelectStage"
 		tween = $CanvasLayer/TransitionOut.OnCommand()
 	else:
@@ -1257,7 +1268,7 @@ func giveExtraLife():
 		CheckpointPlayerStats.playerLivesLeft+=1
 	$OneUpSound.play()
 
-
+#Wouldn't this make more sense as a connection?
 func _on_OptionsScreen_unpaused():
 	stageRoot.update_easytiles()
 

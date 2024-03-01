@@ -31,9 +31,9 @@ var rText = [
 
 #warning-ignore:return_value_discarded
 func _ready():
-	if OS.is_debug_build():
-		Globals.change_screen(get_tree(),\"ScreenDebugSelect\")
-		return
+#	if OS.is_debug_build():
+#		Globals.change_screen(get_tree(),\"ScreenDebugSelect\")
+#		return
 	
 	var l = $Label
 	randomize()

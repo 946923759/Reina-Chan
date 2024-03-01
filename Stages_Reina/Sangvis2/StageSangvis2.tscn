@@ -21,6 +21,7 @@ func _process(delta):
 custom_music_name = "Elisa2"
 nsf_music_file = "Rockman 4MI.nsf"
 nsf_track_num = 88
+wily_stage_num = 2
 
 [node name="Background" type="Sprite" parent="." index="1"]
 position = Vector2( 0, 768 )
@@ -40,7 +41,7 @@ scale = Vector2( 4, 4 )
 texture = ExtResource( 3 )
 centered = false
 region_enabled = true
-region_rect = Rect2( 177.412, 0, 480, 16 )
+region_rect = Rect2( 216.036, 0, 480, 16 )
 script = SubResource( 1 )
 
 [node name="ScrollControl" type="Node" parent="." index="8"]

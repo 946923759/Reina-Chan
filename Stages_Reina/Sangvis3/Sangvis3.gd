@@ -18,4 +18,4 @@ func playBossMusic(isM16:bool=false):
 
 func stopMusic():
 	reinaAudioPlayer.stop_music()
-	$AudioStreamPlayer2.stop()
+	#$AudioStreamPlayer2.stop()

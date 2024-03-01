@@ -22,6 +22,7 @@ export (bool) var mute_boss_music_in_debug=false
 #export (bool) var completely_disable_music=false
 #var camera_multiplier = 16
 export (Globals.Weapons) var weapon_to_unlock=0
+export (int,0,4) var wily_stage_num=0
 
 #Why don't I just enumerate checkpoints?
 #Because the checkpoints aren't in order and adding them to a checkpoint
@@ -40,6 +41,7 @@ func _ready():
 	player = $PlayerHolder.player
 	
 	get_tree().set_screen_stretch(SceneTree.STRETCH_MODE_2D,SceneTree.STRETCH_ASPECT_KEEP,Vector2(1280,720))
+	$CanvasLayer.visible=true
 	
 	if $DebugWarpPoints.get_child_count()==0:
 		debug_warp_points=[Vector2(0,0)]
@@ -49,9 +51,7 @@ func _ready():
 			debug_warp_points.append(c.global_position)
 		
 	update_easytiles()
-	#else:
-	#	print("Diff: "+Globals.difficultyToString(Globals.playerData.gameDifficulty))
-	
+
 	#set_process(true)
 	if CheckpointPlayerStats.checkpointSet:
 		print("There is a checkpoint, not adjusting the camera.")

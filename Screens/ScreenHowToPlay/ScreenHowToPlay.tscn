@@ -10,6 +10,18 @@ func _input(event):
 	$HowToPlay.input(event)
 	
 	#._input(event)
+
+
+func _on_ScreenHowToPlay_gui_input(event):
+	#print(\"TAP!\")
+	if event is InputEventScreenTouch and event.pressed:
+		OffCommandNextScreen()
+
+
+func _on_Panel_gui_input(event):
+	#print(\"TAP!\")
+	if event is InputEventScreenTouch and event.pressed:
+		OffCommandNextScreen()
 "
 
 [node name="ScreenHowToPlay" instance=ExtResource( 1 )]
@@ -24,7 +36,11 @@ anchor_bottom = 1.0
 color = Color( 0, 0, 0, 1 )
 
 [node name="HowToPlay" parent="." index="1" instance=ExtResource( 2 )]
+mouse_filter = 2
 
 [node name="smScreenInOut" parent="." index="2"]
 timeToTweenIn = 0.25
 timeToTweenOut = 0.0
+
+[connection signal="gui_input" from="." to="." method="_on_ScreenHowToPlay_gui_input"]
+[connection signal="gui_input" from="Panel" to="." method="_on_Panel_gui_input"]
