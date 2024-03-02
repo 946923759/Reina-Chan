@@ -79,7 +79,7 @@ func update_portrait_positions(center:float):
 	if is_active:
 		position.x=portraitPositions[numPortraits-1][idx]
 
-func position_portrait(idx:int,isMasked:bool,_offset:int,numPortraits:int):
+func position_portrait(_idx:int,isMasked:bool,_offset:int,_numPortraits:int):
 	print("curPortrait is "+lastLoaded)
 	if _offset==null:
 		_offset=0
@@ -87,8 +87,8 @@ func position_portrait(idx:int,isMasked:bool,_offset:int,numPortraits:int):
 		_offset=_offset*100
 	
 	self._offset = _offset;
-	self.idx=idx; #Needed for dim/hl to function
-	self.numPortraits=numPortraits
+	self.idx=_idx; #Needed for dim/hl to function
+	self.numPortraits=_numPortraits
 	
 	
 	print("idx: "+String(idx)+" numPortraits: "+String(numPortraits)+ " offset: "+String(_offset))

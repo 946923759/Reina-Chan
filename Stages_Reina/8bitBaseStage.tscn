@@ -124,6 +124,7 @@ func _ready():
 script = ExtResource( 3 )
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+pause_mode = 2
 bus = "Music"
 
 [node name="TileMap" type="TileMap" parent="."]

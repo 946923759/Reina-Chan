@@ -300,9 +300,6 @@ texture = ExtResource( 2 )
 centered = false
 offset = Vector2( 0, 32 )
 
-[node name="AudioStreamPlayer" parent="." index="4"]
-pause_mode = 2
-
 [node name="Polygon2D" type="Polygon2D" parent="." index="5"]
 position = Vector2( 5120, 1536 )
 color = Color( 0.0196078, 0.0196078, 0.0196078, 1 )
@@ -438,7 +435,6 @@ automatically_set_x_bounds = false
 topBound = 24
 rightBound = 20
 bottomBound = -999
-facing = -1
 
 [node name="CameraAdjuster" parent="0-24 vs Alchemist Dummy" index="1" instance=ExtResource( 23 )]
 position = Vector2( 672, 736 )

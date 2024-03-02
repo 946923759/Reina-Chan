@@ -15,13 +15,14 @@ var flipButtons = false
 #var textSpeed = 100
 
 enum OPTION_FLAG {
-	PC = 1
-	MOBILE = 2,
-	CONSOLE = 4,
+	PC = 1       # Resolution options, quit game
+	MOBILE = 2,  # Touch screen usually, quit game
+	CONSOLE = 4, # No quit game button
 	
 	ALL = 7 #If not specified, will be this
 }
 
+#Access a value using OPTIONS[key]['value']
 var OPTIONS = {
 	"AudioVolume":{
 		"type":"int",

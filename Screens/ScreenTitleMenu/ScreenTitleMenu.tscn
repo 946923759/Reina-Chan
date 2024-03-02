@@ -499,11 +499,12 @@ func _ready():
 	
 	
 	var thisSystem:int = 0
+	# Android TV is both console and mobile so don't use elif
 	if OS.has_feature(\"pc\"):
 		thisSystem |= Globals.OPTION_FLAG.PC
-	elif OS.has_feature(\"console\"):
+	if OS.has_feature(\"console\"):
 		thisSystem |= Globals.OPTION_FLAG.CONSOLE
-	elif OS.has_feature(\"mobile\"):
+	if OS.has_feature(\"mobile\"):
 		thisSystem |= Globals.OPTION_FLAG.MOBILE
 	print(\"This device's capabilities are: \"+String(thisSystem))
 	
