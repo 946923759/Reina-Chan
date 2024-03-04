@@ -15,7 +15,7 @@
 [sub_resource type="GDScript" id=1]
 script/source = "extends Control
 
-export(int,0,4) var sangvis_stage_num = 0
+export(int,1,4) var sangvis_stage_num = 0
 export(float,0,8) var delay_before_anim = 4.0
 export(float,0,8) var delay_after_anim = 4.0
 var go_to_stage:String = \"\"
@@ -32,6 +32,7 @@ func _ready():
 	if Globals.previous_screen != \"\":
 		sangvis_stage_num = Globals.playerData.wilyStageNum
 		print(\"Not debugging screen\")
+	sangvis_stage_num = max(1,sangvis_stage_num)
 	#else:
 	#	print(\"debug stg: \", sangvis_stage_num)
 	print(\"Got stg \"+String(sangvis_stage_num)+\"\")
@@ -83,7 +84,6 @@ func _process(delta):
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = SubResource( 1 )
-sangvis_stage_num = 1
 
 [node name="Sprite2" type="TextureRect" parent="."]
 anchor_right = 1.0

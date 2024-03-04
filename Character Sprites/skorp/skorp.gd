@@ -11,6 +11,14 @@ export(int,"Towards Player","Left","Right") var facing=0
 export(String) var message_id = "Scarecrow1"
 
 export(int,"None","U","M","P","9","C","H","A","N") var unlocksEmblem = 0
+export(int,"None",
+	"Architect",
+	"Alchemist",
+	"Ouroboros",
+	"Scarecrow",
+	"???", "???", "???", "???",
+	"Clear And Fail",
+	"U (9A-91)", "M", "P", "9", "C", "H", "A", "N") var requiresUnlock = 0
 #export(int,"Unlocks","Requires") var unlocksOrRequires = 1
 
 var velocity:Vector2
@@ -22,6 +30,14 @@ onready var animPlayer:AnimationPlayer = $DustCloud/AnimationPlayer
 onready var sprite:AnimatedSprite = $AnimatedSprite
 
 func _ready():
+	if requiresUnlock > 0:
+		if requiresUnlock < 10:
+			self.visible = Globals.playerData.availableWeapons[requiresUnlock]
+		else:
+			self.visible = Globals.playerData.ReinaChanEmblems[requiresUnlock-10]
+		set_physics_process(self.visible)
+	
+	
 	$DustCloud/LeftC.modulate.a=0
 	$DustCloud/RightC.modulate.a=0
 	
@@ -45,6 +61,9 @@ func _physics_process(delta):
 		velocity.x = max(0,velocity.x-gravity*delta)
 	elif velocity.x < 0:
 		velocity.x = min(0,velocity.x+gravity*delta)
+	
+	#if visible==false:
+	#	return
 	
 	if spawnType==0 and disabled==false and is_on_floor():
 		if timer>.5:

@@ -46,6 +46,8 @@ func _ready():
 	$Sprite.region_rect.size.x=Globals.gameResolution.x
 	portraitFrame.position.x=Globals.SCREEN_CENTER_X
 	
+	if Globals.bitArrayToInt32(Globals.playerData.availableWeapons) < 31:
+		whatever[4][1]=\"d\"
 	
 	for i in range(whatever.size()):
 		var stage = whatever[i]
@@ -73,7 +75,7 @@ func _ready():
 	#var c = portraitFrame.get_child(2)
 	#print(c.position)
 	var bossesDefeated = Globals.bitArrayToInt32(Globals.playerData.availableWeapons)
-	if bossesDefeated > 1:
+	if bossesDefeated > 1: #1 is buster so check above 1
 		$Hub.visible=true
 	else:
 		$Hub.visible=false
@@ -160,6 +162,8 @@ func _input(event):
 
 func input_accept():
 	if selection==4: #SANGVIS_FERRI
+		
+		#This is checking if 5 bits are set, bit 1 is buster so it's always set
 		if Globals.bitArrayToInt32(Globals.playerData.availableWeapons) >= 31:
 			fade_to_next_screen(\"ScreenSangvisIntro\")
 			#Globals.nextStage=whatever[selection][2]

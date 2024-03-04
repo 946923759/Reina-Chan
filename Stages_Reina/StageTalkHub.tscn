@@ -28,9 +28,9 @@ func _ready():
 	p.get_node(\"CanvasLayer/bar\").visible=false
 
 
-	if !Globals.playerData.availableWeapons[Globals.Weapons.Ouroboros]:
-		get_node(\"NPC_T5000\").queue_free()
-		get_node(\"NPC_Ouroboros\").queue_free()
+	#if !Globals.playerData.availableWeapons[Globals.Weapons.Ouroboros]:
+	#	get_node(\"NPC_T5000\").queue_free()
+	#	get_node(\"NPC_Ouroboros\").queue_free()
 	
 	var n = Camera2D.new()
 	n.name=\"asodjasosdjoasjidoasjid\"
@@ -117,35 +117,42 @@ position = Vector2( 544, 640 )
 animToPlayIfNormal = "idle"
 facing = 1
 message_id = "TalkHub_Skorp"
+requiresUnlock = 4
 
 [node name="NPC_T5000" parent="." index="9" instance=ExtResource( 6 )]
 position = Vector2( 800, 640 )
 facing = 1
 message_id = "TalkHub_T5000"
+requiresUnlock = 3
 
 [node name="9a91" parent="." index="10" instance=ExtResource( 8 )]
 position = Vector2( 1056, 640 )
 facing = 1
 message_id = "TalkHub_9A91"
+requiresUnlock = 10
 
 [node name="NPC_Alchemist" parent="." index="11" instance=ExtResource( 10 )]
 position = Vector2( 1760, 640 )
 facing = 2
 message_id = "TalkHub_Alchemist"
+requiresUnlock = 2
 
 [node name="Architect" parent="." index="12" instance=ExtResource( 5 )]
 position = Vector2( 1504, 448 )
 facing = 2
 message_id = "TalkHub_Architect"
+requiresUnlock = 1
 
 [node name="NPC_Ouroboros" parent="." index="13" instance=ExtResource( 9 )]
 position = Vector2( 2016, 640 )
 facing = 2
 message_id = "TalkHub_Ouroboros"
+requiresUnlock = 3
 
 [node name="Scarecrow" parent="." index="14" instance=ExtResource( 11 )]
 position = Vector2( 2304, 448 )
 message_id = "TalkHub_Scarecrow"
+requiresUnlock = 4
 
 [node name="EventTile" parent="." index="15" instance=ExtResource( 12 )]
 position = Vector2( -32, 576 )
@@ -174,5 +181,8 @@ scale = Vector2( 1, 3.2 )
 texture = ExtResource( 14 )
 region_enabled = true
 region_rect = Rect2( 0, 0, 1280, 208 )
+
+[node name="CanvasLayer" parent="." index="16"]
+visible = false
 
 [connection signal="event_executed_passPlayer" from="EventTile" to="EventTile/CanvasLayer" method="_on_EventTile_event_executed_passPlayer"]
