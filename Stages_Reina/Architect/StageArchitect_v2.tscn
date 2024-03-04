@@ -179,7 +179,7 @@ tile_data = PoolIntArray( 786383, 0, 0, 786392, 0, 0, 786403, 0, 0, 786412, 0, 0
 tile_data = PoolIntArray( 589920, 0, 0, 2424994, 0, 0, 2424995, 0, 0, 2424996, 0, 0, 2424997, 0, 0, 2424998, 0, 0, 2424999, 0, 0, 2425000, 0, 0, 2425001, 0, 0, 2425002, 0, 0, 2425003, 0, 0, 2425004, 0, 0, 2425009, 0, 0, 2425010, 0, 0, 2425011, 0, 0, 2425012, 0, 0, 2425013, 0, 0, 2425014, 0, 0, 2425015, 0, 0, 2425016, 0, 0, 2425017, 0, 0, 2425018, 0, 0, 2425019, 0, 0, 2425020, 0, 0, 2425030, 0, 0, 2425031, 0, 0, 2425032, 0, 0, 2425033, 0, 0, 2425034, 0, 0, 2425035, 0, 0, 2425036, 0, 0, 2425037, 0, 0, 2425038, 0, 0, 2425039, 0, 0, 2425040, 0, 0 )
 
 [node name="PlayerHolder" parent="." index="7"]
-position = Vector2( 224, 512 )
+position = Vector2( 5215, 542 )
 
 [node name="room0-0 to 20-0" type="Node2D" parent="." index="8"]
 
@@ -317,7 +317,7 @@ no_movement = false
 
 [node name="room80-0 to 100-0" type="Node2D" parent="." index="14"]
 
-[node name="Node2D" parent="room80-0 to 100-0" index="0" instance=ExtResource( 5 )]
+[node name="Jupiter Laser 4" parent="room80-0 to 100-0" index="0" instance=ExtResource( 5 )]
 position = Vector2( 5504, 576 )
 
 [node name="Jupiter Laser" parent="room80-0 to 100-0" index="1" instance=ExtResource( 5 )]
@@ -756,5 +756,8 @@ position = Vector2( 12992, 832 )
 
 [node name="Position2D3" type="Position2D" parent="DebugWarpPoints" index="2"]
 position = Vector2( 14416, 1296 )
+
+[node name="CanvasLayer" parent="." index="36"]
+visible = false
 
 [connection signal="event_executed" from="bonusRoom/EventTileB" to="bonusRoom/EventTileB/BlockEnablerDisabler" method="execute"]

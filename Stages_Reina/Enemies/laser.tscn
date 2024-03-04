@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Sounds/Classic/S3K_DeathEggLaser2.wav" type="AudioStream" id=1]
 [ext_resource path="res://Stages_Reina/Enemies/Jupiter_Assets/jupiter_1.png" type="Texture" id=2]
@@ -14,7 +14,9 @@ export (float) var initial_cooldown = 0.0
 onready var sprite = $AnimatedSprite
 
 func _ready():
+	$DrawTransparent.modulate.a = 0.0
 	sprite.visible=false
+	self.connect(\"body_entered\",self,\"_on_Jupiter_Laser_body_entered\")
 
 func _process(delta):
 	
@@ -23,16 +25,20 @@ func _process(delta):
 		return
 	
 	timer+=delta
-	if monitoring and timer > 1:
-		monitoring = !monitoring
+	if monitoring and timer > 1: #Turn off laser after 1 sec
+		monitoring = false
 		sprite.visible=false
-	elif timer > 3:
-		monitoring = !monitoring
+	elif timer > 3: #At 3 secs, turn on laser, reset timer to 0 secs
+		$DrawTransparent.modulate.a = 0.0
+		monitoring = true
 		timer=0
 		$Sound.play()
 		sprite.visible=true
 		sprite.frame=0
 		sprite.play()
+	elif timer > 2.5: #Range of 2.5 to 3
+		$DrawTransparent.modulate.a = timer-2.5
+		pass
 
 func _on_Jupiter_Laser_body_entered(body):
 	if body.has_method(\"player_touched\"):
@@ -49,6 +55,17 @@ animations = [ {
 
 [sub_resource type="RectangleShape2D" id=3]
 extents = Vector2( 64, 512 )
+
+[sub_resource type="GDScript" id=4]
+script/source = "extends Node2D
+
+#Taken from CollisionShape2D
+#const rect_size:Vector2 = Vector2(64,512)
+const rect = Rect2(-128,-512*2,128,512*2)
+
+func _draw():
+	draw_rect(rect,Color.fuchsia,true)
+"
 
 [node name="Jupiter Laser" type="Area2D"]
 script = SubResource( 1 )
@@ -73,4 +90,5 @@ position = Vector2( -192, 0 )
 rect = Rect2( 0, -10, 256, 20 )
 process_parent = true
 
-[connection signal="body_entered" from="." to="." method="_on_Jupiter_Laser_body_entered"]
+[node name="DrawTransparent" type="Node2D" parent="."]
+script = SubResource( 4 )
