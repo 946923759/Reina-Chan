@@ -16,6 +16,6 @@ func playBossMusic(isM16:bool=false):
 	else:
 		reinaAudioPlayer.load_song("Elisa3 - M16 vs M16","Cannonball.nsf",0)
 
-func stopMusic():
-	reinaAudioPlayer.stop_music()
-	#$AudioStreamPlayer2.stop()
+#func stopMusic():
+#	reinaAudioPlayer.stop_music()
+#	#$AudioStreamPlayer2.stop()

@@ -33,9 +33,9 @@ R4MI
 96 - Wily Boss again
 100 - Escape!
 101 - Ending 1
-102 - Ending cutscene 
-103 - Ending 2
-104 - Ending 3
+102 - Ending cutscene (Kirby Ending Jingle)
+103 - Ending 2 (Fire Emblem Theme)
+104 - Ending 3 (Kirby Super Star Staff Roll Theme)
 105 - Ending 4 (Rockman World V)
 106 - Extras Menu
 107 - The Arena (Fire Field from F-Zero Climax)
@@ -77,3 +77,4 @@ DMG-CWJ
 Kirby
 20 - Arena Menu
 39 - Death
+

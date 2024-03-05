@@ -165,8 +165,10 @@ func _ready():
 
 func _process(delta):
 	grenadeThrower.update(delta);
-	if hasGrenadeAbility and currentWeapon==0 and !grenadeThrower.isReadyToThrow():
-		HPBar.show_weapon(true,grenadeThrower.getCooldownPercent())
+	if hasGrenadeAbility and currentWeapon==0:
+		var p = grenadeThrower.getCooldownPercent()
+		if p < 1.0:
+			HPBar.show_weapon(true,p)
 	#Not really necessary when we can just not make stages that use the left side
 #	var onscreen_pos = stageRoot.position + position + stageRoot.get_canvas_transform().origin
 #	if onscreen_pos.x < 150:
@@ -667,7 +669,7 @@ func throwGrenade() -> void:
 	if state == State.ON_LADDER:
 		nadePosition = position + Vector2(20 * spriteOrientation, -20)
 	
-	var grenadeInstance = grenadeThrower.tryThrowGrenade(nadePosition, spriteOrientation);
+	var grenadeInstance = grenadeThrower.tryThrowGrenade(nadePosition, spriteOrientation, rapidFire);
 	if (grenadeInstance != null):
 		shoot_time = 0
 		if Globals.playerData.gameDifficulty > Globals.Difficulty.EASY:
@@ -1215,8 +1217,8 @@ func finishStage():
 # warning-ignore:return_value_discarded
 	#$VictorySound.connect("finished",self,"finishStage_2")
 	
-	var timer = get_tree().create_timer(4.5)
-	timer.connect("timeout",self,"finishStage_2")
+	var timer_ = get_tree().create_timer(4.5)
+	timer_.connect("timeout",self,"finishStage_2")
 	
 func finishStage_2():
 
@@ -1224,7 +1226,11 @@ func finishStage_2():
 	CheckpointPlayerStats.lastPlayedStage = stageRoot.weapon_to_unlock
 	
 	var tween:SceneTreeTween
-	if stageRoot.wily_stage_num>0:
+	if stageRoot.wily_stage_num >= 4:
+		Globals.previous_screen = "StageSangvis"
+		nextScene="ScreenCredits"
+		tween = $CanvasLayer/Fadeout.fadeOut()
+	elif stageRoot.wily_stage_num>0:
 		Globals.previous_screen = "StageSangvis"
 		nextScene="ScreenSangvisIntro"
 		#CheckpointPlayerStats.lastPlayedStage = Globals.Weapons.LENGTH_WEAPONS+stageRoot.wily_stage_num

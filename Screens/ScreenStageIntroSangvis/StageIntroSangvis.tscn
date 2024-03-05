@@ -28,6 +28,8 @@ func _ready():
 	var fadeTw = get_tree().create_tween()
 	fadeTw.tween_property($ColorRect,\"modulate:a\",0.0,.25)
 	
+	CheckpointPlayerStats.clearEverything()
+	
 	#var player_stg_num = sangvis_stage
 	if Globals.previous_screen != \"\":
 		sangvis_stage_num = Globals.playerData.wilyStageNum
