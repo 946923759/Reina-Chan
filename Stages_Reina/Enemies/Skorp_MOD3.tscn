@@ -17,22 +17,6 @@
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 128, 84 )
 
-[sub_resource type="AtlasTexture" id=2]
-atlas = ExtResource( 2 )
-region = Rect2( 0, 0, 86, 86 )
-
-[sub_resource type="AtlasTexture" id=3]
-atlas = ExtResource( 2 )
-region = Rect2( 86, 0, 86, 86 )
-
-[sub_resource type="AtlasTexture" id=4]
-atlas = ExtResource( 2 )
-region = Rect2( 172, 0, 86, 86 )
-
-[sub_resource type="AtlasTexture" id=5]
-atlas = ExtResource( 2 )
-region = Rect2( 258, 0, 86, 86 )
-
 [sub_resource type="AtlasTexture" id=15]
 atlas = ExtResource( 12 )
 region = Rect2( 86, 86, 86, 86 )
@@ -48,6 +32,38 @@ region = Rect2( 0, 172, 86, 86 )
 [sub_resource type="AtlasTexture" id=18]
 atlas = ExtResource( 12 )
 region = Rect2( 172, 86, 86, 86 )
+
+[sub_resource type="AtlasTexture" id=11]
+atlas = ExtResource( 12 )
+region = Rect2( 86, 172, 86, 86 )
+
+[sub_resource type="AtlasTexture" id=12]
+atlas = ExtResource( 12 )
+region = Rect2( 0, 0, 86, 86 )
+
+[sub_resource type="AtlasTexture" id=13]
+atlas = ExtResource( 12 )
+region = Rect2( 86, 0, 86, 86 )
+
+[sub_resource type="AtlasTexture" id=14]
+atlas = ExtResource( 12 )
+region = Rect2( 172, 0, 86, 86 )
+
+[sub_resource type="AtlasTexture" id=2]
+atlas = ExtResource( 2 )
+region = Rect2( 0, 0, 86, 86 )
+
+[sub_resource type="AtlasTexture" id=3]
+atlas = ExtResource( 2 )
+region = Rect2( 86, 0, 86, 86 )
+
+[sub_resource type="AtlasTexture" id=4]
+atlas = ExtResource( 2 )
+region = Rect2( 172, 0, 86, 86 )
+
+[sub_resource type="AtlasTexture" id=5]
+atlas = ExtResource( 2 )
+region = Rect2( 258, 0, 86, 86 )
 
 [sub_resource type="AtlasTexture" id=7]
 atlas = ExtResource( 3 )
@@ -69,33 +85,22 @@ region = Rect2( 0, 86, 86, 86 )
 atlas = ExtResource( 3 )
 region = Rect2( 172, 86, 86, 86 )
 
-[sub_resource type="AtlasTexture" id=11]
-atlas = ExtResource( 12 )
-region = Rect2( 86, 172, 86, 86 )
-
-[sub_resource type="AtlasTexture" id=12]
-atlas = ExtResource( 12 )
-region = Rect2( 0, 0, 86, 86 )
-
-[sub_resource type="AtlasTexture" id=13]
-atlas = ExtResource( 12 )
-region = Rect2( 86, 0, 86, 86 )
-
-[sub_resource type="AtlasTexture" id=14]
-atlas = ExtResource( 12 )
-region = Rect2( 172, 0, 86, 86 )
-
 [sub_resource type="SpriteFrames" id=19]
 animations = [ {
-"frames": [ SubResource( 2 ), SubResource( 3 ), SubResource( 4 ), SubResource( 5 ), SubResource( 4 ), SubResource( 3 ) ],
-"loop": true,
-"name": "default",
-"speed": 7.0
-}, {
 "frames": [ SubResource( 15 ), SubResource( 16 ), SubResource( 17 ), SubResource( 18 ) ],
 "loop": false,
 "name": "ThrowFinish",
 "speed": 15.0
+}, {
+"frames": [ SubResource( 11 ), SubResource( 12 ), SubResource( 13 ), SubResource( 14 ) ],
+"loop": false,
+"name": "ThrowReady",
+"speed": 15.0
+}, {
+"frames": [ SubResource( 2 ), SubResource( 3 ), SubResource( 4 ), SubResource( 5 ), SubResource( 4 ), SubResource( 3 ) ],
+"loop": true,
+"name": "default",
+"speed": 7.0
 }, {
 "frames": [ SubResource( 7 ), SubResource( 8 ), SubResource( 9 ), SubResource( 10 ), SubResource( 10 ), SubResource( 10 ) ],
 "loop": false,
@@ -106,11 +111,6 @@ animations = [ {
 "loop": false,
 "name": "jump",
 "speed": 1.0
-}, {
-"frames": [ SubResource( 11 ), SubResource( 12 ), SubResource( 13 ), SubResource( 14 ) ],
-"loop": false,
-"name": "ThrowReady",
-"speed": 15.0
 } ]
 
 [sub_resource type="GDScript" id=20]
@@ -225,6 +225,7 @@ facing = 1
 shapeOverride = SubResource( 1 )
 collisionOffset = Vector2( 0, 64 )
 use_large_explosion = true
+ceiling_pos_to_spawn_rocks = 0
 
 [node name="AnimatedSprite" parent="." index="0"]
 frames = SubResource( 19 )
@@ -283,6 +284,7 @@ anim_offset_random = 1.0
 [node name="FireArea2D1" type="Area2D" parent="." index="9"]
 visible = false
 position = Vector2( 241.227, 124.359 )
+monitorable = false
 __meta__ = {
 "_edit_group_": true
 }
@@ -292,6 +294,7 @@ shape = SubResource( 25 )
 
 [node name="FireArea2D2" type="Area2D" parent="." index="10"]
 position = Vector2( 332, 129.405 )
+monitorable = false
 __meta__ = {
 "_edit_group_": true
 }

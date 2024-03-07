@@ -1,9 +1,8 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://Stages/gridDisplay.png" type="Texture" id=2]
 [ext_resource path="res://Stages/TestStage/Tileset.tres" type="TileSet" id=3]
 [ext_resource path="res://Player Files/OLD_Zero/Player.tscn" type="PackedScene" id=4]
-[ext_resource path="res://Stages/TestStage/8886.jpg" type="Texture" id=5]
 [ext_resource path="res://Stages/TestStage/TreesParallaxBG.png" type="Texture" id=6]
 [ext_resource path="res://Stages/TestStage/TestEnemy.tscn" type="PackedScene" id=7]
 [ext_resource path="res://Stages/NeedleManDemo/EnemyNeedle/Enemy.tscn" type="PackedScene" id=8]
@@ -69,7 +68,6 @@ motion_scale = Vector2( 0.5, 0.5 )
 motion_mirroring = Vector2( 1280, 720 )
 
 [node name="Sprite" type="Sprite" parent="ParallaxBackground/ParallaxLayer"]
-texture = ExtResource( 5 )
 centered = false
 region_enabled = true
 region_rect = Rect2( 0, 0, 1280, 720 )

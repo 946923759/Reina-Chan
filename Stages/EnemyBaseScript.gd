@@ -4,8 +4,11 @@ signal enemy_killed
 #export(int) var maxHealth;
 export(int, 1, 50) var maxHealth = 10
 var curHealth;
+
+# is_reflecting is handled by the weapon, not the enemy
 # warning-ignore:unused_class_variable
 var is_reflecting = false;
+
 #-1 to move left, 1 to move right
 enum DIRECTION {LEFT = -1, RIGHT = 1}
 export(DIRECTION) var facing = DIRECTION.LEFT

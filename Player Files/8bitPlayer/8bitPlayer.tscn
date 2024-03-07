@@ -292,7 +292,8 @@ func _ready():
 # it's on the exact frame...
 func enemy_touched(obj):
 	obj = obj.get_parent()
-	enemy_touched_alt(obj,obj.get(\"is_reflecting\") == true)
+	#The claw dash should go through shields.
+	enemy_touched_alt(obj,false) #obj.get(\"is_reflecting\") == true
 
 #Because I clearly don't know what I'm doing
 func enemy_touched_alt(obj,reflect):
