@@ -842,7 +842,7 @@ scale_by = 3
 
 [node name="VersionNum" parent="logoHolder" instance=ExtResource( 12 )]
 position = Vector2( 10, 10 )
-text = "v.2024.02.23"
+text = "v.2024.03.09"
 wrap_at = 92233720368
 scale_by = 3
 

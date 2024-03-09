@@ -22,6 +22,7 @@ var go_to_stage:String = \"\"
 
 var timeout:float = 6.0
 func _ready():
+	$Label.visible = OS.is_debug_build()
 	VisualServer.canvas_item_set_z_index($ColorRect.get_canvas_item(),50)
 	VisualServer.canvas_item_set_z_index($Transition.get_canvas_item(),51)
 
