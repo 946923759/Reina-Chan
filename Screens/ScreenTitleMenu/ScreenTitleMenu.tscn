@@ -215,6 +215,7 @@ var extras_table = {
 
 #BECAUSE IT'S NOT GODOT 4.0 YET AND I CAN'T PUT FUNCTIONS INSIDE DICTS
 func action_Jukebox():
+	Globals.change_screen(get_tree(),\"ScreenJukebox\")
 	pass
 func action_TestStage():
 	get_tree().change_scene(\"res://Stages_Reina/TestStage.tscn\");

@@ -1,0 +1,19 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://ubuntu-font-family/BitmapFont.tscn" type="PackedScene" id=2]
+
+[node name="SelectSongSmallScroller" type="Node2D"]
+position = Vector2( 0, 80 )
+
+[node name="s1" parent="." instance=ExtResource( 2 )]
+modulate = Color( 0, 0.870588, 1, 1 )
+text = "heaven or hell? Let's rock!  heaven or hell? Let's rock!  heaven or hell? Let's rock!  "
+wrap_at = 500
+scale_by = 4
+
+[node name="s2" parent="." instance=ExtResource( 2 )]
+modulate = Color( 0, 0.870588, 1, 1 )
+position = Vector2( 2314, 0 )
+text = "heaven or hell? Let's rock!  heaven or hell? Let's rock!  heaven or hell? Let's rock!  "
+wrap_at = 500
+scale_by = 4

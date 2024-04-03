@@ -82,7 +82,7 @@ onready var shotTimer = $ShotTimer
 onready var eventCheck = $EventCheck
 
 #Cutscenes
-var gf_cutscene = preload("res://Screens/ScreenCutscene/CutsceneInGame.tscn")
+var gf_cutscene = preload("res://Screens/ScreenCutsceneMMZ/CutsceneInGame.tscn")
 
 #debug
 var freeRoam = false

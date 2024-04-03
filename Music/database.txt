@@ -1,0 +1,46 @@
+--NSF AUDIO
+MICOM logo	CAPCOM jingle		CAPCOM	opening.wav	-1
+Title Screen	Title	Mega Man 2	CAPCOM	MM2.nsf	1
+Select Character	Opening II	Mega Man 4	CAPCOM	CharSelect.ogg	-1
+Stage Select	Stage Select	Mega Man 10	CAPCOM sequenced by Mathew Valente	Mega Man 10 (recreated).nsf	8
+Stage Intro	Stage Intro	Atlantis no Nazo	SUNSOFT sequenced by puresabe	Rockman 4MI.nsf	84
+Architect	Brightman Stage	Rockman 4 Minus Infinity	NINTENDO sequenced by puresabe	Rockman 4MI.nsf	0
+Alchemist 1	Opening	Castlevania III: Dracula's Curse	KONAMI SOUND TEAM	Castlevania3_FDS_testfix.nsf	0
+Alchemist 2	New Messiah	Castlevania II GB: Belmont's Revenge	Konami Kukeiha Club	DMG-CWJ.gbs	8
+Ouroboros	Esperanto	Mega Man Zero 4	CAPCOM sequenced by IKA	RNC.nsf	6
+Scarecrow	Palace 1	Zelda II	Nintendo sequenced by IKA	Rockman 6 UH.nsf	11
+Boss	Battle Against Myself	Mega Man Battle Network 4	CAPCOM sequenced by TATSU	Rockman 6 UH.nsf	30
+Weapon Get	Weapon Get	Mega Man 10	CAPCOM sequenced by Mathew Valente	Mega Man 10 (recreated).nsf	20
+Talk Hub	File Select	Sonic the Hedgehog 3	Doug Grigsby, Cirocco Jones, Brad Buxer sequenced by danooct1	sonic3k.nsf	2
+Sangvis 1	Wily's Castle 1 VRC6 Remix	Mega Man 2	CAPCOM remixed by danooct1	mm2wily1.nsf	0
+Sangvis 2	Overheat	Gradius II	KONAMI sequenced by puresabe	Rockman 4MI.nsf	88
+Sangvis 3	Tracking	Hokkaidou Rensa Satsujin - Okhotsk ni Shoyu	loginsoft sequenced by puresabe	Rockman 4MI.nsf	22
+UMP9 vs M16	Division By Zero	Mega Man Unlimited	Kevin Phetsomphou sequenced by ???	Mega Man Unlimited - Division by Zero.nsf	0
+M16 vs M16	Cannonball	Mega Man Zero 3	CAPCOM sequenced by ???	Cannonball.nsf	0
+Sangvis 4	Intro Stage	Mega Man X2	CAPCOM sequenced by IKA	RNC.nsf	11
+Test Stage	Zena Lan's Stage Fully Armored	Cosmic Carnage	Hikoshi Hashimoto	test.vgm	0
+Final Boss	Final Stage	Doraemon Taiketsu Himitsu Dougu!!	??? sequenced by puresabe	Rockman 4MI.nsf	69
+Credits	Sonic 3 Credits	Sonic The Hedgehog 3	Doug Grigsby, Cirocco Jones, Brad Buxer, Michael Jackson sequenced by danooct1	sonic3k.nsf	35
+
+--CD AUDIO
+Title Screen	Y2064	Girls' Frontline	Vanguard Sound	TitleScreen
+Select Character	INITIALIZE	Girls' Frontline	Vanguard Sound	CharSelect
+Stage Select	HORIZON	Girls' Frontline	Vanguard Sound	StageSelect
+Stage Intro	Stage Intro	Melty Blood Actress Again	French Bread	StageIntro
+Architect	Departure -Mythos Version-	Inti Creates and CAPCOM	Architect
+Alchemist 1	Bloodlines	Castlevania: Rondo of Blood	KONAMI	Alchemist1
+Alchemist 2	Bloody Tears	Castlevania: Rondo of Blood	KONAMI	Alchemist2
+Ouroboros	Stage 1	Espgaluda II BLACK LABEL	Manabu Namiki, Mitsuhiro Kaneda, Ryu Umemoto, N.T	Ouroboros
+Scarecrow	Stage 6	Espgaluda II BLACK LABEL	Manabu Namiki, Mitsuhiro Kaneda, Ryu Umemoto, N.T	Scarecrow
+Boss	MADE IN HEAVEN	Girls' Frontline	Vanguard Sound	Boss
+Weapon Get	Random Variable	Girls' Frontline	Vanguard Sound	ItemGet
+Talk Hub	Cafe' de Springfield	Girls' Frontline	Vanguard Sound	DollLobby
+Sangvis 1	Shattered Connexion 1	Girls' Frontline	Vanguard Sound	Elisa1
+Sangvis 2	Structures	Punishing Gray Raven	Vanguard Sound	Elisa2
+Sangvis 3	LAMIA Full Version	Punishing Gray Raven	Vanguard Sound	Elisa3_Stage
+UMP9 vs M16	X vs Zero	Mega Man X5	CAPCOM	Elisa3 - UMP9 vs M16
+M16 vs M16	Cannonball -Mythos Version-	Remastered Tracks: Rockaman Zero Mythos	Inti Creates	Elisa3 - M16 vs M16
+Sangvis 4	Dual Randomness 1	Girls' Frontline	Vanguard Sound	Elisa4
+Test Stage	Adaptive Algorithm	Girls' Frontline	Vanguard Sound	TestRoom
+Final Boss	HIKARI	Punishing Gray Raven	Vanguard Sound	FinalBoss
+Credits	CUTY	Girls' Frontline	Vanguard Sound	Credits

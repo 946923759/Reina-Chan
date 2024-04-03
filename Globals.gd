@@ -372,6 +372,7 @@ func load_stage_cutscenes()->bool:
 			if OS.has_feature("standalone"):
 				path = OS.get_executable_path().get_base_dir()+"/GameData/Cutscene/"
 				#break
+	#"stage_cutscenes_oldSyntax.txt"
 	var ok = f.open(path+"stage_cutscenes_oldSyntax.txt", File.READ)
 	if ok != OK:
 		printerr("Couldn't open the stage cutscenes! Ya done fucked it up! ERROR ", ok)
@@ -415,6 +416,7 @@ func get_stage_cutscene(key:String):
 		if key+"_M16" in stage_cutscene_data:
 			return stage_cutscene_data[key+"_M16"]
 	if !(key in stage_cutscene_data): #Search for normal cutscene
+		printerr("Tried to load cutscene "+key+" which does not exist")
 		return stage_cutscene_data['error']
 	return stage_cutscene_data[key] #If we got here there is a cutscene, return it
 
@@ -462,10 +464,13 @@ func _ready():
 	print("Game resolution: "+String(gameResolution))
 	
 	
-	if OS.has_feature("standalone"):
+	if OS.has_feature("web"):
+		NSF_location = "GameData/Music/"
+	elif OS.has_feature("standalone"):
 		NSF_location = OS.get_executable_path().get_base_dir()+"/GameData/Music/"
 	else:
 		NSF_location = "res://Music/"
+	print(NSF_location)
 	
 	playerHadSystemData = load_system_data()
 	if playerHadSystemData:
@@ -652,6 +657,7 @@ var SCREENS:Dictionary = {
 	"CutsceneFromFile":"res://Screens/ScreenCutscene/CutsceneFromFile.tscn",
 	"CutsceneDemoEnd":"res://Screens/ScreenCutscene/cutsceneWhatever.tscn",
 	"ScreenCredits":"res://Screens/Credits.tscn",
+	"ScreenJukebox":"res://Screens/ScreenJukebox/ScreenJukebox.tscn",
 	
 	"ScreenDebugSelect":"res://Screens/ScreenDebugLvSelect/ScreenDebugLvSelect.tscn",
 	

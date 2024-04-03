@@ -1,0 +1,16 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://ubuntu-font-family/BitmapFont.tscn" type="PackedScene" id=2]
+
+[node name="SelectSongScroller" type="Node2D"]
+modulate = Color( 0, 0.741176, 1, 1 )
+position = Vector2( 0, 10 )
+
+[node name="s1" parent="." instance=ExtResource( 2 )]
+text = "select a song  select a song  select a song  "
+wrap_at = 500
+
+[node name="s2" parent="." instance=ExtResource( 2 )]
+position = Vector2( 2499, 0 )
+text = "select a song  select a song  select a song  "
+wrap_at = 500

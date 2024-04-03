@@ -1,0 +1,43 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Screens/ScreenCutsceneMMZ/CutsceneInGame.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Screens/ScreenCutsceneMMZ/CutsceneMMZ Debugger.gd" type="Script" id=2]
+
+[node name="Debugger" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 2 )
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -134.0
+margin_top = -176.0
+margin_right = 134.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="GridContainer" type="GridContainer" parent="PanelContainer"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 261.0
+margin_bottom = 169.0
+
+[node name="ItemList" type="ItemList" parent="PanelContainer/GridContainer"]
+margin_right = 254.0
+margin_bottom = 138.0
+size_flags_vertical = 3
+
+[node name="RunDialogScript" type="Button" parent="PanelContainer/GridContainer"]
+margin_top = 142.0
+margin_right = 254.0
+margin_bottom = 162.0
+size_flags_horizontal = 3
+text = "Run!"
+
+[node name="CutscenePlayer" parent="." instance=ExtResource( 1 )]
+
+[connection signal="pressed" from="PanelContainer/GridContainer/RunDialogScript" to="." method="_on_RunDialogScript_pressed"]

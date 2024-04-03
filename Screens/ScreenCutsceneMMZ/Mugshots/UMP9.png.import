@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/test2.png-a7ca0abda8bfc71e8aea6bfd607d41dd.stex"
+path="res://.import/UMP9.png-68e8188723b7cfc1b32d113e030fdc8a.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Screens/ScreenCutscene/Mugshots/test2.png"
-dest_files=[ "res://.import/test2.png-a7ca0abda8bfc71e8aea6bfd607d41dd.stex" ]
+source_file="res://Screens/ScreenCutsceneMMZ/Mugshots/UMP9.png"
+dest_files=[ "res://.import/UMP9.png-68e8188723b7cfc1b32d113e030fdc8a.stex" ]
 
 [params]
 

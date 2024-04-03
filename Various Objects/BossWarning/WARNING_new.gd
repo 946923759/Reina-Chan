@@ -2,7 +2,7 @@ extends Node2D
 #extends "res://Various Objects/EventTile_Message.tres.gd"
 
 onready var sprite = $CanvasLayer/Sprite
-#var gf_cutscene = preload("res://Screens/ScreenCutscene/CutsceneInGame.tscn")
+#var gf_cutscene = preload("res://Screens/ScreenCutsceneMMZ/CutsceneInGame.tscn")
 var gf_cutscene = preload("res://Screens/ScreenCutscene/CutsceneMain.tscn")
 
 
@@ -100,6 +100,7 @@ func part1():
 	#func init_(message, parent,delim="|",msgColumn:int=1):
 	
 	print("Playing boss cutscene!")
+	#Old cutscene format
 	newCutscene.init_(
 		Globals.get_stage_cutscene(message_id),
 		playerObj,
@@ -108,6 +109,14 @@ func part1():
 		"\t",
 		Globals.stage_cutscene_data['msgColumn']
 	)
+
+	#NEw cutscene format
+#	#func init_(message_:PoolStringArray,delim="|",msgColumn_:int=1):
+#	newCutscene.init_(
+#		Globals.get_stage_cutscene(message_id),
+#		"\t",
+#		Globals.stage_cutscene_data['msgColumn']
+#	)
 
 func part2():
 	var callback = child.playIntro();

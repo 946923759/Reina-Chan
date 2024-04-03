@@ -335,15 +335,12 @@ margin_right = 155.159
 margin_bottom = -221.88
 rect_scale = Vector2( 4, 4 )
 text = "DISTANCE BETWEEN SC. AND PLAYER"
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="DebugLabel" type="Label" parent="." index="17"]
-margin_left = 11.2246
-margin_top = -176.227
-margin_right = 103.225
-margin_bottom = -145.227
+margin_left = -142.766
+margin_top = 215.708
+margin_right = 102.234
+margin_bottom = 263.708
 rect_scale = Vector2( 3, 3 )
 text = "curState = null
 position = Vector2( 206.766, 184.292 )

@@ -977,7 +977,7 @@ __meta__ = {
 [node name="h" parent="Area2D" index="0" instance=ExtResource( 50 )]
 
 [node name="PlayerHolder" parent="." index="60"]
-position = Vector2( 160, -512 )
+position = Vector2( 1088, -192 )
 
 [node name="Droplet" parent="." index="62" instance=ExtResource( 51 )]
 position = Vector2( 480, -672 )

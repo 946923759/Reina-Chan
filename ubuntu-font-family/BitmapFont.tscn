@@ -12,6 +12,8 @@ export(String) var text = \"ABCDEFGZ.,'!:\" setget set_text
 export(int,0,500) var wrap_at = 1
 export(int,1,10) var scale_by = 2
 export(int,\"Left\",\"Center\",\"Right\") var alignment = 0
+#export(int,0,500) var start_at_char = 0
+#export(int,0,500) var end_at_char = 500
 
 func set_text(s):
 	text=s
@@ -91,15 +93,19 @@ func _draw():
 			spaceLeft-=1
 	#.to_ascii()
 	#print(tmp)
+	#if end_at_char == null:
+	#	end_at_char=500
 	for i in range(len(tmp)):
+	#for i in range(start_at_char, int(min(len(tmp),end_at_char+start_at_char)) ):
 		
 		if tmp[i]==32: #Space
 			continue
 		
-		var x_pos:int=i%wrap_at
+		var x_pos:int=i%wrap_at # - start_at_char
 		var y_pos:int=0
 		if i >= wrap_at:
 			y_pos = int(i/wrap_at)
+			#y_pos = int((i-start_at_char)/wrap_at)
 			
 		
 		var col = tmp[i]
@@ -134,6 +140,9 @@ func _draw():
 		elif col == 60: # <
 			col = 3
 			row = 3
+		elif col == 62: # >
+			col = 1
+			row = 3
 		
 		elif col <= 57:
 			col=max(0,col-48)
@@ -157,6 +166,14 @@ func _draw():
 			Rect2(x_pos*scale_internal+subpixel_offset,y_pos*scale_internal,scale_internal,scale_internal),
 			Rect2(col*9,row*9,8,8)
 		)
+
+#func get_width():
+#	return len(text) * scale_by * 8
+
+func get_size(txt:String=\"\"):
+	if len(txt) == 0:
+		txt = text
+	return Vector2(len(txt) * scale_by * 8, 8 * scale_by * ceil(len(txt)/float(wrap_at)) )
 
 func position_based_on_center(x_offset:float):
 	if wrap_at <= 0 or wrap_at >= 500:

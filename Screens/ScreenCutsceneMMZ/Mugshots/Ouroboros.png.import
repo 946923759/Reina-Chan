@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Architect.png-d9196bd2955f34a83a015bd4d2f72265.stex"
+path="res://.import/Ouroboros.png-3a0988f0916fed75e79fed9adac6d32d.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Screens/ScreenCutscene/Mugshots/Architect.png"
-dest_files=[ "res://.import/Architect.png-d9196bd2955f34a83a015bd4d2f72265.stex" ]
+source_file="res://Screens/ScreenCutsceneMMZ/Mugshots/Ouroboros.png"
+dest_files=[ "res://.import/Ouroboros.png-3a0988f0916fed75e79fed9adac6d32d.stex" ]
 
 [params]
 

@@ -6,22 +6,25 @@ msg	If you can read this, you forgot to assign a key for your cutscene and the P
 #KEY	error
 msg	You assigned a key that doesn't exist! Go check your event block again.
 
+
+#KEY	TestStageCutscene
+msgbox	Architect	right	top
+/Architect	This is a boss intro test. You can translate boss cutscenes by separating them with tab in stage_cutscenes.txt.
+msgbox	UMP9	left
+/UMP9	Hello world, I'm family-chan! aoijsdoaidj
+
 #KEY	Architect
-portrait	Architect
-msgbox_add	right	top
+#portrait	Architect
+msgbox	Architect	right	top
 /Architect	Heee-ey, you trash Griffin T-Dolls! Let's have some fun!	O-Oigan!, Muñecas Tacticas de pacotilla! Tengamos algo de diversion!
-msgbox_remove
-portrait	UMP9
-msgbox_add	left	top
+msgbox	UMP9	left
 msg	...Who is this weirdo?	...¿Quien es este tipo raro?
-msgbox_remove
-portrait	Architect
-msgbox_add	right	top
+msgbox	Architect	right	top
 /Architect	Heeeey, I heard that~!	Oye!, escuche eso~!
 
 #KEY	Alchemist1
 portrait	Alchemist	true
-msgbox_add	right	top
+msgbox	right	top
 msg	Hahaha! Did you really think you defeated me? That was just a dummy!	JAJAJA! ¿En verdad piensas que me has derrotado? Eso solo fue un secuaz!
 msg	Take this!	¡Toma esto!
 

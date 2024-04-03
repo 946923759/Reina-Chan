@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/test.png-ac246ed14a2fd33c80f1de57182ffa25.stex"
+path="res://.import/Architect.png-40beefa7e0828f63c9ced88cf1148a6a.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Screens/ScreenCutscene/Mugshots/test.png"
-dest_files=[ "res://.import/test.png-ac246ed14a2fd33c80f1de57182ffa25.stex" ]
+source_file="res://Screens/ScreenCutsceneMMZ/Mugshots/Architect.png"
+dest_files=[ "res://.import/Architect.png-40beefa7e0828f63c9ced88cf1148a6a.stex" ]
 
 [params]
 

@@ -1,4 +1,5 @@
 extends CanvasLayer
+signal cutscene_finished()
 
 """
 This one file is CC-BY-NC-SA 4.0 instead of GPLv3
@@ -11,7 +12,6 @@ var time: float = 0.0
 var waitForAnim: float = 0.0
 onready var TEXT_SPEED: float = max(Globals.OPTIONS['TextSpeed']['value']/2,1)
 
-var parent_node
 
 
 var curPos: int = -1
@@ -51,8 +51,8 @@ func preparse_string_array(arr:PoolStringArray,delimiter:String="|")->bool:
 	#var backgrounds_to_load:Array=[]
 	message = []
 	
-	#if !arr[0].begins_with("msgbox_add"):
-	#	message.push_back(["msgbox_add","left","top"])
+	var needs_to_add_msgbox = true
+	var first_msgbox_position = ""
 	
 	#Should return false if delimiter is incorrect
 	for s in arr:
@@ -63,6 +63,8 @@ func preparse_string_array(arr:PoolStringArray,delimiter:String="|")->bool:
 			message.push_back(push_back_from_idx_one(['msg'],splitString))
 			#var a = ['msg']
 			#message.push_back([OPCODES.MSG,splitString[1]])
+			continue
+		elif s.begins_with("#") or s.begins_with(";"):
 			continue
 		match splitString[0]:
 			#"bg":
@@ -78,31 +80,16 @@ func preparse_string_array(arr:PoolStringArray,delimiter:String="|")->bool:
 			"speaker":
 				if splitString.size() < 2:
 					splitString=['speaker','']
-				#print(splitString)
+			"msgbox_add":
+				needs_to_add_msgbox = false
+			"msgbox":
+				if not first_msgbox_position:
+					first_msgbox_position = splitString[2]
 		message.push_back(splitString)
 					
-#	for i in range(len(backgrounds_to_load)):
-#		var bgToLoad = backgrounds_to_load[i]
-#
-#		#var nightFilter = false
-#		if "," in bgToLoad:
-#			#nightFilter = bgToLoad.split(",")[1].to_lower()=="true"
-#			bgToLoad = bgToLoad.split(",")[0]
-#		var c = Color(1,1,1,0)
-#		var s = Def.Sprite({
-#			modulate=c,
-#			Texture=bgToLoad,
-#			cover=true,
-#			#rect_size=Vector2(1920,1080),
-#			name=bgToLoad.replace("/","$"),
-#			mouse_filter=2
-#		})
-#		#s.set_rect_size()
-#		#if nightFilter:
-#		#	s.material=nightShader
-#		backgrounds.add_child(s)
-#		VisualServer.canvas_item_set_z_index(s.get_canvas_item(),-10)
-#	backgrounds.connect("resized",self,"set_rect_size")
+	if needs_to_add_msgbox:
+		#print(["msgbox_add",first_msgbox_position,"top"])
+		message.insert(0,["msgbox_add",first_msgbox_position,"top"])
 	
 	
 	for m in musicToLoad:
@@ -133,6 +120,7 @@ var matchedNames = []
 onready var tw = $TextboxTween
 onready var animPlayer = $CenterContainer_v2/AnimationPlayer
 func advance_text()->bool:
+	tw.remove_all()
 	curPos+=1
 # warning-ignore:unused_variable
 	var tmp_speaker = "NoSpeaker!!"
@@ -148,9 +136,6 @@ func advance_text()->bool:
 		var curMessage = message[curPos]
 		
 		match curMessage[0]:
-			#'tn':
-			#	if msgColumn < curMessage.size():
-			#		tmp_tn=curMessage[msgColumn]
 			'msg':
 				#Do it up here since /setDispChr command might override it.
 				#text.visible_characters=0
@@ -180,59 +165,66 @@ func advance_text()->bool:
 							ChoiceTable.push_back(a[0])
 					#ChoiceTable=push_back_from_idx_one([],message[curPos+1])
 				break #Stop processing opcodes and wait for user to click
-			#Compatibility opcode for Girls' Frontline
-			'msgbox_transition':
-				#waitForAnim+=$CenterContainer_v2.close()
-				closeTextbox(tw)
-				openTextbox(tw,.3)
-				waitForAnim+=.6
+#			'msgbox_transition':
+#				#waitForAnim+=$CenterContainer_v2.close()
+#				closeTextbox(tw)
+#				openTextbox(tw,.3)
+#				waitForAnim+=.6
 			'msgbox_add':
 				var leftSide=true
+				var vPosition = -1
 				if len(curMessage) > 2:
 					match curMessage[2].to_lower():
+						"bottom","bot","b":
+							vPosition=0
+						"middle","mid","m":
+							vPosition=1
+						"top",'t':
+							vPosition=2
+				if len(curMessage) > 1:
+					leftSide=curMessage[1].to_lower()!="right"
+					#print(curMessage[1])
+				print("Messagebox add queued: "+String(leftSide)+", "+String(vPosition))
+				waitForAnim+=$CenterContainer_v2.add(leftSide, vPosition)
+#			'msgbox_remove':
+#				waitForAnim+=$CenterContainer_v2.remove()
+#				#text.text=""
+#				#text.waitForSetText("",.2) #Clear text
+#				pass
+#			'msgbox_close':
+#				if curMessage.size() > 1 and curMessage[1]=="instant":
+#					print("Removing tw")
+#					#tw.remove(textboxSpr,"interpolate_property")
+#					tw.remove_all()
+#					closeTextbox(tw,0,0)
+#				else:
+#					closeTextbox(tw)
+#					waitForAnim+=.3
+			'msgbox':
+				var leftSide=true
+				var vPosition:int = 2
+				
+				var newPortrait = ""
+				var shouldMask = false
+				var splits = curMessage[1].split(",",true,1)
+				newPortrait = splits[0]
+				if len(splits) > 1:
+					shouldMask = splits[1].to_lower() == "true"
+				
+				if len(curMessage) > 3:
+					match curMessage[3].to_lower():
 						"bottom","bot","b":
 							$CenterContainer_v2.lastPosition=0
 						"middle","mid","m":
 							$CenterContainer_v2.lastPosition=1
 						"top",'t':
 							$CenterContainer_v2.lastPosition=2
-				if len(curMessage) > 1:
-					leftSide=curMessage[1].to_lower()!="right"
+				if len(curMessage) > 2:
+					leftSide=curMessage[2].to_lower()!="right"
 					#print(curMessage[1])
-				print("Messagebox add queued...")
-				waitForAnim+=$CenterContainer_v2.add(leftSide)
-			'msgbox_remove':
-				waitForAnim+=$CenterContainer_v2.remove()
-				#text.text=""
-				#text.waitForSetText("",.2) #Clear text
-				pass
-			'msgbox_close':
-				if curMessage.size() > 1 and curMessage[1]=="instant":
-					print("Removing tw")
-					#tw.remove(textboxSpr,"interpolate_property")
-					tw.remove_all()
-					closeTextbox(tw,0,0)
-				else:
-					closeTextbox(tw)
-					waitForAnim+=.3
-			'msgbox_open':
-				openTextbox(tw)
-				waitForAnim+=.3
-#			'set_fs': #Should this close the textbox too?
-#				if curMessage[1].to_lower()=="true":
-#					tw.interpolate_property(fsContainer,"modulate:a",null,1,.3,Tween.TRANS_QUAD,Tween.EASE_IN,waitForAnim)
-#					isFullscreenMessageBox=true
-#					fsText.text=""
-#					fsContainer.visible=true
-#					#shouldTextBoxBeVisible=false
-#				else:
-#					tw.interpolate_property(fsContainer,"modulate:a",null,1,.3,Tween.TRANS_QUAD,Tween.EASE_IN,waitForAnim)
-#					isFullscreenMessageBox=false
-#					fsContainer.visible=false
-					#shouldTextBoxBeVisible=true
-				
-			#'match_names':
-			#	matchedNames=push_back_from_idx_one([],curMessage)
+				#need delay_set_portrait() here...
+				#$CenterContainer_v2.de
+				waitForAnim+=$CenterContainer_v2.close_and_open2(leftSide, newPortrait, shouldMask)
 			'speaker': 
 				
 				# I really didn't think this one through when I made /close and /open
@@ -253,7 +245,7 @@ func advance_text()->bool:
 				if len(curMessage)>2:
 					PORTRAITMAN.delay_set_portrait(curMessage[1],curMessage[2].to_lower()=="true",waitForAnim)
 				else:
-					PORTRAITMAN.delay_set_portrait(curMessage[1],false,waitForAnim)
+					PORTRAITMAN.delay_set_portrait(curMessage[1],false,0.3)
 #			'emote':
 #				var lastUsed = PORTRAITMAN.get_portrait_from_sprite(curMessage[1])
 #				if lastUsed != null:
@@ -314,6 +306,9 @@ func advance_text()->bool:
 #				backgrounds.shakeCamera(howMuch)
 			_:
 				printerr("Unknown opcode encountered: "+curMessage[0]+". It will be ignored and skipped.")
+		# msg opcode will break the loop, but for everything else,
+		# keep incrementing the instruction position and processing
+		# new instructions.
 		curPos+=1
 	
 	
@@ -327,6 +322,7 @@ func advance_text()->bool:
 			Tween.EASE_IN,
 			waitForAnim
 		)
+		print("[CutsceneMMZ] Should tween to "+String(tmp_txt.length())+" chars")
 		tw.interpolate_callback(blinkingCursor,waitForAnim+1/TEXT_SPEED*tmp_txt.length(),"show")
 	else: #Fake tween that just waits for waitForAnim
 		tw.interpolate_property(text,"visible_characters",text.visible_characters,text.text.length(),
@@ -404,35 +400,32 @@ func _ready():
 
 
 
-func init_(message_:PoolStringArray, parent,delim="|",msgColumn_:int=1):
+func init_(message_:PoolStringArray,delim="|",msgColumn_:int=1):
 	assert(message_.size()>0,"You can't pass an empty message to a cutscene!!!")
-	if parent:
-		parent_node = parent
 		
 	#var t := get_tree().create_tween()
 	#t.set_pause_mode(SceneTreeTween.TWEEN_PAUSE_PROCESS)
-	
 	preparse_string_array(message_,delim)
 	#self.message=message
 	self.msgColumn=msgColumn_
 	#parse_string_array(message,delim,msgColumn)
 	text.bbcode_text=""
 	text.visible_characters=0
+	curPos = -1
+	waitForAnim=0
+	text.waitTime = 0.0
+	tw.stop_all()
+	blinkingCursor.hide()
+	$CenterContainer_v2/AnimationPlayer.stop(true)
 	advance_text()
 	set_process(true)
 
 func end_cutscene():
-	print("Hit the end. Now I will kill myself!")
+	print("Hit the end. Now closing the textbox...")
 	$CenterContainer_v2.remove()
+	yield($CenterContainer_v2/AnimationPlayer,"animation_finished")
 	set_process(false)
-	
-	tw.interpolate_callback(self,.6,"end_cutscene_2")
-	tw.start()
-	
-#	var seq := get_tree().create_tween()
-#	seq.set_pause_mode(SceneTreeTween.TWEEN_PAUSE_PROCESS)
-#	seq.append_interval(.6)
-#	seq.tween_callback(self,"end_cutscene_2")
+	emit_signal("cutscene_finished")
 
 # Honestly, this is a mess. When it was in lua the input handling and the VN processing
 # wasn't coupled together, instead vntext:advance() would be called and if it returned
@@ -468,7 +461,7 @@ func _process(_delta):
 	var forward = Input.is_action_just_pressed("ui_select") or manualTriggerForward
 	if animPlayer.is_playing():
 		forward=false
-	if text.visible_characters >= text.text.length():
+	if text.visible_characters >= text.text.length() or text.visible_characters < 0:
 		#blinkingCursor.show()
 		if ChoiceTable.size()>0:
 			$Choices.setChoices(ChoiceTable)
@@ -481,9 +474,10 @@ func _process(_delta):
 				end_cutscene()
 	else:
 		if forward:
-			tw.stop_all()
+			tw.remove_all()
 			#$CenterContainer_v2.skipToOpen() #Does not work
-			text.visible_characters = text.text.length()
+			text.waitTime = 0.0
+			text.visible_characters = -1
 			blinkingCursor.show()
 		else:
 			if Input.is_action_pressed("ui_cancel"):
@@ -493,32 +487,23 @@ func _process(_delta):
 	manualTriggerForward=false
 	
 #Fucking piece of shit game engine
-func _input(event):
-	if isWaitingForChoice:
-		if event is InputEventMouseMotion:
-			$Choices.input_cursor(event.position)
-		elif (event is InputEventMouseButton and event.is_pressed() and event.button_index == BUTTON_LEFT) or (
-			event is InputEventScreenTouch and event.is_pressed()
-		):
-			if $Choices.input_cursor(event.position,true):
-				choiceResult=$Choices.selection+1
-				$Choices.visible=false
-				ChoiceTable=[]
-				advance_text()
-				isWaitingForChoice=false
-		return
-			
-	
-	if (event is InputEventMouseButton and event.is_pressed() and event.button_index == BUTTON_LEFT) or (
-		event is InputEventScreenTouch and event.is_pressed()
-	):
-		manualTriggerForward=true
-
-signal cutscene_finished()
-func end_cutscene_2():
-	if parent_node:
-		get_tree().paused = false
-	else:
-		print("No parent node...")
-	emit_signal("cutscene_finished")
-	queue_free()
+#func _input(event):
+#	if isWaitingForChoice:
+#		if event is InputEventMouseMotion:
+#			$Choices.input_cursor(event.position)
+#		elif (event is InputEventMouseButton and event.is_pressed() and event.button_index == BUTTON_LEFT) or (
+#			event is InputEventScreenTouch and event.is_pressed()
+#		):
+#			if $Choices.input_cursor(event.position,true):
+#				choiceResult=$Choices.selection+1
+#				$Choices.visible=false
+#				ChoiceTable=[]
+#				advance_text()
+#				isWaitingForChoice=false
+#		return
+#
+#
+#	if (event is InputEventMouseButton and event.is_pressed() and event.button_index == BUTTON_LEFT) or (
+#		event is InputEventScreenTouch and event.is_pressed()
+#	):
+#		manualTriggerForward=true

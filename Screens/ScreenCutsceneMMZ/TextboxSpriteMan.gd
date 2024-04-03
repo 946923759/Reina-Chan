@@ -1,26 +1,19 @@
 extends Node2D
 
 const POOL_SIZE = 5
-var SCREEN_CENTER: Vector2
 
-#TODO: Shouldn't be necessary when cache is implemented, cache.size() will return
-#the size of active portraits
-var numPortraits:int=0
-#TODO: The cache isn't implemented
-var cache: Array = []	# Holds dictionaries (see below for details)
-"""
-		{
-			"name": SpriteName,
-			"radioMask": bool,		# this could change into a tag list for different types of masks
-			"y_offset": float		# in case you want to make characters shorter
-		}
-"""
 
 #No need to run get_children(), we can just store the pointers to the portrait nodes
 #here. And we don't want that one tween anyways.
 var portraits:Array
 
 onready var maskOverlay = $MaskOverlay
+
+func get_current_portrait_name() -> String:
+	for p in portraits:
+		if p.visible:
+			return p.lastLoaded
+	return "default"
 
 func get_portrait_from_sprite(spr:String):
 	for p in portraits:
@@ -32,16 +25,19 @@ func get_portrait_from_sprite(spr:String):
 #Load texture but don't display
 func preload_portraits(arr:Array):
 	#TODO: Do not preload until no portraits are shown
-	for i in range(get_child_count()):
+	for i in range(portraits.size()):
 		if i < arr.size()-1:
 			#idx=i+1 since first element in the array is the command name
-			get_child(i).set_texture_wrapper(arr[i+1])
+			portraits[i].set_texture_wrapper(arr[i+1])
 			print("Preloaded "+arr[i+1])
 
-func delay_set_portrait(name:String,radioMask:bool=false,delay:float=0.3):
+func delay_set_portrait(name:String, radioMask:bool=false, delay:float=0.3):
 	if delay<=0.0:
+		#printerr("NO DELAY????")
 		set_portrait(name,radioMask)
 	else:
+		#print("Delay?? "+String(delay))
+		#$Tween.interpolate_callback()
 		$Tween.interpolate_callback(self,delay,"set_portrait",name,radioMask)
 		$Tween.start()
 
@@ -71,6 +67,7 @@ func set_portrait(name: String, radioMask: bool = false)->Node2D:
 				p.visible=true
 				break
 				
+	#print("[PortraitMan] MasK "+String(radioMask))
 	maskOverlay.set_process(radioMask)
 	maskOverlay.visible=radioMask
 
@@ -92,7 +89,7 @@ func _ready():
 	maskOverlay.set_process(false)
 	maskOverlay.visible=false
 
-	var vnPortraithandler = load("res://Cutscene/MugshotImageHandler.gd")
+	var vnPortraithandler = load("res://Screens/ScreenCutsceneMMZ/MugshotImageHandler.gd")
 	for _i in range(POOL_SIZE):
 		var p = Sprite.new()
 		p.set_script(vnPortraithandler)

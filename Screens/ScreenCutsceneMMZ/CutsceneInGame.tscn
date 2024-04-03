@@ -1,19 +1,18 @@
-[gd_scene load_steps=34 format=2]
+[gd_scene load_steps=33 format=2]
 
 [ext_resource path="res://Screens/ScreenCutscene/NotoSans-Bold.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://ubuntu-font-family/pkmndp.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://Screens/ScreenCutscene/blinky.png" type="Texture" id=3]
-[ext_resource path="res://Screens/ScreenCutscene/CutsceneInGame.gd" type="Script" id=4]
-[ext_resource path="res://stepmania-compat/smSprite.gd" type="Script" id=5]
+[ext_resource path="res://Screens/ScreenCutsceneMMZ/CutsceneInGame.gd" type="Script" id=4]
+[ext_resource path="res://Screens/ScreenCutsceneMMZ/Mugshots/default.png" type="Texture" id=5]
 [ext_resource path="res://Screens/ScreenCutscene/DialogueBoxLeft.png" type="Texture" id=6]
-[ext_resource path="res://Screens/ScreenCutscene/Mugshots/Alchemist.png" type="Texture" id=7]
-[ext_resource path="res://Screens/ScreenCutscene/TextboxSpriteMan.gd" type="Script" id=8]
+[ext_resource path="res://addons/godot-next/gui/debug_label.gd" type="Script" id=7]
+[ext_resource path="res://Screens/ScreenCutsceneMMZ/TextboxSpriteMan.gd" type="Script" id=8]
 [ext_resource path="res://ubuntu-font-family/MM2Font_Smaller.tres" type="DynamicFont" id=9]
-[ext_resource path="res://Screens/ScreenCutscene/MugshotImageHandler.gd" type="Script" id=10]
+[ext_resource path="res://Screens/ScreenCutsceneMMZ/MugshotImageHandler.gd" type="Script" id=10]
 [ext_resource path="res://Screens/ScreenCutscene/maskBox2.png" type="Texture" id=11]
-[ext_resource path="res://Screens/ScreenCutscene/Mugshots/test.png" type="Texture" id=12]
 [ext_resource path="res://Screens/ScreenCutscene/VN MaskOverlay (stretch).png" type="Texture" id=13]
-[ext_resource path="res://Screens/ScreenCutscene/Mugshots/test2.png" type="Texture" id=14]
+[ext_resource path="res://Screens/ScreenCutsceneMMZ/Mugshots/test2.png" type="Texture" id=14]
 [ext_resource path="res://Screens/ScreenCutscene/ChoiceHandler.gd" type="Script" id=15]
 
 [sub_resource type="GDScript" id=1]
@@ -28,6 +27,7 @@ onready var blinky = $Blinky
 
 var lastPosition:int=2
 var isLeftSide:bool=true
+var isOpen = false
 
 var MUGSHOT_X_POSITION:int
 var BLINKY_X_POSITION:int
@@ -41,11 +41,17 @@ func _ready():
 		$testLeft.visible=false
 		$testRight.visible=false
 
-func open()->float:
-	if isLeftSide:
+func open(set_position:bool=true, leftSide:bool=true)->float:
+	if leftSide:
+		if set_position:
+			animPlayer.queue(\"AddLeft\")
 		animPlayer.queue(\"Open\")
 	else:
+		if set_position:
+			animPlayer.queue(\"AddRight\")
 		animPlayer.queue(\"OpenRight\")
+	isLeftSide = leftSide
+	isOpen = true
 	return .3
 	
 func close()->float:
@@ -54,21 +60,26 @@ func close()->float:
 		animPlayer.queue(\"Close\")
 	else:
 		animPlayer.play_backwards(\"OpenRight\")
+	isOpen = false
 	return 0.3
 	
 func remove()->float:
 	close()
-	animPlayer.queue(\"Remove_top\")
+	if lastPosition==0:
+		animPlayer.queue(\"Remove_bottom\")
+	else:
+		animPlayer.queue(\"Remove_top\")
 	return 0.5
 
-func reposition_vertical(pos:int):
+func play_vertical_enter_animation(pos:int):
+	print(\"[Container] Playing scroll in animation at position \"+String(pos))
 	match pos:
 		0:
-			animPlayer.queue(\"Pos_bottom\")
+			animPlayer.queue(\"Enter_bottom\")
 		1:
-			animPlayer.queue(\"Pos_mid\")
+			animPlayer.queue(\"Enter_mid\")
 		2:
-			animPlayer.queue(\"Pos_top\")
+			animPlayer.queue(\"Enter_top\")
 		_:
 			print(\"Unknown position...\")
 			return
@@ -76,30 +87,51 @@ func reposition_vertical(pos:int):
 
 #Scroll in a new textbox. Returns the time it takes before the textbox
 #appears, so the text waits that long before starting.
-func add(leftSide:bool=true)->float:
+func add(leftSide:bool=true, newPosition:int = -1)->float:
 	isLeftSide=leftSide
-	#animPlayer.stop(true)
-	#self.modulate.a=0
-	reposition(leftSide)
+	if newPosition == -1:
+		newPosition = lastPosition
+	
+	#reposition(leftSide, newPosition)
 	#animPlayer.queue(\"Add\")
 	if isLeftSide:
-		animPlayer.queue(\"Open\")
+		animPlayer.queue(\"AddLeft\")
+		play_vertical_enter_animation(newPosition)
 	else:
-		animPlayer.queue(\"OpenRight\")
+		animPlayer.queue(\"AddRight\")
+		play_vertical_enter_animation(newPosition)
+	open(false, isLeftSide)
 	return 0.5
 
-func reposition(_leftSide:bool=true):
+func close_and_open() -> float:
+	return close() + open(false)
+	
+
+func close_and_open2(side, portrait=\"\", mask_portrait:bool=false) -> float:
+	var delay = close()
+	if portrait and portrait != $Mugshots.get_current_portrait_name():
+		$Mugshots.delay_set_portrait(portrait,mask_portrait,delay)
+	#else:
+		
+	return delay + open(true,side);
+
+# GOd why did I code this thing like this
+# animPlayer needs to do .queue(\"AddLeft\") or AddRight in order
+# to set the side the text/mugshot is on, but then it needs to do
+# play_vertical_enter_animation() to slide it in
+
+func reposition(_leftSide:bool=true, newPos:int = 2):
 	#var a = -1 if leftSide else 1
 	#mugShotActor.position.x=MUGSHOT_X_POSITION*a
 	if isLeftSide:
 		animPlayer.queue(\"AddLeft\")
-		reposition_vertical(lastPosition)
+		play_vertical_enter_animation(newPos)
 		#animPlayer.play_backwards(\"Open\")
 		#textActor.rect_position.x=-222
 		#$Blinky.position.x=432
 	else:
 		animPlayer.queue(\"AddRight\")
-		reposition_vertical(lastPosition)
+		play_vertical_enter_animation(newPos)
 		#animPlayer.play_backwards(\"OpenRight\")
 		#$Blinky.position.x=200
 		#textActor.rect_position.x=-440
@@ -117,7 +149,7 @@ func reposition(_leftSide:bool=true):
 
 func skipToOpen(leftSide:bool=true):
 	animPlayer.stop(true)
-	reposition(leftSide)
+	reposition(leftSide, lastPosition)
 	if leftSide:
 		animPlayer.play(\"Open\")
 	else:
@@ -126,17 +158,14 @@ func skipToOpen(leftSide:bool=true):
 
 
 func _on_testLeft_button_down(_extra_arg_0):
-	print(\"test left\")
-	add(true)
+	open(true,true)
 
 func _on_testRight_button_down():
-	print(\"test right\")
-	add(false)
+	open(true,false)
 
 
 func _on_testRight2_button_down():
-	remove()
-	add()
+	close_and_open2(isLeftSide)
 "
 
 [sub_resource type="Animation" id=2]
@@ -147,7 +176,7 @@ tracks/0/path = NodePath(".:modulate:a")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
-tracks/0/enabled = true
+tracks/0/enabled = false
 tracks/0/keys = {
 "times": PoolRealArray( 0, 0.3 ),
 "transitions": PoolRealArray( 1, 1 ),
@@ -273,7 +302,7 @@ tracks/9/path = NodePath(".:modulate:a")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/imported = false
-tracks/9/enabled = true
+tracks/9/enabled = false
 tracks/9/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
@@ -375,7 +404,7 @@ tracks/6/path = NodePath(".:modulate:a")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/imported = false
-tracks/6/enabled = true
+tracks/6/enabled = false
 tracks/6/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
@@ -480,6 +509,78 @@ tracks/3/keys = {
 "transitions": PoolRealArray( 0.5, 1 ),
 "update": 0,
 "values": [ 676.0, 0.0 ]
+}
+
+[sub_resource type="Animation" id=8]
+resource_name = "Enter_bottom"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:position:y")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2 ),
+"transitions": PoolRealArray( 0.5, 0.5 ),
+"update": 0,
+"values": [ 830.0, 550.0 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:modulate:a")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = false
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.2 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 0.0, 1.0 ]
+}
+
+[sub_resource type="Animation" id=9]
+resource_name = "Enter_mid"
+length = 0.01
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:position:y")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 360.0 ]
+}
+
+[sub_resource type="Animation" id=10]
+resource_name = "Enter_top"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:position:y")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2 ),
+"transitions": PoolRealArray( 0.5, 0.5 ),
+"update": 0,
+"values": [ -110.0, 170.0 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:modulate:a")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = false
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.2 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 0.0, 1.0 ]
 }
 
 [sub_resource type="Animation" id=6]
@@ -661,78 +762,6 @@ tracks/6/keys = {
 "values": [ 0.0, 1.0 ]
 }
 
-[sub_resource type="Animation" id=8]
-resource_name = "Pos_bottom"
-length = 0.2
-tracks/0/type = "value"
-tracks/0/path = NodePath(".:position:y")
-tracks/0/interp = 2
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 0.2 ),
-"transitions": PoolRealArray( 0.5, 0.5 ),
-"update": 0,
-"values": [ 830.0, 550.0 ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath(".:modulate:a")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0, 0.2 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 0,
-"values": [ 0.0, 1.0 ]
-}
-
-[sub_resource type="Animation" id=9]
-resource_name = "Pos_mid"
-length = 0.01
-tracks/0/type = "value"
-tracks/0/path = NodePath(".:position:y")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ 360.0 ]
-}
-
-[sub_resource type="Animation" id=10]
-resource_name = "Pos_top"
-length = 0.2
-tracks/0/type = "value"
-tracks/0/path = NodePath(".:position:y")
-tracks/0/interp = 2
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 0.2 ),
-"transitions": PoolRealArray( 0.5, 0.5 ),
-"update": 0,
-"values": [ -110.0, 170.0 ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath(".:modulate:a")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0, 0.2 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 0,
-"values": [ 0.0, 1.0 ]
-}
-
 [sub_resource type="Animation" id=11]
 resource_name = "Remove_bottom"
 length = 0.2
@@ -753,7 +782,7 @@ tracks/1/path = NodePath(".:modulate:a")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
-tracks/1/enabled = true
+tracks/1/enabled = false
 tracks/1/keys = {
 "times": PoolRealArray( 0, 0.2 ),
 "transitions": PoolRealArray( 1, 1 ),
@@ -781,7 +810,7 @@ tracks/1/path = NodePath(".:modulate:a")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
-tracks/1/enabled = true
+tracks/1/enabled = false
 tracks/1/keys = {
 "times": PoolRealArray( 0, 0.2 ),
 "transitions": PoolRealArray( 1, 1 ),
@@ -912,60 +941,20 @@ script = ExtResource( 4 )
 
 [node name="SoundEffects" type="Node" parent="."]
 
-[node name="CenterContainer" type="Control" parent="."]
-anchor_right = 1.0125
-anchor_bottom = 1.0
-margin_top = 460.0
-margin_right = -16.0
-margin_bottom = -53.0
-rect_min_size = Vector2( 876, 207 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="TextBox" type="Control" parent="CenterContainer"]
-anchor_top = -0.113
-anchor_right = 1.0
-anchor_bottom = 0.896
-margin_top = -0.0739994
-margin_bottom = 0.0630035
-__meta__ = {
-"_edit_group_": true,
-"_edit_use_anchors_": false
-}
-
-[node name="smSprite" type="TextureRect" parent="CenterContainer/TextBox"]
-margin_left = 187.0
-margin_top = 8.909
-margin_right = 402.0
-margin_bottom = 207.909
-texture = ExtResource( 12 )
-stretch_mode = 5
-script = ExtResource( 5 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="textBackground" type="TextureRect" parent="CenterContainer/TextBox"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_top = 315.0
-margin_right = -960.0
-margin_bottom = 158.0
-grow_vertical = 2
-rect_scale = Vector2( 4, 4 )
-rect_pivot_offset = Vector2( 0, 103 )
-texture = ExtResource( 6 )
-expand = true
-stretch_mode = 4
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
 [node name="CenterContainer_v2" type="Node2D" parent="."]
-modulate = Color( 1, 1, 1, 0 )
-position = Vector2( 640, -110 )
+position = Vector2( 630, -110 )
 script = SubResource( 1 )
+
+[node name="DebugLabel" type="Label" parent="CenterContainer_v2"]
+margin_left = -192.0
+margin_top = -138.0
+margin_right = -54.0
+margin_bottom = -107.0
+text = "visible_characters = 0
+"
+script = ExtResource( 7 )
+target_path = NodePath("../textActor_better")
+properties = PoolStringArray( "visible_characters" )
 
 [node name="testLeft" type="Button" parent="CenterContainer_v2"]
 margin_left = -456.913
@@ -974,9 +963,6 @@ margin_right = -353.913
 margin_bottom = -115.484
 button_mask = 7
 text = "Test Open left"
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="testRight" type="Button" parent="CenterContainer_v2"]
 margin_left = -334.108
@@ -1002,11 +988,11 @@ anims/Add = SubResource( 2 )
 anims/AddLeft = SubResource( 3 )
 anims/AddRight = SubResource( 4 )
 anims/Close = SubResource( 5 )
+anims/Enter_bottom = SubResource( 8 )
+anims/Enter_mid = SubResource( 9 )
+anims/Enter_top = SubResource( 10 )
 anims/Open = SubResource( 6 )
 anims/OpenRight = SubResource( 7 )
-anims/Pos_bottom = SubResource( 8 )
-anims/Pos_mid = SubResource( 9 )
-anims/Pos_top = SubResource( 10 )
 anims/Remove_bottom = SubResource( 11 )
 anims/Remove_top = SubResource( 12 )
 
@@ -1038,19 +1024,13 @@ script = SubResource( 13 )
 [node name="Mugshots" type="Node2D" parent="CenterContainer_v2"]
 position = Vector2( 352, -2 )
 script = ExtResource( 8 )
-
-[node name="Sprite2" type="Sprite" parent="CenterContainer_v2/Mugshots"]
-visible = false
-scale = Vector2( 4, 4 )
-texture = ExtResource( 14 )
-
-[node name="Mugshot" type="Sprite" parent="CenterContainer_v2/Mugshots"]
-visible = false
-scale = Vector2( 3, 3 )
-texture = ExtResource( 7 )
-script = ExtResource( 10 )
+__meta__ = {
+"_edit_group_": true
+}
 
 [node name="MaskOverlay" type="Node2D" parent="CenterContainer_v2/Mugshots"]
+visible = false
+z_index = 1
 script = SubResource( 14 )
 
 [node name="Sprite" type="Sprite" parent="CenterContainer_v2/Mugshots/MaskOverlay"]
@@ -1062,9 +1042,19 @@ region_rect = Rect2( 0, 0, 192, 192 )
 material = SubResource( 15 )
 texture = ExtResource( 13 )
 region_enabled = true
-region_rect = Rect2( 0, 187.048, 192, 192 )
+region_rect = Rect2( 0, 31.7957, 192, 192 )
 
 [node name="Tween" type="Tween" parent="CenterContainer_v2/Mugshots"]
+
+[node name="Sprite2" type="Sprite" parent="CenterContainer_v2/Mugshots"]
+scale = Vector2( 4, 4 )
+texture = ExtResource( 14 )
+script = ExtResource( 10 )
+
+[node name="Mugshot" type="Sprite" parent="CenterContainer_v2/Mugshots"]
+scale = Vector2( 3, 3 )
+texture = ExtResource( 5 )
+script = ExtResource( 10 )
 
 [node name="textActor_better" type="RichTextLabel" parent="CenterContainer_v2"]
 anchor_left = 0.5
@@ -1077,11 +1067,12 @@ margin_right = 236.0
 margin_bottom = 90.0
 custom_fonts/normal_font = SubResource( 18 )
 bbcode_enabled = true
+visible_characters = 0
+percent_visible = 0.0
 script = SubResource( 16 )
 __meta__ = {
-"_edit_use_anchors_": false
+"_edit_lock_": true
 }
-custom_width = 676
 
 [node name="SpeakerActor" type="Label" parent="CenterContainer_v2"]
 visible = false
@@ -1109,9 +1100,6 @@ margin_top = -35.0
 margin_right = 339.0
 custom_fonts/font = ExtResource( 9 )
 text = "PRESS START TO SKIP"
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="TextboxTween" type="Tween" parent="."]
 pause_mode = 2

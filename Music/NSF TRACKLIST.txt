@@ -16,12 +16,12 @@ R4MI
 22 - Wily's Maze
 59 - Cossack's Castle intro?
 60 - Wily's Castle Intro?
-67 - Title Screen
+67 - Rockman 4 Intro (Unused?)
 69 - Final Boss
 80 - Cossack stage?
 81 - Bonus Boss (Vs. Shadow Man)
-82 - Title Screen?
-83 - Balloon Item Get 
+82 - Title Screen
+83 - Balloon Item Get
 84 - Stage Intro
 85 - Wily Boss
 87 - final wily stage

@@ -1,0 +1,139 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://ubuntu-font-family/BitmapFont.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Screens/ScreenJukebox/ScreenJukebox.gd" type="Script" id=2]
+[ext_resource path="res://addons/godot-next/gui/debug_label.gd" type="Script" id=3]
+[ext_resource path="res://Screens/ScreenJukebox/SelectSongBigScroller.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Screens/ScreenJukebox/SelectSongSmallScroller.tscn" type="PackedScene" id=5]
+[ext_resource path="res://ParticleEffects/AlphaMaskPurple.tres" type="Material" id=6]
+[ext_resource path="res://ubuntu-font-family/mm3bitmap.png" type="Texture" id=7]
+[ext_resource path="res://Sounds/Classic/QuickSelectWeapon.wav" type="AudioStream" id=8]
+[ext_resource path="res://Screens/ScreenJukebox/box.png" type="Texture" id=9]
+[ext_resource path="res://Screens/ScreenJukebox/NowPlaying.gd" type="Script" id=10]
+
+[node name="ScreenSelectMusic" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 2 )
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+bus = "Music"
+
+[node name="Beep" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 8 )
+volume_db = -2.0
+bus = "Player/Enemies"
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0.278431, 0.670588, 1 )
+
+[node name="BitmapFont" parent="." instance=ExtResource( 1 )]
+visible = false
+position = Vector2( 65, 460 )
+text = "test1234"
+
+[node name="DebugLabel" type="Label" parent="."]
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = -202.0
+margin_top = -15.5
+margin_bottom = 15.5
+text = "rect_size = Vector2( 1280, 720 )
+"
+script = ExtResource( 3 )
+target_path = NodePath("..")
+properties = PoolStringArray( "rect_size" )
+
+[node name="BitmapFont2" parent="." instance=ExtResource( 1 )]
+position = Vector2( 15, 124 )
+text = "the nsf audio player has a tendency to crash when switching too fast, so don't press the a button too much"
+wrap_at = 57
+scale_by = 2
+
+[node name="SelectSongBigScroller" parent="." instance=ExtResource( 4 )]
+
+[node name="SelectSongBigScroller2" parent="." instance=ExtResource( 4 )]
+position = Vector2( 0, 656 )
+
+[node name="SelectSongSmallScroller" parent="." instance=ExtResource( 5 )]
+
+[node name="SelectSongSmallScroller2" parent="." instance=ExtResource( 5 )]
+position = Vector2( 0, 599 )
+
+[node name="TrackInfo" type="Node2D" parent="."]
+position = Vector2( 168, 316 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="selector" type="Node2D" parent="."]
+position = Vector2( 640, 182 )
+scale = Vector2( 5, 5 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CurrentSelection" parent="selector" instance=ExtResource( 1 )]
+position = Vector2( 16, 0 )
+text = "12345678901234567890"
+wrap_at = 500
+scale_by = 1
+
+[node name="leftArrow" type="Sprite" parent="selector"]
+modulate = Color( 1, 0, 0, 1 )
+material = ExtResource( 6 )
+texture = ExtResource( 7 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 27, 27, 9, 9 )
+
+[node name="rightArrow" type="Sprite" parent="selector"]
+modulate = Color( 1, 0, 0, 1 )
+material = ExtResource( 6 )
+texture = ExtResource( 7 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 9, 27, 9, 9 )
+
+[node name="NowPlaying" type="Node2D" parent="."]
+position = Vector2( 640, 420 )
+script = ExtResource( 10 )
+inverse_timer_speed = 0.3
+
+[node name="Sprite" type="Sprite" parent="NowPlaying"]
+material = ExtResource( 6 )
+scale = Vector2( 3, 3 )
+texture = ExtResource( 9 )
+region_rect = Rect2( 33, 177, 702, 339 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="NowPlayingText" parent="NowPlaying" instance=ExtResource( 1 )]
+position = Vector2( 0, -150 )
+text = "now playing"
+wrap_at = 500
+scale_by = 4
+alignment = 1
+
+[node name="Title" parent="NowPlaying" instance=ExtResource( 1 )]
+position = Vector2( -366, 20 )
+text = "stage 6"
+wrap_at = 500
+scale_by = 4
+
+[node name="Album" parent="NowPlaying" instance=ExtResource( 1 )]
+position = Vector2( -366, 70 )
+text = "espgaluda Ii black label"
+wrap_at = 500
+scale_by = 4
+
+[node name="Artist" parent="NowPlaying" instance=ExtResource( 1 )]
+position = Vector2( -366, 120 )
+text = "Manabu Namiki, Mitsuhiro Kaneda, Ryu Umemoto, N.T"
+wrap_at = 500
+scale_by = 4
