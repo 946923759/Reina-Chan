@@ -18,7 +18,7 @@ var selection:int = 4
 var whatever:Array=[
 	[\"Architect\",\"res://Screens/ScreenStageSelectV2/Architect.png\",\"res://Stages_Reina/Architect/StageArchitect_v2.tscn\"],
 	[\"Alchemist\",\"res://Screens/ScreenStageSelectV2/Alchemist.png\",\"res://Stages_Reina/Alchemist/Alchemist_v2.tscn\"],
-	[\"Ouroboros\",\"res://Screens/ScreenCutscene/Mugshots/Ouroboros.png\",\"res://Stages_Reina/Ouroboros/StageOuroboros.tscn\"],
+	[\"Ouroboros\",\"res://Screens/ScreenCutsceneMMZ/Mugshots/Ouroboros.png\",\"res://Stages_Reina/Ouroboros/StageOuroboros.tscn\"],
 	[\"Scarecrow\",\"res://Screens/ScreenStageSelectV2/Scarecrow.png\",\"res://Stages_Reina/Scarecrow/Scarecrow.tscn\"],
 	[\"\",\"res://Screens/ScreenStageSelectV2/sf icon.png\",\"res://Stages_Reina/Sangvis1/StageSangvis1.tscn\"], #Middle, for wily castle
 	[\"Gager\",\"\",\"\"],

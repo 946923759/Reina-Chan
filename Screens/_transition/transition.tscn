@@ -7,8 +7,14 @@
 [ext_resource path="res://Screens/_transition/SFA3_LOGO_M16.png" type="Texture" id=5]
 
 [node name="Transition" type="Control"]
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -640.0
+margin_top = -360.0
+margin_right = 640.0
+margin_bottom = 360.0
 mouse_filter = 2
 script = ExtResource( 2 )
 m16_tex = ExtResource( 5 )
@@ -44,6 +50,24 @@ texture = ExtResource( 1 )
 offset = Vector2( 143, 0 )
 region_enabled = true
 region_rect = Rect2( 286, 0, 143, 240 )
+
+[node name="BorderRight" type="Sprite" parent="Node2D"]
+visible = false
+modulate = Color( 1, 1, 1, 0 )
+position = Vector2( 1393, 0 )
+scale = Vector2( 30, 3 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 263, 0, 50, 240 )
+
+[node name="BorderLeft" type="Sprite" parent="Node2D"]
+visible = false
+modulate = Color( 1, 1, 1, 0 )
+position = Vector2( -1394, 0 )
+scale = Vector2( 30, 3 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 263, 0, 50, 240 )
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 3 )

@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=2]
+[gd_scene load_steps=28 format=2]
 
 [ext_resource path="res://ubuntu-font-family/MM2Font.tres" type="DynamicFont" id=1]
 [ext_resource path="res://Screens/ScreenTitleMenu/reina_logo.png" type="Texture" id=2]
@@ -14,6 +14,14 @@
 [ext_resource path="res://ubuntu-font-family/BitmapFont.tscn" type="PackedScene" id=12]
 [ext_resource path="res://Screens/_transition/transition.tscn" type="PackedScene" id=13]
 [ext_resource path="res://Sounds/Classic/Mega Man 4 SFX (20) - Weapon Switch.wav" type="AudioStream" id=14]
+
+[sub_resource type="GDScript" id=13]
+script/source = "extends Node2D
+
+func _process(delta):
+	var s = get_viewport().get_visible_rect().size
+	self.position = s - Vector2($BitmapSprite2.get_size().x + 5, $BitmapSprite2.get_size().y*2 + 5)
+"
 
 [sub_resource type="GDScript" id=1]
 script/source = "extends Label
@@ -826,6 +834,7 @@ text = "dumb shit"
 
 [node name="Node2D" type="Node2D" parent="logoHolder"]
 position = Vector2( 411, 667 )
+script = SubResource( 13 )
 __meta__ = {
 "_edit_group_": true
 }
@@ -1037,7 +1046,8 @@ script = ExtResource( 6 )
 codes = [ "UUDDLRLR", "LLLRRRUUU" ]
 
 [node name="Transition" parent="." instance=ExtResource( 13 )]
-visible = false
+margin_left = 0.0
+margin_top = 0.0
 margin_right = 1280.0
 margin_bottom = 720.0
 

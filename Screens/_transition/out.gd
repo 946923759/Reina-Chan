@@ -22,7 +22,12 @@ func OnCommand(character:int = 0):
 	var t = get_tree().create_tween()
 	t.set_parallel()
 	t.tween_property(self,"visible",true,0.0)
+	t.tween_property($Node2D/BorderLeft,"visible",true,0.0)
+	t.tween_property($Node2D/BorderRight,"visible",true,0.0)
 	#t.tween_property($Node2D,"modulate:a",1.0,0.0)
+	
+	t.tween_property($Node2D/BorderLeft,"modulate:a",1.0,.25)
+	t.tween_property($Node2D/BorderRight,"modulate:a",1.0,.25)
 	
 	t.tween_property(U,"position:y",0,.15)
 	t.tween_property(U,"region_rect:position:y",0,1).from(spin).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
@@ -65,6 +70,10 @@ func _ready():
 			P.texture = m16_tex
 		fade.modulate.a = 1.0
 		visible=true
+		$Node2D/BorderLeft.visible = true
+		$Node2D/BorderRight.visible = true
+		$Node2D/BorderLeft.modulate.a = 1.0
+		$Node2D/BorderRight.modulate.a = 1.0
 	#OnCommand()
 	pass
 	
