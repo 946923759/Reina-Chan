@@ -64,10 +64,16 @@ func enemy_touched_alt(obj,reflect):
 			self.rotation_degrees*=-1
 			$Sprite.flip_h=dir==1
 			cooldown=.1
+			# TODO: Damage to reflection shields should be done differently...?
+			try_drain_reflection_health(obj)
 	else:
 		if obj.has_method("damage"):
 			obj.call("damage",2,Globals.Weapons.Ouroboros)
 		killSelf()
+		
+func try_drain_reflection_health(obj):
+	if obj.has_method("drain_reflection_health"):
+		obj.call("drain_reflection_health",2,Globals.Weapons.Ouroboros)
 
 func killSelf(silent:bool=false):
 	var e = smallExplosion.instance()

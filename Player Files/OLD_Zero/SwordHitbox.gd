@@ -14,6 +14,7 @@ func enemy_touched(obj):
 		#print(String(OS.get_ticks_msec())+" Bullet reflected!")
 		#reflectSound.play()
 		print("Sword Reflected.")
+		# TODO: Need to drain reflection health like bullets...?
 		pass
 	else:
 		if obj.has_method("damage"):

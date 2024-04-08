@@ -29,6 +29,18 @@ region = Rect2( 32, 0, 32, 43 )
 atlas = ExtResource( 8 )
 region = Rect2( 64, 0, 32, 43 )
 
+[sub_resource type="AtlasTexture" id=2]
+atlas = ExtResource( 5 )
+region = Rect2( 68, 0, 34, 36 )
+
+[sub_resource type="AtlasTexture" id=3]
+atlas = ExtResource( 5 )
+region = Rect2( 34, 0, 34, 36 )
+
+[sub_resource type="AtlasTexture" id=4]
+atlas = ExtResource( 5 )
+region = Rect2( 0, 0, 34, 36 )
+
 [sub_resource type="AtlasTexture" id=5]
 atlas = ExtResource( 2 )
 region = Rect2( 0, 0, 32, 46 )
@@ -49,18 +61,6 @@ region = Rect2( 96, 0, 32, 46 )
 atlas = ExtResource( 2 )
 region = Rect2( 128, 0, 32, 46 )
 
-[sub_resource type="AtlasTexture" id=2]
-atlas = ExtResource( 5 )
-region = Rect2( 68, 0, 34, 36 )
-
-[sub_resource type="AtlasTexture" id=3]
-atlas = ExtResource( 5 )
-region = Rect2( 34, 0, 34, 36 )
-
-[sub_resource type="AtlasTexture" id=4]
-atlas = ExtResource( 5 )
-region = Rect2( 0, 0, 34, 36 )
-
 [sub_resource type="SpriteFrames" id=10]
 animations = [ {
 "frames": [ SubResource( 1 ) ],
@@ -73,15 +73,15 @@ animations = [ {
 "name": "idle",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 5 ), SubResource( 6 ), SubResource( 7 ), SubResource( 8 ), SubResource( 9 ), SubResource( 9 ) ],
-"loop": false,
-"name": "intro",
-"speed": 13.0
-}, {
 "frames": [ SubResource( 2 ), SubResource( 3 ), SubResource( 4 ), SubResource( 3 ) ],
 "loop": true,
 "name": "idle-o",
 "speed": 5.0
+}, {
+"frames": [ SubResource( 5 ), SubResource( 6 ), SubResource( 7 ), SubResource( 8 ), SubResource( 9 ), SubResource( 9 ) ],
+"loop": false,
+"name": "intro",
+"speed": 13.0
 } ]
 
 [node name="BossScarecrow" instance=ExtResource( 1 )]

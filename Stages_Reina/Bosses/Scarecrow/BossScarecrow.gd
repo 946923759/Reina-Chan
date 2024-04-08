@@ -40,8 +40,13 @@ var player:KinematicBody2D
 
 var startingPosition:Vector2
 var topLeft:Vector2
+
+## Represents how much damage to be done to the reflection shield,
+## before reflection is turned off....
+var reflection_health = 0
+
 func _ready():
-	is_reflecting=true
+	_activate_reflection()
 	if get_parent().get_parent().is_class("Node2D"):
 		topLeft = get_parent().get_parent().global_position
 	startingPosition=self.position
@@ -155,7 +160,6 @@ func _physics_process(delta):
 				fireBullet()
 				shots+=1
 		STATE.IDLE:
-			is_reflecting=true
 			facing=DIRECTION.LEFT if global_position.x > player.global_position.x else DIRECTION.RIGHT
 			sprite.flip_h=(facing==DIRECTION.LEFT)
 			spinnyFrame.set_flipped(sprite.flip_h)
@@ -185,6 +189,7 @@ func _physics_process(delta):
 				idleTime=1
 				spinnyFrame.set_return_circling()
 				curState=STATE.IDLE
+				_activate_reflection()
 		STATE.SHOOT_SPREAD_INIT:
 			is_reflecting=false
 			spinnyFrame.set_float_to_top_spread((topLeft/64+Vector2(10,2))*64)
@@ -248,6 +253,7 @@ func _physics_process(delta):
 				spinnyFrame.set_return_circling(1.0,2.0)
 				idleTime=3.0
 				curState=STATE.IDLE
+				_activate_reflection()
 		STATE.GROUND_ATTACK_1:
 			#DUDE I JUST LOVE HOW THE BITS ARE 1-INDEXED IN THE GUI
 			#BUT 0-INDEXED WHEN USING THE COMMAND BECAUSE THAT
@@ -275,6 +281,7 @@ func _physics_process(delta):
 				get_parent().get_node("DustCloud").position=position
 				get_parent().get_node("DustCloud/AnimationPlayer").play("default")
 				curState=STATE.IDLE
+				_activate_reflection()
 				set_collision_layer_bit(1,true)
 				#set_collision_mask_bit(4,true)
 		#STATE.RETURN_CIRCLING:
@@ -284,3 +291,17 @@ func _physics_process(delta):
 	#Not sure why this isn't working automatically, because
 	#_physics_process can't normally be overridden (godot will execute both)
 	._physics_process(delta)
+
+func _activate_reflection():
+	is_reflecting = true
+	# TODO: Set by difficulty....
+	reflection_health = 6
+
+## NOTE: Don't rename, used by bullets to call...
+func drain_reflection_health(damage: int, damage_type: int):
+	# TODO: Different interaction based on damage type...
+	reflection_health -= damage
+	if reflection_health <= 0 && is_reflecting:
+		# TODO: play sound, or something...
+		is_reflecting = false
+		print("REFLECTION BROKEN")
