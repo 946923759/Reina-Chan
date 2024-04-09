@@ -57,6 +57,7 @@ func enemy_touched_alt(obj,reflect):
 	#TODO: This doesn't account for damage types or effectiveness or whatever...
 	if reflect:
 		reflected=true
+		try_drain_reflection_health(obj)
 		#print(String(OS.get_ticks_msec())+" Bullet reflected!")
 		reflectSound.play()
 		#if obj.has_method("add_collision_exception_with"):
@@ -74,3 +75,7 @@ func enemy_touched_alt(obj,reflect):
 		if obj.has_method("damage"):
 			obj.call("damage",1,damageType)
 		queue_free()
+
+func try_drain_reflection_health(obj):
+	if obj.has_method("drain_reflection_health"):
+		obj.call("drain_reflection_health",1,damageType)
