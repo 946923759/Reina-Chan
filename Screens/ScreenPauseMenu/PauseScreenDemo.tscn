@@ -21,7 +21,7 @@ func _ready():
 	$m.modulate.a=0
 	set_process_input(false)
 	#print(INITrans.GetString(\"PauseMenu\",\"DebugHelp\"))
-	if OS.is_debug_build() or CheckpointPlayerStats.isFromStageSelect:
+	if OS.is_debug_build() or Globals.previous_screen == \"ScreenDebugSelect\":
 		$m/debugHelp.text = INITrans.GetString(\"PauseMenu\",\"DebugHelp\").replace(\"\\\\n\",\"\\n\")
 		optList.get_node(\"debug\").visible=true
 		OPLIST_SIZE=5
@@ -125,7 +125,7 @@ func _input(_ev):
 		OffCommand()
 	elif Input.is_action_just_pressed(\"ui_select\"):
 		input_accept()
-	elif Input.is_action_just_pressed(\"DebugButton1\"):
+	elif Input.is_action_just_pressed(\"DebugButton1\") or (Input.is_action_pressed(\"R1\") and Input.is_action_just_pressed(\"R3\")):
 		if Globals.playerData.gameDifficulty < len(Globals.Difficulty)-1:
 			Globals.playerData.gameDifficulty+=1
 		else:

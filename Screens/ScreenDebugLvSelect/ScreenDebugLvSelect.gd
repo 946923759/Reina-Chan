@@ -25,7 +25,7 @@ func set_character(n):
 	charSel=n
 
 func _ready():
-	
+	Globals.previous_screen = "ScreenDebugSelect"
 	#reinaAudioPlayer=ReinaAudioPlayer.new(self)
 	#reinaAudioPlayer.load_song("StageSelect","Mega Man 10 (recreated).nsf",8)
 	

@@ -326,7 +326,7 @@ animations = [ {
 "speed": 10.0
 } ]
 
-[node name="Enemy" instance=ExtResource( 1 )]
+[node name="nemeum" instance=ExtResource( 1 )]
 script = SubResource( 1 )
 shapeOverride = SubResource( 2 )
 collisionOffset = Vector2( 2, 0 )

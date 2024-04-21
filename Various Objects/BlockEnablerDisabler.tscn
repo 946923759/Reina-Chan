@@ -22,7 +22,10 @@ func execute():
 				child.disable();
 	else:
 		set_process(true)
-		
+
+func execute_from_camera_adjusted(_notUsedOldBounds,_notUsedNewBounds):
+	execute()
+
 var i:int=0
 var t:float = 0.0
 func _process(delta):

@@ -1,4 +1,4 @@
-[gd_scene load_steps=47 format=2]
+[gd_scene load_steps=46 format=2]
 
 [ext_resource path="res://Stages/IceMan/IceManTileset.tres" type="TileSet" id=1]
 [ext_resource path="res://Various Objects/1UP_Drop.tscn" type="PackedScene" id=2]
@@ -12,7 +12,6 @@
 [ext_resource path="res://Various Objects/CameraController/CameraAdjuster_v2.tscn" type="PackedScene" id=10]
 [ext_resource path="res://Screens/ScreenCutscene/Backgrounds/SFBase.png" type="Texture" id=11]
 [ext_resource path="res://Stages_Reina/Enemies/Bomb Enemy.tscn" type="PackedScene" id=12]
-[ext_resource path="res://Various Objects/shapes/v.tres" type="Shape2D" id=13]
 [ext_resource path="res://Stages_Reina/8bitBaseStage.tscn" type="PackedScene" id=14]
 [ext_resource path="res://Various Objects/Waves.tscn" type="PackedScene" id=15]
 [ext_resource path="res://ubuntu-font-family/MM2Font.tres" type="DynamicFont" id=16]
@@ -698,62 +697,53 @@ vandine
 unfiltered"
 align = 1
 
-[node name="EventTileB" type="StaticBody2D" parent="bonusRoom" index="1"]
-position = Vector2( 13216, 320 )
-collision_layer = 4
-collision_mask = 4
-script = ExtResource( 8 )
-event_ID = 9
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="bonusRoom/EventTileB" index="0"]
-shape = ExtResource( 13 )
-
-[node name="CameraAdjuster" parent="bonusRoom/EventTileB" index="1" instance=ExtResource( 22 )]
-position = Vector2( -64, 0 )
+[node name="CameraAdjuster" parent="bonusRoom" index="1" instance=ExtResource( 22 )]
+position = Vector2( 13152, 320 )
 leftBound = 201
 topBound = -999
 rightBound = 221
 bottomBound = 12
 
-[node name="CameraAdjuster2" parent="bonusRoom/EventTileB" index="2" instance=ExtResource( 24 )]
-position = Vector2( 736, 416 )
+[node name="BlockEnablerDisabler" parent="bonusRoom/CameraAdjuster" index="1" instance=ExtResource( 30 )]
+position = Vector2( 64, 0 )
+
+[node name="BlockNode" parent="bonusRoom/CameraAdjuster/BlockEnablerDisabler" index="0" instance=ExtResource( 32 )]
+position = Vector2( -320, 416 )
+start_disabled = true
+
+[node name="BlockNode2" parent="bonusRoom/CameraAdjuster/BlockEnablerDisabler" index="1" instance=ExtResource( 32 )]
+position = Vector2( -256, 416 )
+start_disabled = true
+
+[node name="BlockNode3" parent="bonusRoom/CameraAdjuster/BlockEnablerDisabler" index="2" instance=ExtResource( 32 )]
+position = Vector2( -192, 416 )
+start_disabled = true
+
+[node name="BlockNode4" parent="bonusRoom/CameraAdjuster/BlockEnablerDisabler" index="3" instance=ExtResource( 32 )]
+position = Vector2( -128, 416 )
+start_disabled = true
+
+[node name="CameraAdjuster2" parent="bonusRoom" index="2" instance=ExtResource( 24 )]
+position = Vector2( 13952, 736 )
 leftBound = 201
 topBound = 12
 rightBound = 221
 bottomBound = 36
 freeze_player_during_transition = true
 
-[node name="BlockEnablerDisabler" parent="bonusRoom/EventTileB" index="3" instance=ExtResource( 30 )]
-
-[node name="BlockNode" parent="bonusRoom/EventTileB/BlockEnablerDisabler" index="0" instance=ExtResource( 32 )]
-position = Vector2( -320, 416 )
-start_disabled = true
-
-[node name="BlockNode2" parent="bonusRoom/EventTileB/BlockEnablerDisabler" index="1" instance=ExtResource( 32 )]
-position = Vector2( -256, 416 )
-start_disabled = true
-
-[node name="BlockNode3" parent="bonusRoom/EventTileB/BlockEnablerDisabler" index="2" instance=ExtResource( 32 )]
-position = Vector2( -192, 416 )
-start_disabled = true
-
-[node name="BlockNode4" parent="bonusRoom/EventTileB/BlockEnablerDisabler" index="3" instance=ExtResource( 32 )]
-position = Vector2( -128, 416 )
-start_disabled = true
-
-[node name="9a91" parent="bonusRoom" index="2" instance=ExtResource( 17 )]
+[node name="9a91" parent="bonusRoom" index="3" instance=ExtResource( 17 )]
 position = Vector2( 13440, 640 )
 unlocksEmblem = 1
 
-[node name="1up2" parent="bonusRoom" index="3" instance=ExtResource( 2 )]
+[node name="1up2" parent="bonusRoom" index="4" instance=ExtResource( 2 )]
 position = Vector2( 13632, 672 )
 collision_mask = 49
 
-[node name="1up3" parent="bonusRoom" index="4" instance=ExtResource( 2 )]
+[node name="1up3" parent="bonusRoom" index="5" instance=ExtResource( 2 )]
 position = Vector2( 13728, 672 )
 collision_mask = 49
 
-[node name="1up4" parent="bonusRoom" index="5" instance=ExtResource( 2 )]
+[node name="1up4" parent="bonusRoom" index="6" instance=ExtResource( 2 )]
 position = Vector2( 13680, 608 )
 collision_mask = 49
 
@@ -766,4 +756,4 @@ position = Vector2( 12992, 832 )
 [node name="Position2D3" type="Position2D" parent="DebugWarpPoints" index="2"]
 position = Vector2( 14416, 1296 )
 
-[connection signal="event_executed" from="bonusRoom/EventTileB" to="bonusRoom/EventTileB/BlockEnablerDisabler" method="execute"]
+[connection signal="camera_adjusted" from="bonusRoom/CameraAdjuster" to="bonusRoom/CameraAdjuster/BlockEnablerDisabler" method="execute_from_camera_adjusted"]

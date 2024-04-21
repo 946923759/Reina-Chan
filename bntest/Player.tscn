@@ -1,4 +1,4 @@
-[gd_scene load_steps=59 format=2]
+[gd_scene load_steps=103 format=2]
 
 [ext_resource path="res://bntest/shoot/vz61_attack_25_001.png" type="Texture" id=1]
 [ext_resource path="res://bntest/shoot/vz61_attack_25_000.png" type="Texture" id=2]
@@ -57,6 +57,50 @@
 [ext_resource path="res://bntest/shoot/vz61_attack_25_004.png" type="Texture" id=55]
 [ext_resource path="res://bntest/shoot/vz61_attack_25_006.png" type="Texture" id=56]
 [ext_resource path="res://ubuntu-font-family/MM2Font.tres" type="DynamicFont" id=57]
+[ext_resource path="res://bntest/playerHurt.wav" type="AudioStream" id=58]
+[ext_resource path="res://bntest/shoot.wav" type="AudioStream" id=59]
+[ext_resource path="res://bntest/move/vz61_move_25_000.png" type="Texture" id=60]
+[ext_resource path="res://bntest/move/vz61_move_25_007.png" type="Texture" id=61]
+[ext_resource path="res://bntest/move/vz61_move_25_017.png" type="Texture" id=62]
+[ext_resource path="res://bntest/move/vz61_move_25_018.png" type="Texture" id=63]
+[ext_resource path="res://bntest/move/vz61_move_25_019.png" type="Texture" id=64]
+[ext_resource path="res://bntest/move/vz61_move_25_020.png" type="Texture" id=65]
+[ext_resource path="res://bntest/move/vz61_move_25_011.png" type="Texture" id=66]
+[ext_resource path="res://bntest/move/vz61_move_25_016.png" type="Texture" id=67]
+[ext_resource path="res://bntest/move/vz61_move_25_008.png" type="Texture" id=68]
+[ext_resource path="res://bntest/move/vz61_move_25_021.png" type="Texture" id=69]
+[ext_resource path="res://bntest/move/vz61_move_25_022.png" type="Texture" id=70]
+[ext_resource path="res://bntest/move/vz61_move_25_023.png" type="Texture" id=71]
+[ext_resource path="res://bntest/move/vz61_move_25_013.png" type="Texture" id=72]
+[ext_resource path="res://bntest/move/vz61_move_25_014.png" type="Texture" id=73]
+[ext_resource path="res://bntest/move/vz61_move_25_012.png" type="Texture" id=74]
+[ext_resource path="res://bntest/move/vz61_move_25_010.png" type="Texture" id=75]
+[ext_resource path="res://bntest/move/vz61_move_25_002.png" type="Texture" id=76]
+[ext_resource path="res://bntest/move/vz61_move_25_004.png" type="Texture" id=77]
+[ext_resource path="res://bntest/move/vz61_move_25_006.png" type="Texture" id=78]
+[ext_resource path="res://bntest/move/vz61_move_25_001.png" type="Texture" id=79]
+[ext_resource path="res://bntest/move/vz61_move_25_005.png" type="Texture" id=80]
+[ext_resource path="res://bntest/move/vz61_move_25_009.png" type="Texture" id=81]
+[ext_resource path="res://bntest/move/vz61_move_25_015.png" type="Texture" id=82]
+[ext_resource path="res://bntest/move/vz61_move_25_003.png" type="Texture" id=83]
+[ext_resource path="res://bntest/die/vz61_die_25_006.png" type="Texture" id=84]
+[ext_resource path="res://bntest/die/vz61_die_25_018.png" type="Texture" id=85]
+[ext_resource path="res://bntest/die/vz61_die_25_015.png" type="Texture" id=86]
+[ext_resource path="res://bntest/die/vz61_die_25_016.png" type="Texture" id=87]
+[ext_resource path="res://bntest/die/vz61_die_25_017.png" type="Texture" id=88]
+[ext_resource path="res://bntest/die/vz61_die_25_019.png" type="Texture" id=89]
+[ext_resource path="res://bntest/die/vz61_die_25_020.png" type="Texture" id=90]
+[ext_resource path="res://bntest/die/vz61_die_25_021.png" type="Texture" id=91]
+[ext_resource path="res://bntest/die/vz61_die_25_023.png" type="Texture" id=92]
+[ext_resource path="res://bntest/die/vz61_die_25_022.png" type="Texture" id=93]
+[ext_resource path="res://bntest/die/vz61_die_25_007.png" type="Texture" id=94]
+[ext_resource path="res://bntest/die/vz61_die_25_011.png" type="Texture" id=95]
+[ext_resource path="res://bntest/die/vz61_die_25_010.png" type="Texture" id=96]
+[ext_resource path="res://bntest/die/vz61_die_25_012.png" type="Texture" id=97]
+[ext_resource path="res://bntest/die/vz61_die_25_008.png" type="Texture" id=98]
+[ext_resource path="res://bntest/die/vz61_die_25_009.png" type="Texture" id=99]
+[ext_resource path="res://bntest/die/vz61_die_25_013.png" type="Texture" id=100]
+[ext_resource path="res://bntest/die/vz61_die_25_014.png" type="Texture" id=101]
 
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
@@ -65,8 +109,18 @@ animations = [ {
 "name": "default",
 "speed": 40.0
 }, {
-"frames": [ ExtResource( 2 ), ExtResource( 1 ), ExtResource( 15 ), ExtResource( 53 ), ExtResource( 55 ), ExtResource( 54 ), ExtResource( 56 ), ExtResource( 13 ), ExtResource( 4 ), ExtResource( 14 ), ExtResource( 3 ), ExtResource( 6 ), ExtResource( 12 ), ExtResource( 11 ) ],
+"frames": [ ExtResource( 84 ), ExtResource( 94 ), ExtResource( 98 ), ExtResource( 99 ), ExtResource( 96 ), ExtResource( 95 ), ExtResource( 97 ), ExtResource( 100 ), ExtResource( 101 ), ExtResource( 86 ), ExtResource( 87 ), ExtResource( 88 ), ExtResource( 85 ), ExtResource( 89 ), ExtResource( 90 ), ExtResource( 91 ), ExtResource( 93 ), ExtResource( 92 ) ],
 "loop": true,
+"name": "hurt",
+"speed": 40.0
+}, {
+"frames": [ ExtResource( 60 ), ExtResource( 79 ), ExtResource( 76 ), ExtResource( 83 ), ExtResource( 77 ), ExtResource( 80 ), ExtResource( 78 ), ExtResource( 61 ), ExtResource( 68 ), ExtResource( 81 ), ExtResource( 75 ), ExtResource( 66 ), ExtResource( 74 ), ExtResource( 72 ), ExtResource( 73 ), ExtResource( 82 ), ExtResource( 67 ), ExtResource( 62 ), ExtResource( 63 ), ExtResource( 64 ), ExtResource( 65 ), ExtResource( 69 ), ExtResource( 70 ), ExtResource( 71 ) ],
+"loop": true,
+"name": "move",
+"speed": 40.0
+}, {
+"frames": [ ExtResource( 2 ), ExtResource( 1 ), ExtResource( 15 ), ExtResource( 53 ), ExtResource( 55 ), ExtResource( 54 ), ExtResource( 56 ), ExtResource( 13 ), ExtResource( 4 ), ExtResource( 14 ), ExtResource( 3 ), ExtResource( 6 ), ExtResource( 12 ), ExtResource( 11 ) ],
+"loop": false,
 "name": "shoot",
 "speed": 40.0
 } ]
@@ -80,8 +134,6 @@ __meta__ = {
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 frames = SubResource( 1 )
-frame = 27
-playing = true
 
 [node name="DebugLabel" type="Label" parent="."]
 margin_left = 64.0
@@ -109,3 +161,9 @@ text = "9999"
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="hurt" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 58 )
+
+[node name="shoot" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 59 )

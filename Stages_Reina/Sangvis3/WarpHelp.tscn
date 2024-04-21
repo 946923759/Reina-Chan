@@ -10,7 +10,7 @@ export(int,\"Enter\",\"Exit\") var type setget set_type
 export(int,0,50) var warp_num setget set_warp_num
 
 func _draw():
-	var c = Color.from_hsv(float(warp_num)/50.0,1,1)
+	var c = Color.from_hsv(float(warp_num)/50.0,1,.75)
 	draw_rect(Rect2(0,0,64,64), c)
 
 #func set_txt():

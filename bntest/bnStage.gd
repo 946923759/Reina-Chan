@@ -18,3 +18,12 @@ func _ready():
 	#$Player2.init(platformCenter)
 	#$Player.position=platformCenter
 	#$Player.platformCenter=platformCenter
+
+#func _process(delta):
+#	
+
+func get_obj_at_pos(v2):
+	for c in $Characters.get_children():
+		if v2==c.charaPos:
+			return c
+	return null

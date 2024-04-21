@@ -3,12 +3,28 @@
 [ext_resource path="res://Stages_Reina/Alchemist/cv2.png" type="Texture" id=1]
 
 [sub_resource type="GDScript" id=1]
-script/source = "extends StaticBody2D
+script/source = "tool
+extends StaticBody2D
 
-export (bool) var start_disabled=false
+export (bool) var start_disabled=false setget set_debug_visibility
+export(Texture) var textureOverride
+
+func set_debug_visibility(b):
+	start_disabled = b
+	if Engine.editor_hint:
+		if start_disabled:
+			self.modulate.a = 0.25
+		else:
+			self.modulate.a = 1.0
 
 func _ready():
-	if start_disabled:
+	if textureOverride:
+		var n = get_node_or_null(\"Sprite\")
+		if n:
+			n.texture=textureOverride
+	if Engine.editor_hint:
+		return
+	elif start_disabled:
 		disable();
 
 func enable():

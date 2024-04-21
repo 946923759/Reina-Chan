@@ -39,11 +39,6 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/godot-next/references/bitset.gd"
 }, {
-"base": "KinematicBody2D",
-"class": "BossBase",
-"language": "GDScript",
-"path": "res://Stages_Reina/Bosses/BossBase.gd"
-}, {
 "base": "Reference",
 "class": "CSVFile",
 "language": "GDScript",
@@ -89,12 +84,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/godot-next/global/editor_tools.gd"
 }, {
-"base": "KinematicBody2D",
-"class": "EnemyBase",
-"language": "GDScript",
-"path": "res://Stages/EnemyBaseScript.gd"
-}, {
-"base": "",
+"base": "Node",
 "class": "FLMusicLib",
 "language": "NativeScript",
 "path": "res://gdnative/FLMusicLib/FLMusic.gdns"
@@ -148,11 +138,6 @@ _global_script_classes=[ {
 "class": "MessageDispatcherWrapper",
 "language": "GDScript",
 "path": "res://addons/godot-next/nodes/message_dispatcher_wrapper.gd"
-}, {
-"base": "StaticBody2D",
-"class": "MiniBoss",
-"language": "GDScript",
-"path": "res://Stages/MinibossScript.gd"
 }, {
 "base": "Reference",
 "class": "PIURED_ID",
@@ -281,7 +266,6 @@ _global_script_class_icons={
 "Behavior": "",
 "BitFlag": "",
 "Bitset": "",
-"BossBase": "",
 "CSVFile": "",
 "CallbackDelegator": "",
 "CheatCodeDetector": "",
@@ -291,7 +275,6 @@ _global_script_class_icons={
 "Def": "",
 "DiscreteGradientTexture": "",
 "EditorTools": "",
-"EnemyBase": "",
 "FLMusicLib": "",
 "FileSearch": "",
 "FileSystemLink": "",
@@ -303,7 +286,6 @@ _global_script_class_icons={
 "MenuManager": "",
 "MessageDispatcher": "",
 "MessageDispatcherWrapper": "",
-"MiniBoss": "",
 "PIURED_ID": "",
 "PhysicsLayers": "",
 "PlayerGrenadeThrower": "",

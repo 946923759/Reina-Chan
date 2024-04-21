@@ -202,7 +202,7 @@ func advance_text()->bool:
 #					waitForAnim+=.3
 			'msgbox':
 				var leftSide=true
-				var vPosition:int = 2
+				#var vPosition:int = 2
 				
 				var newPortrait = ""
 				var shouldMask = false

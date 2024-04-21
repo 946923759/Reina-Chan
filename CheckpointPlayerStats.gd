@@ -29,7 +29,7 @@ var temporaryStageStats:int=0
 var lastPlayedStage:int=0
 
 #Should debug menu be shown
-var isFromStageSelect:bool=false
+#var isFromStageSelect:bool=false
 
 #Timer gets assigned every checkpoint, but timerWithDeath should
 #get assigned every death
@@ -65,4 +65,4 @@ func clearEverything():
 	shouldFaceLeft=false
 	temporaryStageStats=0
 	lastPlayedStage=0
-	isFromStageSelect=false
+	#isFromStageSelect=false
