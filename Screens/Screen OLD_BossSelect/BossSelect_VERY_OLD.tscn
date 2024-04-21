@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://ubuntu-font-family/MM2Font_Small.tres" type="DynamicFont" id=3]
-[ext_resource path="res://BossPortraitPositioner.gd" type="Script" id=4]
+[ext_resource path="res://Screens/Screen OLD_BossSelect/BossPortraitPositioner.gd" type="Script" id=4]
 
 [sub_resource type="GDScript" id=1]
 script/source = "extends Node
