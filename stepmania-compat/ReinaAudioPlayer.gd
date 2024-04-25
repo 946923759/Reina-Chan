@@ -49,8 +49,8 @@ func load_song(custom_music_name:String, nsf_music_file:String, nsf_track_num:in
 		#print("Volume level is "+String(realVolumeLevel))
 		nsf_player.set_volume(realVolumeLevel+nsf_volume_adjustment);
 	elif nsf_music_file != "" and OS.has_feature("web"):
-		var jsRet = JavaScript.eval("nsfPlayer.play('"+Globals.NSF_location+nsf_music_file+"',"+String(nsf_track_num)+")")
-		#print(jsRet)
+		var _jsRet = JavaScript.eval("nsfPlayer.play('"+Globals.NSF_location+nsf_music_file+"',"+String(nsf_track_num)+")")
+		#print(_jsRet)
 	elif custom_music_name:
 		print("Failed to find any custom music matching '"+custom_music_name+"'")
 	else:

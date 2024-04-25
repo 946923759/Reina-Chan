@@ -39,7 +39,7 @@ func _physics_process(delta):
 			curState=STATES.MOVING
 	elif curState==STATES.MOVING:
 		sprite.set_animation(\"default\")
-		move_and_slide(Vector2(150*mov,200))
+		move_and_slide(Vector2(150*mov*facing,200))
 		movedFor+=delta
 		if movedFor > moveAfter:
 			movedFor=0
@@ -76,14 +76,6 @@ region = Rect2( 58, 0, 29, 31 )
 atlas = ExtResource( 1 )
 region = Rect2( 87, 0, 29, 31 )
 
-[sub_resource type="AtlasTexture" id=5]
-atlas = ExtResource( 1 )
-region = Rect2( 29, 0, 29, 31 )
-
-[sub_resource type="AtlasTexture" id=6]
-atlas = ExtResource( 1 )
-region = Rect2( 0, 0, 29, 31 )
-
 [sub_resource type="AtlasTexture" id=7]
 atlas = ExtResource( 1 )
 region = Rect2( 0, 0, 29, 31 )
@@ -95,6 +87,14 @@ region = Rect2( 29, 0, 29, 31 )
 [sub_resource type="AtlasTexture" id=9]
 atlas = ExtResource( 1 )
 region = Rect2( 58, 0, 29, 31 )
+
+[sub_resource type="AtlasTexture" id=5]
+atlas = ExtResource( 1 )
+region = Rect2( 29, 0, 29, 31 )
+
+[sub_resource type="AtlasTexture" id=6]
+atlas = ExtResource( 1 )
+region = Rect2( 0, 0, 29, 31 )
 
 [sub_resource type="AtlasTexture" id=10]
 atlas = ExtResource( 1 )
@@ -111,15 +111,15 @@ animations = [ {
 "name": "default",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 5 ), SubResource( 6 ) ],
-"loop": false,
-"name": "stop",
-"speed": 5.0
-}, {
 "frames": [ SubResource( 7 ), SubResource( 8 ), SubResource( 9 ) ],
 "loop": false,
 "name": "start",
 "speed": 12.0
+}, {
+"frames": [ SubResource( 5 ), SubResource( 6 ) ],
+"loop": false,
+"name": "stop",
+"speed": 5.0
 }, {
 "frames": [ SubResource( 10 ), SubResource( 11 ), ExtResource( 3 ), ExtResource( 4 ) ],
 "loop": false,
@@ -132,6 +132,7 @@ script = SubResource( 1 )
 maxHealth = 8
 shapeOverride = SubResource( 2 )
 collisionOffset = Vector2( 0, 2 )
+moveAfter = 0.7
 
 [node name="AnimatedSprite" parent="." index="0"]
 frames = SubResource( 12 )

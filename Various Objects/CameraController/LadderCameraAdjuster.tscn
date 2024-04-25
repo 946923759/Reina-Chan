@@ -3,26 +3,86 @@
 [ext_resource path="res://Various Objects/shapes/CollsionShape2D_h.tscn" type="PackedScene" id=1]
 
 [sub_resource type="GDScript" id=1]
-script/source = "#tool
+script/source = "tool
 extends Area2D
 signal camera_adjusted(camera,newBounds)
+signal camera_moved_upwards()
+signal camera_moved_downwards()
+#signal camera_adjusted_v2(old_bounds, new_bounds, movement_direction)
 #export (Array, int) var newBounds;
 #asdadsadaddsa
+enum AUTO_ADJUST {
+	NONE = 0,
+	X_ONLY,
+	X_AND_Y
+}
+
+export (int,\"Manual\",\"X Only\",\"X and Y\") var auto_adjust_bounds = 0 setget set_bounds
 export (int) var leftBound = 0;
 export (int) var topBound = 0;
 export (int) var rightBound = 0;
 export (int) var bottomBound = 0;
-export (float,-3,3,.5) var center_bound_offset = 0
-export (float) var tweenTime = 1;
+export (float,-3,3,.5) var center_bound_offset = 0.0
+export (float) var tweenTime = 1.0;
 export (bool) var freeze_player_during_transition=true
 export (bool) var only_if_on_ladder=false
 
-
-const cameraScale = 64;
-#export(Shape2D) var shape;
-
+const CAMERA_SCALE = 64;
+const ROOM_WIDTH = 20
+const ROOM_HEIGHT = 12
 
 var player
+
+func set_bounds(t:int):
+	auto_adjust_bounds = t
+	if !is_inside_tree():
+		return
+	if t >= AUTO_ADJUST.X_ONLY:
+		leftBound = int(floor(global_position.x/CAMERA_SCALE/ROOM_WIDTH)*ROOM_WIDTH)
+		rightBound = leftBound+ROOM_WIDTH
+		#print(\"Calculated x=\"+String(leftBound))
+	if t == AUTO_ADJUST.X_AND_Y:
+		#topBound = 
+		# 768
+		var ROOM_HEIGHT_REAL = CAMERA_SCALE*ROOM_HEIGHT
+		var closestRoomBoundary = round(global_position.y/ROOM_HEIGHT_REAL)*ROOM_HEIGHT
+		topBound = closestRoomBoundary-ROOM_HEIGHT
+		bottomBound = closestRoomBoundary+ROOM_HEIGHT
+		# print(\"Calculated closest boundary is \"+String(closestRoomBoundary))
+	update()
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_TRANSFORM_CHANGED:
+		#print(\"changed position\", position)
+		set_bounds(auto_adjust_bounds)
+
+
+func _draw():
+	if Engine.editor_hint:
+		var ladderBoundaryStart = to_local(Vector2(leftBound*CAMERA_SCALE,global_position.y+center_bound_offset*CAMERA_SCALE))
+		var ladderBoundaryEnd = to_local(Vector2(rightBound*CAMERA_SCALE,global_position.y+center_bound_offset*CAMERA_SCALE))
+		#print(\"Drawing from \"+String(ladderBoundaryStart)+\" to \"+String(ladderBoundaryEnd))
+		draw_line(ladderBoundaryStart,ladderBoundaryEnd,Color.chartreuse,4,false)
+		
+		if bottomBound == -999 or topBound == -999:
+			return
+		
+		var leftSide:Vector2 = to_local(Vector2(leftBound,topBound)*CAMERA_SCALE)
+		leftSide.x += 4
+		var rightSide:Vector2 = to_local(Vector2(rightBound,topBound)*CAMERA_SCALE)
+		rightSide.x -= 4
+		#var bottomSide = to_local(Vector2(leftBound,bottomBound)*CAMERA_SCALE)
+		
+		draw_line(
+			leftSide,
+			to_local(Vector2(leftBound,bottomBound)*CAMERA_SCALE),
+			Color.cyan,8
+		)
+		draw_line(
+			rightSide,
+			to_local(Vector2(rightBound,bottomBound)*CAMERA_SCALE),
+			Color.green,8
+		)
 
 func _ready():
 	#The shape to trigger the camera. If the assertion is failing, the camera can't be triggered so it's useless.
@@ -72,37 +132,37 @@ func cam(obj):
 	#We don't want to overwrite leftBound,rightBound, etc so keep the changed variables in a new array.
 	var boundsArray = [null,null,null,null]
 	if rightBound == -999:
-		boundsArray[2] = leftBound*cameraScale+Globals.gameResolution.x
+		boundsArray[2] = leftBound*CAMERA_SCALE+Globals.gameResolution.x
 	else:
-		boundsArray[2] = rightBound*cameraScale
+		boundsArray[2] = rightBound*CAMERA_SCALE
 		
 	if leftBound == -999:
-		boundsArray[0] = rightBound*cameraScale-Globals.gameResolution.x
+		boundsArray[0] = rightBound*CAMERA_SCALE-Globals.gameResolution.x
 	elif leftBound == -9999:
 		boundsArray[0] = cc.limit_right
 	else:
-		boundsArray[0] = leftBound*cameraScale;
+		boundsArray[0] = leftBound*CAMERA_SCALE;
 		#print(\"WARN: Left and right bounds are not defined. The camera won't work.\")
 	
 	#If the player is going up
 	if obj.velocity.y < 0:
 		
 		#Set bottom bound to location of the camera trigger
-		boundsArray[3]=global_position.y+center_bound_offset*cameraScale
+		boundsArray[3]=global_position.y+center_bound_offset*CAMERA_SCALE
 		
 		if topBound == -999:
 			boundsArray[1] = boundsArray[3]-Globals.gameResolution.y
 		else:
-			boundsArray[1] = topBound*cameraScale;
+			boundsArray[1] = topBound*CAMERA_SCALE;
 	else:
 		
 		#Set top bound to the location of the camera trigger
-		boundsArray[1]=global_position.y+center_bound_offset*cameraScale
+		boundsArray[1]=global_position.y+center_bound_offset*CAMERA_SCALE
 		
 		if bottomBound == -999:
 			boundsArray[3] = boundsArray[1]+Globals.gameResolution.y
 		else:
-			boundsArray[3] = bottomBound*cameraScale
+			boundsArray[3] = bottomBound*CAMERA_SCALE
 			
 	if cc.destPositions[1] == boundsArray[1] and cc.destPositions[3]==boundsArray[3]:
 		#print(\"No need to adjust!\")
@@ -120,18 +180,29 @@ func cam(obj):
 			obj.lockMovement(tweenTime,Vector2(0,100))
 	cc.adjustCamera(boundsArray, tweenTime)
 	emit_signal(\"camera_adjusted\",cc,boundsArray)
+	if obj.velocity.y < 0:
+		emit_signal(\"camera_moved_upwards\")
+	else:
+		emit_signal(\"camera_moved_downwards\")
+#	emit_signal(
+#		\"camera_adjusted_v2\", 
+#		Rect2(cc.limit_left, cc.limit_top, cc.limit_right, cc.limit_bottom), 
+#		Rect2(boundsArray[0],boundsArray[1],boundsArray[2],boundsArray[3]), 
+#		obj.velocity
+#	)
 "
 
 [node name="LadderCameraAdjuster" type="Area2D"]
+z_index = 5
+z_as_relative = false
 script = SubResource( 1 )
 __meta__ = {
 "_edit_group_": true,
 "_editor_description_": "Place this where you want the camera to transition while on a ladder.
 The top/bottom limit will be determined based on the location of where this is placed."
 }
-leftBound = 80
-topBound = 13
-rightBound = 100
-bottomBound = 36
+topBound = 12.0
+rightBound = 20
+bottomBound = 36.0
 
 [node name="h" parent="." instance=ExtResource( 1 )]

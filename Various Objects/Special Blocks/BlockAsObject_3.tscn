@@ -13,7 +13,7 @@ func set_debug_visibility(b):
 	start_disabled = b
 	if Engine.editor_hint:
 		if start_disabled:
-			self.modulate.a = 0.25
+			self.modulate.a = 0.35
 		else:
 			self.modulate.a = 1.0
 
@@ -29,6 +29,7 @@ func _ready():
 
 func enable():
 	#print(\"a\")
+	self.modulate.a = 1.0
 	self.visible=true
 	set_collision_mask_bit(0,true)
 	#set_collision_layer_bit(0,true)

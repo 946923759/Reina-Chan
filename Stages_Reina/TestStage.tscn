@@ -1,4 +1,4 @@
-[gd_scene load_steps=69 format=2]
+[gd_scene load_steps=68 format=2]
 
 [ext_resource path="res://Stages/IceMan/IceManTileset.tres" type="TileSet" id=1]
 [ext_resource path="res://Stages_Reina/Enemies/Dinergate.tscn" type="PackedScene" id=2]
@@ -33,7 +33,6 @@
 [ext_resource path="res://Various Objects/CameraController/CameraAdjuster_v2_Horizontal.tscn" type="PackedScene" id=31]
 [ext_resource path="res://Various Objects/MPDrop.tscn" type="PackedScene" id=32]
 [ext_resource path="res://Various Objects/PickupAmmoSmall.tscn" type="PackedScene" id=33]
-[ext_resource path="res://Various Objects/CameraController/LadderCameraAdjuster.tscn" type="PackedScene" id=34]
 [ext_resource path="res://addons/godot-next/gui/debug_label.gd" type="Script" id=35]
 [ext_resource path="res://Stages_Reina/Scarecrow/quicksand_top.png" type="Texture" id=36]
 [ext_resource path="res://Various Objects/EnemySpawner.gd" type="Script" id=37]
@@ -691,7 +690,6 @@ leftBound = -100000
 topBound = -100000
 rightBound = 100000
 bottomBound = 100000
-cameraScale = 1.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CameraAdjuster" index="0"]
 shape = SubResource( 12 )
@@ -741,11 +739,8 @@ topBound = 12
 rightBound = 121
 bottomBound = 25
 
-[node name="LadderCameraAdjuster" parent="." index="42" instance=ExtResource( 34 )]
-position = Vector2( 10880, 1536 )
-leftBound = 160
-topBound = 0
-rightBound = 180
+[node name="PlayerHolder" parent="." index="42"]
+position = Vector2( 1088, -192 )
 
 [node name="CameraAdjuster5" parent="." index="43" instance=ExtResource( 27 )]
 position = Vector2( 10341.1, -376.282 )
@@ -838,7 +833,6 @@ stream = ExtResource( 46 )
 position = Vector2( 2304, -1088 )
 collision_layer = 18
 collision_mask = 18
-moveAfter = 0.7
 
 [node name="Guardian_SWAP" parent="." index="48" instance=ExtResource( 42 )]
 position = Vector2( 2420, -844 )
@@ -976,13 +970,16 @@ __meta__ = {
 
 [node name="h" parent="Area2D" index="0" instance=ExtResource( 50 )]
 
-[node name="PlayerHolder" parent="." index="60"]
-position = Vector2( 1088, -192 )
-
 [node name="Droplet" parent="." index="62" instance=ExtResource( 51 )]
 position = Vector2( 480, -672 )
 
 [node name="Droplet2" parent="." index="63" instance=ExtResource( 51 )]
 position = Vector2( 736, -672 )
+
+[node name="LadderCameraAdjuster" parent="." index="64"]
+position = Vector2( 10880, 1536 )
+leftBound = 160
+topBound = 0
+rightBound = 180
 
 [connection signal="event_executed" from="MovingCameraTest/EventTile12" to="MovingCameraTest/EventTile12/BlockEnablerDisabler" method="execute"]

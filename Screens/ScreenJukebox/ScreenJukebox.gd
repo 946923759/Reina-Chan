@@ -93,10 +93,12 @@ func update_selection(play_sound:bool=true):
 	
 
 func _process(delta):
+	#Set y position every frame
 	var SCREEN_SIZE = self.rect_size
 	bigScroll2.position.y = SCREEN_SIZE.y - scroller1size.y - 10
 	smallScroll2.position.y = SCREEN_SIZE.y - scroller2size.y - 80
 	
+	# Control x position scrolling
 	bigScroll1.position.x -= delta * 200;
 	if bigScroll1.position.x < -scroller1size.x:
 		bigScroll1.position.x += scroller1size.x
@@ -104,9 +106,16 @@ func _process(delta):
 	smallScroll1.position.x -= delta * 100;
 	if smallScroll1.position.x < -scroller2size.x:
 		smallScroll1.position.x += scroller2size.x
-		
-	bigScroll2.position.x = bigScroll1.position.x
-	smallScroll2.position.x = smallScroll1.position.x
+	
+	#Is there a smarter way to do this? Can it be flipped from the above somehow?
+	bigScroll2.position.x += delta * 200;
+	if bigScroll2.position.x > 0:
+		bigScroll2.position.x -= scroller1size.x
+	smallScroll2.position.x += delta * 100;
+	if smallScroll2.position.x > 0:
+		smallScroll2.position.x -= scroller2size.x
+	#bigScroll2.position.x = bigScroll1.position.x
+	#smallScroll2.position.x = smallScroll1.position.x
 		#print("reset")
 		
 	$NowPlaying.position.x = SCREEN_SIZE.x/2

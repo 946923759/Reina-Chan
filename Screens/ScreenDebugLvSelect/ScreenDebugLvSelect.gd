@@ -36,7 +36,7 @@ func _ready():
 		var labelpos = Vector2(0,i*50)
 # warning-ignore:integer_division
 		if i >= (stgLen/2):
-			labelpos = Vector2(500,(i-stgLen/2)*50.0)
+			labelpos = Vector2(500,(i-stgLen/2.0)*50.0)
 		var f = Def.LoadFont(font,{
 			text=stages[i],
 			uppercase=true,

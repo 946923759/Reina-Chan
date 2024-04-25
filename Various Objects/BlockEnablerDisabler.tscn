@@ -10,6 +10,14 @@ onready var children = get_child_count()
 
 var explosion = preload(\"res://Stages/EnemyExplodeSmall.tscn\")
 
+enum Direction {
+	ANY = 0,
+	UP,   
+	DOWN, 
+	LEFT, 
+	RIGHT,
+}
+
 func _ready():
 	set_process(false)
 
@@ -25,6 +33,29 @@ func execute():
 
 func execute_from_camera_adjusted(_notUsedOldBounds,_notUsedNewBounds):
 	execute()
+
+func execute_enable():
+	mode = 0
+	execute()
+
+func execute_disable():
+	mode = 1
+	execute()
+
+#func execute_from_camera_adjusted_v2(_notUsedOldBounds:Rect2, _notUsedNewBounds:Rect2, player_direction:Vector2, match_dir:int=15, enable:int=2):
+#	#0 = enable
+#	#1 = disable
+#	#2 = use last
+#	if enable<2 and enable>=0:
+#		mode = enable
+#	if player_direction.y < 0 and match_dir & Direction.UP:
+#		execute()
+#	elif player_direction.y > 0 and match_dir & Direction.DOWN:
+#		execute()
+#	elif player_direction.x < 0 and match_dir & Direction.LEFT:
+#		execute()
+#	elif player_direction.x > 0 and match_dir & Direction.RIGHT:
+#		execute()
 
 var i:int=0
 var t:float = 0.0

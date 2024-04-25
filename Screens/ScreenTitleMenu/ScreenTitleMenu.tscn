@@ -18,7 +18,7 @@
 [sub_resource type="GDScript" id=13]
 script/source = "extends Node2D
 
-func _process(delta):
+func _process(_delta):
 	var s = get_viewport().get_visible_rect().size
 	self.position = s - Vector2($BitmapSprite2.get_size().x + 5, $BitmapSprite2.get_size().y*2 + 5)
 "
@@ -268,12 +268,12 @@ func unlock_CustomStage()->bool:
 	return false
 	
 	
-	#if OS.has_feature(\"standalone\"):
-	if true:
-		match OS.get_name():
-			\"Windows\",\"WinRT\",\"X11\",\"macOS\",\"UWP\":
-				return true
-	return false
+#	#if OS.has_feature(\"standalone\"):
+#	if true:
+#		match OS.get_name():
+#			\"Windows\",\"WinRT\",\"X11\",\"macOS\",\"UWP\":
+#				return true
+#	return false
 	
 func unlock_CustomCutscene()->bool:
 	return unlock_CustomStage()
@@ -595,7 +595,7 @@ func highlightBool(node,b):
 	node.get_node(\"BoolOff\").set(\"modulate\", Color(.5,.5,.5,1) if b else Color(1,1,1,1));
 	node.get_node(\"BoolOn\").set(\"modulate\", Color(.5,.5,.5,1) if not b else Color(1,1,1,1));
 
-func updateValue(selection,option):
+func updateValue(selection, option):
 	get_child(existing_children+selection).get_node(\"Value\").text=Globals.OPTIONS[option]['value']
 
 func updateTranslation(refresh:bool=false,t:String=\"\"):

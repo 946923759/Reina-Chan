@@ -12,8 +12,8 @@ func _ready():
 	source_scene = load(n.filename)
 	var l = n.get_property_list()
 	for v in l:
-		if v['usage']==8199:
-			print(v)
+		if v['usage']==8199: #If this is an export var. I have no idea where this came from.
+			print("[Spawner] "+String(v))
 			exported_vars.push_back([ v['name'], n.get(v['name']) ])
 
 func _process(delta):
