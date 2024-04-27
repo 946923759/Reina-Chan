@@ -48,6 +48,7 @@ func _ready():
 # warning-ignore:return_value_discarded
 	$Area2D.connect("area_entered",self,"areaTouched")
 
+	sprite.flip_h = (facing == DIRECTION.RIGHT)
 
 onready var introSound:AudioStreamPlayer=$IntroSound
 func playIntro(playSound=true,showHPbar=true)->AudioStreamPlayer:

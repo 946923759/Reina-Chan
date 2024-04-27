@@ -1,4 +1,5 @@
 extends KinematicBody2D
+signal toggled_debug_disp(disp_mode)
 
 const SPEED = 250;
 
@@ -270,10 +271,13 @@ func get_menu_buttons_input(_delta):
 		if debugDisplay.visible and $CanvasLayer/DebugButtonHelp.visible:
 			debugDisplay.visible=false
 			$CanvasLayer/DebugButtonHelp.visible=false
+			emit_signal("toggled_debug_disp",0)
 		elif debugDisplay.visible:
 			$CanvasLayer/DebugButtonHelp.visible = true
+			emit_signal("toggled_debug_disp",2)
 		else:
 			debugDisplay.visible=true
+			emit_signal("toggled_debug_disp",1)
 			
 	#No need to set the debug mode flag for this one since it has zero benefit to the player
 	#and they can restart by pressing start and down+b anyways

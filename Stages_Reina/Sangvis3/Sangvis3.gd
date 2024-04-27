@@ -1,5 +1,10 @@
 extends "res://Stages_Reina/8bitBaseStage.tres.gd"
 
+func _ready():
+	#print("fired ready() from override")
+	get_player().connect("toggled_debug_disp",self,"toggle_debug_block_disp")
+	pass
+
 func playBossMusic(isM16:bool=false):
 	if OS.is_debug_build() and mute_boss_music_in_debug:
 		return
@@ -19,3 +24,7 @@ func playBossMusic(isM16:bool=false):
 #func stopMusic():
 #	reinaAudioPlayer.stop_music()
 #	#$AudioStreamPlayer2.stop()
+
+func toggle_debug_block_disp(m:int=0):
+	for c in get_tree().get_nodes_in_group("debugWarpDisp"):
+		c.visible=(m>0)

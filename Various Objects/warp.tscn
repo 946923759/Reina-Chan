@@ -36,7 +36,7 @@ extents = Vector2( 16, 8 )
 [sub_resource type="RectangleShape2D" id=3]
 extents = Vector2( 16, 7 )
 
-[node name="Node2D" type="Sprite"]
+[node name="Teleporter" type="Sprite"]
 scale = Vector2( 4, 4 )
 texture = ExtResource( 1 )
 centered = false

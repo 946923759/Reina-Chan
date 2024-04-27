@@ -17,8 +17,10 @@ var child:KinematicBody2D
 
 func _ready():
 	sprite.set_process(false)
-	if message_id=="" and message.size()==0:
+	if message_id.empty():
 		message_id="default"
+	elif message_id == "___NONE___":
+		message_id = ""
 	child=get_child(get_child_count()-1)
 	assert(child is KinematicBody2D,"You didn't place the boss as the last child of the warning node, please rearrange it in the list.")
 	#run_event(self)
@@ -39,7 +41,7 @@ func run_event(sender):
 		[999,Vector2(0,5),"Talking",true]
 	])
 	#playerObj.sprite.set_animation("Talking")
-	if Globals.playCutscenes==false or CheckpointPlayerStats.watchedBossIntro:
+	if Globals.playCutscenes==false or CheckpointPlayerStats.watchedBossIntro or message_id.empty():
 		child.playIntro(false)
 		showWarning(false)
 	else:

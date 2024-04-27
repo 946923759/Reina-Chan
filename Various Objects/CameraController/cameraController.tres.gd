@@ -235,3 +235,6 @@ func cam(obj):
 				obj.lockMovement(tweenTime,Vector2(0,-100))
 		cc.adjustCamera(boundsArray, tweenTime)
 		emit_signal("camera_adjusted",cc,boundsArray)
+
+func enable():
+	disabled=false
