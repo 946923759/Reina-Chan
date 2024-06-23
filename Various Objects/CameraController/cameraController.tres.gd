@@ -37,7 +37,8 @@ func auto_set_bounds(t:int):
 	#Godot glitches out if it's false and it's false when switching tabs
 	if !is_inside_tree():
 		return
-		
+	
+	#Rounded to nearest room borders
 	if t == AUTO_ADJUST.RIGHT_1:
 		leftBound = int(round(global_position.x/CAMERA_SCALE/ROOM_WIDTH)*ROOM_WIDTH)
 		rightBound = leftBound+ROOM_WIDTH

@@ -142,13 +142,13 @@ func killSelf():
 	
 	self.queue_free()
 
-var health = preload(\"res://Various Objects/HeartDrop.tscn\")
-var smallHealth = preload(\"res://Various Objects/SmallHeartDrop.tscn\")
+var health = preload(\"res://Various Objects/pickupHealthBig.tscn\")
+var smallHealth = preload(\"res://Various Objects/pickupHealthSmall.tscn\")
 
-var ammo = preload(\"res://Various Objects/MPDrop.tscn\")
+var ammo = preload(\"res://Various Objects/pickupAmmoBig.tscn\")
 var smallAmmo = preload(\"res://Various Objects/PickupAmmoSmall.tscn\")
 
-var oneUp = preload(\"res://Various Objects/1UP_Drop.tscn\")
+var oneUp = preload(\"res://Various Objects/pickupLifeUp.tscn\")
 func dropRandomItem():
 	
 	#Nothing = 24/128

@@ -14,10 +14,14 @@ signal camera_moved_downwards()
 enum AUTO_ADJUST {
 	NONE = 0,
 	X_ONLY,
+	Y_ONLY,
 	X_AND_Y
 }
+const DO_NOT_ADJUST = -9998
+#const AUTOMATIC_BASED_ON_OTHER_SIDE = -999
+#const AUTOMATIC_BASED_ON_THIS_OBJ = -9999
 
-export (int,\"Manual\",\"X Only\",\"X and Y\") var auto_adjust_bounds = 0 setget set_bounds
+export (int,\"Manual\",\"X Only\",\"Y Only\",\"X and Y\") var auto_adjust_bounds = 0 setget set_bounds
 export (int) var leftBound = 0;
 export (int) var topBound = 0;
 export (int) var rightBound = 0;
@@ -37,11 +41,11 @@ func set_bounds(t:int):
 	auto_adjust_bounds = t
 	if !is_inside_tree():
 		return
-	if t >= AUTO_ADJUST.X_ONLY:
+	if t == AUTO_ADJUST.X_ONLY or t == AUTO_ADJUST.X_AND_Y:
 		leftBound = int(floor(global_position.x/CAMERA_SCALE/ROOM_WIDTH)*ROOM_WIDTH)
 		rightBound = leftBound+ROOM_WIDTH
 		#print(\"Calculated x=\"+String(leftBound))
-	if t == AUTO_ADJUST.X_AND_Y:
+	if t == AUTO_ADJUST.Y_ONLY or t == AUTO_ADJUST.X_AND_Y:
 		#topBound = 
 		# 768
 		var ROOM_HEIGHT_REAL = CAMERA_SCALE*ROOM_HEIGHT

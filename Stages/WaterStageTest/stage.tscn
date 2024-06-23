@@ -9,7 +9,7 @@
 [ext_resource path="res://Various Objects/EventTiles/EventTile.tscn" type="PackedScene" id=8]
 [ext_resource path="res://Various Objects/EventTiles/EventTile.gd" type="Script" id=9]
 [ext_resource path="res://Various Objects/Door.tscn" type="PackedScene" id=10]
-[ext_resource path="res://Various Objects/MPDrop.tscn" type="PackedScene" id=11]
+[ext_resource path="res://Various Objects/pickupAmmoBig.tscn" type="PackedScene" id=11]
 
 [sub_resource type="GDScript" id=1]
 script/source = "extends Node2D

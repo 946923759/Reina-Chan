@@ -8,12 +8,12 @@
 [ext_resource path="res://Screens/ScreenSelectCharacter/characterSelectionFrame.tscn" type="PackedScene" id=6]
 [ext_resource path="res://ubuntu-font-family/MM2Font.tres" type="DynamicFont" id=7]
 [ext_resource path="res://Screens/ScreenSelectCharacter/LoopingBG.gd" type="Script" id=8]
-[ext_resource path="res://Screens/ScreenSelectCharacter/ScreenSelectCharacter.gd" type="Script" id=11]
+[ext_resource path="res://Screens/ScreenSelectCharacter/ScreenSelectCharacter_2P.gd" type="Script" id=11]
 [ext_resource path="res://Music/CharSelect.ogg" type="AudioStream" id=13]
 [ext_resource path="res://Screens/ScreenSelectCharacter/okButton.png" type="Texture" id=15]
 [ext_resource path="res://Screens/_transition/transition.tscn" type="PackedScene" id=16]
 
-[node name="ScreenSelectCharacter" type="Control"]
+[node name="ScreenSelectCharacter2P" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 11 )
@@ -96,21 +96,53 @@ texture = ExtResource( 3 )
 expand = true
 stretch_mode = 1
 
-[node name="arrows" parent="." instance=ExtResource( 6 )]
-
-[node name="charDesc" type="Label" parent="."]
+[node name="Control" type="Control" parent="."]
+visible = false
 anchor_right = 1.0
-margin_left = -1024.0
-margin_top = 448.0
-margin_right = -10.0
-margin_bottom = 544.0
-rect_min_size = Vector2( 1280, 96 )
-custom_fonts/font = ExtResource( 2 )
-text = "The star of Reina-Chan, Reina herself! Jump and shoot just like the classics."
-valign = 1
+anchor_bottom = 1.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="HSplitContainer" type="HSplitContainer" parent="."]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -640.0
+margin_top = 478.0
+margin_right = 640.0
+margin_bottom = 513.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="charDesc" type="Label" parent="HSplitContainer"]
+margin_right = 634.0
+margin_bottom = 35.0
+size_flags_horizontal = 3
+custom_fonts/font = ExtResource( 2 )
+text = "player 1"
+align = 1
+valign = 1
+
+[node name="charDesc2" type="Label" parent="HSplitContainer"]
+margin_left = 646.0
+margin_right = 1280.0
+margin_bottom = 35.0
+size_flags_horizontal = 3
+custom_fonts/font = ExtResource( 2 )
+text = "player 2"
+align = 1
+valign = 1
+
+[node name="arrows" parent="." instance=ExtResource( 6 )]
+margin_left = -520.0
+margin_right = -120.0
+player = 1
+
+[node name="arrows2" parent="." instance=ExtResource( 6 )]
+margin_left = 120.0
+margin_right = 520.0
+player = 2
 
 [node name="Tween" type="Tween" parent="."]
 
@@ -146,5 +178,4 @@ valign = 1
 [node name="ScreenTransition" parent="." instance=ExtResource( 16 )]
 visible = false
 
-[connection signal="changed_selection" from="arrows" to="." method="update_disp"]
 [connection signal="gui_input" from="OkButton/OkButtonTexture" to="." method="_on_OkButtonTexture_gui_input"]

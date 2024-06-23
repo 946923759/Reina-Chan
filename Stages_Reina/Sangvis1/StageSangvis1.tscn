@@ -21,7 +21,7 @@
 [ext_resource path="res://Stages_Reina/Sangvis1/bg_underwater.png" type="Texture" id=19]
 [ext_resource path="res://Various Objects/EventTiles/Checkpoint_Vertical.tscn" type="PackedScene" id=20]
 [ext_resource path="res://Stages_Reina/Enemies/Dinergate_Ghost.tscn" type="PackedScene" id=21]
-[ext_resource path="res://Various Objects/HeartDrop.tscn" type="PackedScene" id=22]
+[ext_resource path="res://Various Objects/pickupHealthBig.tscn" type="PackedScene" id=22]
 [ext_resource path="res://Various Objects/shapes/CollsionShape2D_v.tscn" type="PackedScene" id=23]
 [ext_resource path="res://Stages_Reina/Sangvis1/BossBattleWall.tscn" type="PackedScene" id=24]
 [ext_resource path="res://Stages_Reina/Sangvis1/waterfall_v2.tscn" type="PackedScene" id=25]

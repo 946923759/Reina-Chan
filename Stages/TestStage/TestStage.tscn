@@ -11,10 +11,10 @@
 [ext_resource path="res://Stages/NeedleManDemo/EnemySpinnyGuy/Enemy.tscn" type="PackedScene" id=11]
 [ext_resource path="res://Various Objects/Door.tscn" type="PackedScene" id=12]
 [ext_resource path="res://ubuntu-font-family/MM2Font_Small.tres" type="DynamicFont" id=13]
-[ext_resource path="res://Various Objects/HeartDrop.tscn" type="PackedScene" id=14]
+[ext_resource path="res://Various Objects/pickupHealthBig.tscn" type="PackedScene" id=14]
 [ext_resource path="res://Stages/NeedleManDemo/EnemyCannon/CannonEnemyFix.tscn" type="PackedScene" id=15]
 [ext_resource path="res://Stages/NeedleManDemo/EnemyNeedle/NeedleEnemyFix.tscn" type="PackedScene" id=16]
-[ext_resource path="res://Various Objects/MPDrop.tscn" type="PackedScene" id=17]
+[ext_resource path="res://Various Objects/pickupAmmoBig.tscn" type="PackedScene" id=17]
 [ext_resource path="res://Stages/WoodManDemo/enemyRabbit/enemyRabbit.tscn" type="PackedScene" id=18]
 [ext_resource path="res://Various Objects/EventTiles/EventTile.tscn" type="PackedScene" id=19]
 

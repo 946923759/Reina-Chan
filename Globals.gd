@@ -192,6 +192,7 @@ func difficultyToString(d=playerData.gameDifficulty)->String:
 var playerData={
 	gameDifficulty = Difficulty.EASY,
 	currentCharacter = Characters.UMP9,
+	isMultiplayer = false,
 	
 	#These values will get overwritten when you start a new save file,
 	#So you can set them all to true for debugging purposes.
@@ -522,6 +523,8 @@ func set_audio_levels():
 		#The number corresponds to the position in default_bus_layout
 		3:OPTIONS['AudioVolume']['value'],
 		2:OPTIONS['SFXVolume']['value'],
+		4:OPTIONS['SFXVolume']['value'],
+		5:OPTIONS['SFXVolume']['value'],
 		1:OPTIONS['VoiceVolume']['value']
 	}
 	for bus_idx in audios:

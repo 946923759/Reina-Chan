@@ -1,27 +1,27 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Screens/ScreenSelectCharacter/block.png" type="Texture" id=1]
 [ext_resource path="res://ubuntu-font-family/MM2Font_Small.tres" type="DynamicFont" id=2]
 [ext_resource path="res://Screens/ScreenSelectCharacter/title.png" type="Texture" id=3]
 [ext_resource path="res://Stages/NeedleManDemo/backdrop.png" type="Texture" id=4]
 [ext_resource path="res://Stages/NeedleManDemo/backdrop2.png" type="Texture" id=5]
-[ext_resource path="res://Screens/ScreenSelectCharacter/characterSelectionFrame.tscn" type="PackedScene" id=6]
-[ext_resource path="res://ubuntu-font-family/MM2Font.tres" type="DynamicFont" id=7]
 [ext_resource path="res://Screens/ScreenSelectCharacter/LoopingBG.gd" type="Script" id=8]
-[ext_resource path="res://Screens/ScreenSelectCharacter/ScreenSelectCharacter.gd" type="Script" id=11]
 [ext_resource path="res://Music/CharSelect.ogg" type="AudioStream" id=13]
-[ext_resource path="res://Screens/ScreenSelectCharacter/okButton.png" type="Texture" id=15]
+[ext_resource path="res://Sounds/Classic/03 - MenuSelect.wav" type="AudioStream" id=14]
 [ext_resource path="res://Screens/_transition/transition.tscn" type="PackedScene" id=16]
 
 [node name="ScreenSelectCharacter" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-script = ExtResource( 11 )
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 13 )
 autoplay = true
 bus = "Music"
+
+[node name="select" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 14 )
+bus = "Player/Enemies"
 
 [node name="bg" type="TextureRect" parent="."]
 anchor_right = 1.0
@@ -83,68 +83,7 @@ text = "player select"
 align = 1
 valign = 1
 
-[node name="Sprite3" type="TextureRect" parent="."]
-anchor_right = 1.0
-margin_left = -8.0
-margin_top = 448.0
-margin_right = -8.0
-margin_bottom = 480.0
-rect_min_size = Vector2( 0, 32 )
-rect_scale = Vector2( 4, 4 )
-size_flags_horizontal = 3
-texture = ExtResource( 3 )
-expand = true
-stretch_mode = 1
-
-[node name="arrows" parent="." instance=ExtResource( 6 )]
-
-[node name="charDesc" type="Label" parent="."]
-anchor_right = 1.0
-margin_left = -1024.0
-margin_top = 448.0
-margin_right = -10.0
-margin_bottom = 544.0
-rect_min_size = Vector2( 1280, 96 )
-custom_fonts/font = ExtResource( 2 )
-text = "The star of Reina-Chan, Reina herself! Jump and shoot just like the classics."
-valign = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
 [node name="Tween" type="Tween" parent="."]
-
-[node name="OkButton" type="Control" parent="."]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -128.0
-margin_top = 216.0
-margin_right = 128.0
-margin_bottom = 312.0
-__meta__ = {
-"_edit_group_": true
-}
-
-[node name="OkButtonTexture" type="TextureRect" parent="OkButton"]
-margin_right = 64.0
-margin_bottom = 24.0
-rect_scale = Vector2( 4, 4 )
-mouse_filter = 0
-mouse_default_cursor_shape = 2
-texture = ExtResource( 15 )
-
-[node name="Label" type="Label" parent="OkButton"]
-margin_right = 256.0
-margin_bottom = 88.0
-custom_fonts/font = ExtResource( 7 )
-text = "OK"
-align = 1
-valign = 1
 
 [node name="ScreenTransition" parent="." instance=ExtResource( 16 )]
 visible = false
-
-[connection signal="changed_selection" from="arrows" to="." method="update_disp"]
-[connection signal="gui_input" from="OkButton/OkButtonTexture" to="." method="_on_OkButtonTexture_gui_input"]

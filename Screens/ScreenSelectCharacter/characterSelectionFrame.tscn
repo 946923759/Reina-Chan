@@ -1,0 +1,163 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://ParticleEffects/alphaMask.gdshader" type="Shader" id=1]
+[ext_resource path="res://Character Sprites/ump9/ump9.tres" type="SpriteFrames" id=2]
+[ext_resource path="res://Character Sprites/m16/m16.tres" type="SpriteFrames" id=3]
+[ext_resource path="res://Sounds/Classic/03 - MenuSelect.wav" type="AudioStream" id=4]
+[ext_resource path="res://Screens/ScreenSelectCharacter/arrow.png" type="Texture" id=5]
+[ext_resource path="res://ubuntu-font-family/MM2Font.tres" type="DynamicFont" id=6]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Control
+signal changed_selection(new_selection)
+
+export(int,0,4) var player = 0
+
+onready var s = $LeftArrow
+onready var s2 = $RightArrow
+
+var timer:float = 0.0
+var selection:int = 0
+var limit = 1
+
+func _ready():
+	if player > 0:
+		var bus = \"SFXPanRight\"
+		if player & 1:
+			bus = \"SFXPanLeft\"
+		$select.bus = bus
+
+func _process(delta):
+	if OS.has_touchscreen_ui_hint(): #Always show arrows on touchscreen
+		set_process(false)
+		s.modulate.a = 1.0
+		s2.modulate.a = 1.0
+		return
+	
+	s.modulate.a=floor(timer)
+	#$Label.text=String(floor(timer))
+	s2.modulate.a=floor(timer)
+	timer+=delta
+	if timer > 2:
+		timer=timer-2
+	
+	#$Characters.get_child(selection).playing = true
+	#$Characters.position.x = 
+	change_selection(0)
+
+func change_selection(dir:int=0):
+	var nSel = selection+dir
+	if nSel > limit:
+		nSel = 0
+	elif nSel < 0:
+		nSel = limit
+		
+	if selection != nSel:
+		$select.play()
+		emit_signal(\"changed_selection\",nSel)
+
+	selection = nSel
+	var curChar:String = Globals.characterToString(selection)
+	$charName.text=INITrans.GetString(\"ScreenSelectCharacter\",curChar)
+	for i in $Characters.get_child_count():
+		var c = $Characters.get_child(i)
+		c.playing = i==selection
+		c.visible = i==selection
+	
+
+func _on_LeftArrow_gui_input(event):
+	if (event is InputEventMouseButton and event.pressed) or (event is InputEventScreenTouch and event.pressed):
+		change_selection(-1)
+
+
+func _on_RightArrow_gui_input(event):
+	if (event is InputEventMouseButton and event.pressed) or (event is InputEventScreenTouch and event.pressed):
+		change_selection(1)
+"
+
+[sub_resource type="ShaderMaterial" id=3]
+shader = ExtResource( 1 )
+shader_param/clr1 = Color( 0.0627451, 0.439216, 0.517647, 1 )
+
+[node name="arrows" type="Control"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -200.0
+margin_top = -12.0
+margin_right = 200.0
+margin_bottom = 88.0
+rect_min_size = Vector2( 400, 100 )
+script = SubResource( 1 )
+
+[node name="LeftArrow" type="TextureRect" parent="."]
+material = SubResource( 3 )
+anchor_top = 0.5
+anchor_bottom = 0.5
+margin_top = -8.0
+margin_right = 16.0
+margin_bottom = 8.0
+rect_scale = Vector2( 4, 4 )
+rect_pivot_offset = Vector2( 0, 8 )
+mouse_default_cursor_shape = 2
+texture = ExtResource( 5 )
+
+[node name="RightArrow" type="TextureRect" parent="."]
+material = SubResource( 3 )
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = -16.0
+margin_top = -8.0
+margin_bottom = 8.0
+rect_scale = Vector2( 4, 4 )
+rect_pivot_offset = Vector2( 16, 8 )
+mouse_default_cursor_shape = 2
+texture = ExtResource( 5 )
+flip_h = true
+
+[node name="Label" type="Label" parent="."]
+visible = false
+anchor_right = 1.0
+margin_bottom = 14.0
+text = "asdadasdasd"
+
+[node name="Characters" type="Node2D" parent="."]
+position = Vector2( 188, 33 )
+scale = Vector2( 4, 4 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="UMP9" type="AnimatedSprite" parent="Characters"]
+frames = ExtResource( 2 )
+animation = "WalkLoop"
+
+[node name="M16A1" type="AnimatedSprite" parent="Characters"]
+frames = ExtResource( 3 )
+animation = "WalkLoop"
+
+[node name="select" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 4 )
+bus = "Player/Enemies"
+
+[node name="charName" type="Label" parent="."]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -262.0
+margin_top = -256.0
+margin_right = 262.0
+rect_min_size = Vector2( 0, 128 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = ExtResource( 6 )
+text = "ump9 \"REINA\""
+align = 1
+
+[connection signal="gui_input" from="LeftArrow" to="." method="_on_LeftArrow_gui_input"]
+[connection signal="gui_input" from="RightArrow" to="." method="_on_RightArrow_gui_input"]
