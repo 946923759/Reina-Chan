@@ -45,14 +45,14 @@ func auto_set_bounds(t:int):
 		topBound = DO_NOT_ADJUST
 		bottomBound = DO_NOT_ADJUST
 	elif t == AUTO_ADJUST.LEFT_1:
-		rightBound = int(round(global_position.x/CAMERA_SCALE/ROOM_WIDTH)*ROOM_WIDTH)
+		rightBound = int(floor(global_position.x/CAMERA_SCALE/ROOM_WIDTH)*ROOM_WIDTH)
 		leftBound = rightBound-ROOM_WIDTH
 		topBound = DO_NOT_ADJUST
 		bottomBound = DO_NOT_ADJUST
 	elif t == AUTO_ADJUST.DOWN_1:
 		topBound = int(round(global_position.y/CAMERA_SCALE/ROOM_HEIGHT)*ROOM_HEIGHT)
 		bottomBound = AUTOMATIC_BASED_ON_OTHER_SIDE
-		leftBound = int(round(global_position.x/CAMERA_SCALE/ROOM_WIDTH)*ROOM_WIDTH)
+		leftBound = int(floor(global_position.x/CAMERA_SCALE/ROOM_WIDTH)*ROOM_WIDTH)
 		rightBound = leftBound+ROOM_WIDTH
 
 	
@@ -238,4 +238,7 @@ func cam(obj):
 		emit_signal("camera_adjusted",cc,boundsArray)
 
 func enable():
+	disabled=false
+
+func enable_2(_discard, _discard2):
 	disabled=false

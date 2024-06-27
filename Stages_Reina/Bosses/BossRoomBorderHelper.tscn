@@ -1,0 +1,98 @@
+[gd_scene load_steps=2 format=2]
+
+[sub_resource type="GDScript" id=4]
+script/source = "tool
+extends Node2D
+#export(Vector2) var room_bound_offset = Vector2(0,0) setget set_local_offset
+
+const CAMERA_SCALE = 64;
+const ROOM_WIDTH = 20
+const ROOM_HEIGHT = 12
+
+func _ready():
+	if Engine.editor_hint:
+		set_process(false)
+	elif OS.is_debug_build():
+		set_process(true)
+	else:
+		queue_free()
+	#print(get_parent().room_bound_offset)
+
+func _process(delta):
+	update()
+
+func _draw():
+	var CLOSEST_ROOM_BOUND = Vector2(
+		floor(global_position.x/CAMERA_SCALE/ROOM_WIDTH)*ROOM_WIDTH,
+		floor(global_position.y/CAMERA_SCALE/ROOM_HEIGHT)*ROOM_HEIGHT
+	)*CAMERA_SCALE
+	#var rect = Rect2(CLOSEST_ROOM_BOUND.x, CLOSEST_ROOM_BOUND.y, 1280,720)
+	
+	var room_bound_offset:Vector2
+	var p = get_parent()
+	if p:
+		room_bound_offset = p.room_bound_offset
+	
+	
+	var boundaryStart:Vector2 = to_local(CLOSEST_ROOM_BOUND)+room_bound_offset
+	boundaryStart.x -= 64 #Subtract 1 block as rooms will always be shifted left by 1
+	var boundaryEnd:Vector2 = boundaryStart+Vector2(ROOM_WIDTH,ROOM_HEIGHT)*CAMERA_SCALE
+	#rightBoundaryStart.x -= 4
+	# draw_line(
+	#	from: Vector2, 
+	#	to: Vector2, 
+	#	color: Color, 
+	#	width: float = 1.0, 
+	#	antialiased: bool = false
+	# )
+	
+	#Left line
+	draw_line(
+		boundaryStart,
+		Vector2(boundaryStart.x,boundaryEnd.y),
+		Color.red,
+		8,
+		false
+	)
+	
+	#Top line
+	draw_line(
+		boundaryStart,
+		Vector2(boundaryEnd.x,boundaryStart.y),
+		Color.red,
+		8,
+		false
+	)
+	#Right line
+	draw_line(
+		boundaryEnd,
+		Vector2(boundaryEnd.x,boundaryStart.y),
+		Color.red,
+		8,
+		false
+	)
+	#Bottom line
+	draw_line(
+		boundaryEnd,
+		Vector2(boundaryStart.x,boundaryEnd.y),
+		Color.red,
+		8,
+		false
+	)
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_TRANSFORM_CHANGED:
+		update()
+	elif what == NOTIFICATION_VISIBILITY_CHANGED and visible:
+		update()
+
+#func set_local_offset(o:Vector2):
+#	room_bound_offset=o
+#	update()
+"
+
+[node name="BossRoomBoundHelper" type="Node2D"]
+script = SubResource( 4 )
+__meta__ = {
+"_edit_lock_": true
+}

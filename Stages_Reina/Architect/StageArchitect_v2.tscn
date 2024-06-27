@@ -8,7 +8,7 @@
 [ext_resource path="res://Various Objects/pickupHealthSmall.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Various Objects/pickupHealthBig.tscn" type="PackedScene" id=7]
 [ext_resource path="res://Various Objects/EventTiles/EventTile.gd" type="Script" id=8]
-[ext_resource path="res://Stages/DebugRoomBorders.tscn" type="PackedScene" id=9]
+[ext_resource path="res://Stages_Reina/Bosses/BossRoomBorderHelper.tscn" type="PackedScene" id=9]
 [ext_resource path="res://Various Objects/CameraController/CameraAdjuster_v2.tscn" type="PackedScene" id=10]
 [ext_resource path="res://Screens/ScreenCutscene/Backgrounds/SFBase.png" type="Texture" id=11]
 [ext_resource path="res://Stages_Reina/Enemies/Goliath.tscn" type="PackedScene" id=12]
@@ -380,31 +380,34 @@ event_ID = 1
 position = Vector2( 32, 32 )
 shape = SubResource( 4 )
 
-[node name="BossArea" type="Node2D" parent="." index="17"]
+[node name="Room 240-12 Boss Area" type="Node2D" parent="." index="17"]
+position = Vector2( 14080, 768 )
 
-[node name="Sprite" type="Sprite" parent="BossArea" index="0"]
-position = Vector2( 15936, 1220 )
+[node name="Sprite" type="Sprite" parent="Room 240-12 Boss Area" index="0"]
+position = Vector2( 1856, 488 )
 scale = Vector2( 1.125, 1.125 )
 z_index = -1
 texture = ExtResource( 11 )
 
-[node name="Door" parent="BossArea" index="1" instance=ExtResource( 23 )]
-position = Vector2( 14079, 1216 )
+[node name="Door" parent="Room 240-12 Boss Area" index="1" instance=ExtResource( 23 )]
+position = Vector2( 0, 448 )
 topBound = -999
 bottomBound = 25
 
-[node name="Door2" parent="BossArea" index="2" instance=ExtResource( 23 )]
-position = Vector2( 15295, 1216 )
+[node name="Door2" parent="Room 240-12 Boss Area" index="2" instance=ExtResource( 23 )]
+position = Vector2( 1216, 448 )
 boss_room_door = true
 topBound = -999
 bottomBound = 25
 
-[node name="WARNING intro" parent="BossArea/Door2" index="4" instance=ExtResource( 26 )]
-position = Vector2( 256, 256 )
+[node name="WARNING intro" parent="Room 240-12 Boss Area" index="3" instance=ExtResource( 26 )]
+position = Vector2( 1472, 704 )
 message_id = "Architect"
 
-[node name="BossArchitect" parent="BossArea/Door2/WARNING intro" index="3" instance=ExtResource( 33 )]
-position = Vector2( 736, 0 )
+[node name="BossArchitect" parent="Room 240-12 Boss Area/WARNING intro" index="3" instance=ExtResource( 33 )]
+position = Vector2( 736, 16 )
+
+[node name="BossRoomBoundHelper" parent="Room 240-12 Boss Area/WARNING intro/BossArchitect" index="10" instance=ExtResource( 9 )]
 
 [node name="Label" type="Label" parent="." index="18"]
 visible = false
@@ -603,10 +606,7 @@ topBound = -999
 rightBound = 221
 bottomBound = 48
 
-[node name="DebugRoomBorders2" parent="." index="29" instance=ExtResource( 9 )]
-modulate = Color( 1, 1, 1, 1 )
-
-[node name="room140-0" type="Node2D" parent="." index="30"]
+[node name="room140-0" type="Node2D" parent="." index="29"]
 
 [node name="Dinergate5" parent="room140-0" index="0" instance=ExtResource( 29 )]
 position = Vector2( 9888, 672 )
@@ -629,7 +629,7 @@ collision_layer = 48
 [node name="RigidBody2D" parent="room140-0" index="4" instance=ExtResource( 6 )]
 position = Vector2( 9247, 672 )
 
-[node name="room160-0" type="Node2D" parent="." index="31"]
+[node name="room160-0" type="Node2D" parent="." index="30"]
 
 [node name="Enemy9" parent="room160-0" index="0" instance=ExtResource( 12 )]
 position = Vector2( 11391, 128 )
@@ -643,7 +643,7 @@ type = 0
 position = Vector2( 10783, 512 )
 type = 0
 
-[node name="room180-12" type="Node2D" parent="." index="32"]
+[node name="room180-12" type="Node2D" parent="." index="31"]
 
 [node name="CameraAdjuster6" parent="room180-12" index="0" instance=ExtResource( 24 )]
 position = Vector2( 12415, 768 )
@@ -666,7 +666,7 @@ bottomBound = 36
 position = Vector2( 11839, 1920 )
 facing = 1
 
-[node name="room200-12" type="Node2D" parent="." index="33"]
+[node name="room200-12" type="Node2D" parent="." index="32"]
 position = Vector2( 12799, 1536 )
 
 [node name="1up" parent="room200-12" index="0" instance=ExtResource( 2 )]
@@ -681,7 +681,7 @@ no_movement = false
 position = Vector2( 480, 160 )
 facing = 1
 
-[node name="bonusRoom" type="Node2D" parent="." index="34"]
+[node name="bonusRoom" type="Node2D" parent="." index="33"]
 
 [node name="Label6" type="Label" parent="bonusRoom" index="0"]
 visible = false
@@ -754,6 +754,6 @@ position = Vector2( 9536, 1856 )
 position = Vector2( 12992, 832 )
 
 [node name="Position2D3" type="Position2D" parent="DebugWarpPoints" index="2"]
-position = Vector2( 14416, 1296 )
+position = Vector2( 14624, 1344 )
 
 [connection signal="camera_adjusted" from="bonusRoom/CameraAdjuster" to="bonusRoom/CameraAdjuster/BlockEnablerDisabler" method="execute_from_camera_adjusted"]

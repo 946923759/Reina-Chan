@@ -73,18 +73,10 @@ var curState = STATE.JUMP_BACKWARDS
 var idleTime:float =0
 var shots:int = 0
 
-#var topLeftRelative:Vector2
-var topLeft:Vector2
 func _ready():
 	$CanvasLayer/Label.visible=$CanvasLayer/Label.visible and OS.is_debug_build()
 	wheels.visible=false
-	if get_parent().get_parent().is_class("Node2D"):
-		topLeft = get_parent().get_parent().global_position
-		
-		#topLeftRelative = get_parent().position
-		
-func getPosRelativeToRoom()->Vector2:
-	return get_parent().position + position
+	$Wheels.flip_h = (facing == DIRECTION.RIGHT)
 
 #Override this so the wheels intro anim gets played too
 func playIntro(playSound=true,showHPbar=true)->AudioStreamPlayer:
@@ -120,6 +112,7 @@ func shootRocketSky(destXPos:float,offset:Vector2,rightWheel:bool=false,waitTime
 	else:
 		pos+=wheels.w2.position
 	
+	print("[Ouroboros] Spawning rocket at pos "+String(pos)+" (relative to parent)")
 	e.position = pos
 	get_parent().add_child(e)
 	
@@ -154,11 +147,14 @@ func _physics_process(delta):
 		idleTime-=delta
 		return
 	
-	$CanvasLayer/Label.text = stateToString[curState]
-	var stageRoot = get_node_or_null("/root/Node2D")
-	if stageRoot:
-		$CanvasLayer/Label.text+="\n"+String(stageRoot.pos2cell(getPosRelativeToRoom()))+String(getPosRelativeToRoom()/64)
+	#$CanvasLayer/Label.text = stateToString[curState]
+	#var stageRoot = get_node_or_null("/root/Node2D")
+	#if stageRoot:
+	#	$CanvasLayer/Label.text+="\n"+String(stageRoot.pos2cell(get_room_position()))+String(get_room_position()/64)
 	
+	if get_room_position().y/64 > 20:
+		printerr("[Ouroboros] Fell outside the room??? "+String(get_room_position()))
+		position = Vector2(0,-256)
 	
 	match curState:
 		STATE.IDLE:
@@ -189,7 +185,7 @@ func _physics_process(delta):
 				shots+=1
 			elif shots >=4:
 				shots=0
-				if getPosRelativeToRoom().x/64>10:
+				if get_room_position().x/64>10:
 					if curHP<14: # and randi()%2==0
 						curState=STATE.SHOOT_SKY_1
 					else:
@@ -205,8 +201,8 @@ func _physics_process(delta):
 				
 			velocity = move_and_slide(velocity,Vector2(0,-1),true)
 			if is_on_floor():
-				if (curState==STATE.HOP_TO_LEFT and getPosRelativeToRoom().x/64 > 4) or \
-				   (curState==STATE.HOP_TO_RIGHT and getPosRelativeToRoom().x/64 < 14):
+				if (curState==STATE.HOP_TO_LEFT and get_room_position().x/64 > 4) or \
+				   (curState==STATE.HOP_TO_RIGHT and get_room_position().x/64 < 14):
 					sprite.play("jump forward")
 					sprite.frame=0
 					velocity=Vector2(400*facing,-220)
@@ -267,11 +263,11 @@ func _physics_process(delta):
 			velocity = move_and_slide(velocity,Vector2(0,-1),true)
 			velocity.y+=1200*delta
 			if is_on_floor():
-				if global_position.x < topLeft.x+13*64:
+				if get_room_position().x < 13*64:
 					velocity=Vector2(-400*facing,-220)
 					sprite.play("jump backward")
 					#$CanvasLayer/Label.text+="\nRight"
-				elif global_position.x > topLeft.x + 17*64:
+				elif get_room_position().x > 17*64:
 					velocity=Vector2(400*facing,-220)
 					sprite.play("jump forward")
 					#$CanvasLayer/Label.text+="\nLeft"
@@ -287,25 +283,28 @@ func _physics_process(delta):
 				sprite.play("default")
 				$Wheels.play("shootAngle")
 				#Just in case physics doesn't work
-				if getPosRelativeToRoom().x/64 < 18 or getPosRelativeToRoom().y/64 > 4:
-					global_position = Vector2(319*64,99.3*64)
+				if get_room_position().x/64 < 18 or get_room_position().y/64 > 4:
+					set_room_position(Vector2(20*64,3.3*64))
+					#global_position = Vector2(319*64,99.3*64)
 				idleTime=.5
 				shots=0
 				curState=STATE.SHOOT_SKY_3
 		STATE.SHOOT_SKY_3, STATE.SHOOT_SKY_4:
 			move_and_slide(Vector2(0,100),Vector2(0,-1),true)
 			
-# warning-ignore:integer_division
-			#var addOne:int = shots/4 #Truncated on purpose
+			#(12 - 12 or 12 - 13) + 3 + 4*shots
 			var shotX:float=STATE.SHOOT_SKY_3-curState+3+4*shots
-			if shots>=4:
+			if shots>=4: #Reverse it so it's right to left
 				shotX=STATE.SHOOT_SKY_3-curState+2+4*(shots-4)
+				
 			#randf returns a value between 0 and 1
 			shotX+=randf()-.5
 			var waitTimer:float=.2
 			
 			#if shots>4:
 			#	waitTimer+=2
+			
+			#destXPos, offset, rightWheel (reverse dir), wait time
 			var s = shootRocketSky(shotX,Vector2(20*facing, -18),shots>4,waitTimer)
 			if OS.is_debug_build():
 				if shots>=4:

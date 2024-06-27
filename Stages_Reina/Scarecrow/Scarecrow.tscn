@@ -970,7 +970,6 @@ position = Vector2( 640, 0 )
 leftBound = 140
 topBound = 12
 rightBound = 160
-bottomBound = -999
 freeze_player_during_transition = true
 
 [node name="CameraAdjuster2" parent="140-12 to 140-24" index="1" instance=ExtResource( 13 )]
@@ -978,7 +977,6 @@ position = Vector2( 640, 768 )
 leftBound = 140
 topBound = 24
 rightBound = 160
-bottomBound = -999
 freeze_player_during_transition = true
 
 [node name="CameraAdjuster3" parent="140-12 to 140-24" index="2" instance=ExtResource( 13 )]
@@ -986,7 +984,6 @@ position = Vector2( 640, 1472 )
 leftBound = 140
 topBound = 36
 rightBound = 160
-bottomBound = -999
 freeze_player_during_transition = true
 
 [node name="PickupHealth" parent="140-12 to 140-24" index="3" instance=ExtResource( 19 )]
@@ -1003,7 +1000,6 @@ position = Vector2( 800, 576 )
 leftBound = 100
 topBound = 36
 rightBound = 160
-bottomBound = -999
 tweenTime = 0.0
 
 [node name="Goliath6" parent="140-36" index="1" instance=ExtResource( 17 )]

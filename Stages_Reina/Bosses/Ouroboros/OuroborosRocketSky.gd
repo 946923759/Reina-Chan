@@ -16,7 +16,7 @@ func init2(startingDirection_=DIRECTION.LEFT,destXPos_:float=5.0,waitTime_:float
 	startingDirection=startingDirection_
 	destXpos=destXPos_
 	speed=speed_
-	print("Wait for "+String(waitTime_))
+	#print("[OuroborosRocketSky] Wait for "+String(waitTime_))
 	waitTime=waitTime_
 	handle_sprite_direction()
 	$CollisionShape2D.disabled=true

@@ -39,6 +39,8 @@ onready var spinnyFrame = $SpinnyFrame
 var player:KinematicBody2D
 
 var startingPosition:Vector2
+#TODO: This code isn't correct (topLeft isn't aligned in scarecrow stage)
+#and it should be calculating based on room_position var in BossBase anyways
 var topLeft:Vector2
 
 ## Represents how much damage to be done to the reflection shield,

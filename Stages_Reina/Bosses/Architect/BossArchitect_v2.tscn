@@ -15,6 +15,17 @@ frames = ExtResource( 5 )
 [node name="IntroSound" parent="." index="3"]
 stream = ExtResource( 4 )
 
+[node name="DebugLabel2" parent="." index="8"]
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_as_outline = 2
+text = "position = Vector2( 0, 0 )
+global_position = Vector2( 0, 0 )
+room_position = null
+curState = null
+facing = -1
+"
+properties = PoolStringArray( "position", "global_position", "room_position", "curState", "facing" )
+
 [node name="LaunchRocket" type="AudioStreamPlayer2D" parent="." index="9"]
 stream = ExtResource( 3 )
 bus = "Player/Enemies"

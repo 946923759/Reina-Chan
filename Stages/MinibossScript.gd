@@ -26,8 +26,8 @@ onready var explSound = $MiniExplodeSound
 var explosion = preload("res://Stages/EnemyExplosion.tscn")
 var smallExplosion = preload("res://Stages/EnemyExplodeSmall.tscn")
 
-var health = preload("res://Various Objects/HeartDrop.tscn")
-var smallHealth = preload("res://Various Objects/SmallHeartDrop.tscn")
+var health = preload("res://Various Objects/pickupHealthBig.tscn")
+var smallHealth = preload("res://Various Objects/pickupHealthSmall.tscn")
 
 var bullet = preload("res://Stages_Reina/Enemies/bulletDinergate.tscn")
 

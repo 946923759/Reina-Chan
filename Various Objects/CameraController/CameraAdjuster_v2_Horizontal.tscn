@@ -12,6 +12,8 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_group_": true
 }
+rightBound = 20
+bottomBound = -999
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource( 1 )

@@ -14,22 +14,21 @@ script = ExtResource( 5 )
 intro_subtitle_key = "Ouroboros_Intro"
 
 [node name="AnimatedSprite" parent="." index="1"]
-position = Vector2( 8, -22 )
+position = Vector2( 8, -20 )
 frames = ExtResource( 2 )
-animation = "jump backward"
 
 [node name="Wheels" type="Node2D" parent="." index="2"]
 script = ExtResource( 4 )
-radius = Vector2( 8.70456, -13.4222 )
+radius = Vector2( -15.6999, -3.07186 )
 speed = 0.8
 
 [node name="Wheel1" type="AnimatedSprite" parent="Wheels" index="0"]
-position = Vector2( 72.7046, -13.4222 )
+position = Vector2( 48.3001, -3.07186 )
 scale = Vector2( 4, 4 )
 frames = ExtResource( 3 )
 
 [node name="Wheel2" type="AnimatedSprite" parent="Wheels" index="1"]
-position = Vector2( -72.7045, 13.4223 )
+position = Vector2( -48.3001, 3.072 )
 scale = Vector2( 4, 4 )
 z_index = -1
 frames = ExtResource( 3 )
@@ -59,11 +58,6 @@ asdadasdasd
 asdasdasd
 asd"
 valign = 2
-
-[node name="DebugLabel" parent="." index="8"]
-text = "animation = \"jump backward\"
-playing = false
-"
 
 [node name="DebugLabel2" parent="." index="9"]
 text = "position = Vector2( 0, 0 )

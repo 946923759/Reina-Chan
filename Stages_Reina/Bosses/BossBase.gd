@@ -11,6 +11,7 @@ var curHP:int = 28 #All bosses in mega man have 28 health.
 #const MAX_HP = 28
 
 var is_reflecting:bool=false
+
 onready var sprite:AnimatedSprite = $AnimatedSprite
 onready var HPBar = $CanvasLayer/bar
 onready var hurtSound = $HurtSound
@@ -36,23 +37,47 @@ export(bool) var stage_finished_when_killed = true
 
 var deathAnimation = preload("res://Animations/deathAnimation.tscn")
 
+const CAMERA_SCALE = 64;
+const ROOM_WIDTH = 20
+const ROOM_HEIGHT = 12
+#This is real global position, not block position!
+var CLOSEST_ROOM_BOUND:Vector2
+export(Vector2) var room_bound_offset = Vector2(0,0)
+# Returns real pixel position, not rounded to nearest block!
+# Note that get/set only works if another class calls it for some insane reason,
+# so using this in your inherited class will have no effect.
+# Use get_room_position() instead
+var room_position:Vector2 setget set_room_position,get_room_position
+
+func get_room_position()->Vector2:
+	return global_position-CLOSEST_ROOM_BOUND-room_bound_offset
+func set_room_position(v:Vector2):
+	global_position=CLOSEST_ROOM_BOUND+room_bound_offset+v
+
 func _ready():
 	sprite.set_animation("default")
-	
-# warning-ignore:return_value_discarded
-	$Area2D.connect("body_entered",self,"objectTouched")
-# warning-ignore:return_value_discarded
-	$Area2D.connect("body_exited",self,"clearLastTouched")
-# warning-ignore:return_value_discarded
-	#Absolutely kicking myself for not using the enemy base script right now
-# warning-ignore:return_value_discarded
-	$Area2D.connect("area_entered",self,"areaTouched")
-
 	sprite.flip_h = (facing == DIRECTION.RIGHT)
+	CLOSEST_ROOM_BOUND = Vector2(
+		floor(global_position.x/CAMERA_SCALE/ROOM_WIDTH)*ROOM_WIDTH,
+		floor(global_position.y/CAMERA_SCALE/ROOM_HEIGHT)*ROOM_HEIGHT
+	)*CAMERA_SCALE
+	#print("Closest room is "+String(CLOSEST_ROOM_BOUND/CAMERA_SCALE)+", real pos "+String(CLOSEST_ROOM_BOUND))
+
+	if Engine.editor_hint:
+		set_physics_process(false)
+		set_process(false)
+	else:
+		# warning-ignore:return_value_discarded
+		$Area2D.connect("body_entered",self,"objectTouched")
+		# warning-ignore:return_value_discarded
+		$Area2D.connect("body_exited",self,"clearLastTouched")
+		# warning-ignore:return_value_discarded
+		#Absolutely kicking myself for not using the enemy base script right now
+		# warning-ignore:return_value_discarded
+		$Area2D.connect("area_entered",self,"areaTouched")
 
 onready var introSound:AudioStreamPlayer=$IntroSound
 func playIntro(playSound=true,showHPbar=true)->AudioStreamPlayer:
-	#$AnimatedSprite.animation="intro"
 	sprite.play("intro")
 	if showHPbar:
 		var seq := get_tree().create_tween()

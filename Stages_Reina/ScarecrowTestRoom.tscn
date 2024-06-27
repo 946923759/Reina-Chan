@@ -483,3 +483,7 @@ position = Vector2( 288, 544 )
 
 [node name="Dinergate" parent="." index="11" instance=ExtResource( 9 )]
 position = Vector2( 576, 672 )
+no_movement = false
+
+[node name="CanvasLayer" parent="." index="13"]
+visible = false

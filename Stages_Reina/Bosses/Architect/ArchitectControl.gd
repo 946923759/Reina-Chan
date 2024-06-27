@@ -15,7 +15,9 @@ enum STATE {
 var curState = STATE.SHOOTING1
 var idleTime:float =0
 var shots:int = 0
-var shouldMoveLeft:bool=true
+#Sets starting movement, so if architect is facing left, she will
+#move left first. Otherwise if she is facing right, she will move right.
+onready var shouldMoveLeft:bool = (facing==DIRECTION.LEFT)
 var tempVelocity:Vector2
 
 onready var rocketSound = $LaunchRocket
@@ -73,11 +75,11 @@ func _physics_process(delta):
 		if shouldMoveLeft:
 			facing=DIRECTION.LEFT
 			# How can we know how much to walk by?
-			# Since the start boss tile is always 3 blocks from the door,
-			# And the boss is a child of the boss tile, we can assume
-			# The safe bounds of the room are -96 and 864.
+			# The room is width of 1152 (subtracted walls), but each block is 64 pixels wide
+			# so subtract 2*64+32 from each side
+			# note that architect is centered so add 32 pixels
 			
-			if position.x >= -96:
+			if get_room_position().x >= 2*64+32:
 				#player run speed = 350
 # warning-ignore:return_value_discarded
 				move_and_slide(Vector2(facing*500,200))
@@ -87,7 +89,7 @@ func _physics_process(delta):
 				curState=STATE.IDLE2
 		else:
 			facing=DIRECTION.RIGHT
-			if position.x <= 864-16*4:
+			if get_room_position().x <= 1152-2*64-32:
 # warning-ignore:return_value_discarded
 				move_and_slide(Vector2(facing*500,200))
 			else:

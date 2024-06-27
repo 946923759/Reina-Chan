@@ -150,7 +150,7 @@ func objectTouched(obj):
 #	lastTouched=null
 		
 func killSelf(bigExplode=false):
-	print(self.name+" queued to be killed.")
+	#print(self.name+" queued to be killed.")
 	isAlive = false
 	set_physics_process(false)
 	sprite.visible = false
