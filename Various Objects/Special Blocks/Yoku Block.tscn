@@ -49,13 +49,13 @@ func _process(delta):
 		$AnimatedSprite.frame=0
 		$AnimatedSprite.play()
 		active=true
-		#set_collision_mask_bit(0,true)
-		set_collision_layer_bit(0,true)
+		set_collision_mask_bit(0,true)
+		#set_collision_layer_bit(0,true)
 	elif active and cond(time):
 		active=false
 		visible=false
-		#set_collision_mask_bit(0,false)
-		set_collision_layer_bit(0,false)
+		set_collision_mask_bit(0,false)
+		#set_collision_layer_bit(0,false)
 "
 
 [sub_resource type="AtlasTexture" id=2]
@@ -94,8 +94,7 @@ animations = [ {
 extents = Vector2( 32, 32 )
 
 [node name="YokuBlock" type="StaticBody2D"]
-collision_layer = 16
-collision_mask = 16
+collision_layer = 0
 script = SubResource( 1 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]

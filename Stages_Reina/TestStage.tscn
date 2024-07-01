@@ -1,4 +1,4 @@
-[gd_scene load_steps=68 format=2]
+[gd_scene load_steps=69 format=2]
 
 [ext_resource path="res://Stages/IceMan/IceManTileset.tres" type="TileSet" id=1]
 [ext_resource path="res://Stages_Reina/Enemies/Dinergate.tscn" type="PackedScene" id=2]
@@ -33,6 +33,7 @@
 [ext_resource path="res://Various Objects/CameraController/CameraAdjuster_v2_Horizontal.tscn" type="PackedScene" id=31]
 [ext_resource path="res://Various Objects/pickupAmmoBig.tscn" type="PackedScene" id=32]
 [ext_resource path="res://Various Objects/PickupAmmoSmall.tscn" type="PackedScene" id=33]
+[ext_resource path="res://Stages/BossRoomNode2D.tscn" type="PackedScene" id=34]
 [ext_resource path="res://addons/godot-next/gui/debug_label.gd" type="Script" id=35]
 [ext_resource path="res://Stages_Reina/Scarecrow/quicksand_top.png" type="Texture" id=36]
 [ext_resource path="res://Various Objects/EnemySpawner.gd" type="Script" id=37]
@@ -740,7 +741,7 @@ rightBound = 121
 bottomBound = 25
 
 [node name="PlayerHolder" parent="." index="42"]
-position = Vector2( 1088, -192 )
+position = Vector2( -624, 640 )
 
 [node name="CameraAdjuster5" parent="." index="43" instance=ExtResource( 27 )]
 position = Vector2( 10341.1, -376.282 )
@@ -862,24 +863,25 @@ on easy or less"
 [node name="BreakableBlock" parent="." index="53" instance=ExtResource( 49 )]
 position = Vector2( 736, -864 )
 
-[node name="BossRoomTest" type="Node2D" parent="." index="54"]
+[node name="BossRoom" parent="." index="54" instance=ExtResource( 34 )]
+position = Vector2( 1216, -768 )
 
-[node name="Door2" parent="BossRoomTest" index="0" instance=ExtResource( 22 )]
-position = Vector2( 0, -320 )
+[node name="Door2" parent="BossRoom" index="0" instance=ExtResource( 22 )]
+position = Vector2( -1216, 448 )
 topBound = -12
 bottomBound = -999
 
-[node name="Door" parent="BossRoomTest" index="1" instance=ExtResource( 22 )]
-position = Vector2( 1216, -320 )
+[node name="Door" parent="BossRoom" index="1" instance=ExtResource( 22 )]
+position = Vector2( 0, 448 )
 boss_room_door = true
 topBound = -12
 bottomBound = -9999
 
-[node name="Node2D" parent="BossRoomTest/Door" index="4" instance=ExtResource( 17 )]
-position = Vector2( 256, 192 )
+[node name="Node2D" parent="BossRoom" index="2" instance=ExtResource( 17 )]
+position = Vector2( 256, 640 )
 message_id = "TestStageCutscene"
 
-[node name="BossArchitect" parent="BossRoomTest/Door/Node2D" index="3" instance=ExtResource( 26 )]
+[node name="BossArchitect" parent="BossRoom/Node2D" index="3" instance=ExtResource( 26 )]
 position = Vector2( 736, 0 )
 
 [node name="MovingCameraTest" type="Node2D" parent="." index="55"]
@@ -976,10 +978,9 @@ position = Vector2( 480, -672 )
 [node name="Droplet2" parent="." index="63" instance=ExtResource( 51 )]
 position = Vector2( 736, -672 )
 
-[node name="LadderCameraAdjuster" parent="." index="64"]
-position = Vector2( 10880, 1536 )
-leftBound = 160
-topBound = 0
-rightBound = 180
+[node name="BlockNode" parent="." index="64" instance=ExtResource( 28 )]
+position = Vector2( 2592, -800 )
+collision_layer = 0
+collision_mask = 1
 
 [connection signal="event_executed" from="MovingCameraTest/EventTile12" to="MovingCameraTest/EventTile12/BlockEnablerDisabler" method="execute"]

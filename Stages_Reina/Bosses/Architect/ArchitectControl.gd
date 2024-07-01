@@ -79,7 +79,7 @@ func _physics_process(delta):
 			# so subtract 2*64+32 from each side
 			# note that architect is centered so add 32 pixels
 			
-			if get_room_position().x >= 2*64+32:
+			if get_room_position().x >= 3*64+32:
 				#player run speed = 350
 # warning-ignore:return_value_discarded
 				move_and_slide(Vector2(facing*500,200))
@@ -89,7 +89,7 @@ func _physics_process(delta):
 				curState=STATE.IDLE2
 		else:
 			facing=DIRECTION.RIGHT
-			if get_room_position().x <= 1152-2*64-32:
+			if get_room_position().x <= ROOM_WIDTH*64-3*64-32:
 # warning-ignore:return_value_discarded
 				move_and_slide(Vector2(facing*500,200))
 			else:

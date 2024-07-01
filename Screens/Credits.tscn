@@ -82,7 +82,7 @@ margin_bottom = 36.5
 grow_horizontal = 2
 custom_fonts/font = ExtResource( 1 )
 text = "Reina-Chan
-demo 5"
+demo 6"
 align = 1
 
 [node name="c2" type="RichTextLabel" parent="."]
@@ -105,8 +105,9 @@ amaryllis works
 vandine
 unfiltered
 
-[b]programmer[/b]
+[b]programmers[/b]
 amaryllis works
+wqyeo
 
 [b]artwork[/b]
 vandine
@@ -164,8 +165,9 @@ amaryllis works
 vandine
 unfiltered
 
-programmer
+programmers
 amaryllis works
+wqyeo
 
 artwork
 vandine
@@ -213,8 +215,6 @@ no copyright infringement intended
 this game is free and open source!
 
 see you next demo...?"
-__meta__ = {
-"_edit_use_anchors_": false
-}
+scroll_active = false
 
 [node name="Tween" type="Tween" parent="."]

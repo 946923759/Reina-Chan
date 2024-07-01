@@ -265,7 +265,7 @@ func scan_check_diagonal()->bool:
 					$DebugDisplay.debug_highlight_block(Vector2(x,y),Color.blue)
 					if blockAt==PIECE.King:
 						return true
-					elif b==1:
+					elif blockAt==1:
 						break
 				
 				x = p.grid_position.x

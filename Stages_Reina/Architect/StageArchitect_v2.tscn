@@ -8,7 +8,7 @@
 [ext_resource path="res://Various Objects/pickupHealthSmall.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Various Objects/pickupHealthBig.tscn" type="PackedScene" id=7]
 [ext_resource path="res://Various Objects/EventTiles/EventTile.gd" type="Script" id=8]
-[ext_resource path="res://Stages_Reina/Bosses/BossRoomBorderHelper.tscn" type="PackedScene" id=9]
+[ext_resource path="res://Stages/BossRoomNode2D.tscn" type="PackedScene" id=9]
 [ext_resource path="res://Various Objects/CameraController/CameraAdjuster_v2.tscn" type="PackedScene" id=10]
 [ext_resource path="res://Screens/ScreenCutscene/Backgrounds/SFBase.png" type="Texture" id=11]
 [ext_resource path="res://Stages_Reina/Enemies/Goliath.tscn" type="PackedScene" id=12]
@@ -400,16 +400,17 @@ boss_room_door = true
 topBound = -999
 bottomBound = 25
 
-[node name="WARNING intro" parent="Room 240-12 Boss Area" index="3" instance=ExtResource( 26 )]
-position = Vector2( 1472, 704 )
+[node name="BossRoom" parent="." index="18" instance=ExtResource( 9 )]
+position = Vector2( 15296, 768 )
+
+[node name="WARNING intro" parent="BossRoom" index="0" instance=ExtResource( 26 )]
+position = Vector2( 256, 704 )
 message_id = "Architect"
 
-[node name="BossArchitect" parent="Room 240-12 Boss Area/WARNING intro" index="3" instance=ExtResource( 33 )]
+[node name="BossArchitect" parent="BossRoom/WARNING intro" index="3" instance=ExtResource( 33 )]
 position = Vector2( 736, 16 )
 
-[node name="BossRoomBoundHelper" parent="Room 240-12 Boss Area/WARNING intro/BossArchitect" index="10" instance=ExtResource( 9 )]
-
-[node name="Label" type="Label" parent="." index="18"]
+[node name="Label" type="Label" parent="." index="19"]
 visible = false
 margin_left = 12864.0
 margin_top = 1056.0
@@ -423,7 +424,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label2" type="Label" parent="." index="19"]
+[node name="Label2" type="Label" parent="." index="20"]
 visible = false
 margin_left = 11712.0
 margin_top = -128.0
@@ -436,7 +437,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label4" type="Label" parent="." index="20"]
+[node name="Label4" type="Label" parent="." index="21"]
 visible = false
 margin_left = 12224.0
 margin_top = 1408.0
@@ -448,7 +449,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label5" type="Label" parent="." index="21"]
+[node name="Label5" type="Label" parent="." index="22"]
 visible = false
 margin_left = 10400.0
 margin_top = 2400.0
@@ -462,7 +463,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label3" type="Label" parent="." index="22"]
+[node name="Label3" type="Label" parent="." index="23"]
 visible = false
 margin_left = 5824.0
 margin_top = -128.0
@@ -474,7 +475,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="room140-24" type="Node2D" parent="." index="23"]
+[node name="room140-24" type="Node2D" parent="." index="24"]
 position = Vector2( 9215, 2304 )
 
 [node name="UnderwaterShading" type="Polygon2D" parent="room140-24" index="0"]
@@ -513,7 +514,7 @@ region_rect = Rect2( 0, 0, 4096, 8 )
 [node name="PickupAmmo" parent="room140-24" index="6" instance=ExtResource( 4 )]
 position = Vector2( 1088, 608 )
 
-[node name="room160-24 to 200-24" type="Node2D" parent="." index="24"]
+[node name="room160-24 to 200-24" type="Node2D" parent="." index="25"]
 
 [node name="FloorMaster7" parent="room160-24 to 200-24" index="0" instance=ExtResource( 3 )]
 position = Vector2( 10655, 2912 )
@@ -548,7 +549,7 @@ topBound = 12
 rightBound = 221
 bottomBound = 48
 
-[node name="Checkpoints" type="Node2D" parent="." index="25"]
+[node name="Checkpoints" type="Node2D" parent="." index="26"]
 
 [node name="Node2D3" parent="Checkpoints" index="0" instance=ExtResource( 27 )]
 position = Vector2( 14719, 1152 )
@@ -556,14 +557,14 @@ position = Vector2( 14719, 1152 )
 [node name="Checkpoint" parent="Checkpoints" index="1" instance=ExtResource( 27 )]
 position = Vector2( 9536, 1600 )
 
-[node name="CameraAdjuster6" parent="." index="26" instance=ExtResource( 22 )]
+[node name="CameraAdjuster6" parent="." index="27" instance=ExtResource( 22 )]
 position = Vector2( 11520, -256 )
 leftBound = 180
 topBound = -999
 rightBound = 200
 bottomBound = 12
 
-[node name="Jupiter Cannon miniboss" parent="." index="27" instance=ExtResource( 35 )]
+[node name="Jupiter Cannon miniboss" parent="." index="28" instance=ExtResource( 35 )]
 position = Vector2( 12352, 448 )
 scale = Vector2( 6, 6 )
 maxHealth = 25
@@ -598,7 +599,7 @@ __meta__ = {
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Jupiter Cannon miniboss/StaticBody2D" index="0"]
 shape = SubResource( 7 )
 
-[node name="CameraAdjuster5" parent="." index="28" instance=ExtResource( 22 )]
+[node name="CameraAdjuster5" parent="." index="29" instance=ExtResource( 22 )]
 position = Vector2( 10207, 2752 )
 scale = Vector2( 0.5, 1 )
 leftBound = 160
@@ -606,7 +607,7 @@ topBound = -999
 rightBound = 221
 bottomBound = 48
 
-[node name="room140-0" type="Node2D" parent="." index="29"]
+[node name="room140-0" type="Node2D" parent="." index="30"]
 
 [node name="Dinergate5" parent="room140-0" index="0" instance=ExtResource( 29 )]
 position = Vector2( 9888, 672 )
@@ -629,7 +630,7 @@ collision_layer = 48
 [node name="RigidBody2D" parent="room140-0" index="4" instance=ExtResource( 6 )]
 position = Vector2( 9247, 672 )
 
-[node name="room160-0" type="Node2D" parent="." index="30"]
+[node name="room160-0" type="Node2D" parent="." index="31"]
 
 [node name="Enemy9" parent="room160-0" index="0" instance=ExtResource( 12 )]
 position = Vector2( 11391, 128 )
@@ -643,7 +644,7 @@ type = 0
 position = Vector2( 10783, 512 )
 type = 0
 
-[node name="room180-12" type="Node2D" parent="." index="31"]
+[node name="room180-12" type="Node2D" parent="." index="32"]
 
 [node name="CameraAdjuster6" parent="room180-12" index="0" instance=ExtResource( 24 )]
 position = Vector2( 12415, 768 )
@@ -666,7 +667,7 @@ bottomBound = 36
 position = Vector2( 11839, 1920 )
 facing = 1
 
-[node name="room200-12" type="Node2D" parent="." index="32"]
+[node name="room200-12" type="Node2D" parent="." index="33"]
 position = Vector2( 12799, 1536 )
 
 [node name="1up" parent="room200-12" index="0" instance=ExtResource( 2 )]
@@ -681,7 +682,7 @@ no_movement = false
 position = Vector2( 480, 160 )
 facing = 1
 
-[node name="bonusRoom" type="Node2D" parent="." index="33"]
+[node name="bonusRoom" type="Node2D" parent="." index="34"]
 
 [node name="Label6" type="Label" parent="bonusRoom" index="0"]
 visible = false
@@ -733,6 +734,7 @@ freeze_player_during_transition = true
 
 [node name="9a91" parent="bonusRoom" index="3" instance=ExtResource( 17 )]
 position = Vector2( 13440, 640 )
+message_id = "ArchitectNPC"
 unlocksEmblem = 1
 
 [node name="1up2" parent="bonusRoom" index="4" instance=ExtResource( 2 )]

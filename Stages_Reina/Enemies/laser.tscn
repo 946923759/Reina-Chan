@@ -44,6 +44,7 @@ func _on_Jupiter_Laser_body_entered(body):
 	if body.has_method(\"player_touched\"):
 		body.player_touched(self,3)
 
+#No need for enable func since it will enable itself within range
 func disable():
 	monitoring = false
 	sprite.visible = false

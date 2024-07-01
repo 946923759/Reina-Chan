@@ -186,6 +186,9 @@ func list_files_in_directory(path):
 	return files
 
 func _ready():
+	if visible==false:
+		queue_free()
+	
 	var tex1 = $MissionTex
 	var tex2 = $StartTex
 	var tex1width = tex1.texture.get_width()
@@ -491,6 +494,7 @@ test"
 uppercase = true
 
 [node name="MissionStartAnim" type="Node2D" parent="CanvasLayer"]
+visible = false
 script = SubResource( 6 )
 
 [node name="MissionTex" type="Sprite" parent="CanvasLayer/MissionStartAnim"]

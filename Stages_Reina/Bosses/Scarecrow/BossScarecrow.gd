@@ -39,9 +39,6 @@ onready var spinnyFrame = $SpinnyFrame
 var player:KinematicBody2D
 
 var startingPosition:Vector2
-#TODO: This code isn't correct (topLeft isn't aligned in scarecrow stage)
-#and it should be calculating based on room_position var in BossBase anyways
-var topLeft:Vector2
 
 ## Represents how much damage to be done to the reflection shield,
 ## before reflection is turned off....
@@ -49,8 +46,6 @@ var reflection_health = 0
 
 func _ready():
 	_activate_reflection()
-	if get_parent().get_parent().is_class("Node2D"):
-		topLeft = get_parent().get_parent().global_position
 	startingPosition=self.position
 	print("[Scarecrow] StartPos: "+String(startingPosition))
 	facing=DIRECTION.LEFT
@@ -129,7 +124,7 @@ func _physics_process(delta):
 		player=get_node("/root/Node2D/").get_player()
 	
 	if OS.is_debug_build():
-		$DebugLabel3.text=String((global_position-topLeft)/64)
+		$DebugLabel3.text=String(get_room_position()/CAMERA_SCALE)
 		$DebugLabel3.text+="\n"+String(position/64) + String(position)
 
 	match curState:
@@ -176,7 +171,7 @@ func _physics_process(delta):
 			fireBullet()
 			idleTime=1.7
 		STATE.SHOOT_TOP_INIT:
-			spinnyFrame.set_float_to_top((topLeft/64+Vector2(10,3))*64)
+			spinnyFrame.set_float_to_top((CLOSEST_ROOM_BOUND/64+Vector2(10,3))*64)
 			idleTime=1
 			is_reflecting=false
 			bulletCounter=0
@@ -194,11 +189,11 @@ func _physics_process(delta):
 				_activate_reflection()
 		STATE.SHOOT_SPREAD_INIT:
 			is_reflecting=false
-			spinnyFrame.set_float_to_top_spread((topLeft/64+Vector2(10,2))*64)
+			spinnyFrame.set_float_to_top_spread((CLOSEST_ROOM_BOUND/64+Vector2(10,2))*64)
 			if bulletCounter==0:
 				var t:Tween = $Tween
 				t.interpolate_property(self,"global_position",null,
-					topLeft+Vector2(10,6)*64,
+					CLOSEST_ROOM_BOUND+Vector2(10,6)*64,
 					1.0
 				)
 				t.start()

@@ -37,6 +37,7 @@ func _ready():
 	CheckpointPlayerStats.clearEverything()
 	
 	if Globals.previous_screen.begins_with(\"Stage\"):
+		print(\"[ScreenSelectStage] prev screen was \"+Globals.previous_screen+\", no anim!\")
 		$Transition.queue_free()
 	else:
 		$Transition.visible = true

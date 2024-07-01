@@ -28,7 +28,7 @@ func give_emblem(body:KinematicBody2D):
 		self.queue_free()
 "
 
-[node name="1Up Drop" instance=ExtResource( 2 )]
+[node name="Pickup ReinaEmblem" instance=ExtResource( 2 )]
 script = SubResource( 1 )
 
 [node name="Sprite" parent="." index="1"]

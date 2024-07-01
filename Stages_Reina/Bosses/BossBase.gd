@@ -42,7 +42,7 @@ const ROOM_WIDTH = 20
 const ROOM_HEIGHT = 12
 #This is real global position, not block position!
 var CLOSEST_ROOM_BOUND:Vector2
-export(Vector2) var room_bound_offset = Vector2(0,0)
+#export(Vector2) var room_bound_offset = Vector2(0,0)
 # Returns real pixel position, not rounded to nearest block!
 # Note that get/set only works if another class calls it for some insane reason,
 # so using this in your inherited class will have no effect.
@@ -50,18 +50,25 @@ export(Vector2) var room_bound_offset = Vector2(0,0)
 var room_position:Vector2 setget set_room_position,get_room_position
 
 func get_room_position()->Vector2:
-	return global_position-CLOSEST_ROOM_BOUND-room_bound_offset
+	return global_position-CLOSEST_ROOM_BOUND
 func set_room_position(v:Vector2):
-	global_position=CLOSEST_ROOM_BOUND+room_bound_offset+v
+	global_position=CLOSEST_ROOM_BOUND+v
 
 func _ready():
 	sprite.set_animation("default")
 	sprite.flip_h = (facing == DIRECTION.RIGHT)
-	CLOSEST_ROOM_BOUND = Vector2(
-		floor(global_position.x/CAMERA_SCALE/ROOM_WIDTH)*ROOM_WIDTH,
-		floor(global_position.y/CAMERA_SCALE/ROOM_HEIGHT)*ROOM_HEIGHT
-	)*CAMERA_SCALE
+	
+	# What is the point of this? 
+	# Bosses can do get_parent().get_parent() to get the room bound also,
+	# and there is no need to type in the offset since the parent of the parent
+	# is the room position
+	#CLOSEST_ROOM_BOUND = Vector2(
+	#	floor(global_position.x/CAMERA_SCALE/ROOM_WIDTH)*ROOM_WIDTH,
+	#	floor(global_position.y/CAMERA_SCALE/ROOM_HEIGHT)*ROOM_HEIGHT
+	#)*CAMERA_SCALE
 	#print("Closest room is "+String(CLOSEST_ROOM_BOUND/CAMERA_SCALE)+", real pos "+String(CLOSEST_ROOM_BOUND))
+	if get_parent().get_parent().is_class("Node2D"):
+		CLOSEST_ROOM_BOUND = get_parent().get_parent().global_position
 
 	if Engine.editor_hint:
 		set_physics_process(false)
@@ -153,6 +160,8 @@ func killSelf():
 	set_physics_process(false)
 	sprite.visible = false
 	sprite.stop()
+	collision_layer=0
+	collision_mask=0
 	
 	$DieSound.play()
 	var sp = deathAnimation.instance()

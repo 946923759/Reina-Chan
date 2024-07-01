@@ -3,7 +3,7 @@ signal cutscene_finished
 
 
 var gf_cutscene = preload("res://Screens/ScreenCutscene/CutsceneMain.tscn")
-var emblem_drop = preload("res://Various Objects/UMP9CHAN Drop.tscn")
+var emblem_drop = preload("res://Various Objects/pickupReinaEmblem.tscn")
 
 export(int,"AppearFromBoss","Normal") var spawnType = 1
 export (String) var animToPlayIfNormal = "default"

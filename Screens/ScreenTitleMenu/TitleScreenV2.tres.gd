@@ -79,6 +79,7 @@ func _ready():
 	#Enable resizing (WIP)
 	set_process(ProjectSettings.get_setting("display/window/stretch/aspect") != "keep")
 	
+	Globals.previous_screen="ScreenTitleMenu"
 	print("Title screen ready!")
 
 func _process(_delta):

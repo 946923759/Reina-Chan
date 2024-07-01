@@ -22,9 +22,9 @@ var pumpkin = preload(\"res://Stages_Reina/Bosses/Alchemist/PumpkinBomb.tscn\")
 
 var player
 func _ready():
-	player = get_node(\"/root/Node2D\").get_player()
-	if !is_instance_valid(player):
-		print(\"RIPPER: No player!\")
+	#player = get_node(\"/root/Node2D\").get_player()
+	#if !is_instance_valid(player):
+	#	print(\"[RIPPER] No player!\")
 	sprite.set_animation(\"default\")
 		
 var timer:float=0.0
@@ -108,18 +108,6 @@ region = Rect2( 0, 0, 32, 34 )
 atlas = ExtResource( 2 )
 region = Rect2( 128, 0, 32, 34 )
 
-[sub_resource type="AtlasTexture" id=5]
-atlas = ExtResource( 2 )
-region = Rect2( 160, 0, 32, 34 )
-
-[sub_resource type="AtlasTexture" id=6]
-atlas = ExtResource( 2 )
-region = Rect2( 192, 0, 32, 34 )
-
-[sub_resource type="AtlasTexture" id=7]
-atlas = ExtResource( 2 )
-region = Rect2( 224, 0, 32, 34 )
-
 [sub_resource type="AtlasTexture" id=8]
 atlas = ExtResource( 2 )
 region = Rect2( 32, 0, 32, 34 )
@@ -131,6 +119,18 @@ region = Rect2( 64, 0, 32, 34 )
 [sub_resource type="AtlasTexture" id=10]
 atlas = ExtResource( 2 )
 region = Rect2( 96, 0, 32, 34 )
+
+[sub_resource type="AtlasTexture" id=5]
+atlas = ExtResource( 2 )
+region = Rect2( 160, 0, 32, 34 )
+
+[sub_resource type="AtlasTexture" id=6]
+atlas = ExtResource( 2 )
+region = Rect2( 192, 0, 32, 34 )
+
+[sub_resource type="AtlasTexture" id=7]
+atlas = ExtResource( 2 )
+region = Rect2( 224, 0, 32, 34 )
 
 [sub_resource type="SpriteFrames" id=11]
 animations = [ {
@@ -144,15 +144,15 @@ animations = [ {
 "name": "jump",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 5 ), SubResource( 6 ), SubResource( 7 ) ],
-"loop": false,
-"name": "throw",
-"speed": 10.0
-}, {
 "frames": [ SubResource( 8 ), SubResource( 9 ), SubResource( 10 ) ],
 "loop": false,
 "name": "shoot",
 "speed": 5.0
+}, {
+"frames": [ SubResource( 5 ), SubResource( 6 ), SubResource( 7 ) ],
+"loop": false,
+"name": "throw",
+"speed": 10.0
 } ]
 
 [node name="RipperHalloween" instance=ExtResource( 1 )]
