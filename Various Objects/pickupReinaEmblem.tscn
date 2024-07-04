@@ -2,7 +2,7 @@
 
 [ext_resource path="res://ParticleEffects/AlphaMaskPurple.tres" type="Material" id=1]
 [ext_resource path="res://Various Objects/pickupLifeUp.tscn" type="PackedScene" id=2]
-[ext_resource path="res://Various Objects/letters.png" type="Texture" id=3]
+[ext_resource path="res://Various Objects/reina_letters.png" type="Texture" id=3]
 
 [sub_resource type="GDScript" id=1]
 script/source = "tool

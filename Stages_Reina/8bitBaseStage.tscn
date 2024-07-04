@@ -132,14 +132,16 @@ scale = Vector2( 4, 4 )
 tile_set = ExtResource( 2 )
 cell_size = Vector2( 16, 16 )
 show_collision = true
-collision_layer = 48
+collision_layer = 16
+collision_mask = 35
 format = 1
 
 [node name="EasyTiles" type="TileMap" parent="."]
 scale = Vector2( 4, 4 )
 tile_set = SubResource( 3 )
 cell_size = Vector2( 16, 16 )
-collision_layer = 48
+collision_layer = 16
+collision_mask = 33
 format = 1
 
 [node name="DebugRoomBorders" parent="." instance=ExtResource( 4 )]

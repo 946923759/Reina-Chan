@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://ubuntu-font-family/MM2Font_Small.tres" type="DynamicFont" id=1]
 [ext_resource path="res://ubuntu-font-family/MM2Font_Smaller.tres" type="DynamicFont" id=2]
@@ -11,23 +11,23 @@
 script/source = "extends CanvasLayer
 signal unpaused()
 
-onready var optList = $m/CenterContainer/VBoxContainer
+onready var optList = $page1/CenterContainer/VBoxContainer
 var OPLIST_SIZE = 4 #5 if debug
 
 func _ready():
 	self.visible=Engine.editor_hint #If true ingame mouse will break
 	
 	optList.get_child(0).modulate =Color(0.21,0.63,1,1)
-	$m.modulate.a=0
+	$page1.modulate.a=0
 	set_process_input(false)
 	#print(INITrans.GetString(\"PauseMenu\",\"DebugHelp\"))
 	if OS.is_debug_build() or Globals.previous_screen == \"ScreenDebugSelect\":
-		$m/debugHelp.text = INITrans.GetString(\"PauseMenu\",\"DebugHelp\").replace(\"\\\\n\",\"\\n\")
+		$page1/debugHelp.text = INITrans.GetString(\"PauseMenu\",\"DebugHelp\").replace(\"\\\\n\",\"\\n\")
 		optList.get_node(\"debug\").visible=true
 		OPLIST_SIZE=5
-		$d.construct()
+		$page2.construct()
 	else:
-		$m/debugHelp.visible=false
+		$page1/debugHelp.visible=false
 		optList.get_node(\"debug\").visible=false
 	
 	if INITrans.currentLanguage!=\"en\":
@@ -35,8 +35,10 @@ func _ready():
 		for child in optList.get_children():
 			child.set(\"custom_fonts/font\",INITrans.font)
 			child.text=INITrans.GetString(\"PauseMenu\",child.text)
-	#OnCommand()
-	#print($m/CenterContainer/VBoxContainer/Label.rect_global_position)
+	var stg = get_node_or_null(\"/root/Node2D\")
+	if not stg:
+		OnCommand()
+	#print($page1/CenterContainer/VBoxContainer/Label.rect_global_position)
 
 var time
 func updateTimer(time_,timeWithDeath):
@@ -51,23 +53,23 @@ func updateTimer(time_,timeWithDeath):
 			timeWithDeath,
 			Globals.TimeFormat.FORMAT_MINUTES|Globals.TimeFormat.FORMAT_SECONDS|Globals.TimeFormat.FORMAT_MILISECONDS
 		)
-	$m/timerLabel.text=text
+	$page1/timerLabel.text=text
 
 func OnCommand():
 	self.visible=true
 	$Fadeout_Tween.interpolate_property($ColorRect,\"modulate:a\",null,1,.2)
-	$Fadeout_Tween.interpolate_property($m, \"modulate:a\", null, 1, .2, Tween.TRANS_LINEAR, Tween.EASE_OUT)
+	$Fadeout_Tween.interpolate_property($page1, \"modulate:a\", null, 1, .2, Tween.TRANS_LINEAR, Tween.EASE_OUT)
 	$Fadeout_Tween.start()
 	set_process_input(true)
 	
-	$m/currentDifficulty.text=INITrans.GetString(\"Difficulty\",Globals.difficultyToString())
+	$page1/currentDifficulty.text=INITrans.GetString(\"Difficulty\",Globals.difficultyToString())
 	if Globals.playerData.gameDifficulty > Globals.Difficulty.EASY:
-		$m/currentDifficulty.text+=\"\\n\"+(INITrans.GetString(\"PauseMenu\",\"SPARE DUMMIES\") % [CheckpointPlayerStats.playerLivesLeft] )
+		$page1/currentDifficulty.text+=\"\\n\"+(INITrans.GetString(\"PauseMenu\",\"SPARE DUMMIES\") % [CheckpointPlayerStats.playerLivesLeft] )
 	
 
 func OffCommand():
 	$Fadeout_Tween.interpolate_property($ColorRect,\"modulate:a\",null,0,.2)
-	$Fadeout_Tween.interpolate_property($m, \"modulate:a\", null, 0, .2, Tween.TRANS_LINEAR, Tween.EASE_OUT)
+	$Fadeout_Tween.interpolate_property($page1, \"modulate:a\", null, 0, .2, Tween.TRANS_LINEAR, Tween.EASE_OUT)
 	$Fadeout_Tween.start()
 	yield($Fadeout_Tween,\"tween_completed\")
 	#self.visible=false
@@ -78,16 +80,21 @@ func OffCommand():
 	
 var pos = 0
 func _input(_ev):
-	#$Label.text = String($d.isHandlingInput)
+	#$Label.text = String($page2.isHandlingInput)
 	#print(\"input\")
 	
 	if _ev is InputEventJoypadMotion or _ev is InputEventMouseMotion: #XInput controllers are broken on Windows :P
 		return
-	elif $d.isHandlingInput:
-		$d.input(_ev)
+	elif $page2.isHandlingInput:
+		$page2.input(_ev)
 		return
+	elif $page3.isHandlingInput:
+		$page3.input(_ev)
+		return
+	#Handle mouse input. Badly.
+	#TODO: Remove this and replace with gui_input signal handlers
 	elif (_ev is InputEventMouseButton and _ev.pressed) or (_ev is InputEventScreenTouch and _ev.pressed):
-		var opts = $m/CenterContainer/VBoxContainer
+		var opts = $page1/CenterContainer/VBoxContainer
 		for i in range(opts.get_child_count()):
 			var node = opts.get_child(i)
 			if _ev.position.y > node.rect_global_position.y and _ev.position.y < node.rect_global_position.y + 50:
@@ -111,7 +118,7 @@ func _input(_ev):
 		if pos > 0:
 			pos-=1
 		else:
-			pos=3
+			pos=OPLIST_SIZE-1
 		optList.get_child(pos).modulate =Color(0.21,0.63,1,1)
 	elif Input.is_action_just_pressed(\"ui_down\"):
 		$SFX.play()
@@ -131,6 +138,25 @@ func _input(_ev):
 		else:
 			Globals.playerData.gameDifficulty=0
 		OnCommand()
+
+func switch_page(p:int=0):
+	
+	$page2.isHandlingInput= p==1
+	$page3.isHandlingInput= p==2
+	
+	var t:Tween = $Fadeout_Tween
+	#Original positions
+	#0, 1280, 1280*2
+	#Page 1 should be 
+	#-1280, 0, 1280 (Subtract 1280)
+	#Page 2 should be (Subtract 1280*2)
+	#-1280*2, -1280, 0
+	t.interpolate_property($page1,\"rect_position:x\",null, 1280*0-1280*p, .3,Tween.TRANS_CUBIC,Tween.EASE_OUT)
+	t.interpolate_property($page2,\"rect_position:x\",null, 1280*1-1280*p, .3,Tween.TRANS_CUBIC,Tween.EASE_OUT)
+	t.interpolate_property($page3,\"rect_position:x\",null, 1280*2-1280*p, .3,Tween.TRANS_CUBIC,Tween.EASE_OUT)
+	#t.interpolate_callback()
+	#t.interpolate_callback($page2,.3,\"set_input_true\")
+	t.start()
 
 func input_accept():
 	if pos==0:
@@ -164,23 +190,10 @@ func input_accept():
 # warning-ignore:return_value_discarded
 		Globals.change_screen(get_tree(),\"ScreenTitleMenu\")
 	elif pos==4:
-		$d.isHandlingInput=true
-		var t:Tween = $Fadeout_Tween
-		t.interpolate_property($m,\"rect_position:x\",null,-1280,.3,Tween.TRANS_CUBIC,Tween.EASE_OUT)
-		t.interpolate_property($d,\"rect_position:x\",null,0,.3,Tween.TRANS_CUBIC,Tween.EASE_OUT)
-		#t.interpolate_callback()
-		#t.interpolate_callback($d,.3,\"set_input_true\")
-		t.start()
+		switch_page(1)
 
 func exited_debug():
-	#print(\"a\")
-	var t:Tween = $Fadeout_Tween
-	t.remove_all()
-	t.interpolate_property($m,\"rect_position:x\",null,0,.3,Tween.TRANS_CUBIC,Tween.EASE_OUT)
-	t.interpolate_property($d,\"rect_position:x\",null,1280,.3,Tween.TRANS_CUBIC,Tween.EASE_OUT)
-	#t.interpolate_callback()
-	#t.interpolate_callback($d,.3,\"set_input_true\")
-	t.start()
+	switch_page(0)
 "
 
 [sub_resource type="GDScript" id=2]
@@ -207,10 +220,10 @@ func Def_Bitmap(txt:String):
 
 func getWpnString(sel:int)->String:
 	var wpnString:String
-	if sel > wpnLength+itemLength:
-		wpnString = \"Lives: \"+String(CheckpointPlayerStats.playerLivesLeft)
-		pass
-	elif sel >= Globals.Weapons.LENGTH_WEAPONS: #if sel >= 10
+	#if sel > wpnLength+itemLength:
+	#	wpnString = \"Lives: \"+String(CheckpointPlayerStats.playerLivesLeft)
+	#	pass
+	if sel >= Globals.Weapons.LENGTH_WEAPONS: #if sel >= 10
 		wpnString = INITrans.GetString(\"Weapons\",Globals.abilitiesToString[sel-Globals.Weapons.LENGTH_WEAPONS])
 		while len(wpnString) < WPN_STR_PAD_LENGTH:
 			wpnString+=\" \"
@@ -305,10 +318,130 @@ func input(event):
 			Globals.playerData['availableWeapons'][selection+1] = !Globals.playerData['availableWeapons'][selection+1]
 			$PlayerWeapons.get_child(selection).text = getWpnString(selection+1)
 		
-			
+	elif event.is_action_pressed(\"R1\") or event.is_action_pressed(\"L1\"):
+		get_parent().switch_page(2)
 	elif event.is_action_pressed(\"ui_cancel\"):
 		isHandlingInput=false
 		get_parent().exited_debug()
+	pass
+"
+
+[sub_resource type="GDScript" id=3]
+script/source = "extends Control
+
+#Because Vector2D is a float type and not an int
+var selX:int = 0
+var selY:int = 0
+
+#const COL = 1
+const ROWS = 3
+
+var isHandlingInput:bool=false
+onready var SFX = $\"../SFX\"
+onready var UMP9CHAN = $ObtainedMedals/UMP9CHAN_Frame
+onready var BinaryFrame = $ObtainedMedals/BinarySelFrame
+onready var livesActor = $PlayerStats/BitmapSprite
+onready var difficultyActor = $PlayerStats/BitmapSprite2
+var bitmapFont = preload(\"res://ubuntu-font-family/BitmapFont.tscn\")
+
+func Def_Bitmap(txt:String):
+	var inst = bitmapFont.instance()
+	inst.text = txt
+	inst.scale_by=4
+	inst.wrap_at=-1
+	return inst
+	
+func _ready():
+	var ump9chan = \"UMP9CHAN\"
+	for i in range(len(ump9chan)):
+		var ch = ump9chan[i]
+		var actorText = Def_Bitmap(ch)
+		UMP9CHAN.add_child(actorText)
+		actorText.position=Vector2(actorText.get_size().x*i,0)
+		
+		var binText = Def_Bitmap(\"0\")
+		BinaryFrame.add_child(binText)
+		binText.position=Vector2(actorText.get_size().x*i,0)
+		
+	#for i in range()
+	
+func redraw_all():
+	$Label.text = \"Sel: (\"+String(selX)+\",\"+String(selY)+\")\"
+	
+	if Globals.playerData.gameDifficulty <= Globals.Difficulty.EASY:
+		livesActor.text = \"Lives: INFINITE\"
+	else:
+		livesActor.text = \"Lives: \"+String(CheckpointPlayerStats.playerLivesLeft)
+	difficultyActor.text=\"Difficulty: \"+INITrans.GetString(\"Difficulty\",Globals.difficultyToString())
+	
+	for i in range(8):
+		var chA = UMP9CHAN.get_child(i)
+		var biA = BinaryFrame.get_child(i)
+		
+		biA.text = \"1\" if Globals.playerData.ReinaChanEmblems[i] else \"0\"
+		
+		if selY==0 and i==selX:
+			biA.modulate=Color.aqua
+		else:
+			biA.modulate=Color.white
+		
+	livesActor.modulate=Color.aqua if selY==1 else Color.white
+	difficultyActor.modulate=Color.aqua if selY==2 else Color.white
+
+func set_selection(selX_tmp,selY_tmp,play_sound:bool=true):
+	
+	if play_sound:
+		SFX.play()
+	
+	if selX_tmp < 0:
+		selX_tmp = 7
+	elif selX_tmp > 7:
+		selX_tmp = 0
+	
+	if selY_tmp > ROWS-1:
+		selY_tmp = 0
+	elif selY_tmp < 0:
+		selY_tmp = ROWS-1
+	selX = selX_tmp
+	selY = selY_tmp
+
+func input(event):
+	if event.is_action_pressed(\"ui_down\"):
+		set_selection(selX,selY+1)
+	elif event.is_action_pressed(\"ui_up\"):
+		set_selection(selX,selY-1)
+	if event.is_action_pressed(\"ui_left\"):
+		if selY == 0:
+			set_selection(selX-1,selY)
+		elif selY == 1:
+			CheckpointPlayerStats.playerLivesLeft=max(0,CheckpointPlayerStats.playerLivesLeft-1)
+			pass
+		elif selY == 2:
+			if Globals.playerData.gameDifficulty > 0:
+				Globals.playerData.gameDifficulty-=1
+			else:
+				Globals.playerData.gameDifficulty=len(Globals.Difficulty)-1
+			pass
+	elif event.is_action_pressed(\"ui_right\"):
+		if selY == 0:
+			set_selection(selX+1,selY)
+		elif selY == 1:
+			CheckpointPlayerStats.playerLivesLeft=min(9,CheckpointPlayerStats.playerLivesLeft+1)
+		elif selY == 2:
+			if Globals.playerData.gameDifficulty < len(Globals.Difficulty)-1:
+				Globals.playerData.gameDifficulty+=1
+			else:
+				Globals.playerData.gameDifficulty=0
+	
+	elif event.is_action_pressed(\"ui_select\"):
+		if selY==0:
+			Globals.playerData.ReinaChanEmblems[selX] = !Globals.playerData.ReinaChanEmblems[selX]
+	elif event.is_action_pressed(\"R1\") or event.is_action_pressed(\"L1\"):
+		get_parent().switch_page(1)
+	elif event.is_action_pressed(\"ui_cancel\"):
+		isHandlingInput=false
+		get_parent().exited_debug()
+	redraw_all()
 	pass
 "
 
@@ -324,11 +457,11 @@ mouse_filter = 2
 input_pass_on_modal_close_click = false
 color = Color( 0, 0, 0, 0.658824 )
 
-[node name="m" type="Control" parent="."]
+[node name="page1" type="Control" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
 
-[node name="CenterContainer" type="CenterContainer" parent="m"]
+[node name="CenterContainer" type="CenterContainer" parent="page1"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -341,7 +474,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="VBoxContainer" type="VBoxContainer" parent="m/CenterContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="page1/CenterContainer"]
 margin_left = 446.0
 margin_top = 260.0
 margin_right = 834.0
@@ -352,7 +485,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label" type="Label" parent="m/CenterContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="page1/CenterContainer/VBoxContainer"]
 margin_right = 388.0
 margin_bottom = 35.0
 custom_fonts/font = ExtResource( 1 )
@@ -363,7 +496,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="give up" type="Label" parent="m/CenterContainer/VBoxContainer"]
+[node name="give up" type="Label" parent="page1/CenterContainer/VBoxContainer"]
 margin_top = 55.0
 margin_right = 388.0
 margin_bottom = 90.0
@@ -375,7 +508,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="stage select" type="Label" parent="m/CenterContainer/VBoxContainer"]
+[node name="stage select" type="Label" parent="page1/CenterContainer/VBoxContainer"]
 margin_top = 110.0
 margin_right = 388.0
 margin_bottom = 145.0
@@ -387,7 +520,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="title screen" type="Label" parent="m/CenterContainer/VBoxContainer"]
+[node name="title screen" type="Label" parent="page1/CenterContainer/VBoxContainer"]
 margin_top = 165.0
 margin_right = 388.0
 margin_bottom = 200.0
@@ -399,7 +532,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="debug" type="Label" parent="m/CenterContainer/VBoxContainer"]
+[node name="debug" type="Label" parent="page1/CenterContainer/VBoxContainer"]
 visible = false
 margin_top = 220.0
 margin_right = 388.0
@@ -412,7 +545,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label" type="Label" parent="m"]
+[node name="Label" type="Label" parent="page1"]
 visible = false
 anchor_top = 1.0
 anchor_bottom = 1.0
@@ -427,7 +560,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="timerLabel" type="Label" parent="m"]
+[node name="timerLabel" type="Label" parent="page1"]
 anchor_left = 0.5
 anchor_right = 0.5
 margin_left = -255.5
@@ -446,7 +579,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="debugHelp" type="Label" parent="m"]
+[node name="debugHelp" type="Label" parent="page1"]
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -654.0
@@ -459,7 +592,7 @@ cycle difficulty."
 align = 2
 uppercase = true
 
-[node name="currentDifficulty" type="Label" parent="m"]
+[node name="currentDifficulty" type="Label" parent="page1"]
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -654.001
@@ -484,60 +617,128 @@ pause_mode = 2
 stream = ExtResource( 3 )
 bus = "Player/Enemies"
 
-[node name="d" type="Control" parent="."]
+[node name="page2" type="Control" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 1280.0
 margin_right = 1280.0
 script = SubResource( 2 )
 
-[node name="Label2" type="Label" parent="d"]
+[node name="Label2" type="Label" parent="page2"]
 margin_right = 1280.0
 margin_bottom = 50.0
 custom_fonts/font = ExtResource( 4 )
-text = "Debug menu"
+text = "Weapon Debug menu"
 align = 1
 
-[node name="PlayerWeapons" type="Node2D" parent="d"]
+[node name="Control" type="Label" parent="page2"]
+anchor_right = 1.0
+margin_top = 48.0
+margin_bottom = 96.0
+custom_fonts/font = ExtResource( 2 )
+text = "Page 1/2 - use l/r to switch"
+align = 1
+valign = 1
+
+[node name="PlayerWeapons" type="Node2D" parent="page2"]
 position = Vector2( 46.0345, 141.279 )
 __meta__ = {
 "_edit_group_": true
 }
 
-[node name="PlayerAbilities" type="Node2D" parent="d"]
+[node name="PlayerAbilities" type="Node2D" parent="page2"]
 position = Vector2( 661.946, 134.929 )
 __meta__ = {
 "_edit_group_": true
 }
 
-[node name="PlayerStats" type="Node2D" parent="d"]
-position = Vector2( 657.184, 479.395 )
-__meta__ = {
-"_edit_group_": true
-}
-
-[node name="BitmapSprite" parent="d/PlayerStats" instance=ExtResource( 5 )]
-text = "Lives: ??"
-wrap_at = 20
-scale_by = 4
-
-[node name="BitmapSprite2" parent="d/PlayerStats" instance=ExtResource( 5 )]
-position = Vector2( 0, 36 )
-text = "difficulty: ???"
-wrap_at = 20
-scale_by = 4
-
-[node name="BitmapSprite" parent="d" instance=ExtResource( 5 )]
+[node name="BitmapSprite" parent="page2" instance=ExtResource( 5 )]
 position = Vector2( 16.789, 590 )
 text = "wpn length: "
 wrap_at = 92233720368
 scale_by = 4
 
-[node name="BitmapSprite2" parent="d" instance=ExtResource( 5 )]
+[node name="BitmapSprite2" parent="page2" instance=ExtResource( 5 )]
 position = Vector2( 16.789, 626 )
 text = "ability length: "
 wrap_at = 92233720368
 scale_by = 4
+
+[node name="page3" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 2560.0
+margin_right = 2560.0
+script = SubResource( 3 )
+
+[node name="Label3" type="Label" parent="page3"]
+anchor_right = 1.0
+margin_bottom = 50.0
+custom_fonts/font = ExtResource( 4 )
+text = "other Debug menu"
+align = 1
+
+[node name="Label4" type="Label" parent="page3"]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -608.0
+margin_top = -144.0
+margin_right = 608.0
+custom_fonts/font = ExtResource( 1 )
+text = "setting medals will not immediately update stages such as Architect and the hub."
+align = 1
+autowrap = true
+
+[node name="ObtainedMedals" parent="page3" instance=ExtResource( 5 )]
+position = Vector2( 128, 128 )
+text = "obtained medals:"
+wrap_at = 500
+scale_by = 4
+
+[node name="UMP9CHAN_Frame" type="Node2D" parent="page3/ObtainedMedals"]
+position = Vector2( 576, 0 )
+
+[node name="BinarySelFrame" type="Node2D" parent="page3/ObtainedMedals"]
+position = Vector2( 576, 32 )
+
+[node name="BitmapFont2" parent="page3/ObtainedMedals" instance=ExtResource( 5 )]
+visible = false
+position = Vector2( 576, 0 )
+text = "ump9chan"
+wrap_at = 500
+scale_by = 4
+
+[node name="BitmapFont3" parent="page3/ObtainedMedals" instance=ExtResource( 5 )]
+visible = false
+position = Vector2( 576, 32 )
+text = "00000000"
+wrap_at = 500
+scale_by = 4
+
+[node name="PlayerStats" type="Node2D" parent="page3"]
+position = Vector2( 128, 256 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="BitmapSprite" parent="page3/PlayerStats" instance=ExtResource( 5 )]
+text = "Lives: ??"
+wrap_at = 20
+scale_by = 4
+
+[node name="BitmapSprite2" parent="page3/PlayerStats" instance=ExtResource( 5 )]
+position = Vector2( 0, 36 )
+text = "difficulty: ???"
+wrap_at = 500
+scale_by = 4
+
+[node name="Label" type="Label" parent="page3"]
+margin_right = 40.0
+margin_bottom = 14.0
+custom_fonts/font = ExtResource( 6 )
+text = "Sel: 0,0"
 
 [node name="Label" type="Label" parent="."]
 visible = false

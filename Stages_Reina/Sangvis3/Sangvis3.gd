@@ -25,6 +25,7 @@ func playBossMusic(isM16:bool=false):
 #	reinaAudioPlayer.stop_music()
 #	#$AudioStreamPlayer2.stop()
 
-func toggle_debug_block_disp(m:int=0):
+func toggle_debug_block_disp(debug_display_visible:int=0):
+	#print(debug_display_visible)
 	for c in get_tree().get_nodes_in_group("debugWarpDisp"):
-		c.visible=(m>0)
+		c.visible=(debug_display_visible>0)

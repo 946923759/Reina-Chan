@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/letters.png-3704e157ee2b9e390506e6ea27c724bb.stex"
+path="res://.import/reina_letters.png-c69a871a211f2af7e3f5048d6dc6a581.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Various Objects/letters.png"
-dest_files=[ "res://.import/letters.png-3704e157ee2b9e390506e6ea27c724bb.stex" ]
+source_file="res://Various Objects/reina_letters.png"
+dest_files=[ "res://.import/reina_letters.png-c69a871a211f2af7e3f5048d6dc6a581.stex" ]
 
 [params]
 

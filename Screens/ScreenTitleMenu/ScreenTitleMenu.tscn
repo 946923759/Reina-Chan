@@ -1046,6 +1046,7 @@ script = ExtResource( 6 )
 codes = [ "UUDDLRLR", "LLLRRRUUU" ]
 
 [node name="Transition" parent="." instance=ExtResource( 13 )]
+visible = false
 margin_left = 0.0
 margin_top = 0.0
 margin_right = 1280.0

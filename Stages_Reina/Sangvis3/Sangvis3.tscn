@@ -103,6 +103,7 @@ __meta__ = {
 LADDER_TILE_ID = 16
 LADDER_TOP_TILE_ID = 15
 SPIKES_TILE_ID = 14
+adjust_camera = true
 leftBound = 140
 topBound = -999
 rightBound = 160
@@ -110,7 +111,6 @@ bottomBound = 96
 custom_music_name = "Elisa3_Stage"
 nsf_music_file = "Rockman 4MI.nsf"
 nsf_track_num = 22
-mute_music_in_debug = true
 wily_stage_num = 3
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="." index="1"]
@@ -378,7 +378,7 @@ position = Vector2( 176, 576 )
 facing = 1
 gravity = 0
 
-[node name="WarpHelpBlock" parent="Architect/100-48 to 120-48" index="11" instance=ExtResource( 28 )]
+[node name="WarpHelpBlock" parent="Architect/100-48 to 120-48" index="11" groups=["debugWarpDisp"] instance=ExtResource( 28 )]
 position = Vector2( 2304, 704 )
 type = 1
 warp_num = 4

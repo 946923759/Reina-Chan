@@ -15,6 +15,8 @@ export(int,\"Left\",\"Center\",\"Right\") var alignment = 0
 #export(int,0,500) var start_at_char = 0
 #export(int,0,500) var end_at_char = 500
 
+const CHAR_PIXEL_SIZE = 8
+
 func set_text(s):
 	text=s
 	update()

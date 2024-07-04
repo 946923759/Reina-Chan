@@ -9,7 +9,7 @@
 [ext_resource path="res://Screens/ScreenPauseMenu/rockman4_mi_MMC5_c.png" type="Texture" id=7]
 [ext_resource path="res://ubuntu-font-family/MM2Font_Smaller.tres" type="DynamicFont" id=8]
 [ext_resource path="res://Screens/ScreenCutscene/TextFont.tres" type="DynamicFont" id=9]
-[ext_resource path="res://Screens/ScreenPauseMenu/letters.png" type="Texture" id=10]
+[ext_resource path="res://Screens/ScreenPauseMenu/reina_letters.png" type="Texture" id=10]
 [ext_resource path="res://Sounds/Classic/QuickSelectWeapon.wav" type="AudioStream" id=11]
 [ext_resource path="res://Sounds/Classic/Mega Man 4 SFX (25) - Menu Help.wav" type="AudioStream" id=12]
 [ext_resource path="res://ParticleEffects/AlphaMaskPurple.tres" type="Material" id=13]
@@ -436,7 +436,7 @@ onready var weaponInfos:Array = [
 		0
 	],
 	[ #Glorylight
-		0,
+		100,
 		0,
 		1,
 		0

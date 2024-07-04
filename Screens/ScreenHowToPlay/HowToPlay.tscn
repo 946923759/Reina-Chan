@@ -37,7 +37,7 @@ func input(_event):
 func _on_HowToPlay_item_rect_changed():
 	#print(\"rect\")
 	var rect = get_viewport().get_visible_rect().size
-	print(rect)
+	#print(rect)
 	$LabelHowToPlay.position_based_on_center(rect.x/2.0)
 	$Controller/LabelStart.position_based_on_center(rect.x/2.0)
 	$Controller/LabelSelect.position_based_on_center(rect.x/2.0)
