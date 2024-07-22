@@ -6,6 +6,7 @@
 [ext_resource path="res://Screens/_transition/transition.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Music/Stage Start.ogg" type="AudioStream" id=5]
 [ext_resource path="res://Screens/ScreenCutscene/Portraits/pic_Architect.png" type="Texture" id=6]
+[ext_resource path="res://Screens/ScreenStageIntro/BossSpriteLoader.tres.gd" type="Script" id=7]
 
 [sub_resource type="GDScript" id=1]
 script/source = "extends Sprite
@@ -46,52 +47,6 @@ func timer():
 		visible_characters+=1
 	else:
 		$Timer.stop()
-"
-
-[sub_resource type="GDScript" id=4]
-script/source = "extends Node2D
-
-#What the fuck is this doing here
-var bosses = {
-	\"StageArchitect_v2.tscn\":\"res://Stages_Reina/Bosses/Architect/BossArchitect_v2.tscn\",
-	\"Alchemist_v2.tscn\":\"res://Stages_Reina/Bosses/Alchemist/BossAlchemist.tscn\",
-	\"Scarecrow.tscn\":\"res://Stages_Reina/Bosses/Scarecrow/BossScarecrow.tscn\",
-	\"StageOuroboros.tscn\":\"res://Stages_Reina/Bosses/Ouroboros/BossOuroboros.tscn\"
-}
-
-var bi
-func _ready():
-	#var position = get_viewport().get_visible_rect().size/2
-	var b
-	var spawnPosition = Vector2(0,0)
-	if Globals.nextStage:
-		var stg:String = Globals.nextStage.rsplit(\"/\",false,1)[1]
-		if !(stg in bosses):
-			set_process(false)
-			return
-		b = load(bosses[stg])
-		if stg==\"Scarecrow.tscn\":
-			spawnPosition.y-=20
-	else:
-		b = load(\"res://Stages_Reina/Bosses/Architect/BossArchitect_v2.tscn\")
-	bi = b.instance()
-	self.add_child(bi)
-	bi.position=spawnPosition
-	bi.HPBar.visible=false
-	
-
-var time:float=0
-func _process(delta):
-	position = get_viewport().get_visible_rect().size/2
-	#$Label2.text=String(get_viewport().get_visible_rect().size)
-	time+=delta
-	if time > .3:
-		bi.playIntro(false,false)
-		set_process(false)
-
-
-func _on_Node_item_rect_changed():
-	pass # Replace with function body.
 "
 
 [sub_resource type="SegmentShape2D" id=5]
@@ -167,7 +122,7 @@ autostart = true
 [node name="BossSpriteLoader" type="Node2D" parent="."]
 position = Vector2( 640, 360 )
 z_index = 5
-script = SubResource( 4 )
+script = ExtResource( 7 )
 
 [node name="StaticBody2D" type="StaticBody2D" parent="BossSpriteLoader"]
 position = Vector2( 0, 60 )

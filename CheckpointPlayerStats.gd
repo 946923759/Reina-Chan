@@ -22,6 +22,7 @@ var playerLivesLeft:int=3
 
 #Store anything you want here!
 #Used in Ouroboros' stage to unlock the miniboss door after dying.
+#(For you beginner programmers, use temporaryStageStats |= temporaryStageStats<<i)
 var temporaryStageStats:int=0
 
 

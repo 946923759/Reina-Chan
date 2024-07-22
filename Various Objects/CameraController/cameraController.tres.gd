@@ -208,15 +208,17 @@ func cam(obj):
 				print(oldVelocity)
 				obj.lockMovement(tweenTime,Vector2(0,0))
 				var CL = obj.get_node("CanvasLayer");
-				CL.get_node("Fadeout").fadeOut()
-				yield(CL.get_node("Fadeout/Fadeout_Tween"),"tween_completed")
+				print("fading out...")
+				var t:SceneTreeTween = CL.get_node("Fadeout").fadeOut()
+				yield(t,"finished")
+				#yield(CL.get_node("Fadeout/Fadeout_Tween"),"tween_completed")
 				if warp_type==1:
 					print("Warped to "+String(obj.pos2cell(obj.position)+destination_coordinates_if_warp))
 					obj.position = obj.cell2pos(obj.pos2cell(obj.position)+destination_coordinates_if_warp)
 				elif warp_type==2:
 					print("Warped to "+String(obj.cell2pos(destination_coordinates_if_warp)))
 					obj.position = obj.cell2pos(destination_coordinates_if_warp)
-				#print("fading in..")
+				print("fading in..")
 				obj.velocity=Vector2(0,10000)
 				CL.get_node("Fadeout").fadeIn()
 				cc.adjustCamera(boundsArray, 0)

@@ -19,16 +19,16 @@ frames = ExtResource( 2 )
 
 [node name="Wheels" type="Node2D" parent="." index="2"]
 script = ExtResource( 4 )
-radius = Vector2( -15.6999, -3.07186 )
+radius = Vector2( 7.48945, -14.1362 )
 speed = 0.8
 
 [node name="Wheel1" type="AnimatedSprite" parent="Wheels" index="0"]
-position = Vector2( 48.3001, -3.07186 )
+position = Vector2( 71.4894, -14.1362 )
 scale = Vector2( 4, 4 )
 frames = ExtResource( 3 )
 
 [node name="Wheel2" type="AnimatedSprite" parent="Wheels" index="1"]
-position = Vector2( -48.3001, 3.072 )
+position = Vector2( -71.4894, 14.1362 )
 scale = Vector2( 4, 4 )
 z_index = -1
 frames = ExtResource( 3 )

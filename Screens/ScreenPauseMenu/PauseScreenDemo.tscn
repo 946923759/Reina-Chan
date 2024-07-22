@@ -178,7 +178,11 @@ func input_accept():
 		Globals.save_player_game()
 		#Globals.save_system_data() #Not sure why this is here
 		get_tree().paused = false
-		Globals.change_screen(get_tree(),\"ScreenSelectStage\")
+		
+		if Globals.previous_screen==\"ScreenDebugSelect\":
+			Globals.change_screen(get_tree(),\"ScreenDebugSelect\")
+		else:
+			Globals.change_screen(get_tree(),\"ScreenSelectStage\")
 	elif pos==3:
 		$Fadeout.visible = true
 		$Fadeout_Tween.interpolate_property($Fadeout, \"modulate\", Color(0,0,0,0), Color(0,0,0,1), .5, Tween.TRANS_LINEAR, Tween.EASE_OUT)
@@ -297,6 +301,7 @@ func set_input_true():
 	isHandlingInput=true
 
 func _ready():
+	$LabelPrevScreen.text = \"PrevScreen: \"+Globals.previous_screen+\", CurStage: \"+get_node(\"/root/Node2D\").custom_music_name
 	#construct()
 	pass
 
@@ -663,6 +668,15 @@ position = Vector2( 16.789, 626 )
 text = "ability length: "
 wrap_at = 92233720368
 scale_by = 4
+
+[node name="LabelPrevScreen" type="Label" parent="page2"]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 64.0
+margin_top = -52.0
+custom_fonts/font = ExtResource( 6 )
+text = "prevscreen:?"
 
 [node name="page3" type="Control" parent="."]
 anchor_right = 1.0

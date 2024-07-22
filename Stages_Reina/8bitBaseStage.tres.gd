@@ -88,7 +88,8 @@ func _ready():
 	#var music = Globals.get_custom_music(custom_music_name) if custom_music_name != "" else null
 	#load_song(_node:Node, custom_music_name:String, nsf_music_file:String, nsf_track_num:int)
 	if !mute_music_in_debug or !OS.is_debug_build():
-		reinaAudioPlayer.load_song(custom_music_name,nsf_music_file,nsf_track_num,nsf_volume_adjustment)
+		#reinaAudioPlayer.load_song(custom_music_name,nsf_music_file,nsf_track_num,nsf_volume_adjustment)
+		playMusic_2()
 
 func update_easytiles():
 	var easyTiles:TileMap = $EasyTiles
@@ -116,6 +117,9 @@ func playBossMusic(_isM16:bool=false):
 
 func playMusic(cdAudioFileName:String,nsfAudioFileName:String,nsfAudioTrack:int=0):
 	reinaAudioPlayer.load_song(cdAudioFileName,nsfAudioFileName,nsfAudioTrack)
+	
+func playMusic_2():
+	reinaAudioPlayer.load_song(custom_music_name,nsf_music_file,nsf_track_num,nsf_volume_adjustment)
 
 #This is only ever used for the boss doors honestly
 func fadeMusic(time:float=2):

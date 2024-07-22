@@ -21,6 +21,7 @@ export(float,0,8) var delay_after_anim = 4.0
 var go_to_stage:String = \"\"
 
 var timeout:float = 6.0
+var t1:SceneTreeTween
 func _ready():
 	$Label.visible = OS.is_debug_build()
 	VisualServer.canvas_item_set_z_index($ColorRect.get_canvas_item(),50)
@@ -54,15 +55,15 @@ func _ready():
 		actorFrame.visible= (stg_i <= sangvis_stage_num)
 		if stg_i == sangvis_stage_num:
 			#print(\"Animating stg \",stg_i)
-			var t:SceneTreeTween = get_tree().create_tween()
-			t.set_parallel(false)
+			t1 = get_tree().create_tween()
+			t1.set_parallel(false)
 			
 			# Surely a way to add a delay to the base tweener
 			# would have made more sense
 			var first:bool = true
 			for n in actorFrame.get_children():
 				n.visible=false
-				var res = t.tween_property(n,\"visible\",true,.1)
+				var res = t1.tween_property(n,\"visible\",true,.1)
 				if first:
 					res.set_delay(4.0)
 					first=false
@@ -81,6 +82,13 @@ func _process(delta):
 	elif timeout <= 2.0:
 		var n:Sprite = get_node(\"Node2D/stg\"+String(sangvis_stage_num)+\"icon\")
 		n.frame = int(timeout*6) % 2
+
+func _input(_event):
+	if Input.is_action_just_pressed(\"ui_pause\"):
+		timeout=0.0
+		#Because if I don't kill it it spams the log
+		t1.kill()
+		
 "
 
 [node name="Node2D" type="Control"]

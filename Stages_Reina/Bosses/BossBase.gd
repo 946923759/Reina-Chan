@@ -33,6 +33,8 @@ export(PoolRealArray) var weaponDamageMultiplier = [
 #export(Array, float,"a","b","c") var weaponDamageMultiplier = [1.0,1.0,1.0]
 
 export(String) var intro_subtitle_key = "Architect_Intro"
+# What's the point of this when the boss room handler has to reset the music and player position anyways?
+# Just in case there is no boss room handler? Ok
 export(bool) var stage_finished_when_killed = true
 
 var deathAnimation = preload("res://Animations/deathAnimation.tscn")
@@ -162,6 +164,8 @@ func killSelf():
 	sprite.stop()
 	collision_layer=0
 	collision_mask=0
+	$Area2D.monitoring=false
+	$Area2D.monitorable=false
 	
 	$DieSound.play()
 	var sp = deathAnimation.instance()
@@ -178,3 +182,6 @@ func killSelf():
 		#get_node("/root/Node2D/VictorySound").play()
 	else:
 		HPBar.visible=false
+		yield($DieSound,"finished")
+		self.queue_free()
+		get_node("/root/Node2D").playMusic_2()

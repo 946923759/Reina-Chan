@@ -1,0 +1,24 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=2]
+
+[sub_resource type="Shader" id=3]
+code = "shader_type canvas_item;
+
+void fragment() {
+	// BackBufferCopy provides SCREEN_TEXTURE and SCREEN_UV, so we are drawing the sprite from underneath.
+	// BackBufferCopy alpha always returns 1.0, it has no transparency. This is important below...
+	vec4 screenBackBuffer = texture(SCREEN_TEXTURE, SCREEN_UV);
+	vec3 thisText = texture(TEXTURE,UV).rgb;
+	vec3 color = vec3(1.0,1.0,1.0);
+	if (distance(color,thisText) < 0.1){
+		// This doesn't actually make the sprite transparent,
+		// but redraws the texture given by backbuffer on top.
+		// But it looks like it's clipping the object below it.
+		COLOR = screenBackBuffer;
+	} else {
+		// Else, make this pixel transparent.
+		COLOR.a = 0.0;
+	}
+}"
+
+[resource]
+shader = SubResource( 3 )

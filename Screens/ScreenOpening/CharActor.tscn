@@ -1,0 +1,123 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://ubuntu-font-family/BitmapFont.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Screens/ScreenStageIntro/BossSpriteLoader.tres.gd" type="Script" id=2]
+[ext_resource path="res://ParticleEffects/GreyscaleShader.tres" type="Material" id=3]
+[ext_resource path="res://ParticleEffects/DrawFromBackBuffer.tres" type="Material" id=4]
+[ext_resource path="res://Screens/ScreenCutscene/Portraits/pic_Ouroboros.png" type="Texture" id=5]
+[ext_resource path="res://Screens/ScreenOpening/CharActor.gd" type="Script" id=6]
+[ext_resource path="res://Stages_Reina/Bosses/Ouroboros/BossOuroboros.tscn" type="PackedScene" id=7]
+
+[sub_resource type="SegmentShape2D" id=1]
+a = Vector2( -128, 0 )
+b = Vector2( 128, 0 )
+
+[node name="CharActor" type="Node2D"]
+script = ExtResource( 6 )
+text_bg_color = Color( 0.458824, 0, 0.462745, 1 )
+bossToLoad = ExtResource( 7 )
+large_portrait = ExtResource( 5 )
+text = "ouroboros"
+auto_OnCommand = true
+
+[node name="BackBufferCopy" type="BackBufferCopy" parent="."]
+position = Vector2( 20, 173 )
+copy_mode = 2
+__meta__ = {
+"_edit_group_": true,
+"_edit_lock_": true
+}
+
+[node name="Polygon2D4" type="Polygon2D" parent="."]
+position = Vector2( 0, 173 )
+color = Color( 0.458824, 0, 0.462745, 1 )
+offset = Vector2( 0, -13 )
+polygon = PoolVector2Array( 0, 0, 1280, 0, 1280, 60, 0, 60 )
+__meta__ = {
+"_edit_group_": true,
+"_edit_lock_": true
+}
+
+[node name="FakeZText" parent="Polygon2D4" instance=ExtResource( 1 )]
+material = ExtResource( 4 )
+position = Vector2( 20, 0 )
+text = "ouroboros ouroboros ouroboros ouroboros ouroboros"
+wrap_at = 500
+scale_by = 4
+
+[node name="Polygon2D5" type="Polygon2D" parent="."]
+position = Vector2( 0, 542 )
+color = Color( 0.458824, 0, 0.462745, 1 )
+offset = Vector2( 0, -13 )
+polygon = PoolVector2Array( 0, 0, 1280, 0, 1280, 60, 0, 60 )
+__meta__ = {
+"_edit_group_": true,
+"_edit_lock_": true
+}
+
+[node name="FakeZText" parent="Polygon2D5" instance=ExtResource( 1 )]
+material = ExtResource( 4 )
+position = Vector2( 20, 0 )
+__meta__ = {
+"_edit_group_": true
+}
+text = "ouroboros ouroboros ouroboros ouroboros ouroboros"
+wrap_at = 500
+scale_by = 4
+
+[node name="CenterBG" type="Polygon2D" parent="."]
+position = Vector2( 0, 240 )
+color = Color( 0.0196078, 0, 0.635294, 1 )
+polygon = PoolVector2Array( 0, 0, 1280, 0, 1280, 240, 0, 240 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="BossSpriteLoader" type="Node2D" parent="."]
+position = Vector2( 968, 360 )
+script = ExtResource( 2 )
+overwrite_pos = false
+draw_afterimge = true
+run_automatically = false
+
+[node name="StaticBody2D" type="StaticBody2D" parent="BossSpriteLoader"]
+position = Vector2( 0, 60 )
+collision_layer = 18
+collision_mask = 18
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BossSpriteLoader/StaticBody2D"]
+shape = SubResource( 1 )
+
+[node name="Afterimage1" type="Sprite" parent="BossSpriteLoader"]
+modulate = Color( 0, 1, 1, 0.733333 )
+material = ExtResource( 3 )
+z_index = 1
+
+[node name="Afterimage2" type="Sprite" parent="BossSpriteLoader"]
+modulate = Color( 0, 1, 1, 0.733333 )
+material = ExtResource( 3 )
+z_index = 1
+
+[node name="Afterimage3" type="Sprite" parent="BossSpriteLoader"]
+modulate = Color( 0, 0.145098, 0.921569, 1 )
+material = ExtResource( 3 )
+
+[node name="Afterimage4" type="Sprite" parent="BossSpriteLoader"]
+modulate = Color( 0, 0.145098, 0.921569, 1 )
+
+[node name="Polygon2D" type="Polygon2D" parent="."]
+position = Vector2( 100, 0 )
+color = Color( 0.145098, 0.145098, 0.145098, 1 )
+polygon = PoolVector2Array( 0, 0, 400, 0, 400, 1024, 0, 1024 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="HDPortrait" type="Sprite" parent="Polygon2D"]
+texture = ExtResource( 5 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 310, 0, 400, 1024 )

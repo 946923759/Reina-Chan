@@ -26,8 +26,11 @@ onready var letters = $BitmapSprite
 
 func init():
 	var character = Globals.characterToString()
-	var stage = Globals.stagesToString[get_parent().stageRoot.weapon_to_unlock]
-	text = INITrans.GetString(\"Idle\"+character,stage)
+	#var stage = Globals.stagesToString[get_parent().stageRoot.weapon_to_unlock]
+	var stage = get_parent().stageRoot.custom_music_name
+	text = INITrans.GetStringOrNull(\"Idle\"+character,stage)
+	if not text:
+		text = INITrans.GetString(\"Idle\"+character,\"Buster\")
 	#text = Globals.stagesToString(stage)
 #	var 
 	

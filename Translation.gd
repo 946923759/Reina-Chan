@@ -91,3 +91,11 @@ func GetString(category:String,key:String,warn:bool=true)->String:
 	if warn:
 		push_warning("There is no translation for ["+category+"] "+key)
 	return key
+
+func GetStringOrNull(category:String,key:String)->String:
+	if translation.size()==0:
+		push_error("There is no translation loaded...")
+		return ""
+	elif translation.has(category) and translation[category].has(key):
+		return translation[category][key]
+	return ""

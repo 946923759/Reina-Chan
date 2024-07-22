@@ -51,3 +51,7 @@ func _draw():
 			8,
 			false
 		)
+
+func teleport_player():
+	var player = get_node("/root/Node2D").get_player()
+	$CameraAdjuster.cam(player)
