@@ -11,7 +11,12 @@ export (int) var leftBound = 0;
 export (int) var topBound = 0;
 export (int) var rightBound;
 export (int) var bottomBound;
+
 var cameraScale:float = 64;
+
+const CAMERA_SCALE = 64;
+const ROOM_WIDTH = 20
+const ROOM_HEIGHT = 12
 
 export (String) var custom_music_name
 export (String) var nsf_music_file
@@ -140,3 +145,15 @@ func pos2cell(pos):
 
 func cell2pos(pos:Vector2)->Vector2:
 	return pos*16*tile_scale
+
+func get_closest_room(glb_pos:Vector2):
+	return Vector2(
+		floor(glb_pos.x/CAMERA_SCALE/ROOM_WIDTH)*ROOM_WIDTH,
+		floor(glb_pos.y/CAMERA_SCALE/ROOM_HEIGHT)*ROOM_HEIGHT
+	)
+	pass
+
+func get_closest_room_border(glb_pos:Vector2)->Rect2:
+	var topLeft = get_closest_room(glb_pos)
+	var size = Vector2(topLeft.x+ROOM_WIDTH,topLeft.y+ROOM_HEIGHT)
+	return Rect2(topLeft, size)

@@ -20,17 +20,18 @@ var shouldFaceLeft:bool=false
 const playerStartingLifeCount = 3
 var playerLivesLeft:int=3
 
-#Store anything you want here!
-#Used in Ouroboros' stage to unlock the miniboss door after dying.
-#(For you beginner programmers, use temporaryStageStats |= temporaryStageStats<<i)
+# Store anything you want here!
+# Used in Ouroboros' stage to unlock the miniboss door after dying.
+# Used in Sangvis3 to store the boss defeat status.
+# For you beginner programmers: 
+# - To set, use temporaryStageStats |= (1<<i)
+# - To invert a bit, use temporaryStageStats ^= (1<<i)
+# - To get, use temporaryStageStats & 1<<i (notice the single &)
 var temporaryStageStats:int=0
 
 
 #It doesn't really belong in Globals... Anyways, this is only used for the item get screen
 var lastPlayedStage:int=0
-
-#Should debug menu be shown
-#var isFromStageSelect:bool=false
 
 #Timer gets assigned every checkpoint, but timerWithDeath should
 #get assigned every death

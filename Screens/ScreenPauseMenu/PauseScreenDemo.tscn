@@ -339,12 +339,13 @@ var selX:int = 0
 var selY:int = 0
 
 #const COL = 1
-const ROWS = 3
+const ROWS = 4
 
 var isHandlingInput:bool=false
 onready var SFX = $\"../SFX\"
 onready var UMP9CHAN = $ObtainedMedals/UMP9CHAN_Frame
 onready var BinaryFrame = $ObtainedMedals/BinarySelFrame
+onready var CheckpointBinaryFrame = $CheckpointFlags/BinarySelFrame
 onready var livesActor = $PlayerStats/BitmapSprite
 onready var difficultyActor = $PlayerStats/BitmapSprite2
 var bitmapFont = preload(\"res://ubuntu-font-family/BitmapFont.tscn\")
@@ -368,7 +369,10 @@ func _ready():
 		BinaryFrame.add_child(binText)
 		binText.position=Vector2(actorText.get_size().x*i,0)
 		
-	#for i in range()
+	for i in range(8):
+		var binText = Def_Bitmap(\"0\")
+		CheckpointBinaryFrame.add_child(binText)
+		binText.position=Vector2(binText.get_size().x*i,0)
 	
 func redraw_all():
 	$Label.text = \"Sel: (\"+String(selX)+\",\"+String(selY)+\")\"
@@ -380,18 +384,28 @@ func redraw_all():
 	difficultyActor.text=\"Difficulty: \"+INITrans.GetString(\"Difficulty\",Globals.difficultyToString())
 	
 	for i in range(8):
-		var chA = UMP9CHAN.get_child(i)
+		#var chA = UMP9CHAN.get_child(i)
 		var biA = BinaryFrame.get_child(i)
+		var biB = CheckpointBinaryFrame.get_child(i)
 		
 		biA.text = \"1\" if Globals.playerData.ReinaChanEmblems[i] else \"0\"
+		biB.text = \"1\" if CheckpointPlayerStats.temporaryStageStats & 1<<i else \"0\"
 		
 		if selY==0 and i==selX:
 			biA.modulate=Color.aqua
 		else:
 			biA.modulate=Color.white
 		
-	livesActor.modulate=Color.aqua if selY==1 else Color.white
-	difficultyActor.modulate=Color.aqua if selY==2 else Color.white
+		if selY==1 and i==selX:
+			biB.modulate=Color.aqua
+		else:
+			biB.modulate=Color.white
+	
+	$ObtainedMedals.self_modulate=Color.aqua if selY==0 else Color.white
+	$CheckpointFlags.self_modulate=Color.aqua if selY==1 else Color.white
+	$CheckpointFlags.text=\"checkpt. flags:\"+String(CheckpointPlayerStats.temporaryStageStats)
+	livesActor.modulate=Color.aqua if selY==2 else Color.white
+	difficultyActor.modulate=Color.aqua if selY==3 else Color.white
 
 func set_selection(selX_tmp,selY_tmp,play_sound:bool=true):
 	
@@ -416,23 +430,23 @@ func input(event):
 	elif event.is_action_pressed(\"ui_up\"):
 		set_selection(selX,selY-1)
 	if event.is_action_pressed(\"ui_left\"):
-		if selY == 0:
+		if selY < 2:
 			set_selection(selX-1,selY)
-		elif selY == 1:
+		elif selY == 2:
 			CheckpointPlayerStats.playerLivesLeft=max(0,CheckpointPlayerStats.playerLivesLeft-1)
 			pass
-		elif selY == 2:
+		elif selY == 3:
 			if Globals.playerData.gameDifficulty > 0:
 				Globals.playerData.gameDifficulty-=1
 			else:
 				Globals.playerData.gameDifficulty=len(Globals.Difficulty)-1
 			pass
 	elif event.is_action_pressed(\"ui_right\"):
-		if selY == 0:
+		if selY < 2:
 			set_selection(selX+1,selY)
-		elif selY == 1:
-			CheckpointPlayerStats.playerLivesLeft=min(9,CheckpointPlayerStats.playerLivesLeft+1)
 		elif selY == 2:
+			CheckpointPlayerStats.playerLivesLeft=min(9,CheckpointPlayerStats.playerLivesLeft+1)
+		elif selY == 3:
 			if Globals.playerData.gameDifficulty < len(Globals.Difficulty)-1:
 				Globals.playerData.gameDifficulty+=1
 			else:
@@ -441,6 +455,10 @@ func input(event):
 	elif event.is_action_pressed(\"ui_select\"):
 		if selY==0:
 			Globals.playerData.ReinaChanEmblems[selX] = !Globals.playerData.ReinaChanEmblems[selX]
+		elif selY==1:
+			#var mask = ~(1 << selX)
+			#Invert a bit
+			CheckpointPlayerStats.temporaryStageStats ^= (1<<selX)
 	elif event.is_action_pressed(\"R1\") or event.is_action_pressed(\"L1\"):
 		get_parent().switch_page(1)
 	elif event.is_action_pressed(\"ui_cancel\"):
@@ -698,15 +716,16 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 margin_left = -608.0
-margin_top = -144.0
+margin_top = -240.0
 margin_right = 608.0
 custom_fonts/font = ExtResource( 1 )
-text = "setting medals will not immediately update stages such as Architect and the hub."
+text = "setting medals will not immediately update stages such as Architect and the hub.
+Checkpoint flags are arbitrary data used within a stage. they can store door lock state, bosses, etc."
 align = 1
 autowrap = true
 
 [node name="ObtainedMedals" parent="page3" instance=ExtResource( 5 )]
-position = Vector2( 128, 128 )
+position = Vector2( 128, 96 )
 text = "obtained medals:"
 wrap_at = 500
 scale_by = 4
@@ -730,6 +749,15 @@ position = Vector2( 576, 32 )
 text = "00000000"
 wrap_at = 500
 scale_by = 4
+
+[node name="CheckpointFlags" parent="page3" instance=ExtResource( 5 )]
+position = Vector2( 128, 192 )
+text = "checkpt. flags:"
+wrap_at = 500
+scale_by = 4
+
+[node name="BinarySelFrame" type="Node2D" parent="page3/CheckpointFlags"]
+position = Vector2( 576, 0 )
 
 [node name="PlayerStats" type="Node2D" parent="page3"]
 position = Vector2( 128, 256 )

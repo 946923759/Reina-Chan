@@ -36,6 +36,7 @@ export(String) var intro_subtitle_key = "Architect_Intro"
 # What's the point of this when the boss room handler has to reset the music and player position anyways?
 # Just in case there is no boss room handler? Ok
 export(bool) var stage_finished_when_killed = true
+export(int,-1,15) var set_temp_bitflag_when_boss_dies = -1
 
 var deathAnimation = preload("res://Animations/deathAnimation.tscn")
 
@@ -159,13 +160,15 @@ func killSelf():
 	print(self.name+" queued to be killed.")
 	HPBar.updateHP(0)
 	isAlive = false
-	set_physics_process(false)
-	sprite.visible = false
-	sprite.stop()
+
 	collision_layer=0
 	collision_mask=0
-	$Area2D.monitoring=false
-	$Area2D.monitorable=false
+	$Area2D.set_deferred("monitoring",false)
+	$Area2D.set_deferred("monitorable",false)
+	set_physics_process(false)
+	
+	sprite.visible = false
+	sprite.stop()
 	
 	$DieSound.play()
 	var sp = deathAnimation.instance()
@@ -174,8 +177,11 @@ func killSelf():
 	#dropRandomItem()
 	
 	#self.queue_free()
-	emit_signal("boss_killed")
+	if set_temp_bitflag_when_boss_dies >= 0:
+		CheckpointPlayerStats.temporaryStageStats |= (1<<set_temp_bitflag_when_boss_dies)
+	
 	if stage_finished_when_killed:
+		emit_signal("boss_killed")
 		var player = get_node("/root/Node2D").get_player()
 		player.finishStage()
 		#.lockMovement(999,Vector2())
@@ -183,5 +189,6 @@ func killSelf():
 	else:
 		HPBar.visible=false
 		yield($DieSound,"finished")
+		emit_signal("boss_killed")
 		self.queue_free()
 		get_node("/root/Node2D").playMusic_2()

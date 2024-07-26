@@ -5,9 +5,19 @@
 [sub_resource type="GDScript" id=1]
 script/source = "extends Sprite
 
+export (int,-1,15) var teleporter_ID = -1
+export (int,\"In\",\"Out\") var teleport_type = 1
+# If this is true and type is set to In, it will only work 
+# if bitflag in CheckpointPlayerUtils is set
+export (bool) var require_bitflag_to_activate = false
+export (int,\"Blink\",\"Stop Animation\") var when_bitflag_is_true = 0
+#export (bool) var blink_based_on_bitflag = false
+#export (bool) var 
+#export (int,\"Disabled\",\"Enabled\")
+
+
 var drawing:bool = false
 var time:float = 0
-
 
 func _draw():
 	if drawing:
@@ -23,6 +33,10 @@ func _process(delta):
 		time-=.5
 		drawing = !drawing
 		update()
+	if when_bitflag_is_true==1 && teleporter_ID >= 0:
+		if CheckpointPlayerStats.temporaryStageStats & 1<<teleporter_ID:
+			set_inactive()
+			#return
 
 func set_inactive():
 	set_process(false)

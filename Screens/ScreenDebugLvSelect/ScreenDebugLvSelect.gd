@@ -26,6 +26,7 @@ func set_character(n):
 
 func _ready():
 	Globals.previous_screen = "ScreenDebugSelect"
+	CheckpointPlayerStats.clearEverything()
 	#reinaAudioPlayer=ReinaAudioPlayer.new(self)
 	#reinaAudioPlayer.load_song("StageSelect","Mega Man 10 (recreated).nsf",8)
 	
