@@ -383,13 +383,15 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="DebugDisplay" type="Node2D" parent="CanvasLayer"]
+[node name="DebugDisplay" type="Control" parent="CanvasLayer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
 
 [node name="StateInfo" type="Label" parent="CanvasLayer/DebugDisplay"]
-margin_left = 99.0
-margin_top = 118.0
-margin_right = 900.0
-margin_bottom = 168.0
+margin_left = 96.0
+margin_top = 112.0
+margin_right = 897.0
+margin_bottom = 162.0
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_constants/shadow_as_outline = 10
 custom_fonts/font = ExtResource( 6 )
@@ -410,10 +412,10 @@ __meta__ = {
 }
 
 [node name="StateVelocity" type="Label" parent="CanvasLayer/DebugDisplay"]
-margin_left = 101.0
-margin_top = 21.0
-margin_right = 739.0
-margin_bottom = 71.0
+margin_left = 96.0
+margin_top = 16.0
+margin_right = 734.0
+margin_bottom = 66.0
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_constants/shadow_as_outline = 10
 custom_fonts/font = ExtResource( 6 )
@@ -423,20 +425,20 @@ __meta__ = {
 }
 
 [node name="StateTile" type="Label" parent="CanvasLayer/DebugDisplay"]
-margin_left = 99.0
-margin_top = 88.0
-margin_right = 737.0
-margin_bottom = 138.0
+margin_left = 96.0
+margin_top = 80.0
+margin_right = 734.0
+margin_bottom = 130.0
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_constants/shadow_as_outline = 10
 custom_fonts/font = ExtResource( 6 )
 text = "Tile Debug"
 
 [node name="StatePosition" type="Label" parent="CanvasLayer/DebugDisplay"]
-margin_left = 101.0
-margin_top = 53.0
-margin_right = 739.0
-margin_bottom = 103.0
+margin_left = 96.0
+margin_top = 48.0
+margin_right = 734.0
+margin_bottom = 98.0
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_constants/shadow_as_outline = 10
 custom_fonts/font = ExtResource( 6 )
@@ -455,10 +457,10 @@ text = "Free Roam"
 align = 2
 
 [node name="PositionOnScreen" type="Label" parent="CanvasLayer/DebugDisplay"]
-margin_left = 103.0
-margin_top = 243.0
-margin_right = 679.0
-margin_bottom = 278.0
+margin_left = 96.0
+margin_top = 168.0
+margin_right = 672.0
+margin_bottom = 203.0
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_constants/shadow_as_outline = 5
 custom_fonts/font = ExtResource( 6 )

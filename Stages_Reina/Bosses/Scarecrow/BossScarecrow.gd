@@ -48,8 +48,8 @@ func _ready():
 	_activate_reflection()
 	startingPosition=self.position
 	print("[Scarecrow] StartPos: "+String(startingPosition))
-	facing=DIRECTION.LEFT
-	
+	sprite.flip_h=(facing==DIRECTION.LEFT)
+
 	$DebugLabel3.visible=OS.is_debug_build()
 
 # Originally the counter was random but it

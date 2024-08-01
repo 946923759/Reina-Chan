@@ -1,23 +1,176 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Various Objects/warp.png" type="Texture" id=1]
 
 [sub_resource type="GDScript" id=1]
-script/source = "extends Sprite
+script/source = "tool
+extends Sprite
 
 export (int,-1,15) var teleporter_ID = -1
 export (int,\"In\",\"Out\") var teleport_type = 1
 # If this is true and type is set to In, it will only work 
 # if bitflag in CheckpointPlayerUtils is set
-export (bool) var require_bitflag_to_activate = false
-export (int,\"Blink\",\"Stop Animation\") var when_bitflag_is_true = 0
+#export (bool) var require_bitflag_to_activate = false
+#
+
+
+enum CONDITION {
+	ALWAYS_FALSE,
+	ALWAYS_TRUE,
+	EQUAL,
+	NOT_EQUAL,
+	LESS_THAN,
+	LESS_EQUAL,
+	GREATER_THAN,
+	GREATER_EQUAL,
+	BIT_AND,
+	BIT_OR,
+	BIT_AT_INDEX_TRUE,
+	BIT_AT_INDEX_FALSE
+}
+var operator_names = [
+	\"\",
+	\"\",
+	\"==\",
+	\"!=\",
+	\"<\",
+	\"<=\",
+	\">\",
+	\">=\",
+	\"&\",
+	\"|\",
+	\"& (1<<x)\"
+]
+var conditional_type:int = CONDITION.ALWAYS_TRUE
+var conditional_value:int = 0
+var when_condition_is_true = 0
+
+#enum OPERATOR {
+#	OP_EQUAL = 0,
+#	OP_NOT_EQUAL = 1,
+#	OP_LESS = 2,
+#	OP_LESS_EQUAL = 3,
+#	OP_GREATER = 4,
+#	OP_GREATER_EQUAL = 5,
+#	OP_ADD = 6,
+#	OP_SUBTRACT = 7,
+#	OP_MULTIPLY = 8,
+#	OP_DIVIDE = 9,
+#	OP_NEGATE = 10,
+#	OP_POSITIVE = 11,
+#	OP_MODULE = 12,
+#	OP_STRING_CONCAT = 13,
+#	OP_SHIFT_LEFT = 14,
+#	OP_SHIFT_RIGHT = 15,
+#	OP_BIT_AND = 16,
+#	OP_BIT_OR = 17,
+#	OP_BIT_XOR = 18,
+#	OP_BIT_NEGATE = 19,
+#	OP_AND = 20,
+#	OP_OR = 21,
+#	OP_XOR = 22,
+#	OP_NOT = 23,
+#	# Logical NOT operator (not or !).
+#	OP_IN = 24,
+#	# Logical IN operator (in).
+#	OP_MAX = 25
+#	# Represents the size of the Variant.Operator enum.
+#}
+#export () var testttttt
 #export (bool) var blink_based_on_bitflag = false
 #export (bool) var 
 #export (int,\"Disabled\",\"Enabled\")
 
+func _get_property_list()->Array:
+	return [
+#	{
+#		name = \"teleporter_ID\",
+#		type = TYPE_INT,
+#		hint = PROPERTY_HINT_RANGE,
+#		hint_string = \"-1,15,1\"
+#	},
+	{
+		name = \"Activate Condition\",
+		type = TYPE_NIL,
+		hint_string = \"conditional_\",
+		usage = PROPERTY_USAGE_CATEGORY | PROPERTY_USAGE_SCRIPT_VARIABLE
+	},
+	#{
+	#	name = \"require_condition_to_activate\",
+	#	type = TYPE_BOOL
+	#},
+	{
+		usage = PROPERTY_USAGE_EDITOR,
+		name = \"When stage bitflags are....\",
+		type = TYPE_NIL
+	},
+	{
+		name = \"conditional_type\",
+		hint = PROPERTY_HINT_ENUM,
+		type = TYPE_INT,
+		hint_string = PoolStringArray(CONDITION.keys()).join(\",\")
+	},
+	{
+		name = \"conditional_value\",
+		type = TYPE_INT
+		#hint = PROPERT_HINT_INT
+	},
+	{
+		name = \"when_condition_is_true\",
+		type = TYPE_INT,
+		hint = PROPERTY_HINT_ENUM,
+		hint_string=\"Blink,Stop\"
+	}
+	]
+
+var player:KinematicBody2D = null
 
 var drawing:bool = false
 var time:float = 0
+var teleport_cooldown:float = 0
+
+func get_conditional_result()->bool:
+	if Engine.editor_hint:
+		return true
+	
+	var op = CheckpointPlayerStats.temporaryStageStats
+	#print(\"Check condition \"+String(conditional_type))
+	match conditional_type:
+		CONDITION.ALWAYS_FALSE:
+			return false
+		CONDITION.ALWAYS_TRUE:
+			return true
+		CONDITION.EQUAL:
+			return op == conditional_value
+		CONDITION.NOT_EQUAL:
+			return op != conditional_value
+		CONDITION.LESS_THAN:
+			return op < conditional_value
+		CONDITION.LESS_EQUAL:
+			return op <= conditional_value
+		CONDITION.GREATER_THAN:
+			return op > conditional_value
+		CONDITION.GREATER_EQUAL:
+			#print(String(op)+\">=\"+String(conditional_value))
+			return op >= conditional_value
+		CONDITION.BIT_AND:
+			return op & conditional_value
+		CONDITION.BIT_OR:
+			return op | conditional_value
+		CONDITION.BIT_AT_INDEX_TRUE:
+			return op & 1<<conditional_value
+		_:
+			print(\"Unhandled enum result\")
+	return false
+
+#This does nothing since VisibilityEnabler2D will toggle _process()
+func _ready():
+	set_process(false)
+	#if when_condition_is_true==1:
+	#	set_process(true)
+	#else:
+	#	set_process(false)
+		#set_process(get_conditional_result())
 
 func _draw():
 	if drawing:
@@ -28,27 +181,94 @@ func _draw():
 		)
 
 func _process(delta):
+	if teleport_cooldown < 0:
+		teleport_cooldown+=delta
+		return
+		
 	time+=delta
 	if time>=.5:
 		time-=.5
 		drawing = !drawing
 		update()
-	if when_bitflag_is_true==1 && teleporter_ID >= 0:
-		if CheckpointPlayerStats.temporaryStageStats & 1<<teleporter_ID:
+		
+	if teleport_type==0 and player:
+		if player.global_position.x < $Area2D.global_position.x+10 and player.global_position.x > $Area2D.global_position.x-10:
+			#print(\"In range!\")
+			if teleport_player(player):
+				player = null
+				#Unnecessary?
+				teleport_cooldown = .3
+	#If disable when bitflag
+	if Engine.editor_hint==false:
+		if when_condition_is_true==1 and get_conditional_result():
 			set_inactive()
-			#return
+		else:
+			set_process(get_conditional_result())
+		#return
 
 func set_inactive():
 	set_process(false)
 	drawing=false
 	update()
-"
+	
+func adjust_camera(obj:KinematicBody2D, newPosition:Vector2):
+	var cc = obj.get_node(\"Camera2D\")
+	
+	var roomBorders:Rect2 = get_node(\"/root/Node2D\").get_closest_room_border(newPosition)
+	roomBorders.position = roomBorders.position*64
+	roomBorders.size = roomBorders.size*64
+	var boundsArray = [
+		roomBorders.position.x, 
+		roomBorders.position.y,
+		roomBorders.size.x,
+		roomBorders.size.y
+	]
+	#var boundsArray = [null,null,null,null]
+	assert(boundsArray[0] < boundsArray[2]);
+	assert(boundsArray[1] < boundsArray[3]);
+	
+	print(\"LEFT: \"+ String(boundsArray[0])+ \" TOP: \"+String(boundsArray[1])+\" RIGHT: \"+String(boundsArray[2]) + \" BOTTOM: \"+String(boundsArray[3]))
+
+	var oldVelocity=obj.velocity
+	#print(oldVelocity)
+	obj.lockMovement(.5, Vector2(0,0))
+	var CL = obj.get_node(\"CanvasLayer\");
+	print(\"fading out...\")
+	var t:SceneTreeTween = CL.get_node(\"Fadeout\").fadeOut()
+	yield(t,\"finished\")
+	obj.global_position = newPosition
+	print(\"fading in..\")
+	obj.velocity=Vector2(0,10000)
+	CL.get_node(\"Fadeout\").fadeIn()
+	cc.adjustCamera(boundsArray, 0)
+	
+func teleport_player(p:KinematicBody2D) -> bool:
+	for c in get_tree().get_nodes_in_group(\"Teleporter\"):
+		if c.teleporter_ID == teleporter_ID and c.teleport_type==1:
+			print(c.teleporter_ID)
+			adjust_camera(p, c.get_node(\"Area2D\").global_position)
+			#p.global_position= c.get_node(\"Area2D\").global_position
+			#p.get_node(\"Camera2D\").adjustCamera([-10000000,-10000000,10000000,10000000],0)
+			return true
+			#get_node(\"/root/Node2D\")
+			#var player = .get_player()
+	printerr(\"No destination teleporters found with ID \"+String(teleporter_ID))
+	return false
+
+func _on_Area2D_body_entered(body):
+	player = body
+
+func _on_Area2D_body_exited(body):
+	if player == body:
+		player = null"
 
 [sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 16, 8 )
 
 [sub_resource type="RectangleShape2D" id=3]
 extents = Vector2( 16, 7 )
+
+[sub_resource type="RectangleShape2D" id=4]
 
 [node name="Teleporter" type="Sprite"]
 scale = Vector2( 4, 4 )
@@ -59,6 +279,9 @@ frame = 1
 region_enabled = true
 region_rect = Rect2( 0, 16, 64, 64 )
 script = SubResource( 1 )
+conditional_type = 1
+conditional_value = 0
+when_condition_is_true = 0
 
 [node name="StaticBody2D" type="StaticBody2D" parent="."]
 position = Vector2( 16, 8 )
@@ -85,3 +308,19 @@ shape = SubResource( 3 )
 [node name="VisibilityEnabler2D" type="VisibilityEnabler2D" parent="."]
 process_parent = true
 physics_process_parent = true
+
+[node name="Area2D" type="Area2D" parent="."]
+position = Vector2( 16, 32 )
+monitorable = false
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource( 4 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_Area2D_body_entered"]
+[connection signal="body_exited" from="Area2D" to="." method="_on_Area2D_body_exited"]

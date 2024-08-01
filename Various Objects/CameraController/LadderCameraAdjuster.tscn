@@ -54,6 +54,8 @@ func set_bounds(t:int):
 		bottomBound = closestRoomBoundary+ROOM_HEIGHT
 		# print(\"Calculated closest boundary is \"+String(closestRoomBoundary))
 	update()
+	#Causes extreme lag
+	#property_list_changed_notify()
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_TRANSFORM_CHANGED:

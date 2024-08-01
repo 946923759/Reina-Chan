@@ -41,7 +41,7 @@ scale = Vector2( 4, 4 )
 texture = ExtResource( 3 )
 centered = false
 region_enabled = true
-region_rect = Rect2( 222.808, 0, 480, 16 )
+region_rect = Rect2( 398.418, 0, 480, 16 )
 script = SubResource( 1 )
 
 [node name="ScrollControl" type="Node" parent="." index="8"]
@@ -49,7 +49,6 @@ script = SubResource( 1 )
 [node name="CameraAdjuster" parent="." index="9" instance=ExtResource( 5 )]
 position = Vector2( 640, 768 )
 topBound = -999
-rightBound = 20
 bottomBound = 24
 freeze_player_during_transition = true
 

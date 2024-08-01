@@ -52,6 +52,7 @@ var shoot_sprite_time = 0
 var bullet = preload("res://Player Files/Weapons/bullet.tscn")
 var archiRocket = preload("res://Player Files/Weapons/ArchiRocket_Player.tscn")
 var wpnSnake = preload("res://Player Files/Weapons/WpnSnake.tscn")
+var dbgHealthDrop = preload("res://Various Objects/pickupHealthBig.tscn")
 #how long UMP9 dashes when using the dash attack, or how long the slide goes
 #if it's above 0 it's currently active.
 var dash_time:float = 0.0
@@ -247,12 +248,15 @@ func get_menu_buttons_input(_delta):
 
 		
 	elif Input.is_action_just_pressed("DebugButton5"):
-		HP = MAX_HP
-		HPBar.updateHP(HP)
-		for i in range(weaponMeters.size()):
-			weaponMeters[i] = 144
-		if currentWeapon!=0:
-			HPBar.updateAmmo(1.0,false)
+#		HP = MAX_HP
+#		HPBar.updateHP(HP)
+#		for i in range(weaponMeters.size()):
+#			weaponMeters[i] = 144
+#		if currentWeapon!=0:
+#			HPBar.updateAmmo(1.0,false)
+		var inst = dbgHealthDrop.instance()
+		stageRoot.add_child(inst)
+		inst.global_position = Vector2(global_position.x+200, global_position.y-200)
 		CheckpointPlayerStats.usedDebugMode=true
 		pass
 		
@@ -1021,7 +1025,7 @@ func _physics_process(delta):
 		cameraInfo.text += "\nOffset: "+String($Camera2D.offset)+ "\nPos: "+String(stepify(cPos.x,.01)) + ", " + String(stepify(cPos.y,.01))
 		
 		onscreenPos.text = "Onscreen pos: " + String(stageRoot.position + position + stageRoot.get_canvas_transform().origin)
-		
+		onscreenPos.text = onscreenPos.text + "\nRoom: " + String(stageRoot.get_closest_room(global_position))
 	
 	if movementLocked:
 		processLockMovement(delta)

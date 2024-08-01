@@ -69,6 +69,8 @@ func auto_set_bounds(t:int):
 #		bottomBound = closestRoomBoundary+ROOM_HEIGHT
 		# print("Calculated closest boundary is "+String(closestRoomBoundary))
 	update()
+	#Causes extreme lag
+	#property_list_changed_notify()
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_TRANSFORM_CHANGED:
@@ -166,7 +168,8 @@ var disabled = false
 func cam(obj):
 	if obj.has_method("player_touched") and not disabled:
 		disabled = !never_disable
-		var cc = get_node("/root/Node2D/").get_player().get_node("Camera2D")
+		var cc = obj.get_node("Camera2D")
+		#var cc = get_node("/root/Node2D/").get_player().get_node("Camera2D")
 		print("Touched camera trigger at "+String(self.global_position))
 		
 		#We don't want to overwrite leftBound,rightBound, etc so keep the changed variables in a new array.
