@@ -636,7 +636,7 @@ func format_time(time, format = FORMAT_DEFAULT, digit_format = "%02d"):
 
 # This will 'reverse' your array because binary is 'right' sided.
 # In other words, doing arr[4] would be ret & 1<<4 to check if arr[4] is true.
-func bitArrayToInt32(arr:Array)->int:
+static func bitArrayToInt32(arr:Array)->int:
 	var ret:int = 0;
 	var tmp:int;
 	for i in range(len(arr)):
@@ -650,6 +650,8 @@ func bitArrayToInt32(arr:Array)->int:
 var SCREENS:Dictionary = {
 	"ScreenDisclaimer":"res://Screens/BetaDisclaimer.tscn",
 	"ScreenHowToPlay":"res://Screens/ScreenHowToPlay/ScreenHowToPlay.tscn",
+	"ScreenOpening":"res://Screens/ScreenOpening/Test_ScreenOpening.tscn",
+	
 	"ScreenTitleMenu":"res://Screens/ScreenTitleMenu/ScreenTitleMenu.tscn",
 	"ScreenSelectCharacter":"res://Screens/ScreenSelectCharacter/ScreenSelectCharacter.tscn",
 	"ScreenSelectStage":"res://Screens/ScreenStageSelectV2/ScreenSelectStage.tscn",

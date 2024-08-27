@@ -1,17 +1,22 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Various Objects/warp.png" type="Texture" id=1]
+[ext_resource path="res://Sounds/Classic/S3K_AF - Enter Large Ring.wav" type="AudioStream" id=2]
 
 [sub_resource type="GDScript" id=1]
 script/source = "tool
 extends Sprite
 
 export (int,-1,15) var teleporter_ID = -1
-export (int,\"In\",\"Out\") var teleport_type = 1
+export (int,\"In\",\"Out\") var teleport_type = 1 setget set_teleport_type
 # If this is true and type is set to In, it will only work 
 # if bitflag in CheckpointPlayerUtils is set
 #export (bool) var require_bitflag_to_activate = false
 #
+func set_teleport_type(i):
+	teleport_type=i
+	self.frame=teleport_type
+	
 
 
 enum CONDITION {
@@ -246,6 +251,11 @@ func teleport_player(p:KinematicBody2D) -> bool:
 	for c in get_tree().get_nodes_in_group(\"Teleporter\"):
 		if c.teleporter_ID == teleporter_ID and c.teleport_type==1:
 			print(c.teleporter_ID)
+			$AudioStreamPlayer.play()
+			var seq:=get_tree().create_tween()
+			seq.tween_property($Polygon2D,\"visible\",true,0.0)
+			seq.tween_property($Polygon2D,\"scale:y\",1.0,.3).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN).from(0.0) #
+			seq.tween_property($Polygon2D,\"visible\",false,0.0).set_delay(.2)
 			adjust_camera(p, c.get_node(\"Area2D\").global_position)
 			#p.global_position= c.get_node(\"Area2D\").global_position
 			#p.get_node(\"Camera2D\").adjustCamera([-10000000,-10000000,10000000,10000000],0)
@@ -260,7 +270,8 @@ func _on_Area2D_body_entered(body):
 
 func _on_Area2D_body_exited(body):
 	if player == body:
-		player = null"
+		player = null
+"
 
 [sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 16, 8 )
@@ -321,6 +332,16 @@ shape = SubResource( 4 )
 __meta__ = {
 "_edit_lock_": true
 }
+
+[node name="Polygon2D" type="Polygon2D" parent="."]
+visible = false
+position = Vector2( 16, 48 )
+z_index = 2
+z_as_relative = false
+polygon = PoolVector2Array( -16, 0, 16, 0, 16, -32, -16, -32 )
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 2 )
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_Area2D_body_entered"]
 [connection signal="body_exited" from="Area2D" to="." method="_on_Area2D_body_exited"]

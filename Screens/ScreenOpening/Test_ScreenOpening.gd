@@ -4,9 +4,14 @@ export(Color) var text_bg_color
 export(String) var bossToLoad
 
 onready var seq = [
-	[03.723, $ZTextWalk],
-	[11.130, $Ouroboros],
-	[14.800, $Scarecrow],
+	[0.0, $ZTextWalk],
+	[03.723, $ZText2],
+	[07.432, $Ouroboros],
+	[11.130, $Scarecrow],
+	[14.800, $Alchemist],
+	[18.450, $Architect],
+	#[20.330, ],
+	[23.100, $LogoFade],
 	[INF]
 ]
 var step = 0
@@ -17,6 +22,8 @@ func _ready():
 	for o in seq:
 		if len(o)>1:
 			o[1].visible=false
+			
+	$AudioStreamPlayer.connect("finished",self,"OffCommandNextScreen")
 
 #Maybe frame time is better
 func _physics_process(delta):

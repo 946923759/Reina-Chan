@@ -33,9 +33,7 @@ var curState:int = STATES.RANDOMPICK
 const bullet = preload("res://Stages_Reina/Enemies/EnemyChargeShot.tscn")
 var pumpkin = preload("res://Stages_Reina/Bosses/Alchemist/PumpkinBomb.tscn")
 
-#So the boss knows where to jump towards
-#This can probably be done automatically by rounding but fuck it
-export(Vector2) var nearestRoomCorner
+#onready var nearestRoomCorner = get_room_position()/CAMERA_SCALE
 
 func _ready():
 	$NearestBlock.visible = OS.is_debug_build()
@@ -60,7 +58,7 @@ func _physics_process(delta):
 		
 	sprite.playing=true
 	sprite.flip_h = (facing == DIRECTION.RIGHT)
-	$NearestBlock.text = (String(global_position/64-nearestRoomCorner))
+	$NearestBlock.text = String(get_room_position()/CAMERA_SCALE)
 	
 	match curState:
 		STATES.RANDOMPICK:
@@ -83,7 +81,7 @@ func _physics_process(delta):
 					if curHP <= 14:
 						#stateProgress=0
 						curState = STATES.JUMPING_TOWARDS_WALL
-						if (global_position/64-nearestRoomCorner).x < 10:
+						if get_room_position().x/CAMERA_SCALE < 10:
 							facing=-1
 						else:
 							facing=1
@@ -141,9 +139,9 @@ func _physics_process(delta):
 				#stateProgress = 0
 				curState = STATES.RANDOMPICK
 			elif dashTime < .8 and (
-					((global_position/64-nearestRoomCorner).x < 17 and facing==DIRECTION.RIGHT)
+					(get_room_position().x/CAMERA_SCALE < 17 and facing==DIRECTION.RIGHT)
 					or
-					((global_position/64-nearestRoomCorner).x > 2 and facing==DIRECTION.LEFT)
+					(get_room_position().x/CAMERA_SCALE > 2 and facing==DIRECTION.LEFT)
 				):
 				sprite.set_animation("dash")
 				# warning-ignore:return_value_discarded
@@ -189,7 +187,7 @@ func _physics_process(delta):
 				stateProgress+=1
 				curState=STATES.WALLDASH
 				tempVelocity=Vector2(0,0)
-				if (global_position/64-nearestRoomCorner).y > 6.5:
+				if get_room_position().y/CAMERA_SCALE > 6.5:
 					tempVelocity.y=-200
 				cooldown=.5
 		STATES.WALLDASH:
@@ -210,7 +208,7 @@ func _physics_process(delta):
 				curState=STATES.JUMPING_TOWARDS_WALL
 				#cooldown=.3
 			elif is_on_floor():
-				if (global_position/64-nearestRoomCorner).x < 10:
+				if get_room_position().x/CAMERA_SCALE < 10:
 					facing=1
 				else:
 					facing=-1
@@ -219,9 +217,9 @@ func _physics_process(delta):
 				sprite.set_animation('idle')
 				curState=STATES.RANDOMPICK
 		STATES.JUMPING_TOWARDS_CENTER:
-			if facing==DIRECTION.LEFT and (global_position/64-nearestRoomCorner).x < 10:
+			if facing==DIRECTION.LEFT and get_room_position().x/CAMERA_SCALE < 10:
 				tempVelocity.x=min(0,tempVelocity.x+delta*1000)
-			elif facing==DIRECTION.RIGHT and (global_position/64-nearestRoomCorner).x > 9:
+			elif facing==DIRECTION.RIGHT and get_room_position().x/CAMERA_SCALE > 9:
 				tempVelocity.x=max(0,abs(tempVelocity.x)-delta*1000)
 				
 			tempVelocity=move_and_slide(tempVelocity,Vector2(0,-1),true)

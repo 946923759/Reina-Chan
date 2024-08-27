@@ -26,7 +26,8 @@ var rText = [
 	\"Amaryllis Works, VanDine, Unfiltered, Anonymous, Chaosoup & Nirvash\",
 	\"Remember to hydrate\",
 	\"We will reverse all creation!\",
-	\"Heaven or Hell, let's rock!\"
+	\"Heaven or Hell, let's rock!\",
+	\"Battle routine, set! Execute!\"
 ]
 
 #warning-ignore:return_value_discarded

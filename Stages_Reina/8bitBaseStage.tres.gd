@@ -124,6 +124,8 @@ func playMusic(cdAudioFileName:String,nsfAudioFileName:String,nsfAudioTrack:int=
 	reinaAudioPlayer.load_song(cdAudioFileName,nsfAudioFileName,nsfAudioTrack)
 	
 func playMusic_2():
+	if OS.is_debug_build() and mute_music_in_debug:
+		return
 	reinaAudioPlayer.load_song(custom_music_name,nsf_music_file,nsf_track_num,nsf_volume_adjustment)
 
 #This is only ever used for the boss doors honestly

@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://ParticleEffects/alphaMask.gdshader" type="Shader" id=1]
 [ext_resource path="res://Character Sprites/ump9/ump9.tres" type="SpriteFrames" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://Sounds/Classic/03 - MenuSelect.wav" type="AudioStream" id=4]
 [ext_resource path="res://Screens/ScreenSelectCharacter/arrow.png" type="Texture" id=5]
 [ext_resource path="res://ubuntu-font-family/MM2Font.tres" type="DynamicFont" id=6]
+[ext_resource path="res://ParticleEffects/PaletteSwapShader.tres" type="Material" id=7]
 
 [sub_resource type="GDScript" id=1]
 script/source = "extends Control
@@ -45,6 +46,7 @@ func _process(delta):
 	#$Characters.position.x = 
 	change_selection(0)
 
+#TODO: Add \"Lenna\", aka UMP9 but lighter hair
 func change_selection(dir:int=0):
 	var nSel = selection+dir
 	if nSel > limit:
@@ -132,6 +134,7 @@ __meta__ = {
 }
 
 [node name="UMP9" type="AnimatedSprite" parent="Characters"]
+material = ExtResource( 7 )
 frames = ExtResource( 2 )
 animation = "WalkLoop"
 

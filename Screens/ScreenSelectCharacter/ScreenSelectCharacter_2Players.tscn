@@ -134,12 +134,12 @@ text = "player 2"
 align = 1
 valign = 1
 
-[node name="arrows" parent="." instance=ExtResource( 6 )]
+[node name="arrowsAndPlayer" parent="." instance=ExtResource( 6 )]
 margin_left = -520.0
 margin_right = -120.0
 player = 1
 
-[node name="arrows2" parent="." instance=ExtResource( 6 )]
+[node name="arrowsAndPlayer2" parent="." instance=ExtResource( 6 )]
 margin_left = 120.0
 margin_right = 520.0
 player = 2

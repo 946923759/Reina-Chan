@@ -7,15 +7,21 @@ export(String) var text = "reina-chan"
 enum DIRECTION {LEFT = -1, RIGHT = 1}
 export(DIRECTION) var facing = DIRECTION.LEFT
 export(bool) var auto_OnCommand=false
+export(bool) var flip_h=false
 
 func _ready():
 	$Polygon2D4.color = text_bg_color
 	$Polygon2D5.color = text_bg_color
-	for i in range(5):
+	for _i in range(5):
 		text += " "+text
 	$Polygon2D4/FakeZText.text = text
 	$Polygon2D5/FakeZText.text = text
-	$Polygon2D/HDPortrait.texture = large_portrait
+	
+	$HDPortrait_BG.texture = large_portrait
+	$HDPortrait_BG/HDPortrait.texture = large_portrait
+	$HDPortrait_BG.flip_h = flip_h
+	$HDPortrait_BG/HDPortrait.flip_h = flip_h
+	
 	print("CharActor init")
 	$BossSpriteLoader.bossToLoad=bossToLoad
 	$BossSpriteLoader.InitCommand()
@@ -23,7 +29,7 @@ func _ready():
 	if facing == DIRECTION.RIGHT:
 		$BossSpriteLoader.position.x = 1280-$BossSpriteLoader.position.x
 		#This one is left aligned so it's dumb
-		$Polygon2D.position.x = 1280-$Polygon2D.position.x-400
+		$HDPortrait_BG.position.x = 1280-$HDPortrait_BG.position.x
 	if auto_OnCommand:
 		OnCommand()
 
@@ -35,7 +41,7 @@ func OnCommand():
 	t.set_parallel(true)
 	t.tween_property(self,"visible",true,0.0)
 	#t.tween_property($CenterBG,"position",Vector2(0,SCREEN_SIZE.y/2-240/2),0.0)
-	t.tween_property($Polygon2D/HDPortrait,"position:y",-200.0,5)
+	t.tween_property($HDPortrait_BG,"position:y",350,5)
 	t.tween_property($CenterBG,"position:y", SCREEN_SIZE.y/2-240/2, .5).from(SCREEN_SIZE.y/2-240/2*1.5)
 	t.tween_property($CenterBG,"scale:y",1.0 ,.5).from(1.5)
 	t.tween_property($Polygon2D4,"position",Vector2(0,SCREEN_SIZE.y/2-200),1.0).from(Vector2(0,0)).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)

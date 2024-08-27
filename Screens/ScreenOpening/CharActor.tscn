@@ -18,6 +18,7 @@ text_bg_color = Color( 0.458824, 0, 0.462745, 1 )
 bossToLoad = ExtResource( 7 )
 large_portrait = ExtResource( 5 )
 text = "ouroboros"
+facing = 1
 auto_OnCommand = true
 
 [node name="BackBufferCopy" type="BackBufferCopy" parent="."]
@@ -108,16 +109,25 @@ material = ExtResource( 3 )
 [node name="Afterimage4" type="Sprite" parent="BossSpriteLoader"]
 modulate = Color( 0, 0.145098, 0.921569, 1 )
 
+[node name="HDPortrait_BG" type="Sprite" parent="."]
+self_modulate = Color( 0, 0, 0, 0.784314 )
+position = Vector2( 330, 512 )
+texture = ExtResource( 5 )
+region_rect = Rect2( 310, 0, 400, 1024 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="HDPortrait" type="Sprite" parent="HDPortrait_BG"]
+position = Vector2( -40, 0 )
+texture = ExtResource( 5 )
+region_rect = Rect2( 310, 0, 400, 1024 )
+
 [node name="Polygon2D" type="Polygon2D" parent="."]
+visible = false
 position = Vector2( 100, 0 )
 color = Color( 0.145098, 0.145098, 0.145098, 1 )
 polygon = PoolVector2Array( 0, 0, 400, 0, 400, 1024, 0, 1024 )
 __meta__ = {
 "_edit_group_": true
 }
-
-[node name="HDPortrait" type="Sprite" parent="Polygon2D"]
-texture = ExtResource( 5 )
-centered = false
-region_enabled = true
-region_rect = Rect2( 310, 0, 400, 1024 )

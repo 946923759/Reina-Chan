@@ -21,12 +21,13 @@ export (DOOR_IS_FACING) var facing = DOOR_IS_FACING.RIGHT
 func _ready():
 	$Area2D.connect("body_entered",self,"move")
 	if locked:
-		$LockedDoor.set_collision_layer_bit(0,true)
-		$Area2D.monitoring=false
+		lock_door()
 	
 	
 func move(obj):
-	if obj.has_method("lockMovement"):
+	if locked:
+		return
+	elif obj.has_method("lockMovement"):
 		obj.dash_time=0
 		if newMusic != null and newMusic != "":
 			var music = load(newMusic)
@@ -87,6 +88,10 @@ func move(obj):
 		
 #func _process(delta):
 #	var time = 5/16;
+	
+func lock_door():
+	$LockedDoor.set_collision_layer_bit(0,true)
+	$Area2D.monitoring=false
 	
 func unlock_door():
 	$LockedDoor.queue_free()

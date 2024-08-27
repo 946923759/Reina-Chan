@@ -4,8 +4,8 @@ var canPickM16 = Globals.systemData.unlocked_M16A1
 var canPickShinM16 = Globals.systemData.unlocked_M16_Ultimate
 
 #onready var charDesc:Label = $charDesc
-onready var arrows = $arrows
-onready var arrows2 = $arrows2
+onready var arrows = $arrowsAndPlayer
+onready var arrows2 = $arrowsAndPlayer2
 onready var all_select = [arrows, arrows2]
 #func _input(event):
 

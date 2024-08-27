@@ -20,7 +20,7 @@ const SCREEN_CENTER_X = SCREEN_WIDTH/2
 const SCREEN_CENTER_Y = SCREEN_HEIGHT/2
 
 func _ready():
-	set_process(true)
+	set_physics_process(true)
 	destPositions=[cam.limit_left, cam.limit_top, cam.limit_right, cam.limit_bottom]
 
 var is_tweening:bool=false
@@ -126,19 +126,15 @@ export var shakeReduction : float = 1.0
 var stress : float = 0.0
 var shake : float = 0.0
 
-var elapsed:float=0
-func _process(_delta):
+
+#Lock to the frame rate with _physics_process
+func _physics_process(_delta):
 	if stress == 0.0:
 		return
 	
-	elapsed+=_delta
-	if elapsed>1/60: #Lock to the frame rate
-		elapsed=0
-		_process_shake(Vector2(0,0), 0.0, _delta)
+	_process_shake(Vector2(0,0), 0.0, _delta)
 	pass
 
-
-#TODO: It's tied to the update rate which is extremely inconsistent between computers
 func _process_shake(_center, _angle, delta) -> void:
 	shake = stress * stress
 

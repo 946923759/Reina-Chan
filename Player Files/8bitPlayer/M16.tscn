@@ -79,6 +79,8 @@ dash_multiplier = 2.0
 
 [node name="Sprite" parent="." index="1"]
 frames = ExtResource( 2 )
+animation = "intro_pt2"
+playing = true
 
 [node name="AfterImage1" type="Sprite" parent="Sprite" index="0"]
 visible = false

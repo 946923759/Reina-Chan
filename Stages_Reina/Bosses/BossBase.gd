@@ -8,7 +8,7 @@ var lastTouched
 var enabled:bool = false
 
 var curHP:int = 28 #All bosses in mega man have 28 health.
-#const MAX_HP = 28
+const MAX_HP = 28
 
 var is_reflecting:bool=false
 
@@ -87,6 +87,7 @@ func _ready():
 		$Area2D.connect("area_entered",self,"areaTouched")
 
 onready var introSound:AudioStreamPlayer=$IntroSound
+
 func playIntro(playSound=true,showHPbar=true)->AudioStreamPlayer:
 	sprite.play("intro")
 	if showHPbar:
