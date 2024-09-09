@@ -1,6 +1,6 @@
 [gd_scene load_steps=33 format=2]
 
-[ext_resource path="res://Screens/ScreenCutscene/NotoSans-Bold.ttf" type="DynamicFontData" id=1]
+[ext_resource path="res://ubuntu-font-family/NotoSans-Bold.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://ubuntu-font-family/pkmndp.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://Screens/ScreenCutscene/blinky.png" type="Texture" id=3]
 [ext_resource path="res://Screens/ScreenCutsceneMMZ/CutsceneInGame.gd" type="Script" id=4]

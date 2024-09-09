@@ -16,7 +16,7 @@ onready var seq = [
 ]
 var step = 0
 
-var total:float = 0.0
+#var total:float = 0.0
 
 func _ready():
 	for o in seq:
@@ -27,7 +27,8 @@ func _ready():
 
 #Maybe frame time is better
 func _physics_process(delta):
-	total+=delta
+	#total+=delta
+	var total = $AudioStreamPlayer.get_playback_position()
 	if total>=seq[step][0]:
 		assert(seq[step][1])
 		#seq[step][1].OnCommand()

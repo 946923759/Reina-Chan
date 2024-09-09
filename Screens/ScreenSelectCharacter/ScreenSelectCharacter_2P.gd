@@ -28,7 +28,7 @@ func _input(event):
 				all_select[i].change_selection(1)
 			elif event.is_action("right_p%d" % (i+1)):
 				all_select[i].change_selection(-1)
-		if event.is_action("ui_select") or event.is_action("ui_pause"):
+		if event.is_action("ui_accept") or event.is_action("ui_pause"):
 			action_accept()
 		elif event.is_action("ui_cancel"):
 			Globals.change_screen(get_tree(),"ScreenTitleMenu")

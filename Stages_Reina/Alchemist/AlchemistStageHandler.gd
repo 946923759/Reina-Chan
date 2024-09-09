@@ -17,7 +17,11 @@ export (int) var leftBound = 0;
 export (int) var topBound = 0;
 export (int) var rightBound;
 export (int) var bottomBound;
-var cameraScale:float = 64;
+
+#var CAMERA_SCALE:float = 64;
+const CAMERA_SCALE = 64;
+const ROOM_WIDTH = 20
+const ROOM_HEIGHT = 12
 
 export (String) var custom_music_name
 export (String) var nsf_music_file
@@ -32,7 +36,9 @@ export (bool) var mute_boss_music_in_debug=false
 
 export (Globals.Weapons) var weapon_to_unlock=0
 
-export (Array,Vector2) var debug_warp_points
+var debug_warp_points
+#Not a wily stage obviously so it's 0
+const wily_stage_num=0
 
 var reinaAudioPlayer
 var player:KinematicBody2D
@@ -63,23 +69,23 @@ func _ready():
 		#We don't want to overwrite leftBound,rightBound, etc so keep the changed variables in a new array.
 		var boundsArray = [null,null,null,null]
 		if rightBound == -999:
-			boundsArray[2] = leftBound*cameraScale+Globals.gameResolution.x
+			boundsArray[2] = leftBound*CAMERA_SCALE+Globals.gameResolution.x
 		else:
-			boundsArray[2] = rightBound*cameraScale
+			boundsArray[2] = rightBound*CAMERA_SCALE
 			
 		if leftBound == -999:
 			boundsArray[0] = rightBound-Globals.gameResolution.x
 		else:
-			boundsArray[0] = leftBound*cameraScale;
+			boundsArray[0] = leftBound*CAMERA_SCALE;
 			#print("WARN: Left and right bounds are not defined. The camera won't work.")
 		if bottomBound == -999:
-			boundsArray[3] = topBound*cameraScale+Globals.gameResolution.y
+			boundsArray[3] = topBound*CAMERA_SCALE+Globals.gameResolution.y
 		else:
-			boundsArray[3] = bottomBound*cameraScale
+			boundsArray[3] = bottomBound*CAMERA_SCALE
 		if topBound == -999:
-			boundsArray[1] = bottomBound*cameraScale-Globals.gameResolution.y
+			boundsArray[1] = bottomBound*CAMERA_SCALE-Globals.gameResolution.y
 		else:
-			boundsArray[1] = topBound*cameraScale;
+			boundsArray[1] = topBound*CAMERA_SCALE;
 		
 		assert(boundsArray[0] < boundsArray[2]);
 		assert(boundsArray[1] < boundsArray[3]);
@@ -119,11 +125,22 @@ func fadeMusic():
 func stopMusic():
 	reinaAudioPlayer.stop_music()
 
+func get_player()->KinematicBody2D:
+	return player
+
 onready var tile_scale = $TileMap.scale
 func pos2cell(pos):
 	#TODO: Offset is wrong, fix it for real
 	#pos minus 30 (why?) divided by quadrant size divided by tile scale
 	return Vector2(round((pos.x-32)/16/tile_scale.x), round((pos.y-32)/16/tile_scale.y));
+func get_closest_room(glb_pos:Vector2):
+	return Vector2(
+		floor(glb_pos.x/CAMERA_SCALE/ROOM_WIDTH)*ROOM_WIDTH,
+		floor(glb_pos.y/CAMERA_SCALE/ROOM_HEIGHT)*ROOM_HEIGHT
+	)
+	pass
 
-func get_player()->KinematicBody2D:
-	return player
+func get_closest_room_border(glb_pos:Vector2)->Rect2:
+	var topLeft = get_closest_room(glb_pos)
+	var size = Vector2(topLeft.x+ROOM_WIDTH,topLeft.y+ROOM_HEIGHT)
+	return Rect2(topLeft, size)

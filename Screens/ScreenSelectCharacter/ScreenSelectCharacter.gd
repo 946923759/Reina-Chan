@@ -46,7 +46,7 @@ func _input(event):
 			arrows.change_selection(1)
 		elif event.is_action("ui_left"):
 			arrows.change_selection(-1)
-		elif event.is_action("ui_select") or event.is_action("ui_pause"):
+		elif event.is_action("ui_accept") or event.is_action("ui_pause"):
 			action_accept()
 		elif event.is_action("ui_cancel"):
 			Globals.change_screen(get_tree(),"ScreenTitleMenu")

@@ -92,6 +92,7 @@ animations = [ {
 
 [node name="KinematicBody2D" type="KinematicBody2D"]
 position = Vector2( 1124.26, 559.248 )
+z_index = 1
 collision_layer = 18
 collision_mask = 2
 script = SubResource( 1 )
@@ -105,7 +106,6 @@ __meta__ = {
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 scale = Vector2( 4, 4 )
 frames = SubResource( 11 )
-frame = 1
 playing = true
 offset = Vector2( -0.5, -0.5 )
 __meta__ = {

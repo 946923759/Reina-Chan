@@ -232,7 +232,7 @@ func get_input(delta):
 		var left = Input.is_action_pressed('ui_left')
 		var up = Input.is_action_pressed('ui_up')
 		var down = Input.is_action_pressed('ui_down')
-		var jump = Input.is_action_just_pressed('ui_select')
+		var jump = Input.is_action_just_pressed('ui_accept')
 		var shoot = Input.is_action_just_pressed("ui_cancel")
 		if rapidFire and shoot_time > .1:
 			shoot = Input.is_action_pressed("ui_cancel")
@@ -392,7 +392,7 @@ func get_input(delta):
 				#	set_collision_layer_bit(0,false)
 			if jumping:
 				#Cancel upward momentium if jump button is let go
-				if velocity.y < 0 and !Input.is_action_pressed("ui_select"):
+				if velocity.y < 0 and !Input.is_action_pressed("ui_accept"):
 					velocity.y = 0
 		
 	if Input.is_action_just_pressed("DebugButton3"):

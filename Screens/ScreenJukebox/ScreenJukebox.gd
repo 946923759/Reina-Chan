@@ -137,7 +137,7 @@ func _process(delta):
 			selection += 1
 		else:
 			selection = 0
-	elif Input.is_action_just_pressed("ui_select"):
+	elif Input.is_action_just_pressed("ui_accept"):
 		#reinaAudioPlayer.stop_music()
 		
 		var sel:music_entry = audio_database[selection]

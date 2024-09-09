@@ -689,7 +689,8 @@ var STAGES_REINA:Dictionary = {
 	"NSF_TEST_2":"res://Stages_Reina/TestStage_NSF/TestStage_NSF_2.tscn",
 	"SCARECROW_BOSS_TEST":"res://Stages_Reina/ScarecrowTestRoom.tscn",
 	"mm2wily1":"res://Stages/mm2wily/stgWily.tscn",
-	"CAMERA_ZOOM_TEST":"res://Stages/IntroStageTest/Stage.tscn"
+	#"CAMERA_ZOOM_TEST":"res://Stages/IntroStageTest/Stage.tscn"
+	"MULTIPLAYER_TEST":"res://Stages_Reina/RoomsTest.tscn"
 }
 
 var previous_screen = ""

@@ -32,7 +32,7 @@ func _ready():
 func _input(_event):
 	if Input.is_action_just_pressed("ui_cancel") and HandlePhysicalBButton:
 		OffCommandPrevScreen()
-	elif (Input.is_action_just_pressed("ui_select") or Input.is_action_just_pressed("ui_pause")) and HandlePhysicalAButton:
+	elif (Input.is_action_just_pressed("ui_accept") or Input.is_action_just_pressed("ui_pause")) and HandlePhysicalAButton:
 		OffCommandNextScreen()
 		
 #	var f3_is_held = Input.is_action_pressed("DebugButton3") #and $smScreenInOut.t.is_active()==false

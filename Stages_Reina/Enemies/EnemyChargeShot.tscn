@@ -1,7 +1,9 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://Stages_Reina/Enemies/M16Miniboss/chargeShot.png" type="Texture" id=1]
 [ext_resource path="res://Sounds/Classic/Mega Man 6 SRX (34) - Maybe Charge Shot.wav" type="AudioStream" id=2]
+[ext_resource path="res://Character Sprites/m16/omegaBullet.png" type="Texture" id=3]
+[ext_resource path="res://ParticleEffects/AlphaMaskPurple.tres" type="Material" id=4]
 
 [sub_resource type="GDScript" id=1]
 script/source = "extends Node2D
@@ -46,6 +48,22 @@ func objectTouched(obj):
 	#	obj.call(\"enemy_touched\",self)
 "
 
+[sub_resource type="AtlasTexture" id=11]
+atlas = ExtResource( 3 )
+region = Rect2( 0, 0, 24, 16 )
+
+[sub_resource type="AtlasTexture" id=12]
+atlas = ExtResource( 3 )
+region = Rect2( 24, 0, 24, 16 )
+
+[sub_resource type="AtlasTexture" id=13]
+atlas = ExtResource( 3 )
+region = Rect2( 48, 0, 24, 16 )
+
+[sub_resource type="AtlasTexture" id=14]
+atlas = ExtResource( 3 )
+region = Rect2( 72, 0, 24, 16 )
+
 [sub_resource type="AtlasTexture" id=2]
 atlas = ExtResource( 1 )
 region = Rect2( 0, 0, 40, 22 )
@@ -76,6 +94,11 @@ region = Rect2( 200, 0, 40, 22 )
 
 [sub_resource type="SpriteFrames" id=9]
 animations = [ {
+"frames": [ SubResource( 11 ), SubResource( 11 ), SubResource( 12 ), SubResource( 13 ), SubResource( 13 ), SubResource( 14 ) ],
+"loop": true,
+"name": "blue",
+"speed": 30.0
+}, {
 "frames": [ SubResource( 2 ), SubResource( 3 ), SubResource( 4 ) ],
 "loop": false,
 "name": "default",
@@ -91,16 +114,16 @@ animations = [ {
 extents = Vector2( 72, 40 )
 
 [node name="Node2D" type="Node2D"]
+z_index = 1
 script = SubResource( 1 )
 __meta__ = {
 "_edit_group_": true
 }
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+material = ExtResource( 4 )
 scale = Vector2( 4, 4 )
 frames = SubResource( 9 )
-animation = "loop"
-frame = 1
 
 [node name="Area2D" type="Area2D" parent="."]
 

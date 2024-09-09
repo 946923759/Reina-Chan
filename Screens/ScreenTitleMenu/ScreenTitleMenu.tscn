@@ -907,6 +907,7 @@ script = SubResource( 2 )
 hasSubmenu = false
 
 [node name="playIntro" type="Label" parent="MainMenu" groups=["TEST"]]
+visible = false
 margin_top = 150.0
 margin_right = 601.0
 margin_bottom = 195.0
@@ -917,9 +918,9 @@ uppercase = true
 script = SubResource( 3 )
 
 [node name="OptionsLabel" type="Label" parent="MainMenu" groups=["TEST"]]
-margin_top = 225.0
+margin_top = 150.0
 margin_right = 601.0
-margin_bottom = 270.0
+margin_bottom = 195.0
 custom_fonts/font = ExtResource( 5 )
 text = "OPTIONS"
 uppercase = true
@@ -927,9 +928,9 @@ script = SubResource( 4 )
 submenuNode = "OptionsList"
 
 [node name="JukeboxLabel" type="Label" parent="MainMenu" groups=["TEST"]]
-margin_top = 300.0
+margin_top = 225.0
 margin_right = 601.0
-margin_bottom = 345.0
+margin_bottom = 270.0
 custom_fonts/font = ExtResource( 5 )
 text = "EXTRAS"
 uppercase = true
@@ -937,18 +938,18 @@ script = SubResource( 5 )
 submenuNode = "Extras"
 
 [node name="Home page" type="Label" parent="MainMenu" groups=["TEST"]]
-margin_top = 375.0
+margin_top = 300.0
 margin_right = 601.0
-margin_bottom = 420.0
+margin_bottom = 345.0
 custom_fonts/font = ExtResource( 5 )
 text = "HOMEPAGE"
 uppercase = true
 script = SubResource( 6 )
 
 [node name="QuitLabel" type="Label" parent="MainMenu" groups=["TEST"]]
-margin_top = 450.0
+margin_top = 375.0
 margin_right = 601.0
-margin_bottom = 495.0
+margin_bottom = 420.0
 custom_fonts/font = ExtResource( 5 )
 text = "QUIT"
 uppercase = true
@@ -1062,13 +1063,6 @@ script = SubResource( 12 )
 script = ExtResource( 6 )
 codes = [ "UUDDLRLR", "LLLRRRUUU" ]
 
-[node name="Transition" parent="." instance=ExtResource( 13 )]
-visible = false
-margin_left = 0.0
-margin_top = 0.0
-margin_right = 1280.0
-margin_bottom = 720.0
-
 [node name="DebugPanel" type="Panel" parent="."]
 anchor_left = 1.0
 anchor_top = 0.5
@@ -1094,6 +1088,13 @@ __meta__ = {
 margin_right = 390.0
 margin_bottom = 20.0
 text = "hide panel"
+
+[node name="Transition" parent="." instance=ExtResource( 13 )]
+visible = false
+margin_left = 0.0
+margin_top = 0.0
+margin_right = 1280.0
+margin_bottom = 720.0
 
 [connection signal="file_selected" from="FileDialog_stage" to="Extras" method="_on_FileDialog_file_selected"]
 [connection signal="file_selected" from="FileDialog_cutscene" to="Extras" method="_on_FileDialog_cutscene_file_selected"]

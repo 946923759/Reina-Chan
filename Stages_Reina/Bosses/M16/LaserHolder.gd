@@ -1,6 +1,6 @@
 extends Node2D
 
-const ANIMATION_LENGTH = 2
+const ANIMATION_LENGTH = 1.5
 func _ready():
 	
 	set_process(false)
@@ -18,7 +18,7 @@ func _process(delta):
 			c.frame_=max(0,3-time*3)
 	else:
 		for c in get_children():
-			c.frame_ = (time- 1.5)*2 #float 0 to .5
+			c.frame_ = (time- (ANIMATION_LENGTH-.5))*2 #float 0 to .5
 		
 	time+=delta
 	if time>ANIMATION_LENGTH:

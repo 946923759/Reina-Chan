@@ -167,7 +167,7 @@ func _ready():
 var disabled = false
 func cam(obj):
 	if obj.has_method("player_touched") and not disabled:
-		disabled = !never_disable
+		disabled = (!never_disable and obj.controller_index==0)
 		var cc = obj.get_node("Camera2D")
 		#var cc = get_node("/root/Node2D/").get_player().get_node("Camera2D")
 		print("Touched camera trigger at "+String(self.global_position))

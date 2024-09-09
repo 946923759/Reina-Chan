@@ -2,23 +2,23 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/44d43b7cc9d590f16c63a84d4accdca3.jpg-4cc9c6c993ae1031d8b5d7f7647049db.stex"
+path="res://.import/omegaBullet.png-abfdf9e55dc6de51b629501ce05f3015.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Screens/ScreenStageIntroSangvis/44d43b7cc9d590f16c63a84d4accdca3.jpg"
-dest_files=[ "res://.import/44d43b7cc9d590f16c63a84d4accdca3.jpg-4cc9c6c993ae1031d8b5d7f7647049db.stex" ]
+source_file="res://Character Sprites/m16/omegaBullet.png"
+dest_files=[ "res://.import/omegaBullet.png-abfdf9e55dc6de51b629501ce05f3015.stex" ]
 
 [params]
 
-compress/mode=1
-compress/lossy_quality=0.8
+compress/mode=0
+compress/lossy_quality=0.7
 compress/hdr_mode=0
 compress/bptc_ldr=0
-compress/normal_map=2
+compress/normal_map=0
 flags/repeat=0
 flags/filter=false
 flags/mipmaps=false

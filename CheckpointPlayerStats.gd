@@ -8,7 +8,7 @@ var lastCameraBounds:Array
 var lastWeaponMeters:PoolIntArray
 
 #You can change this to true if you want to debug, clearEverything() will reset it anyways
-var watchedBossIntro:bool = false # OS.is_debug_build()
+var watchedBossIntro:bool = OS.is_debug_build()
 
 #To check for cheated time attack scores
 var usedDebugMode:bool=false

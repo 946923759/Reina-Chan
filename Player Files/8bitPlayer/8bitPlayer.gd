@@ -3,12 +3,22 @@ signal toggled_debug_disp(disp_mode)
 
 const SPEED = 250;
 
+#Why are these adjustable in the first place?
 export (float) var grenade_throw_cooldown = 1.5;
 export (int) var run_speed = 350
 export (int) var jump_speed = -1200
 export (float,1,10,.5) var dash_multiplier
 export (int,100,10000) var gravity = 3500
+
+#const grenade_throw_cooldown = 1.5
+#const run_speed = 350
+#const jump_speed = -1200
+#const gravity = 3500
+#const dash_multiplier = 2.5
+
 export (float,0,5) var time_before_active=.3
+
+export (int,0,3) var controller_index = 0
 
 #0 = UMP9
 #1 = M16 (can charge and dash, no other difference)
@@ -108,6 +118,7 @@ var DEATH_TILE_ID
 var lastDebugWarped=-1
 
 var grenadeThrower: PlayerGrenadeThrower;
+onready var INPUT = $INPUTMAN
 
 func _ready():
 	
@@ -135,7 +146,7 @@ func _ready():
 	
 	grenadeThrower = PlayerGrenadeThrower.new(grenade_throw_cooldown, bulletHolder);
 	
-	debugDisplay.visible=OS.is_debug_build()
+	debugDisplay.visible=OS.is_debug_build() and controller_index==0
 	
 	if CheckpointPlayerStats.checkpointSet:
 		position=CheckpointPlayerStats.lastCheckpointPos
@@ -356,7 +367,7 @@ func get_input(delta):
 		switchWeapon(false)
 	
 	#It's here because freeRoam overrides R1
-	if Input.is_action_just_pressed("R1"):
+	if Input.is_action_just_pressed(INPUT.R1[controller_index]):
 		var i = currentWeapon+1
 		while true:
 			if i == len(Globals.playerData.availableWeapons):
@@ -367,7 +378,7 @@ func get_input(delta):
 				i+=1
 		currentWeapon=i
 		switchWeapon()
-	elif Input.is_action_just_pressed("L1"):
+	elif Input.is_action_just_pressed(INPUT.L1[controller_index]):
 		var i = currentWeapon-1
 		while true:
 			if i < 0:
@@ -380,24 +391,32 @@ func get_input(delta):
 		switchWeapon()
 			
 	
-	var right = Input.is_action_pressed('ui_right')
-	var left = Input.is_action_pressed('ui_left')
-	var up = Input.is_action_pressed('ui_up')
-	var down = Input.is_action_pressed('ui_down')
-	var jump = Input.is_action_just_pressed('ui_select')
-	var shoot = Input.is_action_just_pressed("ui_cancel")
+#	var right = Input.is_action_pressed('ui_right')
+#	var left = Input.is_action_pressed('ui_left')
+#	var up = Input.is_action_pressed('ui_up')
+#	var down = Input.is_action_pressed('ui_down')
+#	var jump = Input.is_action_just_pressed('ui_accept')
+#	var shoot = Input.is_action_just_pressed("ui_cancel")
+	var left = Input.is_action_pressed(INPUT.LEFT[controller_index])
+	var right = Input.is_action_pressed(INPUT.RIGHT[controller_index])
+	var up = Input.is_action_pressed(INPUT.UP[controller_index])
+	var down = Input.is_action_pressed(INPUT.DOWN[controller_index])
+	var jump = Input.is_action_just_pressed(INPUT.FORWARD[controller_index])
+	var shoot = Input.is_action_just_pressed(INPUT.BACK[controller_index])
 
 	if state==State.DASH: #No shooting while dashing
 		shoot=false
 	elif rapidFire and shoot_time > .1 and currentWeapon != 1:
-		shoot = Input.is_action_pressed("ui_cancel")
+		#This is action_pressed, not action_just_pressed
+		#shoot = Input.is_action_pressed("ui_cancel")
+		shoot = Input.is_action_pressed(INPUT.BACK[controller_index])
 	
 	if Globals.flipButtons:
-		jump = Input.is_action_just_pressed('ui_cancel')
-		shoot = Input.is_action_just_pressed("ui_select") or rapidFire and (shoot_time > .1 and Input.is_action_pressed("ui_select"))
+		jump = Input.is_action_just_pressed(INPUT.BACK[controller_index])
+		shoot = Input.is_action_just_pressed(INPUT.FORWARD[controller_index]) or rapidFire and (shoot_time > .1 and Input.is_action_pressed(INPUT.FORWARD[controller_index]))
 
 	var grenade_input = (shoot and up) or (
-		Input.is_action_just_pressed("gameplay_btn3") and
+		Input.is_action_just_pressed(INPUT.THIRD[controller_index]) and
 		state!=State.DASH
 	)
 	#Can't throw grenades if using other weapons because it will
@@ -643,9 +662,9 @@ func get_input(delta):
 				sprite.set_animation("Dash")
 				canAirDash=false
 		if state == State.JUMPING:
-			var jumpHeld = Input.is_action_pressed("ui_select")
+			var jumpHeld = Input.is_action_pressed(INPUT.FORWARD[controller_index])
 			if Globals.flipButtons:
-				jumpHeld = Input.is_action_pressed("ui_cancel")
+				jumpHeld = Input.is_action_pressed(INPUT.BACK[controller_index])
 			#Cancel upward momentium if jump button is let go
 			#I'm pretty sure this can be simplified into one if statement
 			if velocity.y < 0 and !jumpHeld:
@@ -821,7 +840,9 @@ func _physics_process(delta):
 		dash_time-=delta
 	
 	#Menu buttons should always be accessible!
-	get_menu_buttons_input(delta)
+	#...For player 1.
+	if controller_index == 0:
+		get_menu_buttons_input(delta)
 	
 	if state==State.INACTIVE:
 		handleEvents()

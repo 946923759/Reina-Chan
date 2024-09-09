@@ -27,7 +27,8 @@ enum STATES {
 	WALLHANG,
 	WALLDASH,
 }
-var curState:int = STATES.RANDOMPICK
+var previous_state:int = STATES.RANDOMPICK
+var current_state:int = STATES.RANDOMPICK
 
 #YEP, HERE WE GO AGAIN
 const bullet = preload("res://Stages_Reina/Enemies/EnemyChargeShot.tscn")
@@ -47,7 +48,7 @@ var tempVelocity:Vector2
 var justShot:bool=false
 
 #If not random enough, force it
-var randResults = [false,true,false]
+#var randResults = [false,true,false]
 
 func _physics_process(delta):
 	if not enabled:
@@ -60,7 +61,7 @@ func _physics_process(delta):
 	sprite.flip_h = (facing == DIRECTION.RIGHT)
 	$NearestBlock.text = String(get_room_position()/CAMERA_SCALE)
 	
-	match curState:
+	match current_state:
 		STATES.RANDOMPICK:
 			stateProgress=0
 			tempVelocity=Vector2(0,1000)
@@ -75,12 +76,15 @@ func _physics_process(delta):
 			#randResults[1]=randResults[2]
 			#randResults[2]=rand
 			#print(randResults)
+			
+			if rand==1 and previous_state==STATES.DASHING:
+				rand=0
 			print(rand)
 			match rand:
 				0:
 					if curHP <= 14:
 						#stateProgress=0
-						curState = STATES.JUMPING_TOWARDS_WALL
+						current_state = STATES.JUMPING_TOWARDS_WALL
 						if get_room_position().x/CAMERA_SCALE < 10:
 							facing=-1
 						else:
@@ -89,17 +93,17 @@ func _physics_process(delta):
 						sprite.set_animation("jump")
 						
 					else:
-						curState = STATES.JUMPING_TOWARDS_CENTER
+						current_state = STATES.JUMPING_TOWARDS_CENTER
 						tempVelocity=Vector2(facing*375,-1000)
 						sprite.set_animation("jump")
 				1:
 					dashStartDirection=facing
-					curState=STATES.DASHING
+					current_state=STATES.DASHING
 				2:
 					
 					sprite.set_animation("twoShoot")
 					sprite.frame=0
-					curState=STATES.SHOOTING
+					current_state=STATES.SHOOTING
 			move_and_slide(tempVelocity,Vector2(0, -1))
 		STATES.SHOOTING:
 			if (sprite.frame==2 or sprite.frame==5):
@@ -117,7 +121,7 @@ func _physics_process(delta):
 				justShot=true
 			elif sprite.frame==7:
 				justShot=false
-				curState=STATES.RANDOMPICK
+				current_state=STATES.RANDOMPICK
 				cooldown=.75
 			else:
 				justShot=false
@@ -137,7 +141,8 @@ func _physics_process(delta):
 				#print(cooldown)
 				#print(randi()%2)
 				#stateProgress = 0
-				curState = STATES.RANDOMPICK
+				previous_state = current_state
+				current_state = STATES.RANDOMPICK
 			elif dashTime < .8 and (
 					(get_room_position().x/CAMERA_SCALE < 17 and facing==DIRECTION.RIGHT)
 					or
@@ -156,7 +161,7 @@ func _physics_process(delta):
 				facing=dashStartDirection
 		#STATES.JUMPING_CENTER_START:
 		#	tempVelocity=Vector2(facing*250,-900)
-		#	curState=STATES.JUMPING_TOWARDS_CENTER
+		#	current_state=STATES.JUMPING_TOWARDS_CENTER
 		STATES.JUMPING_TOWARDS_WALL:
 			tempVelocity.y+=1600*delta
 			if is_on_wall():
@@ -164,11 +169,11 @@ func _physics_process(delta):
 				sprite.flip_h = (facing == DIRECTION.RIGHT)
 				sprite.set_animation('wallhang')
 				sprite.offset.x=4*facing #Make sure to change it back later...
-				curState=STATES.WALLHANG
+				current_state=STATES.WALLHANG
 				cooldown=.3
 			elif is_on_floor():
 				facing*=-1
-				curState=STATES.DASHING
+				current_state=STATES.DASHING
 			else:
 				tempVelocity=move_and_slide(tempVelocity,Vector2(0,-1),true)
 		STATES.WALLHANG:
@@ -185,7 +190,7 @@ func _physics_process(delta):
 				
 				self.add_collision_exception_with(bi)# Make bullet and this not collide
 				stateProgress+=1
-				curState=STATES.WALLDASH
+				current_state=STATES.WALLDASH
 				tempVelocity=Vector2(0,0)
 				if get_room_position().y/CAMERA_SCALE > 6.5:
 					tempVelocity.y=-200
@@ -203,9 +208,9 @@ func _physics_process(delta):
 			if false: #(global_position/64-nearestRoomCorner).x < 1 and (global_position/64-nearestRoomCorner).y > 7
 				facing=1
 				sprite.set_animation("jump")
-				curState=STATES.JUMPING_TOWARDS_CENTER
+				current_state=STATES.JUMPING_TOWARDS_CENTER
 			elif is_on_wall():
-				curState=STATES.JUMPING_TOWARDS_WALL
+				current_state=STATES.JUMPING_TOWARDS_WALL
 				#cooldown=.3
 			elif is_on_floor():
 				if get_room_position().x/CAMERA_SCALE < 10:
@@ -215,7 +220,7 @@ func _physics_process(delta):
 				#facing*=-1
 				cooldown=.5
 				sprite.set_animation('idle')
-				curState=STATES.RANDOMPICK
+				current_state=STATES.RANDOMPICK
 		STATES.JUMPING_TOWARDS_CENTER:
 			if facing==DIRECTION.LEFT and get_room_position().x/CAMERA_SCALE < 10:
 				tempVelocity.x=min(0,tempVelocity.x+delta*1000)
@@ -225,11 +230,11 @@ func _physics_process(delta):
 			tempVelocity=move_and_slide(tempVelocity,Vector2(0,-1),true)
 			tempVelocity.y+=1600*delta
 			if is_on_floor():
-				curState=STATES.JUMPING_AGAIN
+				current_state=STATES.JUMPING_AGAIN
 				tempVelocity=Vector2(facing*375,-900)
 		STATES.JUMPING_AGAIN:
 			tempVelocity=move_and_slide(tempVelocity,Vector2(0,-1),true)
 			tempVelocity.y+=1600*delta
 			if is_on_floor():
 				facing*=-1
-				curState=STATES.DASHING
+				current_state=STATES.DASHING

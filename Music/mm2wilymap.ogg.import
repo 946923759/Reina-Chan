@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/mm2wilymap.ogg-96e7d237c30588a068342ce16d5e8952.oggstr"
+
+[deps]
+
+source_file="res://Music/mm2wilymap.ogg"
+dest_files=[ "res://.import/mm2wilymap.ogg-96e7d237c30588a068342ce16d5e8952.oggstr" ]
+
+[params]
+
+loop=false
+loop_offset=0

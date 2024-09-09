@@ -7,7 +7,7 @@
 [ext_resource path="res://Screens/ScreenStageIntroSangvis/Untitled 12-20-2023 03-36-46 (1).png" type="Texture" id=5]
 [ext_resource path="res://Screens/ScreenStageIntroSangvis/Untitled 12-20-2023 03-57-35.png" type="Texture" id=6]
 [ext_resource path="res://Screens/ScreenStageIntroSangvis/Untitled 12-20-2023 08-21-46.png" type="Texture" id=7]
-[ext_resource path="res://Music/mm2wilymap.wav" type="AudioStream" id=8]
+[ext_resource path="res://Music/mm2wilymap.ogg" type="AudioStream" id=8]
 [ext_resource path="res://ubuntu-font-family/JP_KR_font.tres" type="DynamicFont" id=9]
 [ext_resource path="res://Screens/ScreenStageIntroSangvis/44d43b7cc9d590f16c63a84d4accdca3.jpg" type="Texture" id=10]
 [ext_resource path="res://Screens/_transition/transition.tscn" type="PackedScene" id=11]

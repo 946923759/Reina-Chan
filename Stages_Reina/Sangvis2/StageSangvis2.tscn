@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://Stages_Reina/8bitBaseStage.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Stages_Reina/Sangvis1/Tileset.tres" type="TileSet" id=2]
@@ -6,6 +6,28 @@
 [ext_resource path="res://Stages_Reina/Sangvis1/outsideBGTop.png" type="Texture" id=4]
 [ext_resource path="res://Various Objects/CameraController/CameraAdjuster_v2_Horizontal.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Various Objects/EventTiles/EventTile_StageCompleted.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Various Objects/EventTiles/EventTile_NO_SHAPE.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Various Objects/EventTiles/Checkpoint_Vertical.tscn" type="PackedScene" id=9]
+
+[sub_resource type="GDScript" id=2]
+script/source = "extends Sprite
+
+#func _process(delta):
+#	self.region_rect.position.x+=delta*80
+"
+
+[sub_resource type="GDScript" id=5]
+script/source = "extends Node2D
+
+
+
+func _on_Activator_4012_event_executed():
+	$Dinergate.set_physics_process(true)
+	$Dinergate2.set_physics_process(true)
+"
+
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 8, 96 )
 
 [sub_resource type="GDScript" id=1]
 script/source = "tool
@@ -15,6 +37,21 @@ func _process(delta):
 	self.region_rect.position.x+=delta*150.0
 	if self.region_rect.position.x>480:
 		self.region_rect.position.x-=480
+"
+
+[sub_resource type="GDScript" id=3]
+script/source = "extends Node
+
+
+
+func _on_CameraAdjuster_camera_adjusted(camera, newBounds):
+	var tiles = get_parent().get_node(\"TileMap\")
+	var t = get_tree().create_tween()
+	t.tween_property(tiles,\"position:x\",-1280*2,3).set_delay(2)
+
+export(PackedScene) var enemyToSpawn
+func _on_Activator_4012_event_executed():
+	pass # Replace with function body.
 "
 
 [node name="Node2D" instance=ExtResource( 1 )]
@@ -30,27 +67,63 @@ texture = ExtResource( 4 )
 centered = false
 region_enabled = true
 region_rect = Rect2( 160, 0, 416, 176 )
+script = SubResource( 2 )
 
 [node name="TileMap" parent="." index="2"]
 tile_set = ExtResource( 2 )
-tile_data = PoolIntArray( 65535, 13, 0, 20, 13, 0, 131071, 13, 0, 65556, 13, 0, 196607, 13, 0, 131092, 13, 0, 262143, 13, 0, 196628, 13, 0, 327679, 13, 0, 262164, 13, 0, 393215, 13, 0, 327700, 13, 0, 458751, 13, 0, 393236, 13, 0, 524287, 13, 0, 458772, 13, 0, 589823, 13, 0, 524308, 13, 0, 655359, 13, 0, 589844, 13, 0, 720895, 13, 0, 655380, 13, 0, 786431, 13, 0, 720916, 13, 0, 1507327, 9, 0, 1441792, 9, 0, 1441793, 9, 0, 1441794, 9, 0, 1441795, 9, 0, 1441796, 9, 0, 1441797, 9, 0, 1441798, 9, 0, 1441799, 9, 0, 1441800, 9, 0, 1441801, 9, 0, 1441802, 9, 0, 1441803, 9, 0, 1441804, 9, 0, 1441805, 9, 0, 1441806, 9, 0, 1441807, 9, 0, 1441808, 9, 0, 1441809, 9, 0, 1441810, 9, 0, 1441811, 9, 0, 1441812, 9, 0 )
+tile_data = PoolIntArray( 65535, 13, 0, 7, 13, 0, 12, 13, 0, 20, 13, 0, 131071, 13, 0, 65543, 13, 0, 65548, 13, 0, 65556, 13, 0, 196607, 13, 0, 131079, 13, 0, 131084, 13, 0, 131092, 13, 0, 262143, 13, 0, 196615, 13, 0, 196620, 13, 0, 196628, 13, 0, 327679, 13, 0, 262151, 13, 0, 262156, 13, 0, 262164, 13, 0, 393215, 13, 0, 327687, 13, 0, 327692, 13, 0, 327700, 13, 0, 458751, 13, 0, 393223, 13, 0, 393228, 13, 0, 393236, 13, 0, 524287, 13, 0, 458759, 13, 0, 458764, 13, 0, 458772, 13, 0, 589823, 13, 0, 524295, 13, 0, 524300, 13, 0, 524308, 13, 0, 655359, 13, 0, 589831, 13, 0, 589836, 13, 0, 589844, 13, 0, 720895, 13, 0, 655367, 13, 0, 655372, 13, 0, 655380, 13, 0, 786431, 13, 0, 720903, 13, 0, 720908, 13, 0, 720916, 13, 0, 720944, 9, 0, 786455, 9, 0, 786456, 9, 0, 786457, 9, 0, 786459, 9, 0, 786460, 9, 0, 786462, 9, 0, 786463, 9, 0, 786464, 9, 0, 786467, 9, 0, 786468, 9, 0, 786469, 9, 0, 786472, 9, 0, 786473, 9, 0, 786474, 9, 0, 786480, 9, 0, 786481, 9, 0, 786482, 9, 0, 786483, 9, 0, 786489, 9, 0, 786490, 9, 0, 786491, 9, 0, 851992, 9, 0, 851995, 9, 0, 851998, 9, 0, 852004, 9, 0, 852008, 9, 0, 852009, 9, 0, 852010, 9, 0, 852016, 9, 0, 852017, 9, 0, 852018, 9, 0, 852019, 9, 0, 852025, 9, 0, 852026, 9, 0, 852027, 9, 0, 917528, 9, 0, 917531, 9, 0, 917532, 9, 0, 917534, 9, 0, 917535, 9, 0, 917536, 9, 0, 917540, 9, 0, 917544, 9, 0, 917545, 9, 0, 917546, 9, 0, 917552, 9, 0, 917553, 9, 0, 917554, 9, 0, 917555, 9, 0, 917561, 9, 0, 917562, 9, 0, 917563, 9, 0, 983064, 9, 0, 983067, 9, 0, 983072, 9, 0, 983076, 9, 0, 983080, 9, 0, 983081, 9, 0, 983082, 9, 0, 983088, 9, 0, 983089, 9, 0, 983090, 9, 0, 983091, 9, 0, 983097, 9, 0, 983098, 9, 0, 983099, 9, 0, 1048600, 9, 0, 1048603, 9, 0, 1048604, 9, 0, 1048606, 9, 0, 1048607, 9, 0, 1048608, 9, 0, 1048612, 9, 0, 1507327, 9, 0, 1441792, 9, 0, 1441793, 9, 0, 1441794, 9, 0, 1441795, 9, 0, 1441796, 9, 0, 1441797, 9, 0, 1441798, 9, 0, 1441799, 9, 0, 1441800, 9, 0, 1441801, 9, 0, 1441802, 9, 0, 1441803, 9, 0, 1441804, 9, 0, 1441805, 9, 0, 1441806, 9, 0, 1441807, 9, 0, 1441808, 9, 0, 1441809, 9, 0, 1441810, 9, 0, 1441811, 9, 0, 1441812, 9, 0, 1441813, 9, 0, 1441814, 9, 0, 1441815, 9, 0, 1441816, 9, 0, 1441817, 9, 0, 1441818, 9, 0, 1441819, 9, 0, 1441820, 9, 0, 1441821, 9, 0, 1441822, 9, 0, 1441823, 9, 0, 1441824, 9, 0, 1441825, 9, 0, 1441826, 9, 0, 1441827, 9, 0, 1441828, 9, 0, 1441829, 9, 0, 1441830, 9, 0, 1441831, 9, 0, 1441832, 9, 0, 1441833, 9, 0, 1441834, 9, 0, 1441835, 9, 0, 1441836, 9, 0, 1441837, 9, 0, 1441838, 9, 0, 1441839, 9, 0, 1441840, 9, 0, 1441841, 9, 0, 1441842, 9, 0, 1441843, 9, 0, 1441844, 9, 0, 1441845, 9, 0, 1441846, 9, 0, 1441847, 9, 0, 1441848, 9, 0, 1441849, 9, 0, 1441850, 9, 0, 1441851, 9, 0, 1441852, 9, 0, 1441853, 9, 0, 1441854, 9, 0, 1441855, 9, 0, 1441856, 9, 0, 1441857, 9, 0, 1441858, 9, 0 )
 
-[node name="Sprite" type="Sprite" parent="." index="7"]
+[node name="test" type="Node2D" parent="TileMap" index="0"]
+position = Vector2( 640, 192 )
+scale = Vector2( 0.25, 0.25 )
+script = SubResource( 5 )
+
+[node name="Activator 40-12" parent="TileMap/test" index="0" instance=ExtResource( 7 )]
+position = Vector2( 0, 384 )
+scale = Vector2( 4, 4 )
+collision_layer = 6
+collision_mask = 6
+__meta__ = {
+"_edit_group_": true
+}
+event_ID = 9
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TileMap/test/Activator 40-12" index="0"]
+shape = SubResource( 4 )
+
+[node name="Checkpoint" parent="TileMap/test" index="1" instance=ExtResource( 9 )]
+position = Vector2( 1280, 384 )
+collision_layer = 2
+collision_mask = 2
+
+[node name="EventTile_StageComplete" parent="TileMap" index="1" instance=ExtResource( 6 )]
+position = Vector2( 928, 320 )
+scale = Vector2( 0.25, 0.25 )
+
+[node name="PlayerHolder" parent="." index="5"]
+position = Vector2( 584, 24 )
+
+[node name="CanvasLayer" parent="." index="7"]
+visible = false
+
+[node name="Sprite" type="Sprite" parent="." index="8"]
 position = Vector2( 0, 1472 )
 scale = Vector2( 4, 4 )
 texture = ExtResource( 3 )
 centered = false
 region_enabled = true
-region_rect = Rect2( 398.418, 0, 480, 16 )
+region_rect = Rect2( 254.881, 0, 480, 16 )
 script = SubResource( 1 )
 
-[node name="ScrollControl" type="Node" parent="." index="8"]
+[node name="ScrollControl" type="Node" parent="." index="9"]
+script = SubResource( 3 )
 
-[node name="CameraAdjuster" parent="." index="9" instance=ExtResource( 5 )]
+[node name="CameraAdjuster" parent="." index="10" instance=ExtResource( 5 )]
 position = Vector2( 640, 768 )
 topBound = -999
 bottomBound = 24
 freeze_player_during_transition = true
 
-[node name="EventTile_StageComplete" parent="." index="10" instance=ExtResource( 6 )]
-position = Vector2( 1024, 1280 )
+[connection signal="event_executed" from="TileMap/test/Activator 40-12" to="TileMap/test" method="_on_Activator_4012_event_executed"]
+[connection signal="event_executed" from="TileMap/test/Activator 40-12" to="ScrollControl" method="_on_Activator_4012_event_executed"]
+[connection signal="camera_adjusted" from="CameraAdjuster" to="ScrollControl" method="_on_CameraAdjuster_camera_adjusted"]

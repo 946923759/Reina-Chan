@@ -79,10 +79,10 @@ func set_text():
 
 [node name="UMP9" instance=ExtResource( 1 )]
 
-[node name="Sprite" parent="." index="1"]
+[node name="Sprite" parent="." index="2"]
 animation = "Dash"
 
-[node name="DebugLabel" parent="." index="19"]
+[node name="DebugLabel" parent="." index="20"]
 visible = true
 text = "frameTimer = null
 idleTimer = null

@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Player Files/8bitPlayer/8bitPlayer.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Player Files/8bitPlayer/Replayer.gd" type="Script" id=2]
+
+[node name="Replayer" instance=ExtResource( 1 )]
+script = ExtResource( 2 )
+dash_multiplier = 0.0
+
+[node name="bar" parent="CanvasLayer" index="3"]
+visible = false
+
+[node name="TouchscreenButtons" parent="CanvasLayer" index="7"]
+visible = false

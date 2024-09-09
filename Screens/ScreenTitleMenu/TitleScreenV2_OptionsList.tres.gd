@@ -369,5 +369,5 @@ func input():
 						updateTranslation(true,t)
 						t=INITrans.GetString("Language",t)
 					get_child(existing_children+selection).get_node("Value").text=t
-	#elif Input.is_action_just_pressed("ui_select"):
+	#elif Input.is_action_just_pressed("ui_accept"):
 	#	call("action_"+get_child(selection).name)

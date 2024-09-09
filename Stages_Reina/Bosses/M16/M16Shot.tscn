@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Stages_Reina/Enemies/EnemyChargeShot.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Stages_Reina/Bosses/M16/M16shot.gd" type="Script" id=2]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 32, 32 )
+
+[node name="EnemyChargeShot" instance=ExtResource( 1 )]
+script = ExtResource( 2 )
+
+[node name="AnimatedSprite" parent="." index="0"]
+animation = "blue"
+
+[node name="Area2D" parent="." index="1"]
+position = Vector2( 16, 0 )
+collision_layer = 2
+
+[node name="CollisionShape2D" parent="Area2D" index="0"]
+shape = SubResource( 1 )
+
+[node name="AudioStreamPlayer2D" parent="." index="3"]
+autoplay = false

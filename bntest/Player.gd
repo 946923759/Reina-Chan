@@ -8,7 +8,7 @@ export(bool) var leftSide=true
 export(int) var PN = 0
 export(NodePath) var target_hp_display
 
-var INPUT = load("res://bntest/INPUTMAN.gd")
+var INPUT = load("res://Player Files/8bitPlayer/INPUTMAN.gd")
 
 onready var sprite:AnimatedSprite = $AnimatedSprite
 

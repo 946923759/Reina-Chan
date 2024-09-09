@@ -607,7 +607,7 @@ func _process(delta):
 			$Choices.input_up()
 		elif Input.is_action_just_pressed("ui_down"):
 			$Choices.input_down()
-		elif Input.is_action_just_pressed("ui_select") and $Choices.selection!=-1:
+		elif Input.is_action_just_pressed("ui_accept") and $Choices.selection!=-1:
 			choiceResult=$Choices.selection+1
 			$Choices.visible=false
 			ChoiceTable=[]
@@ -616,7 +616,7 @@ func _process(delta):
 			#$Choices.input
 		return
 	
-	var forward = Input.is_action_just_pressed("ui_select") or manualTriggerForward
+	var forward = Input.is_action_just_pressed("ui_accept") or manualTriggerForward
 	if text.visible_characters >= text.text.length():
 		if ChoiceTable.size()>0:
 			$Choices.setChoices(ChoiceTable)
@@ -639,7 +639,7 @@ func _process(delta):
 			else:
 				tw.playback_speed=1.0
 	manualTriggerForward=false
-	
+
 #Fucking piece of shit game engine
 func _input(event):
 	if isWaitingForChoice:

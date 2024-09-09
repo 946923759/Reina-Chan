@@ -58,7 +58,7 @@ func get_input(delta):
 	var left = Input.is_action_pressed('ui_left')
 	var up = Input.is_action_pressed('ui_up')
 	var down = Input.is_action_pressed('ui_down')
-	var jump = Input.is_action_just_pressed('ui_select')
+	var jump = Input.is_action_just_pressed('ui_accept')
 	var shoot = Input.is_action_just_pressed("ui_cancel")
 	var chargeShot = Input.is_action_pressed("ui_cancel") and currentWeapon==Globals.Weapons.Buster
 	if rapidFire and shoot_time > .1:
@@ -67,7 +67,7 @@ func get_input(delta):
 
 	if Globals.flipButtons:
 		jump = Input.is_action_just_pressed('ui_cancel')
-		shoot = Input.is_action_just_pressed("ui_select") or rapidFire and (shoot_time > .1 and Input.is_action_pressed("ui_select"))
+		shoot = Input.is_action_just_pressed("ui_accept") or rapidFire and (shoot_time > .1 and Input.is_action_pressed("ui_accept"))
 
 	var grenade_input = (shoot and up) or (
 		Input.is_action_just_pressed("gameplay_btn3") and
@@ -318,7 +318,7 @@ func get_input(delta):
 			#Cancel upward momentium if jump button is let go
 			#I'm pretty sure this can be simplified into one if statement
 			if !Globals.flipButtons:
-				if velocity.y < 0 and !Input.is_action_pressed("ui_select"):
+				if velocity.y < 0 and !Input.is_action_pressed("ui_accept"):
 					velocity.y = 0
 					state=State.FALLING
 			else:

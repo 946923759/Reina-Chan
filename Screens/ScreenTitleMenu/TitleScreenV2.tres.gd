@@ -150,31 +150,38 @@ func _input(event):
 			currentlyHandledMenu.input();
 	else:
 		if Input.is_action_pressed("ui_down"):
-			if selection < mainMenu.get_child_count() - 1:
-				selectSound.play()
-				selection = selection + 1;
+			
+			while true:
+				selection += 1
+				if selection > mainMenu.get_child_count() - 1:
+					selection = 0
+					break;
 				#Skip continue if there's no save file
-				if selection == 1 and !Globals.playerHasSaveData:
-					selection = 2;
-				highlightList(mainMenu,selection);
-			else:
-				selectSound.play()
-				selection = 0
-				highlightList(mainMenu,selection);
+				elif selection == 1 and !Globals.playerHasSaveData:
+					pass
+				elif mainMenu.get_child(selection).visible:
+					break
+			
+			selectSound.play()
+			highlightList(mainMenu,selection);
 				
 		if Input.is_action_pressed("ui_up"):
-			if selection > 0:
-				selectSound.play()
-				selection = selection - 1;
-				if selection == 1 and !Globals.playerHasSaveData:
-					selection = 0;
-				highlightList(mainMenu, selection);
-			else:
-				selection = mainMenu.get_child_count() - 1
-				selectSound.play()
-				highlightList(mainMenu, selection);
+			
+			while true:
+				selection -= 1
+				if selection < 0:
+					selection = mainMenu.get_child_count() - 1
+					break
+				#Skip continue if there's no save file
+				elif selection == 1 and !Globals.playerHasSaveData:
+					pass
+				elif mainMenu.get_child(selection).visible:
+					break
+			
+			selectSound.play()
+			highlightList(mainMenu, selection);
 				
-		if Input.is_action_just_pressed("ui_select") or Input.is_action_just_pressed("ui_pause"):
+		if Input.is_action_just_pressed("ui_accept") or Input.is_action_just_pressed("ui_pause"):
 			input_select()
 
 func input_select():

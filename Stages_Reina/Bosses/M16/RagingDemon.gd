@@ -19,6 +19,11 @@ func raging_demon(obj):
 		])
 		player.get_node("CanvasLayer/Fadeout").fadeOut(.3)
 		set_process(true)
+		
+		#device, weak magnitude, strong magnitude, duration
+		Input.start_joy_vibration(0, .5, .5, 5)
+
+		#Input.vibrate_handheld()
 		#func lockMovement(time:float,velocity:Vector2,freeze_y_velocity:bool=true):
 		
 var delay=.3
@@ -27,7 +32,9 @@ func _process(delta):
 	delay-=delta
 	if limit==0:
 		visible = true
+		#TODO: Don't always kill player!
 		player.die()
+
 		$KO.play()
 		$Fire.play()
 		#var h = heaven.instance()

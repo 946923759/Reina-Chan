@@ -92,6 +92,6 @@ message_id = "Alchemist2"
 
 [node name="BossAlchemist" parent="Room 0-48/WARNING intro" index="3" instance=ExtResource( 9 )]
 position = Vector2( -672, 16 )
-nearestRoomCorner = Vector2( 0, 48 )
+facing = 1
 
 [connection signal="block_broken" from="Room 40-48/BreakableBlock" to="Room 40-48/BlockEnablerDisabler" method="execute"]

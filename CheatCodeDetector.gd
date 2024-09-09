@@ -31,7 +31,7 @@ const MAX_LENGTH := 32
 const CODE_KEYS :={
 	"ui_up":"U", "ui_down":"D","ui_left":"L","ui_right":"R",
 	
-	"ui_select":"A","ui_cancel":"B","ui_pause":"S"
+	"ui_accept":"A","ui_cancel":"B","ui_pause":"S"
 }
 
 # List of cheat codes. Cheat codes should be lower-case, and should not be contained within one another or the shorter

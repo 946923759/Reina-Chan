@@ -34,6 +34,9 @@ func move(obj):
 			get_node("/root/Node2D/AudioStreamPlayer").stream = music;
 			get_node("/root/Node2D/AudioStreamPlayer").play()
 
+		#We don't want to overwrite leftBound,rightBound, etc so keep the changed variables in a new array.
+		var boundsArray = [null,null,null,null]
+		
 		if automatically_set_x_bounds:
 			if facing == DOOR_IS_FACING.LEFT:
 				rightBound=global_position.x+64
@@ -58,9 +61,14 @@ func move(obj):
 			bottomBound = topBound*cameraScale+Globals.gameResolution.y
 		else:
 			bottomBound = bottomBound*cameraScale
-		topBound = topBound*cameraScale;
+		
+		#if topBound == -999:
+		#	topBound = bottomBound*cameraScale-Globals.gameResolution.y
+		#else:
+		#	topBound = topBound*cameraScale;
+			
 		print("LEFT: "+ String(leftBound)+ " TOP: "+String(topBound)+" RIGHT: "+String(rightBound) + " BOTTOM: "+String(bottomBound))
-		get_node("/root/Node2D/").get_player().get_node("Camera2D").adjustCamera([leftBound,topBound,rightBound,bottomBound], tweenTime)
+		obj.get_node("Camera2D").adjustCamera([leftBound,topBound,rightBound,bottomBound], tweenTime)
 		
 		#Lock player into walking right .5 seconds
 		#$Sprite.piecesToDraw=0

@@ -61,7 +61,7 @@ func GainFocusCommand(p:int):
 func _input(event):
 # warning-ignore:integer_division
 	var jump:int=stgLen/2
-	if Input.is_action_just_pressed("ui_select"):
+	if Input.is_action_just_pressed("ui_accept"):
 		print("lol")
 		var newScreen = Globals.STAGES_REINA[stages[pos]]
 		if newScreen != "":

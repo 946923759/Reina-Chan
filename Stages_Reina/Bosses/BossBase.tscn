@@ -191,8 +191,8 @@ func updateHP(percentHP):
 "
 
 [node name="BossBase" type="KinematicBody2D"]
-collision_layer = 18
-collision_mask = 18
+collision_layer = 2
+collision_mask = 16
 script = ExtResource( 7 )
 __meta__ = {
 "_editor_description_": "Place the boss as the child of the warning, three blocks
