@@ -14,27 +14,24 @@ script = ExtResource( 5 )
 intro_subtitle_key = "Ouroboros_Intro"
 
 [node name="AnimatedSprite" parent="." index="1"]
-position = Vector2( 8, -20 )
+position = Vector2( 16, -20 )
 frames = ExtResource( 2 )
 
 [node name="Wheels" type="Node2D" parent="." index="2"]
 script = ExtResource( 4 )
-radius = Vector2( 8.61691, -13.4785 )
+radius = Vector2( 15.3382, 4.54543 )
 speed = 0.8
 
 [node name="Wheel1" type="AnimatedSprite" parent="Wheels" index="0"]
-position = Vector2( 72.6169, -13.4785 )
+position = Vector2( 79.3382, 4.54543 )
 scale = Vector2( 4, 4 )
 frames = ExtResource( 3 )
 
 [node name="Wheel2" type="AnimatedSprite" parent="Wheels" index="1"]
-position = Vector2( -72.617, 13.4785 )
+position = Vector2( -79.3381, -4.54589 )
 scale = Vector2( 4, 4 )
 z_index = -1
 frames = ExtResource( 3 )
-
-[node name="Area2D" parent="." index="3"]
-visible = false
 
 [node name="IntroSound" parent="." index="4"]
 stream = ExtResource( 6 )

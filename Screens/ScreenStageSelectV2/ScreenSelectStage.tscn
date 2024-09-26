@@ -250,6 +250,7 @@ position = Vector2( 384, 238 )
 text = "hikari"
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+bus = "Music"
 
 [node name="Confirm" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 8 )

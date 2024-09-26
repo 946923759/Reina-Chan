@@ -27,7 +27,7 @@ func _on_Panel_gui_input(event):
 [node name="ScreenHowToPlay" instance=ExtResource( 1 )]
 script = SubResource( 1 )
 PrevScreen = "ScreenTitleMenu"
-NextScreen = "ScreenTitleMenu"
+NextScreen = "ScreenOpening"
 HandlePhysicalAButton = true
 
 [node name="Panel" type="ColorRect" parent="." index="0"]
@@ -40,7 +40,7 @@ mouse_filter = 2
 
 [node name="smScreenInOut" parent="." index="2"]
 timeToTweenIn = 0.25
-timeToTweenOut = 0.0
+timeToTweenOut = 0.3
 
 [connection signal="gui_input" from="." to="." method="_on_ScreenHowToPlay_gui_input"]
 [connection signal="gui_input" from="Panel" to="." method="_on_Panel_gui_input"]

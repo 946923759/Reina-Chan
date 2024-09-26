@@ -51,7 +51,6 @@ shape = SubResource( 1 )
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 scale = Vector2( 4, 4 )
 frames = SubResource( 4 )
-frame = 1
 playing = true
 
 [node name="Area2D" type="Area2D" parent="."]
@@ -59,3 +58,7 @@ script = SubResource( 5 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource( 6 )
+
+[node name="VisibilityEnabler2D" type="VisibilityEnabler2D" parent="."]
+process_parent = true
+physics_process_parent = true

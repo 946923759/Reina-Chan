@@ -87,3 +87,6 @@ func killSelf(silent:bool=false):
 func _on_VisibilityNotifier2D_screen_exited():
 	#print("grenade freed")
 	queue_free()
+
+func switched_weapon(_discard):
+	killSelf(true)

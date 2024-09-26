@@ -1,5 +1,6 @@
 extends KinematicBody2D
 signal toggled_debug_disp(disp_mode)
+signal switched_weapon(new_weapon)
 
 const SPEED = 250;
 
@@ -52,7 +53,6 @@ var is_timer_stopped:bool=false
 var currentWeapon = Globals.Weapons.Buster;
 # Out of 128 in this game (See Globals.gd for more information)
 var weaponMeters:PoolIntArray = []
-onready var weaponSwitch =$WeaponSwitch
 #What the fuck does e20 mean
 #Cooldown between shots
 var shoot_time = 1e20
@@ -203,7 +203,7 @@ func setDebugInfoText():
 
 func switchWeapon(showIcon:bool=true):
 	if showIcon:
-		weaponSwitch.showIcon(currentWeapon)
+		emit_signal("switched_weapon",currentWeapon)
 #	if current_character==1 and currentWeapon==0: #lmao
 #		sprite.get_material().set_shader_param("clr1", Color(.749,.749,.749))
 #		sprite.get_material().set_shader_param("clr2", Color(.957,.957,.957))
@@ -259,15 +259,15 @@ func get_menu_buttons_input(_delta):
 
 		
 	elif Input.is_action_just_pressed("DebugButton5"):
-#		HP = MAX_HP
-#		HPBar.updateHP(HP)
-#		for i in range(weaponMeters.size()):
-#			weaponMeters[i] = 144
-#		if currentWeapon!=0:
-#			HPBar.updateAmmo(1.0,false)
-		var inst = dbgHealthDrop.instance()
-		stageRoot.add_child(inst)
-		inst.global_position = Vector2(global_position.x+200, global_position.y-200)
+		HP = MAX_HP
+		HPBar.updateHP(HP)
+		for i in range(weaponMeters.size()):
+			weaponMeters[i] = 144
+		if currentWeapon!=0:
+			HPBar.updateAmmo(1.0,false)
+#		var inst = dbgHealthDrop.instance()
+#		stageRoot.add_child(inst)
+#		inst.global_position = Vector2(global_position.x+200, global_position.y-200)
 		CheckpointPlayerStats.usedDebugMode=true
 		pass
 		
@@ -512,10 +512,11 @@ func get_input(delta):
 					
 					# Check if the tile where the snake would spawn is a wall.
 					# If it is, spawn the snake at the player's position instead.
-					if tiles.get_cellv(pos2cell(position)+Vector2(ss,0)) >= 0:
+					if tiles.get_cellv(pos2cell(position+Vector2(32*ss,0))+Vector2(ss,0)) >= 0:
 						pos.x=position.x
 					
 					bi = wpnSnake.instance()
+					connect("switched_weapon",bi,"switched_weapon")
 					bi.position = pos
 					#get_parent().add_child(bi)
 					bulletHolder.add_child(bi)
@@ -791,6 +792,8 @@ func handleEvents():
 				event.disabled=true
 			Globals.EVENT_TILES.STAGE_COMPLETED:
 				finishStage()
+			#Globals.EVENT_TILES.KILL_PLAYER:
+			#	die()
 			_:
 				print("Unknown event ID: "+String(event_ID))
 

@@ -2,8 +2,6 @@ extends Node
 #class_name Globals
 
 #TODO: There's no need for these as they can be inserted into the OPTIONS table
-#var AudioVolume = 100
-#var SFXVolume = 100
 var isFullscreen = false
 
 # This value is set when you init a stage.
@@ -13,6 +11,8 @@ var playCutscenes = true
 
 var flipButtons = false
 #var textSpeed = 100
+
+var eventMode = false
 
 enum OPTION_FLAG {
 	PC = 1       # Resolution options, quit game
@@ -40,6 +40,11 @@ var OPTIONS = {
 		"default":90
 	},
 	"isFullscreen":{
+		"type":"bool",
+		"default":false,
+		"flag":OPTION_FLAG.PC
+	},
+	"vsync":{
 		"type":"bool",
 		"default":false,
 		"flag":OPTION_FLAG.PC
@@ -495,6 +500,8 @@ func _ready():
 		set_fullscreen(OPTIONS['isFullscreen']['value'])
 	elif OPTIONS['isFullscreen']['value']:
 		print("Fullscreen setting is ignored in debug.")
+	
+	OS.set_use_vsync(OPTIONS['vsync']['value'])
 
 func _input(_event):
 	if Input.is_action_just_pressed("FullscreenButton"):
@@ -507,7 +514,6 @@ func set_fullscreen(b):
 		OS.set_window_fullscreen(false)
 		OS.window_size = gameResolution
 		OS.center_window()
-		
 #func set_language(new_lang:String=""):
 #	if new_lang=="":
 #		new_lang=OPTIONS['language']['value']
@@ -550,7 +556,8 @@ enum EVENT_TILES {
 	CHECKPOINT,
 	CUSTOM_EVENT, #Runs a function run_event() if a player touched it. The player is passed to the event.
 	SIGNAL, #It triggers a signal
-	STAGE_COMPLETED
+	STAGE_COMPLETED,
+	#KILL_PLAYER # Needed for moving death planes
 }
 
 
@@ -648,11 +655,13 @@ static func bitArrayToInt32(arr:Array)->int:
 	return ret;
 
 var SCREENS:Dictionary = {
+	"ScreenInit":'res://Screens/ScreenInit/InitLogo.tscn',
 	"ScreenDisclaimer":"res://Screens/BetaDisclaimer.tscn",
 	"ScreenHowToPlay":"res://Screens/ScreenHowToPlay/ScreenHowToPlay.tscn",
 	"ScreenOpening":"res://Screens/ScreenOpening/Test_ScreenOpening.tscn",
 	
 	"ScreenTitleMenu":"res://Screens/ScreenTitleMenu/ScreenTitleMenu.tscn",
+	"ScreenTitleJoin":"res://Screens/ScreenTitleJoin/ScreenTitleJoin.tscn",
 	"ScreenSelectCharacter":"res://Screens/ScreenSelectCharacter/ScreenSelectCharacter.tscn",
 	"ScreenSelectStage":"res://Screens/ScreenStageSelectV2/ScreenSelectStage.tscn",
 	"ScreenStageIntro":"res://Screens/ScreenStageIntro.tscn",

@@ -58,7 +58,7 @@ func _on_AudioStreamPlayer_finished():
 	yield(tween,\"tween_completed\")
 	#get_tree().change_scene(\"res://Intro.tscn\");
 	#get_tree().change_scene(\"res://BetaDisclaimer.tscn\")
-	Globals.change_screen(get_tree(),\"ScreenDisclaimer\")
+	Globals.change_screen(get_tree(),\"ScreenHowToPlay\")
 "
 
 [node name="Node2D" type="Control"]

@@ -86,6 +86,8 @@ var when_condition_is_true = 0
 #export (bool) var 
 #export (int,\"Disabled\",\"Enabled\")
 
+var override_position:Vector2
+
 func _get_property_list()->Array:
 	return [
 #	{
@@ -125,6 +127,17 @@ func _get_property_list()->Array:
 		type = TYPE_INT,
 		hint = PROPERTY_HINT_ENUM,
 		hint_string=\"Blink,Stop\"
+	},
+	{
+		name = \"Destination Position (If ID = -1 and Type = IN)\",
+		type = TYPE_NIL,
+		hint_string = \"override_\",
+		usage = PROPERTY_USAGE_CATEGORY | PROPERTY_USAGE_SCRIPT_VARIABLE
+	},
+	{
+		name = \"override_position\",
+		type = TYPE_VECTOR2,
+		#hint_string
 	}
 	]
 
@@ -248,22 +261,31 @@ func adjust_camera(obj:KinematicBody2D, newPosition:Vector2):
 	cc.adjustCamera(boundsArray, 0)
 	
 func teleport_player(p:KinematicBody2D) -> bool:
-	for c in get_tree().get_nodes_in_group(\"Teleporter\"):
-		if c.teleporter_ID == teleporter_ID and c.teleport_type==1:
-			print(c.teleporter_ID)
-			$AudioStreamPlayer.play()
-			var seq:=get_tree().create_tween()
-			seq.tween_property($Polygon2D,\"visible\",true,0.0)
-			seq.tween_property($Polygon2D,\"scale:y\",1.0,.3).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN).from(0.0) #
-			seq.tween_property($Polygon2D,\"visible\",false,0.0).set_delay(.2)
-			adjust_camera(p, c.get_node(\"Area2D\").global_position)
-			#p.global_position= c.get_node(\"Area2D\").global_position
-			#p.get_node(\"Camera2D\").adjustCamera([-10000000,-10000000,10000000,10000000],0)
-			return true
-			#get_node(\"/root/Node2D\")
-			#var player = .get_player()
-	printerr(\"No destination teleporters found with ID \"+String(teleporter_ID))
-	return false
+	if teleporter_ID==-1:
+		var new_position = get_node(\"/root/Node2D\").cell2pos(override_position)
+		
+		$AudioStreamPlayer.play()
+		var seq:=get_tree().create_tween()
+		seq.tween_property($Polygon2D,\"visible\",true,0.0)
+		seq.tween_property($Polygon2D,\"scale:y\",1.0,.3).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN).from(0.0) #
+		seq.tween_property($Polygon2D,\"visible\",false,0.0).set_delay(.2)
+		adjust_camera(p, new_position)
+		return true
+	else:
+		for c in get_tree().get_nodes_in_group(\"Teleporter\"):
+			if c.teleporter_ID == teleporter_ID and c.teleport_type==1:
+				print(c.teleporter_ID)
+				$AudioStreamPlayer.play()
+				var seq:=get_tree().create_tween()
+				seq.tween_property($Polygon2D,\"visible\",true,0.0)
+				seq.tween_property($Polygon2D,\"scale:y\",1.0,.3).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN).from(0.0) #
+				seq.tween_property($Polygon2D,\"visible\",false,0.0).set_delay(.2)
+				adjust_camera(p, c.get_node(\"Area2D\").global_position)
+				#p.global_position= c.get_node(\"Area2D\").global_position
+				#p.get_node(\"Camera2D\").adjustCamera([-10000000,-10000000,10000000,10000000],0)
+				return true
+		printerr(\"No destination teleporters found with ID \"+String(teleporter_ID))
+		return false
 
 func _on_Area2D_body_entered(body):
 	player = body
@@ -293,6 +315,7 @@ script = SubResource( 1 )
 conditional_type = 1
 conditional_value = 0
 when_condition_is_true = 0
+override_position = null
 
 [node name="StaticBody2D" type="StaticBody2D" parent="."]
 position = Vector2( 16, 8 )

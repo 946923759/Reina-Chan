@@ -198,9 +198,9 @@ var extras_table = {
 	\"NSF_Test\":{
 		\"hidden\":false
 	},
-	\"ZeroTest\":{
-		\"hidden\":true
-	},
+	#\"ZeroTest\":{
+	#	\"hidden\":true
+	#},
 	\"Credits\":{
 		\"hidden\":false
 	},
@@ -211,6 +211,9 @@ var extras_table = {
 		\"hidden\":false
 	},
 	\"PIURED_Debug\":{
+		\"hidden\":false
+	},
+	\"EventMode\":{
 		\"hidden\":false
 	},
 	\"CustomStage\":{
@@ -242,6 +245,10 @@ func action_NSF_Test():
 
 func action_PIURED_Debug():
 	get_tree().change_scene(\"res://Stages_Reina/Clear_And_Fail/PIURED_DebugTest.tscn\")
+
+func action_EventMode():
+	Globals.eventMode=true
+	Globals.change_screen(get_tree(),\"ScreenTitleJoin\")
 
 func action_CustomStage():
 	var filePicker = parent.get_node(\"FileDialog_stage\")
@@ -631,7 +638,7 @@ func moveListUp():
 	var subList = self
 	tween2.interpolate_property(subList, 'position:y',
 	null,
-	realInitPos.y-175, #move 100px up
+	realInitPos.y-250, #move 100px up
 	.25, Tween.TRANS_QUAD, Tween.EASE_OUT);
 	tween2.start();
 	
@@ -687,6 +694,8 @@ func input():
 			highlightBool(get_child(existing_children+selection),false)
 			if option==\"isFullscreen\":
 				Globals.set_fullscreen(false)
+			elif option==\"vsync\":
+				OS.set_use_vsync(false)
 		elif Globals.OPTIONS[option]['type']==\"int\":
 			var val = Globals.OPTIONS[option]['value']
 			if val > 0:
@@ -723,6 +732,8 @@ func input():
 				highlightBool(get_child(existing_children+selection),true)
 				if option==\"isFullscreen\":
 					Globals.set_fullscreen(true)
+				elif option==\"vsync\":
+					OS.set_use_vsync(true)
 			\"int\":
 				var val = Globals.OPTIONS[option]['value']
 				if val < 100:
@@ -869,7 +880,7 @@ scale_by = 3
 
 [node name="VersionNum" parent="logoHolder" instance=ExtResource( 12 )]
 position = Vector2( 9, 10 )
-text = "v.2024.06.27"
+text = "v.2024.09.16"
 wrap_at = 92233720368
 scale_by = 3
 

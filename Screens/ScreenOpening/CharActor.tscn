@@ -109,19 +109,21 @@ material = ExtResource( 3 )
 [node name="Afterimage4" type="Sprite" parent="BossSpriteLoader"]
 modulate = Color( 0, 0.145098, 0.921569, 1 )
 
-[node name="HDPortrait_BG" type="Sprite" parent="."]
+[node name="HDPortrait" type="Sprite" parent="."]
+position = Vector2( 290, 512 )
+z_index = 1
+texture = ExtResource( 5 )
+region_rect = Rect2( 310, 0, 400, 1024 )
+
+[node name="HDPortrait_BG" type="Sprite" parent="HDPortrait"]
 self_modulate = Color( 0, 0, 0, 0.784314 )
-position = Vector2( 330, 512 )
+position = Vector2( -40, 0 )
+z_index = -1
 texture = ExtResource( 5 )
 region_rect = Rect2( 310, 0, 400, 1024 )
 __meta__ = {
 "_edit_group_": true
 }
-
-[node name="HDPortrait" type="Sprite" parent="HDPortrait_BG"]
-position = Vector2( -40, 0 )
-texture = ExtResource( 5 )
-region_rect = Rect2( 310, 0, 400, 1024 )
 
 [node name="Polygon2D" type="Polygon2D" parent="."]
 visible = false

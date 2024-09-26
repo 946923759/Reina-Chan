@@ -38,6 +38,10 @@ extents = Vector2( 32, 130 )
 
 [node name="Door" type="Node2D"]
 script = ExtResource( 2 )
+__meta__ = {
+"_edit_group_": true
+}
+rightBound = 20
 tweenTime = 1.0
 
 [node name="Sprite" type="Sprite" parent="."]

@@ -79,9 +79,6 @@ func set_text():
 
 [node name="UMP9" instance=ExtResource( 1 )]
 
-[node name="Sprite" parent="." index="2"]
-animation = "Dash"
-
 [node name="DebugLabel" parent="." index="20"]
 visible = true
 text = "frameTimer = null
@@ -128,3 +125,5 @@ position = Vector2( -48, -123 )
 text = "hurry up!!!"
 wrap_at = 92233720368
 scale_by = 4
+
+[connection signal="switched_weapon" from="." to="WeaponSwitch" method="showIcon"]

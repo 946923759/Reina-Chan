@@ -21,7 +21,8 @@ export(int, FLAGS,
 	\"???\",
 	\"???\",
 	\"Glorylight\",
-	\"Grenade\") var weaponCanBreak=2047 #Use a calculator in programmer mode for this number
+	\"Grenade\") var weaponCanBreak=2047 # 11 1111 1111 in binary = 2047 in int
+
 var despawn_on_break:bool = true
 export(int, 1, 50) var maxHealth = 3
 export(Texture) var textureOverride
@@ -74,7 +75,7 @@ func _physics_process(delta):
 		if whiteTime > .1:
 			sprite.use_parent_material = true
 
-func damage(amount,type:int=0):
+func damage(amount, type:int=0):
 	#print(type)
 	#print(weaponCanBreak)
 	if !(weaponCanBreak & 1<<type):
@@ -94,6 +95,8 @@ func killSelf():
 	isAlive = false
 	set_physics_process(false)
 	visible = false
+	collision_layer=0
+	collision_mask=0
 	
 	var e = explosion.instance()
 	e.init(true)
@@ -104,8 +107,9 @@ func killSelf():
 	emit_signal(\"block_broken\")
 	if drop_on_break!=null:
 		var f = drop_on_break.instance()
-		f.global_position = global_position
 		get_parent().add_child(f)
+		f.global_position = global_position
+		#print(\"[BreakableBlock] Dropped item at \"+String(f.global_position))
 	
 	if despawn_on_break:
 		#print(\"Despawning\")

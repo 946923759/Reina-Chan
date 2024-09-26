@@ -77,6 +77,7 @@ func _ready():
 	$CanvasLayer/Label.visible=$CanvasLayer/Label.visible and OS.is_debug_build()
 	wheels.visible=false
 	$Wheels.flip_h = (facing == DIRECTION.RIGHT)
+	sprite.position.x = -16*facing
 
 #Override this so the wheels intro anim gets played too
 func playIntro(playSound=true,showHPbar=true)->AudioStreamPlayer:
@@ -328,6 +329,7 @@ func _physics_process(delta):
 				curState=0
 			pass
 	sprite.flip_h = (facing == DIRECTION.RIGHT)
+	sprite.position.x = -16*facing
 	#We can't do the -1 scale trick because it flips the positions
 	#of the left and the right wheel
 	$Wheels.flip_h = (facing == DIRECTION.RIGHT)

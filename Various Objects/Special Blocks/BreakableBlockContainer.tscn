@@ -12,10 +12,12 @@ func destroyAdjacent():
 		if b is StaticBody2D:
 			if b.isAlive:
 				b.killSelf()
+
+func destroy_children(_discard=false, _discard2=false):
+	destroyAdjacent()
 "
 
 [node name="BreakableBlockContainer" type="Node2D"]
-position = Vector2( 832, 576 )
 script = SubResource( 1 )
 __meta__ = {
 "_edit_group_": true

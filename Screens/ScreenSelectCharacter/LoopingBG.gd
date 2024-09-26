@@ -8,6 +8,8 @@ func _ready():
 	set_process(looping_speed>0 or Engine.editor_hint)
 
 func _process(delta):
+	if Input.is_key_pressed(KEY_TAB):
+		delta*=4
 	region_rect.position.x+=delta*looping_speed
 	#if region_rect.position.x > region_size.x:
 	#	region_rect.position.x-=region_size.x

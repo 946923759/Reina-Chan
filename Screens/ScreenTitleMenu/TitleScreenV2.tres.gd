@@ -10,7 +10,6 @@ onready var selectSound = $Select
 
 export (String) var nsf_music
 export (int) var nsf_track_num = 0
-#var nsf_player
 var reinaAudioPlayer
 
 func BitmapText(d)->Label:

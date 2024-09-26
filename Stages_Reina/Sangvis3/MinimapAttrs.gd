@@ -6,3 +6,8 @@ export (int, FLAGS,
 	"right",
 	"has boss"
 	) var open_sides
+export (int, "None",
+	"top left",
+	"top right",
+	"bottom left",
+	"bottom right") var fake_exit_at

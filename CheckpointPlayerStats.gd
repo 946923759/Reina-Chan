@@ -33,6 +33,9 @@ var temporaryStageStats:int=0
 #It doesn't really belong in Globals... Anyways, this is only used for the item get screen
 var lastPlayedStage:int=0
 
+#This is used for the third sangvis stage for the minimap. Yeah. Literally only that one.
+var visited_rooms = {}
+
 #Timer gets assigned every checkpoint, but timerWithDeath should
 #get assigned every death
 
@@ -67,4 +70,4 @@ func clearEverything():
 	shouldFaceLeft=false
 	temporaryStageStats=0
 	lastPlayedStage=0
-	#isFromStageSelect=false
+	visited_rooms = {}
