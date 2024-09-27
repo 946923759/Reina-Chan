@@ -250,6 +250,7 @@ func reset_player_data():
 		playerData.specialAbilities[i]=false
 	for i in range(len(playerData.ReinaChanEmblems)):
 		playerData.ReinaChanEmblems[i]=false
+	playerData.wilyStageNum = 0
 
 #EXCLUDING THE OPTIONS! This is the 'extras' in the json.
 var systemData:Dictionary = {
@@ -658,7 +659,7 @@ var SCREENS:Dictionary = {
 	"ScreenInit":'res://Screens/ScreenInit/InitLogo.tscn',
 	"ScreenDisclaimer":"res://Screens/BetaDisclaimer.tscn",
 	"ScreenHowToPlay":"res://Screens/ScreenHowToPlay/ScreenHowToPlay.tscn",
-	"ScreenOpening":"res://Screens/ScreenOpening/Test_ScreenOpening.tscn",
+	"ScreenOpening":"res://Screens/ScreenOpening/ScreenOpening.tscn",
 	
 	"ScreenTitleMenu":"res://Screens/ScreenTitleMenu/ScreenTitleMenu.tscn",
 	"ScreenTitleJoin":"res://Screens/ScreenTitleJoin/ScreenTitleJoin.tscn",

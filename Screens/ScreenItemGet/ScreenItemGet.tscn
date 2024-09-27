@@ -113,6 +113,10 @@ func end_screen():
 	#if weapons[1] and weapons[2] and weapons[3] and weapons[4]:
 	#	next = \"CutsceneDemoEnd\"
 	
+	# For some reason this thing is not centered properly
+	# the transition is left aligned so we have to calculate the center... somehow.
+	#var SCREEN_CENTER = get_viewport().get_visible_rect().size/2
+	$Transition.rect_position.x= get_viewport().get_visible_rect().size.x - $Transition.rect_size.x
 	var t:SceneTreeTween = $Transition.OnCommand()
 	t.tween_callback(Globals,\"change_screen\",[get_tree(),next])
 	
@@ -226,7 +230,8 @@ color = Color( 0, 0, 0, 1 )
 polygon = PoolVector2Array( 0, 0, 0, 720, 1280, 720, 1280, 0 )
 
 [node name="Transition" parent="." instance=ExtResource( 9 )]
-visible = false
+margin_left = 0.0
+margin_top = 0.0
 margin_right = 1280.0
 margin_bottom = 720.0
 

@@ -27,7 +27,7 @@ func diffusealpha(node,alpha):
 	null, alpha, .25, Tween.TRANS_QUAD, Tween.EASE_OUT);
 	tween.start();
 
-func highlightList(actor,param):
+static func highlightList(actor:Node, param:int = -1):
 	for i in range(actor.get_child_count()):
 		if i != param:
 			actor.get_child(i).set("custom_colors/font_color", Color(.5,.5,.5,1));
@@ -42,15 +42,24 @@ func _ready():
 	if OS.has_feature("console"):
 		mainMenu.get_node("QuitLabel").queue_free()
 		#home page can be kept since it works on Android TV and chrome supports controllers
+	
 	$DifficultySelect.modulate.a=0
 	$DifficultySelect_Description.modulate.a=0
 	$Extras.modulate.a=0
 	$OptionsList.modulate.a=0
+	# Need to set false so mouse doesn't touch it
+	$DifficultySelect.visible=false
+	#$DifficultySelect_Description.visible=false
+	$Extras.visible=false
+	$OptionsList.visible=false
 	
 	if Globals.playerHasSaveData:
 		selection=1
 	else:
 		$MainMenu/Continue.modulate=Color(.5,.5,.5)
+		
+	for i in range(mainMenu.get_child_count()):
+		mainMenu.get_child(i).connect("gui_input",self,"input_touch", [i])
 	highlightList(mainMenu, selection);
 	
 	#print(OS.get_executable_path().get_base_dir()+"/CustomMusic/")
@@ -105,37 +114,36 @@ func setTranslated():
 #					l.rect_scale.x=scaling
 #			l.set("custom_fonts/font",fallbackFont)
 
+
+func input_confirm():
+	#self.get_node("Debug").text = list.get_child(selection).text;
+	confirmSound.play()
+	var sel = mainMenu.get_child(selection);
+	if sel.hasSubmenu:
+		currentlyHandledMenu = get_node(sel.submenuNode);
+		if currentlyHandledMenu.has_method("OnCommand"):
+			currentlyHandledMenu.OnCommand()
+		#$MainMenu.visible=false
+		#currentlyHandledMenu.visible=true
+		#currentSubmenu.selection = 0;
+		#currentSubmenu.highlightList(currentSubmenu.selection);
+		#inSubmenu = true;
+		tweenMainMenu();
+		return
+	else:
+		sel.action();
+
 func _input(event):
 	if event is InputEventJoypadMotion or event is InputEventMouseMotion:
 		return
 	elif (event is InputEventMouseButton and event.pressed) or (event is InputEventScreenTouch and event.pressed):
-		#print(event.button_index)
-		print("Clicked at "+String(event.position))
 		if (event is InputEventMouseButton and event.button_index == 2) or (event is InputEventScreenTouch and event.index==1):
 			if currentlyHandledMenu:
 				tweenMainMenuIn();
 				if currentlyHandledMenu.has_method("OffCommand"):
 						currentlyHandledMenu.OffCommand()
 				currentlyHandledMenu = null
-		elif currentlyHandledMenu:
-			currentlyHandledMenu.mouse_input(event)
-		else:
-			for i in range(mainMenu.get_child_count()):
-				var n = mainMenu.get_child(i)
-				var p = mainMenu.rect_position+n.rect_position
-				if event.position.y > p.y and event.position.y < p.y+n.rect_size.y:
-					print("Guessed click: "+n.get_name())
-					if i == 1 and !Globals.playerHasSaveData:
-						return
-					elif i==selection:
-						input_select()
-					else:
-						selectSound.play()
-						selection=i
-						highlightList(mainMenu,selection);
-					break
-		return
-	#print(String(event.get_device())+" "+event.as_text())
+				return
 	if currentlyHandledMenu:
 		if Input.is_action_just_pressed("ui_cancel"):
 			#currentlyHandledMenu.visible=false
@@ -146,7 +154,7 @@ func _input(event):
 			currentlyHandledMenu = null
 			#return
 		else:
-			currentlyHandledMenu.input();
+			currentlyHandledMenu.input(event);
 	else:
 		if Input.is_action_pressed("ui_down"):
 			
@@ -181,25 +189,18 @@ func _input(event):
 			highlightList(mainMenu, selection);
 				
 		if Input.is_action_just_pressed("ui_accept") or Input.is_action_just_pressed("ui_pause"):
-			input_select()
+			input_confirm()
 
-func input_select():
-	#self.get_node("Debug").text = list.get_child(selection).text;
-	confirmSound.play()
-	var sel = mainMenu.get_child(selection);
-	if sel.hasSubmenu:
-		currentlyHandledMenu = get_node(sel.submenuNode);
-		if currentlyHandledMenu.has_method("OnCommand"):
-			currentlyHandledMenu.OnCommand()
-		#$MainMenu.visible=false
-		#currentlyHandledMenu.visible=true
-		#currentSubmenu.selection = 0;
-		#currentSubmenu.highlightList(currentSubmenu.selection);
-		#inSubmenu = true;
-		tweenMainMenu();
-		return
-	else:
-		sel.action();
+func input_touch(event: InputEvent, sel:int = -1):
+	if event is InputEventMouseButton and event.pressed and event.button_index == 1:
+		if sel == 1 and !Globals.playerHasSaveData:
+			return
+		elif sel==selection:
+			input_confirm()
+		else:
+			selectSound.play()
+			selection=sel
+			highlightList(mainMenu,selection);
 
 var initialPosition = 35
 func tweenMainMenu():
@@ -207,11 +208,16 @@ func tweenMainMenu():
 	
 	#First tween out main menu
 	var tween = $Tween;
+	var tween2 = $Tween2;
+	tween.remove_all()
+	tween2.remove_all()
+	
 	tween.interpolate_property(mainMenu, 'rect_position:x',
 	null, initialPosition-200, .25, Tween.TRANS_QUAD, Tween.EASE_OUT);
 	tween.interpolate_property(mainMenu, 'modulate',
 	null, Color(1,1,1,0), .25, Tween.TRANS_QUAD, Tween.EASE_OUT);
-	tween.start();
+	tween.interpolate_property(mainMenu,"visible",
+	null,false,0.0,Tween.TRANS_LINEAR,Tween.EASE_IN,.25);
 	
 	#Tween in the submenu
 	var property = "rect_position:x"
@@ -219,20 +225,30 @@ func tweenMainMenu():
 	if currentlyHandledMenu.get_class() == "Node2D":
 		property = "position:x"	
 	
-	var tween2 = get_node("Tween2");
 	var subList = currentlyHandledMenu;
+	
+	tween2.interpolate_property(subList,"visible",
+	null, true, 0.0,Tween.TRANS_LINEAR,Tween.EASE_IN);
 	tween2.interpolate_property(subList, property,
 	initialPosition+200,
 	initialPosition,
 	.25, Tween.TRANS_QUAD, Tween.EASE_OUT);
 	tween2.interpolate_property(subList, 'modulate',
 	null, Color(1,1,1,1), .25, Tween.TRANS_QUAD, Tween.EASE_OUT);
+	
+	tween.start();
 	tween2.start();
 
 func tweenMainMenuIn():
 	
 	#Tween the main menu back in
 	var tween = $Tween;
+	var tween2 = $Tween2;
+	tween.remove_all()
+	tween2.remove_all()
+	
+	tween.interpolate_property(mainMenu,"visible",
+	null, true, 0.0,Tween.TRANS_LINEAR,Tween.EASE_IN);
 	tween.interpolate_property(mainMenu, 'rect_position:x',
 	null, initialPosition, .25, Tween.TRANS_QUAD, Tween.EASE_OUT);
 	tween.interpolate_property(mainMenu, 'modulate',
@@ -243,14 +259,18 @@ func tweenMainMenuIn():
 	#Tween the submenu out
 	var property = "rect_position:x"
 	if currentlyHandledMenu.get_class() == "Node2D":
-		property = "position:x"	
-	var tween2 = get_node("Tween2");
+		property = "position:x"
+		
 	tween2.interpolate_property(currentlyHandledMenu, property,
 	null,
 	initialPosition+200,
 	.25, Tween.TRANS_QUAD, Tween.EASE_OUT);
 	tween2.interpolate_property(currentlyHandledMenu, 'modulate',
 	null, Color(1,1,1,0), .25, Tween.TRANS_QUAD, Tween.EASE_OUT);
+	tween2.interpolate_property(currentlyHandledMenu,"visible",
+	null,false,0.0,Tween.TRANS_LINEAR,Tween.EASE_IN,.25);
+	
+	tween.start();
 	tween2.start();
 
 

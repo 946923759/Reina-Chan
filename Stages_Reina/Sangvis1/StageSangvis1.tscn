@@ -203,7 +203,7 @@ scale = Vector2( 4, 4 )
 texture = ExtResource( 31 )
 centered = false
 region_enabled = true
-region_rect = Rect2( 0, 0, 3, 32 )
+region_rect = Rect2( 15, 0, 3, 32 )
 script = SubResource( 42 )
 
 [node name="Sprite4" type="Sprite" parent="." index="6"]
@@ -212,7 +212,7 @@ scale = Vector2( 4, 4 )
 texture = ExtResource( 31 )
 centered = false
 region_enabled = true
-region_rect = Rect2( 0, 0, 3, 32 )
+region_rect = Rect2( 15, 0, 3, 32 )
 script = SubResource( 42 )
 
 [node name="Sprite5" type="Sprite" parent="." index="7"]
@@ -221,7 +221,7 @@ scale = Vector2( 4, 4 )
 texture = ExtResource( 31 )
 centered = false
 region_enabled = true
-region_rect = Rect2( 0, 0, 3, 524 )
+region_rect = Rect2( 15, 0, 3, 524 )
 script = SubResource( 42 )
 
 [node name="Sprite6" type="Sprite" parent="." index="8"]
@@ -230,7 +230,7 @@ scale = Vector2( 4, 4 )
 texture = ExtResource( 31 )
 centered = false
 region_enabled = true
-region_rect = Rect2( 0, 0, 3, 524 )
+region_rect = Rect2( 15, 0, 3, 524 )
 script = SubResource( 42 )
 
 [node name="Polygon2D" type="Polygon2D" parent="." index="9"]
@@ -422,8 +422,10 @@ facing = 1
 
 [node name="LadderCameraAdjuster" parent="Room 80-60" index="5" instance=ExtResource( 5 )]
 position = Vector2( 704, 768 )
-topBound = -999
-bottomBound = 84
+leftBound = 80
+topBound = 60.0
+rightBound = 100
+bottomBound = 84.0
 
 [node name="EventTile3" parent="Room 80-60" index="6" instance=ExtResource( 18 )]
 visible = false
@@ -468,9 +470,11 @@ position = Vector2( 1120, 288 )
 no_movement = false
 
 [node name="LadderCameraAdjuster" parent="Room 80-48" index="3" instance=ExtResource( 5 )]
-position = Vector2( -512, 736 )
-topBound = 48
-bottomBound = 72
+position = Vector2( -512, 768 )
+leftBound = 80
+topBound = 48.0
+rightBound = 100
+bottomBound = 72.0
 
 [node name="CameraAdjuster" parent="Room 80-48" index="4" instance=ExtResource( 6 )]
 position = Vector2( 1280, -64 )

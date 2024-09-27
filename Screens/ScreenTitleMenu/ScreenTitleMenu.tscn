@@ -126,34 +126,36 @@ func reload_translation():
 	setDescText()
 
 func _ready():
-	#var i = 0
+	var i = 0
 	for difficulty in Globals.Difficulty:
 		#print(tr(difficulty.to_upper()))
-		add_child(BitmapText({
+		var b = BitmapText({
 			\"text\":INITrans.GetString(\"Difficulty\",difficulty.to_upper()),
-			\"name\":difficulty
-		}))
+			\"name\":difficulty,
+			\"mouse_filter\":MOUSE_FILTER_PASS,
+			\"mouse_default_cursor_shape\":CURSOR_POINTING_HAND
+		})
+		b.connect(\"gui_input\",self,\"input_touch\",[i])
+		i+=1
+		add_child(b)
 	parent.highlightList(self,Globals.playerData.gameDifficulty)
 	setDescText()
 	#print(Globals.get(\"gameDifficulty\"))
 
-func mouse_input(event):
-	for i in range(get_child_count()):
-		var n = get_child(i)
-		var p = rect_position+n.rect_position
-		if event.position.y > p.y and event.position.y < p.y+n.rect_size.y:
-			if i==Globals.playerData.gameDifficulty:
-				
-				#It has to be done on start/continue in case the player changed the language
-				Globals.load_stage_cutscenes()
-				Globals.reset_player_data()
-				Globals.change_screen(get_tree(),\"ScreenSelectCharacter\")
-			else:
-				parent.selectSound.play()
-				Globals.playerData.gameDifficulty=i
-				parent.highlightList(self,Globals.playerData.gameDifficulty)
+func input_touch(event:InputEvent, i:int = 0):
+	if event is InputEventMouseButton and event.pressed and event.button_index == 1:
+		if i==Globals.playerData.gameDifficulty:
+			
+			#It has to be done on start/continue in case the player changed the language
+			Globals.load_stage_cutscenes()
+			Globals.reset_player_data()
+			Globals.change_screen(get_tree(),\"ScreenSelectCharacter\")
+		else:
+			parent.selectSound.play()
+			Globals.playerData.gameDifficulty=i
+			parent.highlightList(self,Globals.playerData.gameDifficulty)
 
-func input():
+func input(event):
 	if Input.is_action_just_pressed(\"ui_down\") and Globals.playerData.gameDifficulty < len(Globals.Difficulty)-1:
 		Globals.playerData.gameDifficulty=Globals.playerData.gameDifficulty+1
 		parent.highlightList(self,Globals.playerData.gameDifficulty)
@@ -289,14 +291,37 @@ func _ready():
 	#var i = 0
 	for option in extras_table:
 		if extras_table[option]['hidden']==false or call(\"unlock_\"+option):
-			add_child(parent.BitmapText({
+			var c = parent.BitmapText({
 				\"text\":INITrans.GetString(\"Extras\",option),
-				\"name\":option
-			}))
+				\"name\":option,
+				\"mouse_filter\":MOUSE_FILTER_PASS,
+				\"mouse_default_cursor_shape\":CURSOR_POINTING_HAND
+			})
+			add_child(c)
+			
 	parent.highlightList(self,0)
 	realInitPos=rect_position.y
 	#print(Globals.get(\"gameDifficulty\"))
 
+
+func set_selection(new_sel:int=0):
+	if new_sel == selection:
+		return
+		
+	# Alternatively, new_sel = clamp(new_sel,0,get_child_count()-1)
+	# But that converts int -> float -> int since we're not on Godot 4
+	if new_sel < 0:
+		new_sel = 0
+	elif new_sel > get_child_count() - 1:
+		new_sel = get_child_count() - 1
+	
+	selection = new_sel
+	if selection > 4:
+		moveListUp()
+	else:
+		moveListDown()
+	parent.highlightList(self,selection)
+	parent.selectSound.play()
 
 func mouse_input(event):
 	for i in range(get_child_count()):
@@ -306,23 +331,19 @@ func mouse_input(event):
 			if i==selection:
 				call(\"action_\"+get_child(selection).name)
 			else:
-				parent.selectSound.play()
-				selection=i
-				parent.highlightList(self,selection)
+				set_selection(i)
 
-func input():
-	if Input.is_action_pressed(\"ui_down\") and selection < get_child_count() - 1:
-		selection+=1
-		parent.highlightList(self,selection)
-		parent.selectSound.play()
-		if selection > 4:
-			moveListUp()
-	elif Input.is_action_pressed(\"ui_up\") and selection > 0:
-		selection-=1
-		parent.highlightList(self,selection)
-		parent.selectSound.play()
-		if selection <= 4:
-			moveListDown()
+func input(event):
+	if event is InputEventMouseButton and event.pressed and event.button_index == 1:
+		mouse_input(event)
+	elif Input.is_action_pressed(\"ui_down\"):
+		set_selection(selection+1)
+	elif Input.is_action_pressed(\"ui_up\"):
+		set_selection(selection-1)
+	elif Input.is_action_just_pressed(\"ui_page_down\"):
+		set_selection(selection+5)
+	elif Input.is_action_just_pressed(\"ui_page_up\"):
+		set_selection(selection-5)
 	elif Input.is_action_just_pressed(\"ui_select\"):
 		call(\"action_\"+get_child(selection).name)
 		
@@ -522,7 +543,7 @@ func _ready():
 		thisSystem |= Globals.OPTION_FLAG.CONSOLE
 	if OS.has_feature(\"mobile\"):
 		thisSystem |= Globals.OPTION_FLAG.MOBILE
-	print(\"This device's capabilities are: \"+String(thisSystem))
+	print(\"[ScreenTitleMenu Options] This device's capabilities are: \"+String(thisSystem))
 	
 	var i = 0
 	for option in Globals.OPTIONS:
@@ -545,7 +566,8 @@ func _ready():
 		var optionNameActor = parent.BitmapText({
 			\"name\":\"TextActor\",
 			\"text\":INITrans.GetString(\"SystemOptions\",option),
-			\"uppercase\":true
+			\"uppercase\":true,
+			\"mouse_default_cursor_shape\": Control.CURSOR_POINTING_HAND
 		})
 		#print(parent.font.get_string_size(option))
 		#print(Globals.OPTIONS[option])
@@ -674,8 +696,10 @@ func mouse_input(event):
 			else:
 				parent.selectSound.play()
 			break
-func input():
-	if Input.is_action_pressed(\"ui_down\") and selection < displayedOptions-1:
+func input(event):
+	if event is InputEventMouseButton and event.pressed and event.button_index == 1:
+		mouse_input(event)
+	elif Input.is_action_pressed(\"ui_down\") and selection < displayedOptions-1:
 		selection+=1
 		highlightList()
 		if selection > 5:
@@ -910,6 +934,7 @@ submenuNode = "DifficultySelect"
 margin_top = 75.0
 margin_right = 601.0
 margin_bottom = 120.0
+mouse_filter = 1
 mouse_default_cursor_shape = 2
 custom_fonts/font = ExtResource( 5 )
 text = "CONTINUE"
@@ -922,6 +947,7 @@ visible = false
 margin_top = 150.0
 margin_right = 601.0
 margin_bottom = 195.0
+mouse_filter = 1
 mouse_default_cursor_shape = 2
 custom_fonts/font = ExtResource( 5 )
 text = "PLAY_INTRO"
@@ -932,6 +958,8 @@ script = SubResource( 3 )
 margin_top = 150.0
 margin_right = 601.0
 margin_bottom = 195.0
+mouse_filter = 1
+mouse_default_cursor_shape = 2
 custom_fonts/font = ExtResource( 5 )
 text = "OPTIONS"
 uppercase = true
@@ -942,6 +970,8 @@ submenuNode = "OptionsList"
 margin_top = 225.0
 margin_right = 601.0
 margin_bottom = 270.0
+mouse_filter = 1
+mouse_default_cursor_shape = 2
 custom_fonts/font = ExtResource( 5 )
 text = "EXTRAS"
 uppercase = true
@@ -952,6 +982,8 @@ submenuNode = "Extras"
 margin_top = 300.0
 margin_right = 601.0
 margin_bottom = 345.0
+mouse_filter = 1
+mouse_default_cursor_shape = 2
 custom_fonts/font = ExtResource( 5 )
 text = "HOMEPAGE"
 uppercase = true
@@ -961,6 +993,8 @@ script = SubResource( 6 )
 margin_top = 375.0
 margin_right = 601.0
 margin_bottom = 420.0
+mouse_filter = 1
+mouse_default_cursor_shape = 2
 custom_fonts/font = ExtResource( 5 )
 text = "QUIT"
 uppercase = true
