@@ -1,8 +1,8 @@
-[gd_scene load_steps=26 format=2]
+[gd_scene load_steps=33 format=2]
 
 [ext_resource path="res://Screens/ScreenWithMenuElements.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Screens/ScreenOpening/CharActor.tscn" type="PackedScene" id=2]
-[ext_resource path="res://Screens/ScreenOpening/Test_ScreenOpening.gd" type="Script" id=3]
+[ext_resource path="res://Screens/ScreenOpening/ScreenOpening.gd" type="Script" id=3]
 [ext_resource path="res://Music/OpeningAnimation.mp3" type="AudioStream" id=4]
 [ext_resource path="res://Stages_Reina/Bosses/Scarecrow/BossScarecrow.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Screens/ScreenCutscene/Portraits/pic_Scarecrow.png" type="Texture" id=6]
@@ -21,6 +21,9 @@
 [ext_resource path="res://Screens/ScreenOpening/logo_0.png" type="Texture" id=19]
 [ext_resource path="res://Screens/ScreenCutscene/Portraits/pic_Architect.png" type="Texture" id=20]
 [ext_resource path="res://Stages_Reina/Bosses/Architect/BossArchitect_v2.tscn" type="PackedScene" id=21]
+[ext_resource path="res://Screens/ScreenStageIntroSangvis/44d43b7cc9d590f16c63a84d4accdca3.jpg" type="Texture" id=22]
+[ext_resource path="res://Screens/ScreenOpening/scrolling_blue.png" type="Texture" id=23]
+[ext_resource path="res://Screens/ScreenCutscene/Portraits/pic_UMP9.png" type="Texture" id=24]
 
 [sub_resource type="GDScript" id=2]
 script/source = "extends Control
@@ -70,11 +73,62 @@ script/source = "extends Node2D
 #	t.tween_property($spriteM16A1,\"position:x\",$spriteM16A1.position.x-800,2.2)
 "
 
+[sub_resource type="GDScript" id=8]
+script/source = "extends Control
+
+export(bool) var auto_OnCommand=false
+
+func _ready():
+	set_process(false)
+	if auto_OnCommand:
+		OnCommand()
+		
+func OnCommand():
+	set_process(true)
+	var t:SceneTreeTween = get_tree().create_tween()
+	t.set_parallel(true)
+	#t.tween_property($spriteUMP9,\"\")
+	t.tween_property(self,\"visible\",true,0.0)
+	t.tween_callback($BackBufferSrc/spriteUMP9,\"play\",[\"WalkLoop\"])
+	#t.tween_callback($BackBufferSrc/spriteM16A1,\"play\",[\"WalkLoop\"])
+	t.tween_property($BackBufferSrc/spriteUMP9,\"position:x\",1280+96,3.6)
+	t.tween_property($TextureRect,\"rect_position:x\",544,5)
+	#t.tween_property($BackBufferSrc/spriteM16A1,\"position:x\",$BackBufferSrc/spriteM16A1.position.x-800,2.2)
+
+func _process(delta):
+	$BackBufferDest/rcText1.position.x+=300*delta
+	$BackBufferDest/rcText3.position.x+=300*delta
+	
+	$BackBufferDest/rcText2.position.x-=300*delta
+	$BackBufferDest/rcText4.position.x-=300*delta
+"
+
 [sub_resource type="GDScript" id=4]
 script/source = "extends Control
 
+onready var bbLoopSprite = $bbLoopSprite
+onready var image = $TextureRect
+onready var top = $top
+onready var bottom = $bottom
+
+func _ready():
+	top.rect_scale.y=2.0
+	bottom.rect_scale.y=2.0
+	#bbLoopSprite.region_rect.position.x
+	pass
+
 func OnCommand():
-	visible=true
+	var t = get_tree().create_tween()
+	t.set_parallel()
+	t.tween_property(bbLoopSprite,\"region_rect:position:x\",-600,4)
+	t.tween_property(image,\"rect_position:y\",180,3.5).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	t.tween_property(top,\"rect_scale:y\",1.0,.5)
+	t.tween_property(bottom,\"rect_scale:y\",1.0,.5)
+	t.tween_property(self,\"visible\",true,0.0)
+	
+	t.tween_property(top,\"rect_scale:y\",2.0,.5).from(1.0).set_delay(3.0).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+	t.tween_property(bottom,\"rect_scale:y\",2.0,.5).from(1.0).set_delay(3.0).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+	#visible=true
 "
 
 [sub_resource type="GDScript" id=3]
@@ -83,31 +137,52 @@ script/source = "extends Control
 onready var l = $Logo
 onready var l2 = $Logo2
 onready var l3 = $Logo3
-onready var fade = $ColorRect
+onready var fade = $FlashWhite
+
+onready var l1f = $Logo1Flash
+onready var l2f = $Logo2Flash
+onready var l3f = $Logo3Flash
 
 func _ready():
 	l.visible=false
 	l2.visible=false
 	l3.visible=false
 	self.visible=false
+	
+	for o in [l1f,l2f,l3f]:
+		o.visible=true
+		o.modulate.a=0.0
 
 func OnCommand():
 	var t = get_tree().create_tween()
 	t.set_parallel()
 	t.tween_property(self,'visible',true, 0.0)
-	t.tween_property(fade,\"visible\",true, 0.0)
+	#t.tween_property(fade,\"visible\",true, 0.0)
 	
-	t.tween_property(fade,\"modulate:a\",0.0,.25)
+	#t.tween_property(fade,\"modulate:a\",0.0,.25)
+	t.tween_property(l1f,\"modulate:a\",0.0,.25).from(1.0)
 	t.tween_property(l,\"visible\",true,0.0)
 	
-	t.tween_property(fade,\"modulate:a\",0.0,.25).from(1.0).set_delay(.334)
+	#t.tween_property(fade,\"modulate:a\",0.0,.25).from(1.0).set_delay(.334)
+	t.tween_property(l2f,\"modulate:a\",0.0,.25).from(1.0).set_delay(.334)
 	t.tween_property(l2,\"visible\",true,0.0).set_delay(.334)
 	
-	t.tween_property(fade,\"modulate:a\",0.0,.5).from(1.0).set_delay(.668)
+	#t.tween_property(fade,\"modulate:a\",0.0,.5).from(1.0).set_delay(.668)
+	t.tween_property(l3f,\"modulate:a\",0.0,.5).from(1.0).set_delay(.668)
 	t.tween_property(l3,\"visible\",true,0.0).set_delay(.668)
 	
-	t.tween_property(self,\"rect_size:y\",85*2,1.0).set_delay(3)
+	#t.tween_property(self,\"rect_size:y\",85*2,1.0).set_delay(3)
 "
+
+[sub_resource type="CanvasItemMaterial" id=5]
+blend_mode = 1
+light_mode = 2
+
+[sub_resource type="CanvasItemMaterial" id=6]
+blend_mode = 1
+
+[sub_resource type="CanvasItemMaterial" id=7]
+blend_mode = 1
 
 [node name="ScreenWithMenuElements" instance=ExtResource( 1 )]
 script = ExtResource( 3 )
@@ -128,27 +203,26 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 color = Color( 0, 0, 0, 1 )
 
-[node name="ColorRect2" type="ColorRect" parent="." index="3"]
+[node name="ColorRect2" type="ColorRect" parent="." index="2"]
 visible = false
 anchor_bottom = 1.0
 margin_right = 417.0
 color = Color( 0.219608, 0, 0, 1 )
 
-[node name="Ouroboros" parent="." index="4" instance=ExtResource( 2 )]
+[node name="Ouroboros" parent="." index="3" instance=ExtResource( 2 )]
 visible = false
 facing = -1
 auto_OnCommand = false
 
-[node name="Scarecrow" parent="." index="5" instance=ExtResource( 2 )]
+[node name="Scarecrow" parent="." index="4" instance=ExtResource( 2 )]
 visible = false
 text_bg_color = Color( 0.188235, 0.313726, 0.188235, 1 )
 bossToLoad = ExtResource( 5 )
 large_portrait = ExtResource( 6 )
 text = "Scarecrow"
 auto_OnCommand = false
-flip_h = true
 
-[node name="Alchemist" parent="." index="6" instance=ExtResource( 2 )]
+[node name="Alchemist" parent="." index="5" instance=ExtResource( 2 )]
 visible = false
 text_bg_color = Color( 0.827451, 0.501961, 0.156863, 1 )
 bossToLoad = ExtResource( 15 )
@@ -157,7 +231,7 @@ text = "Alchemist"
 facing = -1
 auto_OnCommand = false
 
-[node name="Architect" parent="." index="7" instance=ExtResource( 2 )]
+[node name="Architect" parent="." index="6" instance=ExtResource( 2 )]
 visible = false
 text_bg_color = Color( 0.156863, 0.74902, 0.827451, 1 )
 bossToLoad = ExtResource( 21 )
@@ -165,7 +239,7 @@ large_portrait = ExtResource( 20 )
 text = "Architect"
 auto_OnCommand = false
 
-[node name="TileMap2" type="TileMap" parent="." index="8"]
+[node name="TileMap2" type="TileMap" parent="." index="7"]
 visible = false
 scale = Vector2( 4, 4 )
 tile_set = ExtResource( 8 )
@@ -176,7 +250,7 @@ collision_mask = 35
 format = 1
 tile_data = PoolIntArray( -65535, 19, 0, -65534, 19, 0, -65533, 19, 0, -65532, 19, 0, -65531, 19, 0, -65489, 12, 0, -65488, 35, 0, 65535, 12, 0, 47, 12, 0, 131071, 12, 0, 65583, 12, 0, 65584, 35, 0, 196607, 12, 0, 131119, 12, 0, 262143, 12, 0, 196655, 12, 0, 196656, 35, 0, 327679, 12, 0, 262191, 12, 0, 393215, 12, 0, 327727, 12, 0, 327728, 35, 0, 458746, 0, 0, 458747, 0, 0, 458748, 0, 0, 458749, 0, 0, 458750, 0, 0, 458751, 12, 0, 393256, 11, 0, 393258, 11, 0, 393263, 12, 0, 458792, 7, 0, 458794, 8, 0, 458799, 12, 0, 458800, 35, 0, 524310, 11, 0, 524312, 11, 0, 524322, 11, 0, 524324, 11, 0, 524326, 11, 0, 524328, 9, 0, 524330, 10, 0, 524335, 12, 0, 589846, 9, 0, 589848, 10, 0, 589858, 9, 0, 589860, 7, 0, 589862, 8, 0, 589864, 7, 0, 589866, 8, 0, 589871, 12, 0, 589872, 35, 0, 655382, 7, 0, 655384, 8, 0, 655394, 7, 0, 655396, 8, 0, 655398, 7, 0, 655400, 8, 0, 655402, 10, 0, 655407, 12, 0, 786426, 0, 0, 786427, 0, 0, 786428, 0, 0, 786429, 0, 0, 786430, 0, 0, 786431, 0, 0, 720896, 11, 0, 720898, 11, 0, 720900, 11, 0, 720902, 11, 0, 720904, 11, 0, 720906, 11, 0, 720908, 11, 0, 720910, 11, 0, 720912, 11, 0, 720914, 11, 0, 720916, 11, 0, 720918, 9, 0, 720920, 10, 0, 720922, 11, 0, 720924, 11, 0, 720926, 11, 0, 720928, 11, 0, 720930, 9, 0, 720932, 7, 0, 720934, 8, 0, 720936, 7, 0, 720938, 8, 0, 720940, 11, 0, 720943, 12, 0, 720944, 35, 0, 786432, 9, 0, 786434, 7, 0, 786436, 8, 0, 786438, 7, 0, 786440, 8, 0, 786442, 7, 0, 786444, 8, 0, 786446, 7, 0, 786448, 8, 0, 786450, 7, 0, 786452, 8, 0, 786454, 7, 0, 786456, 8, 0, 786458, 7, 0, 786460, 8, 0, 786462, 7, 0, 786464, 8, 0, 786466, 7, 0, 786468, 8, 0, 786470, 7, 0, 786472, 8, 0, 786474, 7, 0, 786476, 8, 0, 786479, 12, 0, 851968, 7, 0, 851970, 8, 0, 851972, 7, 0, 851974, 8, 0, 851976, 7, 0, 851978, 8, 0, 851980, 7, 0, 851982, 8, 0, 851984, 7, 0, 851986, 8, 0, 851988, 7, 0, 851990, 8, 0, 851992, 7, 0, 851994, 8, 0, 851996, 7, 0, 851998, 8, 0, 852000, 7, 0, 852002, 8, 0, 852004, 7, 0, 852006, 8, 0, 852008, 7, 0, 852010, 8, 0, 852012, 7, 0, 852015, 12, 0, 852016, 35, 0, 917504, 9, 0, 917506, 7, 0, 917508, 8, 0, 917510, 7, 0, 917512, 8, 0, 917514, 7, 0, 917516, 8, 0, 917518, 7, 0, 917520, 8, 0, 917522, 7, 0, 917524, 8, 0, 917526, 7, 0, 917528, 8, 0, 917530, 7, 0, 917532, 8, 0, 917534, 7, 0, 917536, 2, 0, 917537, 2, 0, 917538, 2, 0, 917539, 2, 0, 917540, 2, 0, 917541, 2, 0, 917542, 2, 0, 917543, 2, 0, 917544, 2, 0, 917545, 2, 0, 917546, 2, 0, 917547, 2, 0, 917548, 2, 0, 917549, 13, 0, 917551, 12, 0 )
 
-[node name="ZTextWalk" type="Control" parent="." index="9"]
+[node name="ZTextWalk" type="Control" parent="." index="8"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -308,19 +382,234 @@ text = "reina-chan  reina-chan  reina-chan  reina-chan  reina-chan  reina-chan  
 wrap_at = 500
 scale_by = 5
 
+[node name="ZTextWalk_NoM16" type="Control" parent="." index="9"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = SubResource( 8 )
+
+[node name="BackBufferSrc" type="Node2D" parent="ZTextWalk_NoM16" index="0"]
+script = SubResource( 1 )
+
+[node name="Backdrop2" type="Sprite" parent="ZTextWalk_NoM16/BackBufferSrc" index="0"]
+scale = Vector2( 4, 4 )
+texture = ExtResource( 11 )
+centered = false
+
+[node name="Backdrop" type="Sprite" parent="ZTextWalk_NoM16/BackBufferSrc" index="1"]
+position = Vector2( -448, 0 )
+scale = Vector2( 4, 4 )
+texture = ExtResource( 10 )
+centered = false
+
+[node name="TileMap" type="TileMap" parent="ZTextWalk_NoM16/BackBufferSrc" index="2"]
+scale = Vector2( 4, 4 )
+tile_set = ExtResource( 8 )
+cell_size = Vector2( 16, 16 )
+format = 1
+tile_data = PoolIntArray( 262144, 11, 0, 262146, 11, 0, 262148, 11, 0, 262150, 11, 0, 262152, 11, 0, 262154, 11, 0, 262156, 11, 0, 262158, 11, 0, 262160, 11, 0, 262162, 11, 0, 327680, 9, 0, 327682, 7, 0, 327684, 8, 0, 327686, 7, 0, 327688, 8, 0, 327690, 7, 0, 327692, 8, 0, 327694, 7, 0, 327696, 8, 0, 327698, 7, 0, 655360, 9, 0, 655376, 8, 0, 655378, 7, 0, 720896, 7, 0, 720898, 8, 0, 720900, 7, 0, 720902, 8, 0, 720904, 7, 0, 720906, 8, 0, 720908, 7, 0, 720910, 8, 0, 720912, 7, 0, 720914, 8, 0, 786432, 9, 0, 786434, 7, 0, 786436, 8, 0, 786438, 7, 0, 786440, 8, 0, 786442, 7, 0, 786444, 8, 0, 786446, 7, 0, 786448, 8, 0, 786450, 7, 0 )
+
+[node name="spriteUMP9" type="AnimatedSprite" parent="ZTextWalk_NoM16/BackBufferSrc" index="3"]
+position = Vector2( -96, 192 )
+scale = Vector2( 4, 4 )
+frames = ExtResource( 9 )
+animation = "WalkLoop"
+
+[node name="BackBufferCopy" type="BackBufferCopy" parent="ZTextWalk_NoM16" index="1"]
+copy_mode = 2
+
+[node name="BackBufferDest" type="Control" parent="ZTextWalk_NoM16" index="2"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="ColorRect" type="ColorRect" parent="ZTextWalk_NoM16/BackBufferDest" index="0"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 1 )
+
+[node name="charName" type="Label" parent="ZTextWalk_NoM16/BackBufferDest" index="1"]
+visible = false
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -640.0
+margin_top = -592.0
+margin_right = -116.0
+margin_bottom = -336.0
+rect_min_size = Vector2( 0, 128 )
+custom_constants/shadow_offset_x = 4
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = ExtResource( 12 )
+text = "ump9 \"REINA\" ump9 \"REINA\" ump9 \"REINA\""
+align = 1
+
+[node name="charName2" type="Label" parent="ZTextWalk_NoM16/BackBufferDest" index="2"]
+visible = false
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -640.0
+margin_top = -208.0
+margin_right = 70.0
+margin_bottom = 48.0
+rect_min_size = Vector2( 0, 128 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = ExtResource( 12 )
+text = "m16a1 m16a1 m16a1 m16a1 m16a1 m16a1 "
+
+[node name="BitmapFont" parent="ZTextWalk_NoM16/BackBufferDest" index="3" instance=ExtResource( 13 )]
+material = ExtResource( 14 )
+position = Vector2( 640, 96 )
+text = "ump9"
+wrap_at = 7
+scale_by = 10
+alignment = 1
+
+[node name="BitmapFont3" parent="ZTextWalk_NoM16/BackBufferDest" index="4" instance=ExtResource( 13 )]
+material = ExtResource( 14 )
+position = Vector2( 640, 176 )
+text = "'reina'"
+wrap_at = 7
+scale_by = 10
+alignment = 1
+
+[node name="BitmapFont2" parent="ZTextWalk_NoM16/BackBufferDest" index="5" instance=ExtResource( 13 )]
+material = ExtResource( 14 )
+position = Vector2( 640, 480 )
+text = "vs..."
+wrap_at = 500
+scale_by = 10
+alignment = 1
+
+[node name="rcText1" parent="ZTextWalk_NoM16/BackBufferDest" index="6" instance=ExtResource( 13 )]
+material = ExtResource( 14 )
+position = Vector2( -1440, 560 )
+text = "reina-chan  reina-chan  reina-chan  reina-chan  reina-chan  reina-chan  reina-chan  reina-chan  reina-chan  "
+wrap_at = 500
+scale_by = 5
+
+[node name="rcText2" parent="ZTextWalk_NoM16/BackBufferDest" index="7" instance=ExtResource( 13 )]
+material = ExtResource( 14 )
+position = Vector2( 0, 432 )
+text = "reina-chan  reina-chan  reina-chan  reina-chan  reina-chan  reina-chan  reina-chan  reina-chan  reina-chan  "
+wrap_at = 500
+scale_by = 5
+
+[node name="rcText3" parent="ZTextWalk_NoM16/BackBufferDest" index="8" instance=ExtResource( 13 )]
+material = ExtResource( 14 )
+position = Vector2( -1440, 256 )
+text = "reina-chan  reina-chan  reina-chan  reina-chan  reina-chan  reina-chan  reina-chan  reina-chan  reina-chan  "
+wrap_at = 500
+scale_by = 5
+
+[node name="rcText4" parent="ZTextWalk_NoM16/BackBufferDest" index="9" instance=ExtResource( 13 )]
+material = ExtResource( 14 )
+position = Vector2( 0, 48 )
+text = "reina-chan  reina-chan  reina-chan  reina-chan  reina-chan  reina-chan  reina-chan  reina-chan  reina-chan  "
+wrap_at = 500
+scale_by = 5
+
+[node name="TextureRect" type="TextureRect" parent="ZTextWalk_NoM16" index="3"]
+visible = false
+margin_left = 688.0
+margin_top = -16.0
+margin_right = 1712.0
+margin_bottom = 1008.0
+texture = ExtResource( 24 )
+
 [node name="ZText2" type="Control" parent="." index="10"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = SubResource( 4 )
 
-[node name="BitmapFont" parent="ZText2" index="0" instance=ExtResource( 13 )]
-position = Vector2( 176, 304 )
-text = "vs. sangvis ferri"
-wrap_at = 500
+[node name="bbLoopSprite" type="Sprite" parent="ZText2" index="0"]
+position = Vector2( 128, 400 )
+scale = Vector2( 4, 4 )
+texture = ExtResource( 23 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 0, 0, 260, 30 )
 
-[node name="LogoFade" type="Control" parent="." index="11"]
+[node name="BackBufferCopy" type="BackBufferCopy" parent="ZText2" index="1"]
+copy_mode = 2
+rect = Rect2( 0, 0, 230, 30 )
+
+[node name="TextureRect" type="TextureRect" parent="ZText2" index="2"]
+margin_right = 1280.0
+margin_bottom = 720.0
+texture = ExtResource( 22 )
+stretch_mode = 7
+
+[node name="ColorRect" type="ColorRect" parent="ZText2" index="3"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
+color = Color( 0.419608, 0.4, 0.294118, 1 )
+
+[node name="BitmapFont" parent="ZText2" index="4" instance=ExtResource( 13 )]
+position = Vector2( 640, 448 )
+text = "sangvis ferri"
+wrap_at = 500
+alignment = 1
+
+[node name="BitmapFont2" parent="ZText2" index="5" instance=ExtResource( 13 )]
+material = ExtResource( 14 )
+position = Vector2( 640, 448 )
+text = "sangvis ferri"
+wrap_at = 500
+alignment = 1
+
+[node name="top" type="ColorRect" parent="ZText2" index="6"]
+anchor_right = 1.0
+margin_bottom = 180.0
+color = Color( 0, 0, 0, 1 )
+
+[node name="bottom" type="ColorRect" parent="ZText2" index="7"]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -640.0
+margin_top = -180.0
+margin_right = 640.0
+rect_pivot_offset = Vector2( 0, 180 )
+color = Color( 0, 0, 0, 1 )
+
+[node name="top" type="ColorRect" parent="." index="11"]
+visible = false
+anchor_right = 1.0
+margin_bottom = 180.0
+color = Color( 0, 0, 0, 1 )
+
+[node name="bottom" type="ColorRect" parent="." index="12"]
+visible = false
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -640.0
+margin_top = -180.0
+margin_right = 640.0
+rect_pivot_offset = Vector2( 0, 180 )
+color = Color( 0, 0, 0, 1 )
+
+[node name="LogoFade" type="Control" parent="." index="13"]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -640.0
+margin_top = -360.0
+margin_right = 640.0
+margin_bottom = 360.0
 script = SubResource( 3 )
 __meta__ = {
 "_edit_lock_": true
@@ -356,7 +645,43 @@ texture = ExtResource( 17 )
 expand = true
 stretch_mode = 6
 
-[node name="ColorRect" type="ColorRect" parent="LogoFade" index="3"]
+[node name="Logo1Flash" type="TextureRect" parent="LogoFade" index="3"]
+visible = false
+material = SubResource( 5 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_min_size = Vector2( 640, 85 )
+size_flags_horizontal = 3
+size_flags_vertical = 8
+texture = ExtResource( 19 )
+expand = true
+stretch_mode = 6
+
+[node name="Logo2Flash" type="TextureRect" parent="LogoFade" index="4"]
+visible = false
+material = SubResource( 6 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_min_size = Vector2( 640, 85 )
+size_flags_horizontal = 3
+size_flags_vertical = 8
+texture = ExtResource( 18 )
+expand = true
+stretch_mode = 6
+
+[node name="Logo3Flash" type="TextureRect" parent="LogoFade" index="5"]
+visible = false
+material = SubResource( 7 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_min_size = Vector2( 640, 85 )
+size_flags_horizontal = 3
+size_flags_vertical = 8
+texture = ExtResource( 17 )
+expand = true
+stretch_mode = 6
+
+[node name="FlashWhite" type="ColorRect" parent="LogoFade" index="6"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0

@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/OpeningAnimation.mp3-d5f8f39f95cd57636778530821163bba.mp3str"
+
+[deps]
+
+source_file="res://Music/OpeningAnimation.mp3"
+dest_files=[ "res://.import/OpeningAnimation.mp3-d5f8f39f95cd57636778530821163bba.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0
