@@ -30,7 +30,7 @@ func input(_event):
 	if _event is InputEventMouseButton or _event is InputEventMouseMotion:
 		return
 	$Keyboard.visible=(_event is InputEventKey)
-	$Controller.visible=(_event is InputEventJoypadButton)
+	$Controller.visible=(_event is InputEventJoypadButton or _event is InputEventJoypadMotion)
 	#if _event is InputEventKey:
 
 

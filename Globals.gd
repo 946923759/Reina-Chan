@@ -661,8 +661,8 @@ var SCREENS:Dictionary = {
 	"ScreenHowToPlay":"res://Screens/ScreenHowToPlay/ScreenHowToPlay.tscn",
 	"ScreenOpening":"res://Screens/ScreenOpening/ScreenOpening.tscn",
 	
-	"ScreenTitleMenu":"res://Screens/ScreenTitleMenu/ScreenTitleMenu.tscn",
-	"ScreenTitleJoin":"res://Screens/ScreenTitleJoin/ScreenTitleJoin.tscn",
+	"ScreenTitleMenu":"res://Screens/ScreenTitleMenu/ScreenTitleMenuV3.tscn",
+	"ScreenTitleJoin":"res://Screens/ScreenTitleJoin/ScreenTitleJoinV3.tscn",
 	"ScreenSelectCharacter":"res://Screens/ScreenSelectCharacter/ScreenSelectCharacter.tscn",
 	"ScreenSelectStage":"res://Screens/ScreenStageSelectV2/ScreenSelectStage.tscn",
 	"ScreenStageIntro":"res://Screens/ScreenStageIntro.tscn",

@@ -23,6 +23,8 @@ onready var bottom:ColorRect = $bottom
 #var total:float = 0.0
 
 func _ready():
+	Globals.previous_screen=self.name
+	
 	if Globals.eventMode:
 		NextScreen="ScreenTitleJoin"
 		

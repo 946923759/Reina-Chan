@@ -1,4 +1,5 @@
-extends Node2D
+extends Control
+signal menu_switched(new_menu)
 
 var font = preload("res://ubuntu-font-family/FallbackPixelFont.tres")
 var fallbackFont = preload("res://ubuntu-font-family/FallbackPixelFont.tres")
@@ -8,9 +9,6 @@ onready var mainMenu = $MainMenu
 onready var confirmSound = $Confirm
 onready var selectSound = $Select
 
-export (String) var nsf_music
-export (int) var nsf_track_num = 0
-var reinaAudioPlayer
 
 func BitmapText(d)->Label:
 	var l = Label.new()
@@ -62,12 +60,7 @@ func _ready():
 		mainMenu.get_child(i).connect("gui_input",self,"input_touch", [i])
 	highlightList(mainMenu, selection);
 	
-	#print(OS.get_executable_path().get_base_dir()+"/CustomMusic/")
-	print("Starting music...")
-	reinaAudioPlayer=ReinaAudioPlayer.new(self)
-	reinaAudioPlayer.load_song("TitleScreen",nsf_music,nsf_track_num)
-	print("Success.")
-	#var music = Globals.get_custom_music("TitleScreen")
+
 	#$DifficultySelect.visible=false
 	#$Extras.visible=false
 	#$OptionsList.visible=false
@@ -80,19 +73,10 @@ func _ready():
 	print("Translating items...")
 	setTranslated()
 	
-	if OS.get_date()['month']==4 and OS.get_date()['day']==1:
-		var tex = load("res://reina_logo_april_fools.png")
-		$logoHolder/Logo.texture=tex
-	
 	#Enable resizing (WIP)
 	set_process(ProjectSettings.get_setting("display/window/stretch/aspect") != "keep")
 	
-	Globals.previous_screen="ScreenTitleMenu"
 	print("Title screen ready!")
-
-func _process(_delta):
-	$logoHolder.rect_size=get_viewport().get_visible_rect().size
-	#$logoHolder/Label2.text = String(get_viewport().get_visible_rect().size)
 
 func setTranslated():
 	for node in $MainMenu.get_children():
@@ -117,23 +101,23 @@ func setTranslated():
 
 func input_confirm():
 	#self.get_node("Debug").text = list.get_child(selection).text;
-	confirmSound.play()
 	var sel = mainMenu.get_child(selection);
 	if sel.hasSubmenu:
+		confirmSound.play()
 		currentlyHandledMenu = get_node(sel.submenuNode);
 		if currentlyHandledMenu.has_method("OnCommand"):
 			currentlyHandledMenu.OnCommand()
-		#$MainMenu.visible=false
-		#currentlyHandledMenu.visible=true
-		#currentSubmenu.selection = 0;
-		#currentSubmenu.highlightList(currentSubmenu.selection);
-		#inSubmenu = true;
+		emit_signal("menu_switched",currentlyHandledMenu)
 		tweenMainMenu();
 		return
 	else:
 		sel.action();
+		$Continue_Sound.play()
 
 func _input(event):
+	if Input.is_key_pressed(KEY_0):
+		OnCommand()
+	
 	if event is InputEventJoypadMotion or event is InputEventMouseMotion:
 		return
 	elif (event is InputEventMouseButton and event.pressed) or (event is InputEventScreenTouch and event.pressed):
@@ -143,6 +127,7 @@ func _input(event):
 				if currentlyHandledMenu.has_method("OffCommand"):
 						currentlyHandledMenu.OffCommand()
 				currentlyHandledMenu = null
+				emit_signal("menu_switched",currentlyHandledMenu)
 				return
 	if currentlyHandledMenu:
 		if Input.is_action_just_pressed("ui_cancel"):
@@ -152,11 +137,12 @@ func _input(event):
 			if currentlyHandledMenu.has_method("OffCommand"):
 					currentlyHandledMenu.OffCommand()
 			currentlyHandledMenu = null
+			emit_signal("menu_switched",currentlyHandledMenu)
 			#return
 		else:
 			currentlyHandledMenu.input(event);
 	else:
-		if Input.is_action_pressed("ui_down"):
+		if Input.is_action_just_pressed("ui_down"):
 			
 			while true:
 				selection += 1
@@ -172,7 +158,7 @@ func _input(event):
 			selectSound.play()
 			highlightList(mainMenu,selection);
 				
-		if Input.is_action_pressed("ui_up"):
+		if Input.is_action_just_pressed("ui_up"):
 			
 			while true:
 				selection -= 1
@@ -273,6 +259,20 @@ func tweenMainMenuIn():
 	tween.start();
 	tween2.start();
 
-
-func _on_CheatCodeHandler_cheat_detected():
-	pass # Replace with function body.
+func OnCommand():
+	var t = $Tween3
+	var lim = mainMenu.get_child_count()
+	for i in range(lim):
+		var c = mainMenu.get_child(i)
+		
+		#Because godot makes no sense, setting visible will reset the rect position
+		#inside a VBoxContainer. But not modulate.
+		c.modulate=Color.transparent
+		t.interpolate_property(c,"modulate",null,Color.white,0,Tween.TRANS_CUBIC,Tween.EASE_OUT,i*.05)
+		t.interpolate_property(c,"rect_position:x",-1000,0,.5,Tween.TRANS_CUBIC,Tween.EASE_OUT,i*.05)
+	#Not working?
+	#t.interpolate_property(mainMenu,"visible",null,true,0.0)
+	#t.interpolate_property(mainMenu,"visible",null,true,0.0)
+	#print("MainMenu visible!")
+	t.start()
+	set_process_input(true)

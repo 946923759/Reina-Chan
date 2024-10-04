@@ -1,8 +1,5 @@
-[gd_scene load_steps=29 format=2]
+[gd_scene load_steps=24 format=2]
 
-[ext_resource path="res://ubuntu-font-family/MM2Font.tres" type="DynamicFont" id=1]
-[ext_resource path="res://Screens/ScreenTitleMenu/reina_logo.png" type="Texture" id=2]
-[ext_resource path="res://ubuntu-font-family/MM2Font_Smaller.tres" type="DynamicFont" id=3]
 [ext_resource path="res://Sounds/Classic/Mega Man 4 SFX (25) - Menu Help.wav" type="AudioStream" id=4]
 [ext_resource path="res://ubuntu-font-family/FallbackPixelFont.tres" type="DynamicFont" id=5]
 [ext_resource path="res://CheatCodeDetector.gd" type="Script" id=6]
@@ -11,17 +8,8 @@
 [ext_resource path="res://ubuntu-font-family/megaman_2.ttf" type="DynamicFontData" id=9]
 [ext_resource path="res://Sounds/Classic/03 - MenuSelect.wav" type="AudioStream" id=10]
 [ext_resource path="res://Sounds/Classic/37 - Chaos Emerald.ogg" type="AudioStream" id=11]
-[ext_resource path="res://ubuntu-font-family/BitmapFont.tscn" type="PackedScene" id=12]
 [ext_resource path="res://Screens/_transition/transition.tscn" type="PackedScene" id=13]
 [ext_resource path="res://Sounds/Classic/Mega Man 4 SFX (20) - Weapon Switch.wav" type="AudioStream" id=14]
-
-[sub_resource type="GDScript" id=13]
-script/source = "extends Node2D
-
-func _process(_delta):
-	var s = get_viewport().get_visible_rect().size
-	self.position = s - Vector2($BitmapSprite2.get_size().x + 5, $BitmapSprite2.get_size().y*2 + 5)
-"
 
 [sub_resource type="GDScript" id=1]
 script/source = "extends Label
@@ -54,7 +42,7 @@ func action():
 	Globals.load_stage_cutscenes()
 	
 	if Globals.load_player_game():
-		var t = get_node(\"/root/Node2D/Transition\").OnCommand(Globals.playerData.currentCharacter)
+		var t = get_node(\"../../Transition\").OnCommand(Globals.playerData.currentCharacter)
 		yield(t,\"finished\")
 		Globals.change_screen(get_tree(),\"ScreenSelectStage\")
 	else:
@@ -104,7 +92,7 @@ script/source = "extends VBoxContainer
 
 var font = preload(\"res://ubuntu-font-family/MM2Font.tres\")
 onready var parent = get_node(\"../\")
-onready var desc = get_node(\"/root/Node2D/DifficultySelect_Description\")
+onready var desc = get_node(\"../DifficultySelect_Description\")
 #var propertyToAdjust=\"gameDifficulty\"
 
 func BitmapText(d):
@@ -696,21 +684,33 @@ func mouse_input(event):
 			else:
 				parent.selectSound.play()
 			break
+
+func set_selection(new_sel:int=0):
+	if new_sel<0:
+		new_sel=0
+	elif new_sel>displayedOptions-1:
+		new_sel=displayedOptions-1
+	if new_sel != selection:
+		selection=new_sel
+		parent.selectSound.play()
+		highlightList()
+		
+		if selection < 6:
+			moveListDown()
+		else:
+			moveListUp()
+
 func input(event):
 	if event is InputEventMouseButton and event.pressed and event.button_index == 1:
 		mouse_input(event)
-	elif Input.is_action_pressed(\"ui_down\") and selection < displayedOptions-1:
-		selection+=1
-		highlightList()
-		if selection > 5:
-			moveListUp()
-		parent.selectSound.play()
-	elif Input.is_action_pressed(\"ui_up\") and selection > 0:
-		selection-=1
-		highlightList()
-		if selection < 6:
-			moveListDown()
-		parent.selectSound.play()
+	elif Input.is_action_pressed(\"ui_down\"):
+		set_selection(selection+1)
+	elif Input.is_action_pressed(\"ui_up\"):
+		set_selection(selection-1)
+	elif Input.is_action_just_pressed(\"ui_page_down\"):
+		set_selection(selection+5)
+	elif Input.is_action_just_pressed(\"ui_page_up\"):
+		set_selection(selection-5)
 	elif Input.is_action_pressed(\"ui_left\"):
 		var option = get_child(existing_children+selection).get_meta(\"opt_name\")
 		if Globals.OPTIONS[option]['type']==\"bool\":
@@ -829,92 +829,18 @@ func _on_Button_pressed():
 	self.visible=false
 "
 
-[node name="Node2D" type="Node2D"]
+[node name="MenuFrame" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
 script = ExtResource( 8 )
-nsf_music = "MM2.nsf"
-nsf_track_num = 1
-
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
-bus = "Music"
-
-[node name="logoHolder" type="Control" parent="."]
-anchor_right = 1.0
-anchor_bottom = 1.0
-rect_min_size = Vector2( 1280, 720 )
-size_flags_horizontal = 3
-
-[node name="Panel" type="ColorRect" parent="logoHolder"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-rect_min_size = Vector2( 1280, 720 )
-size_flags_horizontal = 3
-size_flags_vertical = 3
-color = Color( 0, 0, 0, 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label" type="Label" parent="logoHolder"]
-anchor_left = 0.136
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-margin_top = -230.0
-margin_bottom = -210.0
-custom_fonts/font = ExtResource( 3 )
-text = "Demo 6"
-align = 1
-
-[node name="Logo" type="TextureRect" parent="logoHolder"]
-anchor_right = 1.0
-margin_bottom = 170.0
-rect_min_size = Vector2( 640, 85 )
-size_flags_horizontal = 3
-size_flags_vertical = 8
-texture = ExtResource( 2 )
-expand = true
-stretch_mode = 6
-
-[node name="Label2" type="Label" parent="logoHolder"]
-visible = false
-margin_left = 881.259
-margin_top = 482.675
-margin_right = 1275.26
-margin_bottom = 532.675
-custom_fonts/font = ExtResource( 1 )
-text = "dumb shit"
-
-[node name="Node2D" type="Node2D" parent="logoHolder"]
-position = Vector2( 411, 667 )
-script = SubResource( 13 )
-__meta__ = {
-"_edit_group_": true
-}
-
-[node name="BitmapSprite" parent="logoHolder/Node2D" instance=ExtResource( 12 )]
-text = "            this is a free fan game!"
-wrap_at = 92233720368
-scale_by = 3
-
-[node name="BitmapSprite2" parent="logoHolder/Node2D" instance=ExtResource( 12 )]
-position = Vector2( 0, 24 )
-text = "girls' frontline is property of mica"
-wrap_at = 92233720368
-scale_by = 3
-
-[node name="VersionNum" parent="logoHolder" instance=ExtResource( 12 )]
-position = Vector2( 9, 10 )
-text = "v.2024.09.16"
-wrap_at = 92233720368
-scale_by = 3
 
 [node name="MainMenu" type="VBoxContainer" parent="."]
-anchor_top = 1.0
-anchor_bottom = 1.0
-margin_left = 35.0
-margin_top = 201.0
-margin_right = 636.0
-margin_bottom = 761.0
+anchor_top = 0.5
+anchor_bottom = 0.5
+margin_left = 20.0
+margin_top = -164.0
+margin_right = 621.0
+margin_bottom = 326.0
 focus_mode = 2
 custom_constants/separation = 30
 
@@ -1001,15 +927,14 @@ uppercase = true
 script = SubResource( 7 )
 
 [node name="DifficultySelect" type="VBoxContainer" parent="."]
-margin_left = 35.0
-margin_top = 200.0
-margin_right = 75.0
-margin_bottom = 240.0
+anchor_top = 0.5
+anchor_bottom = 0.5
+margin_left = 20.0
+margin_top = -186.0
+margin_right = 492.0
+margin_bottom = 104.0
 custom_constants/separation = 30
 script = SubResource( 8 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="DifficultySelect_Description" type="Label" parent="."]
 margin_top = 565.0
@@ -1027,24 +952,26 @@ __meta__ = {
 }
 
 [node name="Extras" type="VBoxContainer" parent="."]
-margin_left = 38.255
-margin_top = 200.0
-margin_right = 78.255
-margin_bottom = 240.0
+anchor_bottom = 1.0
+margin_top = 219.0
+margin_right = 689.0
 custom_constants/separation = 30
 script = SubResource( 10 )
 
 [node name="OptionsList" type="Node2D" parent="."]
+visible = false
 position = Vector2( 0, 200 )
 script = SubResource( 11 )
 
 [node name="Polygon2D" type="Polygon2D" parent="OptionsList"]
+visible = false
 position = Vector2( 4, -88 )
 scale = Vector2( 1, 0.36616 )
 polygon = PoolVector2Array( 0, 0, 1280, 0, 1280, 720, 0, 720 )
 vertex_colors = PoolColorArray( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1 )
 
 [node name="Polygon2D2" type="Polygon2D" parent="OptionsList"]
+visible = false
 position = Vector2( 544, 461 )
 scale = Vector2( 0.584375, 0.387182 )
 polygon = PoolVector2Array( 0, 0, 1280, 0, 1280, 720, 0, 720 )
@@ -1065,6 +992,7 @@ bus = "Player/Enemies"
 
 [node name="Continue_Sound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 14 )
+bus = "Player/Enemies"
 
 [node name="Tween" type="Tween" parent="."]
 
@@ -1102,6 +1030,7 @@ __meta__ = {
 
 [node name="AudioStreamPlayer2" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 11 )
+bus = "Music"
 script = SubResource( 12 )
 
 [node name="CheatCodeHandler" type="Node" parent="AudioStreamPlayer2"]
@@ -1113,10 +1042,11 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-margin_left = 876.0
-margin_top = 142.0
-margin_right = 1266.0
-margin_bottom = 490.0
+margin_left = -447.0
+margin_top = -242.0
+margin_bottom = 242.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 script = SubResource( 14 )
 __meta__ = {
 "_edit_group_": true
@@ -1125,21 +1055,27 @@ __meta__ = {
 [node name="VBoxContainer" type="VBoxContainer" parent="DebugPanel"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+size_flags_horizontal = 2
+size_flags_vertical = 3
 __meta__ = {
 "_edit_lock_": true
 }
 
 [node name="Button" type="Button" parent="DebugPanel/VBoxContainer"]
-margin_right = 390.0
+margin_right = 447.0
 margin_bottom = 20.0
 text = "hide panel"
 
 [node name="Transition" parent="." instance=ExtResource( 13 )]
 visible = false
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 1.0
 margin_left = 0.0
 margin_top = 0.0
-margin_right = 1280.0
-margin_bottom = 720.0
+margin_right = 0.0
+margin_bottom = 0.0
 
 [connection signal="file_selected" from="FileDialog_stage" to="Extras" method="_on_FileDialog_file_selected"]
 [connection signal="file_selected" from="FileDialog_cutscene" to="Extras" method="_on_FileDialog_cutscene_file_selected"]

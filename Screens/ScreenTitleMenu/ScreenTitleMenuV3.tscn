@@ -1,0 +1,396 @@
+[gd_scene load_steps=21 format=2]
+
+[ext_resource path="res://ubuntu-font-family/BitmapFont.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Stages_Reina/Ouroboros/bg.png" type="Texture" id=2]
+[ext_resource path="res://Screens/ScreenTitleMenu/reina_logo.png" type="Texture" id=3]
+[ext_resource path="res://Stages/NeedleManDemo/backdrop2.png" type="Texture" id=4]
+[ext_resource path="res://Stages/NeedleManDemo/backdrop.png" type="Texture" id=5]
+[ext_resource path="res://Screens/ScreenWithMenuElements.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Stages_Reina/Alchemist/castlevania interior bg 1.png" type="Texture" id=7]
+[ext_resource path="res://Stages_Reina/Alchemist/castlevania interior bg 2.png" type="Texture" id=8]
+[ext_resource path="res://Screens/ScreenTitleMenu/ScrollBG.gd" type="Script" id=9]
+[ext_resource path="res://Stages_Reina/Scarecrow/quicksand_top.png" type="Texture" id=10]
+[ext_resource path="res://ParticleEffects/PaletteSwapShader.tres" type="Material" id=11]
+[ext_resource path="res://Stages_Reina/Scarecrow/scarecrow_bg.png" type="Texture" id=12]
+[ext_resource path="res://Stages_Reina/Sangvis1/outsideBGBottom.png" type="Texture" id=13]
+[ext_resource path="res://Stages_Reina/Sangvis1/outsideBGTop.png" type="Texture" id=14]
+[ext_resource path="res://Screens/ScreenCutscene/Backgrounds/black.png" type="Texture" id=15]
+[ext_resource path="res://Screens/ScreenTitleMenu/MenuFrame.tscn" type="PackedScene" id=16]
+[ext_resource path="res://Sounds/Classic/Mega Man 4 SFX (25) - Menu Help.wav" type="AudioStream" id=17]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends \"res://Screens/ScreenWithMenuElements.gd\"
+
+export (int,\"ScreenTitleJoin\",\"ScreenTitleMenu\") var game_mode = 1
+export (float,5,30,.5) var time_before_attract_screen = 20.0
+
+export (String) var nsf_music
+export (int) var nsf_track_num = 0
+export (bool) var mute_music_in_debug = false
+
+var reinaAudioPlayer
+
+func _ready():
+	if OS.is_debug_build() and mute_music_in_debug:
+		print(\"[Debug] Not playing title screen music...\")
+	else:
+		print(\"Starting music...\")
+		reinaAudioPlayer=ReinaAudioPlayer.new(self)
+		reinaAudioPlayer.load_song(\"TitleScreen\",nsf_music,nsf_track_num)
+		print(\"Success.\")
+	
+	if game_mode == 0:
+		$MenuFrame.queue_free()
+		Globals.eventMode=true
+		$VersionNum.text = \"Event Mode\"
+	else:
+		$MenuFrame.set_process_input(false)
+		$MenuFrame.visible = false
+	
+	if true:
+		# Only needed if we're debugging this screen,
+		# But otherwise when debugging with F6 it will always land on 1
+		randomize() 
+		
+		var rand = randi() % $Backdrops.get_child_count()
+		
+		for i in range($Backdrops.get_child_count()):
+			var c = $Backdrops.get_child(i)
+			#Could also just queue free the others...
+			c.visible= (i==rand)
+			c.set_process(i==rand)
+	
+	var cameFromAttractScreen = (
+		Globals.previous_screen == \"ScreenOpening\") or (
+		Globals.previous_screen == \"ScreenDemo\"
+	)
+	#print(\"PrevScreen=\"+Globals.previous_screen)
+	if cameFromAttractScreen or game_mode == 0:
+		var tw:SceneTreeTween = get_tree().create_tween()
+		tw.tween_property($Backdrops,\"modulate\",Color(.5,.5,.5),.5).from(Color.black)
+	else:
+		#Skip the \"PRESS START\" 
+		tween_main_menu_on(false)
+	
+	if game_mode==0:
+		Globals.previous_screen=\"ScreenTitleJoin\"
+	else:
+		Globals.previous_screen=\"ScreenTitleMenu\"
+
+var elapsed:float = 0.0
+var noInputs:float = 0.0
+func _process(delta):
+	if Input.is_key_pressed(KEY_TAB):
+		delta*=4
+	
+	noInputs+=delta
+	elapsed+=delta
+	
+	if elapsed>1:
+		elapsed-=1
+	$PressStart.visible=int(elapsed*2)%2==0
+	
+	var s = get_viewport().get_visible_rect().size
+	$PressStart.position.x = s.x/2
+
+	
+	if noInputs >= time_before_attract_screen:
+		OffCommandPrevScreen()
+		set_process(false)
+
+func input_accept():
+	if game_mode == 1:
+		tween_main_menu_on()
+	else:
+		Globals.load_stage_cutscenes()
+		Globals.reset_player_data()
+		Globals.playerData.gameDifficulty=Globals.Difficulty.EASY
+		OffCommandNextScreen()
+	#	Globals.change_screen(get_tree(),\"ScreenTitleMenu\")
+
+func _input(event):
+	if is_processing():
+		if event is InputEventMouseButton:
+			if event.pressed and event.button_index==0:
+				OffCommandNextScreen()
+		elif Input.is_action_just_pressed(\"ui_accept\") or Input.is_action_just_pressed(\"ui_pause\"):
+			input_accept()
+
+func tween_main_menu_on(play_sound:bool=true):
+	set_process(false)
+	if play_sound:
+		$Confirm.play()
+
+	var tw:SceneTreeTween = get_tree().create_tween()
+	tw.set_parallel()
+	tw.tween_property($Logo,\"modulate\",Color.transparent,.25)
+	#tw.tween_property($BottomRight,\"modulate\",Color(.2,.2,.2),.25)
+	#tw.tween_property($VersionNum,\"modulate\",Color(.2,.2,.2),.25)
+	#tw.tween_property($VersionNum2,\"modulate\",Color(.2,.2,.2),.25)
+	tw.tween_property($Backdrops,\"modulate\",Color(.2,.2,.2),.25)
+	tw.tween_property($PressStart,\"visible\",false,0.0)
+	tw.tween_property($MenuFrame,\"visible\",true,0.0) #.set_delay(.3)
+	tw.tween_callback($MenuFrame,\"OnCommand\")
+
+func _on_MenuFrame_menu_switched(new_menu):
+	var t = $Tween
+	t.remove_all()
+	var c = Color.white
+	if new_menu:
+		#print(\"Menu!\")
+		c = Color.transparent
+	#else:
+	#	print(\"No menu!\")
+	t.interpolate_property($BottomRight, 'modulate', null, c, .1);
+	t.interpolate_property($VersionNum, 'modulate', null, c, .1);
+	t.interpolate_property($VersionNum2, 'modulate', null, c, .1);
+	t.start()
+"
+
+[sub_resource type="GDScript" id=3]
+script/source = "extends Sprite
+
+export(float,0, 1.0) var saturation = .2
+export(float,0, 1.0) var value = .2
+
+var color:float = 0.0
+func _process(delta):
+	get_material().set_shader_param(\"clr1\", Color.from_hsv(color,saturation,value))
+	color+=delta*.1
+	if color>360:
+		color=0
+
+	if Input.is_key_pressed(KEY_TAB):
+		delta*=4
+	position.x-=delta*40.0
+	position.y-=delta*10.0
+"
+
+[sub_resource type="GDScript" id=2]
+script/source = "extends Node2D
+
+func _process(_delta):
+	var s = get_viewport().get_visible_rect().size
+	self.position = s - Vector2($BitmapSprite2.get_size().x + 5, $BitmapSprite2.get_size().y*3 + 5)
+"
+
+[node name="ScreenTitleMenu_v3" instance=ExtResource( 6 )]
+script = SubResource( 1 )
+PrevScreen = "ScreenOpening"
+NextScreen = "ScreenSelectStage"
+HandlePhysicalBButton = false
+game_mode = 1
+time_before_attract_screen = 20.0
+nsf_music = "MM2.nsf"
+nsf_track_num = 1
+mute_music_in_debug = true
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." index="0"]
+
+[node name="ColorRect2" type="ColorRect" parent="." index="1"]
+visible = false
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = -640.0
+margin_top = -360.0
+margin_bottom = 360.0
+color = Color( 0.372549, 0, 0, 1 )
+
+[node name="ColorRect" type="ColorRect" parent="." index="2"]
+visible = false
+anchor_top = 0.5
+anchor_bottom = 0.5
+margin_top = -360.0
+margin_right = 640.0
+margin_bottom = 360.0
+color = Color( 0.513726, 0, 0, 1 )
+
+[node name="Backdrops" type="Node2D" parent="." index="3"]
+
+[node name="Backdrop" type="Node2D" parent="Backdrops" index="0"]
+visible = false
+scale = Vector2( 4, 4 )
+script = ExtResource( 9 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Sprite5" type="Sprite" parent="Backdrops/Backdrop" index="0"]
+texture = ExtResource( 4 )
+centered = false
+offset = Vector2( 0, -8 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 752, 192 )
+
+[node name="Sprite4" type="Sprite" parent="Backdrops/Backdrop" index="1"]
+texture = ExtResource( 5 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 0, 0, 752, 192 )
+
+[node name="Backdrop2" type="Node2D" parent="Backdrops" index="1"]
+scale = Vector2( 4, 4 )
+script = ExtResource( 9 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Sprite5" type="Sprite" parent="Backdrops/Backdrop2" index="0"]
+texture = ExtResource( 7 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 0, 0, 752, 192 )
+
+[node name="Sprite6" type="Sprite" parent="Backdrops/Backdrop2" index="1"]
+texture = ExtResource( 8 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 0, 0, 704, 192 )
+
+[node name="Backdrop3" type="Sprite" parent="Backdrops" index="2"]
+visible = false
+material = ExtResource( 11 )
+scale = Vector2( 4, 4 )
+texture = ExtResource( 2 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 0, 0, 5760, 2160 )
+script = SubResource( 3 )
+saturation = 0.3
+value = 0.3
+
+[node name="Node2D" type="Node2D" parent="Backdrops" index="3"]
+visible = false
+script = ExtResource( 9 )
+
+[node name="Sprite" type="Sprite" parent="Backdrops/Node2D" index="0"]
+scale = Vector2( 4, 4 )
+texture = ExtResource( 12 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 0, 0, 832, 192 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Sprite2" type="Sprite" parent="Backdrops/Node2D" index="1"]
+position = Vector2( 0, 760 )
+scale = Vector2( 4, 4 )
+texture = ExtResource( 10 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 0, 16, 704, 16 )
+
+[node name="Node2D2" type="Node2D" parent="Backdrops" index="4"]
+visible = false
+script = ExtResource( 9 )
+obj1_scroll_speed = 1.0
+obj2_scroll_speed = 16.0
+
+[node name="Sprite3" type="Sprite" parent="Backdrops/Node2D2" index="0"]
+scale = Vector2( 4, 4 )
+z_index = -1
+texture = ExtResource( 14 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 0, 0, 704, 64 )
+
+[node name="Sprite2" type="Sprite" parent="Backdrops/Node2D2" index="1"]
+position = Vector2( 0, 368 )
+scale = Vector2( 4, 4 )
+z_index = -1
+texture = ExtResource( 13 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 0, 0, 1024, 96 )
+
+[node name="Sprite" type="Sprite" parent="Backdrops/Node2D2" index="2"]
+scale = Vector2( 50, 50 )
+z_index = -2
+z_as_relative = false
+texture = ExtResource( 15 )
+centered = false
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="VersionNum" parent="." index="4" instance=ExtResource( 1 )]
+position = Vector2( 9, 10 )
+text = "demo 6"
+wrap_at = 92233720368
+scale_by = 3
+
+[node name="VersionNum2" parent="." index="5" instance=ExtResource( 1 )]
+position = Vector2( 9, 42 )
+text = "v.2024.10.01"
+wrap_at = 92233720368
+scale_by = 3
+
+[node name="BottomRight" type="Node2D" parent="." index="6"]
+position = Vector2( 411, 667 )
+script = SubResource( 2 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="BitmapSprite3" parent="BottomRight" index="0" instance=ExtResource( 1 )]
+text = "                    created by micom"
+wrap_at = 92233720368
+scale_by = 3
+
+[node name="BitmapSprite" parent="BottomRight" index="1" instance=ExtResource( 1 )]
+position = Vector2( 0, 24 )
+text = "            this is a free fan game!"
+wrap_at = 92233720368
+scale_by = 3
+
+[node name="BitmapSprite2" parent="BottomRight" index="2" instance=ExtResource( 1 )]
+position = Vector2( 0, 48 )
+text = "girls' frontline is property of mica"
+wrap_at = 92233720368
+scale_by = 3
+
+[node name="MenuFrame" parent="." index="7" instance=ExtResource( 16 )]
+
+[node name="Logo" type="TextureRect" parent="." index="8"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -500.0
+margin_top = -300.0
+margin_right = 500.0
+margin_bottom = 300.0
+mouse_filter = 2
+texture = ExtResource( 3 )
+stretch_mode = 6
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="PressStart" parent="." index="9" instance=ExtResource( 1 )]
+position = Vector2( 640, 520 )
+text = "press start"
+wrap_at = 92233720368
+scale_by = 4
+alignment = 1
+
+[node name="Label" type="Label" parent="." index="11"]
+visible = false
+anchor_top = 0.5
+anchor_bottom = 0.5
+margin_top = -7.0
+margin_right = 118.0
+margin_bottom = 7.0
+text = "asdadasdadasdasd"
+
+[node name="Tween" type="Tween" parent="." index="12"]
+
+[node name="Confirm" type="AudioStreamPlayer" parent="." index="13"]
+stream = ExtResource( 17 )
+volume_db = 4.0
+bus = "Player/Enemies"
+
+[connection signal="menu_switched" from="MenuFrame" to="." method="_on_MenuFrame_menu_switched"]

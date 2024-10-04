@@ -12,7 +12,9 @@
 a = Vector2( -128, 0 )
 b = Vector2( 128, 0 )
 
-[node name="CharActor" type="Node2D"]
+[node name="CharActor" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
 script = ExtResource( 6 )
 text_bg_color = Color( 0.458824, 0, 0.462745, 1 )
 bossToLoad = ExtResource( 7 )
@@ -29,36 +31,40 @@ __meta__ = {
 "_edit_lock_": true
 }
 
-[node name="Polygon2D4" type="Polygon2D" parent="."]
-position = Vector2( 0, 173 )
+[node name="Polygon2D4" type="ColorRect" parent="."]
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_top = -200.0
+margin_bottom = -140.0
+rect_min_size = Vector2( 1280, 60 )
 color = Color( 0.458824, 0, 0.462745, 1 )
-offset = Vector2( 0, -13 )
-polygon = PoolVector2Array( 0, 0, 1280, 0, 1280, 60, 0, 60 )
 __meta__ = {
-"_edit_group_": true,
-"_edit_lock_": true
+"_edit_group_": true
 }
 
 [node name="FakeZText" parent="Polygon2D4" instance=ExtResource( 1 )]
 material = ExtResource( 4 )
-position = Vector2( 20, 0 )
+position = Vector2( 20, 15 )
 text = "ouroboros ouroboros ouroboros ouroboros ouroboros"
 wrap_at = 500
 scale_by = 4
 
-[node name="Polygon2D5" type="Polygon2D" parent="."]
-position = Vector2( 0, 542 )
+[node name="Polygon2D5" type="ColorRect" parent="."]
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_top = 140.0
+margin_bottom = 200.0
+rect_min_size = Vector2( 1280, 60 )
 color = Color( 0.458824, 0, 0.462745, 1 )
-offset = Vector2( 0, -13 )
-polygon = PoolVector2Array( 0, 0, 1280, 0, 1280, 60, 0, 60 )
 __meta__ = {
-"_edit_group_": true,
-"_edit_lock_": true
+"_edit_group_": true
 }
 
 [node name="FakeZText" parent="Polygon2D5" instance=ExtResource( 1 )]
 material = ExtResource( 4 )
-position = Vector2( 20, 0 )
+position = Vector2( 20, 15 )
 __meta__ = {
 "_edit_group_": true
 }
@@ -66,13 +72,16 @@ text = "ouroboros ouroboros ouroboros ouroboros ouroboros"
 wrap_at = 500
 scale_by = 4
 
-[node name="CenterBG" type="Polygon2D" parent="."]
-position = Vector2( 0, 240 )
+[node name="CenterBG" type="ColorRect" parent="."]
+anchor_top = 0.333
+anchor_right = 1.0
+anchor_bottom = 0.667
+margin_top = 0.23999
+margin_bottom = -0.240051
+rect_min_size = Vector2( 1280, 240 )
+rect_pivot_offset = Vector2( 0, 120 )
+size_flags_horizontal = 3
 color = Color( 0.0196078, 0, 0.635294, 1 )
-polygon = PoolVector2Array( 0, 0, 1280, 0, 1280, 240, 0, 240 )
-__meta__ = {
-"_edit_lock_": true
-}
 
 [node name="BossSpriteLoader" type="Node2D" parent="."]
 position = Vector2( 968, 360 )

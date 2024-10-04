@@ -118,6 +118,11 @@ func playBossMusic(_unused):
 		return
 	reinaAudioPlayer.load_song("Boss","Rockman 6 UH.nsf",30)
 
+# null this out, bosses call it if the stage doesn't get finished but 
+# There's already a music handler in this stage
+func playMusic_2():
+	pass
+	
 func fadeMusic():
 	print("Got FadeMusic command")
 	reinaAudioPlayer.fade_music(2)

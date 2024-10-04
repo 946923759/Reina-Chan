@@ -52,6 +52,7 @@ func _input(_event):
 
 func OffCommandNextScreen(ns:String=NextScreen)->bool:
 	if ns != "":
+		set_process_input(false)
 		fadeOut.OffCommand(ns)
 		return true
 	elif ThisScreenIsAnOverlay:
@@ -62,6 +63,7 @@ func OffCommandNextScreen(ns:String=NextScreen)->bool:
 
 func OffCommandPrevScreen()->bool:
 	if PrevScreen != "":
+		set_process_input(false)
 		fadeOut.OffCommand(PrevScreen)
 		return true
 	elif ThisScreenIsAnOverlay:

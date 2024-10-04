@@ -122,7 +122,8 @@ func playBossMusic(_isM16:bool=false):
 
 func playMusic(cdAudioFileName:String,nsfAudioFileName:String,nsfAudioTrack:int=0):
 	reinaAudioPlayer.load_song(cdAudioFileName,nsfAudioFileName,nsfAudioTrack)
-	
+
+#This is the same thing as the first function but it pulls values from the exported vars instead of taking any arguments
 func playMusic_2():
 	if OS.is_debug_build() and mute_music_in_debug:
 		return
