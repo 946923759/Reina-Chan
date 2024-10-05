@@ -439,6 +439,11 @@ func get_input(delta):
 		idleTimer+=delta
 		if idleTimer>=10.0 and $Idle.visible==false:
 			$Idle.init()
+		#Reset the game if left idle for 3 minutes.
+		elif Globals.eventMode and idleTimer >= 180.0:
+			set_process(false)
+			Globals.change_screen(get_tree(), "ScreenOpening")
+			return
 		
 	#All this shit is copypasted from the example platformer so I have no idea how it works
 	# A good idea when implementing characters of all kinds,

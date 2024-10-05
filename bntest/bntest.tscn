@@ -15,6 +15,7 @@ position = Vector2( 128, 192 )
 [node name="Panel" type="Node2D" parent="Stage"]
 scale = Vector2( 4, 4 )
 script = ExtResource( 2 )
+state = 6
 
 [node name="Panel2" type="Node2D" parent="Stage"]
 position = Vector2( 160, 0 )
@@ -112,6 +113,9 @@ playerSide = 1
 
 [node name="Characters" type="Node2D" parent="."]
 position = Vector2( 128, 192 )
+__meta__ = {
+"_edit_lock_": true
+}
 
 [node name="Player" parent="Characters" instance=ExtResource( 1 )]
 position = Vector2( 672, -224 )

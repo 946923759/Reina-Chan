@@ -1,10 +1,27 @@
 extends Node2D
 
-var lifeMax:int = 3000
-var curHP=lifeMax
-export(Vector2) var charaPos=Vector2(0,0)
+#For base class (God why am I using godot for this)
+enum OBJECT_TYPE {
+	PLAYER,
+	CPU_PLAYER, #Navis and similar
+	ENEMY,
+	IMMOVABLE_OBJECT #Rocks, Cubes
+}
+
+export(Vector2) var charaPos=Vector2(0,0) setget set_pos
 var platformCenter:Vector2
 export(bool) var leftSide=true
+
+#Inherit these and change
+var type = OBJECT_TYPE.PLAYER
+const maximum_health:int = 3000
+var health:int=maximum_health setget set_health
+
+#Base PLAYER/CPU_PLAYER stuff I guess
+const MOVEMENT_COOLDOWN = 0.15
+var chipsInHand = [] #lol lmao
+
+#ONLY FOR PLAYER CLASS!!
 export(int) var PN = 0
 export(NodePath) var target_hp_display
 
@@ -12,27 +29,37 @@ var INPUT = load("res://Player Files/8bitPlayer/INPUTMAN.gd")
 
 onready var sprite:AnimatedSprite = $AnimatedSprite
 
-func setPos():
+func set_pos(new_pos):
+	
+	if charaPos != new_pos:
+		movement_cooldown = MOVEMENT_COOLDOWN
+		charaPos = new_pos
 	position=platformCenter+Vector2(charaPos.x*160,charaPos.y*96)
 
 func _ready():
 	sprite.flip_h = !leftSide
 	sprite.connect("animation_finished",sprite,"play",["default"])
+	sprite.play('default')
 	
 func init(platformCenter:Vector2):
 	self.platformCenter=platformCenter
-	setPos()
+	set_pos(charaPos)
 	if target_hp_display:
-		get_node(target_hp_display).text = String(curHP)
+		get_node(target_hp_display).text = String(health)
 
-func apply_damage(damage_amount:int=0, attacker:Node2D=null):
+func set_health(h:int):
+	health = h
+	if target_hp_display:
+		get_node(target_hp_display).text = String(health)
+
+#apply_hitstun is not necessary, directly subtracting health will trigger set_health?
+func apply_damage(damage_amount:int=0, attacker:Node2D=null, apply_hitstun:bool=true):
 	$hurt.play()
 	sprite.play('hurt')
 	sprite.frame=0
 	hurt_cooldown=.3
-	curHP-=damage_amount
-	if target_hp_display:
-		get_node(target_hp_display).text = String(curHP)
+	#health-=damage_amount
+	set_health(health-damage_amount)
 
 var shoothold:float = 0.0
 var playcharge = false
@@ -62,28 +89,26 @@ func get_input(delta):
 			
 	#TODO: CHECK OBSTACLES!!
 	if movement_cooldown <= 0.0:
-		var origCharaPos = charaPos
+		var newCharaPos = charaPos
 		if Input.is_action_pressed(INPUT.UP[PN]):
-			if charaPos.y>0:
-				charaPos.y-=1
+			if newCharaPos.y>0:
+				newCharaPos.y-=1
 		elif Input.is_action_pressed(INPUT.DOWN[PN]):
-			if charaPos.y<2:
-				charaPos.y+=1
+			if newCharaPos.y<2:
+				newCharaPos.y+=1
 		elif Input.is_action_pressed(INPUT.RIGHT[PN]):
 			if leftSide and charaPos.x<2:
-				charaPos.x+=1
+				newCharaPos.x+=1
 			elif !leftSide and charaPos.x<5:
-				charaPos.x+=1
+				newCharaPos.x+=1
 		elif Input.is_action_pressed(INPUT.LEFT[PN]):
 			if leftSide and charaPos.x>0:
-				charaPos.x-=1
+				newCharaPos.x-=1
 			elif !leftSide and charaPos.x > 3:
-				charaPos.x-=1
+				newCharaPos.x-=1
 		else:
 			return
-		if charaPos != origCharaPos:
-			movement_cooldown = 0.15
-			setPos()
+		set_pos(newCharaPos)
 		#print(position)
 	
 
@@ -104,3 +129,4 @@ func attack_default():
 		var o = root.get_obj_at_pos(Vector2(i,charaPos.y))
 		if o:
 			o.apply_damage(1)
+			break

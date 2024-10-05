@@ -94,6 +94,11 @@ func unlock_lol():
 [sub_resource type="VisualScriptFunction" id=14]
 resource_name = "_ready"
 
+[sub_resource type="VisualScriptFunction" id=15]
+resource_name = "test"
+
+[sub_resource type="VisualScriptReturn" id=16]
+
 [sub_resource type="VisualScriptFunctionCall" id=17]
 base_type = "Node"
 argument_cache = {
@@ -187,11 +192,6 @@ argument_cache = {
 function = "instance"
 use_default_args = 0
 
-[sub_resource type="VisualScriptFunction" id=15]
-resource_name = "test"
-
-[sub_resource type="VisualScriptReturn" id=16]
-
 [sub_resource type="VisualScript" id=13]
 data = {
 "base_type": "Node",
@@ -203,19 +203,19 @@ data = {
 "scroll": Vector2( -50, -100 ),
 "sequence_connections": [  ]
 }, {
-"data_connections": [ 1, 0, 2, 0, 2, 0, 3, 0, 4, 0, 5, 0, 5, 1, 3, 1 ],
-"function_id": -1,
-"name": "f_312843592",
-"nodes": [ 1, Vector2( 820, 60 ), SubResource( 17 ), 2, Vector2( 1060, 0 ), SubResource( 18 ), 3, Vector2( 1720, 0 ), SubResource( 19 ), 4, Vector2( 980, -140 ), SubResource( 20 ), 5, Vector2( 1420, -160 ), SubResource( 21 ) ],
-"scroll": Vector2( 894, -337 ),
-"sequence_connections": [ 2, 0, 3 ]
-}, {
 "data_connections": [  ],
 "function_id": 0,
 "name": "test",
 "nodes": [ 0, Vector2( 560, -20 ), SubResource( 15 ), 6, Vector2( 700, -20 ), SubResource( 16 ) ],
 "scroll": Vector2( -50, -100 ),
 "sequence_connections": [ 0, 0, 6 ]
+}, {
+"data_connections": [ 1, 0, 2, 0, 2, 0, 3, 0, 4, 0, 5, 0, 5, 1, 3, 1 ],
+"function_id": -1,
+"name": "f_312843592",
+"nodes": [ 1, Vector2( 820, 60 ), SubResource( 17 ), 2, Vector2( 1060, 0 ), SubResource( 18 ), 3, Vector2( 1720, 0 ), SubResource( 19 ), 4, Vector2( 980, -140 ), SubResource( 20 ), 5, Vector2( 1420, -160 ), SubResource( 21 ) ],
+"scroll": Vector2( 894, -337 ),
+"sequence_connections": [ 2, 0, 3 ]
 } ],
 "is_tool_script": false,
 "signals": [  ],
@@ -1457,7 +1457,6 @@ anims/default = SubResource( 27 )
 
 [node name="Scarecrow" parent="140-108 Boss Room/WARNING intro" index="4" instance=ExtResource( 29 )]
 position = Vector2( 736, -32 )
-collision_layer = 2
 collision_mask = 2
 intro_subtitle_key = "Scarecrow_Intro"
 

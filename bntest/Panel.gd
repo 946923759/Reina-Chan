@@ -22,7 +22,12 @@ private const int bandtanimation = 3;
 private const int thunderwait = 100;
 private const int defaulttime = 180;
 """
+
 var flashtime:int=0 #WHAT DOES IT DO???
+
+#Makes the panels flash, I think when appearing?
+var flashing:bool=false;
+
 var noRender:bool=false
 var playAnimation:bool=false
 var animeChange:bool=false
@@ -47,7 +52,6 @@ var breakCooldown:int = 0;
 # I don't have a better description for it but
 # the game flashes between broken and the normal state when being repaired
 var showingRepaired:bool=false; 
-var flashing:bool=false; #WHAT DOES IT MEAN?
 
 
 var panelPos:Vector2
@@ -234,6 +238,14 @@ func _process(delta):
 					animReversed = false;
 				elif curAnimationFrame >= 2:
 					animReversed = true;
+					
+				
+				var o = stage.get_obj_at_pos(panelPos)
+				# TODO: Only apply damage to human/cpu objects
+				# cubes and rocks don't take poison damage
+				# objects with aura don't take poison damage
+				if o:
+					o.health -= 1
 				
 		PANEL.burner,PANEL.thunder:
 			#Not implemented lol!!!!!!!!!
