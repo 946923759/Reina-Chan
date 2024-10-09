@@ -1,132 +1,194 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://bntest/Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://bntest/Panel.gd" type="Script" id=2]
 [ext_resource path="res://ubuntu-font-family/BitmapFont.tscn" type="PackedScene" id=3]
+[ext_resource path="res://ParticleEffects/PaletteSwapShader.tres" type="Material" id=4]
+[ext_resource path="res://Stages_Reina/Ouroboros/bg.png" type="Texture" id=5]
+[ext_resource path="res://bntest/EntityCube.tscn" type="PackedScene" id=6]
 [ext_resource path="res://bntest/bnStage.gd" type="Script" id=29]
 [ext_resource path="res://Screens/ScreenCutscene/TextFont.tres" type="DynamicFont" id=43]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Sprite
+
+export(float,0, 1.0, .05) var saturation = .2
+export(float,0, 1.0, .05) var value = .2
+export(float,.1,1.0, .05) var speed = .1
+
+export(float,1,80,.5) var obj1_scroll_speed = 10.0
+export(float,1,80,.5) var obj2_scroll_speed = 40.0
+
+var color:float = 0.0
+func _process(delta):
+	get_material().set_shader_param(\"clr1\", Color.from_hsv(color,saturation,value))
+	color+=delta*speed
+	if color > 360.0:
+		color-=360.0
+
+	if Input.is_key_pressed(KEY_TAB):
+		delta*=4
+	position.x-=delta*obj2_scroll_speed
+	position.y-=delta*obj1_scroll_speed
+
+	if position.x <= -16*32:
+		#print(\"reset\")
+		position.x += 16*32
+		
+	if position.y < -16 * 32:
+		position.y += 16*32
+"
 
 [node name="StageRoot" type="Node2D"]
 script = ExtResource( 29 )
 
-[node name="Stage" type="Node2D" parent="."]
-position = Vector2( 128, 192 )
+[node name="BackdropOuroboros" type="Sprite" parent="."]
+material = ExtResource( 4 )
+scale = Vector2( 4, 4 )
+z_index = -2
+texture = ExtResource( 5 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 0, 0, 5760, 2160 )
+script = SubResource( 1 )
+saturation = 0.35
+speed = 0.2
+obj1_scroll_speed = 30.0
+obj2_scroll_speed = 60.0
 
-[node name="Panel" type="Node2D" parent="Stage"]
+[node name="Stage" type="Node2D" parent="."]
+position = Vector2( 160, 192 )
+
+[node name="AllPanels" type="Node2D" parent="Stage"]
+__meta__ = {
+"_edit_group_": true,
+"_edit_lock_": true
+}
+
+[node name="Panel" type="Node2D" parent="Stage/AllPanels"]
+scale = Vector2( 4, 4 )
+script = ExtResource( 2 )
+
+[node name="Panel2" type="Node2D" parent="Stage/AllPanels"]
+position = Vector2( 160, 0 )
 scale = Vector2( 4, 4 )
 script = ExtResource( 2 )
 state = 6
 
-[node name="Panel2" type="Node2D" parent="Stage"]
-position = Vector2( 160, 0 )
-scale = Vector2( 4, 4 )
-script = ExtResource( 2 )
-
-[node name="Panel3" type="Node2D" parent="Stage"]
+[node name="Panel3" type="Node2D" parent="Stage/AllPanels"]
 position = Vector2( 320, 0 )
 scale = Vector2( 4, 4 )
 script = ExtResource( 2 )
 
-[node name="Panel4" type="Node2D" parent="Stage"]
+[node name="Panel4" type="Node2D" parent="Stage/AllPanels"]
 position = Vector2( 0, 96 )
 scale = Vector2( 4, 4 )
 script = ExtResource( 2 )
 
-[node name="Panel5" type="Node2D" parent="Stage"]
+[node name="Panel5" type="Node2D" parent="Stage/AllPanels"]
 position = Vector2( 160, 96 )
 scale = Vector2( 4, 4 )
 script = ExtResource( 2 )
 
-[node name="Panel6" type="Node2D" parent="Stage"]
+[node name="Panel6" type="Node2D" parent="Stage/AllPanels"]
 position = Vector2( 320, 96 )
 scale = Vector2( 4, 4 )
 script = ExtResource( 2 )
 
-[node name="Panel7" type="Node2D" parent="Stage"]
+[node name="Panel7" type="Node2D" parent="Stage/AllPanels"]
 position = Vector2( 0, 192 )
 scale = Vector2( 4, 4 )
 script = ExtResource( 2 )
 
-[node name="Panel8" type="Node2D" parent="Stage"]
+[node name="Panel8" type="Node2D" parent="Stage/AllPanels"]
 position = Vector2( 160, 192 )
 scale = Vector2( 4, 4 )
 script = ExtResource( 2 )
 
-[node name="Panel9" type="Node2D" parent="Stage"]
+[node name="Panel9" type="Node2D" parent="Stage/AllPanels"]
 position = Vector2( 320, 192 )
 scale = Vector2( 4, 4 )
 script = ExtResource( 2 )
 
-[node name="Panel10" type="Node2D" parent="Stage"]
+[node name="Panel10" type="Node2D" parent="Stage/AllPanels"]
 position = Vector2( 480, 0 )
 scale = Vector2( 4, 4 )
 script = ExtResource( 2 )
 playerSide = 1
 
-[node name="Panel11" type="Node2D" parent="Stage"]
+[node name="Panel11" type="Node2D" parent="Stage/AllPanels"]
 position = Vector2( 640, 0 )
 scale = Vector2( 4, 4 )
 script = ExtResource( 2 )
 playerSide = 1
 
-[node name="Panel12" type="Node2D" parent="Stage"]
+[node name="Panel12" type="Node2D" parent="Stage/AllPanels"]
 position = Vector2( 800, 0 )
 scale = Vector2( 4, 4 )
 script = ExtResource( 2 )
 playerSide = 1
 
-[node name="Panel13" type="Node2D" parent="Stage"]
+[node name="Panel13" type="Node2D" parent="Stage/AllPanels"]
 position = Vector2( 480, 96 )
 scale = Vector2( 4, 4 )
 script = ExtResource( 2 )
 playerSide = 1
 
-[node name="Panel14" type="Node2D" parent="Stage"]
+[node name="Panel14" type="Node2D" parent="Stage/AllPanels"]
 position = Vector2( 640, 96 )
 scale = Vector2( 4, 4 )
 script = ExtResource( 2 )
 playerSide = 1
 
-[node name="Panel15" type="Node2D" parent="Stage"]
+[node name="Panel15" type="Node2D" parent="Stage/AllPanels"]
 position = Vector2( 800, 96 )
 scale = Vector2( 4, 4 )
 script = ExtResource( 2 )
 playerSide = 1
 
-[node name="Panel16" type="Node2D" parent="Stage"]
+[node name="Panel16" type="Node2D" parent="Stage/AllPanels"]
 position = Vector2( 480, 192 )
 scale = Vector2( 4, 4 )
 script = ExtResource( 2 )
 playerSide = 1
 
-[node name="Panel17" type="Node2D" parent="Stage"]
+[node name="Panel17" type="Node2D" parent="Stage/AllPanels"]
 position = Vector2( 640, 192 )
 scale = Vector2( 4, 4 )
 script = ExtResource( 2 )
 playerSide = 1
 
-[node name="Panel18" type="Node2D" parent="Stage"]
+[node name="Panel18" type="Node2D" parent="Stage/AllPanels"]
 position = Vector2( 800, 192 )
 scale = Vector2( 4, 4 )
 script = ExtResource( 2 )
 playerSide = 1
 
-[node name="Characters" type="Node2D" parent="."]
-position = Vector2( 128, 192 )
+[node name="AllEntities" type="Node2D" parent="Stage"]
+position = Vector2( 80, -12 )
 __meta__ = {
 "_edit_lock_": true
 }
 
-[node name="Player" parent="Characters" instance=ExtResource( 1 )]
-position = Vector2( 672, -224 )
-target_hp_display = NodePath("../../hpDisp1")
+[node name="Player" parent="Stage/AllEntities" instance=ExtResource( 1 )]
+target_hp_display = NodePath("../../../hpDisp1")
+target_chip_display = NodePath("../../../BitmapFont")
 
-[node name="Player2" parent="Characters" instance=ExtResource( 1 )]
-position = Vector2( 992, 0 )
+[node name="Player2" parent="Stage/AllEntities" instance=ExtResource( 1 )]
+position = Vector2( 640, 32 )
 charaPos = Vector2( 4, 1 )
-leftSide = false
+facing = -1
+maximum_health = 100
 PN = 1
-target_hp_display = NodePath("../../hpDisp2")
+target_hp_display = NodePath("../../../hpDisp2")
+
+[node name="Cube" parent="Stage/AllEntities" instance=ExtResource( 6 )]
+
+[node name="AttackQueue" type="Node2D" parent="Stage"]
+z_index = 1
+__meta__ = {
+"_edit_lock_": true
+}
 
 [node name="Label" type="Label" parent="."]
 visible = false
@@ -143,3 +205,9 @@ text = "100"
 [node name="hpDisp2" parent="." instance=ExtResource( 3 )]
 position = Vector2( 1071, 13 )
 text = "100"
+
+[node name="BitmapFont" parent="." instance=ExtResource( 3 )]
+position = Vector2( 20, 660 )
+text = "chip display"
+wrap_at = 500
+scale_by = 5

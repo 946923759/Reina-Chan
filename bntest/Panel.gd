@@ -1,6 +1,9 @@
 tool
 extends Node2D
 
+#The real size, not the scaled one!
+var PANEL_SIZE = Vector2(40,32)
+
 enum PANEL {
 	normal=0,
 	cracked, #It breaks after you step off it
@@ -15,7 +18,12 @@ enum PANEL {
 	none,    #This panel doesn't exist
 }
 
-var bright:bool=false #If there is an attack on top of this panel
+enum BRIGHT {
+	NONE,
+	NORMAL, #If there is an attack on top of this panel
+	DEBUG_HITBOXES #Draw red to display hitboxes
+}
+var bright:int=BRIGHT.NONE
 """
 private const int poisonanimation = 10;
 private const int bandtanimation = 3;
@@ -54,19 +62,39 @@ var breakCooldown:int = 0;
 var showingRepaired:bool=false; 
 
 
-var panelPos:Vector2
+var panelPos:Vector2 setget set_panelPos
 var stage:Node2D
 var characters:Node2D
-	
+
+var debugDisp_actor = preload("res://ubuntu-font-family/BitmapFont.tscn")
+var debugDisp
+
 func _ready():
 	if Engine.editor_hint:
 		#set_process(true)
 		return
-	stage = get_parent().get_parent()
-	characters = stage.get_node("Characters")
+	stage = get_node("/root/StageRoot")
+	characters = stage.get_node("Stage/AllEntities")
 	set_process(true)
-func init(panelPos:Vector2):
-	self.panelPos = panelPos
+	debugDisp = debugDisp_actor.instance()
+	debugDisp.scale_by=1
+	add_child(debugDisp)
+	set_panelPos(panelPos)
+	
+func init(stageRef:Node2D, panelPos:Vector2):
+	print("init!")
+	set_panelPos(panelPos)
+	stage = stageRef
+	characters = stage.get_node("Characters")
+
+func set_panelPos(i:Vector2):
+	panelPos=i
+	debugDisp.text = String(panelPos.x)+"x"+String(panelPos.y)
+
+func get_center_pos()->Vector2:
+	return position+Vector2(40*2-3,-10)
+
+
 
 var s = preload("res://bntest/Panels.png")
 func _draw():
@@ -114,11 +142,21 @@ func _draw():
 			#	Rect2(40*num,state*32,40,32),
 			#	false
 			#)
-	if bright: #Draw highlight
-		draw_texture_rect(s,
-			Rect2(200,0,40,32),
-			false
-		)
+	if bright:
+		match bright:
+			BRIGHT.NORMAL:
+				#draw_rect(Rect2(Vector2(0,0),PANEL_SIZE),Color.yellow)
+				draw_texture_rect_region(
+					s,
+					Rect2(0,0,40,24),
+					Rect2(200,0,40,24)
+				)
+			BRIGHT.DEBUG_HITBOXES:
+				draw_rect(Rect2(Vector2(0,0),PANEL_SIZE),Color.red)
+		# Chip will continuously set bright. 
+		# We need to cancel every frame in case it gets inturrupted
+		bright=false
+		
 	#tex, dest, source
 	#Rect2 = x,y,width,height
 	#draw_texture_rect_region(s,
@@ -255,19 +293,19 @@ func _process(delta):
 	update()
 	return
 	
-	if breakCooldown > 0:
-		if state == PANEL.broken: # && !this.parent.blackOut
-			breakCooldown-=1;
-			if breakCooldown < 180 && breakCooldown % 3 == 0:
-				showingRepaired = !showingRepaired;
-			if breakCooldown > 0:
-				return;
-			state = PANEL.normal;
-		else:
-			breakCooldown=0
-	else:
-		if state != PANEL.broken:
-			return
-		breakCooldown=BREAK_COOLDOWN_LEN
-		showingRepaired = false;
-	update()
+#	if breakCooldown > 0:
+#		if state == PANEL.broken: # && !this.parent.blackOut
+#			breakCooldown-=1;
+#			if breakCooldown < 180 && breakCooldown % 3 == 0:
+#				showingRepaired = !showingRepaired;
+#			if breakCooldown > 0:
+#				return;
+#			state = PANEL.normal;
+#		else:
+#			breakCooldown=0
+#	else:
+#		if state != PANEL.broken:
+#			return
+#		breakCooldown=BREAK_COOLDOWN_LEN
+#		showingRepaired = false;
+#	update()

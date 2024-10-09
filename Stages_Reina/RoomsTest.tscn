@@ -15,12 +15,20 @@ tile_data = PoolIntArray( -1, 0, 0, -65536, 0, 0, -65535, 0, 0, -65534, 0, 0, -6
 
 [node name="CameraAdjuster" parent="." index="4" instance=ExtResource( 2 )]
 position = Vector2( 1280, 320 )
+auto_adjust_bounds = 2
 leftBound = 20
-topBound = -999
+topBound = -9998
 rightBound = 40
-bottomBound = 12
+bottomBound = -9998
 
 [node name="Door" parent="." index="5" instance=ExtResource( 3 )]
 position = Vector2( 2496, 448 )
 topBound = -999
 bottomBound = 12
+
+[node name="PlayerHolder" parent="." index="6"]
+position = Vector2( 160, 576 )
+player_to_spawn_in_debug = 2
+
+[node name="CanvasLayer" parent="." index="8"]
+visible = false

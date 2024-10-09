@@ -658,6 +658,10 @@ gameplay_dash={
 translations=PoolStringArray(  )
 locale_filter=[ 0, [ "en" ] ]
 
+[mono]
+
+project/assembly_name="Reina-Chan"
+
 [rendering]
 
 quality/driver/driver_name="GLES2"

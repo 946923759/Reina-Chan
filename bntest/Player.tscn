@@ -1,4 +1,4 @@
-[gd_scene load_steps=103 format=2]
+[gd_scene load_steps=166 format=2]
 
 [ext_resource path="res://bntest/shoot/vz61_attack_25_001.png" type="Texture" id=1]
 [ext_resource path="res://bntest/shoot/vz61_attack_25_000.png" type="Texture" id=2]
@@ -6,52 +6,52 @@
 [ext_resource path="res://bntest/shoot/vz61_attack_25_008.png" type="Texture" id=4]
 [ext_resource path="res://addons/godot-next/gui/debug_label.gd" type="Script" id=5]
 [ext_resource path="res://bntest/shoot/vz61_attack_25_011.png" type="Texture" id=6]
-[ext_resource path="res://bntest/images/vz61_wait_25_027.png" type="Texture" id=7]
-[ext_resource path="res://bntest/images/vz61_wait_25_028.png" type="Texture" id=8]
-[ext_resource path="res://bntest/images/vz61_wait_25_030.png" type="Texture" id=9]
-[ext_resource path="res://bntest/images/vz61_wait_25_029.png" type="Texture" id=10]
+[ext_resource path="res://bntest/wait/vz61_wait_25_027.png" type="Texture" id=7]
+[ext_resource path="res://bntest/wait/vz61_wait_25_028.png" type="Texture" id=8]
+[ext_resource path="res://bntest/wait/vz61_wait_25_030.png" type="Texture" id=9]
+[ext_resource path="res://bntest/wait/vz61_wait_25_029.png" type="Texture" id=10]
 [ext_resource path="res://bntest/shoot/vz61_attack_25_013.png" type="Texture" id=11]
 [ext_resource path="res://bntest/shoot/vz61_attack_25_012.png" type="Texture" id=12]
 [ext_resource path="res://bntest/shoot/vz61_attack_25_007.png" type="Texture" id=13]
 [ext_resource path="res://bntest/shoot/vz61_attack_25_009.png" type="Texture" id=14]
 [ext_resource path="res://bntest/shoot/vz61_attack_25_002.png" type="Texture" id=15]
-[ext_resource path="res://bntest/images/vz61_wait_25_021.png" type="Texture" id=16]
-[ext_resource path="res://bntest/images/vz61_wait_25_023.png" type="Texture" id=17]
-[ext_resource path="res://bntest/images/vz61_wait_25_022.png" type="Texture" id=18]
+[ext_resource path="res://bntest/wait/vz61_wait_25_021.png" type="Texture" id=16]
+[ext_resource path="res://bntest/wait/vz61_wait_25_023.png" type="Texture" id=17]
+[ext_resource path="res://bntest/wait/vz61_wait_25_022.png" type="Texture" id=18]
 [ext_resource path="res://bntest/Player.gd" type="Script" id=19]
-[ext_resource path="res://bntest/images/vz61_wait_25_005.png" type="Texture" id=20]
-[ext_resource path="res://bntest/images/vz61_wait_25_007.png" type="Texture" id=21]
-[ext_resource path="res://bntest/images/vz61_wait_25_016.png" type="Texture" id=22]
-[ext_resource path="res://bntest/images/vz61_wait_25_024.png" type="Texture" id=23]
-[ext_resource path="res://bntest/images/vz61_wait_25_025.png" type="Texture" id=24]
-[ext_resource path="res://bntest/images/vz61_wait_25_026.png" type="Texture" id=25]
-[ext_resource path="res://bntest/images/vz61_wait_25_001.png" type="Texture" id=26]
-[ext_resource path="res://bntest/images/vz61_wait_25_031.png" type="Texture" id=27]
-[ext_resource path="res://bntest/images/vz61_wait_25_033.png" type="Texture" id=28]
-[ext_resource path="res://bntest/images/vz61_wait_25_034.png" type="Texture" id=29]
-[ext_resource path="res://bntest/images/vz61_wait_25_009.png" type="Texture" id=30]
-[ext_resource path="res://bntest/images/vz61_wait_25_006.png" type="Texture" id=31]
-[ext_resource path="res://bntest/images/vz61_wait_25_011.png" type="Texture" id=32]
-[ext_resource path="res://bntest/images/vz61_wait_25_010.png" type="Texture" id=33]
-[ext_resource path="res://bntest/images/vz61_wait_25_000.png" type="Texture" id=34]
-[ext_resource path="res://bntest/images/vz61_wait_25_002.png" type="Texture" id=35]
-[ext_resource path="res://bntest/images/vz61_wait_25_004.png" type="Texture" id=36]
-[ext_resource path="res://bntest/images/vz61_wait_25_032.png" type="Texture" id=37]
-[ext_resource path="res://bntest/images/vz61_wait_25_003.png" type="Texture" id=38]
-[ext_resource path="res://bntest/images/vz61_wait_25_008.png" type="Texture" id=39]
-[ext_resource path="res://bntest/images/vz61_wait_25_039.png" type="Texture" id=40]
-[ext_resource path="res://bntest/images/vz61_wait_25_035.png" type="Texture" id=41]
-[ext_resource path="res://bntest/images/vz61_wait_25_036.png" type="Texture" id=42]
-[ext_resource path="res://bntest/images/vz61_wait_25_037.png" type="Texture" id=43]
-[ext_resource path="res://bntest/images/vz61_wait_25_038.png" type="Texture" id=44]
-[ext_resource path="res://bntest/images/vz61_wait_25_017.png" type="Texture" id=45]
-[ext_resource path="res://bntest/images/vz61_wait_25_018.png" type="Texture" id=46]
-[ext_resource path="res://bntest/images/vz61_wait_25_019.png" type="Texture" id=47]
-[ext_resource path="res://bntest/images/vz61_wait_25_020.png" type="Texture" id=48]
-[ext_resource path="res://bntest/images/vz61_wait_25_014.png" type="Texture" id=49]
-[ext_resource path="res://bntest/images/vz61_wait_25_013.png" type="Texture" id=50]
-[ext_resource path="res://bntest/images/vz61_wait_25_012.png" type="Texture" id=51]
-[ext_resource path="res://bntest/images/vz61_wait_25_015.png" type="Texture" id=52]
+[ext_resource path="res://bntest/wait/vz61_wait_25_005.png" type="Texture" id=20]
+[ext_resource path="res://bntest/wait/vz61_wait_25_007.png" type="Texture" id=21]
+[ext_resource path="res://bntest/wait/vz61_wait_25_016.png" type="Texture" id=22]
+[ext_resource path="res://bntest/wait/vz61_wait_25_024.png" type="Texture" id=23]
+[ext_resource path="res://bntest/wait/vz61_wait_25_025.png" type="Texture" id=24]
+[ext_resource path="res://bntest/wait/vz61_wait_25_026.png" type="Texture" id=25]
+[ext_resource path="res://bntest/wait/vz61_wait_25_001.png" type="Texture" id=26]
+[ext_resource path="res://bntest/wait/vz61_wait_25_031.png" type="Texture" id=27]
+[ext_resource path="res://bntest/wait/vz61_wait_25_033.png" type="Texture" id=28]
+[ext_resource path="res://bntest/wait/vz61_wait_25_034.png" type="Texture" id=29]
+[ext_resource path="res://bntest/wait/vz61_wait_25_009.png" type="Texture" id=30]
+[ext_resource path="res://bntest/wait/vz61_wait_25_006.png" type="Texture" id=31]
+[ext_resource path="res://bntest/wait/vz61_wait_25_011.png" type="Texture" id=32]
+[ext_resource path="res://bntest/wait/vz61_wait_25_010.png" type="Texture" id=33]
+[ext_resource path="res://bntest/wait/vz61_wait_25_000.png" type="Texture" id=34]
+[ext_resource path="res://bntest/wait/vz61_wait_25_002.png" type="Texture" id=35]
+[ext_resource path="res://bntest/wait/vz61_wait_25_004.png" type="Texture" id=36]
+[ext_resource path="res://bntest/wait/vz61_wait_25_032.png" type="Texture" id=37]
+[ext_resource path="res://bntest/wait/vz61_wait_25_003.png" type="Texture" id=38]
+[ext_resource path="res://bntest/wait/vz61_wait_25_008.png" type="Texture" id=39]
+[ext_resource path="res://bntest/wait/vz61_wait_25_039.png" type="Texture" id=40]
+[ext_resource path="res://bntest/wait/vz61_wait_25_035.png" type="Texture" id=41]
+[ext_resource path="res://bntest/wait/vz61_wait_25_036.png" type="Texture" id=42]
+[ext_resource path="res://bntest/wait/vz61_wait_25_037.png" type="Texture" id=43]
+[ext_resource path="res://bntest/wait/vz61_wait_25_038.png" type="Texture" id=44]
+[ext_resource path="res://bntest/wait/vz61_wait_25_017.png" type="Texture" id=45]
+[ext_resource path="res://bntest/wait/vz61_wait_25_018.png" type="Texture" id=46]
+[ext_resource path="res://bntest/wait/vz61_wait_25_019.png" type="Texture" id=47]
+[ext_resource path="res://bntest/wait/vz61_wait_25_020.png" type="Texture" id=48]
+[ext_resource path="res://bntest/wait/vz61_wait_25_014.png" type="Texture" id=49]
+[ext_resource path="res://bntest/wait/vz61_wait_25_013.png" type="Texture" id=50]
+[ext_resource path="res://bntest/wait/vz61_wait_25_012.png" type="Texture" id=51]
+[ext_resource path="res://bntest/wait/vz61_wait_25_015.png" type="Texture" id=52]
 [ext_resource path="res://bntest/shoot/vz61_attack_25_003.png" type="Texture" id=53]
 [ext_resource path="res://bntest/shoot/vz61_attack_25_005.png" type="Texture" id=54]
 [ext_resource path="res://bntest/shoot/vz61_attack_25_004.png" type="Texture" id=55]
@@ -83,30 +83,101 @@
 [ext_resource path="res://bntest/move/vz61_move_25_009.png" type="Texture" id=81]
 [ext_resource path="res://bntest/move/vz61_move_25_015.png" type="Texture" id=82]
 [ext_resource path="res://bntest/move/vz61_move_25_003.png" type="Texture" id=83]
-[ext_resource path="res://bntest/die/vz61_die_25_006.png" type="Texture" id=84]
-[ext_resource path="res://bntest/die/vz61_die_25_018.png" type="Texture" id=85]
-[ext_resource path="res://bntest/die/vz61_die_25_015.png" type="Texture" id=86]
-[ext_resource path="res://bntest/die/vz61_die_25_016.png" type="Texture" id=87]
-[ext_resource path="res://bntest/die/vz61_die_25_017.png" type="Texture" id=88]
-[ext_resource path="res://bntest/die/vz61_die_25_019.png" type="Texture" id=89]
-[ext_resource path="res://bntest/die/vz61_die_25_020.png" type="Texture" id=90]
-[ext_resource path="res://bntest/die/vz61_die_25_021.png" type="Texture" id=91]
-[ext_resource path="res://bntest/die/vz61_die_25_023.png" type="Texture" id=92]
-[ext_resource path="res://bntest/die/vz61_die_25_022.png" type="Texture" id=93]
-[ext_resource path="res://bntest/die/vz61_die_25_007.png" type="Texture" id=94]
-[ext_resource path="res://bntest/die/vz61_die_25_011.png" type="Texture" id=95]
-[ext_resource path="res://bntest/die/vz61_die_25_010.png" type="Texture" id=96]
-[ext_resource path="res://bntest/die/vz61_die_25_012.png" type="Texture" id=97]
-[ext_resource path="res://bntest/die/vz61_die_25_008.png" type="Texture" id=98]
-[ext_resource path="res://bntest/die/vz61_die_25_009.png" type="Texture" id=99]
-[ext_resource path="res://bntest/die/vz61_die_25_013.png" type="Texture" id=100]
-[ext_resource path="res://bntest/die/vz61_die_25_014.png" type="Texture" id=101]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_006.png" type="Texture" id=84]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_018.png" type="Texture" id=85]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_015.png" type="Texture" id=86]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_016.png" type="Texture" id=87]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_017.png" type="Texture" id=88]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_019.png" type="Texture" id=89]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_020.png" type="Texture" id=90]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_021.png" type="Texture" id=91]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_023.png" type="Texture" id=92]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_022.png" type="Texture" id=93]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_007.png" type="Texture" id=94]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_011.png" type="Texture" id=95]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_010.png" type="Texture" id=96]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_012.png" type="Texture" id=97]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_008.png" type="Texture" id=98]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_009.png" type="Texture" id=99]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_013.png" type="Texture" id=100]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_014.png" type="Texture" id=101]
+[ext_resource path="res://bntest/chipicon.png" type="Texture" id=102]
+[ext_resource path="res://ParticleEffects/Pixelate.gdshader" type="Shader" id=103]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_049.png" type="Texture" id=104]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_071.png" type="Texture" id=105]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_036.png" type="Texture" id=106]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_065.png" type="Texture" id=107]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_073.png" type="Texture" id=108]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_066.png" type="Texture" id=109]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_033.png" type="Texture" id=110]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_037.png" type="Texture" id=111]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_047.png" type="Texture" id=112]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_026.png" type="Texture" id=113]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_028.png" type="Texture" id=114]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_068.png" type="Texture" id=115]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_027.png" type="Texture" id=116]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_038.png" type="Texture" id=117]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_051.png" type="Texture" id=118]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_053.png" type="Texture" id=119]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_055.png" type="Texture" id=120]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_056.png" type="Texture" id=121]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_024.png" type="Texture" id=122]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_061.png" type="Texture" id=123]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_044.png" type="Texture" id=124]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_005.png" type="Texture" id=125]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_052.png" type="Texture" id=126]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_032.png" type="Texture" id=127]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_062.png" type="Texture" id=128]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_067.png" type="Texture" id=129]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_070.png" type="Texture" id=130]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_069.png" type="Texture" id=131]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_025.png" type="Texture" id=132]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_031.png" type="Texture" id=133]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_035.png" type="Texture" id=134]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_029.png" type="Texture" id=135]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_046.png" type="Texture" id=136]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_063.png" type="Texture" id=137]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_060.png" type="Texture" id=138]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_064.png" type="Texture" id=139]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_050.png" type="Texture" id=140]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_030.png" type="Texture" id=141]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_072.png" type="Texture" id=142]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_041.png" type="Texture" id=143]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_034.png" type="Texture" id=144]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_000.png" type="Texture" id=145]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_001.png" type="Texture" id=146]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_003.png" type="Texture" id=147]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_002.png" type="Texture" id=148]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_004.png" type="Texture" id=149]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_048.png" type="Texture" id=150]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_057.png" type="Texture" id=151]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_074.png" type="Texture" id=152]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_077.png" type="Texture" id=153]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_045.png" type="Texture" id=154]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_040.png" type="Texture" id=155]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_076.png" type="Texture" id=156]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_075.png" type="Texture" id=157]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_039.png" type="Texture" id=158]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_059.png" type="Texture" id=159]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_043.png" type="Texture" id=160]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_042.png" type="Texture" id=161]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_054.png" type="Texture" id=162]
+[ext_resource path="res://bntest/chara/skorp/die/vz61_die_25_058.png" type="Texture" id=163]
+
+[sub_resource type="ShaderMaterial" id=3]
+shader = ExtResource( 103 )
+shader_param/amount = 0.0
 
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
 "frames": [ ExtResource( 34 ), ExtResource( 26 ), ExtResource( 35 ), ExtResource( 38 ), ExtResource( 36 ), ExtResource( 20 ), ExtResource( 31 ), ExtResource( 21 ), ExtResource( 39 ), ExtResource( 30 ), ExtResource( 33 ), ExtResource( 32 ), ExtResource( 51 ), ExtResource( 50 ), ExtResource( 49 ), ExtResource( 52 ), ExtResource( 22 ), ExtResource( 45 ), ExtResource( 46 ), ExtResource( 47 ), ExtResource( 48 ), ExtResource( 16 ), ExtResource( 18 ), ExtResource( 17 ), ExtResource( 23 ), ExtResource( 24 ), ExtResource( 25 ), ExtResource( 7 ), ExtResource( 8 ), ExtResource( 10 ), ExtResource( 9 ), ExtResource( 27 ), ExtResource( 37 ), ExtResource( 28 ), ExtResource( 29 ), ExtResource( 41 ), ExtResource( 42 ), ExtResource( 43 ), ExtResource( 44 ), ExtResource( 40 ) ],
 "loop": true,
 "name": "default",
+"speed": 40.0
+}, {
+"frames": [ ExtResource( 145 ), ExtResource( 146 ), ExtResource( 148 ), ExtResource( 147 ), ExtResource( 149 ), ExtResource( 125 ), ExtResource( 84 ), ExtResource( 94 ), ExtResource( 98 ), ExtResource( 99 ), ExtResource( 96 ), ExtResource( 95 ), ExtResource( 97 ), ExtResource( 100 ), ExtResource( 101 ), ExtResource( 86 ), ExtResource( 87 ), ExtResource( 88 ), ExtResource( 85 ), ExtResource( 89 ), ExtResource( 90 ), ExtResource( 91 ), ExtResource( 93 ), ExtResource( 92 ), ExtResource( 122 ), ExtResource( 132 ), ExtResource( 113 ), ExtResource( 116 ), ExtResource( 114 ), ExtResource( 135 ), ExtResource( 141 ), ExtResource( 133 ), ExtResource( 127 ), ExtResource( 110 ), ExtResource( 144 ), ExtResource( 134 ), ExtResource( 106 ), ExtResource( 111 ), ExtResource( 117 ), ExtResource( 158 ), ExtResource( 155 ), ExtResource( 143 ), ExtResource( 161 ), ExtResource( 160 ), ExtResource( 124 ), ExtResource( 154 ), ExtResource( 136 ), ExtResource( 112 ), ExtResource( 150 ), ExtResource( 104 ), ExtResource( 140 ), ExtResource( 118 ), ExtResource( 126 ), ExtResource( 119 ), ExtResource( 162 ), ExtResource( 120 ), ExtResource( 121 ), ExtResource( 151 ), ExtResource( 163 ), ExtResource( 159 ), ExtResource( 138 ), ExtResource( 123 ), ExtResource( 128 ), ExtResource( 137 ), ExtResource( 139 ), ExtResource( 107 ), ExtResource( 109 ), ExtResource( 129 ), ExtResource( 115 ), ExtResource( 131 ), ExtResource( 130 ), ExtResource( 105 ), ExtResource( 142 ), ExtResource( 108 ), ExtResource( 152 ), ExtResource( 157 ), ExtResource( 156 ), ExtResource( 153 ) ],
+"loop": false,
+"name": "die",
 "speed": 40.0
 }, {
 "frames": [ ExtResource( 84 ), ExtResource( 94 ), ExtResource( 98 ), ExtResource( 99 ), ExtResource( 96 ), ExtResource( 95 ), ExtResource( 97 ), ExtResource( 100 ), ExtResource( 101 ), ExtResource( 86 ), ExtResource( 87 ), ExtResource( 88 ), ExtResource( 85 ), ExtResource( 89 ), ExtResource( 90 ), ExtResource( 91 ), ExtResource( 93 ), ExtResource( 92 ) ],
@@ -126,13 +197,11 @@ animations = [ {
 } ]
 
 [node name="Player" type="Node2D"]
-position = Vector2( 416, 64 )
 script = ExtResource( 19 )
-__meta__ = {
-"_edit_group_": true
-}
+facing = 1
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+material = SubResource( 3 )
 frames = SubResource( 1 )
 
 [node name="DebugLabel" type="Label" parent="."]
@@ -140,17 +209,15 @@ margin_left = 64.0
 margin_top = -64.0
 margin_right = 245.0
 margin_bottom = -33.0
-text = "position = Vector2( 416, 64 )
-playerPos = null
+text = "position = Vector2( 0, 0 )
+charaPos = Vector2( 0, 0 )
 "
 script = ExtResource( 5 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 target_path = NodePath("..")
-properties = PoolStringArray( "position", "playerPos" )
+properties = PoolStringArray( "position", "charaPos" )
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
+visible = false
 
 [node name="Label" type="Label" parent="CanvasLayer"]
 visible = false
@@ -167,3 +234,45 @@ stream = ExtResource( 58 )
 
 [node name="shoot" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource( 59 )
+
+[node name="ChipMiniDisplay" type="Node2D" parent="."]
+position = Vector2( 0, -112 )
+scale = Vector2( 4, 4 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Chip1" type="Sprite" parent="ChipMiniDisplay"]
+z_index = 5
+texture = ExtResource( 102 )
+hframes = 40
+vframes = 12
+frame = 173
+
+[node name="Chip2" type="Sprite" parent="ChipMiniDisplay"]
+position = Vector2( -2, -2 )
+z_index = 4
+texture = ExtResource( 102 )
+hframes = 40
+vframes = 12
+
+[node name="Chip3" type="Sprite" parent="ChipMiniDisplay"]
+position = Vector2( -4, -4 )
+z_index = 3
+texture = ExtResource( 102 )
+hframes = 40
+vframes = 12
+
+[node name="Chip4" type="Sprite" parent="ChipMiniDisplay"]
+position = Vector2( -6, -6 )
+z_index = 2
+texture = ExtResource( 102 )
+hframes = 40
+vframes = 12
+
+[node name="Chip5" type="Sprite" parent="ChipMiniDisplay"]
+position = Vector2( -8, -8 )
+z_index = 1
+texture = ExtResource( 102 )
+hframes = 40
+vframes = 12
