@@ -21,8 +21,8 @@ func _ready():
 	$Area2D.connect(\"body_entered\",self,\"objectTouched\")
 
 var facing:int=1
-func init(facing):
-	self.facing=facing
+func init(facing_):
+	self.facing=facing_
 	sprite.flip_h=(facing==-1)
 	
 var isDefaultAnim:bool=true

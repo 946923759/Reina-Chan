@@ -176,6 +176,9 @@ func killSelf():
 # warning-ignore:return_value_discarded
 	#$ExplosionSound.connect("finished",self,"queue_free")
 
+# TODO: This constantly prints errors to the console, so maybe it would
+# be better to move it to the stage and have the enemy emit a death
+# signal for the stage to respond to
 var health = preload("res://Various Objects/pickupHealthBig.tscn")
 var smallHealth = preload("res://Various Objects/pickupHealthSmall.tscn")
 

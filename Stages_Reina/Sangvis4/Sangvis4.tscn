@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://Stages_Reina/8bitBaseStage.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Stages_Reina/Alchemist/AlchemistTileset.tres" type="TileSet" id=2]
@@ -9,6 +9,7 @@
 [ext_resource path="res://Stages_Reina/Sangvis4/Sangvis4.gd" type="Script" id=7]
 [ext_resource path="res://Various Objects/BossWarning/WARNING.tscn" type="PackedScene" id=8]
 [ext_resource path="res://Stages_Reina/Bosses/Alchemist/BossAlchemist.tscn" type="PackedScene" id=9]
+[ext_resource path="res://ubuntu-font-family/BitmapFont.tscn" type="PackedScene" id=10]
 
 [node name="Node2D" instance=ExtResource( 1 )]
 script = ExtResource( 7 )
@@ -83,7 +84,6 @@ position = Vector2( 1216, 3520 )
 automatically_set_x_bounds = false
 boss_room_door = true
 topBound = 48
-rightBound = 20
 bottomBound = 60
 
 [node name="WARNING intro" parent="Room 0-48" index="1" instance=ExtResource( 8 )]
@@ -93,5 +93,10 @@ message_id = "Alchemist2"
 [node name="BossAlchemist" parent="Room 0-48/WARNING intro" index="3" instance=ExtResource( 9 )]
 position = Vector2( -672, 16 )
 facing = 1
+
+[node name="BitmapFont" parent="." index="9" instance=ExtResource( 10 )]
+position = Vector2( 1472, 3520 )
+z_index = -1
+text = "< boss"
 
 [connection signal="block_broken" from="Room 40-48/BreakableBlock" to="Room 40-48/BlockEnablerDisabler" method="execute"]

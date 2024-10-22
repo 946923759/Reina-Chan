@@ -302,10 +302,10 @@ func get_menu_buttons_input(_delta):
 		finishStage()
 		
 	#L+R+Down+Start
-	elif Input.is_action_just_pressed("L1") and \
+	elif Input.is_action_pressed("L1") and \
 		 Input.is_action_pressed("R1") and \
 		 Input.is_action_pressed("ui_down") and \
-		 Input.is_action_just_pressed("ui_pause"):
+		 Input.is_action_pressed("ui_pause"):
 			finishStage()
 			return
 	elif Input.is_action_just_pressed("DebugButton12"):
@@ -1100,6 +1100,10 @@ func lockMovementQueue(queue:Array):
 func processLockMovement(delta):
 	timeElapsed += delta
 	#var n = len(lockQueue[posInQueue])
+	if posInQueue>=lockQueue.size():
+		clearLockedMovement()
+		return
+	
 	if timeElapsed > lockQueue[posInQueue][0]:
 		if posInQueue == len(lockQueue)-1:
 			clearLockedMovement()
@@ -1311,7 +1315,6 @@ func giveExtraLife():
 		CheckpointPlayerStats.playerLivesLeft+=1
 	$OneUpSound.play()
 
-#Wouldn't this make more sense as a connection?
 func _on_OptionsScreen_unpaused():
 	stageRoot.update_easytiles()
 

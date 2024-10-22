@@ -24,6 +24,7 @@ func heal(obj):
 		set_deferred(\"monitorable\",false)
 		var parent:RigidBody2D = get_parent()
 		parent.get_node(\"Sprite\").visible=false
+		parent.set_deferred(\"mode\",RigidBody2D.MODE_STATIC) #Prevent moving
 		#parent.sleeping = true
 		parent.set_collision_mask_bit(4,false)
 		#parent.visible = false

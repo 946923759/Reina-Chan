@@ -9,6 +9,7 @@
 
 [sub_resource type="GDScript" id=1]
 script/source = "extends CanvasLayer
+signal paused()
 signal unpaused()
 
 onready var optList = $page1/CenterContainer/VBoxContainer
@@ -66,6 +67,7 @@ func OnCommand():
 	if Globals.playerData.gameDifficulty > Globals.Difficulty.EASY:
 		$page1/currentDifficulty.text+=\"\\n\"+(INITrans.GetString(\"PauseMenu\",\"SPARE DUMMIES\") % [CheckpointPlayerStats.playerLivesLeft] )
 	
+	emit_signal(\"paused\")
 
 func OffCommand():
 	$Fadeout_Tween.interpolate_property($ColorRect,\"modulate:a\",null,0,.2)

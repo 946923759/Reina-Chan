@@ -1,4 +1,5 @@
 extends "res://Stages_Reina/Bosses/BossBase.gd"
+signal raging_demon_finished()
 
 enum STATES {
 	IDLE,
@@ -56,6 +57,7 @@ func _ready():
 	a2.visible=false
 	a3.visible=false
 	$RockSmash.visible=false
+	$CanvasLayer2.visible = $CanvasLayer2.visible and OS.is_debug_build()
 	
 	$Heaven.connect("finished",self,"raging_demon_fin")
 	sprite.flip_h = (facing==DIRECTION.LEFT)
@@ -192,7 +194,7 @@ func _physics_process(delta):
 			sprite.animation = "Falling"
 			sprite.playing=false
 			#lololol
-			if Globals.playerData.gameDifficulty >= Globals.Difficulty.HARD:
+			if Globals.playerData.gameDifficulty >= Globals.Difficulty.MEDIUM:
 				is_reflecting = true
 			
 			current_state = STATES.RAGING_DEMON
@@ -315,6 +317,7 @@ func _physics_process(delta):
 				progress-=threshold
 				progress_v += 1
 				if Globals.playerData.gameDifficulty >= Globals.Difficulty.EASY:
+# warning-ignore:narrowing_conversion
 					curHP=min(MAX_HP,curHP+1)
 					HPBar.updateHP(curHP/28.0)
 		STATES.THROWING:
@@ -387,6 +390,7 @@ func _physics_process(delta):
 
 #This disables the afterimages when the raging demon attack connects
 func raging_demon_fin():
+	emit_signal("raging_demon_finished")
 	a1.visible = false
 	a2.visible = false
 	a3.visible = false

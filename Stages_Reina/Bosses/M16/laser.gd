@@ -3,8 +3,8 @@ extends Sprite
 
 const PI_MULT_2 = PI*2.0
 const WIDTH = 55.0
-export(float,0,6.28,.1) var x = 0;
-export(int,0,2) var frame_ = 0
+export(float,0,6.28,.1) var x = 0.0;
+export(int,0,2) var frame_ = 0;
 
 #func update_p():
 #	self.position.x = cos(x)*WIDTH
@@ -18,6 +18,7 @@ func _process(delta):
 	if x >= PI_MULT_2:
 		x -= PI_MULT_2
 	self.position.x = cos(x)*WIDTH
+# warning-ignore:narrowing_conversion
 	self.z_index = sin(x)-1
 	#update_p()
 

@@ -191,6 +191,7 @@ playing = false
 "
 
 [node name="Heaven" parent="." index="9" instance=ExtResource( 7 )]
+visible = false
 
 [node name="CanvasLayer2" type="CanvasLayer" parent="." index="10"]
 

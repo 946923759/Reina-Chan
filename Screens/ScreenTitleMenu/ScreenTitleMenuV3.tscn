@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://ubuntu-font-family/BitmapFont.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Stages_Reina/Ouroboros/bg.png" type="Texture" id=2]
@@ -17,6 +17,8 @@
 [ext_resource path="res://Screens/ScreenCutscene/Backgrounds/black.png" type="Texture" id=15]
 [ext_resource path="res://Screens/ScreenTitleMenu/MenuFrame.tscn" type="PackedScene" id=16]
 [ext_resource path="res://Sounds/Classic/Mega Man 4 SFX (25) - Menu Help.wav" type="AudioStream" id=17]
+[ext_resource path="res://Stages_Reina/Architect/clouds.png" type="Texture" id=18]
+[ext_resource path="res://Stages_Reina/Architect/bg.png" type="Texture" id=19]
 
 [sub_resource type="GDScript" id=1]
 script/source = "extends \"res://Screens/ScreenWithMenuElements.gd\"
@@ -200,6 +202,7 @@ nsf_track_num = 1
 mute_music_in_debug = true
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." index="0"]
+bus = "Music"
 
 [node name="ColorRect2" type="ColorRect" parent="." index="1"]
 visible = false
@@ -223,7 +226,7 @@ color = Color( 0.513726, 0, 0, 1 )
 
 [node name="Backdrops" type="Node2D" parent="." index="3"]
 
-[node name="BackdropArchitect" type="Node2D" parent="Backdrops" index="0"]
+[node name="BackdropHub" type="Node2D" parent="Backdrops" index="0"]
 visible = false
 scale = Vector2( 4, 4 )
 script = ExtResource( 9 )
@@ -231,20 +234,42 @@ __meta__ = {
 "_edit_group_": true
 }
 
-[node name="Sprite5" type="Sprite" parent="Backdrops/BackdropArchitect" index="0"]
+[node name="Sprite5" type="Sprite" parent="Backdrops/BackdropHub" index="0"]
 texture = ExtResource( 4 )
 centered = false
 offset = Vector2( 0, -8 )
 region_enabled = true
 region_rect = Rect2( 0, 0, 752, 192 )
 
-[node name="Sprite4" type="Sprite" parent="Backdrops/BackdropArchitect" index="1"]
+[node name="Sprite4" type="Sprite" parent="Backdrops/BackdropHub" index="1"]
 texture = ExtResource( 5 )
 centered = false
 region_enabled = true
 region_rect = Rect2( 0, 0, 752, 192 )
 
-[node name="BackdropAlchemist" type="Node2D" parent="Backdrops" index="1"]
+[node name="BackdropArchitect" type="Node2D" parent="Backdrops" index="1"]
+script = ExtResource( 9 )
+
+[node name="Sprite" type="Sprite" parent="Backdrops/BackdropArchitect" index="0"]
+scale = Vector2( 4, 4 )
+texture = ExtResource( 18 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 0, 0, 4096, 128 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Sprite2" type="Sprite" parent="Backdrops/BackdropArchitect" index="1"]
+position = Vector2( 0, -112 )
+scale = Vector2( 4, 4 )
+texture = ExtResource( 19 )
+centered = false
+offset = Vector2( 0, 112 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 464, 96 )
+
+[node name="BackdropAlchemist" type="Node2D" parent="Backdrops" index="2"]
 visible = false
 scale = Vector2( 4, 4 )
 script = ExtResource( 9 )
@@ -264,7 +289,8 @@ centered = false
 region_enabled = true
 region_rect = Rect2( 0, 0, 704, 192 )
 
-[node name="BackdropOuroboros" type="Sprite" parent="Backdrops" index="2"]
+[node name="BackdropOuroboros" type="Sprite" parent="Backdrops" index="3"]
+visible = false
 material = ExtResource( 11 )
 scale = Vector2( 4, 4 )
 texture = ExtResource( 2 )
@@ -275,7 +301,7 @@ script = SubResource( 3 )
 saturation = 0.3
 value = 0.3
 
-[node name="BackdropScarecrow" type="Node2D" parent="Backdrops" index="3"]
+[node name="BackdropScarecrow" type="Node2D" parent="Backdrops" index="4"]
 visible = false
 script = ExtResource( 9 )
 
@@ -297,7 +323,7 @@ centered = false
 region_enabled = true
 region_rect = Rect2( 0, 16, 704, 16 )
 
-[node name="BackdropSF1" type="Node2D" parent="Backdrops" index="4"]
+[node name="BackdropSF1" type="Node2D" parent="Backdrops" index="5"]
 visible = false
 script = ExtResource( 9 )
 obj1_scroll_speed = 1.0
@@ -338,7 +364,7 @@ scale_by = 3
 
 [node name="VersionNum2" parent="." index="5" instance=ExtResource( 1 )]
 position = Vector2( 9, 42 )
-text = "v.2024.10.06"
+text = "v.2024.10.20"
 wrap_at = 92233720368
 scale_by = 3
 

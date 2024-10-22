@@ -41,6 +41,7 @@ func _ready():
 		queue_free()
 	set_type(type)
 	set_warp_num(warp_num)
+	add_to_group(\"debugWarpDisp\")
 "
 
 [node name="WarpHelpBlock" type="Node2D"]

@@ -86,8 +86,9 @@ func _process(delta):
 func _input(_event):
 	if Input.is_action_just_pressed(\"ui_pause\"):
 		timeout=0.0
-		#Because if I don't kill it it spams the log
-		t1.kill()
+		if is_instance_valid(t1):
+			#Because if I don't kill it it spams the log
+			t1.kill()
 		
 "
 

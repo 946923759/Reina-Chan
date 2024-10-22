@@ -4,12 +4,15 @@ const WIDTH = 8
 const HEIGHT = 7
 const NUM_ROWS = 3
 const NUM_COLUMNS = 5
-#const NUM_ROOM_COLUMNS = 16
-#const NUM_ROOM_ROWS = 13
 
-var rooms:Dictionary = {}
+#export(int) var NUM_ROWS = 3
+#export(int) var NUM_COLUMNS = 5
+
+#var rooms:Dictionary = {}
 
 export(Texture) var map_texture
+export(bool) var draw_all
+
 var prev_room:Vector2 = Vector2(0,0)
 var player_current_room:Vector2 = Vector2(0,0)
 var player
@@ -73,7 +76,7 @@ func _draw():
 				(player_current_room.x+x+1),
 				(player_current_room.y+y)
 			)
-			if this_room in CheckpointPlayerStats.visited_rooms:
+			if draw_all or this_room in CheckpointPlayerStats.visited_rooms:
 				#print("Drawing "+String(this_room)+" at ",x,"x",y)
 				draw_texture_rect_region(
 					map_texture,

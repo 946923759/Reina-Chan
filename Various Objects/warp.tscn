@@ -9,6 +9,12 @@ extends Sprite
 
 export (int,-1,15) var teleporter_ID = -1
 export (int,\"In\",\"Out\") var teleport_type = 1 setget set_teleport_type
+enum FACING {
+	LEFT = -1,
+	UNCHANGED = 0,
+	RIGHT = 1
+}
+export (FACING) var facing_dir_when_out = FACING.UNCHANGED
 # If this is true and type is set to In, it will only work 
 # if bitflag in CheckpointPlayerUtils is set
 #export (bool) var require_bitflag_to_activate = false
@@ -255,6 +261,8 @@ func adjust_camera(obj:KinematicBody2D, newPosition:Vector2):
 	var t:SceneTreeTween = CL.get_node(\"Fadeout\").fadeOut()
 	yield(t,\"finished\")
 	obj.global_position = newPosition
+	if facing_dir_when_out != FACING.UNCHANGED:
+		obj.sprite.flip_h = (facing_dir_when_out==FACING.LEFT)
 	print(\"fading in..\")
 	obj.velocity=Vector2(0,10000)
 	CL.get_node(\"Fadeout\").fadeIn()
@@ -315,7 +323,7 @@ script = SubResource( 1 )
 conditional_type = 1
 conditional_value = 0
 when_condition_is_true = 0
-override_position = null
+override_position = Vector2( 0, 0 )
 
 [node name="StaticBody2D" type="StaticBody2D" parent="."]
 position = Vector2( 16, 8 )

@@ -102,6 +102,7 @@ animations = [ {
 [node name="Snakebig" instance=ExtResource( 1 )]
 script = SubResource( 1 )
 use_large_explosion = true
+bottom_rings_n = NodePath("")
 
 [node name="AnimatedSprite" parent="." index="0"]
 frames = SubResource( 2 )

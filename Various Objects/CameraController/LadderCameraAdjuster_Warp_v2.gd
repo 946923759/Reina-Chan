@@ -1,22 +1,36 @@
-#tool
+tool
 extends Area2D
-signal camera_adjusted(camera,newBounds)
+#signal camera_adjusted(camera, newBounds, tweenTime)
+signal player_teleported(new_player_position)
 
 export (float) var tweenTime = 1.0;
 export (bool) var freeze_player_during_transition=true
 export (bool) var only_if_on_ladder=false
 export (int,"Before","After") var warp_when = 0
-export (Vector2) var warp_position = Vector2(0,0)
+export (Vector2) var warp_position = Vector2(0,0) setget set_warp_position
 export (Rect2) var camera_bounds #This is bounds before teleporting
 export (int,"Upwards","Downwards","Do not adjust camera") var ladder_type
 #export (Rect2) var downwards_warp_bounds
+export(int,0,16) var warp_num = 0 setget set_warp_num
 
 
-const cameraScale = 64;
+const CAMERA_SCALE = 64;
 
 
 var player:KinematicBody2D
 
+func set_warp_num(i):
+	warp_num = i
+	update()
+	
+func set_warp_position(v):
+	warp_position = v
+	update()
+
+func _draw():
+	if Engine.editor_hint:
+		var c = Color.from_hsv(float(warp_num)/16.0,1,.75)
+		draw_line(Vector2(0,0), warp_position*CAMERA_SCALE*1/scale, c, 25.0)
 #func _draw():
 #	if is_processing():
 #		draw_rect(Rect2(-8,-8,64,64),Color.red)
@@ -36,6 +50,7 @@ func _ready():
 	self.connect("body_exited",self,"player_exited")
 	set_process(false)
 	#update()
+	add_to_group("ladderWarp")
 
 func player_entered(obj):
 	if obj.has_method("player_touched"):
@@ -90,18 +105,19 @@ func _process(delta):
 
 func teleport_player(player:KinematicBody2D):
 	var cc:Camera2D = player.get_node("Camera2D")
-	player.position += warp_position*cameraScale
+	player.position += warp_position*CAMERA_SCALE
 	
 	cc.adjustCamera([
-		cc.limit_left + warp_position.x*cameraScale,
-		cc.limit_top + warp_position.y*cameraScale,
-		cc.limit_right + warp_position.x*cameraScale,
-		cc.limit_bottom + warp_position.y*cameraScale,
+		cc.limit_left + warp_position.x*CAMERA_SCALE,
+		cc.limit_top + warp_position.y*CAMERA_SCALE,
+		cc.limit_right + warp_position.x*CAMERA_SCALE,
+		cc.limit_bottom + warp_position.y*CAMERA_SCALE,
 	], 0.0)
-	#cc.limit_top += warp_position.y*cameraScale
-	#cc.limit_bottom += warp_position.y*cameraScale
-	#cc.limit_left += warp_position.x*cameraScale
-	#cc.limit_right += warp_position.x*cameraScale
+	emit_signal("player_teleported", player.position)
+	#cc.limit_top += warp_position.y*CAMERA_SCALE
+	#cc.limit_bottom += warp_position.y*CAMERA_SCALE
+	#cc.limit_left += warp_position.x*CAMERA_SCALE
+	#cc.limit_right += warp_position.x*CAMERA_SCALE
 
 var disabled = false
 func cam(player:KinematicBody2D):
@@ -128,36 +144,36 @@ func cam(player:KinematicBody2D):
 	var bottomBound = camera_bounds.size.y
 	
 	if rightBound == -999:
-		boundsArray[2] = leftBound*cameraScale+Globals.gameResolution.x
+		boundsArray[2] = leftBound*CAMERA_SCALE+Globals.gameResolution.x
 	else:
-		boundsArray[2] = rightBound*cameraScale
+		boundsArray[2] = rightBound*CAMERA_SCALE
 		
 	if leftBound == -999:
-		boundsArray[0] = rightBound*cameraScale-Globals.gameResolution.x
+		boundsArray[0] = rightBound*CAMERA_SCALE-Globals.gameResolution.x
 	elif leftBound == -9999:
 		boundsArray[0] = cc.limit_right
 	else:
-		boundsArray[0] = leftBound*cameraScale;
+		boundsArray[0] = leftBound*CAMERA_SCALE;
 		#print("WARN: Left and right bounds are not defined. The camera won't work.")
 		
 	if topBound == -999:
 		#print("Top is -999")
-		boundsArray[1]=bottomBound*cameraScale-Globals.gameResolution.y
+		boundsArray[1]=bottomBound*CAMERA_SCALE-Globals.gameResolution.y
 	else:
-		boundsArray[1]=topBound*cameraScale
+		boundsArray[1]=topBound*CAMERA_SCALE
 	
 	if bottomBound == -999:
 		boundsArray[3] = boundsArray[1]+Globals.gameResolution.y
 	else:
-		boundsArray[3] = bottomBound*cameraScale
+		boundsArray[3] = bottomBound*CAMERA_SCALE
 		
 	
 	if warp_when==0:
 		teleport_player(player)
-		boundsArray[0] += warp_position.x*cameraScale
-		boundsArray[1] += warp_position.y*cameraScale
-		boundsArray[2] += warp_position.x*cameraScale
-		boundsArray[3] += warp_position.y*cameraScale
+		boundsArray[0] += warp_position.x*CAMERA_SCALE
+		boundsArray[1] += warp_position.y*CAMERA_SCALE
+		boundsArray[2] += warp_position.x*CAMERA_SCALE
+		boundsArray[3] += warp_position.y*CAMERA_SCALE
 
 	
 	#if cc.destPositions[1] == boundsArray[1] and cc.destPositions[3]==boundsArray[3]:
@@ -177,7 +193,7 @@ func cam(player:KinematicBody2D):
 	cc.adjustCamera(boundsArray, tweenTime)
 	
 	#What is this even FOR??? It doesn't wait for the tween, there's no way this is useful right?
-	emit_signal("camera_adjusted",cc,boundsArray)
+	#emit_signal("camera_adjusted",cc, boundsArray, tweenTime)
 	
 	if warp_when==1:
 		yield(cc,"camera_finished_tween")
