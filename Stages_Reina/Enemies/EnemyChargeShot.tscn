@@ -39,10 +39,11 @@ func objectTouched(obj):
 	#print(\"intersecting!\")
 	if obj.has_method(\"player_touched\"): #If enemy touched player
 		#lastTouched = obj
-		if Globals.playerData.gameDifficulty > Globals.Difficulty.EASY:
-			obj.call(\"player_touched\",self,4)
+		var diffNum = Globals.playerData.gameDifficulty
+		if diffNum > Globals.Difficulty.EASY:
+			obj.call(\"player_touched\",self, diffNum)
 		else:
-			obj.call(\"player_touched\",self,4)
+			obj.call(\"player_touched\",self,1)
 		#print(\"hurt player\")
 	#elif obj.has_method(\"enemy_touched\"): #If enemy touched bullet
 	#	obj.call(\"enemy_touched\",self)

@@ -40,6 +40,9 @@ func _ready():
 		reinaAudioPlayer=ReinaAudioPlayer.new(self)
 		reinaAudioPlayer.load_song(\"TitleScreen\",nsf_music,nsf_track_num)
 		print(\"Success.\")
+		
+	if OS.has_feature(\"web\"):
+		time_before_attract_screen = INF
 	
 	if game_mode == 0:
 		$MenuFrame.queue_free()
@@ -199,7 +202,7 @@ game_mode = 1
 time_before_attract_screen = 20.0
 nsf_music = "MM2.nsf"
 nsf_track_num = 1
-mute_music_in_debug = true
+mute_music_in_debug = false
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." index="0"]
 bus = "Music"
@@ -358,13 +361,13 @@ __meta__ = {
 
 [node name="VersionNum" parent="." index="4" instance=ExtResource( 1 )]
 position = Vector2( 9, 10 )
-text = "demo 6"
+text = "demo 7"
 wrap_at = 92233720368
 scale_by = 3
 
 [node name="VersionNum2" parent="." index="5" instance=ExtResource( 1 )]
 position = Vector2( 9, 42 )
-text = "v.2024.10.20"
+text = "v.2024.11.11"
 wrap_at = 92233720368
 scale_by = 3
 

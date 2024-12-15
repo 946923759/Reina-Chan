@@ -122,6 +122,12 @@ text = "select: STAGE OPTIONS"
 wrap_at = 92233720368
 scale_by = 4
 
+[node name="Shoot2" parent="Controller" instance=ExtResource( 2 )]
+position = Vector2( 8, 696 )
+text = "Using a keyboard? press any arrow key to show the keyboard controls."
+wrap_at = 92233720368
+scale_by = 2
+
 [node name="Keyboard" type="Control" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0

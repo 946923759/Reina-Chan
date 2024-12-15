@@ -6,6 +6,12 @@
 [sub_resource type="GDScript" id=1]
 script/source = "extends \"res://Screens/ScreenWithMenuElements.gd\"
 
+func _ready():
+	#Intro doesn't work due to HTML5 timing issues
+	if OS.has_feature(\"web\"):
+		NextScreen=\"ScreenTitleMenu\"
+		PrevScreen=\"ScreenTitleMenu\"
+
 func _input(event):
 	$HowToPlay.input(event)
 	
@@ -26,7 +32,7 @@ func _on_Panel_gui_input(event):
 
 [node name="ScreenHowToPlay" instance=ExtResource( 1 )]
 script = SubResource( 1 )
-PrevScreen = "ScreenTitleMenu"
+PrevScreen = "ScreenOpening"
 NextScreen = "ScreenOpening"
 HandlePhysicalAButton = true
 

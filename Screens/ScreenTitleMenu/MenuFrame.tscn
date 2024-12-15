@@ -727,9 +727,10 @@ func input(event):
 				Globals.OPTIONS[option]['value']=val
 				get_child(existing_children+selection).get_node(\"Value\").text=String(val)
 				if option==\"AudioVolume\" or option==\"SFXVolume\" or option==\"VoiceVolume\":
-					if parent.reinaAudioPlayer.nsf_player != null:
+					var root = get_tree().get_current_scene()
+					if root.reinaAudioPlayer.nsf_player != null:
 						var realVolumeLevel = Globals.OPTIONS['AudioVolume']['value']*.6-60
-						parent.reinaAudioPlayer.nsf_player.set_volume(realVolumeLevel);
+						root.reinaAudioPlayer.nsf_player.set_volume(realVolumeLevel);
 					Globals.set_audio_levels()
 				if option == \"VoiceVolume\":
 					$Announcer.stop()
@@ -765,9 +766,10 @@ func input(event):
 					Globals.OPTIONS[option]['value']=val
 					get_child(existing_children+selection).get_node(\"Value\").text=String(val)
 					if option==\"AudioVolume\" or option==\"SFXVolume\" or option==\"VoiceVolume\":
-						if parent.reinaAudioPlayer.nsf_player != null:
+						var root = get_tree().get_current_scene()
+						if root.reinaAudioPlayer.nsf_player != null:
 							var realVolumeLevel = Globals.OPTIONS['AudioVolume']['value']*.6-60
-							parent.reinaAudioPlayer.nsf_player.set_volume(realVolumeLevel);
+							root.reinaAudioPlayer.nsf_player.set_volume(realVolumeLevel);
 						Globals.set_audio_levels()
 					if option == \"VoiceVolume\":
 						$Announcer.stop()

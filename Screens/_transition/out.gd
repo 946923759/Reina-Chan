@@ -11,6 +11,9 @@ export (int,"Out","In") var transition_type
 export(Texture) var m16_tex
 
 func OnCommand(character:int = 0):
+	var s = get_viewport().get_visible_rect().size
+	$Node2D.position.x = s.x/2.0
+	print("Screen Center: ",s.x/2)
 	if character == 1:
 		U.texture = m16_tex
 		M.texture = m16_tex
@@ -77,9 +80,9 @@ func _ready():
 	#OnCommand()
 	pass
 	
-#func _input(event):
-#	if event is InputEventKey and event.pressed:
-#		if event.scancode == KEY_0:
-#			OnCommand()
-#		elif event.scancode == KEY_1:
-#			OffCommand()
+func _input(event):
+	if event is InputEventKey and event.pressed:
+		if event.scancode == KEY_0:
+			OnCommand()
+		elif event.scancode == KEY_9:
+			OffCommand()

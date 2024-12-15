@@ -143,5 +143,13 @@ mouse_filter = 2
 color = Color( 0, 0, 0, 1 )
 
 [node name="TransitionOut" parent="." instance=ExtResource( 4 )]
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 0.0
+margin_top = 0.0
+margin_right = 0.0
+margin_bottom = 0.0
 
 [connection signal="item_rect_changed" from="." to="BossSpriteLoader" method="_on_Node_item_rect_changed"]

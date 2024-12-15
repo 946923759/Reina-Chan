@@ -24,7 +24,8 @@ var playerLivesLeft:int=3
 # Used in Ouroboros' stage to unlock the miniboss door after dying.
 # Used in Sangvis3 to store the boss defeat status.
 # For you beginner programmers: 
-# - To set, use temporaryStageStats |= (1<<i)
+# - To set true, use temporaryStageStats |= (1<<i)
+# - To set false, use temporaryStageStats &= ~(1<<i). It's usually less effort to invert, though.
 # - To invert a bit, use temporaryStageStats ^= (1<<i)
 # - To get, use temporaryStageStats & 1<<i (notice the single &)
 var temporaryStageStats:int=0

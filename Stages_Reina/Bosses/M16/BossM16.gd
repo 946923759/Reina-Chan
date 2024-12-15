@@ -221,6 +221,8 @@ func _physics_process(delta):
 				facing *= -1
 				previous_state = STATES.RAGING_DEMON_START
 				current_state = STATES.IDLE
+				#This is needed mostly for hard mode, not medium
+				#cooldown = .2
 			else:
 				var spd = Globals.playerData.gameDifficulty*12
 				if curHP<10:
@@ -306,9 +308,10 @@ func _physics_process(delta):
 
 				#is_reflecting=false
 				cooldown= 1.0
-				# Should this be based on difficulty?
-				# Maybe 5sec cooldown on hard? Or is it hard enough already?
-				healing_cooldown = 10
+				if Globals.playerData.gameDifficulty >= Globals.Difficulty.HARD:
+					healing_cooldown = 6
+				else:
+					healing_cooldown = 10
 				previous_state=STATES.HEAL
 				current_state=STATES.IDLE
 				
@@ -324,7 +327,9 @@ func _physics_process(delta):
 			sprite.set_animation("Grenade")
 			#facing=1 if (player.global_position.x > global_position.x) else -1
 			#if sprite.frame==1:
-			var a = [grenade.instance(),grenade.instance(),grenade.instance()]
+			
+			#The third grenade is way too hard to dodge unless M16 is near the edge
+			var a = [grenade.instance(),grenade.instance()] #,grenade.instance()
 			for i in range(a.size()):
 				var bi = a[i]
 				var pos = position + Vector2(15*facing, -16)
@@ -337,7 +342,7 @@ func _physics_process(delta):
 				self.add_collision_exception_with(a[i])# Make bullet and this not collide
 				a[i].add_collision_exception_with(a[0])
 				a[i].add_collision_exception_with(a[1])
-				a[i].add_collision_exception_with(a[2])
+				#a[i].add_collision_exception_with(a[2])
 			cooldown=1
 			previous_state=STATES.THROWING
 			current_state=0
