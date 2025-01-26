@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Screens/ScreenHowToPlay/XboxSeriesX_Diagram.png" type="Texture" id=1]
 [ext_resource path="res://ubuntu-font-family/BitmapFont.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Screens/ScreenHowToPlay/Blank_QWERTkeyboard_for_input_methods.svg.png" type="Texture" id=3]
+[ext_resource path="res://Screens/ScreenHowToPlay/NX_Diagram.png" type="Texture" id=4]
 
 [sub_resource type="GDScript" id=1]
 script/source = "extends Control
@@ -50,10 +51,11 @@ script = SubResource( 1 )
 unlocked_abilities = 3
 
 [node name="LabelHowToPlay" parent="." instance=ExtResource( 2 )]
-position = Vector2( 421.537, 24.476 )
-text = "how to play"
-wrap_at = 92233720368
+position = Vector2( 640, 24 )
+text = "How to play"
+wrap_at = 500
 scale_by = 5
+alignment = 1
 
 [node name="Controller" type="Control" parent="."]
 anchor_right = 1.0
@@ -218,5 +220,23 @@ position = Vector2( 208.44, 370.742 )
 text = "controls are on-screen."
 wrap_at = 24
 scale_by = 5
+
+[node name="NX" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 2160.0
+margin_bottom = 2160.0
+
+[node name="TextureRect" type="TextureRect" parent="NX"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -368.5
+margin_top = -268.0
+margin_right = 368.5
+margin_bottom = 268.0
+texture = ExtResource( 4 )
+stretch_mode = 6
 
 [connection signal="item_rect_changed" from="." to="." method="_on_HowToPlay_item_rect_changed"]

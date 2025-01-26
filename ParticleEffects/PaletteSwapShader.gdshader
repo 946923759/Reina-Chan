@@ -18,7 +18,7 @@ void fragment(){
 	}
 	else
 	{
-		COLOR.rgb = color
+		COLOR.rgb = color;
 	}
 	//COLOR.rgb = vec3(1,0,0);
 	COLOR.a  = texture(TEXTURE,UV).a;

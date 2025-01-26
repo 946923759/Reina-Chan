@@ -10,7 +10,9 @@ export (int,"Out","In") var transition_type
 
 export(Texture) var m16_tex
 
-func OnCommand(character:int = 0):
+func OnCommand(character:int = -1):
+	if character == -1:
+		character = Globals.playerData.currentCharacter
 	var s = get_viewport().get_visible_rect().size
 	$Node2D.position.x = s.x/2.0
 	print("Screen Center: ",s.x/2)

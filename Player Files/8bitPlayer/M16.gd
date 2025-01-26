@@ -26,14 +26,12 @@ func _ready():
 	#I DON'T UNDERSTAND WHY THIS WILL OVERRIDE THE BASE
 	#SCENES IF YOU CHANGE IT IN THE EDITOR WHO THE FUCK
 	#DESIGNED THIS
-	sprite.get_material().set_shader_param("colorToSwap1", Color("#c2c2c2"))
-	sprite.get_material().set_shader_param("colorToSwap2", Color("#f0f0f0"))
-
+	switchWeapon(false)
 	#chargeStart.connect("finished",chargeLoop,"play")
 
 func switchWeapon(showIcon:bool=true):
 	if showIcon:
-		weaponSwitch.showIcon(currentWeapon)
+		emit_signal("switched_weapon",currentWeapon)
 	if currentWeapon==0: #lmao
 		sprite.get_material().set_shader_param("clr1", Color(.749,.749,.749))
 		sprite.get_material().set_shader_param("clr2", Color(.957,.957,.957))
@@ -53,24 +51,25 @@ var startedCharging:bool=false
 func get_input(delta):
 	if hasGrenadeAbility==false and Globals.playerData.specialAbilities[Globals.SpecialAbilities.Grenade]:
 		hasGrenadeAbility=true
-	#print("lmao 2")
-	var right = Input.is_action_pressed('ui_right')
-	var left = Input.is_action_pressed('ui_left')
-	var up = Input.is_action_pressed('ui_up')
-	var down = Input.is_action_pressed('ui_down')
-	var jump = Input.is_action_just_pressed('ui_accept')
-	var shoot = Input.is_action_just_pressed("ui_cancel")
-	var chargeShot = Input.is_action_pressed("ui_cancel") and currentWeapon==Globals.Weapons.Buster
+
+	var left = Input.is_action_pressed(INPUT.LEFT[controller_index])
+	var right = Input.is_action_pressed(INPUT.RIGHT[controller_index])
+	var up = Input.is_action_pressed(INPUT.UP[controller_index])
+	var down = Input.is_action_pressed(INPUT.DOWN[controller_index])
+	var jump = Input.is_action_just_pressed(INPUT.FORWARD[controller_index])
+	var shoot = Input.is_action_just_pressed(INPUT.BACK[controller_index])
+
+	var chargeShot = Input.is_action_pressed(INPUT.BACK[controller_index]) and currentWeapon==Globals.Weapons.Buster
 	if rapidFire and shoot_time > .1:
-		shoot = Input.is_action_pressed("ui_cancel")
+		shoot = Input.is_action_pressed(INPUT.BACK[controller_index])
 		chargeShot=false #no charge shots when rapidFire!
 
 	if Globals.flipButtons:
-		jump = Input.is_action_just_pressed('ui_cancel')
-		shoot = Input.is_action_just_pressed("ui_accept") or rapidFire and (shoot_time > .1 and Input.is_action_pressed("ui_accept"))
+		jump = Input.is_action_just_pressed(INPUT.BACK[controller_index])
+		shoot = Input.is_action_just_pressed(INPUT.FORWARD[controller_index]) or rapidFire and (shoot_time > .1 and Input.is_action_pressed(INPUT.FORWARD[controller_index]))
 
 	var grenade_input = (shoot and up) or (
-		Input.is_action_just_pressed("gameplay_btn3") and
+		Input.is_action_just_pressed(INPUT.THIRD[controller_index]) and
 		state!=State.DASH
 	)
 		#Can't throw grenades if using other weapons because it will
@@ -81,7 +80,7 @@ func get_input(delta):
 	if dash_time>0:
 		jump=false
 	if Input.is_action_just_pressed("R1") or (
-		Input.is_action_pressed("ui_down") and jump
+		down and jump
 	):
 		if is_on_floor() and dash_time<=0:
 			#print("Dash")
@@ -367,19 +366,31 @@ func dash_handler()->bool:
 #Currently we decided m16 can't obtain weapons,
 #so the item get screen is disabled for her.
 func finishStage_2():
-	$CanvasLayer/Fadeout.fadeOut()
-	yield($CanvasLayer/Fadeout/Fadeout_Tween,"tween_completed")
 	var nextScene = "ScreenSelectStage"
 	CheckpointPlayerStats.lastPlayedStage = stageRoot.weapon_to_unlock
-	#if Globals.playerData.availableWeapons[stageRoot.weapon_to_unlock]: #If this stage is already completed
-	#	nextScene="ScreenSelectStage"
-
-	print("Marking stage/item "+String(stageRoot.weapon_to_unlock)+" as cleared.")
-	Globals.playerData.availableWeapons[stageRoot.weapon_to_unlock]=true
-	Globals.save_player_game()
-
-	var weapons = Globals.playerData.availableWeapons
-	if weapons[1] and weapons[2] and weapons[4]:
-		Globals.change_screen(get_tree(),"CutsceneDemoEnd")
+	
+	var tween:SceneTreeTween
+	if stageRoot.wily_stage_num >= 4:
+		Globals.previous_screen = "StageSangvis"
+		nextScene="ScreenCredits"
+		tween = $CanvasLayer/Fadeout.fadeOut()
+	elif stageRoot.wily_stage_num>0:
+		Globals.previous_screen = "StageSangvis"
+		nextScene="ScreenSangvisIntro"
+		#CheckpointPlayerStats.lastPlayedStage = Globals.Weapons.LENGTH_WEAPONS+stageRoot.wily_stage_num
+		Globals.playerData.wilyStageNum = stageRoot.wily_stage_num+1
+		tween = $CanvasLayer/Fadeout.fadeOut()
+		
+	elif false: #If this stage is already completed
+		nextScene="ScreenSelectStage"
+		tween = $CanvasLayer/TransitionOut.OnCommand()
 	else:
-		Globals.change_screen(get_tree(),nextScene)
+		tween = $CanvasLayer/Fadeout.fadeOut()
+	
+		Globals.playerData.availableWeapons[stageRoot.weapon_to_unlock]=true
+		print("Marking stage/item "+String(stageRoot.weapon_to_unlock)+" as cleared.")
+	
+	Globals.save_player_game()
+	
+	tween.tween_callback(Globals,"change_screen",[get_tree(),nextScene])
+	#Globals.change_screen(get_tree(),nextScene)

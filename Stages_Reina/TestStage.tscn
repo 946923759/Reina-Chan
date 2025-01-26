@@ -443,19 +443,7 @@ script = SubResource( 4 )
 position = Vector2( -1248, 448 )
 script = SubResource( 4 )
 
-[node name="Dinergate3" parent="." index="11" instance=ExtResource( 2 )]
-position = Vector2( 2784, 480 )
-collision_layer = 18
-collision_mask = 18
-no_movement = false
-
-[node name="Dinergate4" parent="." index="12" instance=ExtResource( 2 )]
-position = Vector2( 3296, 352 )
-collision_layer = 18
-collision_mask = 18
-no_movement = false
-
-[node name="Label" type="Label" parent="." index="13"]
+[node name="Label" type="Label" parent="." index="11"]
 margin_left = -1216.0
 margin_top = 160.0
 margin_right = -121.0
@@ -463,26 +451,26 @@ margin_bottom = 210.0
 custom_fonts/font = ExtResource( 9 )
 text = "Welcome to the test room!"
 
-[node name="EventTile" parent="." index="14" instance=ExtResource( 3 )]
+[node name="EventTile" parent="." index="12" instance=ExtResource( 3 )]
 position = Vector2( -1216, 704 )
 scale = Vector2( 4, 1 )
 event_ID = 2
 
-[node name="EventTile7" parent="." index="15" instance=ExtResource( 3 )]
+[node name="EventTile7" parent="." index="13" instance=ExtResource( 3 )]
 position = Vector2( -1216, 768 )
 scale = Vector2( 4, 1 )
 event_ID = 1
 
-[node name="Polygon2D" type="Polygon2D" parent="." index="16"]
+[node name="Polygon2D" type="Polygon2D" parent="." index="14"]
 position = Vector2( -640, 768 )
 scale = Vector2( 0.421053, 0.8 )
 color = Color( 0.0196078, 0, 0.588235, 0.286275 )
 polygon = PoolVector2Array( -736, 0, -736, 480, -1344, 480, -1344, 0 )
 
-[node name="EventTile11_message" parent="." index="17" instance=ExtResource( 13 )]
+[node name="EventTile11_message" parent="." index="15" instance=ExtResource( 13 )]
 position = Vector2( -704, 1152 )
 
-[node name="Label2" type="Label" parent="." index="18"]
+[node name="Label2" type="Label" parent="." index="16"]
 margin_left = -832.0
 margin_top = 1088.0
 margin_right = -560.0
@@ -493,13 +481,13 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Dinergate5" parent="." index="19" instance=ExtResource( 2 )]
+[node name="Dinergate5" parent="." index="17" instance=ExtResource( 2 )]
 position = Vector2( -1408, 736 )
 collision_mask = 18
 facing = 1
 no_movement = false
 
-[node name="SpawnerTest" type="VisibilityNotifier2D" parent="." index="20"]
+[node name="SpawnerTest" type="VisibilityNotifier2D" parent="." index="18"]
 position = Vector2( -160, 256 )
 rect = Rect2( 0, 0, 64, 64 )
 script = ExtResource( 37 )
@@ -515,12 +503,12 @@ collision_mask = 18
 facing = 1
 no_movement = false
 
-[node name="Enemy2" parent="." index="21" instance=ExtResource( 18 )]
+[node name="Enemy2" parent="." index="19" instance=ExtResource( 18 )]
 position = Vector2( -3040, 736 )
 facing = 1
 type = 0
 
-[node name="CannonEnemyFix" parent="." index="22" instance=ExtResource( 15 )]
+[node name="CannonEnemyFix" parent="." index="20" instance=ExtResource( 15 )]
 position = Vector2( -2432, 704 )
 collision_layer = 26
 collision_mask = 26
@@ -529,18 +517,18 @@ shapeOverride = null
 collisionOffset = Vector2( 0, 0 )
 use_collision = true
 
-[node name="RigidBody2D" parent="." index="23" instance=ExtResource( 6 )]
+[node name="RigidBody2D" parent="." index="21" instance=ExtResource( 6 )]
 position = Vector2( -224, 736 )
 
-[node name="1Up Drop" parent="." index="24" instance=ExtResource( 30 )]
+[node name="1Up Drop" parent="." index="22" instance=ExtResource( 30 )]
 position = Vector2( -736, 736 )
 
-[node name="RipperHalloween" parent="." index="25" instance=ExtResource( 41 )]
+[node name="RipperHalloween" parent="." index="23" instance=ExtResource( 41 )]
 position = Vector2( 12448, 1376 )
 collision_layer = 18
 collision_mask = 18
 
-[node name="room20-0" type="Node2D" parent="." index="26"]
+[node name="room20-0" type="Node2D" parent="." index="24"]
 
 [node name="Dinergate" parent="room20-0" index="0" instance=ExtResource( 2 )]
 position = Vector2( 1696, 736 )
@@ -559,7 +547,7 @@ collision_layer = 18
 collision_mask = 18
 no_movement = true
 
-[node name="YokuBlockRoom" type="Node2D" parent="." index="27"]
+[node name="YokuBlockRoom" type="Node2D" parent="." index="25"]
 position = Vector2( -2560, 1088 )
 
 [node name="YokuBlock" parent="YokuBlockRoom" index="0" instance=ExtResource( 12 )]
@@ -587,14 +575,14 @@ position = Vector2( 960, 32 )
 collision_layer = 18
 collision_mask = 18
 
-[node name="TimeBomb" parent="." index="28" instance=ExtResource( 19 )]
+[node name="TimeBomb" parent="." index="26" instance=ExtResource( 19 )]
 position = Vector2( -1120, 704 )
 script = SubResource( 4 )
 
-[node name="RigidBody2D2" parent="." index="29" instance=ExtResource( 4 )]
+[node name="RigidBody2D2" parent="." index="27" instance=ExtResource( 4 )]
 position = Vector2( -224, 656 )
 
-[node name="EventTile17" type="StaticBody2D" parent="." index="30"]
+[node name="EventTile17" type="StaticBody2D" parent="." index="28"]
 position = Vector2( -4160, 640 )
 collision_layer = 4
 collision_mask = 4
@@ -608,7 +596,7 @@ event_ID = 2
 position = Vector2( 32, 32 )
 shape = SubResource( 10 )
 
-[node name="EventTile18" type="StaticBody2D" parent="." index="31"]
+[node name="EventTile18" type="StaticBody2D" parent="." index="29"]
 position = Vector2( -4160, 704 )
 collision_layer = 4
 collision_mask = 4
@@ -622,7 +610,7 @@ event_ID = 1
 position = Vector2( 32, 32 )
 shape = SubResource( 11 )
 
-[node name="CameraTestRooms" type="Node2D" parent="." index="32"]
+[node name="CameraTestRooms" type="Node2D" parent="." index="30"]
 
 [node name="EventTile13" parent="CameraTestRooms" index="0" instance=ExtResource( 23 )]
 position = Vector2( 0, 1920 )
@@ -684,7 +672,7 @@ bottomBound = 36
 position = Vector2( 32, 32 )
 shape = SubResource( 9 )
 
-[node name="CameraAdjuster" parent="." index="33" instance=ExtResource( 23 )]
+[node name="CameraAdjuster" parent="." index="31" instance=ExtResource( 23 )]
 position = Vector2( 0, 448 )
 leftBound = -100000
 topBound = -100000
@@ -694,13 +682,13 @@ bottomBound = 100000
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CameraAdjuster" index="0"]
 shape = SubResource( 12 )
 
-[node name="TestEnemy" parent="." index="34" instance=ExtResource( 21 )]
+[node name="TestEnemy" parent="." index="32" instance=ExtResource( 21 )]
 position = Vector2( 352, 736 )
 collision_layer = 26
 collision_mask = 26
 shapeOverride = SubResource( 13 )
 
-[node name="FGTiles" type="TileMap" parent="." index="35"]
+[node name="FGTiles" type="TileMap" parent="." index="33"]
 scale = Vector2( 4, 4 )
 tile_set = ExtResource( 1 )
 cell_size = Vector2( 16, 16 )
@@ -709,11 +697,11 @@ collision_mask = 0
 format = 1
 tile_data = PoolIntArray( 720896, 7, 0, 720898, 7, 0, 720902, 7, 0, 720904, 7, 0, 720905, 7, 0, 720909, 7, 0, 720910, 7, 0, 720911, 7, 0, 720914, 7, 0, 720917, 7, 0, 720918, 7, 0, 720920, 7, 0, 720921, 7, 0, 720924, 7, 0, 720925, 7, 0, 720927, 7, 0 )
 
-[node name="EventTile19" parent="." index="36" instance=ExtResource( 3 )]
+[node name="EventTile19" parent="." index="34" instance=ExtResource( 3 )]
 position = Vector2( 3136, 1472 )
 event_ID = 9
 
-[node name="CameraAdjuster3" parent="." index="37" instance=ExtResource( 31 )]
+[node name="CameraAdjuster3" parent="." index="35" instance=ExtResource( 31 )]
 position = Vector2( 7040, 1760 )
 leftBound = 100
 topBound = -999
@@ -721,41 +709,41 @@ rightBound = 120
 bottomBound = 36
 destination_coordinates_if_warp = Vector2( 0, -8 )
 
-[node name="Door3" parent="." index="38" instance=ExtResource( 22 )]
+[node name="Door3" parent="." index="36" instance=ExtResource( 22 )]
 position = Vector2( 7680, 1280 )
 topBound = 14
 bottomBound = -999
 
-[node name="PickupAmmo" parent="." index="39" instance=ExtResource( 32 )]
+[node name="PickupAmmo" parent="." index="37" instance=ExtResource( 32 )]
 position = Vector2( -96, 736 )
 
-[node name="PickupAmmoSmall" parent="." index="40" instance=ExtResource( 33 )]
+[node name="PickupAmmoSmall" parent="." index="38" instance=ExtResource( 33 )]
 position = Vector2( -160, 736 )
 
-[node name="CameraAdjuster4" parent="." index="41" instance=ExtResource( 27 )]
+[node name="CameraAdjuster4" parent="." index="39" instance=ExtResource( 27 )]
 position = Vector2( 6176, 1152 )
 leftBound = 80
 topBound = 12
 rightBound = 121
 bottomBound = 25
 
-[node name="PlayerHolder" parent="." index="42"]
-position = Vector2( 560, 2880 )
+[node name="PlayerHolder" parent="." index="40"]
+position = Vector2( 2816, 256 )
 
-[node name="CameraAdjuster5" parent="." index="43" instance=ExtResource( 27 )]
+[node name="CameraAdjuster5" parent="." index="41" instance=ExtResource( 27 )]
 position = Vector2( 10341.1, -376.282 )
 leftBound = 160
 topBound = -12
 rightBound = -999
 
-[node name="Dinergate" parent="." index="44" instance=ExtResource( 2 )]
+[node name="Dinergate" parent="." index="42" instance=ExtResource( 2 )]
 position = Vector2( 11332.7, -62.6801 )
 collision_layer = 18
 collision_mask = 18
 facing = 1
 no_movement = false
 
-[node name="QuicksandTest" type="Node2D" parent="." index="45"]
+[node name="QuicksandTest" type="Node2D" parent="." index="43"]
 position = Vector2( 12800, 0 )
 
 [node name="QuickSand" type="StaticBody2D" parent="QuicksandTest" index="0"]
@@ -802,7 +790,7 @@ modulate = Color( 1, 1, 1, 0.486275 )
 color = Color( 1, 0.929412, 0.2, 1 )
 polygon = PoolVector2Array( 0, 0, 2048, 0, 2048, 128, 0, 128 )
 
-[node name="DIE ONE THOUSAND DEATHS" type="Area2D" parent="." index="46"]
+[node name="DIE ONE THOUSAND DEATHS" type="Area2D" parent="." index="44"]
 position = Vector2( 1693.48, -1158.3 )
 script = SubResource( 19 )
 
@@ -829,27 +817,27 @@ stream = ExtResource( 45 )
 [node name="ExpSound" type="AudioStreamPlayer" parent="DIE ONE THOUSAND DEATHS" index="4"]
 stream = ExtResource( 46 )
 
-[node name="Enemy" parent="." index="47" instance=ExtResource( 40 )]
+[node name="Enemy" parent="." index="45" instance=ExtResource( 40 )]
 position = Vector2( 2304, -1088 )
 collision_layer = 18
 collision_mask = 18
 
-[node name="Guardian_SWAP" parent="." index="48" instance=ExtResource( 42 )]
+[node name="Guardian_SWAP" parent="." index="46" instance=ExtResource( 42 )]
 position = Vector2( 2420, -844 )
 
-[node name="Enemy5" parent="." index="49" instance=ExtResource( 43 )]
+[node name="Enemy5" parent="." index="47" instance=ExtResource( 43 )]
 position = Vector2( 8736, 160 )
 
-[node name="Prowler" parent="." index="50" instance=ExtResource( 44 )]
+[node name="Prowler" parent="." index="48" instance=ExtResource( 44 )]
 position = Vector2( 10976, -320 )
 gravity = 0
 
-[node name="Skorpion" parent="." index="51" instance=ExtResource( 48 )]
+[node name="Skorpion" parent="." index="49" instance=ExtResource( 48 )]
 position = Vector2( 320, -864 )
 collision_layer = 16
 message_id = "TestStage_Sk"
 
-[node name="Label3" type="Label" parent="." index="52"]
+[node name="Label3" type="Label" parent="." index="50"]
 margin_left = -1408.0
 margin_top = 1280.0
 margin_right = -601.0
@@ -859,10 +847,10 @@ text = "These tiles appear
 if you are playing
 on easy or less"
 
-[node name="BreakableBlock" parent="." index="53" instance=ExtResource( 49 )]
+[node name="BreakableBlock" parent="." index="51" instance=ExtResource( 49 )]
 position = Vector2( 736, -864 )
 
-[node name="BossRoom" parent="." index="54" instance=ExtResource( 34 )]
+[node name="BossRoom" parent="." index="52" instance=ExtResource( 34 )]
 position = Vector2( 1216, -768 )
 
 [node name="Door2" parent="BossRoom" index="0" instance=ExtResource( 22 )]
@@ -883,7 +871,7 @@ message_id = "TestStageCutscene"
 [node name="BossArchitect" parent="BossRoom/Node2D" index="3" instance=ExtResource( 26 )]
 position = Vector2( 736, 0 )
 
-[node name="MovingCameraTest" type="Node2D" parent="." index="55"]
+[node name="MovingCameraTest" type="Node2D" parent="." index="53"]
 
 [node name="CameraAdjuster2" parent="MovingCameraTest" index="0" instance=ExtResource( 27 )]
 position = Vector2( 32, 1152 )
@@ -915,10 +903,10 @@ start_disabled = true
 position = Vector2( 160, -160 )
 start_disabled = true
 
-[node name="Guardian" parent="." index="56" instance=ExtResource( 14 )]
+[node name="Guardian" parent="." index="54" instance=ExtResource( 14 )]
 position = Vector2( 724, 692 )
 
-[node name="DamageTestRoom" type="Node2D" parent="." index="57"]
+[node name="DamageTestRoom" type="Node2D" parent="." index="55"]
 position = Vector2( 2560, -768 )
 
 [node name="TestEnemy" parent="DamageTestRoom" index="0" instance=ExtResource( 21 )]
@@ -944,7 +932,7 @@ player_damage = 6
 position = Vector2( 1120, 672 )
 player_damage = 8
 
-[node name="Node2D" type="Node2D" parent="." index="58"]
+[node name="Node2D" type="Node2D" parent="." index="56"]
 position = Vector2( 3840, -768 )
 
 [node name="BreakableBlock" parent="Node2D" index="0" instance=ExtResource( 49 )]
@@ -960,7 +948,7 @@ position = Vector2( 544, 96 )
 collision_layer = 17
 collision_mask = 17
 
-[node name="Area2D" type="StaticBody2D" parent="." index="59"]
+[node name="Area2D" type="StaticBody2D" parent="." index="57"]
 position = Vector2( -896, 5152 )
 collision_layer = 4
 collision_mask = 4
@@ -971,18 +959,18 @@ __meta__ = {
 
 [node name="h" parent="Area2D" index="0" instance=ExtResource( 50 )]
 
-[node name="Droplet" parent="." index="62" instance=ExtResource( 51 )]
+[node name="Droplet" parent="." index="60" instance=ExtResource( 51 )]
 position = Vector2( 480, -672 )
 
-[node name="Droplet2" parent="." index="63" instance=ExtResource( 51 )]
+[node name="Droplet2" parent="." index="61" instance=ExtResource( 51 )]
 position = Vector2( 736, -672 )
 
-[node name="BlockNode" parent="." index="64" instance=ExtResource( 28 )]
+[node name="BlockNode" parent="." index="62" instance=ExtResource( 28 )]
 position = Vector2( 2592, -800 )
 collision_layer = 0
 collision_mask = 1
 
-[node name="LockedDoorROom" type="Node2D" parent="." index="65"]
+[node name="LockedDoorROom" type="Node2D" parent="." index="63"]
 
 [node name="Door" parent="LockedDoorROom" index="0" instance=ExtResource( 22 )]
 position = Vector2( 1216, 2752 )
@@ -999,6 +987,13 @@ bottomBound = 48
 
 [node name="Button" parent="LockedDoorROom" index="2" instance=ExtResource( 52 )]
 position = Vector2( 416, 2976 )
+
+[node name="Guardian2" parent="." index="64" instance=ExtResource( 14 )]
+position = Vector2( 3264, 304 )
+maxHealth = 50
+
+[node name="Guardian_SWAP2" parent="." index="65" instance=ExtResource( 42 )]
+position = Vector2( 2752, 448 )
 
 [connection signal="event_executed" from="MovingCameraTest/EventTile12" to="MovingCameraTest/EventTile12/BlockEnablerDisabler" method="execute"]
 [connection signal="event_executed" from="LockedDoorROom/Button" to="LockedDoorROom/Door" method="unlock_door"]

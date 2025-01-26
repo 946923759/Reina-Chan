@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://Screens/ScreenStageSelectV2/bg.png" type="Texture" id=1]
 [ext_resource path="res://Sounds/Classic/S3K_B2 - No Way.wav" type="AudioStream" id=2]
@@ -9,6 +9,7 @@
 [ext_resource path="res://Screens/ScreenStageSelectV2/hub.png" type="Texture" id=7]
 [ext_resource path="res://Sounds/Classic/Mega Man 4 SFX (20) - Weapon Switch.wav" type="AudioStream" id=8]
 [ext_resource path="res://Screens/_transition/transition.tscn" type="PackedScene" id=9]
+[ext_resource path="res://ParticleEffects/PaletteSwapShader.gdshader" type="Shader" id=10]
 
 [sub_resource type="GDScript" id=1]
 script/source = "extends Control
@@ -80,6 +81,9 @@ func _ready():
 		$Hub.visible=true
 	else:
 		$Hub.visible=false
+
+	#if Globals.playerData.currentCharacter
+	$Sprite.use_parent_material = Globals.playerData.currentCharacter == Globals.Characters.UMP9
 
 	set_process(OS.has_feature(\"pc\"))
 
@@ -191,6 +195,13 @@ func setter(newSelection,playSound=true):
 	pass
 "
 
+[sub_resource type="ShaderMaterial" id=2]
+shader = ExtResource( 10 )
+shader_param/colorToSwap1 = Color( 0.937255, 0.788235, 0, 1 )
+shader_param/colorToSwap2 = Color( 0.811765, 0.439216, 0, 1 )
+shader_param/clr1 = Color( 1, 1, 1, 1 )
+shader_param/clr2 = Color( 0.694, 0.627, 0.592, 1 )
+
 [node name="ScreenSelectStage" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -204,6 +215,7 @@ color = Color( 0, 0, 0, 1 )
 script = ExtResource( 4 )
 
 [node name="Sprite" type="Sprite" parent="."]
+material = SubResource( 2 )
 position = Vector2( 640, 360 )
 scale = Vector2( 1, 3.2 )
 texture = ExtResource( 1 )

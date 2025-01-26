@@ -361,13 +361,13 @@ __meta__ = {
 
 [node name="VersionNum" parent="." index="4" instance=ExtResource( 1 )]
 position = Vector2( 9, 10 )
-text = "demo 7"
+text = "demo 6.2"
 wrap_at = 92233720368
 scale_by = 3
 
 [node name="VersionNum2" parent="." index="5" instance=ExtResource( 1 )]
 position = Vector2( 9, 42 )
-text = "v.2024.11.11"
+text = "v.2025.01.25"
 wrap_at = 92233720368
 scale_by = 3
 

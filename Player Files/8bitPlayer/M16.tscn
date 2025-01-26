@@ -147,3 +147,5 @@ stream = ExtResource( 10 )
 
 [node name="ChargeShotFireSound" type="AudioStreamPlayer2D" parent="." index="14"]
 stream = ExtResource( 8 )
+
+[connection signal="switched_weapon" from="." to="WeaponSwitch" method="showIcon"]

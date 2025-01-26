@@ -88,7 +88,10 @@ func parse_string_array(arr,delimiter:String="|",msgColumn:int=1):
 		var splitString = s.split(delimiter) #,true,1
 		if splitString[0].begins_with('/'): #Chaosoup's idea, since typing two opcodes every time was getting obnoxious
 			message.push_back([OPCODES.SPEAKER,splitString[0].substr(1)])
-			if msgColumn > splitString.size()-1:
+			if splitString.size() == 1:
+				print("This line is empty!!!!")
+				message.push_back([OPCODES.MSG,"(Error: Pushed an empty line...)"])
+			elif msgColumn > splitString.size()-1:
 				print("Hey moron, you're missing the translation for this line: "+String(splitString))
 				message.push_back([OPCODES.MSG,splitString[1]])
 			else:
