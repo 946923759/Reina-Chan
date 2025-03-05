@@ -118,8 +118,10 @@ func _input(event):
 	if Input.is_key_pressed(KEY_0):
 		OnCommand()
 	
-	if event is InputEventJoypadMotion or event is InputEventMouseMotion:
+	if event is InputEventJoypadMotion:
 		return
+	elif event is InputEventMouseMotion:
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	elif (event is InputEventMouseButton and event.pressed) or (event is InputEventScreenTouch and event.pressed):
 		if (event is InputEventMouseButton and event.button_index == 2) or (event is InputEventScreenTouch and event.index==1):
 			if currentlyHandledMenu:
@@ -143,7 +145,7 @@ func _input(event):
 			currentlyHandledMenu.input(event);
 	else:
 		if Input.is_action_just_pressed("ui_down"):
-			
+			Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 			while true:
 				selection += 1
 				if selection > mainMenu.get_child_count() - 1:
@@ -159,7 +161,7 @@ func _input(event):
 			highlightList(mainMenu,selection);
 				
 		if Input.is_action_just_pressed("ui_up"):
-			
+			Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 			while true:
 				selection -= 1
 				if selection < 0:

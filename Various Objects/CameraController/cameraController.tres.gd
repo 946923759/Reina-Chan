@@ -31,6 +31,11 @@ const CAMERA_SCALE = 64;
 const ROOM_WIDTH = 20
 const ROOM_HEIGHT = 12
 
+const SCREEN_WIDTH:int = 1280
+const SCREEN_HEIGHT:int = 720
+const SCREEN_CENTER_X = SCREEN_WIDTH/2
+const SCREEN_CENTER_Y = SCREEN_HEIGHT/2
+
 func auto_set_bounds(t:int):
 	auto_adjust_bounds = t
 	
@@ -175,12 +180,12 @@ func cam(obj):
 		#We don't want to overwrite leftBound,rightBound, etc so keep the changed variables in a new array.
 		var boundsArray = [null,null,null,null]
 		if rightBound == -999:
-			boundsArray[2] = leftBound*CAMERA_SCALE+Globals.gameResolution.x
+			boundsArray[2] = leftBound*CAMERA_SCALE+SCREEN_WIDTH
 		else:
 			boundsArray[2] = rightBound*CAMERA_SCALE
 			
 		if leftBound == -999:
-			boundsArray[0] = rightBound*CAMERA_SCALE-Globals.gameResolution.x
+			boundsArray[0] = rightBound*CAMERA_SCALE-SCREEN_WIDTH
 		elif leftBound == -9999: #Change the left bound to the current right bound. Basically move right exactly 1 room.
 			boundsArray[0] = cc.limit_right
 		else:
@@ -188,14 +193,14 @@ func cam(obj):
 			#print("WARN: Left and right bounds are not defined. The camera won't work.")
 		
 		if bottomBound == -999:
-			boundsArray[3] = topBound*CAMERA_SCALE+Globals.gameResolution.y
+			boundsArray[3] = topBound*CAMERA_SCALE+SCREEN_HEIGHT
 		elif bottomBound == DO_NOT_ADJUST:
 			boundsArray[3] = cc.limit_bottom
 		else:
 			boundsArray[3] = bottomBound*CAMERA_SCALE
 			
 		if topBound == -999:
-			boundsArray[1] = bottomBound*CAMERA_SCALE-Globals.gameResolution.y
+			boundsArray[1] = bottomBound*CAMERA_SCALE-SCREEN_HEIGHT
 		elif bottomBound == DO_NOT_ADJUST:
 			boundsArray[1] = cc.limit_top
 		else:

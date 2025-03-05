@@ -12,7 +12,11 @@ func _ready():
 		NextScreen=\"ScreenTitleMenu\"
 		PrevScreen=\"ScreenTitleMenu\"
 
+#TODO: This can probably be moved to Globals so the mouse is shown when it moves
+# and the mouse is hidden when there's a controller
 func _input(event):
+	if (event is InputEventJoypadButton or event is InputEventJoypadMotion):
+		Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	$HowToPlay.input(event)
 	
 	#._input(event)

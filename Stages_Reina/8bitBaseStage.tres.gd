@@ -46,6 +46,7 @@ func _ready():
 	player = $PlayerHolder.player
 	
 	get_tree().set_screen_stretch(SceneTree.STRETCH_MODE_2D,SceneTree.STRETCH_ASPECT_KEEP,Vector2(1280,720))
+	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	$CanvasLayer.visible=true
 	
 	if $DebugWarpPoints.get_child_count()==0:
@@ -90,11 +91,7 @@ func _ready():
 		c.adjustCamera(boundsArray, 0)
 	
 	reinaAudioPlayer = ReinaAudioPlayer.new(self)
-	#var music = Globals.get_custom_music(custom_music_name) if custom_music_name != "" else null
-	#load_song(_node:Node, custom_music_name:String, nsf_music_file:String, nsf_track_num:int)
-	if !mute_music_in_debug or !OS.is_debug_build():
-		#reinaAudioPlayer.load_song(custom_music_name,nsf_music_file,nsf_track_num,nsf_volume_adjustment)
-		playMusic_2()
+	playMusic_2()
 
 func update_easytiles():
 	var easyTiles:TileMap = $EasyTiles

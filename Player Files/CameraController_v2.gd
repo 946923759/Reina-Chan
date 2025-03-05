@@ -45,6 +45,7 @@ func adjustCamera(np,secs):
 		
 		#lock the camera to the current position so the tween works correctly
 		var cPos = cam.get_camera_screen_center()
+		print("[Camera] ", cPos)
 		cam.limit_top = cPos.y - SCREEN_CENTER_Y
 		cam.limit_bottom = cPos.y + SCREEN_CENTER_Y
 		

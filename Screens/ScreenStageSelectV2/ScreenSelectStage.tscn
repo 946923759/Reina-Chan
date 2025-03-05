@@ -45,7 +45,8 @@ func _ready():
 		$Transition.OffCommand()
 	get_tree().set_screen_stretch(SceneTree.STRETCH_MODE_2D,SceneTree.STRETCH_ASPECT_EXPAND,Vector2(1280,720))
 	
-	$Sprite.region_rect.size.x=Globals.gameResolution.x
+	#$Sprite.region_rect.size.x=Globals.gameResolution.x
+	$Sprite.region_rect.size.x = self.rect_size.x
 	portraitFrame.position.x=Globals.SCREEN_CENTER_X
 	
 	if Globals.bitArrayToInt32(Globals.playerData.availableWeapons) < 31:
@@ -85,11 +86,11 @@ func _ready():
 	#if Globals.playerData.currentCharacter
 	$Sprite.use_parent_material = Globals.playerData.currentCharacter == Globals.Characters.UMP9
 
-	set_process(OS.has_feature(\"pc\"))
+	set_process(OS.has_feature(\"pc\") or OS.has_feature(\"web\"))
 
 func _process(_delta):
 	var SCREEN_SIZE = get_viewport().get_visible_rect().size
-	#$Label.text=String(SCREEN_SIZE)
+	$Label.text=String(SCREEN_SIZE)
 	$Sprite.region_rect.size.x=SCREEN_SIZE.x
 	$Sprite.position=SCREEN_SIZE/2
 	portraitFrame.position=SCREEN_SIZE/2
@@ -121,8 +122,10 @@ func fade_to_next_screen(scr_name:String = \"ScreenStageIntro\", raw_name:bool =
 
 
 func _input(event):
-	if event is InputEventJoypadMotion or event is InputEventMouseMotion:
+	if event is InputEventJoypadMotion:
 		return
+	elif event is InputEventMouseMotion:
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 #	if (event is InputEventMouseButton and event.pressed) or (event is InputEventScreenTouch and event.pressed):
 #		#print(\"Clicked at \"+String(event.position))
 #		for i in range(portraitFrame.get_child_count()):
@@ -292,3 +295,9 @@ color = Color( 0, 0, 0, 1 )
 [node name="Transition" parent="." instance=ExtResource( 9 )]
 visible = false
 transition_type = 1
+
+[node name="Label" type="Label" parent="."]
+visible = false
+margin_right = 40.0
+margin_bottom = 14.0
+text = "(not processing)"

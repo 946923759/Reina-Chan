@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://Character Sprites/ump9/ump9Idle.png" type="Texture" id=1]
 [ext_resource path="res://Stages/TestStage/Tileset.tres" type="TileSet" id=2]
@@ -8,6 +8,8 @@
 [ext_resource path="res://Various Objects/Special Blocks/EasyModeHelper.png" type="Texture" id=6]
 [ext_resource path="res://Various Objects/Special Blocks/EasyModeHelper_OneWay.png" type="Texture" id=7]
 [ext_resource path="res://Screens/_transition/transition.tscn" type="PackedScene" id=8]
+[ext_resource path="res://ubuntu-font-family/BitmapFont.tscn" type="PackedScene" id=9]
+[ext_resource path="res://Screens/ScreenTitleMenu/reina_logo.png" type="Texture" id=10]
 
 [sub_resource type="ConvexPolygonShape2D" id=2]
 points = PoolVector2Array( 16, 16, 0, 16, 0, 0, 16, 0 )
@@ -122,6 +124,35 @@ func _ready():
 	self.texture=null
 "
 
+[sub_resource type="GDScript" id=5]
+script/source = "extends CanvasLayer
+
+func _ready():
+	if Globals.previous_screen == \"ScreenTitleMenu\" or Globals.previous_screen == \"ScreenTitleJoin\":
+		visible=true
+		pass
+	else:
+		queue_free()
+		pass
+
+var time:float = 0.0
+func _process(delta):
+	time+=delta
+	if time>1.0:
+		time-=1
+	$BitmapFont.visible = time>.5
+	
+	if Input.is_action_just_pressed(\"ui_pause\"):
+		set_process(false)
+		$BitmapFont.visible=false
+		$ColorRect.color.a=0.0
+		var t = create_tween()
+		t.tween_property($ColorRect,\"visible\",true,0.0)
+		t.tween_property($ColorRect,\"color\",Color.black,1.0)
+		Globals.previous_screen=\"ScreenDemo\"
+		t.tween_callback(Globals,\"change_screen\",[get_tree(),\"ScreenTitleMenu\"])
+"
+
 [node name="Node2D" type="Node2D"]
 script = ExtResource( 3 )
 
@@ -168,7 +199,35 @@ charTextures = [ ExtResource( 1 ), ExtResource( 5 ), ExtResource( 1 ) ]
 
 [node name="DebugWarpPoints" type="Node" parent="."]
 
+[node name="Demo" type="CanvasLayer" parent="."]
+script = SubResource( 5 )
+
+[node name="BitmapFont" parent="Demo" instance=ExtResource( 9 )]
+position = Vector2( 640, 352 )
+text = "press start"
+wrap_at = 500
+scale_by = 4
+alignment = 1
+
+[node name="BitmapFont2" parent="Demo" instance=ExtResource( 9 )]
+position = Vector2( 64, 664 )
+text = "demonstration"
+wrap_at = 500
+scale_by = 4
+
+[node name="Sprite" type="Sprite" parent="Demo"]
+position = Vector2( 968, 632 )
+scale = Vector2( 2, 2 )
+texture = ExtResource( 10 )
+
+[node name="ColorRect" type="ColorRect" parent="Demo"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 1 )
+
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
+visible = false
 
 [node name="TransitionIn" parent="CanvasLayer" instance=ExtResource( 8 )]
 transition_type = 1

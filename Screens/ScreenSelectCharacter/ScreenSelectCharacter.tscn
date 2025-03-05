@@ -20,7 +20,6 @@ script = ExtResource( 11 )
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 13 )
-autoplay = true
 bus = "Music"
 
 [node name="bg" type="TextureRect" parent="."]
@@ -97,6 +96,10 @@ expand = true
 stretch_mode = 1
 
 [node name="arrows" parent="." instance=ExtResource( 6 )]
+anchor_top = 0.0
+anchor_bottom = 0.0
+margin_top = 348.0
+margin_bottom = 448.0
 
 [node name="charDesc" type="Label" parent="."]
 anchor_right = 1.0
@@ -144,6 +147,7 @@ align = 1
 valign = 1
 
 [node name="ScreenTransition" parent="." instance=ExtResource( 16 )]
+visible = false
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 1.0

@@ -96,6 +96,32 @@ func get_menu_buttons_input(_delta):
 			HP=MAX_HP
 			isRecording=RECORDING.PLAYBACK
 			setDebugInfoText()
+	elif Input.is_action_just_pressed("DebugButton6"):
+		if frameData_stored.empty():
+			print("No recording data to save!")
+		else:
+			#CheckpointPlayerStats.lastPlayedStage = stageRoot.weapon_to_unlock
+			var stage = stageRoot.weapon_to_unlock
+			var fileName = "user://demo_replay_"+String(stage)+".bin"
+			var replay_file = File.new()
+			var ok = replay_file.open(fileName,File.WRITE)
+			if ok != OK:
+				printerr("Warning: could not create file for writing! ERROR ", ok)
+				return false
+			replay_file.store_buffer(frameData_stored)
+			replay_file.close()
+			print("Saved "+fileName)
+	elif Input.is_action_just_pressed("DebugButton9"):
+		if debugDisplay.visible and $CanvasLayer/DebugButtonHelp.visible:
+			debugDisplay.visible=false
+			$CanvasLayer/DebugButtonHelp.visible=false
+			emit_signal("toggled_debug_disp",0)
+		elif debugDisplay.visible:
+			$CanvasLayer/DebugButtonHelp.visible = true
+			emit_signal("toggled_debug_disp",2)
+		else:
+			debugDisplay.visible=true
+			emit_signal("toggled_debug_disp",1)
 
 # Because it is possible to miss the frame the player shoots on,
 # store it until it gets recorded

@@ -29,6 +29,12 @@ func _ready():
 	if canPickShinM16:
 		arrows.limit = 2
 	
+	#If web, use native audio since it doesn't crash
+	if OS.has_feature("web"):
+		var reinaAudioPlayer=ReinaAudioPlayer.new(self)
+		reinaAudioPlayer.load_song("CharSelect","Rockman 4MI.nsf",67)
+	else:
+		$AudioStreamPlayer.play()
 	#if INITrans.currentLanguage!="en":
 	#	var child = $charDesc
 	#	child.set("custom_fonts/font",INITrans.font)
