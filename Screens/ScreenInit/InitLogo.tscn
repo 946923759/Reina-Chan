@@ -32,7 +32,10 @@ var rText = [
 
 #warning-ignore:return_value_discarded
 func _ready():
-	if OS.is_debug_build():
+	
+	if Globals.networkMode != 0:
+		Globals.change_screen(get_tree(),\"ScreenNetConnect\")
+	elif OS.is_debug_build():
 		Globals.change_screen(get_tree(),\"ScreenDebugSelect\")
 		return
 	

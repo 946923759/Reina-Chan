@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=2]
+[gd_scene load_steps=25 format=2]
 
 [ext_resource path="res://Sounds/Classic/Mega Man 4 SFX (25) - Menu Help.wav" type="AudioStream" id=4]
 [ext_resource path="res://ubuntu-font-family/FallbackPixelFont.tres" type="DynamicFont" id=5]
@@ -179,7 +179,16 @@ var selection = 0
 #var propertyToAdjust=\"gameDifficulty\"
 
 var extras_table = {
+	\"Multiplayer\":{
+		\"hidden\":false
+	},
 	\"Jukebox\":{
+		\"hidden\":false
+	},
+	\"Credits\":{
+		\"hidden\":false
+	},
+	\"EventMode\":{
 		\"hidden\":false
 	},
 	\"TestStage\":{
@@ -191,9 +200,6 @@ var extras_table = {
 	#\"ZeroTest\":{
 	#	\"hidden\":true
 	#},
-	\"Credits\":{
-		\"hidden\":false
-	},
 	\"AprilFools2022\":{
 		\"hidden\":false
 	},
@@ -201,9 +207,6 @@ var extras_table = {
 		\"hidden\":false
 	},
 	\"PIURED_Debug\":{
-		\"hidden\":false
-	},
-	\"EventMode\":{
 		\"hidden\":false
 	},
 	\"CustomStage\":{
@@ -217,7 +220,34 @@ var extras_table = {
 #BECAUSE IT'S NOT GODOT 4.0 YET AND I CAN'T PUT FUNCTIONS INSIDE DICTS
 func action_Jukebox():
 	Globals.change_screen(get_tree(),\"ScreenJukebox\")
-	pass
+
+var initialPosition = 35
+func tweenToMenu(newMenu:Control):
+	
+	var tween = create_tween()
+	tween.set_parallel()
+	
+	tween.tween_property(self, 'rect_position:x',
+	initialPosition-200, .25).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT);
+	tween.tween_property(self, 'modulate',
+	Color(1,1,1,0), .25).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT);
+	tween.tween_property(self,\"visible\",false,.25)
+	
+	
+	var subList = newMenu;
+	subList.rect_position.x = initialPosition+200
+	var tween2 = create_tween()
+	tween2.set_parallel()
+	tween2.tween_property(subList,\"visible\", true, 0.0);
+	tween2.tween_property(subList, \"rect_position:x\", initialPosition, .25
+	).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT);
+	tween2.tween_property(subList, 'modulate', Color(1,1,1,1), .25
+	).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT);
+
+func action_Multiplayer():
+	parent.currentlyHandledMenu = parent.get_node(\"MultiplayerMenu\")
+	tweenToMenu(parent.currentlyHandledMenu)
+
 func action_TestStage():
 	get_tree().change_scene(\"res://Stages_Reina/TestStage.tscn\");
 
@@ -371,6 +401,69 @@ func _on_FileDialog_cutscene_file_selected(path):
 	Globals.nextCutscene=path
 	Globals.change_screen(get_tree(),\"CutsceneFromFile\")
 	pass # Replace with function body.
+"
+
+[sub_resource type="GDScript" id=15]
+script/source = "extends VBoxContainer
+
+var selection = 0
+
+var font = preload(\"res://ubuntu-font-family/MM2Font.tres\")
+onready var parent = get_node(\"../\")
+
+func BitmapText(d):
+	var l = Label.new()
+	for property in d:
+		l.set(property,d[property])
+	l.set(\"custom_fonts/font\",font)
+	l.add_to_group(\"Translatable\")
+	return l
+
+func _ready():
+	var i = 0
+	for option in [\"Local\",\"Network\"]:
+		#print(tr(difficulty.to_upper()))
+		var b = BitmapText({
+			\"text\":option,
+			\"name\":option,
+			\"mouse_filter\":MOUSE_FILTER_PASS,
+			\"mouse_default_cursor_shape\":CURSOR_POINTING_HAND
+		})
+		b.connect(\"gui_input\",self,\"input_touch\",[i])
+		i+=1
+		add_child(b)
+	parent.highlightList(self,0)
+
+#func input_touch(event:InputEvent, i:int = 0):
+#	if event is InputEventMouseButton and event.pressed and event.button_index == 1:
+#		if i==selection:
+#
+#			#It has to be done on start/continue in case the player changed the language
+#			Globals.load_stage_cutscenes()
+#			Globals.reset_player_data()
+#			Globals.change_screen(get_tree(),\"ScreenSelectCharacter\")
+#		else:
+#			parent.selectSound.play()
+#			Globals.playerData.gameDifficulty=i
+#			parent.highlightList(self,Globals.playerData.gameDifficulty)
+
+func input(event):
+	if Input.is_action_just_pressed(\"ui_down\") and selection < 1:
+		selection+=1
+		parent.highlightList(self,selection)
+		#setDescText()
+		parent.selectSound.play()
+	elif Input.is_action_just_pressed(\"ui_up\") and selection > 0:
+		selection -=1
+		parent.highlightList(self,selection)
+		#setDescText()
+		parent.selectSound.play()
+	elif Input.is_action_just_pressed(\"ui_select\") or Input.is_action_just_pressed(\"ui_pause\"):
+		#It has to be done on start/continue in case the player changed the language
+		Globals.load_stage_cutscenes()
+		Globals.reset_player_data()
+		if selection==0:
+			Globals.change_screen(get_tree(),\"ScreenSelectCharacter2P\")
 "
 
 [sub_resource type="GDScript" id=11]
@@ -959,6 +1052,17 @@ margin_top = 219.0
 margin_right = 689.0
 custom_constants/separation = 30
 script = SubResource( 10 )
+
+[node name="MultiplayerMenu" type="VBoxContainer" parent="."]
+visible = false
+anchor_top = 0.5
+anchor_bottom = 0.5
+margin_left = 20.0
+margin_top = -186.0
+margin_right = 492.0
+margin_bottom = 104.0
+custom_constants/separation = 30
+script = SubResource( 15 )
 
 [node name="OptionsList" type="Node2D" parent="."]
 visible = false

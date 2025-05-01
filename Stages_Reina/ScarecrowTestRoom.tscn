@@ -431,7 +431,6 @@ script = SubResource( 1 )
 
 [node name="BossScarecrow" parent="Room/Node2D" index="0" instance=ExtResource( 1 )]
 position = Vector2( 1066.82, 621.542 )
-collision_layer = 2
 stage_finished_when_killed = false
 
 [node name="DustCloud" type="Node2D" parent="Room/Node2D" index="1"]
@@ -484,6 +483,3 @@ position = Vector2( 288, 544 )
 [node name="Dinergate" parent="." index="11" instance=ExtResource( 9 )]
 position = Vector2( 576, 672 )
 no_movement = false
-
-[node name="CanvasLayer" parent="." index="13"]
-visible = false

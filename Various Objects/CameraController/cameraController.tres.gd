@@ -186,7 +186,7 @@ func cam(obj):
 			
 		if leftBound == -999:
 			boundsArray[0] = rightBound*CAMERA_SCALE-SCREEN_WIDTH
-		elif leftBound == -9999: #Change the left bound to the current right bound. Basically move right exactly 1 room.
+		elif leftBound == DO_NOT_ADJUST: #Change the left bound to the current right bound. Basically move right exactly 1 room.
 			boundsArray[0] = cc.limit_right
 		else:
 			boundsArray[0] = leftBound*CAMERA_SCALE;

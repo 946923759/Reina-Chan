@@ -86,7 +86,7 @@ func getMovementDirection(moveSpeed)->float:
 			shouldMove=0
 		elif gravity == 1 and player.global_position.y < global_position.y+500*facing:
 			shouldMove=-1
-		elif gravity == 3 and player.global_position.y > global_position.y+500*facing:
+		elif gravity == 3 and player.global_position.y < global_position.y+500*facing:
 			shouldMove=-1
 	return moveSpeed*shouldMove
 
@@ -187,6 +187,7 @@ extents = Vector2( 68, 52 )
 script = SubResource( 1 )
 shapeOverride = SubResource( 2 )
 collisionOffset = Vector2( 0, 1 )
+gravity = 0
 
 [node name="AnimatedSprite" parent="." index="0"]
 frames = ExtResource( 2 )

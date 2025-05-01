@@ -3,14 +3,17 @@ extends "res://Player Files/8bitPlayer/8bitPlayer.gd"
 # PoolByteArrays are read only (assignment only, no modify within array)
 # so this can only be used to store the data.
 var frameData_stored:PoolByteArray = PoolByteArray()
+#This will be saved to disk as two 32-bit integers
+var recordingStartPosition:Vector2
+var currentFrame:int = 0
 
 #Here goes nothing!
 var frameData_tmp = [
 	
 ]
 
-var recordingStartPosition:Vector2
-var currentFrame:int = 0
+
+
 enum RECORDING {
 	INACTIVE, # Not recording
 	READY,    # Start recording on any press
@@ -35,8 +38,63 @@ func getRecordedInputAtFrame(frame,input_idx,just_pressed:bool=false) -> bool:
 	else:
 		return frameData_stored[frame] & 1<<input_idx
 
-#func startPlayback():
-#	isRecording
+func loadRecording():
+	var stage = stageRoot.weapon_to_unlock
+	var paths = [
+		"user://demo_replay_"+String(stage)+".bin",
+		"res://Player Files/8bitplayer/DemoRecordings/demo_replay_"+String(stage)+".bin", #There's a bug where this just staright up doesn't work on Windows
+		OS.get_executable_path().get_base_dir()+"/GameData/DemoRecordings/demo_replay_"+String(stage)+".bin"
+	]
+	var replay_file = File.new()
+	var ok = 1
+	for path in paths:
+		if replay_file.file_exists(path):
+			ok = replay_file.open(path,File.READ)
+		if ok != OK:
+			print("[Replayer] There's no recording at ",path)
+		else:
+			print("[Replayer] OK! Loaded ",path)
+			break
+	if ok != OK:
+		return false
+	recordingStartPosition = Vector2(replay_file.get_32(),replay_file.get_32())
+	frameData_stored = replay_file.get_buffer(replay_file.get_len()-8)
+	#replay_file.store_buffer(frameData_stored)
+	replay_file.close()
+	#print("Saved "+fileName)
+	return true
+	
+func saveRecording():
+	if frameData_stored.empty():
+		print("No recording data to save!")
+	else:
+		#CheckpointPlayerStats.lastPlayedStage = stageRoot.weapon_to_unlock
+		var stage = stageRoot.weapon_to_unlock
+		var fileName = "user://demo_replay_"+String(stage)+".bin"
+		var replay_file = File.new()
+		var ok = replay_file.open(fileName,File.WRITE)
+		if ok != OK:
+			printerr("Warning: could not create file for writing! ERROR ", ok)
+			return false
+		#4 bytes
+		replay_file.store_32(int(recordingStartPosition.x))
+		#4 bytes
+		replay_file.store_32(int(recordingStartPosition.y))
+		replay_file.store_buffer(frameData_stored)
+		replay_file.close()
+		print("Saved "+fileName)
+	
+func playRecording():
+	if frameData_stored.empty():
+		var t = $CanvasLayer/DebugDisplay/FreeRoam
+		t.text = "No recording loaded!"
+		print("No recording loaded!")
+	else:
+		global_position=recordingStartPosition
+		currentFrame=0
+		HP=MAX_HP
+		isRecording=RECORDING.PLAYBACK
+		setDebugInfoText()
 
 func setDebugInfoText():
 	var t = $CanvasLayer/DebugDisplay/FreeRoam
@@ -87,30 +145,10 @@ func get_menu_buttons_input(_delta):
 			stopRecording()
 		setDebugInfoText()
 	elif Input.is_action_just_pressed("DebugButton5"):
-		if frameData_stored.empty():
-			var t = $CanvasLayer/DebugDisplay/FreeRoam
-			t.text = "No recording saved!"
-		else:
-			global_position=recordingStartPosition
-			currentFrame=0
-			HP=MAX_HP
-			isRecording=RECORDING.PLAYBACK
-			setDebugInfoText()
+		$Camera2D.adjustCamera([-10000000,-10000000,10000000,10000000],0)
+		playRecording()
 	elif Input.is_action_just_pressed("DebugButton6"):
-		if frameData_stored.empty():
-			print("No recording data to save!")
-		else:
-			#CheckpointPlayerStats.lastPlayedStage = stageRoot.weapon_to_unlock
-			var stage = stageRoot.weapon_to_unlock
-			var fileName = "user://demo_replay_"+String(stage)+".bin"
-			var replay_file = File.new()
-			var ok = replay_file.open(fileName,File.WRITE)
-			if ok != OK:
-				printerr("Warning: could not create file for writing! ERROR ", ok)
-				return false
-			replay_file.store_buffer(frameData_stored)
-			replay_file.close()
-			print("Saved "+fileName)
+		saveRecording()
 	elif Input.is_action_just_pressed("DebugButton9"):
 		if debugDisplay.visible and $CanvasLayer/DebugButtonHelp.visible:
 			debugDisplay.visible=false
@@ -419,6 +457,7 @@ func get_input(delta):
 
 func die():
 	if isDead == false:
+		stageRoot.stopMusic()
 		isDead = true
 		$CanvasLayer/Timer.set_process(false)
 		set_physics_process(false)

@@ -1,11 +1,11 @@
 [gd_scene load_steps=39 format=2]
 
 [ext_resource path="res://Stages/EnemyBase.tscn" type="PackedScene" id=1]
-[ext_resource path="res://Stages_Reina/Enemies/nemeum.png" type="Texture" id=2]
+[ext_resource path="res://Stages_Reina/Enemies/Nemeum/nemeum.png" type="Texture" id=2]
 [ext_resource path="res://ParticleEffects/alphaMask.gdshader" type="Shader" id=3]
-[ext_resource path="res://Stages_Reina/Enemies/nemeum shot.png" type="Texture" id=4]
-[ext_resource path="res://Stages_Reina/Enemies/nemeumAngled.png" type="Texture" id=5]
-[ext_resource path="res://Stages_Reina/Enemies/nemeumUp.png" type="Texture" id=6]
+[ext_resource path="res://Stages_Reina/Enemies/Nemeum/nemeum shot.png" type="Texture" id=4]
+[ext_resource path="res://Stages_Reina/Enemies/Nemeum/nemeumAngled.png" type="Texture" id=5]
+[ext_resource path="res://Stages_Reina/Enemies/Nemeum/nemeumUp.png" type="Texture" id=6]
 
 [sub_resource type="GDScript" id=1]
 script/source = "extends \"res://Stages/EnemyBaseScript.gd\"
@@ -30,12 +30,20 @@ const CHARGE_OFFSETS = {
 }
 
 var curState = 0
-onready var charge = $charge
+var player:KinematicBody2D
+
+onready var charge:AnimatedSprite = $charge
 
 #Testing
 var bullet = preload(\"res://Stages_Reina/Enemies/nemeum homing shot.tscn\")
 
-var player:KinematicBody2D
+
+func reset():
+	set_physics_process(false)
+	charge.visible = false
+	sprite.set_animation('default')
+	curState = 0
+
 func _ready():
 	sprite.set_animation('default')
 	player=get_node(\"/root/Node2D\").get_player()
@@ -142,17 +150,6 @@ func _physics_process(delta):
 					sprite.offset = Vector2(-3*facing,-11)
 				else:
 					sprite.offset=Vector2(facing,-1)
-			
-#/**		
-# * @brief Scales x so that l1 corresponds to l2 and h1 corresponds to h2.
-# *
-# * This does not modify x, so it MUST assign the result to something!
-# * Do the multiply before the divide to that integer scales have more precision.
-# *
-# * One such example: SCALE(x, 0, 1, L, H); interpolate between L and H.
-# */
-#static func SCALE(x, l1, h1, l2, h2)->float:
-#	return (((x) - (l1)) * ((h2) - (l2)) / ((h1) - (l1)) + (l2))
 "
 
 [sub_resource type="RectangleShape2D" id=2]
@@ -174,15 +171,15 @@ region = Rect2( 0, 50, 52, 50 )
 atlas = ExtResource( 5 )
 region = Rect2( 52, 50, 52, 50 )
 
-[sub_resource type="AtlasTexture" id=4]
+[sub_resource type="AtlasTexture" id=32]
 atlas = ExtResource( 6 )
 region = Rect2( 0, 58, 46, 58 )
 
-[sub_resource type="AtlasTexture" id=5]
+[sub_resource type="AtlasTexture" id=33]
 atlas = ExtResource( 6 )
 region = Rect2( 46, 58, 46, 58 )
 
-[sub_resource type="AtlasTexture" id=3]
+[sub_resource type="AtlasTexture" id=34]
 atlas = ExtResource( 2 )
 region = Rect2( 0, 0, 54, 38 )
 
@@ -202,7 +199,7 @@ region = Rect2( 52, 0, 52, 50 )
 atlas = ExtResource( 5 )
 region = Rect2( 0, 0, 52, 50 )
 
-[sub_resource type="AtlasTexture" id=12]
+[sub_resource type="AtlasTexture" id=35]
 atlas = ExtResource( 6 )
 region = Rect2( 46, 0, 46, 58 )
 
@@ -214,11 +211,11 @@ region = Rect2( 0, 0, 46, 58 )
 atlas = ExtResource( 2 )
 region = Rect2( 0, 0, 54, 38 )
 
-[sub_resource type="AtlasTexture" id=10]
+[sub_resource type="AtlasTexture" id=36]
 atlas = ExtResource( 2 )
 region = Rect2( 0, 38, 54, 38 )
 
-[sub_resource type="AtlasTexture" id=11]
+[sub_resource type="AtlasTexture" id=37]
 atlas = ExtResource( 2 )
 region = Rect2( 54, 38, 54, 38 )
 
@@ -226,11 +223,11 @@ region = Rect2( 54, 38, 54, 38 )
 atlas = ExtResource( 6 )
 region = Rect2( 0, 0, 46, 58 )
 
-[sub_resource type="AtlasTexture" id=7]
+[sub_resource type="AtlasTexture" id=38]
 atlas = ExtResource( 6 )
 region = Rect2( 0, 116, 46, 58 )
 
-[sub_resource type="AtlasTexture" id=8]
+[sub_resource type="AtlasTexture" id=39]
 atlas = ExtResource( 6 )
 region = Rect2( 46, 116, 46, 58 )
 
@@ -246,12 +243,12 @@ animations = [ {
 "name": "chargingAngle",
 "speed": 10.0
 }, {
-"frames": [ SubResource( 4 ), SubResource( 5 ) ],
+"frames": [ SubResource( 32 ), SubResource( 33 ) ],
 "loop": true,
 "name": "chargingUp",
 "speed": 10.0
 }, {
-"frames": [ SubResource( 3 ) ],
+"frames": [ SubResource( 34 ) ],
 "loop": true,
 "name": "default",
 "speed": 5.0
@@ -266,17 +263,17 @@ animations = [ {
 "name": "firedAngle",
 "speed": 10.0
 }, {
-"frames": [ SubResource( 12 ), SubResource( 13 ) ],
+"frames": [ SubResource( 35 ), SubResource( 13 ) ],
 "loop": false,
 "name": "firedUp",
 "speed": 10.0
 }, {
-"frames": [ SubResource( 9 ), SubResource( 10 ), SubResource( 11 ), SubResource( 11 ), SubResource( 10 ), SubResource( 9 ) ],
+"frames": [ SubResource( 9 ), SubResource( 36 ), SubResource( 37 ), SubResource( 37 ), SubResource( 36 ), SubResource( 9 ) ],
 "loop": false,
 "name": "turning",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 6 ), SubResource( 7 ), SubResource( 8 ), SubResource( 8 ), SubResource( 7 ), SubResource( 6 ) ],
+"frames": [ SubResource( 6 ), SubResource( 38 ), SubResource( 39 ), SubResource( 39 ), SubResource( 38 ), SubResource( 6 ) ],
 "loop": false,
 "name": "turningUp",
 "speed": 5.0
@@ -318,7 +315,7 @@ region = Rect2( 102, 0, 17, 16 )
 atlas = ExtResource( 4 )
 region = Rect2( 119, 0, 17, 16 )
 
-[sub_resource type="SpriteFrames" id=32]
+[sub_resource type="SpriteFrames" id=40]
 animations = [ {
 "frames": [ SubResource( 24 ), SubResource( 25 ), SubResource( 26 ), SubResource( 27 ), SubResource( 28 ), SubResource( 29 ), SubResource( 30 ), SubResource( 31 ) ],
 "loop": false,
@@ -345,5 +342,5 @@ scale = Vector2( 18.607, 1 )
 material = SubResource( 23 )
 position = Vector2( -92, -52 )
 scale = Vector2( 4, 4 )
-frames = SubResource( 32 )
+frames = SubResource( 40 )
 frame = 3

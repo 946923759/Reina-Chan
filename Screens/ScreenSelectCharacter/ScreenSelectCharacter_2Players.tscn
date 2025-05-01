@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://Screens/ScreenSelectCharacter/block.png" type="Texture" id=1]
 [ext_resource path="res://ubuntu-font-family/MM2Font_Small.tres" type="DynamicFont" id=2]
@@ -8,6 +8,7 @@
 [ext_resource path="res://Screens/ScreenSelectCharacter/characterSelectionFrame.tscn" type="PackedScene" id=6]
 [ext_resource path="res://ubuntu-font-family/MM2Font.tres" type="DynamicFont" id=7]
 [ext_resource path="res://Screens/ScreenSelectCharacter/LoopingBG.gd" type="Script" id=8]
+[ext_resource path="res://ubuntu-font-family/BitmapFont.tscn" type="PackedScene" id=9]
 [ext_resource path="res://Screens/ScreenSelectCharacter/ScreenSelectCharacter_2P.gd" type="Script" id=11]
 [ext_resource path="res://Music/CharSelect.ogg" type="AudioStream" id=13]
 [ext_resource path="res://Screens/ScreenSelectCharacter/okButton.png" type="Texture" id=15]
@@ -177,5 +178,11 @@ valign = 1
 
 [node name="ScreenTransition" parent="." instance=ExtResource( 16 )]
 visible = false
+
+[node name="BitmapFont" parent="." instance=ExtResource( 9 )]
+position = Vector2( 13, 17 )
+text = "network ok! id: "
+wrap_at = 500
+scale_by = 4
 
 [connection signal="gui_input" from="OkButton/OkButtonTexture" to="." method="_on_OkButtonTexture_gui_input"]

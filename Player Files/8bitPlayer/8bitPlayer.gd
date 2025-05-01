@@ -186,6 +186,7 @@ func _process(delta):
 #	var onscreen_pos = stageRoot.position + position + stageRoot.get_canvas_transform().origin
 #	if onscreen_pos.x < 150:
 #		HPBar.modulate.a=max(.3,onscreen_pos.x/150)
+#		HPBar.modulate.a=max(.3,onscreen_pos.x/150)
 #	else:
 #		HPBar.modulate.a=1
 	pass
@@ -276,11 +277,17 @@ func get_menu_buttons_input(_delta):
 		$Camera2D.adjustCamera([-10000000,-10000000,10000000,10000000],0)
 	elif Input.is_action_just_pressed("DebugButton7"):
 		var c = $Camera2D
-		var cPos = c.get_camera_screen_center()
-		c.limit_left = cPos.x - Globals.SCREEN_CENTER_X
-		c.limit_right = cPos.x + Globals.SCREEN_CENTER_X
-		c.limit_top = cPos.y - Globals.SCREEN_CENTER_Y
-		c.limit_bottom = cPos.y + Globals.SCREEN_CENTER_Y
+		if c.zoom == Vector2.ONE:
+			c.zoom = Vector2(1.5, 1.5)
+		elif c.zoom == Vector2(1.5, 1.5):
+			c.zoom = Vector2(2.0, 2.0)
+		else:
+			c.zoom = Vector2.ONE
+#		var cPos = c.get_camera_screen_center()
+#		c.limit_left = cPos.x - Globals.SCREEN_CENTER_X
+#		c.limit_right = cPos.x + Globals.SCREEN_CENTER_X
+#		c.limit_top = cPos.y - Globals.SCREEN_CENTER_Y
+#		c.limit_bottom = cPos.y + Globals.SCREEN_CENTER_Y
 		pass
 	elif Input.is_action_just_pressed("DebugButton9"):
 		if debugDisplay.visible and $CanvasLayer/DebugButtonHelp.visible:
@@ -1036,6 +1043,10 @@ func _physics_process(delta):
 		#stateInfo.text = "Floor:" + String(is_on_floor()) +" ! "+ "Jumping: "+String(jumping)
 		stateInfo.text = sprite.get_animation() + " ! " + state_toString[state]
 		if Globals.playerData.gameDifficulty > Globals.Difficulty.EASY:
+			#var txt = "\n" + String(bulletManager.get_onscreen_bullet_pos(0))
+			#txt += "\n" + String(bulletManager.get_onscreen_bullet_pos(0)*stageRoot.get_canvas_transform().get_scale())
+			#txt += "\n"+ String(stageRoot.get_canvas_transform().origin)+","+String(stageRoot.get_canvas_transform().get_scale())
+			#stateInfo.text = txt
 			for i in range(3):
 				stateInfo.text +="\n"+String(bulletManager.get_onscreen_bullet_pos(i))
 		

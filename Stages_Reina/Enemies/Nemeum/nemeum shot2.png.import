@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/nemeumAngled.png-f9f0e86d4060ab14acc13b91cccb7e36.stex"
+path="res://.import/nemeum shot2.png-ce7bc2bf7de036ce86e3694fdf560f8d.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Stages_Reina/Enemies/nemeumAngled.png"
-dest_files=[ "res://.import/nemeumAngled.png-f9f0e86d4060ab14acc13b91cccb7e36.stex" ]
+source_file="res://Stages_Reina/Enemies/Nemeum/nemeum shot2.png"
+dest_files=[ "res://.import/nemeum shot2.png-ce7bc2bf7de036ce86e3694fdf560f8d.stex" ]
 
 [params]
 

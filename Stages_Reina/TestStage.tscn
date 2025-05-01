@@ -728,7 +728,7 @@ rightBound = 121
 bottomBound = 25
 
 [node name="PlayerHolder" parent="." index="40"]
-position = Vector2( 2816, 256 )
+position = Vector2( -176, -272 )
 
 [node name="CameraAdjuster5" parent="." index="41" instance=ExtResource( 27 )]
 position = Vector2( 10341.1, -376.282 )
@@ -855,14 +855,14 @@ position = Vector2( 1216, -768 )
 
 [node name="Door2" parent="BossRoom" index="0" instance=ExtResource( 22 )]
 position = Vector2( -1216, 448 )
-topBound = -12
-bottomBound = -999
+automatically_set_y_bounds = 2
+topBound = -999
 
 [node name="Door" parent="BossRoom" index="1" instance=ExtResource( 22 )]
 position = Vector2( 0, 448 )
+automatically_set_y_bounds = 2
 boss_room_door = true
-topBound = -12
-bottomBound = -9999
+topBound = -999
 
 [node name="Node2D" parent="BossRoom" index="2" instance=ExtResource( 17 )]
 position = Vector2( 256, 640 )

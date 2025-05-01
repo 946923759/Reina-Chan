@@ -1,0 +1,23 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/S3K_42 - Insta Shield.wav-d91db375ab1b584ba8dedae1a9dcb72e.sample"
+
+[deps]
+
+source_file="res://Sounds/Classic/S3K_42 - Insta Shield.wav"
+dest_files=[ "res://.import/S3K_42 - Insta Shield.wav-d91db375ab1b584ba8dedae1a9dcb72e.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

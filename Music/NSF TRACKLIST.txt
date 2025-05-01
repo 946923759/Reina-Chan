@@ -31,6 +31,9 @@ R4MI
 92 - Idk, I think it was used in a cutscene
 94 - Another wily's castle intro
 96 - Wily Boss again
+97 - Mashup Boss (MM1) (Unused?)
+98 - Mashup Boss (MM2) (Unused?)
+99 - Mashup Boss (MM3) (Unused?)
 100 - Escape!
 101 - Ending 1
 102 - Ending cutscene (Kirby Ending Jingle)

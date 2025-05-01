@@ -29,7 +29,11 @@ export (DOOR_IS_FACING) var facing = DOOR_IS_FACING.RIGHT
 const CAMERA_SCALE = 64;
 const ROOM_WIDTH = 20
 const ROOM_HEIGHT = 12
-#const SCREEN_HEIGHT = 720;
+
+const SCREEN_WIDTH:int = 1280
+const SCREEN_HEIGHT:int = 720
+const SCREEN_CENTER_X = SCREEN_WIDTH/2
+const SCREEN_CENTER_Y = SCREEN_HEIGHT/2
 
 # After copying all this code I realized
 # there's no reason to ever do this because
@@ -139,6 +143,8 @@ func move(obj):
 		return
 	elif obj.has_method("lockMovement"):
 		obj.dash_time=0
+		var cc = obj.get_node("Camera2D")
+		
 		if newMusic != null and newMusic != "":
 			var music = load(newMusic)
 			get_node("/root/Node2D/AudioStreamPlayer").stream = music;
@@ -150,32 +156,34 @@ func move(obj):
 		if automatically_set_x_bounds:
 			if facing == DOOR_IS_FACING.LEFT:
 				rightBound=global_position.x+64
-				leftBound=rightBound-Globals.gameResolution.x
+				leftBound=rightBound-SCREEN_WIDTH
 			else:
 				leftBound=global_position.x
-				rightBound=leftBound+Globals.gameResolution.x
+				rightBound=leftBound+SCREEN_WIDTH
 		else:
 			#Copying and pasting the same code twice is a great idea right?			
 			if rightBound == -999:
-				rightBound = leftBound*CAMERA_SCALE+Globals.gameResolution.x
+				rightBound = leftBound*CAMERA_SCALE+SCREEN_WIDTH
 			else:
 				rightBound = rightBound*CAMERA_SCALE
 				
 			if leftBound == -999:
-				leftBound = rightBound-Globals.gameResolution.x
+				leftBound = rightBound-SCREEN_WIDTH
 			else:
 				leftBound = leftBound*CAMERA_SCALE;
 				#print("WARN: Left and right bounds are not defined. The camera won't work.")
 		
 		if bottomBound == -999:
-			bottomBound = topBound*CAMERA_SCALE+Globals.gameResolution.y
+			bottomBound = topBound*CAMERA_SCALE+SCREEN_HEIGHT
+		elif bottomBound == -9999:
+			bottomBound = cc.limit_bottom
 		else:
 			bottomBound = bottomBound*CAMERA_SCALE
 		
-		#if topBound == -999:
-		#	topBound = bottomBound*CAMERA_SCALE-Globals.gameResolution.y
-		#else:
-		#	topBound = topBound*CAMERA_SCALE;
+		if topBound == -999:
+			topBound = bottomBound-SCREEN_HEIGHT
+		else:
+			topBound = topBound*CAMERA_SCALE;
 			
 		print("LEFT: "+ String(leftBound)+ " TOP: "+String(topBound)+" RIGHT: "+String(rightBound) + " BOTTOM: "+String(bottomBound))
 		obj.get_node("Camera2D").adjustCamera([leftBound,topBound,rightBound,bottomBound], tweenTime)
@@ -191,15 +199,15 @@ func move(obj):
 		if boss_room_door:
 			get_node("/root/Node2D").fadeMusic()
 			obj.call("lockMovementQueue",[
-				[.3,Vector2(0,0)],
-				[.8,Vector2(obj.run_speed*facing,0),"",false],
-				[.3,Vector2(0,0),"Idle"]
+				[.3,Vector2(0,0),"",true],
+				[.8,Vector2(obj.run_speed*facing,0),"",true],
+				[.3,Vector2(0,0),"",false]
 			])
 		else:
 			obj.call("lockMovementQueue",[
-				[.3,Vector2(0,0)],
-				[.5,Vector2(obj.run_speed*facing,0),"",false],
-				[.3,Vector2(0,0),"Idle"]
+				[.3,Vector2(0,0),"",true],
+				[.4,Vector2(obj.run_speed*facing,0),"",true],
+				[.3,Vector2(0,0),"",true]
 			])
 			
 		emit_signal("player_entered_door")

@@ -47,7 +47,7 @@ func _process(delta):
 	change_selection(0)
 
 #TODO: Add \"Lenna\", aka UMP9 but lighter hair
-func change_selection(dir:int=0):
+remotesync func change_selection(dir:int=0):
 	var nSel = selection+dir
 	if nSel > limit:
 		nSel = 0

@@ -7,7 +7,22 @@
 script = ExtResource( 2 )
 dash_multiplier = 0.0
 
+[node name="DebugButtonHelp" parent="CanvasLayer" index="1"]
+visible = true
+text = "F1 - FREE ROAM
+F2 - NOCLIP
+F3 - cycle test warps
+F4 - Start/Stop Recording
+f5 - Play recording (if stopped)
+f6 - Save recording to disk
+f7 - lock camera to current pos
+f8 - exit game
+F9 - CYCLE  DEBUG DISP"
+
 [node name="bar" parent="CanvasLayer" index="3"]
+visible = false
+
+[node name="Timer" parent="CanvasLayer" index="6"]
 visible = false
 
 [node name="TouchscreenButtons" parent="CanvasLayer" index="7"]

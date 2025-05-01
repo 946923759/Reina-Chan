@@ -132,18 +132,22 @@ func _ready():
 		visible=true
 		pass
 	else:
+		visible=false
 		queue_free()
 		pass
 
-var time:float = 0.0
+var blinkTime:float = 0.0
+var elapsedTime:float = 0.0
 func _process(delta):
-	time+=delta
-	if time>1.0:
-		time-=1
-	$BitmapFont.visible = time>.5
+	elapsedTime+=delta
+	blinkTime+=delta
+	if blinkTime>1.0:
+		blinkTime-=1
+	$BitmapFont.visible = blinkTime>.5
 	
-	if Input.is_action_just_pressed(\"ui_pause\"):
+	if Input.is_action_just_pressed(\"ui_pause\") or elapsedTime > 15.0:
 		set_process(false)
+		get_parent().stopMusic()
 		$BitmapFont.visible=false
 		$ColorRect.color.a=0.0
 		var t = create_tween()
@@ -151,6 +155,17 @@ func _process(delta):
 		t.tween_property($ColorRect,\"color\",Color.black,1.0)
 		Globals.previous_screen=\"ScreenDemo\"
 		t.tween_callback(Globals,\"change_screen\",[get_tree(),\"ScreenTitleMenu\"])
+
+func _on_Node2D_ready():
+	if !visible:
+		return
+	
+	print(\"[ScreenDemonstration] hello world!\")
+	var p = get_parent().get_player()
+	p.get_node(\"CanvasLayer\").visible=false
+	#p.debugDisplay.visible = false
+	p.loadRecording()
+	p.playRecording()
 "
 
 [node name="Node2D" type="Node2D"]
@@ -200,6 +215,7 @@ charTextures = [ ExtResource( 1 ), ExtResource( 5 ), ExtResource( 1 ) ]
 [node name="DebugWarpPoints" type="Node" parent="."]
 
 [node name="Demo" type="CanvasLayer" parent="."]
+visible = false
 script = SubResource( 5 )
 
 [node name="BitmapFont" parent="Demo" instance=ExtResource( 9 )]
@@ -232,4 +248,5 @@ visible = false
 [node name="TransitionIn" parent="CanvasLayer" instance=ExtResource( 8 )]
 transition_type = 1
 
+[connection signal="ready" from="." to="Demo" method="_on_Node2D_ready"]
 [connection signal="ready" from="." to="CanvasLayer/TransitionIn" method="OffCommand"]

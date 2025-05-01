@@ -1,0 +1,39 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://Various Objects/Special Blocks/EasyModeHelper_OneWay.png" type="Texture" id=1]
+[ext_resource path="res://Stages_Reina/Sangvis2/AutoPlatform.gd" type="Script" id=2]
+
+[sub_resource type="RectangleShape2D" id=14]
+extents = Vector2( 36, 8 )
+
+[sub_resource type="RectangleShape2D" id=15]
+extents = Vector2( 32, 8 )
+
+[node name="AutoPlatform" type="Node2D"]
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_group_": true
+}
+width = 2
+
+[node name="Sprite" type="Sprite" parent="."]
+scale = Vector2( 4, 4 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 16, 4 )
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+shape = SubResource( 14 )
+one_way_collision = true
+one_way_collision_margin = 12.0
+
+[node name="Area2D" type="Area2D" parent="."]
+position = Vector2( 0, -16 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource( 15 )

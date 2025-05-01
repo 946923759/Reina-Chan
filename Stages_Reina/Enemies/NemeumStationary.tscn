@@ -1,0 +1,220 @@
+[gd_scene load_steps=40 format=2]
+
+[ext_resource path="res://ParticleEffects/alphaMask.gdshader" type="Shader" id=1]
+[ext_resource path="res://Sounds/Classic/EnemyDamage.wav" type="AudioStream" id=2]
+[ext_resource path="res://Stages_Reina/Enemies/Nemeum/nemeumUp.png" type="Texture" id=3]
+[ext_resource path="res://Stages_Reina/Enemies/Nemeum/nemeum shot.png" type="Texture" id=4]
+[ext_resource path="res://ParticleEffects/GlowShader.tres" type="Material" id=5]
+[ext_resource path="res://Stages_Reina/Enemies/Nemeum/nemeum.png" type="Texture" id=6]
+[ext_resource path="res://Stages_Reina/Enemies/Nemeum/nemeumAngled.png" type="Texture" id=7]
+[ext_resource path="res://Stages_Reina/Enemies/NemeumStationary.gd" type="Script" id=8]
+
+[sub_resource type="AtlasTexture" id=16]
+atlas = ExtResource( 6 )
+region = Rect2( 54, 0, 54, 38 )
+
+[sub_resource type="AtlasTexture" id=17]
+atlas = ExtResource( 6 )
+region = Rect2( 108, 0, 54, 38 )
+
+[sub_resource type="AtlasTexture" id=18]
+atlas = ExtResource( 7 )
+region = Rect2( 0, 50, 52, 50 )
+
+[sub_resource type="AtlasTexture" id=19]
+atlas = ExtResource( 7 )
+region = Rect2( 52, 50, 52, 50 )
+
+[sub_resource type="AtlasTexture" id=32]
+atlas = ExtResource( 3 )
+region = Rect2( 0, 58, 46, 58 )
+
+[sub_resource type="AtlasTexture" id=33]
+atlas = ExtResource( 3 )
+region = Rect2( 46, 58, 46, 58 )
+
+[sub_resource type="AtlasTexture" id=34]
+atlas = ExtResource( 6 )
+region = Rect2( 0, 0, 54, 38 )
+
+[sub_resource type="AtlasTexture" id=20]
+atlas = ExtResource( 6 )
+region = Rect2( 162, 0, 54, 38 )
+
+[sub_resource type="AtlasTexture" id=21]
+atlas = ExtResource( 6 )
+region = Rect2( 0, 0, 54, 38 )
+
+[sub_resource type="AtlasTexture" id=14]
+atlas = ExtResource( 7 )
+region = Rect2( 52, 0, 52, 50 )
+
+[sub_resource type="AtlasTexture" id=15]
+atlas = ExtResource( 7 )
+region = Rect2( 0, 0, 52, 50 )
+
+[sub_resource type="AtlasTexture" id=35]
+atlas = ExtResource( 3 )
+region = Rect2( 46, 0, 46, 58 )
+
+[sub_resource type="AtlasTexture" id=13]
+atlas = ExtResource( 3 )
+region = Rect2( 0, 0, 46, 58 )
+
+[sub_resource type="AtlasTexture" id=9]
+atlas = ExtResource( 6 )
+region = Rect2( 0, 0, 54, 38 )
+
+[sub_resource type="AtlasTexture" id=36]
+atlas = ExtResource( 6 )
+region = Rect2( 0, 38, 54, 38 )
+
+[sub_resource type="AtlasTexture" id=37]
+atlas = ExtResource( 6 )
+region = Rect2( 54, 38, 54, 38 )
+
+[sub_resource type="AtlasTexture" id=6]
+atlas = ExtResource( 3 )
+region = Rect2( 0, 0, 46, 58 )
+
+[sub_resource type="AtlasTexture" id=38]
+atlas = ExtResource( 3 )
+region = Rect2( 0, 116, 46, 58 )
+
+[sub_resource type="AtlasTexture" id=39]
+atlas = ExtResource( 3 )
+region = Rect2( 46, 116, 46, 58 )
+
+[sub_resource type="SpriteFrames" id=40]
+animations = [ {
+"frames": [ SubResource( 16 ), SubResource( 17 ) ],
+"loop": true,
+"name": "charging",
+"speed": 10.0
+}, {
+"frames": [ SubResource( 18 ), SubResource( 19 ) ],
+"loop": true,
+"name": "chargingAngle",
+"speed": 10.0
+}, {
+"frames": [ SubResource( 32 ), SubResource( 33 ) ],
+"loop": true,
+"name": "chargingUp",
+"speed": 10.0
+}, {
+"frames": [ SubResource( 34 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 20 ), SubResource( 21 ) ],
+"loop": false,
+"name": "fired",
+"speed": 10.0
+}, {
+"frames": [ SubResource( 14 ), SubResource( 15 ) ],
+"loop": false,
+"name": "firedAngle",
+"speed": 10.0
+}, {
+"frames": [ SubResource( 35 ), SubResource( 13 ) ],
+"loop": false,
+"name": "firedUp",
+"speed": 10.0
+}, {
+"frames": [ SubResource( 9 ), SubResource( 36 ), SubResource( 37 ), SubResource( 37 ), SubResource( 36 ), SubResource( 9 ) ],
+"loop": false,
+"name": "turning",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 6 ), SubResource( 38 ), SubResource( 39 ), SubResource( 39 ), SubResource( 38 ), SubResource( 6 ) ],
+"loop": false,
+"name": "turningUp",
+"speed": 5.0
+} ]
+
+[sub_resource type="RectangleShape2D" id=41]
+extents = Vector2( 104, 75 )
+
+[sub_resource type="ShaderMaterial" id=42]
+shader = ExtResource( 1 )
+shader_param/clr1 = Color( 0, 0, 0, 1 )
+
+[sub_resource type="AtlasTexture" id=24]
+atlas = ExtResource( 4 )
+region = Rect2( 0, 0, 17, 16 )
+
+[sub_resource type="AtlasTexture" id=25]
+atlas = ExtResource( 4 )
+region = Rect2( 17, 0, 17, 16 )
+
+[sub_resource type="AtlasTexture" id=26]
+atlas = ExtResource( 4 )
+region = Rect2( 34, 0, 17, 16 )
+
+[sub_resource type="AtlasTexture" id=27]
+atlas = ExtResource( 4 )
+region = Rect2( 51, 0, 17, 16 )
+
+[sub_resource type="AtlasTexture" id=28]
+atlas = ExtResource( 4 )
+region = Rect2( 68, 0, 17, 16 )
+
+[sub_resource type="AtlasTexture" id=29]
+atlas = ExtResource( 4 )
+region = Rect2( 85, 0, 17, 16 )
+
+[sub_resource type="AtlasTexture" id=30]
+atlas = ExtResource( 4 )
+region = Rect2( 102, 0, 17, 16 )
+
+[sub_resource type="AtlasTexture" id=31]
+atlas = ExtResource( 4 )
+region = Rect2( 119, 0, 17, 16 )
+
+[sub_resource type="SpriteFrames" id=43]
+animations = [ {
+"frames": [ SubResource( 24 ), SubResource( 25 ), SubResource( 26 ), SubResource( 27 ), SubResource( 28 ), SubResource( 29 ), SubResource( 30 ), SubResource( 31 ) ],
+"loop": false,
+"name": "default",
+"speed": 10.0
+} ]
+
+[node name="NemeumStationary" type="Area2D"]
+position = Vector2( 0, -80 )
+collision_layer = 2
+collision_mask = 9
+script = ExtResource( 8 )
+__meta__ = {
+"_edit_group_": true
+}
+bullet_attach_path = NodePath("../..")
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+material = ExtResource( 5 )
+use_parent_material = true
+scale = Vector2( 4, 4 )
+frames = SubResource( 40 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 41 )
+
+[node name="charge" type="AnimatedSprite" parent="."]
+material = SubResource( 42 )
+position = Vector2( -112, -48 )
+scale = Vector2( 4, 4 )
+frames = SubResource( 43 )
+frame = 7
+playing = true
+
+[node name="HurtSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 2 )
+bus = "Player/Enemies"
+
+[node name="HurtSound2" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 2 )
+bus = "Player/Enemies"
+
+[node name="VisibilityEnabler2D" type="VisibilityEnabler2D" parent="."]
+process_parent = true
+physics_process_parent = true

@@ -183,7 +183,8 @@ var weaponColorSwaps = [
 enum Characters {
 	UMP9,
 	M16A1,
-	Ultimate_M16,
+	UMP9_Demo,
+	#Ultimate_M16,
 	LENGTH_CHARACTERS
 }
 
@@ -352,6 +353,15 @@ var SCREEN_CENTER_Y:int
 # MusicMappings
 var NSF_location;
 
+enum NetworkMode {
+	DISABLED,
+	CLIENT,
+	SERVER
+}
+var networkMode = 0
+var networkClientAddress:String = ""
+var networkPort:int = 8910
+
 #The stage to load.
 var nextStage
 #For the item get screen... If 0, item will be skipped
@@ -460,6 +470,17 @@ func _ready():
 					forcedFullscreen=2
 				else:
 					forcedFullscreen=1
+			elif kv[0]=="--network-host-port":
+				networkMode = NetworkMode.SERVER
+				networkPort = int(kv[1])
+			elif kv[0]=="--network-client-address":
+				networkMode = NetworkMode.CLIENT
+				if ":" in kv[1]:
+					var address_and_port = kv[1].split(":")
+					networkClientAddress = address_and_port[0]
+					networkPort = int(address_and_port[1])
+				else:
+					networkClientAddress = kv[1]
 	
 	
 # warning-ignore:narrowing_conversion
@@ -664,6 +685,7 @@ var SCREENS:Dictionary = {
 	"ScreenTitleMenu":"res://Screens/ScreenTitleMenu/ScreenTitleMenuV3.tscn",
 	"ScreenTitleJoin":"res://Screens/ScreenTitleJoin/ScreenTitleJoinV3.tscn",
 	"ScreenSelectCharacter":"res://Screens/ScreenSelectCharacter/ScreenSelectCharacter.tscn",
+	"ScreenSelectCharacter2P":"res://Screens/ScreenSelectCharacter/ScreenSelectCharacter_2Players.tscn",
 	"ScreenSelectStage":"res://Screens/ScreenStageSelectV2/ScreenSelectStage.tscn",
 	"ScreenStageIntro":"res://Screens/ScreenStageIntro.tscn",
 	"ScreenSangvisIntro":"res://Screens/ScreenStageIntroSangvis/StageIntroSangvis.tscn",
@@ -675,6 +697,8 @@ var SCREENS:Dictionary = {
 	"ScreenJukebox":"res://Screens/ScreenJukebox/ScreenJukebox.tscn",
 	
 	"ScreenDebugSelect":"res://Screens/ScreenDebugLvSelect/ScreenDebugLvSelect.tscn",
+	
+	"ScreenNetConnect":"res://Screens/ScreenNetConnect/ScreenNetConnect.tscn",
 	
 	"MMZeroTest":"res://Stages/TestStage/TestStage.tscn",
 	"PIURED_ScreenGameplay":"res://Stages_Reina/Clear_And_Fail/PIURED/GameObjects/ScreenGameplay.tscn"

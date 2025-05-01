@@ -14,6 +14,7 @@
 [sub_resource type="GDScript" id=1]
 script/source = "extends Control
 
+var isNetworkGame:bool = false
 var selection:int = 4
 #Name,image,stage,isAvailable
 var whatever:Array=[
@@ -79,14 +80,16 @@ func _ready():
 	#print(c.position)
 	var bossesDefeated = Globals.bitArrayToInt32(Globals.playerData.availableWeapons)
 	if bossesDefeated > 1: #1 is buster so check above 1
-		$Hub.visible=true
+		$HubButton.visible=true
 	else:
-		$Hub.visible=false
+		$HubButton.visible=false
 
 	#if Globals.playerData.currentCharacter
 	$Sprite.use_parent_material = Globals.playerData.currentCharacter == Globals.Characters.UMP9
 
 	set_process(OS.has_feature(\"pc\") or OS.has_feature(\"web\"))
+	if isNetworkGame:
+		set_process_input(get_tree().is_network_server())
 
 func _process(_delta):
 	var SCREEN_SIZE = get_viewport().get_visible_rect().size
@@ -94,7 +97,7 @@ func _process(_delta):
 	$Sprite.region_rect.size.x=SCREEN_SIZE.x
 	$Sprite.position=SCREEN_SIZE/2
 	portraitFrame.position=SCREEN_SIZE/2
-	$Hub.position = Vector2(portraitFrame.position.x,portraitFrame.position.y+100)
+	#$Hub.position = Vector2(portraitFrame.position.x,portraitFrame.position.y+100)
 
 
 func mouse_input(event,new_sel):
@@ -147,8 +150,7 @@ func _input(event):
 	if Input.is_action_pressed(\"ui_pause\") or Input.is_action_pressed(\"ui_select\"):
 		input_accept()
 	elif Input.is_action_pressed(\"ui_options\") and Globals.bitArrayToInt32(Globals.playerData.availableWeapons)>1:
-		fade_to_next_screen(\"res://Stages_Reina/StageTalkHub.tscn\",true)
-		#get_tree().change_scene(\"res://Stages_Reina/StageTalkHub.tscn\")
+		input_hub_stage()
 	elif Input.is_action_just_pressed(\"ui_cancel\") or (event is InputEventScreenTouch and event.index==1):
 		fade_to_next_screen(\"ScreenTitleMenu\")
 	elif Input.is_action_just_pressed(\"ui_up\"):
@@ -169,9 +171,9 @@ func _input(event):
 			#selection+=3
 			setter(selection+3)
 
-func input_accept():
+#Only master can call this func
+puppetsync func input_accept():
 	if selection==4: #SANGVIS_FERRI
-		
 		#This is checking if 5 bits are set, bit 1 is buster so it's always set
 		if Globals.bitArrayToInt32(Globals.playerData.availableWeapons) >= 31:
 			fade_to_next_screen(\"ScreenSangvisIntro\")
@@ -188,14 +190,32 @@ func input_accept():
 	else:
 		$No.play()
 
+func input_hub_stage():
+	if isNetworkGame and get_tree().is_network_server():
+		rpc(\"enter_hub_stage\")
+	else:
+		enter_hub_stage()
+
+puppetsync func enter_hub_stage():
+	fade_to_next_screen(\"res://Stages_Reina/StageTalkHub.tscn\",true)
+	#get_tree().change_scene(\"res://Stages_Reina/StageTalkHub.tscn\")
+
 onready var selSound = $select
-func setter(newSelection,playSound=true):
+puppetsync func setter(newSelection, playSound=true):
 	portraitFrame.get_child(selection).loseFocus()
 	portraitFrame.get_child(newSelection).gainFocus()
 	selection=newSelection
 	if playSound:
 		selSound.play()
 	pass
+
+
+func _on_HubButton_gui_input(event):
+	if (event is InputEventMouseButton == false and event is InputEventScreenTouch == false):
+		return
+	if !event.pressed:
+		return
+	input_hub_stage()
 "
 
 [sub_resource type="ShaderMaterial" id=2]
@@ -280,10 +300,25 @@ stream = ExtResource( 2 )
 bus = "Player/Enemies"
 
 [node name="Hub" type="Sprite" parent="."]
+visible = false
 material = ExtResource( 6 )
 position = Vector2( 640, 448 )
 scale = Vector2( 3, 3 )
 texture = ExtResource( 7 )
+
+[node name="HubButton" type="TextureRect" parent="."]
+material = ExtResource( 6 )
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -108.0
+margin_top = 77.0
+margin_right = 108.0
+margin_bottom = 123.0
+mouse_default_cursor_shape = 2
+texture = ExtResource( 7 )
+stretch_mode = 6
 
 [node name="FadeOut" type="ColorRect" parent="."]
 visible = false
@@ -301,3 +336,5 @@ visible = false
 margin_right = 40.0
 margin_bottom = 14.0
 text = "(not processing)"
+
+[connection signal="gui_input" from="HubButton" to="." method="_on_HubButton_gui_input"]

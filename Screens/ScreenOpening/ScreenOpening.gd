@@ -34,7 +34,7 @@ func _ready():
 			
 	$AudioStreamPlayer.connect("finished",self,"OffCommandNextScreen")
 	
-	tw = get_tree().create_tween()
+	tw = create_tween()
 	tw.set_parallel()
 	#fuck you
 	VisualServer.canvas_item_set_z_index(top.get_canvas_item(),998)

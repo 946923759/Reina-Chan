@@ -90,6 +90,7 @@ anchor_right = 1.0
 anchor_bottom = 0.639
 margin_top = 3.67999
 margin_bottom = -0.0800476
+mouse_filter = 2
 color = Color( 0, 0.0588235, 0.533333, 1 )
 
 [node name="Sprite2" type="Sprite" parent="."]
@@ -143,6 +144,7 @@ mouse_filter = 2
 color = Color( 0, 0, 0, 1 )
 
 [node name="TransitionOut" parent="." instance=ExtResource( 4 )]
+visible = false
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 1.0

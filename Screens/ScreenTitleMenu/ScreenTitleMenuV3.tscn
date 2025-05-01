@@ -78,12 +78,6 @@ func _ready():
 	else:
 		#Skip the \"PRESS START\" 
 		tween_main_menu_on(false)
-	
-	if game_mode==0:
-		Globals.previous_screen=\"ScreenTitleJoin\"
-	else:
-		Globals.previous_screen=\"ScreenTitleMenu\"
-		
 
 var elapsed:float = 0.0
 var noInputs:float = 0.0
@@ -103,10 +97,35 @@ func _process(delta):
 
 	
 	if noInputs >= time_before_attract_screen:
+		#OffCommandPrevScreen()
+		set_up_demonstration()
+
+func set_up_demonstration():
+	set_process(false)
+	
+	if Globals.previous_screen == \"ScreenOpening\":
+		
+		if game_mode==0:
+			Globals.previous_screen=\"ScreenTitleJoin\"
+		else:
+			Globals.previous_screen=\"ScreenTitleMenu\"
+		
+		Globals.nextStage=Globals.STAGES_REINA.values()[randi() % 4]
+		#Globals.nextStage=Globals.STAGES_REINA.values()[1]
+		Globals.playerData.currentCharacter = Globals.Characters.UMP9_Demo
+		Globals.playerData.gameDifficulty = Globals.Difficulty.MEDIUM
+		get_tree().change_scene(Globals.nextStage)
+		#OffCommandNextScreen()
+	else:
+		print(\"PrevScreen was \",Globals.previous_screen,\", playing attract video\")
 		OffCommandPrevScreen()
-		set_process(false)
 
 func input_accept():
+	if game_mode==0:
+		Globals.previous_screen=\"ScreenTitleJoin\"
+	else:
+		Globals.previous_screen=\"ScreenTitleMenu\"
+		
 	if game_mode == 1:
 		tween_main_menu_on()
 	else:
@@ -367,7 +386,7 @@ scale_by = 3
 
 [node name="VersionNum2" parent="." index="5" instance=ExtResource( 1 )]
 position = Vector2( 9, 42 )
-text = "v.2025.01.25"
+text = "v.2025.04.23"
 wrap_at = 92233720368
 scale_by = 3
 

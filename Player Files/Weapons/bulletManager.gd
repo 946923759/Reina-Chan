@@ -2,6 +2,7 @@ extends Node
 
 var stageRoot:Node2D
 var bullets = [null,null,null]
+const SCREEN_WIDTH = 1280
 
 func init(_stageRoot):
 	stageRoot=_stageRoot
@@ -45,11 +46,12 @@ func is_bullet_onscreen(i:int)->bool:
 		#bullets[i]=null 
 		return false
 	#print("Bullet "+String(i)+" still valid.");
-	return get_onscreen_bullet_pos(i).x > -10 and get_onscreen_bullet_pos(i).x < Globals.gameResolution.x+10
+	return get_onscreen_bullet_pos(i).x > -10 and get_onscreen_bullet_pos(i).x < SCREEN_WIDTH+10
 
 func get_onscreen_bullet_pos(i:int)->Vector2:
 	if is_instance_valid(bullets[i]):
-		return stageRoot.position + stageRoot.get_canvas_transform().origin + bullets[i].position
+		#We have to multiply bullet position by scale to fit within 0-1280
+		return stageRoot.get_canvas_transform().origin + (stageRoot.position + bullets[i].position)*stageRoot.get_canvas_transform().get_scale()
 	bullets[i]=null
 	return Vector2()
 

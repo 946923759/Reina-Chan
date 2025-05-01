@@ -90,7 +90,12 @@ func _process(time):
 		#break
 
 func _input(event):
-	if event.is_action_pressed("ui_pause"):
+	if (
+		event.is_action_pressed("ui_pause") or
+		(event is InputEventMouseButton and event.pressed) or 
+		(event is InputEventScreenTouch and event.pressed)
+	):
+		set_process_input(false)
 		audio.disconnect("finished",self,"done")
 		done()
 		#$AudioStreamPlayer.stop()

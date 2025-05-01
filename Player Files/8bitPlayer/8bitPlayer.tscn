@@ -462,9 +462,9 @@ align = 2
 
 [node name="PositionOnScreen" type="Label" parent="CanvasLayer/DebugDisplay"]
 margin_left = 96.0
-margin_top = 168.0
+margin_top = 200.0
 margin_right = 672.0
-margin_bottom = 203.0
+margin_bottom = 235.0
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_constants/shadow_as_outline = 5
 custom_fonts/font = ExtResource( 6 )

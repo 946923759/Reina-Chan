@@ -51,7 +51,7 @@ func adjustCamera(np,secs):
 		
 		#seq.set_pause_mode(SceneTreeTween.TWEEN_PAUSE_PROCESS)
 		is_tweening=true
-		var seq := get_tree().create_tween()
+		var seq := create_tween()
 		seq.set_parallel(true)
 		
 		if np[0] == limit_left and np[2] == limit_right: #If only top and bottom is being adjusted...
