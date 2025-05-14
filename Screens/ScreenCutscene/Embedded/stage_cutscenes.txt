@@ -9,22 +9,20 @@ msg	You assigned a key that doesn't exist! Go check your event block again.
 
 #KEY	TestStageCutscene
 msgbox	Architect	right	top
-/Architect	This is a boss intro test. You can translate boss cutscenes by separating them with tab in stage_cutscenes.txt.
+msg	This is a boss intro test. You can translate boss cutscenes by separating them with tab in stage_cutscenes.txt.
 msgbox	UMP9	left
-/UMP9	Hello world, I'm family-chan! aoijsdoaidj
+msg	Hello world, I'm Reina-chan!
 
 #KEY	Architect
-#portrait	Architect
-msgbox	Architect	right	top
+msgbox_add	Architect	right	top
 /Architect	Heee-ey, you trash Griffin T-Dolls! Let's have some fun!	O-Oigan!, Muñecas Tacticas de pacotilla! Tengamos algo de diversion!
 msgbox	UMP9	left
 msg	...Who is this weirdo?	...¿Quien es este tipo raro?
-msgbox	Architect	right	top
+msgbox	Architect	right
 /Architect	Heeeey, I heard that~!	Oye!, escuche eso~!
 
 #KEY	Alchemist1
-portrait	Alchemist	true
-msgbox	right	top
+msgbox_add	Alchemist	right	top
 msg	Hahaha! Did you really think you defeated me? That was just a dummy!	JAJAJA! ¿En verdad piensas que me has derrotado? Eso solo fue un secuaz!
 msg	Take this!	¡Toma esto!
 
@@ -46,9 +44,7 @@ msgbox_open
 /Dier	What kind of feature is that...?
 
 #KEY	Alchemist2
-portrait	Alchemist	false
-speaker	Alchemist
-msgbox_add	right	top
+msgbox_add	Alchemist	right	top
 nop	Dear translators, this is a reference to the opening of Symphony of the Night (which quotes Andre Malraux). Hopefully it translates accurately?
 nop	https://www.youtube.com/watch?v=zTH6TlCcsu0
 msg	What is a Tactical Doll?	¿Que son los muñecos tacticos?
@@ -65,18 +61,6 @@ msg	Alright.
 msgbox_transition
 msg	Nice to meet you UMP9, please die immediately.
 
-#KEY	Demo2Ending
-preload_portraits	Dier	pic_Alchemist	pic_Scarecrow
-matchnames	AmWorks	Alchemist	Scarecrow
-portrait	Dier
-/AmWorks	So, did you enjoy the second demo? Hopefully it was worth the wait.
-portrait	Dier	pic_Alchemist
-/Alchemist	/hl[1]We hope you enjoyed the upside-down castle. And the Alchemist boss fights!
-msg	If you've played Mega Man X1 you'll recognize where we got the inspiration from. A big thanks to /gfg/ for all the stage and boss ideas, too.
-portrait	Dier	pic_Alchemist	pic_Scarecrow
-/Scarecrow	/hl[2]Thank you for playing! See you soon for the next demo, featuring me.
-nop	Maybe this should be shown only if they beat it on hard?
-portrait	Dier	pic_Alchemist	pic_Scarecrow	pic_M16A1_Boss_5
-/M16A1	/hl[3]Are you forgetting someone? I'm going to be there too.
-speaker	Dier
-nop	msg	Well, I suppose you are a Sangfis Ferri android... Of sorts...
+#KEY	vs_M16
+msgbox_add	M16A1	right
+msg	Hahahahaha! I have mastered the Raging Demon! Prepare to be sent to heaven under my supreme power!

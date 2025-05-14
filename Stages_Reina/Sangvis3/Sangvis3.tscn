@@ -373,8 +373,6 @@ bottomBound = 96
 custom_music_name = "Elisa3_Stage"
 nsf_music_file = "Rockman 4MI.nsf"
 nsf_track_num = 22
-mute_music_in_debug = true
-mute_boss_music_in_debug = true
 wily_stage_num = 3
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="." index="1"]
@@ -751,7 +749,6 @@ facing = 1
 [node name="Prowler" parent="Architect/100-48 to 120-48" index="10" instance=ExtResource( 45 )]
 position = Vector2( 176, 576 )
 facing = 1
-gravity = 0
 
 [node name="WarpHelpBlock" parent="Architect/100-48 to 120-48" index="11" groups=["debugWarpDisp"] instance=ExtResource( 28 )]
 position = Vector2( 2304, 704 )
@@ -818,7 +815,6 @@ facing = 1
 [node name="Prowler" parent="Architect/100-48 to 120-48 (fake)" index="10" instance=ExtResource( 45 )]
 position = Vector2( 176, 576 )
 facing = 1
-gravity = 0
 
 [node name="WarpHelpBlock" parent="Architect/100-48 to 120-48 (fake)" index="11" groups=["debugWarpDisp"] instance=ExtResource( 28 )]
 position = Vector2( 2304, 704 )
@@ -1793,14 +1789,12 @@ position = Vector2( 976, 592 )
 
 [node name="Prowler4" parent="Alchemist/240-36 to 260-36" index="5" instance=ExtResource( 45 )]
 position = Vector2( -752, 640 )
-gravity = 0
 
 [node name="FloorMaster" parent="Alchemist/240-36 to 260-36" index="6" instance=ExtResource( 37 )]
 position = Vector2( -736, 288 )
 
 [node name="Prowler" parent="Alchemist/240-36 to 260-36" index="7" instance=ExtResource( 45 )]
 position = Vector2( 272, 640 )
-gravity = 0
 
 [node name="Prowler2" parent="Alchemist/240-36 to 260-36" index="8" instance=ExtResource( 45 )]
 position = Vector2( -512, 496 )
@@ -1848,12 +1842,10 @@ position = Vector2( 6400, 1536 )
 
 [node name="Prowler2" parent="Alchemist/Room 260-24" index="0" instance=ExtResource( 45 )]
 position = Vector2( 1088, 384 )
-gravity = 0
 
 [node name="Prowler" parent="Alchemist/Room 260-24" index="1" instance=ExtResource( 45 )]
 position = Vector2( 192, 384 )
 facing = 1
-gravity = 0
 
 [node name="WarpHelpBlock2" parent="Alchemist/Room 260-24" index="2" groups=["debugWarpDisp"] instance=ExtResource( 28 )]
 position = Vector2( 960, 0 )
@@ -2315,7 +2307,6 @@ facing = 1
 [node name="Prowler" parent="Ouroboros/20-108" index="3" instance=ExtResource( 45 )]
 position = Vector2( 1856, 384 )
 facing = 1
-gravity = 0
 
 [node name="WarpHelpBlock" parent="Ouroboros/20-108" index="4" groups=["debugWarpDisp"] instance=ExtResource( 28 )]
 position = Vector2( 1088, 768 )
@@ -3295,7 +3286,7 @@ ladder_type = 1
 position = Vector2( 9584, 5952 )
 
 [node name="Minimap" type="CanvasLayer" parent="." index="13"]
-layer = 10
+layer = 5
 script = SubResource( 30 )
 
 [node name="Minimap" parent="Minimap" index="0" instance=ExtResource( 7 )]
@@ -3350,14 +3341,6 @@ position = Vector2( 18240, 9024 )
 [node name="Position2D12" type="Position2D" parent="DebugWarpPoints" index="11"]
 position = Vector2( 13760, 384 )
 
-[node name="CanvasLayer" parent="." index="15"]
-visible = false
-
-[node name="TransitionIn" parent="CanvasLayer" index="0"]
-__meta__ = {
-"_edit_lock_": true
-}
-
 [node name="Node2D" type="Node2D" parent="." index="16"]
 position = Vector2( 12800, 4608 )
 
@@ -3398,6 +3381,11 @@ frozen_movement_direction = 1
 never_disable = true
 warp_type = 1
 destination_coordinates_if_warp = Vector2( -24, 0 )
+
+[node name="TransitionIn" parent="CanvasLayer" index="0"]
+__meta__ = {
+"_edit_lock_": true
+}
 
 [connection signal="boss_killed" from="Architect/BossRoom/WARNING intro/BossArchitect" to="Architect/BossRoom" method="teleport_player"]
 [connection signal="camera_moved_upwards" from="Architect/100-48 to 120-48/LadderCameraAdjuster" to="Architect/100-48 to 120-48/Jupiter Laser On the left" method="disable"]

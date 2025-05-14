@@ -464,6 +464,8 @@ func input(event):
 		Globals.reset_player_data()
 		if selection==0:
 			Globals.change_screen(get_tree(),\"ScreenSelectCharacter2P\")
+		else:
+			Globals.change_screen(get_tree(),\"ScreenNetConnect\")
 "
 
 [sub_resource type="GDScript" id=11]
@@ -705,8 +707,8 @@ func highlightBool(node,b):
 	node.get_node(\"BoolOff\").set(\"modulate\", Color(.5,.5,.5,1) if b else Color(1,1,1,1));
 	node.get_node(\"BoolOn\").set(\"modulate\", Color(.5,.5,.5,1) if not b else Color(1,1,1,1));
 
-func updateValue(selection, option):
-	get_child(existing_children+selection).get_node(\"Value\").text=Globals.OPTIONS[option]['value']
+func updateValue(selection_, option):
+	get_child(existing_children+selection_).get_node(\"Value\").text=Globals.OPTIONS[option]['value']
 
 func updateTranslation(refresh:bool=false,t:String=\"\"):
 	if refresh:
@@ -905,23 +907,40 @@ func _on_CheatCodeHandler_cheat_detected(_a):
 			get_tree().change_scene(\"res://Screens/ScreenDebugLvSelect/ScreenDebugLvSelect.tscn\")
 "
 
-[sub_resource type="GDScript" id=14]
-script/source = "extends Panel
+[sub_resource type="GDScript" id=16]
+script/source = "extends TabContainer
 
 func _ready():
 	if OS.is_debug_build():
 		var vbox = $VBoxContainer
+		var stages = $PlayDemo
 		for k in Globals.SCREENS:
 			var btn = Button.new()
 			btn.text = k
 			btn.connect(\"pressed\",Globals,\"change_screen\",[get_tree(), k])
 			vbox.add_child(btn)
+		for i in range(1,5):
+			var btn = Button.new()
+			btn.text = Globals.stagesToString[i]
+			btn.connect(\"pressed\",self,\"change_screen\",[Globals.stagesToString[i]])
+			stages.add_child(btn)
 	else:
 		self.visible=false
 
 
 func _on_Button_pressed():
 	self.visible=false
+
+func change_screen(stageToLoad:String):
+	if $PlayDemo/OptionButton.pressed:
+		Globals.previous_screen=\"ScreenTitleMenu\"
+	else:
+		Globals.previous_screen=\"\"
+	print(\"Loading \"+Globals.STAGES_REINA[stageToLoad]+\" \"+String(stageToLoad))
+	Globals.nextStage=Globals.STAGES_REINA[stageToLoad]
+	Globals.playerData.currentCharacter = Globals.Characters.UMP9_Demo
+	Globals.playerData.gameDifficulty = Globals.Difficulty.MEDIUM
+	get_tree().change_scene(Globals.nextStage)
 "
 
 [node name="MenuFrame" type="Control"]
@@ -1143,24 +1162,21 @@ script = SubResource( 12 )
 script = ExtResource( 6 )
 codes = [ "UUDDLRLR", "LLLRRRUUU" ]
 
-[node name="DebugPanel" type="Panel" parent="."]
-anchor_left = 1.0
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-margin_left = -447.0
-margin_top = -242.0
-margin_bottom = 242.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-script = SubResource( 14 )
-__meta__ = {
-"_edit_group_": true
-}
+[node name="DebugPanel" type="TabContainer" parent="."]
+margin_left = 833.0
+margin_top = 118.0
+margin_right = 1263.0
+margin_bottom = 557.0
+script = SubResource( 16 )
 
 [node name="VBoxContainer" type="VBoxContainer" parent="DebugPanel"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
 size_flags_horizontal = 2
 size_flags_vertical = 3
 __meta__ = {
@@ -1168,9 +1184,23 @@ __meta__ = {
 }
 
 [node name="Button" type="Button" parent="DebugPanel/VBoxContainer"]
-margin_right = 447.0
+margin_right = 422.0
 margin_bottom = 20.0
 text = "hide panel"
+
+[node name="PlayDemo" type="VBoxContainer" parent="DebugPanel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
+
+[node name="OptionButton" type="CheckBox" parent="DebugPanel/PlayDemo"]
+margin_right = 422.0
+margin_bottom = 24.0
+pressed = true
+text = "demo playback"
 
 [node name="Transition" parent="." instance=ExtResource( 13 )]
 visible = false

@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/mmSplash.png-68a5987183af5d3eb7fd80a424b95764.stex"
+path="res://.import/ClassicWalkShoot_3.png-c7c77304123cf6f6dedc05dfa7bfb28f.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Player Files/8bitPlayer/Classic/mmSplash.png"
-dest_files=[ "res://.import/mmSplash.png-68a5987183af5d3eb7fd80a424b95764.stex" ]
+source_file="res://Character Sprites/Classic/ClassicWalkShoot_3.png"
+dest_files=[ "res://.import/ClassicWalkShoot_3.png-c7c77304123cf6f6dedc05dfa7bfb28f.stex" ]
 
 [params]
 

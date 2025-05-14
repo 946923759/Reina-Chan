@@ -5,7 +5,7 @@
 [sub_resource type="SegmentShape2D" id=1]
 b = Vector2( 16, 0 )
 
-[node name="Area2D" type="Area2D"]
+[node name="CameraAdjuster" type="Area2D"]
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_group_": true

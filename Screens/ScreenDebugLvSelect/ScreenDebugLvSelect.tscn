@@ -21,15 +21,15 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 2 )
 
-[node name="Control" type="Control" parent="."]
-margin_left = 100.0
-margin_top = 200.0
-margin_right = 140.0
-margin_bottom = 240.0
+[node name="lvSelActorFrame" type="Node2D" parent="."]
+position = Vector2( 64, 192 )
 
 [node name="Characters" type="Node2D" parent="."]
-position = Vector2( 1152, 608 )
+position = Vector2( 1152, 592 )
 scale = Vector2( 4, 4 )
+__meta__ = {
+"_edit_group_": true
+}
 
 [node name="UMP9" type="AnimatedSprite" parent="Characters"]
 frames = ExtResource( 3 )
@@ -54,13 +54,21 @@ stream = ExtResource( 5 )
 volume_db = 4.0
 bus = "Player/Enemies"
 
-[node name="Label" type="Label" parent="."]
+[node name="LabelChangeChar" type="Label" parent="."]
 margin_left = 896.0
-margin_top = 672.0
+margin_top = 656.0
 margin_right = 1240.0
-margin_bottom = 692.0
+margin_bottom = 676.0
 custom_fonts/font = SubResource( 1 )
 text = "L1/R1 = Change Char"
+
+[node name="LabelCharName" type="Label" parent="."]
+margin_left = 896.0
+margin_top = 688.0
+margin_right = 1240.0
+margin_bottom = 708.0
+custom_fonts/font = SubResource( 1 )
+text = "Character: UMP9"
 
 [node name="NoWay" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 7 )

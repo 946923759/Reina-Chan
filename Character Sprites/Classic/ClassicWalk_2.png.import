@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/ClassicLadder_2.png-45d5e584b608cd5fe195e0d477e0f884.stex"
+path="res://.import/ClassicWalk_2.png-8db687f6666e006c86287250f1628597.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Player Files/8bitPlayer/Classic/ClassicLadder_2.png"
-dest_files=[ "res://.import/ClassicLadder_2.png-45d5e584b608cd5fe195e0d477e0f884.stex" ]
+source_file="res://Character Sprites/Classic/ClassicWalk_2.png"
+dest_files=[ "res://.import/ClassicWalk_2.png-8db687f6666e006c86287250f1628597.stex" ]
 
 [params]
 

@@ -139,6 +139,9 @@ func _draw():
 		elif col == 94: # ^
 			col = 0
 			row = 3
+		elif col == 95: # _
+			col = 4
+			row = 3
 		elif col == 60: # <
 			col = 3
 			row = 3

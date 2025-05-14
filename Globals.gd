@@ -83,6 +83,23 @@ var OPTIONS = {
 	}
 }
 
+#DO NOT REARRANGE THIS OR IT WILL BREAK EVERYTHING!!!!!
+#The event tile parameters are stored as ints!
+enum EVENT_TILES {
+	NO_EVENT = 0, #Just so I don't place a tile and have it default to IN_WATER
+	IN_WATER, 
+	OUT_WATER,
+	MESSAGE_BOX,
+	MESSAGE_BOX_OPTIONAL, #Press up to view an optional message box.
+	MESSAGE_POPUP, #Unlike the message box, this doesn't interrupt gameplay.
+	NO_MESSAGE_POPUP, #Remove the popup, if you set it to last forever
+	CHECKPOINT,
+	CUSTOM_EVENT, #Runs a function run_event() if a player touched it. The player is passed to the event.
+	SIGNAL, #It triggers a signal
+	STAGE_COMPLETED,
+	KILL_PLAYER # Needed for moving death planes
+}
+
 enum Difficulty {
 	BEGINNER=0,
 	EASY,
@@ -260,11 +277,39 @@ var systemData:Dictionary = {
 	unlocked_M16A1=true,
 	unlocked_M16_Ultimate=false
 }
+
 var unlockedZeroMode:bool=false
-
-
 var playerHasSaveData:bool=false
 var playerHadSystemData:bool=false
+
+var gameResolution:Vector2;
+var SCREEN_CENTER:Vector2
+var SCREEN_CENTER_X:int
+var SCREEN_CENTER_Y:int
+#onready var GAME_DIRECTORY = OS.get_executable_path().get_base_dir()
+# MusicMappings
+var NSF_location;
+
+enum NetworkMode {
+	DISABLED,
+	CLIENT,
+	SERVER
+}
+var networkMode = 0
+var networkClientAddress:String = ""
+var networkPort:int = 8910
+
+#The stage to load.
+var nextStage
+#For the item get screen... If 0, item will be skipped
+var nextStageWeaponNum:int=0
+
+var stage_cutscene_data:Dictionary = {}
+
+# The name of the next cutscene to load from Cutscene/ or GameData/Cutscene
+# if we're using the "cutscene from file" scene
+var nextCutscene:String="cutscene1Data.txt"
+
 
 func load_system_data()->bool:
 	var save_game = File.new()
@@ -345,32 +390,6 @@ func save_player_game()->bool:
 	playerHasSaveData=true
 	return true
 
-var gameResolution:Vector2;
-var SCREEN_CENTER:Vector2
-var SCREEN_CENTER_X:int
-var SCREEN_CENTER_Y:int
-#onready var GAME_DIRECTORY = OS.get_executable_path().get_base_dir()
-# MusicMappings
-var NSF_location;
-
-enum NetworkMode {
-	DISABLED,
-	CLIENT,
-	SERVER
-}
-var networkMode = 0
-var networkClientAddress:String = ""
-var networkPort:int = 8910
-
-#The stage to load.
-var nextStage
-#For the item get screen... If 0, item will be skipped
-var nextStageWeaponNum:int=0
-
-# The name of the next cutscene to load from Cutscene/ or GameData/Cutscene
-# if we're using the "cutscene from file" scene
-var nextCutscene:String="cutscene1Data.txt"
-
 static func get_save_directory(fName:String)->String:
 	match OS.get_name():
 		"Windows","X11","macOS":
@@ -379,9 +398,7 @@ static func get_save_directory(fName:String)->String:
 	#If not compiled or if the platform doesn't allow writing to the game's current directory
 	return "user://"+fName+".json"
 
-var stage_cutscene_data:Dictionary = {}
-
-func load_stage_cutscenes()->bool:
+func load_stage_cutscenes(p:String = "stage_cutscenes")->bool:
 	var f = File.new()
 	var path = "res://Screens/ScreenCutscene/Embedded/"
 	match OS.get_name():
@@ -389,8 +406,7 @@ func load_stage_cutscenes()->bool:
 			if OS.has_feature("standalone"):
 				path = OS.get_executable_path().get_base_dir()+"/GameData/Cutscene/"
 				#break
-	#"stage_cutscenes_oldSyntax.txt"
-	var ok = f.open(path+"stage_cutscenes_oldSyntax.txt", File.READ)
+	var ok = f.open(path+p+".txt", File.READ)
 	if ok != OK:
 		printerr("Couldn't open the stage cutscenes! Ya done fucked it up! ERROR ", ok)
 		printerr(path)
@@ -564,24 +580,6 @@ func set_audio_levels():
 		else:
 			AudioServer.set_bus_volume_db(bus_idx,realVolumeLevel)
 			AudioServer.set_bus_mute(bus_idx,false)
-
-#DO NOT REARRANGE THIS OR IT WILL BREAK EVERYTHING!!!!!
-#The event tile parameters are stored as ints!
-enum EVENT_TILES {
-	NO_EVENT = 0, #Just so I don't place a tile and have it default to IN_WATER
-	IN_WATER, 
-	OUT_WATER,
-	MESSAGE_BOX,
-	MESSAGE_BOX_OPTIONAL, #Press up to view an optional message box.
-	MESSAGE_POPUP, #Unlike the message box, this doesn't interrupt gameplay.
-	NO_MESSAGE_POPUP, #Remove the popup, if you set it to last forever
-	CHECKPOINT,
-	CUSTOM_EVENT, #Runs a function run_event() if a player touched it. The player is passed to the event.
-	SIGNAL, #It triggers a signal
-	STAGE_COMPLETED,
-	#KILL_PLAYER # Needed for moving death planes
-}
-
 
 # HELPERS
 static func get_matching_files(path,fname):

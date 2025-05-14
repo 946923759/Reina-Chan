@@ -14,6 +14,8 @@ onready var buttonConnect:Button = $VBoxContainer/HBoxNetClient/ButtonClientConn
 onready var textboxClientAddress:TextEdit = $VBoxContainer/HBoxNetClient/TextEditClientDestination
 
 func _ready():
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	
 	textboxHostPort.value = Globals.networkPort
 	get_tree().connect("network_peer_connected", self, "_player_connected")
 	#get_tree().connect("connected_to_server",self,"_connected_to_server")

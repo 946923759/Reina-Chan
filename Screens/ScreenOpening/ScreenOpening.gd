@@ -59,7 +59,7 @@ func _process(delta):
 		assert(seq[step][1])
 		#seq[step][1].OnCommand()
 		seq[step][1].OnCommand()
-		var startTime:float = seq[step][0]
+		#var startTime:float = seq[step][0]
 		
 		if step<size-1:
 			var newTw = get_tree().create_tween()

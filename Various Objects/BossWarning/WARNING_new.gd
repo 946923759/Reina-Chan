@@ -2,8 +2,8 @@ extends Node2D
 #extends "res://Various Objects/EventTile_Message.tres.gd"
 
 onready var sprite = $CanvasLayer/Sprite
-#var gf_cutscene = preload("res://Screens/ScreenCutsceneMMZ/CutsceneInGame.tscn")
-var gf_cutscene = preload("res://Screens/ScreenCutscene/CutsceneMain.tscn")
+var gf_cutscene = preload("res://Screens/ScreenCutsceneMMZ/CutsceneInGame.tscn")
+#var gf_cutscene = preload("res://Screens/ScreenCutscene/CutsceneMain.tscn")
 
 
 var event_ID = Globals.EVENT_TILES.CUSTOM_EVENT
@@ -91,49 +91,38 @@ func part5():
 	sprite.visible=false
 
 func part1():
-	#get_node("/root/Node2D").stopMusic()
-	#if !msgEv.finished:
-	#playerObj.lockMovement(.1,Vector2())
-	#playerObj.sprite.set_animation("Talking")
+	#I'm pretty sure this only exists so people don't pause during the cutscene
 	get_tree().paused=true
 	var newCutscene = gf_cutscene.instance()
 	playerObj.add_child(newCutscene) #Needs to be done first for the _ready()
 	newCutscene.connect("cutscene_finished",self,"part2")
-	#func init_(message, parent,delim="|",msgColumn:int=1):
 	
 	print("Playing boss cutscene!")
 	#Old cutscene format
-	newCutscene.init_(
-		Globals.get_stage_cutscene(message_id),
-		playerObj,
-		true,
-		null, #Backgrounds
-		"\t",
-		Globals.stage_cutscene_data['msgColumn']
-	)
-
-	#NEw cutscene format
-#	#func init_(message_:PoolStringArray,delim="|",msgColumn_:int=1):
 #	newCutscene.init_(
 #		Globals.get_stage_cutscene(message_id),
+#		playerObj,
+#		true,
+#		null, #Backgrounds
 #		"\t",
 #		Globals.stage_cutscene_data['msgColumn']
 #	)
 
+	#New cutscene format
+	#func init_(message_:PoolStringArray,delim="|",msgColumn_:int=1):
+	newCutscene.init_(
+		Globals.get_stage_cutscene(message_id),
+		"\t",
+		Globals.stage_cutscene_data['msgColumn']
+	)
+
 func part2():
+	get_tree().paused=false
 	var callback = child.playIntro();
 	if callback.stream == null:
-		print("BossBase.IntroSound: There's no audio file assigned for this boss, idiot. Change IntroSound actor in the boss class.")
+		printerr("[BossBase.IntroSound] There's no audio file assigned for this boss, idiot. Change IntroSound actor in the boss class.")
 		showWarning()
 		return
 	callback.connect("finished",self,"showWarning")
-	#var t = Timer.new()
-	#t.set_wait_time(.3)
-	#t.set_one_shot(true)
-	#add_child(t)
-	#t.connect("timeout",self,"showWarning")
-	#t.start()
-	#yield(t,"timeout")
-	#showWarning()
 
 var time:float = 0.0

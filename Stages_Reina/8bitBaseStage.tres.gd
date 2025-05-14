@@ -110,6 +110,8 @@ func update_easytiles():
 #function
 func get_player()->KinematicBody2D:
 	return player
+func get_all_players()->Array:
+	return [ player ]
 
 func playBossMusic(_isM16:bool=false):
 	if OS.is_debug_build() and mute_boss_music_in_debug:

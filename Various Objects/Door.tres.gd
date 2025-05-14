@@ -198,9 +198,13 @@ func move(obj):
 		seq.tween_property($Sprite,'piecesToDraw',16,.3)
 		if boss_room_door:
 			get_node("/root/Node2D").fadeMusic()
+			#Apply gravity if they're on the floor so it plays the walking animation
+			var gravity = 0
+			if obj.is_on_floor():
+				gravity = 200
 			obj.call("lockMovementQueue",[
 				[.3,Vector2(0,0),"",true],
-				[.8,Vector2(obj.run_speed*facing,0),"",true],
+				[.8,Vector2(obj.run_speed*facing, gravity),"",true],
 				[.3,Vector2(0,0),"",false]
 			])
 		else:

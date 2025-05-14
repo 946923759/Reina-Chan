@@ -2,7 +2,7 @@ extends "res://Stages_Reina/Enemies/bulletDinergate.gd"
 #BulletDanmaku - It's like a bullet but COOLER
 
 export(int,"normal","reverse_x_pos","spread_x_pos","spin_circle","external") var special_type=0
-export(float,0.1,2,.1) var time_to_reverse = 1
+export(float,0.1,2,.1) var time_to_reverse = 1.0
 export(float,0.0,0.5,.01) var reverse_time_increase=0.0
 
 #xpos,velocity

@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Ouroboros.png-3a0988f0916fed75e79fed9adac6d32d.stex"
+path="res://.import/ClassicIdle_1.png-d03e932952c360fb19845ca097f181a8.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Screens/ScreenCutsceneMMZ/Mugshots/Ouroboros.png"
-dest_files=[ "res://.import/Ouroboros.png-3a0988f0916fed75e79fed9adac6d32d.stex" ]
+source_file="res://Character Sprites/Classic/ClassicIdle_1.png"
+dest_files=[ "res://.import/ClassicIdle_1.png-d03e932952c360fb19845ca097f181a8.stex" ]
 
 [params]
 

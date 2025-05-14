@@ -804,8 +804,8 @@ func handleEvents():
 				event.disabled=true
 			Globals.EVENT_TILES.STAGE_COMPLETED:
 				finishStage()
-			#Globals.EVENT_TILES.KILL_PLAYER:
-			#	die()
+			Globals.EVENT_TILES.KILL_PLAYER:
+				die()
 			_:
 				print("Unknown event ID: "+String(event_ID))
 

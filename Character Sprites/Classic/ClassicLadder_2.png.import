@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/ClassicIdleShoot.png-8ab00cebbe4abeb2569315a3214acc47.stex"
+path="res://.import/ClassicLadder_2.png-160f742aa7d92e541ed1211fd6daab1a.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Player Files/8bitPlayer/Classic/ClassicIdleShoot.png"
-dest_files=[ "res://.import/ClassicIdleShoot.png-8ab00cebbe4abeb2569315a3214acc47.stex" ]
+source_file="res://Character Sprites/Classic/ClassicLadder_2.png"
+dest_files=[ "res://.import/ClassicLadder_2.png-160f742aa7d92e541ed1211fd6daab1a.stex" ]
 
 [params]
 

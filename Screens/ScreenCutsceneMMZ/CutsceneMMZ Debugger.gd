@@ -6,7 +6,7 @@ onready var vbox = $PanelContainer/GridContainer/ItemList
 var scenes
 
 func _ready():
-	Globals.load_stage_cutscenes()
+	Globals.load_stage_cutscenes("stage_cutscenes")
 	scenes = Globals.stage_cutscene_data.keys()
 	for k in scenes:
 		vbox.add_item(k)
@@ -16,6 +16,7 @@ func _ready():
 
 
 func _on_RunDialogScript_pressed():
+	$PanelContainer/GridContainer/RunDialogScript.release_focus()
 	var items = $PanelContainer/GridContainer/ItemList.get_selected_items()
 	var selectionIndex = items[0]
 	var selectionName = scenes[selectionIndex]

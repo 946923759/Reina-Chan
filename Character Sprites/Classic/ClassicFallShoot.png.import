@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/ClassicWalkShoot_3.png-9f7df34a630cc350062cf210b42fdc12.stex"
+path="res://.import/ClassicFallShoot.png-99b28ca66728600b1a24430ad239f682.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Player Files/8bitPlayer/Classic/ClassicWalkShoot_3.png"
-dest_files=[ "res://.import/ClassicWalkShoot_3.png-9f7df34a630cc350062cf210b42fdc12.stex" ]
+source_file="res://Character Sprites/Classic/ClassicFallShoot.png"
+dest_files=[ "res://.import/ClassicFallShoot.png-99b28ca66728600b1a24430ad239f682.stex" ]
 
 [params]
 

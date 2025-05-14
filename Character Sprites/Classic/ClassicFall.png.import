@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/ClassicLadderFinish.png-108521cda39e60c6014de3fa97059a86.stex"
+path="res://.import/ClassicFall.png-76f85ccd7369292be697df8136f8f1d4.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Player Files/8bitPlayer/Classic/ClassicLadderFinish.png"
-dest_files=[ "res://.import/ClassicLadderFinish.png-108521cda39e60c6014de3fa97059a86.stex" ]
+source_file="res://Character Sprites/Classic/ClassicFall.png"
+dest_files=[ "res://.import/ClassicFall.png-76f85ccd7369292be697df8136f8f1d4.stex" ]
 
 [params]
 

@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/bg (copy 1).png-1953c5111b865f8e8680d30a5a6faf35.stex"
+path="res://.import/DialogueBoxLeft.png-527424daa698490f6f9bbc252c024e42.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Stages_Reina/Ouroboros/bg (copy 1).png"
-dest_files=[ "res://.import/bg (copy 1).png-1953c5111b865f8e8680d30a5a6faf35.stex" ]
+source_file="res://Screens/ScreenCutsceneMMZ/DialogueBoxLeft.png"
+dest_files=[ "res://.import/DialogueBoxLeft.png-527424daa698490f6f9bbc252c024e42.stex" ]
 
 [params]
 

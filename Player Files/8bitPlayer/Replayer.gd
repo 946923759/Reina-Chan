@@ -426,13 +426,14 @@ func get_input(delta):
 				state=State.FALLING
 				
 	
+	if isRecording==RECORDING.READY:
+		if left or right or jump or shoot:
+			recordingStartPosition = global_position
+			isRecording=RECORDING.RECORDING
+			
 	frameTimer+=delta
 	if frameTimer > 5.0/60.0:
 		frameTimer=0
-		if isRecording==RECORDING.READY:
-			if left or right or jump or shoot:
-				recordingStartPosition = global_position
-				isRecording=RECORDING.RECORDING
 		#Not elif! Because the above will set it to recording on input!
 		if isRecording==RECORDING.RECORDING:
 			if currentFrame < 360:

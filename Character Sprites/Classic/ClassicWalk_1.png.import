@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/test2.png-2e058611720c213740097a6ad253ce25.stex"
+path="res://.import/ClassicWalk_1.png-b63a107e71b6d98658963f1a6c871125.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Screens/ScreenCutsceneMMZ/Mugshots/test2.png"
-dest_files=[ "res://.import/test2.png-2e058611720c213740097a6ad253ce25.stex" ]
+source_file="res://Character Sprites/Classic/ClassicWalk_1.png"
+dest_files=[ "res://.import/ClassicWalk_1.png-b63a107e71b6d98658963f1a6c871125.stex" ]
 
 [params]
 

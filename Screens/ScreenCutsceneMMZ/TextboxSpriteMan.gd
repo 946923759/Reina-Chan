@@ -41,7 +41,7 @@ func delay_set_portrait(name:String, radioMask:bool=false, delay:float=0.3):
 		$Tween.interpolate_callback(self,delay,"set_portrait",name,radioMask)
 		$Tween.start()
 
-func set_portrait(name: String, radioMask: bool = false)->Node2D:
+func set_portrait(name: String, radioMask: bool = false) -> Node2D:
 	# checks if exist
 	# Unnecessary? CutsceneMain already checks if there's a spare portrait
 	#var lastUsed = get_portrait_from_sprite(name)
