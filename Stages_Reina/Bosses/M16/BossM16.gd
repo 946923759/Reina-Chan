@@ -100,7 +100,7 @@ func playIntro(playSound=true,showHPbar=true)->AudioStreamPlayer:
 #		#HPBar.set_process(true)
 #		seq.parallel().tween_property(HPBar,"position:x",1235,.1)
 ## warning-ignore:return_value_discarded
-#		seq.tween_property(HPBar,"curHP",1,1.5)
+#		seq.tween_property(HPBar,"health",1,1.5)
 ## warning-ignore:return_value_discarded
 #		seq.tween_callback(HPBar,"set_process",[false])
 #	if playSound:
@@ -172,9 +172,9 @@ func _physics_process(delta):
 				STATES.SHOOT,
 				#STATES.DASH #Just way too hard
 			]
-			if curHP <= MAX_HP-4 and healing_cooldown <= 0:
+			if health <= MAX_HP-4 and healing_cooldown <= 0:
 				validOptions.append(STATES.HEAL)
-			#if curHP < 14:
+			#if health < 14:
 			#	validOptions.append(STATES.RAGING_DEMON_START)
 			var rand = randi()%validOptions.size()
 			
@@ -225,7 +225,7 @@ func _physics_process(delta):
 				#cooldown = .2
 			else:
 				var spd = Globals.playerData.gameDifficulty*12
-				if curHP<10:
+				if health<10:
 					velocity=Vector2((520.0+spd)*facing,100)
 				else:
 					velocity=Vector2((460.0+spd)*facing,100)
@@ -294,7 +294,7 @@ func _physics_process(delta):
 			sprite.frame=0
 			$Lasers.anim()
 			is_reflecting=true
-			if curHP<MAX_HP and Globals.playerData.gameDifficulty >= Globals.Difficulty.EASY:
+			if health<MAX_HP and Globals.playerData.gameDifficulty >= Globals.Difficulty.EASY:
 				$BossHealthUp.play()
 			$LaserSound.play()
 			current_state=STATES.HEAL_WAIT
@@ -303,7 +303,7 @@ func _physics_process(delta):
 			progress+=delta
 			#var t = $Lasers.ANIMATION_LENGTH
 			if progress_v>3:
-				HPBar.updateHP(curHP/28.0)
+				HPBar.updateHP(health/28.0)
 				$BossHealthUp.stop()
 
 				#is_reflecting=false
@@ -321,8 +321,8 @@ func _physics_process(delta):
 				progress_v += 1
 				if Globals.playerData.gameDifficulty >= Globals.Difficulty.EASY:
 # warning-ignore:narrowing_conversion
-					curHP=min(MAX_HP,curHP+1)
-					HPBar.updateHP(curHP/28.0)
+					health=min(MAX_HP,health+1)
+					HPBar.updateHP(health/28.0)
 		STATES.THROWING:
 			sprite.set_animation("Grenade")
 			#facing=1 if (player.global_position.x > global_position.x) else -1

@@ -1,7 +1,7 @@
 extends "res://Stages_Reina/Enemies/bulletDinergate.gd"
 #BulletDanmaku - It's like a bullet but COOLER
 
-export(int,"normal","reverse_x_pos","spread_x_pos","spin_circle","external") var special_type=0
+export(int,"normal","reverse_x_pos","spread_x_pos","spin_circle","external","sine_y_pos") var special_type=0
 export(float,0.1,2,.1) var time_to_reverse = 1.0
 export(float,0.0,0.5,.01) var reverse_time_increase=0.0
 
@@ -34,12 +34,12 @@ static func EaseOut(t:float)->float:
 	return Flip(pow(Flip(t),2))
 
 
-var startingPos_x:float=0.0
+var starting_position:Vector2=Vector2.ZERO
 var shouldPlayShoot:bool=false
-func init(t_movement,shouldPlayShoot_:bool=false):
+func init(t_movement:Vector2,shouldPlayShoot_:bool=false):
 	shouldPlayShoot=shouldPlayShoot_
 	DAMAGE_AMOUNT=2
-	startingPos_x=self.position.x
+	starting_position=self.position
 	movement = t_movement
 	# warning-ignore:return_value_discarded
 	$Area2D.connect("body_entered",self,"objectTouched")
@@ -73,7 +73,7 @@ func _physics_process(delta):
 			#I don't think the full SCALE func is needed for this but 
 			#math is extremely cheap for the CPU anyways
 			var timeScaled:float = SCALE(timer,0,destination_spread_xpos.y,0,1)
-			self.position.x=startingPos_x+EaseOut(timeScaled)*(destination_spread_xpos.x-startingPos_x)
+			self.position.x=starting_position.x+EaseOut(timeScaled)*(destination_spread_xpos.x-starting_position.x)
 	elif special_type==3:
 		# 1 full circle (i.e. 2 * PI) every second, clockwise
 		var rotateBy:float = 2.0 * PI * delta*1.0
@@ -84,6 +84,9 @@ func _physics_process(delta):
 		#movement.x+=delta*5
 		#move_and_collide(bulletSpin)
 		pass
+	elif special_type==5:
+		position.x += movement.x
+		self.position.y = sin(position.x/30.0)*20.0 + starting_position.y
 	#._physics_process(delta)
 	timer+=delta
 

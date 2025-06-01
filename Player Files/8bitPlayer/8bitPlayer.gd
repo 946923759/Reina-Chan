@@ -761,7 +761,6 @@ func handleEvents():
 				return
 			Globals.EVENT_TILES.SIGNAL:
 				event.signal_event(self)
-				event.disabled=true
 				return
 		
 		match event_ID:

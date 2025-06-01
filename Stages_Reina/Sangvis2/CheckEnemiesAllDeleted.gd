@@ -10,6 +10,7 @@ func _ready():
 		idx+=1
 	
 func freed(i):
+	#print("Freed!")
 	enemies[i] = null
 	for e in enemies:
 		if is_instance_valid(e):
@@ -18,3 +19,10 @@ func freed(i):
 	#print("all enemies killed!")
 	#If we got here, all enemies were freed
 	emit_signal("all_enemies_killed")
+	queue_free()
+
+func add_enemy(obj:Node):
+	add_child(obj)
+	obj.connect("tree_exited",self,"freed",[len(enemies)])
+	enemies.push_back(obj)
+	

@@ -12,8 +12,6 @@ const bullet = preload("res://Stages_Reina/Enemies/EnemyChargeShot.tscn")
 const bulletSmall = preload("res://Stages_Reina/Enemies/bulletDinergate.tscn")
 const b = preload("res://Stages_Reina/Enemies/bulletDanmaku.tscn")
 
-#export(Vector2) var room_top_left=Vector2(108,140)
-
 enum STATE {
 	IDLE,
 	SHOOTING1,
@@ -139,7 +137,7 @@ func _physics_process(delta):
 						#I like it if it's random.
 						if randi()%2==0:
 							curState=STATE.SHOOT_TOP
-						elif curHP<=14:
+						elif health<=14:
 							curState=STATE.SHOOT_SPREAD_INIT
 						else:
 							curState=STATE.SHOOT_TOP_INIT
@@ -163,7 +161,7 @@ func _physics_process(delta):
 			idleTime=1
 			shots=0
 			bulletCounter=0
-			if curHP < 14 and randi()%2==0:
+			if health < 14 and randi()%2==0:
 				curState=STATE.SHOOT_SPREAD_INIT
 			else:
 				curState=STATE.SHOOTING1

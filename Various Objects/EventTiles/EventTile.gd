@@ -15,3 +15,9 @@ var disabled:bool = false
 func signal_event(player:KinematicBody2D):
 	emit_signal("event_executed")
 	emit_signal("event_executed_passPlayer",player)
+	self.disabled=true
+
+# For custom events, override this function!
+# Unlike the above function, run_event does not disable.
+func run_event(player:KinematicBody2D):
+	return

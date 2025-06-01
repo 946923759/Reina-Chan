@@ -82,7 +82,7 @@ func _physics_process(delta):
 			print(rand)
 			match rand:
 				0:
-					if curHP <= 14:
+					if health <= 14:
 						#stateProgress=0
 						current_state = STATES.JUMPING_TOWARDS_WALL
 						if get_room_position().x/CAMERA_SCALE < 10:

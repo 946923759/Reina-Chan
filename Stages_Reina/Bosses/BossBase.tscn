@@ -173,17 +173,17 @@ extents = Vector2( 30, 48 )
 script/source = "extends Sprite
 
 var piece = preload(\"res://Character Sprites/hp_piece.png\")
-var curHP:float = 0 setget updateHP
+var health:float = 0 setget updateHP
 
 #func _ready():
 #	set_process(false)
 
 func _draw():
-	for i in range(floor(curHP*32)):
+	for i in range(floor(health*32)):
 		draw_texture(piece,Vector2(-4,23+2*-i))
 		
 func updateHP(percentHP):
-	curHP = percentHP
+	health = percentHP
 	update()
 
 #func _process(_delta):

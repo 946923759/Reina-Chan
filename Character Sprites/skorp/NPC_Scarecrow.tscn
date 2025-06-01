@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://Character Sprites/skorp/skorp.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Character Sprites/skorp/NPC_skorp_base.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Stages_Reina/Bosses/Scarecrow/Scarecrow_SpriteFrames.tres" type="SpriteFrames" id=2]
 
 [node name="Skorpion" instance=ExtResource( 1 )]

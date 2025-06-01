@@ -194,6 +194,7 @@ playing = false
 visible = false
 
 [node name="CanvasLayer2" type="CanvasLayer" parent="." index="10"]
+visible = false
 
 [node name="Label" type="Label" parent="CanvasLayer2" index="0"]
 anchor_top = 1.0

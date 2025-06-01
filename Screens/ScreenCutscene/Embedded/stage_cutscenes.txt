@@ -61,6 +61,14 @@ msg	Alright.
 msgbox_transition
 msg	Nice to meet you UMP9, please die immediately.
 
+#KEY	Agent1
+msgbox_add	Agent	right	top
+msg	Worthless trash like you thinks it can go near my master? Be buried here with the rest!
+
+#KEY	Agent2
+msgbox_add	Agent	right	top
+msg	Your adventure ends here. Prepare to die!
+
 #KEY	vs_M16
 msgbox_add	M16A1	right
 msg	Hahahahaha! I have mastered the Raging Demon! Prepare to be sent to heaven under my supreme power!

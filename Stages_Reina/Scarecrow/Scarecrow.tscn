@@ -41,7 +41,7 @@
 [ext_resource path="res://Stages_Reina/Enemies/ELID zombie.tscn" type="PackedScene" id=39]
 [ext_resource path="res://Stages_Reina/Enemies/Dinergate.tscn" type="PackedScene" id=40]
 [ext_resource path="res://Screens/ScreenCutscene/Backgrounds/SFBase.png" type="Texture" id=41]
-[ext_resource path="res://Character Sprites/skorp/skorp.tscn" type="PackedScene" id=42]
+[ext_resource path="res://Character Sprites/skorp/NPC_skorp_base.tscn" type="PackedScene" id=42]
 [ext_resource path="res://Various Objects/EventTiles/Checkpoint_Horizontal.tscn" type="PackedScene" id=43]
 [ext_resource path="res://Various Objects/EventTiles/EventTile.tscn" type="PackedScene" id=44]
 [ext_resource path="res://Various Objects/pickupAmmoBig.tscn" type="PackedScene" id=45]

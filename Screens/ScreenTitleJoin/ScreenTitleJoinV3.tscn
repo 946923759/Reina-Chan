@@ -4,4 +4,3 @@
 
 [node name="ScreenTitleJoin_v3" instance=ExtResource( 1 )]
 game_mode = 0
-mute_music_in_debug = false

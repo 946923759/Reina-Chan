@@ -33,6 +33,7 @@ bottomBound = 12
 
 [node name="PlayerHolder" parent="." index="7"]
 position = Vector2( 160, 576 )
+player_to_spawn_in_debug = 2
 
 [node name="CanvasLayer" parent="." index="9"]
 visible = false

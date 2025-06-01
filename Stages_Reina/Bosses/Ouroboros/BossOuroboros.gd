@@ -98,7 +98,7 @@ func shootRocket(rocketDirection:int,offset:Vector2,rightWheel:bool=false)->Node
 	get_parent().add_child(e)
 	
 	#DIRECTION enum in the rocket, homing rockets, and if rockets should speed up
-	e.init(rocketDirection,false,curHP<=14) # 
+	e.init(rocketDirection,false,health<=14) # 
 	
 	add_collision_exception_with(e) # Make bullet and this not collide
 	return e
@@ -187,7 +187,7 @@ func _physics_process(delta):
 			elif shots >=4:
 				shots=0
 				if get_room_position().x/64>10:
-					if curHP<14: # and randi()%2==0
+					if health<14: # and randi()%2==0
 						curState=STATE.SHOOT_SKY_1
 					else:
 						curState=STATE.HOP_TO_LEFT
@@ -256,7 +256,7 @@ func _physics_process(delta):
 				#If even, jump backwards, else jump forwards by adding 1 to enum
 				curState=STATE.JUMP_BACKWARDS+shots%2
 				
-				if curHP<14:
+				if health<14:
 					idleTime=.1
 				else:
 					idleTime=.2

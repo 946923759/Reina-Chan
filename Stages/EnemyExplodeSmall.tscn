@@ -58,6 +58,7 @@ func _ready():
 [node name="AnimatedSprite" type="AnimatedSprite"]
 scale = Vector2( 4, 4 )
 frames = SubResource( 6 )
+frame = 4
 script = SubResource( 7 )
 
 [node name="s1" type="AudioStreamPlayer2D" parent="."]

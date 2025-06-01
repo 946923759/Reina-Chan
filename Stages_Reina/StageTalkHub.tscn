@@ -6,7 +6,7 @@
 [ext_resource path="res://Stages/NeedleManDemo/backdrop.png" type="Texture" id=4]
 [ext_resource path="res://Character Sprites/skorp/NPC_Architect.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Character Sprites/skorp/NPC_T5000.tscn" type="PackedScene" id=6]
-[ext_resource path="res://Character Sprites/skorp/skorp.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Character Sprites/skorp/NPC_skorp_base.tscn" type="PackedScene" id=7]
 [ext_resource path="res://Character Sprites/skorp/9a91.tscn" type="PackedScene" id=8]
 [ext_resource path="res://Character Sprites/skorp/NPC_Ouroboros.tscn" type="PackedScene" id=9]
 [ext_resource path="res://Character Sprites/skorp/NPC_Alchemist.tscn" type="PackedScene" id=10]

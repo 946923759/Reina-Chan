@@ -37,14 +37,13 @@ tracks/1/keys = {
 }
 
 [node name="bullet" type="KinematicBody2D"]
-collision_layer = 0
+collision_layer = 16
 collision_mask = 0
 collision/safe_margin = 5.0
 script = ExtResource( 3 )
 
 [node name="Area2D" type="Area2D" parent="."]
-collision_layer = 3
-collision_mask = 3
+collision_layer = 2
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource( 1 )

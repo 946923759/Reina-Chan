@@ -1,7 +1,7 @@
 [gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://Character Sprites/skorp/9a-91 5x1.png" type="Texture" id=1]
-[ext_resource path="res://Character Sprites/skorp/skorp.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Character Sprites/skorp/NPC_skorp_base.tscn" type="PackedScene" id=2]
 
 [sub_resource type="AtlasTexture" id=1]
 atlas = ExtResource( 1 )

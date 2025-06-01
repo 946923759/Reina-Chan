@@ -16,7 +16,7 @@ func _ready():
 		e.timer=.25*i
 		i+=1
 	#set_process(false)
-	set_physics_process(false)
+	#set_physics_process(false)
 
 #TODO: This fires if the entire scene is getting reloaded, there should be some way to not do that
 func check_enemies(i):
@@ -31,6 +31,13 @@ func check_enemies(i):
 
 var timer = 3.0
 func _physics_process(delta):
+	for c in get_children():
+		# 1 full circle (i.e. 2 * PI) every second, clockwise
+		var rotateBy:float = delta * -1.50
+		
+		var nPos:Vector2 = c.position.rotated(rotateBy)
+		c.position_wrapper=Vector2(0,0).direction_to(nPos)*player_platform_radius
+
 	return
 
 	timer += delta

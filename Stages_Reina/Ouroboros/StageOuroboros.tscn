@@ -481,7 +481,6 @@ position = Vector2( 2112, 512 )
 [node name="Prowler" parent="Room 120-0" index="1" instance=ExtResource( 10 )]
 material = null
 position = Vector2( 704, 640 )
-gravity = 0
 
 [node name="Guardian" parent="Room 120-0" index="2" instance=ExtResource( 11 )]
 position = Vector2( 1536, 512 )

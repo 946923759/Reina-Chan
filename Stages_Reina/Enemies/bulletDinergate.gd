@@ -22,6 +22,7 @@ func init(t_movement):
 	$Area2D.connect("body_entered",self,"objectTouched")
 # warning-ignore:return_value_discarded
 	#$Area2D.connect("body_exited",self,"clearLastTouched")
+	#Why is this called on init and not _ready()?
 	shootSound.play()
 
 func objectTouched(obj):
@@ -33,9 +34,13 @@ func objectTouched(obj):
 	#elif obj.has_method("enemy_touched"): #If enemy touched bullet
 	#	obj.call("enemy_touched",self)
 
+
+var cooldown:float = 0.5
 #For KinematicBody2D only.
 func _physics_process(_delta):
-	if !vis.is_on_screen():
+	cooldown -= _delta
+	if !vis.is_on_screen() and cooldown<=0:
+		#print("Bullet "+name+" exited screen")
 		queue_free()
 	var collision = move_and_collide(movement)
 	if collision != null:

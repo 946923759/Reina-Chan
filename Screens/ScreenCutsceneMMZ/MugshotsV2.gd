@@ -7,8 +7,10 @@ var PORTRAITS = [
 	"Alchemist",
 	"Ouroboros",
 	"Scarecrow",
-	"9A91",
+	"Agent",
+	"M16_Nice",
 	"M16A1",
+	"9A91",
 	"Skorpion",
 	"T5000"
 ]

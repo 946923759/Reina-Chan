@@ -9,6 +9,7 @@ export(int,"AppearFromBoss","Normal") var spawnType = 1
 export (String) var animToPlayIfNormal = "default"
 export(int,"Towards Player","Left","Right") var facing=0
 export(String) var message_id = "Scarecrow1"
+export(bool) var talk_allowed = true
 
 export(int,"None","U","M","P","9","C","H","A","N") var unlocksEmblem = 0
 export(int,"None",
@@ -23,7 +24,6 @@ export(int,"None",
 
 var velocity:Vector2
 var gravity = 2000
-var disabled:bool=false
 var just_touched_ground:bool=false
 
 onready var animPlayer:AnimationPlayer = $DustCloud/AnimationPlayer
@@ -65,7 +65,7 @@ func _physics_process(delta):
 	#if visible==false:
 	#	return
 	
-	if spawnType==0 and disabled==false and is_on_floor():
+	if spawnType==0 and talk_allowed and is_on_floor():
 		if timer>.5:
 			play_cutscene()
 		else:
@@ -74,7 +74,7 @@ func _physics_process(delta):
 			animPlayer.play("default")
 			sprite.play("default")
 			just_touched_ground=true
-	elif spawnType==1:
+	elif spawnType==1 and talk_allowed:
 		var p = get_node("/root/Node2D").get_player()
 		if abs(p.global_position.x - global_position.x) < 100 and \
 		abs(p.global_position.y - global_position.y) < 100:
@@ -108,7 +108,7 @@ func play_cutscene():
 			null,
 			"\t"
 		)
-	disabled=true
+	talk_allowed = false
 	emit_signal("cutscene_finished")
 	$AudioStreamPlayer.play()
 

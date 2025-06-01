@@ -7,7 +7,7 @@ export(DIRECTION) var facing = DIRECTION.LEFT
 var lastTouched
 var enabled:bool = false
 
-var curHP:int = 28 #All bosses in mega man have 28 health.
+var health:int = 28 #All bosses in mega man have 28 health.
 const MAX_HP = 28
 
 var is_reflecting:bool=false
@@ -54,8 +54,13 @@ var room_position:Vector2 setget set_room_position,get_room_position
 
 func get_room_position()->Vector2:
 	return global_position-CLOSEST_ROOM_BOUND
+
 func set_room_position(v:Vector2):
 	global_position=CLOSEST_ROOM_BOUND+v
+
+
+func get_room_position_of_node(o:Node2D)->Vector2:
+	return o.global_position - CLOSEST_ROOM_BOUND
 
 func _ready():
 	sprite.set_animation("default")
@@ -95,7 +100,7 @@ func playIntro(playSound=true,showHPbar=true)->AudioStreamPlayer:
 		#HPBar.set_process(true)
 		seq.tween_property(HPBar,"position:x",1235,.1)
 # warning-ignore:return_value_discarded
-		seq.tween_property(HPBar,"curHP",1,1.5)
+		seq.tween_property(HPBar,"health",1,1.5)
 # warning-ignore:return_value_discarded
 		seq.tween_callback(HPBar,"set_process",[false])
 	if playSound:
@@ -144,9 +149,9 @@ func damage(amount,damageType:int=0):
 	#so make sure you can't shoot it until it's enabled lol
 	if !enabled:
 		return
-	curHP -= amount
+	health -= amount
 	#print("Took damage!")
-	if curHP <= 0:
+	if health <= 0:
 		if isAlive:
 			killSelf()
 	else:
@@ -154,8 +159,8 @@ func damage(amount,damageType:int=0):
 		hurtSound.play()
 		sprite.use_parent_material = false
 		whiteTime = .1
-		#print(curHP/28.0)
-		HPBar.updateHP(curHP/28.0)
+		#print(health/28.0)
+		HPBar.updateHP(health/28.0)
 		
 func killSelf():
 	print(self.name+" queued to be killed.")

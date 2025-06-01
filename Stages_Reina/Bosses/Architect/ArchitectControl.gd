@@ -33,7 +33,7 @@ func _physics_process(delta):
 		sprite.set_animation("Idle")
 		idleTime+=delta
 		if idleTime > .2:
-			if curHP<=14 and randi()%2==0:
+			if health<=14 and randi()%2==0:
 				curState=STATE.JUMPING
 			else:
 				curState = STATE.MOVING
@@ -49,7 +49,7 @@ func _physics_process(delta):
 			get_parent().add_child(e)
 			
 			#DIRECTION enum in the rocket, homing rockets, and if rockets should speed up
-			e.init(3 if facing==-1 else 5,false,curHP<=14) 
+			e.init(3 if facing==-1 else 5,false,health<=14) 
 			
 			add_collision_exception_with(e) # Make bullet and this not collide
 # warning-ignore:return_value_discarded

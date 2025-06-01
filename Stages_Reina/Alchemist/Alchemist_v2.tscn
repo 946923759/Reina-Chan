@@ -450,11 +450,9 @@ position = Vector2( -128, -2368 )
 
 [node name="Dinergate" parent="0-24 vs Alchemist Dummy/AlchemistDummy_v2/dg" index="0" instance=ExtResource( 16 )]
 position = Vector2( 416, 2976 )
-no_movement = false
 
 [node name="Dinergate2" parent="0-24 vs Alchemist Dummy/AlchemistDummy_v2/dg" index="1" instance=ExtResource( 16 )]
 position = Vector2( 992, 2976 )
-no_movement = false
 
 [node name="EventTile" parent="0-24 vs Alchemist Dummy" index="3" instance=ExtResource( 42 )]
 position = Vector2( 448, 768 )
@@ -497,6 +495,7 @@ tile_data = PoolIntArray( 1572918, 0, 0, 1572919, 0, 0, 1638459, 0, 0, 1703995, 
 
 [node name="PlayerHolder" parent="." index="18"]
 position = Vector2( 160, 4480 )
+player_to_spawn_in_debug = 2
 
 [node name="60-0 to 60-40" type="Node2D" parent="." index="19"]
 
@@ -540,7 +539,6 @@ position = Vector2( 2560, 128 )
 
 [node name="Dinergate" parent="60-40 to 60-100" index="7" instance=ExtResource( 16 )]
 position = Vector2( 1216, 288 )
-no_movement = false
 
 [node name="ELID" parent="60-40 to 60-100" index="8" instance=ExtResource( 20 )]
 position = Vector2( 896, 256 )
@@ -678,7 +676,6 @@ position = Vector2( 2080, 224 )
 
 [node name="Dinergate" parent="48-100 to 48-140" index="11" instance=ExtResource( 16 )]
 position = Vector2( 1760, 672 )
-no_movement = false
 
 [node name="36-120" type="Node2D" parent="." index="24"]
 
