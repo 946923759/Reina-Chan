@@ -72,7 +72,7 @@ script/source = "extends Node
 #Godot's VisualScript makes a 4 line function way way more complex than
 #it needs to be
 
-var skorp = preload(\"res://Character Sprites/skorp/skorp.tscn\")
+var skorp = preload(\"res://Character Sprites/skorp/NPC_skorp_base.tscn\")
 
 func execute():
 	var parent = get_parent()
@@ -1044,7 +1044,6 @@ facing = 1
 position = Vector2( 2688, 448 )
 collision_mask = 17
 facing = 1
-no_movement = false
 
 [node name="100-48 to 100-60" type="Node2D" parent="." index="19"]
 position = Vector2( 6400, 3072 )

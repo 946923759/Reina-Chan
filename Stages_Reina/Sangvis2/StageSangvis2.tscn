@@ -313,6 +313,8 @@ var drawSize:Vector2
 var spr = preload(\"res://Stages_Reina/Sangvis2/lava.png\")
 var frame:int = 0
 
+const DAMAGE = 3
+
 func _ready():
 	if get_child_count()>0:
 		#No idea how this works but for some reason
@@ -333,7 +335,7 @@ func object_touched(obj):
 	#print(\"intersecting!\")
 	if obj.has_method(\"player_touched\"): #If enemy touched player
 		lastTouched = obj
-		obj.call(\"player_touched\",self,2)
+		obj.call(\"player_touched\",self,DAMAGE)
 
 func clearLastTouched(_obj):
 	lastTouched=null
@@ -383,7 +385,7 @@ func _process(delta):
 		_ready()
 	else:
 		if lastTouched != null:
-			lastTouched.call(\"player_touched\",self,2)
+			lastTouched.call(\"player_touched\",self,DAMAGE)
 "
 
 [sub_resource type="RectangleShape2D" id=18]
@@ -401,8 +403,6 @@ bottomBound = 72
 custom_music_name = "Elisa2"
 nsf_music_file = "Rockman 4MI.nsf"
 nsf_track_num = 88
-mute_music_in_debug = true
-mute_boss_music_in_debug = true
 wily_stage_num = 2
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="." index="1"]
@@ -501,7 +501,7 @@ scale = Vector2( 4, 4 )
 texture = ExtResource( 3 )
 centered = false
 region_enabled = true
-region_rect = Rect2( 126.764, 0, 480, 16 )
+region_rect = Rect2( 218.737, 0, 480, 16 )
 script = SubResource( 1 )
 
 [node name="ScrollControl" type="Node" parent="." index="11"]
@@ -1379,7 +1379,7 @@ cell_size = Vector2( 16, 16 )
 collision_layer = 16
 collision_mask = 35
 format = 1
-tile_data = PoolIntArray( 131081, 1, 0, 131082, 1, 0, 327681, 1, 0, 327682, 1, 0, 327683, 1, 0, 327696, 1, 0, 327697, 1, 0, 327698, 1, 0 )
+tile_data = PoolIntArray( 458753, 1, 0, 458754, 1, 0, 458755, 1, 0, 458768, 1, 0, 458769, 1, 0, 458770, 1, 0 )
 __meta__ = {
 "_edit_lock_": true
 }

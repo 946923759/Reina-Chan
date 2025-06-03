@@ -1,10 +1,13 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Stages_Reina/Bosses/BossBase.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Stages_Reina/Bosses/Agent/BossAgent_SpriteFrames.tres" type="SpriteFrames" id=2]
 [ext_resource path="res://Sounds/BossSounds/Agent_APPEAR2_JP.wav" type="AudioStream" id=3]
 [ext_resource path="res://Stages_Reina/Bosses/Agent/BossAgent.gd" type="Script" id=4]
 [ext_resource path="res://ubuntu-font-family/NotoSansKR-Bold.otf" type="DynamicFontData" id=5]
+[ext_resource path="res://Sounds/Classic/S3K_70 - Fireball.wav" type="AudioStream" id=6]
+[ext_resource path="res://Sounds/Classic/S3K_C2 - Fire Sound.wav" type="AudioStream" id=7]
+[ext_resource path="res://Sounds/Classic/S3K_42 - Insta Shield.wav" type="AudioStream" id=8]
 
 [sub_resource type="DynamicFont" id=1]
 size = 35
@@ -55,3 +58,15 @@ position = Vector2( -96, 0 )
 
 [node name="Position2D4" type="Position2D" parent="." index="12"]
 position = Vector2( -96, 24 )
+
+[node name="LavaSound" type="AudioStreamPlayer" parent="." index="13"]
+stream = ExtResource( 6 )
+bus = "Player/Enemies"
+
+[node name="LavaRising" type="AudioStreamPlayer" parent="." index="14"]
+stream = ExtResource( 7 )
+bus = "Player/Enemies"
+
+[node name="TeleportSound" type="AudioStreamPlayer2D" parent="." index="15"]
+stream = ExtResource( 8 )
+bus = "Player/Enemies"

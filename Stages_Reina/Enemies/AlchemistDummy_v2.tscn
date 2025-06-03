@@ -223,7 +223,7 @@ func _physics_process(delta):
 #The idea was to support multiple players but is this really necessary?
 func _on_EventTile_event_executed_passPlayer(player_):
 	player=player_
-	curHP=14 #lol
+	health=14 #lol
 	enabled=true
 "
 
