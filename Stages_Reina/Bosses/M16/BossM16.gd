@@ -185,14 +185,10 @@ func _physics_process(delta):
 				#	cooldown+=.3
 			
 		STATES.RAGING_DEMON_START:
-			a1.visible = true
-			a2.visible = true
-			a3.visible = true
+			raging_demon_start()
 
 			rayCast.cast_to = Vector2(facing*25,0)
 			rayCast.enabled = true
-			sprite.animation = "Falling"
-			sprite.playing=false
 			#lololol
 			if Globals.playerData.gameDifficulty >= Globals.Difficulty.MEDIUM:
 				is_reflecting = true
@@ -202,10 +198,11 @@ func _physics_process(delta):
 			update_after_image()
 			
 			if rayCast.is_colliding():
-				player.sprite.play("Hurt")
+				var obj = rayCast.get_collider()
+				obj.sprite.play("Hurt")
 				sprite.animation="Grenade"
 				sprite.frame=2
-				$Heaven.raging_demon(player)
+				$Heaven.raging_demon(obj)
 				cooldown=INF
 			elif (
 					facing == DIRECTION.LEFT and get_room_position().x/CAMERA_SCALE < 2
@@ -346,7 +343,7 @@ func _physics_process(delta):
 			cooldown=1
 			previous_state=STATES.THROWING
 			current_state=0
-		STATES.DASH:
+		STATES.DASH: #Not used!
 			sprite.play("Dash")
 			a1.visible = true
 			a2.visible = true
@@ -393,6 +390,17 @@ func _physics_process(delta):
 				previous_state=STATES.SHOOT
 				current_state=STATES.IDLE
 
+#This enables the afterimages
+func raging_demon_start():
+	a1.visible = true
+	a2.visible = true
+	a3.visible = true
+	sprite.animation = "Falling"
+	sprite.playing=false
+	
+func raging_demon_play(): #This plays the animation
+	pass
+
 #This disables the afterimages when the raging demon attack connects
 func raging_demon_fin():
 	emit_signal("raging_demon_finished")
@@ -400,6 +408,11 @@ func raging_demon_fin():
 	a2.visible = false
 	a3.visible = false
 	sprite.play("RagingDemon")
+
+
+func raging_demon_intro(n:Node2D):
+	raging_demon_start()
+	
 
 static func get_bezier_curve(p0:Vector2, p1:Vector2, p2:Vector2, t:float):
 	var q0 = p0.linear_interpolate(p1, t)

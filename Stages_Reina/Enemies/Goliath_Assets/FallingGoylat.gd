@@ -29,9 +29,9 @@ func objTouched(obj):
 	if obj.has_method("player_touched"): #If enemy touched player
 		#lastTouched = obj
 		obj.call("player_touched",self,2)
-	killSelf()
+	die()
 
-func killSelf():
+func die():
 	set_physics_process(false)
 	$Sprite.visible=false
 	set_collision_layer_bit(0,false)

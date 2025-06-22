@@ -1,0 +1,153 @@
+[gd_scene load_steps=18 format=2]
+
+[ext_resource path="res://Screens/ScreenStageSelectV2/BossSelectActorV2.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Screens/ScreenStageSelectV2/ScreenSelectStageV3.gd" type="Script" id=2]
+[ext_resource path="res://ParticleEffects/AlphaMaskPurple.tres" type="Material" id=3]
+[ext_resource path="res://Screens/_transition/transition.tscn" type="PackedScene" id=4]
+[ext_resource path="res://stepmania-compat/smQuad.gd" type="Script" id=5]
+[ext_resource path="res://ParticleEffects/PaletteSwapShader.gdshader" type="Shader" id=6]
+[ext_resource path="res://Screens/ScreenStageSelectV2/bg.png" type="Texture" id=7]
+[ext_resource path="res://Screens/ScreenStageSelectV2/hub.png" type="Texture" id=8]
+[ext_resource path="res://Screens/ScreenStageSelectV2/Ouroboros.png" type="Texture" id=9]
+[ext_resource path="res://Screens/ScreenStageSelectV2/Scarecrow.png" type="Texture" id=10]
+[ext_resource path="res://Screens/ScreenStageSelectV2/Alchemist.png" type="Texture" id=11]
+[ext_resource path="res://Screens/ScreenStageSelectV2/Architect.png" type="Texture" id=12]
+[ext_resource path="res://Sounds/Classic/S3K_B2 - No Way.wav" type="AudioStream" id=13]
+[ext_resource path="res://Sounds/Classic/Mega Man 4 SFX (20) - Weapon Switch.wav" type="AudioStream" id=14]
+[ext_resource path="res://Sounds/Classic/03 - MenuSelect.wav" type="AudioStream" id=15]
+[ext_resource path="res://Screens/ScreenStageSelectV2/sf icon.png" type="Texture" id=16]
+
+[sub_resource type="ShaderMaterial" id=1]
+shader = ExtResource( 6 )
+shader_param/colorToSwap1 = Color( 0.937255, 0.788235, 0, 1 )
+shader_param/colorToSwap2 = Color( 0.811765, 0.439216, 0, 1 )
+shader_param/clr1 = Color( 1, 1, 1, 1 )
+shader_param/clr2 = Color( 0.694, 0.627, 0.592, 1 )
+
+[node name="ScreenSelectStageV3" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_pivot_offset = Vector2( -494, -21 )
+script = ExtResource( 2 )
+
+[node name="bg" type="ColorRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_min_size = Vector2( 1920, 1080 )
+color = Color( 0, 0, 0, 1 )
+script = ExtResource( 5 )
+
+[node name="Sprite" type="Sprite" parent="."]
+material = SubResource( 1 )
+position = Vector2( 640, 360 )
+scale = Vector2( 1, 3.2 )
+texture = ExtResource( 7 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 1280, 208 )
+
+[node name="PortraitsActorFrame" type="GridContainer" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -390.0
+margin_top = -290.0
+margin_right = 390.0
+margin_bottom = 290.0
+custom_constants/vseparation = 50
+custom_constants/hseparation = 150
+columns = 3
+
+[node name="Control" type="Control" parent="PortraitsActorFrame"]
+margin_right = 160.0
+margin_bottom = 160.0
+
+[node name="BossSelectActorV2" parent="PortraitsActorFrame" instance=ExtResource( 1 )]
+margin_left = 310.0
+margin_right = 470.0
+text = "Architect"
+destination_stage = "res://Stages_Reina/Architect/StageArchitect_v2.tscn"
+portrait_texture = ExtResource( 12 )
+
+[node name="Control2" type="Control" parent="PortraitsActorFrame"]
+margin_left = 620.0
+margin_right = 780.0
+margin_bottom = 160.0
+
+[node name="BossSelectActorV3" parent="PortraitsActorFrame" instance=ExtResource( 1 )]
+margin_top = 210.0
+margin_bottom = 370.0
+text = "Alchemist"
+destination_stage = "res://Stages_Reina/Alchemist/Alchemist_v2.tscn"
+portrait_texture = ExtResource( 11 )
+
+[node name="BossSelectActorV4" parent="PortraitsActorFrame" instance=ExtResource( 1 )]
+margin_left = 310.0
+margin_top = 210.0
+margin_right = 470.0
+margin_bottom = 370.0
+text = ""
+portrait_texture = ExtResource( 16 )
+show_texture = false
+
+[node name="BossSelectActorV5" parent="PortraitsActorFrame" instance=ExtResource( 1 )]
+margin_left = 620.0
+margin_top = 210.0
+margin_right = 780.0
+margin_bottom = 370.0
+text = "Ouroboros"
+destination_stage = "res://Stages_Reina/Ouroboros/StageOuroboros.tscn"
+portrait_texture = ExtResource( 9 )
+
+[node name="Control3" type="Control" parent="PortraitsActorFrame"]
+margin_top = 420.0
+margin_right = 160.0
+margin_bottom = 580.0
+
+[node name="BossSelectActorV6" parent="PortraitsActorFrame" instance=ExtResource( 1 )]
+margin_left = 310.0
+margin_top = 420.0
+margin_right = 470.0
+margin_bottom = 580.0
+text = "Scarecrow"
+destination_stage = "res://Stages_Reina/Scarecrow/Scarecrow.tscn"
+portrait_texture = ExtResource( 10 )
+
+[node name="HubButton" type="TextureRect" parent="."]
+material = ExtResource( 3 )
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -108.0
+margin_top = 77.0
+margin_right = 108.0
+margin_bottom = 123.0
+mouse_default_cursor_shape = 2
+texture = ExtResource( 8 )
+stretch_mode = 6
+
+[node name="FadeOut" type="ColorRect" parent="."]
+visible = false
+modulate = Color( 1, 1, 1, 0 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 1 )
+
+[node name="Transition" parent="." instance=ExtResource( 4 )]
+visible = false
+transition_type = 1
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+
+[node name="Confirm" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 14 )
+bus = "Music"
+
+[node name="select" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 15 )
+bus = "Player/Enemies"
+
+[node name="No" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 13 )
+bus = "Player/Enemies"

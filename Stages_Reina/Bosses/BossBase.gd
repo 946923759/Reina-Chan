@@ -36,6 +36,7 @@ export(String) var intro_subtitle_key = "Architect_Intro"
 # What's the point of this when the boss room handler has to reset the music and player position anyways?
 # Just in case there is no boss room handler? Ok
 export(bool) var stage_finished_when_killed = true
+export(bool) var resume_music_after_killed:bool = true
 export(int,-1,15) var set_temp_bitflag_when_boss_dies = -1
 
 var deathAnimation = preload("res://Animations/deathAnimation.tscn")
@@ -153,7 +154,7 @@ func damage(amount,damageType:int=0):
 	#print("Took damage!")
 	if health <= 0:
 		if isAlive:
-			killSelf()
+			die()
 	else:
 		#set false so the white tint shader will show up.
 		hurtSound.play()
@@ -162,7 +163,7 @@ func damage(amount,damageType:int=0):
 		#print(health/28.0)
 		HPBar.updateHP(health/28.0)
 		
-func killSelf():
+func die():
 	print(self.name+" queued to be killed.")
 	HPBar.updateHP(0)
 	isAlive = false
@@ -197,4 +198,5 @@ func killSelf():
 		yield($DieSound,"finished")
 		emit_signal("boss_killed")
 		self.queue_free()
-		get_node("/root/Node2D").playMusic_2()
+		if resume_music_after_killed:
+			get_node("/root/Node2D").playMusic_2()

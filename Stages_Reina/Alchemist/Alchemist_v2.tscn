@@ -1,4 +1,4 @@
-[gd_scene load_steps=49 format=2]
+[gd_scene load_steps=50 format=2]
 
 [ext_resource path="res://Stages_Reina/Alchemist/cvBG.png" type="Texture" id=1]
 [ext_resource path="res://Stages_Reina/Alchemist/cvBG2.png" type="Texture" id=2]
@@ -45,6 +45,7 @@
 [ext_resource path="res://Various Objects/DoorButLeft.tscn" type="PackedScene" id=43]
 [ext_resource path="res://Various Objects/pickupWallChicken.tscn" type="PackedScene" id=44]
 [ext_resource path="res://Stages_Reina/Alchemist/cv2.png" type="Texture" id=45]
+[ext_resource path="res://Screens/ScreenCutsceneMMZ/CutsceneInGame.tscn" type="PackedScene" id=46]
 
 [sub_resource type="GDScript" id=1]
 script/source = "extends Node2D
@@ -75,8 +76,6 @@ export (int) var bottomBound = 0;
 #export (Vector2) var current_room
 export (Vector2) var destination_room_offset
 
-#var player
-
 func _ready():
 	if message_id==\"\" and message.size()==0:
 		message_id=\"default\"
@@ -93,7 +92,7 @@ func execute():
 	var parent = get_parent()
 	#set_process
 	
-	if true:
+	if false:
 		get_tree().paused=true
 		var newCutscene = gf_cutscene.instance()
 		parent.add_child(newCutscene) #Needs to be done first for the _ready()
@@ -106,8 +105,15 @@ func execute():
 			\"\\t\"
 		)
 		newCutscene.connect(\"cutscene_finished\",self,\"teleport_1\")
+	else:
+		player.lockMovementQueue([
+			[9999,Vector2(0,0),\"\",true]
+		])
+		$DialoguePlayerInGame.init_by_msg_id(message_id)
+		$DialoguePlayerInGame.connect(\"cutscene_finished\",self,\"teleport_1\")
 		
 func teleport_1():
+	$DialoguePlayerInGame.queue_free()
 	#player.lockMovement(3,Vector2(0,0))
 	#Queue is structured like time,vector2,animation,freeze_y_velocity
 	#obj.call(\"lockMovementQueue\",[
@@ -468,6 +474,8 @@ rightBound = 160
 bottomBound = 156
 destination_room_offset = Vector2( 7, 7 )
 
+[node name="DialoguePlayerInGame" parent="0-24 vs Alchemist Dummy/RotateAndTeleport2" index="0" instance=ExtResource( 46 )]
+
 [node name="platform" type="TileMap" parent="0-24 vs Alchemist Dummy" index="5"]
 scale = Vector2( 4, 4 )
 tile_set = ExtResource( 5 )
@@ -495,7 +503,6 @@ tile_data = PoolIntArray( 1572918, 0, 0, 1572919, 0, 0, 1638459, 0, 0, 1703995, 
 
 [node name="PlayerHolder" parent="." index="18"]
 position = Vector2( 160, 4480 )
-player_to_spawn_in_debug = 2
 
 [node name="60-0 to 60-40" type="Node2D" parent="." index="19"]
 
@@ -600,7 +607,7 @@ position = Vector2( 6176, 2944 )
 position = Vector2( 6304, 2944 )
 
 [node name="Vespid Bride" parent="36-80 to 36-120" index="4" instance=ExtResource( 29 )]
-position = Vector2( 6976, 2688 )
+position = Vector2( 6880, 2688 )
 
 [node name="48-100 to 48-140" type="Node2D" parent="." index="23"]
 position = Vector2( 6400, 3072 )
@@ -1202,7 +1209,7 @@ bottomBound = 144
 position = Vector2( 3040, 8320 )
 
 [node name="Vespid Bride" parent="120-40 to 120-60" index="5" instance=ExtResource( 29 )]
-position = Vector2( 3360, 8000 )
+position = Vector2( 3232, 8000 )
 
 [node name="Checkpoint2" parent="." index="40" instance=ExtResource( 28 )]
 position = Vector2( 4480, 8832 )
@@ -1303,20 +1310,26 @@ position = Vector2( 672, 384 )
 [node name="Position2D" type="Position2D" parent="DebugWarpPoints" index="0"]
 position = Vector2( 5216, 1856 )
 
-[node name="Position2D2" type="Position2D" parent="DebugWarpPoints" index="1"]
+[node name="Position2D7" type="Position2D" parent="DebugWarpPoints" index="1"]
+position = Vector2( 6512, 2784 )
+
+[node name="Position2D2" type="Position2D" parent="DebugWarpPoints" index="2"]
 position = Vector2( 1408, 1856 )
 
-[node name="Position2D3" type="Position2D" parent="DebugWarpPoints" index="2"]
+[node name="Position2D3" type="Position2D" parent="DebugWarpPoints" index="3"]
 position = Vector2( 9152, 9472 )
 
-[node name="Position2D4" type="Position2D" parent="DebugWarpPoints" index="3"]
+[node name="Position2D4" type="Position2D" parent="DebugWarpPoints" index="4"]
 position = Vector2( 5216, 9120 )
 
-[node name="Position2D5" type="Position2D" parent="DebugWarpPoints" index="4"]
+[node name="Position2D5" type="Position2D" parent="DebugWarpPoints" index="5"]
 position = Vector2( 6528, 6720 )
 
-[node name="Position2D6" type="Position2D" parent="DebugWarpPoints" index="5"]
+[node name="Position2D6" type="Position2D" parent="DebugWarpPoints" index="6"]
 position = Vector2( 1728, 7488 )
+
+[node name="CanvasLayer" parent="." index="47"]
+visible = true
 
 [connection signal="boss_killed" from="0-24 vs Alchemist Dummy/AlchemistDummy_v2" to="0-24 vs Alchemist Dummy/RotateAndTeleport2" method="_on_AlchemistDummy_v2_boss_killed"]
 [connection signal="event_executed_passPlayer" from="0-24 vs Alchemist Dummy/EventTile" to="0-24 vs Alchemist Dummy/AlchemistDummy_v2" method="_on_EventTile_event_executed_passPlayer"]

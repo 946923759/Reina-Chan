@@ -6,6 +6,7 @@ var player_ref:KinematicBody2D
 func _ready():
 	$Area2D.connect("body_entered",self,"obj_touched")
 	$Area2D.connect("body_exited",self,"obj_exited")
+	$Label.visible = OS.is_debug_build()
 
 func obj_touched(obj):
 	if obj is KinematicBody2D:

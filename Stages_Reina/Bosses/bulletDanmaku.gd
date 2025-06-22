@@ -36,7 +36,8 @@ static func EaseOut(t:float)->float:
 
 var starting_position:Vector2=Vector2.ZERO
 var shouldPlayShoot:bool=false
-func init(t_movement:Vector2,shouldPlayShoot_:bool=false):
+
+func init(t_movement:Vector2, shouldPlayShoot_:bool=false):
 	shouldPlayShoot=shouldPlayShoot_
 	DAMAGE_AMOUNT=2
 	starting_position=self.position

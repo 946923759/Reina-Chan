@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://Stages/MinibossBase.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Stages_Reina/Enemies/Jupiter_Assets/Jupiter Cannon_Spriteframes.tres" type="SpriteFrames" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://addons/godot-next/gui/debug_label.gd" type="Script" id=5]
 [ext_resource path="res://Sounds/Classic/Explosion2.wav" type="AudioStream" id=6]
 [ext_resource path="res://Stages_Reina/Enemies/Jupiter_Assets/JUPITERCANNON_prongs.png" type="Texture" id=7]
+[ext_resource path="res://Stages_Reina/Enemies/Jupiter_Assets/Jupiter Cannon.gd" type="Script" id=8]
 
 [sub_resource type="GDScript" id=1]
 script/source = "extends Sprite
@@ -63,7 +64,8 @@ extents = Vector2( 90, 8 )
 [node name="Jupiter Cannon" instance=ExtResource( 1 )]
 collision_layer = 27
 collision_mask = 27
-maxHealth = 30
+script = ExtResource( 8 )
+MAX_HEALTH = 20
 
 [node name="AnimatedSprite" parent="." index="0"]
 position = Vector2( 0, 2 )
@@ -81,37 +83,41 @@ visible = false
 position = Vector2( 0.5, 2 )
 texture = ExtResource( 7 )
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" index="0"]
+[node name="Hitbox" parent="." index="3"]
+collision_layer = 10
+collision_mask = 11
+
+[node name="Area2D@CollisionShape2D" type="CollisionShape2D" parent="Hitbox" index="0"]
 position = Vector2( -8, -4 )
 shape = SubResource( 2 )
 
 [node name="HurtSound" parent="." index="4"]
 bus = "Player/Enemies"
 
-[node name="WhatTheFuckIsWrongWithGodot" type="Area2D" parent="." index="6"]
-monitoring = false
+[node name="WhatTheFuckIsWrongWithGodot" type="Area2D" parent="." index="5"]
 collision_layer = 9
 collision_mask = 9
+monitoring = false
 
 [node name="BottomHalf2" type="CollisionPolygon2D" parent="WhatTheFuckIsWrongWithGodot" index="0"]
 position = Vector2( 0, 8 )
 polygon = PoolVector2Array( 0, 0, 20, 0, 40, 35, -30, 35 )
 
-[node name="BottomHalf" type="CollisionPolygon2D" parent="." index="7"]
+[node name="BottomHalf" type="CollisionPolygon2D" parent="." index="6"]
 visible = false
 position = Vector2( -2, 8 )
 polygon = PoolVector2Array( 0, 0, 20, 0, 40, 35, -30, 35 )
 disabled = true
 
-[node name="LaserCharging" type="AudioStreamPlayer2D" parent="." index="8"]
+[node name="LaserCharging" type="AudioStreamPlayer2D" parent="." index="7"]
 stream = ExtResource( 3 )
 bus = "Player/Enemies"
 
-[node name="LaserFire" type="AudioStreamPlayer2D" parent="." index="9"]
+[node name="LaserFire" type="AudioStreamPlayer2D" parent="." index="8"]
 stream = ExtResource( 4 )
 bus = "Player/Enemies"
 
-[node name="DebugLabel" type="Label" parent="." index="10"]
+[node name="DebugLabel" type="Label" parent="." index="9"]
 visible = false
 margin_left = -53.3289
 margin_top = -40.1147
@@ -128,9 +134,9 @@ __meta__ = {
 target_path = NodePath("..")
 properties = PoolStringArray( "curState", "waitTime" )
 
-[node name="Tween" type="Tween" parent="." index="11"]
+[node name="Tween" type="Tween" parent="." index="10"]
 
-[node name="laserArea2D" type="Area2D" parent="." index="12"]
+[node name="laserArea2D" type="Area2D" parent="." index="11"]
 monitoring = false
 script = SubResource( 3 )
 
@@ -138,6 +144,6 @@ script = SubResource( 3 )
 position = Vector2( -116.912, -2.452 )
 shape = SubResource( 4 )
 
-[node name="MiniExplodeSound" type="AudioStreamPlayer2D" parent="." index="13"]
+[node name="MiniExplodeSound" type="AudioStreamPlayer2D" parent="." index="12"]
 stream = ExtResource( 6 )
 bus = "Player/Enemies"

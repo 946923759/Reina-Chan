@@ -10,6 +10,7 @@ script = ExtResource( 4 )
 player_damage = 3
 
 [node name="AnimatedSprite" parent="." index="1"]
+position = Vector2( 8, -13 )
 frames = ExtResource( 3 )
 animation = "twoShoot"
 frame = 6

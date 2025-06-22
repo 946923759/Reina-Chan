@@ -137,4 +137,4 @@ moveAfter = 0.7
 [node name="AnimatedSprite" parent="." index="0"]
 frames = SubResource( 12 )
 animation = "stop"
-offset = Vector2( 3, 0 )
+offset = Vector2( 3, 0.5 )

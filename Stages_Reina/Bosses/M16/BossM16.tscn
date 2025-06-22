@@ -148,6 +148,9 @@ tracks/10/keys = {
 [node name="BossM16" instance=ExtResource( 1 )]
 z_index = 1
 script = ExtResource( 6 )
+__meta__ = {
+"_editor_description_": "Place the boss as the last child of the warning block. Normally the boss is placed three blocks from the right wall."
+}
 
 [node name="AnimatedSprite" parent="." index="1"]
 position = Vector2( 0, -16 )

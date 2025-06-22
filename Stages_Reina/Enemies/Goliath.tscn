@@ -15,6 +15,7 @@ maxHealth = 5
 player_damage = 5
 collisionOffset = Vector2( 0, -2 )
 use_large_explosion = true
+type = 0
 
 [node name="AnimatedSprite" parent="." index="0"]
 scale = Vector2( 3, 3 )

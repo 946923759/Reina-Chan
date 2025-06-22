@@ -24,15 +24,11 @@ position = Vector2( 4, -27 )
 frames = ExtResource( 2 )
 animation = "firing"
 
-[node name="CollisionShape2D" parent="Area2D" index="0"]
-__meta__ = {
-"_edit_lock_": true
-}
-
 [node name="IntroSound" parent="." index="3"]
 stream = ExtResource( 3 )
 
 [node name="Label" type="Label" parent="CanvasLayer" index="1"]
+visible = false
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -43,9 +39,13 @@ align = 2
 valign = 2
 
 [node name="DebugLabel" parent="." index="7"]
+visible = false
 text = "animation = \"firing\"
 playing = false
 "
+
+[node name="DebugLabel2" parent="." index="8"]
+visible = false
 
 [node name="Position2D" type="Position2D" parent="." index="9"]
 position = Vector2( -96, 0 )

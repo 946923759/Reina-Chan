@@ -4,7 +4,7 @@
 msg	If you can read this, you forgot to assign a key for your cutscene and the PoolStringArray is empty.	Si lees esto, has olvidado asignar alguna tecla para las cinematicas y los "PoolStringArray" estan vacios.
 
 #KEY	error
-msg	This cutscene specified a key that does not exist in stage_cutscenes.txt. If you are the stage creator, check your event block for typos.
+msg	This cutscene specified a key '%KEY%' that does not exist in stage_cutscenes.txt. If you are the stage creator, check your event block for typos.
 msg	(If this isn't a test stage or a user-made stage, this is a bug!)
 
 #KEY	TestStageCutscene

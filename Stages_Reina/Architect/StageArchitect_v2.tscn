@@ -192,11 +192,9 @@ position = Vector2( 120, 512 )
 
 [node name="Dinergate3" parent="room0-0 to 20-0" index="0" instance=ExtResource( 29 )]
 position = Vector2( 1632, 608 )
-no_movement = false
 
 [node name="Dinergate4" parent="room0-0 to 20-0" index="1" instance=ExtResource( 29 )]
 position = Vector2( 1120, 608 )
-no_movement = false
 
 [node name="Room140-12 Yoku Room 1" type="Node2D" parent="." index="9"]
 position = Vector2( 0, 768 )
@@ -312,15 +310,12 @@ position = Vector2( 4448, 96 )
 
 [node name="Dinergate" parent="room40-0 to 60-0" index="4" instance=ExtResource( 29 )]
 position = Vector2( 4480, 672 )
-no_movement = false
 
 [node name="Enemy" parent="room40-0 to 60-0" index="5" instance=ExtResource( 12 )]
 position = Vector2( 4576, 96 )
-type = 0
 
 [node name="Dinergate2" parent="room40-0 to 60-0" index="6" instance=ExtResource( 29 )]
 position = Vector2( 3808, 672 )
-no_movement = false
 
 [node name="room80-0 to 100-0" type="Node2D" parent="." index="14"]
 
@@ -566,7 +561,6 @@ bottomBound = 12
 [node name="Jupiter Cannon miniboss" parent="." index="28" instance=ExtResource( 35 )]
 position = Vector2( 12352, 448 )
 scale = Vector2( 6, 6 )
-maxHealth = 25
 
 [node name="BlockNode" parent="Jupiter Cannon miniboss" index="14" instance=ExtResource( 32 )]
 position = Vector2( 48.001, 48 )
@@ -610,7 +604,6 @@ bottomBound = 48
 
 [node name="Dinergate5" parent="room140-0" index="0" instance=ExtResource( 29 )]
 position = Vector2( 9888, 672 )
-no_movement = false
 
 [node name="CameraAdjuster7" parent="room140-0" index="1" instance=ExtResource( 22 )]
 position = Vector2( 10208, 320 )
@@ -633,15 +626,12 @@ position = Vector2( 9247, 672 )
 
 [node name="Enemy9" parent="room160-0" index="0" instance=ExtResource( 12 )]
 position = Vector2( 11391, 128 )
-type = 0
 
 [node name="Enemy10" parent="room160-0" index="1" instance=ExtResource( 12 )]
 position = Vector2( 11135, 416 )
-type = 0
 
 [node name="Enemy11" parent="room160-0" index="2" instance=ExtResource( 12 )]
 position = Vector2( 10783, 512 )
-type = 0
 
 [node name="room180-12" type="Node2D" parent="." index="32"]
 
@@ -675,7 +665,6 @@ position = Vector2( 96, -672 )
 [node name="Dinergate" parent="room200-12" index="1" instance=ExtResource( 29 )]
 position = Vector2( 352, 608 )
 facing = 1
-no_movement = false
 
 [node name="Scout" parent="room200-12" index="2" instance=ExtResource( 25 )]
 position = Vector2( 480, 160 )
@@ -748,13 +737,16 @@ collision_mask = 32
 position = Vector2( 13680, 608 )
 collision_mask = 32
 
-[node name="Position2D" type="Position2D" parent="DebugWarpPoints" index="0"]
+[node name="Position2D4" type="Position2D" parent="DebugWarpPoints" index="0"]
+position = Vector2( 11552, 48 )
+
+[node name="Position2D" type="Position2D" parent="DebugWarpPoints" index="1"]
 position = Vector2( 9536, 1856 )
 
-[node name="Position2D2" type="Position2D" parent="DebugWarpPoints" index="1"]
+[node name="Position2D2" type="Position2D" parent="DebugWarpPoints" index="2"]
 position = Vector2( 12992, 832 )
 
-[node name="Position2D3" type="Position2D" parent="DebugWarpPoints" index="2"]
+[node name="Position2D3" type="Position2D" parent="DebugWarpPoints" index="3"]
 position = Vector2( 14624, 1344 )
 
 [connection signal="camera_adjusted" from="bonusRoom/CameraAdjuster" to="bonusRoom/CameraAdjuster/BlockEnablerDisabler" method="execute_from_camera_adjusted"]

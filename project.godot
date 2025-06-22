@@ -650,6 +650,7 @@ gameplay_dash={
 2d_physics/layer_4="Player Projectiles"
 2d_physics/layer_5="Stage"
 2d_physics/layer_6="Player Pickups"
+2d_physics/layer_7="Other Players"
 
 [locale]
 

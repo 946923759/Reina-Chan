@@ -113,7 +113,7 @@ func update_easytiles():
 		easyTiles.set_collision_mask_bit(0,true)
 		easyTiles.visible=true
 
-func playBossMusic(_unused):
+func playBossMusic():
 	if OS.is_debug_build() and mute_boss_music_in_debug:
 		return
 	reinaAudioPlayer.load_song("Boss","Rockman 6 UH.nsf",30)

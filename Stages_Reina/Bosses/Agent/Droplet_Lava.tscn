@@ -1,0 +1,82 @@
+[gd_scene load_steps=13 format=2]
+
+[ext_resource path="res://ParticleEffects/AlphaMaskPurple.tres" type="Material" id=1]
+[ext_resource path="res://Stages_Reina/Sangvis1/drop.png" type="Texture" id=2]
+[ext_resource path="res://Stages_Reina/Sangvis1/drop_lava.png" type="Texture" id=3]
+[ext_resource path="res://Stages_Reina/Bosses/Agent/Droplet_Lava.gd" type="Script" id=4]
+
+[sub_resource type="AtlasTexture" id=12]
+atlas = ExtResource( 2 )
+region = Rect2( 0, 0, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=13]
+atlas = ExtResource( 2 )
+region = Rect2( 16, 0, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=14]
+atlas = ExtResource( 2 )
+region = Rect2( 32, 0, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=22]
+atlas = ExtResource( 3 )
+region = Rect2( 0, 0, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=23]
+atlas = ExtResource( 3 )
+region = Rect2( 16, 0, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=24]
+atlas = ExtResource( 3 )
+region = Rect2( 32, 0, 16, 16 )
+
+[sub_resource type="SpriteFrames" id=15]
+animations = [ {
+"frames": [ SubResource( 12 ), SubResource( 13 ), SubResource( 14 ), SubResource( 14 ) ],
+"loop": false,
+"name": "default",
+"speed": 15.0
+}, {
+"frames": [ SubResource( 22 ), SubResource( 23 ), SubResource( 24 ), SubResource( 24 ) ],
+"loop": false,
+"name": "lava",
+"speed": 15.0
+} ]
+
+[sub_resource type="RectangleShape2D" id=9]
+extents = Vector2( 16, 24 )
+
+[node name="KinematicBody2D" type="KinematicBody2D"]
+collision_layer = 16
+collision_mask = 16
+script = ExtResource( 4 )
+
+[node name="Sprite" type="AnimatedSprite" parent="."]
+material = ExtResource( 1 )
+position = Vector2( 0, 40 )
+scale = Vector2( 4, 4 )
+frames = SubResource( 15 )
+animation = "lava"
+offset = Vector2( 0, -10 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( 0, 8 )
+shape = SubResource( 9 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Area2D" type="Area2D" parent="."]
+position = Vector2( 0, 8 )
+collision_layer = 2
+monitorable = false
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource( 9 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_Area2D_body_entered"]

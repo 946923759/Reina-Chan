@@ -335,6 +335,6 @@ func _physics_process(delta):
 	$Wheels.flip_h = (facing == DIRECTION.RIGHT)
 
 
-func killSelf():
+func die():
 	$Wheels.is_dead=true
-	.killSelf()
+	.die()

@@ -757,7 +757,6 @@ tile_data = PoolIntArray( 589919, 0, 0, 589920, 0, 0, 655384, 0, 0, 655385, 0, 0
 
 [node name="PlayerHolder" parent="." index="11"]
 position = Vector2( 224, 448 )
-player_to_spawn_in_debug = 2
 
 [node name="0-0 to 40-0" type="Node2D" parent="." index="12"]
 

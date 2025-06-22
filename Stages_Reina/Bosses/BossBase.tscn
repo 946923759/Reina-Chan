@@ -14,7 +14,7 @@
 [ext_resource path="res://Stages_Reina/Bosses/Architect/Down1.png" type="Texture" id=14]
 [ext_resource path="res://Sounds/Classic/Die.wav" type="AudioStream" id=15]
 
-[sub_resource type="SegmentShape2D" id=1]
+[sub_resource type="SegmentShape2D" id=30]
 a = Vector2( -30, 48 )
 b = Vector2( 30, 48 )
 
@@ -200,7 +200,8 @@ from the right side."
 }
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource( 1 )
+position = Vector2( 0, -1 )
+shape = SubResource( 30 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 material = ExtResource( 6 )
@@ -215,6 +216,9 @@ collision_mask = 11
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource( 28 )
+__meta__ = {
+"_edit_lock_": true
+}
 
 [node name="IntroSound" type="AudioStreamPlayer" parent="."]
 bus = "Voices"

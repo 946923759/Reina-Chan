@@ -1,8 +1,10 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=28 format=2]
 
 [ext_resource path="res://Stages_Reina/Sangvis1/drop.png" type="Texture" id=1]
 [ext_resource path="res://Stages_Reina/Sangvis1/water drop.png" type="Texture" id=2]
 [ext_resource path="res://ParticleEffects/AlphaMaskPurple.tres" type="Material" id=3]
+[ext_resource path="res://Stages_Reina/Sangvis1/drop_lava.png" type="Texture" id=4]
+[ext_resource path="res://Stages_Reina/Sangvis1/lava drop.png" type="Texture" id=5]
 
 [sub_resource type="GDScript" id=1]
 script/source = "extends Node2D
@@ -11,7 +13,7 @@ export(int,0,25) var player_damage = 1
 
 onready var sprite = $AnimatedSprite
 onready var drop = $KinematicBody2D
-onready var dropSpr=$KinematicBody2D/Sprite
+onready var dropSpr = $KinematicBody2D/Sprite
 
 var dropState = 0
 var collisionMask
@@ -86,8 +88,32 @@ region = Rect2( 64, 0, 16, 16 )
 atlas = ExtResource( 2 )
 region = Rect2( 80, 0, 16, 16 )
 
+[sub_resource type="AtlasTexture" id=16]
+atlas = ExtResource( 5 )
+region = Rect2( 16, 0, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=17]
+atlas = ExtResource( 5 )
+region = Rect2( 32, 0, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=18]
+atlas = ExtResource( 5 )
+region = Rect2( 48, 0, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=19]
+atlas = ExtResource( 5 )
+region = Rect2( 64, 0, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=20]
+atlas = ExtResource( 5 )
+region = Rect2( 80, 0, 16, 16 )
+
 [sub_resource type="AtlasTexture" id=11]
 atlas = ExtResource( 2 )
+region = Rect2( 16, 0, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=21]
+atlas = ExtResource( 5 )
 region = Rect2( 16, 0, 16, 16 )
 
 [sub_resource type="SpriteFrames" id=8]
@@ -97,10 +123,20 @@ animations = [ {
 "name": "default",
 "speed": 8.0
 }, {
+"frames": [ SubResource( 16 ), SubResource( 17 ), SubResource( 18 ), SubResource( 19 ), SubResource( 20 ) ],
+"loop": true,
+"name": "default_lava",
+"speed": 5.0
+}, {
 "frames": [ SubResource( 11 ) ],
 "loop": true,
 "name": "loop",
 "speed": 3.0
+}, {
+"frames": [ SubResource( 21 ) ],
+"loop": true,
+"name": "loop_lava",
+"speed": 5.0
 } ]
 
 [sub_resource type="AtlasTexture" id=12]
@@ -115,12 +151,29 @@ region = Rect2( 16, 0, 16, 16 )
 atlas = ExtResource( 1 )
 region = Rect2( 32, 0, 16, 16 )
 
+[sub_resource type="AtlasTexture" id=22]
+atlas = ExtResource( 4 )
+region = Rect2( 0, 0, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=23]
+atlas = ExtResource( 4 )
+region = Rect2( 16, 0, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=24]
+atlas = ExtResource( 4 )
+region = Rect2( 32, 0, 16, 16 )
+
 [sub_resource type="SpriteFrames" id=15]
 animations = [ {
 "frames": [ SubResource( 12 ), SubResource( 13 ), SubResource( 14 ), SubResource( 14 ) ],
 "loop": false,
 "name": "default",
 "speed": 15.0
+}, {
+"frames": [ SubResource( 22 ), SubResource( 23 ), SubResource( 24 ), SubResource( 24 ) ],
+"loop": true,
+"name": "lava",
+"speed": 5.0
 } ]
 
 [sub_resource type="RectangleShape2D" id=9]
@@ -132,7 +185,6 @@ script = SubResource( 1 )
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 scale = Vector2( 4, 4 )
 frames = SubResource( 8 )
-animation = "loop"
 
 [node name="VisibilityEnabler2D" type="VisibilityEnabler2D" parent="."]
 process_parent = true

@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Various Objects/chicken.png" type="Texture" id=1]
 [ext_resource path="res://ParticleEffects/alphaMask.gdshader" type="Shader" id=2]
+[ext_resource path="res://Screens/ScreenCutsceneMMZ/CutsceneInGame.tscn" type="PackedScene" id=3]
 
 [sub_resource type="ShaderMaterial" id=4]
 shader = ExtResource( 2 )
@@ -14,6 +15,7 @@ extents = Vector2( 32, 32 )
 script/source = "extends Area2D
 
 const gf_cutscene = preload(\"res://Screens/ScreenCutscene/CutsceneMain.tscn\")
+const gf_cutscene_2 = preload(\"res://Screens/ScreenCutsceneMMZ/CutsceneInGame.tscn\")
 
 func _ready():
 	self.connect(\"body_entered\",self,\"heal\")
@@ -22,18 +24,31 @@ func heal(obj):
 	#print(\"Healing!\")
 	if obj.has_method(\"healPlayer\"):
 		if Globals.playCutscenes:
-			get_tree().paused=true
-			var newCutscene = gf_cutscene.instance()
-			obj.add_child(newCutscene) #Needs to be done first for the _ready()
-			newCutscene.init_(
-				Globals.get_stage_cutscene(\"AlchemistChicken\"),
-				obj,
-				true,
-				null,
-				\"\\t\"
-			)
+			if false:
+				get_tree().paused=true
+				var newCutscene = gf_cutscene.instance()
+				obj.add_child(newCutscene) #Needs to be done first for the _ready()
+				newCutscene.init_(
+					Globals.get_stage_cutscene(\"AlchemistChicken\"),
+					obj,
+					true,
+					null,
+					\"\\t\"
+				)
+			else:
+				get_tree().paused=true
+				#$DialoguePlayerInGame.connect(\"cutscene_finished\",self,\"_on_cutscene_finished\",[obj])
+				$DialoguePlayerInGame.init_by_msg_id(\"AlchemistChicken\")
+				yield($DialoguePlayerInGame,\"cutscene_finished\")
+				get_tree().paused=false
+				
 		obj.healPlayer(8)
 		self.get_parent().queue_free()
+
+
+#func _on_cutscene_finished(obj):
+#	obj.healPlayer(8)
+#	self.get_parent().queue_free()
 "
 
 [sub_resource type="RectangleShape2D" id=5]
@@ -60,3 +75,5 @@ script = SubResource( 3 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource( 5 )
+
+[node name="DialoguePlayerInGame" parent="Area2D" instance=ExtResource( 3 )]

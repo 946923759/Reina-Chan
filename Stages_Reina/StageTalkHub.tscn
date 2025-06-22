@@ -182,7 +182,4 @@ texture = ExtResource( 14 )
 region_enabled = true
 region_rect = Rect2( 0, 0, 1280, 208 )
 
-[node name="CanvasLayer" parent="." index="16"]
-visible = false
-
 [connection signal="event_executed_passPlayer" from="EventTile" to="EventTile/CanvasLayer" method="_on_EventTile_event_executed_passPlayer"]

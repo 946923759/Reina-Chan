@@ -19,7 +19,7 @@ func freed(i):
 	#print("all enemies killed!")
 	#If we got here, all enemies were freed
 	emit_signal("all_enemies_killed")
-	queue_free()
+	#queue_free() #DO NOT QUEUE FREE IT WILL FREE THE ITEMS ATTACHED TO THIS NODE
 
 func add_enemy(obj:Node):
 	add_child(obj)

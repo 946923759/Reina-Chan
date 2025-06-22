@@ -1,0 +1,159 @@
+[gd_scene load_steps=15 format=2]
+
+[ext_resource path="res://Stages/MinibossBase.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Stages_Reina/Bosses/S1_FishBoss/fish_boss.png" type="Texture" id=2]
+[ext_resource path="res://Stages_Reina/Bosses/S1_FishBoss/S1_miniboss.gd" type="Script" id=3]
+[ext_resource path="res://Stages_Reina/Bosses/S1_FishBoss/fish_boss4.png" type="Texture" id=4]
+[ext_resource path="res://Sounds/Classic/S3K_DeathEggLaser2.wav" type="AudioStream" id=5]
+[ext_resource path="res://Sounds/Classic/S3K_LaserCharging.wav" type="AudioStream" id=6]
+[ext_resource path="res://Stages_Reina/Bosses/S1_FishBoss/fish_boss3.png" type="Texture" id=7]
+[ext_resource path="res://Stages_Reina/Bosses/S1_FishBoss/fish_boss2.png" type="Texture" id=8]
+
+[sub_resource type="SpriteFrames" id=1]
+animations = [ {
+"frames": [ ExtResource( 2 ), ExtResource( 2 ), ExtResource( 2 ), ExtResource( 2 ), ExtResource( 2 ), ExtResource( 2 ), ExtResource( 2 ), ExtResource( 2 ), ExtResource( 2 ), ExtResource( 8 ), ExtResource( 7 ), ExtResource( 4 ) ],
+"loop": false,
+"name": "charging",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 2 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 84, 35 )
+
+[sub_resource type="RectangleShape2D" id=3]
+
+[sub_resource type="GDScript" id=4]
+script/source = "extends Node2D
+
+var tex = preload(\"res://Stages_Reina/Enemies/Jupiter_Assets/Jupiter_2_rot.png\")
+var tex2 = preload(\"res://Stages_Reina/Enemies/Jupiter_Assets/Jupiter_2_begin.png\")
+var toDraw=0
+
+var CONST_IMG_WIDTH=16
+
+func _draw():
+	#draw_texture_rect_region(tex,
+	#	Rect2(-toDraw+11,0,toDraw,16), #dest
+	#	Rect2(0,0,1,16) #src
+	#)
+	#It turns out that if you specify a position below 0 it will do this
+	draw_texture_rect_region(tex2,
+		Rect2(3+CONST_IMG_WIDTH/2-toDraw,-8,toDraw,32),
+		Rect2(CONST_IMG_WIDTH-toDraw,0,toDraw,32)
+	)
+
+
+func _process(delta):
+	update()
+"
+
+[sub_resource type="GDScript" id=5]
+script/source = "extends Area2D
+
+var lastTouched
+
+func _ready():
+# warning-ignore:return_value_discarded
+	connect(\"body_entered\",self,\"objectTouched\")
+# warning-ignore:return_value_discarded
+	connect(\"body_exited\",self,\"clearLastTouched\")
+	
+func objectTouched(obj):
+	#print(\"intersecting!\")
+	if obj.has_method(\"player_touched\"): #If enemy touched player
+		lastTouched = obj
+		obj.call(\"player_touched\",self,1)
+
+func clearLastTouched(_obj):
+	lastTouched=null
+"
+
+[sub_resource type="RectangleShape2D" id=6]
+extents = Vector2( 90, 8 )
+
+[node name="Enemy" instance=ExtResource( 1 )]
+position = Vector2( 0, 0 )
+scale = Vector2( 4, 4 )
+collision_layer = 0
+collision_mask = 0
+script = ExtResource( 3 )
+MAX_HEALTH = 28
+
+[node name="AnimatedSprite" parent="." index="0"]
+frames = SubResource( 1 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Hitbox" parent="." index="1"]
+position = Vector2( 8, 0 )
+collision_layer = 2
+collision_mask = 1
+__meta__ = {
+"_edit_group_": true,
+"_editor_description_": ""
+}
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Hitbox" index="0"]
+position = Vector2( 0, 6 )
+shape = SubResource( 2 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Hurtbox" type="Area2D" parent="." index="2"]
+position = Vector2( -69, 8 )
+collision_layer = 0
+collision_mask = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" index="0"]
+shape = SubResource( 3 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="HurtSound" parent="." index="3"]
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="VisibilityEnabler2D" parent="." index="4"]
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="LaserCharging" type="AudioStreamPlayer2D" parent="." index="5"]
+stream = ExtResource( 6 )
+bus = "Player/Enemies"
+
+[node name="LaserFire" type="AudioStreamPlayer2D" parent="." index="6"]
+stream = ExtResource( 5 )
+bus = "Player/Enemies"
+
+[node name="Laser" type="Node2D" parent="." index="7"]
+position = Vector2( -80, 0 )
+script = SubResource( 4 )
+
+[node name="laserArea2D" type="Area2D" parent="." index="8"]
+position = Vector2( -120, 8 )
+monitoring = false
+script = SubResource( 5 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="laserArea2D" index="0"]
+shape = SubResource( 6 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Position2D" type="Position2D" parent="." index="9"]
+position = Vector2( -54, -47 )
+
+[connection signal="body_entered" from="Hurtbox" to="." method="object_touched_this_obj_hurtbox"]

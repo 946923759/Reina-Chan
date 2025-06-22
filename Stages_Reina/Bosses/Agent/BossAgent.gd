@@ -8,6 +8,7 @@ enum STATE {
 	READY_SHOOT,
 	SHOOT_HORIZONTAL,
 	SPAWN_ENEMIES,
+	SPAWN_LAVA,
 	TELEPORT_LAVA,
 	RISE_LAVA,
 	LOWER_LAVA
@@ -24,6 +25,7 @@ const b1 = preload("res://Stages_Reina/Bosses/Agent/bulletAgent.tscn")
 const b2 = preload("res://Stages_Reina/Enemies/bulletDanmaku.tscn")
 const enemy_to_spawn = preload("res://Stages_Reina/Enemies/Scout.tscn")
 const explosion = preload("res://Stages/EnemyExplodeSmall.tscn")
+const lava_drop = preload("res://Stages_Reina/Bosses/Agent/Droplet_Lava.tscn")
 
 export(NodePath) var lava_path
 var lava:Node2D
@@ -39,6 +41,8 @@ func _ready():
 	if lava_path:
 		lava = get_node(lava_path)
 		starting_lava_position = lava.position
+		
+	$CanvasLayer/Label.visible = $CanvasLayer/Label.visible and OS.is_debug_build()
 
 func fire_spread(root:Node2D, startPos:Vector2):
 	var startingAngle = Vector2(-8,0)
@@ -66,7 +70,7 @@ func _physics_process(delta):
 			player=get_node("/root/Node2D/").get_player()
 		return
 		
-	var player_block_position:Vector2 = get_room_position_of_node(player)/64
+	var player_block_position:Vector2 = get_room_position_of_node(player)/64.0
 	$CanvasLayer/Label.text = String(player_block_position)
 
 	
@@ -86,12 +90,19 @@ func _physics_process(delta):
 		STATE.IDLE:
 			#if next_state == null:
 			if health > 20:
-				next_state = STATE.TELEPORT_IN_SETUP
+				if randi()%2==0 and player_block_position.y < 7:
+					#This should only trigger if you're on the top platforms
+					next_state = STATE.SPAWN_LAVA
+				else:
+					next_state = STATE.TELEPORT_IN_SETUP
+				
 			else:
 				if prev_state == STATE.TELEPORT_LAVA:
 					next_state = STATE.SPAWN_ENEMIES
-				else:
+				elif randi()%2==0 and player_block_position.y < 7:
 					next_state = STATE.TELEPORT_LAVA
+				else:
+					next_state = STATE.TELEPORT_IN_SETUP
 			
 			prev_state = next_state
 			curState = STATE.TELEPORT_OUT
@@ -174,6 +185,29 @@ func _physics_process(delta):
 			curState = STATE.TELEPORT_IN_SETUP
 			next_state = STATE.SHOOT_HORIZONTAL
 			#curState = STATE.IDLE
+		STATE.SPAWN_LAVA:
+			var room = get_parent().get_parent()
+			
+			if progress >= 3.0:
+				curState = STATE.IDLE
+				progress = 0.0
+				randomize()
+			else:
+				var inst:Node2D = lava_drop.instance()
+				if progress < 2.0:
+					while true:
+						var random_position:Vector2 = Vector2(rand_range(1,19), 3)
+						if random_position.x > player_block_position.x+1 or random_position.x < player_block_position.x-1:
+							inst.position = random_position*64.0
+							break
+				else:
+					inst.position = Vector2(player_block_position.x, 3)*64.0
+				room.add_child(inst)
+				progress+=1.0
+			idleTime = .4
+			
+			
+			
 		STATE.TELEPORT_LAVA:
 			set_room_position(Vector2(6,-5)*64)
 			#is_reflecting = true

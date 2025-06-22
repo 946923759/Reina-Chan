@@ -8,4 +8,7 @@
 [node name="AnimatedSprite" parent="." index="0"]
 frames = ExtResource( 1 )
 animation = "default"
-offset = Vector2( 0, -4 )
+offset = Vector2( 0, -3 )
+
+[node name="CollisionShape2D" parent="." index="1"]
+position = Vector2( 0, 4 )

@@ -9,7 +9,7 @@ var gf_cutscene = preload("res://Screens/ScreenCutsceneMMZ/CutsceneInGame.tscn")
 var event_ID = Globals.EVENT_TILES.CUSTOM_EVENT
 export(String) var message_id
 export(PoolStringArray) var message
-export(bool) var play_M16_boss_music=false
+#export(bool) var play_M16_boss_music=false
 var disabled = false
 
 var playerObj
@@ -73,7 +73,7 @@ func playSound():
 	$AudioStreamPlayer.play()
 
 func hideWarning():
-	get_node("/root/Node2D").playBossMusic(play_M16_boss_music)
+	get_node("/root/Node2D").playBossMusic()
 	sprite.cropright=true
 	var seq := get_tree().create_tween()
 	seq.tween_property(sprite,"toDraw",0,.5).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
@@ -86,13 +86,15 @@ func hideWarning():
 func part5():
 	CheckpointPlayerStats.watchedBossIntro=true
 	child.enabled=true
+	playerObj.set_physics_process(true)
 	playerObj.clearLockedMovement()
 	sprite.set_process(false)
 	sprite.visible=false
 
 func part1():
 	#I'm pretty sure this only exists so people don't pause during the cutscene
-	get_tree().paused=true
+	#get_tree().paused=true
+	playerObj.set_physics_process(false)
 	var newCutscene = gf_cutscene.instance()
 	playerObj.add_child(newCutscene) #Needs to be done first for the _ready()
 	newCutscene.connect("cutscene_finished",self,"part2")
@@ -113,11 +115,11 @@ func part1():
 	newCutscene.init_(
 		Globals.get_stage_cutscene(message_id),
 		"\t",
-		Globals.stage_cutscene_data['msgColumn']
+		Globals.stage_cutscene_data['msgColumn'],
+		self
 	)
 
 func part2():
-	get_tree().paused=false
 	var callback = child.playIntro();
 	if callback.stream == null:
 		printerr("[BossBase.IntroSound] There's no audio file assigned for this boss, idiot. Change IntroSound actor in the boss class.")

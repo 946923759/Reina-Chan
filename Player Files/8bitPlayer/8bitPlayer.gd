@@ -808,14 +808,15 @@ func handleEvents():
 			_:
 				print("Unknown event ID: "+String(event_ID))
 
-func set_checkpoint(respawnPosition:Vector2,shouldFaceLeft=false):
+func set_checkpoint(respawnPosition:Vector2, shouldFaceLeft = false):
 	
 	var cam = $Camera2D
 	if respawnPosition != Vector2(0,0):
 		CheckpointPlayerStats.lastCheckpointPos = cell2pos(respawnPosition)
 	else:
 		CheckpointPlayerStats.lastCheckpointPos=position
-		#print(cam.destPositions)
+	
+	print(cam.destPositions)
 	CheckpointPlayerStats.lastCameraBounds=cam.destPositions
 	#CheckpointPlayerStats.lastHealth=HP
 	CheckpointPlayerStats.setTimer(timer)

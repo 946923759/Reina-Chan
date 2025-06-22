@@ -14,23 +14,15 @@ func _ready():
 		c.visible=true
 	pass
 
-func playBossMusic(isFightingM16:bool=false):
+func playBossMusic():
 	if OS.is_debug_build() and mute_boss_music_in_debug:
 		return
 	print("playing boss music")
-	if isFightingM16:
-		if $PlayerHolder.currentCharacter==Globals.Characters.UMP9:
-			reinaAudioPlayer.load_song("Elisa3 - UMP9 vs M16","Mega Man Unlimited - Division by Zero.nsf",0)
-			#if 
-			#$AudioStreamPlayer2.play()
-	#		if OS.has_feature("standalone"):
-	#			
-	#		else:
-	#			reinaAudioPlayer.load_song("Elisa3 - UMP9 vs M16","X vs Zero.nsf",0)
-		else:
-			reinaAudioPlayer.load_song("Elisa3 - M16 vs M16","Cannonball.nsf",0)
+	if $PlayerHolder.currentCharacter==Globals.Characters.UMP9:
+		reinaAudioPlayer.load_song("Elisa3 - UMP9 vs M16","Mega Man Unlimited - Division by Zero.nsf",0)
 	else:
-		.playBossMusic(isFightingM16)
+		reinaAudioPlayer.load_song("Elisa3 - M16 vs M16","Cannonball.nsf",0)
+
 
 #func stopMusic():
 #	reinaAudioPlayer.stop_music()

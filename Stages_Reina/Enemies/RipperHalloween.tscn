@@ -83,7 +83,7 @@ func _physics_process(delta):
 				timer=1
 				curState=0
 
-func killSelf():
+func die():
 	var bi = pumpkin.instance()
 	var pos = position + Vector2(15*facing, -16)
 	
@@ -94,8 +94,7 @@ func killSelf():
 	
 	self.add_collision_exception_with(bi)# Make bullet and this not collide
 	#Call super method
-	.killSelf()
-"
+	.die()"
 
 [sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 36, 64 )

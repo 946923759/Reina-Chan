@@ -14,6 +14,7 @@ func init(dir_:int):
 	
 var totalTime:float=0
 var cooldown:float=0
+var reflected:bool = false 
 
 var gravity:Vector2=Vector2(0,0)
 
@@ -22,7 +23,7 @@ func _physics_process(delta):
 	cooldown-=delta
 	
 	if totalTime>=15:
-		killSelf(true)
+		die(true)
 		return
 	
 	move_and_slide(Vector2(dir*300,220).rotated(rotation)+gravity,Vector2(0,-1),false)
@@ -69,13 +70,13 @@ func enemy_touched_alt(obj,reflect):
 	else:
 		if obj.has_method("damage"):
 			obj.call("damage",2,Globals.Weapons.Ouroboros)
-		killSelf()
+		die()
 		
 func try_drain_reflection_health(obj):
 	if obj.has_method("drain_reflection_health"):
 		obj.call("drain_reflection_health",2,Globals.Weapons.Ouroboros)
 
-func killSelf(silent:bool=false):
+func die(silent:bool=false):
 	var e = smallExplosion.instance()
 	e.position = position
 	get_parent().add_child(e)
@@ -89,4 +90,4 @@ func _on_VisibilityNotifier2D_screen_exited():
 	queue_free()
 
 func switched_weapon(_discard):
-	killSelf(true)
+	die(true)

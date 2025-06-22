@@ -4,7 +4,8 @@
 msg	If you can read this, you forgot to assign a key for your cutscene and the PoolStringArray is blank.	Si lees esto, has olvidado asignar alguna tecla para las cinematicas y los "PoolStringArray" estan vacios.
 
 #KEY	error
-msg	You assigned a key that doesn't exist! Go check your event block again.
+msg	This cutscene specified a key '%KEY%' that does not exist in stage_cutscenes.txt. If you are the stage creator, check your event block for typos.
+msg	(If this isn't a test stage or a user-made stage, this is a bug!)
 
 
 #KEY	TestStageCutscene
@@ -21,26 +22,35 @@ msg	...Who is this weirdo?	...¿Quien es este tipo raro?
 msgbox	Architect	right
 /Architect	Heeeey, I heard that~!	Oye!, escuche eso~!
 
+#KEY	Architect_M16
+msgbox_add	Architect	right	top
+/Architect	Heee-ey, you t... Oh, M16? You want to fight me?
+msgbox	M16_Nice	left	top
+/M16A1	Of course. Don't you want a rematch? The last time we fought was way back when you were with Sangvis Ferri.
+msgbox	Architect	right	top
+/Architect	Y-yeah, but I'm not really suited for direct combat... (And you look like you could crush me now!)
+
+#KEY	ArchitectNPC
+msgbox_add	9A91	right	top
+/9A-91	It's f-f-freezing out here! Especially down B-b-below!
+msgbox	UMP9	left	top
+/UMP9	If only there was something out there to cover your... Waist. And stomach. Can't remember what they're called, though.
+msgbox	9A91	right	top
+/9A-91	Huh? N-n-no idea what you're talking about. I c-can't take this anymore, I'm outta here!
+
 #KEY	Alchemist1
 msgbox_add	Alchemist	right	top
 msg	Hahaha! Did you really think you defeated me? That was just a dummy!	JAJAJA! ¿En verdad piensas que me has derrotado? Eso solo fue un secuaz!
 msg	Take this!	¡Toma esto!
 
 #KEY	AlchemistChicken
-portrait	UMP9
-msgbox_add	left	top
+msgbox_add	UMP9	left	bottom
 /UMP9	...A chicken? From the wall? That doesn't seem sanitary.
-msgbox_close
-portrait	Dier	true
-msgbox_open
+msgbox	default	left
 /Dier	You're an android, why do you care?
-msgbox_close
-portrait	UMP9
-msgbox_open
+msgbox	UMP9	left
 /UMP9	Hey, T-Dolls can have stomach issues too! Somehow.
-msgbox_close
-portrait	Dier	true
-msgbox_open
+msgbox	default	left
 /Dier	What kind of feature is that...?
 
 #KEY	Alchemist2
@@ -53,13 +63,63 @@ msg	A miserable little pile of ammo and parts!	Una miserable pila de armamento y
 nop	(ES: 'Have at you' is an English term so it was changed to "Prepare yourself!")
 msg	But enough talk, have at you!	Basta de charlas, preparate!
 
+#KEY	Scarecrow1
+msgbox_add	Skorpion	right	top
+/Skorpion	Waaaah, that was my ultimate weapon! I paid 8000 gems to MDR for that!
+msgbox	UMP9	left
+/UMP9	Ultimate... Weapon? What a horrifying weapon.
+msgbox	Skorpion	right
+/Skorpion	Oh well.... Here, take this. It will help you.
+msgbox	UMP9	left
+/UMP9	Thanks!
+msgbox	default	left
+/SYSTEM	You obtained the air dash! Press DOWN+JUMP in mid-air to dash.
+msg	There are certain locations in other stages that are only possible to cross using the dash. Try searching everywhere, you might find a shortcut!
+
 #KEY	Scarecrow2
-msgbox_add	right	top
+msgbox_add	Scarecrow	right	top
 msg	Your chances of victory are zero.
+msgbox	UMP9	left
 msg	Is that all they can say? Why not something like "I love you UMP9, let's go out for lunch"?
+msgbox	Scarecrow	right
 msg	Alright.
-msgbox_transition
 msg	Nice to meet you UMP9, please die immediately.
+
+#KEY	Scarecrow2_M16
+msgbox_add	Scarecrow	right	top
+/Scarecrow	Your chances of victory... Are far too high! Why are you here!?
+msgbox	M16_Nice	left
+/M16A1	Because I'm bored.
+msgbox	Scarecrow	right
+/Scarecrow	Hmph... I promise I'll provide an entertaining fight. Come at me!
+
+#KEY	Ouroboros1
+msgbox_add	T5000	right	top
+/T5000	Thanks for rescuing me! Here, have this item, it allows you to transform into a superhero and save the day!
+msg	All you have to do is hold it in front of you and yell "Henshin a go go, baby"!
+msgbox	UMP9	left
+/UMP9	Wow, that sounds awesome!
+msgbox	T5000	right
+/T5000	....Oops! I lost it! Um, here, have these grenades instead!
+msgbox	UMP9	left
+/UMP9	Aww. Thanks anyways!
+msgbox	default	left
+/SYSTEM	You obtained the grenade. Press UP+SHOOT while the default weapon is equipped to throw a grenade.
+msg	There are some blocks throughout the stages that you can use grenades on.
+
+#KEY	Ouroboros2
+msgbox_add	Ouroboros	right	top
+/Ouroboros	Hmph... So you've made it past my puzzles. No matter, my battle strategries are flawless!
+msgbox	UMP9	left
+/UMP9	We'll see about that!
+
+#KEY	Ouroboros2_M16
+msgbox_add	Ouroboros	right	top
+/Ouroboros	Hmph... So you've made it past my puzzles. You didn't just smash through them, right...?
+msgbox	M16_Nice	left
+/M16A1	Would you be sad if I cheated? Don't worry, I solved them properly. Now, let's see what you've got!
+msgbox	Ouroboros	left
+/Ouroboros	(Who's battling who here?)
 
 #KEY	Agent1
 msgbox_add	Agent	right	top
@@ -70,5 +130,67 @@ msgbox_add	Agent	right	top
 msg	Your adventure ends here. Prepare to die!
 
 #KEY	vs_M16
-msgbox_add	M16A1	right
+msgbox_add	UMP9	left
+msg	You're still alive!? I guess I'll just beat you again!
+msgbox	Agent	right
+msg	Hmph! I have more tricks up my sleeve! Just you wait-
+nop	tween	before	BossM16	call,raging_demon_start;linear,.5;x,$Agent/position/x
+await_call	FakeM16	raging_demon_start
+msgbox	M16A1	right
 msg	Hahahahaha! I have mastered the Raging Demon! Prepare to be sent to heaven under my supreme power!
+
+#KEY	vs_M16_M16
+msgbox_add	M16A1	right	top
+/M16?	...
+msgbox	M16A1_Nica	left
+/M16	A clone of me? Don't you know nothing can replace the original?
+msgbox	default	left
+/Dandelion	This one is a replica of you when you were allied with Sangvis Ferri. She's controlled by me, so don't expect an easy fight.
+msgbox	M16A1_Nice	left
+msg	That's fine by me! You're on, Dandelion!
+
+#KEY	TalkHub_Skorp
+msgbox_add	Skorpion
+/Skorpion	Hey, UMP9! suco suco suco suco suco suco suco
+
+
+#KEY	TalkHub_Skorp_M16
+msgbox_add	Skorpion
+/Skorpion	You are... M16? Nice to meet you. suco suco suco suco
+
+#KEY	TalkHub_T5000
+msgbox_add	T5000
+/T-5000	Hmm... I don't think I've seen you in the dorms too often. Hey, have you ever played a game called Viewtiful Joe?
+nop	/UMP9	Maybe G11 has...?
+
+#KEY	TalkHub_T5000_M16
+msgbox_add	T5000
+/T-5000	Tell me, have you mastered the Shun Goku Satsu? Maybe if you find all the emblems...
+/	(P.S. It's not implemented yet, don't bother)
+
+#KEY	TalkHub_9A91
+msgbox_add	9A91
+/9A-91	I'm so glad to be out of that frozen wasteland...
+
+#KEY	TalkHub_9A91_M16
+msgbox_add	9A91
+/9A-91	You look well dressed. Better than me, anyways.
+
+#KEY	TalkHub_Architect
+msgbox_add	Architect
+/Architect	Heeeey! Wanna play again after this? It's so boring, all the T-Dolls are too scared to talk to me!
+
+#KEY	TalkHub_Alchemist
+msgbox_add	Alchemist
+/Alchemist	...What? You gonna ask me for some candy? I'll impale you.
+
+#KEY	TalkHub_Ouroboros
+msgbox_add	Ouroboros
+/Ouroboros	My clothes? What about them?
+/Ouroboros	I don't know who designed this outfit, but I think it looks fine. If anything, Architect's outfit looks weird...
+
+
+#KEY	TalkHub_Scarecrow
+msgbox_add	Scarecrow
+/Scarecrow	...
+/Scarecrow	No, I'm not taking off this mask. Stop asking.

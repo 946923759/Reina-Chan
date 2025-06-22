@@ -76,6 +76,6 @@ func objectTouched(obj):
 	if obj.has_method("player_touched"): #If enemy touched player
 		obj.call("player_touched",self,player_damage)
 		#Special case for the bomb enemy, we want the enemy to kill itself when it touches the player
-		killSelf()
+		die()
 	elif obj.has_method("enemy_touched"): #If enemy touched bullet
 		obj.call("enemy_touched",self)

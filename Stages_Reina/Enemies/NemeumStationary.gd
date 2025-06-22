@@ -219,14 +219,14 @@ func damage(amount,damageType=0):
 	#print("Took damage!")
 	if curHealth <= 0:
 		if isAlive:
-			killSelf()
+			die()
 	else:
 		#set false so the white tint shader will show up.
 		hurtSound.play()
 		sprite.use_parent_material = false
 		whiteTime = 0
 
-func killSelf():
+func die():
 	print(self.name+" queued to be killed.")
 	isAlive = false
 	set_physics_process(false)

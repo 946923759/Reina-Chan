@@ -81,7 +81,7 @@ func _physics_process(delta):
 				#it would be better to use the tile scale
 				#but I don't care
 				if timeToRun>10 or position.y < startingPosition.y-600:
-					killSelf2()
+					die2()
 		return
 	
 	match curState:
@@ -162,10 +162,10 @@ func _physics_process(delta):
 	#sprite.offset.x=25*facing
 
 #Overrides base class because lmao
-func killSelf():
+func die():
 	return
 	
-func killSelf2():
+func die2():
 	print(self.name+" queued to be killed.")
 	isAlive = false
 	set_physics_process(false)

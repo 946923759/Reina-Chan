@@ -192,7 +192,7 @@ func _physics_process(delta):
 	
 	var collision = move_and_collide(lastChange) #Vector2(movX,movY)
 	if collision != null:
-		killSelf()
+		die()
 	
 	
 	if !sprite.use_parent_material:
@@ -213,7 +213,7 @@ func damage(amount,_damageType:int=0):
 	#print("Took damage!")
 	if curHealth <= 0:
 		if isAlive:
-			killSelf()
+			die()
 	else:
 		#set false so the white tint shader will show up.
 		hurtSound.play()
@@ -225,14 +225,14 @@ func objectTouched(obj):
 	if obj.has_method("player_touched"): #If enemy touched player
 		#lastTouched = obj
 		obj.call("player_touched",self,player_damage)
-		killSelf(true)
+		die(true)
 	elif obj.has_method("enemy_touched"): #If enemy touched bullet
 		obj.call("enemy_touched",self)
 
 #func clearLastTouched(_obj):
 #	lastTouched=null
 		
-func killSelf(bigExplode=false):
+func die(bigExplode=false):
 	print(self.name+" queued to be killed.")
 	isAlive = false
 	set_physics_process(false)

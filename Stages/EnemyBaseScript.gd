@@ -115,7 +115,7 @@ func damage(amount,damageType=0):
 	#print("Took damage!")
 	if curHealth <= 0:
 		if isAlive:
-			killSelf()
+			die()
 	else:
 		#set false so the white tint shader will show up.
 		hurtSound.play()
@@ -141,7 +141,7 @@ func areaTouched(obj):
 func clearLastTouched(_obj):
 	lastTouched=null
 		
-func killSelf():
+func die():
 	print(self.name+" queued to be killed.")
 	isAlive = false
 	set_physics_process(false)
@@ -154,7 +154,7 @@ func killSelf():
 	if use_large_explosion:
 		e = explosion.instance()
 	else:
-		e = smallExplosion.instance()	
+		e = smallExplosion.instance()
 	e.position = position
 	#e.position.y-=32
 	get_parent().add_child(e)
@@ -162,19 +162,6 @@ func killSelf():
 	emit_signal("enemy_killed")
 	
 	self.queue_free()
-	
-	
-	#$Area2D.queue_free() #how to turn off monitoring, the broken way
-	#if use_collision:
-	#	shape_owner_clear_shapes(shapeOwnerID)
-	#	set_collision_mask_bit(1,false)
-	#	set_collision_mask_bit(3,false)
-	#	set_collision_mask_bit(4,false)
-	#	#set_collision_layer_bit(1,false)
-	#$Explosion.emitting = true
-	#$ExplosionSound.play()
-# warning-ignore:return_value_discarded
-	#$ExplosionSound.connect("finished",self,"queue_free")
 
 # TODO: This constantly prints errors to the console, so maybe it would
 # be better to move it to the stage and have the enemy emit a death

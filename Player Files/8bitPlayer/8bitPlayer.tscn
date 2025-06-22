@@ -317,6 +317,8 @@ radius = 320.0
 
 [node name="Player" type="KinematicBody2D"]
 z_index = 1
+collision_layer = 65
+collision_mask = 64
 script = ExtResource( 7 )
 dash_multiplier = 2.5
 

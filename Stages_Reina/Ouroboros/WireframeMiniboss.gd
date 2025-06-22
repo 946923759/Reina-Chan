@@ -195,7 +195,7 @@ func damage(amount,damageType=0):
 	#print("Took damage!")
 	if curHealth <= 0:
 		if isAlive:
-			killSelf()
+			die()
 	else:
 		#set false so the white tint shader will show up.
 		hurtSound.play()

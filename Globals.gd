@@ -304,6 +304,7 @@ var nextStage
 #For the item get screen... If 0, item will be skipped
 var nextStageWeaponNum:int=0
 
+#This is a dictionary of PoolStringArrays
 var stage_cutscene_data:Dictionary = {}
 
 # The name of the next cutscene to load from Cutscene/ or GameData/Cutscene
@@ -442,7 +443,7 @@ func load_stage_cutscenes(p:String = "stage_cutscenes")->bool:
 	return true
 	
 	
-func get_stage_cutscene(key:String):
+func get_stage_cutscene(key:String) -> PoolStringArray:
 	if stage_cutscene_data.size() == 0:
 		load_stage_cutscenes()
 	if playerData.currentCharacter>0: #Search for M16 cutscene first
@@ -450,7 +451,9 @@ func get_stage_cutscene(key:String):
 			return stage_cutscene_data[key+"_M16"]
 	if !(key in stage_cutscene_data): #Search for normal cutscene
 		printerr("Tried to load cutscene "+key+" which does not exist")
-		return stage_cutscene_data['error']
+		var d:PoolStringArray = stage_cutscene_data['error']
+		d.insert(0,'var\tKEY\t"'+key+'"')
+		return d
 	return stage_cutscene_data[key] #If we got here there is a cutscene, return it
 
 func _ready():
@@ -684,7 +687,7 @@ var SCREENS:Dictionary = {
 	"ScreenTitleJoin":"res://Screens/ScreenTitleJoin/ScreenTitleJoinV3.tscn",
 	"ScreenSelectCharacter":"res://Screens/ScreenSelectCharacter/ScreenSelectCharacter.tscn",
 	"ScreenSelectCharacter2P":"res://Screens/ScreenSelectCharacter/ScreenSelectCharacter_2Players.tscn",
-	"ScreenSelectStage":"res://Screens/ScreenStageSelectV2/ScreenSelectStage.tscn",
+	"ScreenSelectStage":"res://Screens/ScreenStageSelectV2/ScreenSelectStageV3.tscn",
 	"ScreenStageIntro":"res://Screens/ScreenStageIntro.tscn",
 	"ScreenSangvisIntro":"res://Screens/ScreenStageIntroSangvis/StageIntroSangvis.tscn",
 	"ScreenItemGet":"res://Screens/ScreenItemGet/ScreenItemGet.tscn",

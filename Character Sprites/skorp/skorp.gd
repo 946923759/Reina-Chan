@@ -1,8 +1,10 @@
 extends KinematicBody2D
 signal cutscene_finished
 
+const NEW_CUTSCENE_FORMAT:bool = true
 
 var gf_cutscene = preload("res://Screens/ScreenCutscene/CutsceneMain.tscn")
+var gf_cutscene_new = preload("res://Screens/ScreenCutsceneMMZ/CutsceneInGame.tscn")
 var emblem_drop = preload("res://Various Objects/pickupReinaEmblem.tscn")
 
 export(int,"AppearFromBoss","Normal") var spawnType = 1
@@ -98,6 +100,61 @@ func play_cutscene():
 	if Globals.playCutscenes:
 		var parent = get_parent()
 		get_tree().paused=true
+		
+		if NEW_CUTSCENE_FORMAT:
+			var newCutscene = gf_cutscene_new.instance()
+			parent.add_child(newCutscene) #Needs to be done first for the _ready()
+#			newCutscene.init_(
+#				Globals.get_stage_cutscene(message_id),
+#				"\t",
+#				Globals.stage_cutscene_data['msgColumn']
+#			)
+			get_node("/root/Node2D").get_player().lockMovementQueue([[INF, Vector2.ZERO, "", false]])
+			newCutscene.init_by_msg_id(message_id)
+			yield(newCutscene,"cutscene_finished")
+		else:
+			var newCutscene = gf_cutscene.instance()
+			parent.add_child(newCutscene) #Needs to be done first for the _ready()
+			#newCutscene.connect("cutscene_finished",self,"part2")
+			newCutscene.init_(
+				Globals.get_stage_cutscene(message_id),
+				parent,
+				true,
+				null,
+				"\t"
+			)
+	get_node("/root/Node2D").get_player().clearLockedMovement()
+	get_tree().paused=false
+	talk_allowed = false
+	emit_signal("cutscene_finished")
+	$AudioStreamPlayer.play()
+
+func play_optional_cutscene():
+	var parent = get_parent()
+	
+	if NEW_CUTSCENE_FORMAT:
+		talk_allowed = false
+		$TalkHelp.visible=false
+		get_tree().paused=true
+		var p:KinematicBody2D = get_node("/root/Node2D").get_player()
+		#func lockMovement(time:float,n_velocity:Vector2,freeze_y_velocity:bool=true):
+		#p.lockMovement(INF, Vector2.ZERO, false)
+		#Queue is structured like time,vector2,animation,freeze_y_velocity
+		p.lockMovementQueue([[INF, Vector2.ZERO, "Talking", false]])
+		var newCutscene = gf_cutscene_new.instance()
+		parent.add_child(newCutscene) #Needs to be done first for the _ready()
+		newCutscene.init_(
+			Globals.get_stage_cutscene(message_id),
+			"\t",
+			Globals.stage_cutscene_data['msgColumn']
+		)
+		yield(newCutscene,"cutscene_finished")
+		p.clearLockedMovement()
+		talk_allowed = true
+		get_tree().paused=false
+	else:
+		
+		get_tree().paused=true
 		var newCutscene = gf_cutscene.instance()
 		parent.add_child(newCutscene) #Needs to be done first for the _ready()
 		#newCutscene.connect("cutscene_finished",self,"part2")
@@ -108,23 +165,7 @@ func play_cutscene():
 			null,
 			"\t"
 		)
-	talk_allowed = false
-	emit_signal("cutscene_finished")
-	$AudioStreamPlayer.play()
-
-func play_optional_cutscene():
-	var parent = get_parent()
-	get_tree().paused=true
-	var newCutscene = gf_cutscene.instance()
-	parent.add_child(newCutscene) #Needs to be done first for the _ready()
-	#newCutscene.connect("cutscene_finished",self,"part2")
-	newCutscene.init_(
-		Globals.get_stage_cutscene(message_id),
-		parent,
-		true,
-		null,
-		"\t"
-	)
+		
 	#disabled=true
 	emit_signal("cutscene_finished")
 	if unlocksEmblem > 0:

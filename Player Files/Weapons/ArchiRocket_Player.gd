@@ -80,11 +80,11 @@ func enemy_touched_alt(obj,reflect):
 		try_drain_reflection_health(obj)
 		#print(String(OS.get_ticks_msec())+" Bullet reflected!")
 		reflectSound.play()
-		killSelf(false,true)
+		die(false,true)
 	else:
 		if obj.has_method("damage"):
 			obj.call("damage",3,Globals.Weapons.Architect)
-		killSelf()
+		die()
 
 func try_drain_reflection_health(obj):
 	if obj.has_method("drain_reflection_health"):
@@ -93,7 +93,7 @@ func try_drain_reflection_health(obj):
 #We want an isAlive var so we can play the death animation only one time
 var isAlive = true
 
-func killSelf(_bigExplode=false,_noSound=false):
+func die(_bigExplode=false,_noSound=false):
 	#print(self.name+" queued to be killed.")
 	isAlive = false
 	set_physics_process(false)
