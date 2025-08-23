@@ -144,17 +144,17 @@ func input_touch(event:InputEvent, i:int = 0):
 			parent.highlightList(self,Globals.playerData.gameDifficulty)
 
 func input(event):
-	if Input.is_action_just_pressed(\"ui_down\") and Globals.playerData.gameDifficulty < len(Globals.Difficulty)-1:
+	if event.is_action_pressed(\"ui_down\",true) and Globals.playerData.gameDifficulty < len(Globals.Difficulty)-1:
 		Globals.playerData.gameDifficulty=Globals.playerData.gameDifficulty+1
 		parent.highlightList(self,Globals.playerData.gameDifficulty)
 		setDescText()
 		parent.selectSound.play()
-	elif Input.is_action_just_pressed(\"ui_up\") and Globals.playerData.gameDifficulty > 0:
+	elif event.is_action_pressed(\"ui_up\",true) and Globals.playerData.gameDifficulty > 0:
 		Globals.playerData.gameDifficulty=Globals.playerData.gameDifficulty-1
 		parent.highlightList(self,Globals.playerData.gameDifficulty)
 		setDescText()
 		parent.selectSound.play()
-	elif Input.is_action_just_pressed(\"ui_select\") or Input.is_action_just_pressed(\"ui_pause\"):
+	elif event.is_action_pressed(\"ui_select\") or event.is_action_pressed(\"ui_pause\"):
 		#Globals.nextStage = \"res://Stages_Reina/Architect/StageArchitect.tscn\"
 		#It has to be done on start/continue in case the player changed the language
 		Globals.load_stage_cutscenes()
@@ -798,15 +798,15 @@ func set_selection(new_sel:int=0):
 func input(event):
 	if event is InputEventMouseButton and event.pressed and event.button_index == 1:
 		mouse_input(event)
-	elif Input.is_action_pressed(\"ui_down\"):
+	elif event.is_action_pressed(\"ui_down\",true):
 		set_selection(selection+1)
-	elif Input.is_action_pressed(\"ui_up\"):
+	elif event.is_action_pressed(\"ui_up\",true):
 		set_selection(selection-1)
-	elif Input.is_action_just_pressed(\"ui_page_down\"):
+	elif event.is_action_pressed(\"ui_page_down\"):
 		set_selection(selection+5)
-	elif Input.is_action_just_pressed(\"ui_page_up\"):
+	elif event.is_action_pressed(\"ui_page_up\"):
 		set_selection(selection-5)
-	elif Input.is_action_pressed(\"ui_left\"):
+	elif event.is_action_pressed(\"ui_left\"):
 		var option = get_child(existing_children+selection).get_meta(\"opt_name\")
 		if Globals.OPTIONS[option]['type']==\"bool\":
 			Globals.OPTIONS[option]['value']=false
@@ -844,7 +844,7 @@ func input(event):
 				get_child(existing_children+selection).get_node(\"Value\").text=t
 		else:
 			print(\"Unknown type! \"+Globals.OPTIONS[option]['type'])
-	elif Input.is_action_pressed(\"ui_right\"):
+	elif event.is_action_pressed(\"ui_right\"):
 		var option = get_child(existing_children+selection).get_meta(\"opt_name\")
 		match Globals.OPTIONS[option]['type']:
 			\"bool\":
@@ -879,7 +879,7 @@ func input(event):
 						updateTranslation(true,t)
 						t=INITrans.GetString(\"Language\",t)
 					get_child(existing_children+selection).get_node(\"Value\").text=t
-	#elif Input.is_action_just_pressed(\"ui_select\"):
+	#elif event.is_action_pressed(\"ui_select\"):
 	#	call(\"action_\"+get_child(selection).name)
 "
 
@@ -1170,7 +1170,6 @@ margin_bottom = 557.0
 script = SubResource( 16 )
 
 [node name="VBoxContainer" type="VBoxContainer" parent="DebugPanel"]
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 4.0
@@ -1189,6 +1188,7 @@ margin_bottom = 20.0
 text = "hide panel"
 
 [node name="PlayDemo" type="VBoxContainer" parent="DebugPanel"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 4.0

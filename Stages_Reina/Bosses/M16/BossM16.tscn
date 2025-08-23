@@ -153,9 +153,9 @@ __meta__ = {
 }
 
 [node name="AnimatedSprite" parent="." index="1"]
-position = Vector2( 0, -16 )
+position = Vector2( 0, -15.5 )
 frames = ExtResource( 2 )
-animation = "Begin"
+animation = "RagingDemon_Active"
 flip_h = true
 
 [node name="AfterImage1" type="Sprite" parent="AnimatedSprite" index="0"]
@@ -189,7 +189,7 @@ region_rect = Rect2( 0, 0, 40, 32 )
 stream = ExtResource( 3 )
 
 [node name="DebugLabel" parent="." index="7"]
-text = "animation = \"Begin\"
+text = "animation = \"RagingDemon_Active\"
 playing = false
 "
 
@@ -216,6 +216,7 @@ cast_to = Vector2( 50, 0 )
 anims/intro = SubResource( 1 )
 
 [node name="RockSmash" type="Node2D" parent="." index="13"]
+visible = false
 position = Vector2( 0, 48 )
 __meta__ = {
 "_edit_group_": true

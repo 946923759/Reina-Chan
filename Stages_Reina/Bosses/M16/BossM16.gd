@@ -200,8 +200,9 @@ func _physics_process(delta):
 			if rayCast.is_colliding():
 				var obj = rayCast.get_collider()
 				obj.sprite.play("Hurt")
-				sprite.animation="Grenade"
-				sprite.frame=2
+				sprite.play("RagingDemon_Grab")
+				#sprite.animation="Grenade"
+				#sprite.frame=2
 				$Heaven.raging_demon(obj)
 				cooldown=INF
 			elif (
@@ -395,7 +396,7 @@ func raging_demon_start():
 	a1.visible = true
 	a2.visible = true
 	a3.visible = true
-	sprite.animation = "Falling"
+	sprite.animation = "RagingDemon_Active"
 	sprite.playing=false
 	
 func raging_demon_play(): #This plays the animation
@@ -407,7 +408,7 @@ func raging_demon_fin():
 	a1.visible = false
 	a2.visible = false
 	a3.visible = false
-	sprite.play("RagingDemon")
+	sprite.play("RagingDemon_End")
 
 
 func raging_demon_intro(n:Node2D):

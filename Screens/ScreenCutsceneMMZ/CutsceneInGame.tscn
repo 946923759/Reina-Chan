@@ -1054,9 +1054,9 @@ script = SubResource( 13 )
 position = Vector2( -352, -2 )
 scale = Vector2( 1.5, 1.5 )
 texture = ExtResource( 5 )
-hframes = 4
+hframes = 5
 vframes = 3
-frame = 2
+frame = 13
 script = ExtResource( 8 )
 
 [node name="MaskOverlay" type="Node2D" parent="CenterContainer_v2/MugshotsV2"]
@@ -1074,7 +1074,7 @@ region_rect = Rect2( 0, 0, 192, 192 )
 material = SubResource( 15 )
 texture = ExtResource( 13 )
 region_enabled = true
-region_rect = Rect2( 0, 151.985, 192, 192 )
+region_rect = Rect2( 0, 77.5576, 192, 192 )
 
 [node name="textActor_better" type="RichTextLabel" parent="CenterContainer_v2"]
 anchor_left = 0.5

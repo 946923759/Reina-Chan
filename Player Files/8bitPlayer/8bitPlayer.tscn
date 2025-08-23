@@ -107,7 +107,7 @@ func _draw():
 		for i in range(currentAmmo):
 			draw_texture(ammoPiece,Vector2(8,23+2*-i))
 		
-func updateHP(newHP,shouldTween:bool=false):
+func updateHP(newHP, shouldTween:bool=false):
 	if newHP > curHP and shouldTween:
 		var difference = newHP - curHP
 		tween.interpolate_property(self, 'curHP',
@@ -122,7 +122,7 @@ func updateHP(newHP,shouldTween:bool=false):
 	#if OS.is_debug_build():
 	#	$DebugDisp.text=\"HP: \"+String(newHP)+\"\\nAmmo: \"+String(currentAmmo)
 		
-func updateAmmo(newAmmoPercent:float,shouldTween:bool=false):
+func updateAmmo(newAmmoPercent:float, shouldTween:bool=false):
 	var newAmmo = ceil(newAmmoPercent*24.0)
 	if newAmmo > currentAmmo and shouldTween:
 		var difference = newAmmo - currentAmmo
@@ -138,7 +138,7 @@ func updateAmmo(newAmmoPercent:float,shouldTween:bool=false):
 	#if OS.is_debug_build():
 	#	$DebugDisp.text=\"HP: \"+String(curHP)+\"\\nAmmo: \"+String(newAmmo)
 
-func show_weapon(b,newValue:float=-1):
+func show_weapon(b:bool, newValue:float=-1):
 	if b:
 		texture=ammoBar
 	else:

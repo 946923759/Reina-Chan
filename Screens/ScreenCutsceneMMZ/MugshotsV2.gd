@@ -12,7 +12,8 @@ var PORTRAITS = [
 	"M16A1",
 	"9A91",
 	"Skorpion",
-	"T5000"
+	"T5000",
+	"Elisa"
 ]
 var t:SceneTreeTween
 

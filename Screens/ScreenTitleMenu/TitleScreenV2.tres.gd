@@ -132,7 +132,7 @@ func _input(event):
 				emit_signal("menu_switched",currentlyHandledMenu)
 				return
 	if currentlyHandledMenu:
-		if Input.is_action_just_pressed("ui_cancel"):
+		if event.is_action_pressed("ui_cancel"):
 			#currentlyHandledMenu.visible=false
 			#$MainMenu.visible=true
 			tweenMainMenuIn();
@@ -144,7 +144,7 @@ func _input(event):
 		else:
 			currentlyHandledMenu.input(event);
 	else:
-		if Input.is_action_just_pressed("ui_down"):
+		if event.is_action_pressed("ui_down", true):
 			Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 			while true:
 				selection += 1
@@ -160,7 +160,7 @@ func _input(event):
 			selectSound.play()
 			highlightList(mainMenu,selection);
 				
-		if Input.is_action_just_pressed("ui_up"):
+		if event.is_action_pressed("ui_up", true):
 			Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 			while true:
 				selection -= 1
@@ -176,7 +176,7 @@ func _input(event):
 			selectSound.play()
 			highlightList(mainMenu, selection);
 				
-		if Input.is_action_just_pressed("ui_accept") or Input.is_action_just_pressed("ui_pause"):
+		if event.is_action_pressed("ui_accept") or event.is_action_pressed("ui_pause"):
 			input_confirm()
 
 func input_touch(event: InputEvent, sel:int = -1):
