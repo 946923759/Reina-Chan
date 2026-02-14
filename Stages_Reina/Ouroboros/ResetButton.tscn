@@ -8,7 +8,6 @@
 extents = Vector2( 28, 10 )
 
 [node name="Button" type="Area2D"]
-position = Vector2( 6752, 672 )
 script = ExtResource( 3 )
 __meta__ = {
 "_edit_group_": true

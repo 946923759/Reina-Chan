@@ -132,7 +132,7 @@ func _physics_process(delta):
 				#v.x=min(player.global_position.x-global_position.x,500)
 				#v.y=player.global_position.y+(-1 if player.global_position.y<0 else 1)*abs(player.global_position.x-global_position.x-v.x)
 				#print(v.normalized())
-				bi.init(v,2)
+				bi.init(v, 2)
 				
 				#self.add_collision_exception_with(bi)# Make bullet and this not collide
 				#sleepTime=1

@@ -42,12 +42,12 @@ func OnCommand():
 	# TODO: Position the HDPortrait properly. We can't use TextureRect
 	# because it doesn't have proper z-ordering.
 	
-	var t:SceneTreeTween = get_tree().create_tween()
+	var t:SceneTreeTween = create_tween()
 	t.set_parallel(true)
 	t.tween_property(self,"visible",true,0.0)
 	#t.tween_property($CenterBG,"position",Vector2(0,SCREEN_SIZE.y/2-240/2),0.0)
 	t.tween_property($HDPortrait,"position:y",400,5)
-	t.tween_property($CenterBG,"rect_position:y", SCREEN_SIZE.y/2-240/2, .5).from(SCREEN_SIZE.y/2-240/2*1.5)
+	#t.tween_property($CenterBG,"rect_position:y", SCREEN_SIZE.y/2-240/2, .5).from(SCREEN_SIZE.y/2-240/2*1.5)
 	#t.tween_property($CenterBG,"scale:y",1.0 ,.5).from(1.5)
 	t.tween_property($Polygon2D4/FakeZText,"position:x",-1280*2,10)
 	t.tween_property($Polygon2D5/FakeZText,"position:x",20.0,10).from(-1280.0*2.0)

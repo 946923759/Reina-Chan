@@ -260,15 +260,18 @@ func get_menu_buttons_input(_delta):
 
 		
 	elif Input.is_action_just_pressed("DebugButton5"):
-		HP = MAX_HP
-		HPBar.updateHP(HP)
-		for i in range(weaponMeters.size()):
-			weaponMeters[i] = 144
-		if currentWeapon!=0:
-			HPBar.updateAmmo(1.0,false)
-#		var inst = dbgHealthDrop.instance()
-#		stageRoot.add_child(inst)
-#		inst.global_position = Vector2(global_position.x+200, global_position.y-200)
+		
+		if Input.is_action_pressed("R1"):
+			var inst = dbgHealthDrop.instance()
+			stageRoot.add_child(inst)
+			inst.global_position = Vector2(global_position.x+200, global_position.y-200)
+		else:
+			HP = MAX_HP
+			HPBar.updateHP(HP)
+			for i in range(weaponMeters.size()):
+				weaponMeters[i] = 144
+			if currentWeapon!=0:
+				HPBar.updateAmmo(1.0,false)
 		CheckpointPlayerStats.usedDebugMode=true
 		pass
 		
@@ -408,22 +411,22 @@ func get_input(delta):
 	var right = Input.is_action_pressed(INPUT.RIGHT[controller_index])
 	var up = Input.is_action_pressed(INPUT.UP[controller_index])
 	var down = Input.is_action_pressed(INPUT.DOWN[controller_index])
-	var jump = Input.is_action_just_pressed(INPUT.FORWARD[controller_index])
-	var shoot = Input.is_action_just_pressed(INPUT.BACK[controller_index])
+	var jump = Input.is_action_just_pressed(INPUT.JUMP[controller_index])
+	var shoot = Input.is_action_just_pressed(INPUT.SHOOT[controller_index])
 
 	if state==State.DASH: #No shooting while dashing
 		shoot=false
 	elif rapidFire and shoot_time > .1 and currentWeapon != 1:
 		#This is action_pressed, not action_just_pressed
 		#shoot = Input.is_action_pressed("ui_cancel")
-		shoot = Input.is_action_pressed(INPUT.BACK[controller_index])
+		shoot = Input.is_action_pressed(INPUT.SHOOT[controller_index])
 	
-	if Globals.flipButtons:
-		jump = Input.is_action_just_pressed(INPUT.BACK[controller_index])
-		shoot = Input.is_action_just_pressed(INPUT.FORWARD[controller_index]) or rapidFire and (shoot_time > .1 and Input.is_action_pressed(INPUT.FORWARD[controller_index]))
+	#if Globals.flipButtons:
+	#	jump = Input.is_action_just_pressed(INPUT.BACK[controller_index])
+	#	shoot = Input.is_action_just_pressed(INPUT.FORWARD[controller_index]) or rapidFire and (shoot_time > .1 and Input.is_action_pressed(INPUT.FORWARD[controller_index]))
 
 	var grenade_input = (shoot and up) or (
-		Input.is_action_just_pressed(INPUT.THIRD[controller_index]) and
+		Input.is_action_just_pressed(INPUT.GRENADE[controller_index]) and
 		state!=State.DASH
 	)
 	#Can't throw grenades if using other weapons because it will
@@ -675,9 +678,9 @@ func get_input(delta):
 				sprite.set_animation("Dash")
 				canAirDash=false
 		if state == State.JUMPING:
-			var jumpHeld = Input.is_action_pressed(INPUT.FORWARD[controller_index])
-			if Globals.flipButtons:
-				jumpHeld = Input.is_action_pressed(INPUT.BACK[controller_index])
+			var jumpHeld = Input.is_action_pressed(INPUT.JUMP[controller_index])
+			#if Globals.flipButtons:
+			#	jumpHeld = Input.is_action_pressed(INPUT.BACK[controller_index])
 			#Cancel upward momentium if jump button is let go
 			#I'm pretty sure this can be simplified into one if statement
 			if velocity.y < 0 and !jumpHeld:
@@ -1185,7 +1188,8 @@ func player_touched(_obj, amountToDamage:int):
 			sprite.modulate.a = .5
 
 			#device, weak magnitude, strong magnitude, duration
-			Input.start_joy_vibration(0,
+			INPUT.vibrate_device(
+				0,
 				min(.2+.1*amountToDamage,1.0),
 				min(.4+.1*amountToDamage,1.0),
 				.1
@@ -1233,7 +1237,7 @@ func die():
 		sprite.visible = false
 		
 		#device, weak magnitude, strong magnitude, duration
-		Input.start_joy_vibration(0,.5,.5,.3)
+		INPUT.vibrate_device(0,.5,.5,.3)
 		
 		var sp = deathAnimation.instance()
 		sp.position=position-Vector2(48,16)

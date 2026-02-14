@@ -21,12 +21,16 @@ const DOWN = [
 	"ui_down",
 	"p2_down"
 ]
-const FORWARD = [
-	"ui_accept",
+const JUMP = [
+	"gameplay_jump",
 	"p2_accept"
 ]
-const BACK = [
-	"ui_cancel",
+const SHOOT = [
+	"gameplay_shoot",
+	"p2_btn3"
+]
+const GRENADE = [
+	"gameplay_grenade",
 	"p2_cancel"
 ]
 # Nobody is gonna remember this so just name it THIRD FOURTH
@@ -36,10 +40,6 @@ const BACK = [
 #const QUARTARY = [
 #
 #]
-const THIRD = [
-	"p1_btn3",
-	"p2_btn3"
-]
 const FOURTH = [
 	"p1_btn4",
 	"p2_btn4"
@@ -60,3 +60,22 @@ const SELECT = [
 	"",
 	""
 ]
+
+func vibrate_device(
+	device: int, 
+	weak_magnitude: float, 
+	strong_magnitude: float, 
+	duration_seconds: float = 0
+):
+	if Globals.OPTIONS['Vibration']['value']:
+		#var c = Input.get_connected_joypads()
+		if Input.get_connected_joypads().size() > 0:
+			Input.start_joy_vibration(
+				device,
+				weak_magnitude,
+				strong_magnitude,
+				duration_seconds
+			)
+		elif OS.has_feature("mobile"):
+			#Why is this in ms and the controller one in seconds?
+			Input.vibrate_handheld(duration_seconds * 1000)

@@ -2892,7 +2892,6 @@ __meta__ = {
 [node name="Goliath" parent="Scarecrow/Room 220-156 and 220-144" index="10" instance=ExtResource( 62 )]
 position = Vector2( 976, 960 )
 z_index = 1
-type = 0
 
 [node name="jaguar" parent="Scarecrow/Room 220-156 and 220-144" index="11" instance=ExtResource( 55 )]
 position = Vector2( 752, 1088 )
@@ -3440,6 +3439,12 @@ position = Vector2( 18240, 9024 )
 
 [node name="Position2D12" type="Position2D" parent="DebugWarpPoints" index="11"]
 position = Vector2( 13760, 384 )
+
+[node name="BitmapFont" parent="Demo" index="0"]
+displayed_characters = 500
+
+[node name="BitmapFont2" parent="Demo" index="1"]
+displayed_characters = 500
 
 [node name="Node2D" type="Node2D" parent="." index="16"]
 position = Vector2( 12800, 4608 )

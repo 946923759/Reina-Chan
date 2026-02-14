@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://Screens/ScreenStageIntro/StageIntro.tres.gd" type="Script" id=1]
 [ext_resource path="res://ubuntu-font-family/MM2Font.tres" type="DynamicFont" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://Music/Stage Start.ogg" type="AudioStream" id=5]
 [ext_resource path="res://Screens/ScreenCutscene/Portraits/pic_Architect.png" type="Texture" id=6]
 [ext_resource path="res://Screens/ScreenStageIntro/BossSpriteLoader.tres.gd" type="Script" id=7]
+[ext_resource path="res://ubuntu-font-family/BitmapFont.tscn" type="PackedScene" id=8]
 
 [sub_resource type="GDScript" id=1]
 script/source = "extends Sprite
@@ -84,12 +85,13 @@ centered = false
 region_enabled = true
 region_rect = Rect2( 250, 0, 1280, 720 )
 
-[node name="ColorRect2" type="ColorRect" parent="."]
+[node name="BossBG" type="ColorRect" parent="."]
 anchor_top = 0.356
 anchor_right = 1.0
 anchor_bottom = 0.639
 margin_top = 3.67999
 margin_bottom = -0.0800476
+rect_pivot_offset = Vector2( 0, 100 )
 mouse_filter = 2
 color = Color( 0, 0.0588235, 0.533333, 1 )
 
@@ -102,6 +104,15 @@ texture = ExtResource( 6 )
 region_enabled = true
 region_rect = Rect2( 0, 0, 1024, 400 )
 script = SubResource( 2 )
+
+[node name="BitmapFont" parent="." instance=ExtResource( 8 )]
+visible = false
+position = Vector2( 643, 563 )
+text = "no stage set!"
+wrap_at = 500
+scale_by = 6
+alignment = 1
+displayed_characters = 100
 
 [node name="Label" type="Label" parent="."]
 anchor_top = 0.5

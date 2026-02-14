@@ -9,6 +9,7 @@ var PORTRAITS = [
 	"Scarecrow",
 	"Agent",
 	"M16_Nice",
+	"Dandelion",
 	"M16A1",
 	"9A91",
 	"Skorpion",

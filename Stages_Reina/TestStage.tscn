@@ -504,7 +504,6 @@ facing = 1
 [node name="Enemy2" parent="." index="19" instance=ExtResource( 18 )]
 position = Vector2( -3040, 736 )
 facing = 1
-type = 0
 
 [node name="CannonEnemyFix" parent="." index="20" instance=ExtResource( 15 )]
 position = Vector2( -2432, 704 )
@@ -536,7 +535,6 @@ collision_mask = 2
 [node name="Enemy" parent="room20-0" index="1" instance=ExtResource( 18 )]
 position = Vector2( 1984, 672 )
 scale = Vector2( 1.5, 1.5 )
-type = 0
 
 [node name="Dinergate2" parent="room20-0" index="2" instance=ExtResource( 2 )]
 position = Vector2( 2272, 608 )

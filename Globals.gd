@@ -55,10 +55,10 @@ var OPTIONS = {
 		"localizeKey":"Language",
 		"default":"en"
 	},
-	"flipButtons":{
-		"type":"bool",
-		"default":false
-	},
+	#"flipButtons":{
+	#	"type":"bool",
+	#	"default":false
+	#},
 	"playCutscenes":{
 		"type":"bool",
 		"default":true
@@ -80,6 +80,10 @@ var OPTIONS = {
 		"type":"bool",
 		"default":true,
 		"flag" : OPTION_FLAG.MOBILE
+	},
+	"Vibration":{
+		"type":"bool",
+		"default":true
 	}
 }
 
@@ -327,7 +331,9 @@ func load_system_data()->bool:
 				OPTIONS[option]['value'] = dataToLoad['options'][option]
 			else:
 				OPTIONS[option]['value'] = OPTIONS[option]['default']
-		flipButtons=OPTIONS['flipButtons']['value']
+		#flipButtons=OPTIONS['flipButtons']['value']\
+		playCutscenes=OPTIONS['playCutscenes']['value']
+
 		
 		#Actually, this should only be set when the player pressed continue
 		#gameDifficulty=dataToLoad['playerdata']['difficulty']
@@ -423,7 +429,10 @@ func load_stage_cutscenes(p:String = "stage_cutscenes")->bool:
 		var line = f.get_line().strip_edges(false,true)
 		#print(line)
 		if line.begins_with('#KEY'):
-			dictKey=line.lstrip("#KEY\t")
+			#Godot has a bug where #KEY\t strips the letter E as well
+			#Yes really. What the fuck?
+			#dictKey=line.lstrip("#KEY\t")
+			dictKey = line.substr(5)
 			d[dictKey]=[]
 		elif !langKeyFound and line.begins_with("#LANGUAGES"):
 			langs=line.lstrip("#LANGUAGES\t").split("\t",true)
@@ -524,8 +533,6 @@ func _ready():
 		set_audio_levels()
 		#INITrans.SetLanguage("kr")
 		INITrans.SetLanguage(OPTIONS["language"]['value'])
-		#playCutscenes=OPTIONS['playCutscenes']['value']
-		flipButtons=OPTIONS['flipButtons']['value']
 	else:
 		INITrans.SetLanguage("en")
 
@@ -710,7 +717,7 @@ var STAGES_REINA:Dictionary = {
 	"Architect":"res://Stages_Reina/Architect/StageArchitect_v2.tscn",
 	"Ouroboros":"res://Stages_Reina/Ouroboros/StageOuroboros.tscn",
 	"Scarecrow":"res://Stages_Reina/Scarecrow/Scarecrow.tscn",
-	"None1":"",
+	"Gager":"res://Stages_Reina/Gager/StageGager.tscn",
 	"None2":"",
 	"None3":"",
 	"None4":"",

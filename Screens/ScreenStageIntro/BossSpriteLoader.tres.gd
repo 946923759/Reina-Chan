@@ -2,7 +2,7 @@ extends Node2D
 
 export(bool) var overwrite_pos = true
 export(bool) var draw_afterimge = false
-export(bool) var run_automatically = true
+export(bool) var init_from_params = true
 export(String) var bossToLoad
 
 #What the fuck is this doing here
@@ -17,11 +17,13 @@ var bi:KinematicBody2D
 var afterimages = []
 func _ready():
 	set_process(false)
-	if run_automatically:
+	if init_from_params:
 		InitCommand()
-		set_process(true)
+		#OnCommand()
 
+var already_run = false
 func InitCommand():
+	assert(already_run == false)
 	#var position = get_viewport().get_visible_rect().size/2
 	var b
 	if bossToLoad:
@@ -35,6 +37,7 @@ func InitCommand():
 			return
 		b = load(bosses[stg])
 	else:
+		printerr("InitCommand called without params!")
 		b = load("res://Stages_Reina/Bosses/Architect/BossArchitect_v2.tscn")
 	bi = b.instance()
 	self.add_child(bi)
@@ -46,12 +49,15 @@ func InitCommand():
 	bi.collision_layer=0
 	
 	if draw_afterimge:
-		for i in range(4):
+		for i in range(4): #0 1 2 3
 			afterimages.append(get_node("Afterimage"+String(i+1)))
 			afterimages[i].scale = bi.sprite.scale
-			print(ceil((i+1)/2.0))
+			var offset = ((i+1)&1*2) - 1
+			#print(offset)
+			print(i,": ",ceil((i+1)/2.0)*offset*10.0)
 		bi.z_index = 2
 		#print(bi.sprite.position.y)
+	already_run = true
 
 func OnCommand():
 	set_process(true)
@@ -78,8 +84,11 @@ func _process(delta):
 				spr.flip_h = bi.sprite.flip_h
 				# -1 or 1
 				var offset = ((i+1)&1*2) - 1
-				spr.position.x += offset*delta*40.0*ceil((i+1)/2.0)
+				#print(i," ",ceil( (i+1)/2.0 ) )
+				#
+				spr.position.x += 40.0*(ceil((i+1)/2.0)*float(offset))*delta
 				spr.position.y = bi.position.y + bi.sprite.position.y
+			#print("--")
 		else:
 			set_process(false)
 		#print(afterimages[0].position.x)

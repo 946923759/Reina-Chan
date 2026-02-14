@@ -178,7 +178,7 @@ func _input(_ev):
 		return
 	
 	if showingInfo:
-		if Input.is_action_just_pressed(\"ui_cancel\") or Input.is_action_just_pressed(\"ui_select\"):
+		if _ev.is_action_pressed(\"ui_cancel\") or _ev.is_action_pressed(\"ui_select\") or _ev.is_action_pressed(\"gameplay_grenade\"):
 			if pos>Globals.Weapons.LENGTH_WEAPONS-1:
 				#print(\"Reset pos..\")
 				pos=getPrevClosestWeapon(Globals.Weapons.LENGTH_WEAPONS)
@@ -188,14 +188,14 @@ func _input(_ev):
 			tween.interpolate_property(infoScreen, 'modulate:a',
 			null, 0, .5, Tween.TRANS_QUAD, Tween.EASE_OUT);
 			tween.start();
-		if Input.is_action_just_pressed(\"ui_left\"):
+		if _ev.is_action_pressed(\"ui_left\"):
 			if pos>0:
 				pos=getPrevClosestWeapon(pos)
 			else:
 				pos=getPrevClosestWeapon(Globals.Weapons.LENGTH_WEAPONS+Globals.SpecialAbilities.LENGTH_ABILITIES)
 			infoScreen.updateWeaponInfo(pos)
 			info.play()
-		elif Input.is_action_just_pressed(\"ui_right\") and pos < Globals.Weapons.LENGTH_WEAPONS+Globals.SpecialAbilities.LENGTH_ABILITIES:
+		elif _ev.is_action_pressed(\"ui_right\") and pos < Globals.Weapons.LENGTH_WEAPONS+Globals.SpecialAbilities.LENGTH_ABILITIES:
 			pos=getNextClosestWeapon(pos,Globals.Weapons.LENGTH_WEAPONS+Globals.SpecialAbilities.LENGTH_ABILITIES+1)
 			infoScreen.updateWeaponInfo(pos)
 			#if tmp_pos<Globals.Weapons.LENGTH_WEAPONS:
@@ -203,29 +203,29 @@ func _input(_ev):
 			info.play()
 	elif pauseMenuPage>0:
 		$Page2.input(_ev)
-		if Input.is_action_just_pressed(\"R1\") or Input.is_action_just_pressed(\"L1\"):
+		if _ev.is_action_pressed(\"R1\") or _ev.is_action_pressed(\"L1\"):
 			pauseMenuPage=0
 			switchPages()
-		elif Input.is_action_just_pressed(\"ui_select\") or Input.is_action_just_pressed(\"ui_pause\"):
+		elif _ev.is_action_pressed(\"ui_select\") or _ev.is_action_pressed(\"ui_pause\"):
 			if isStandAlone:
 				return
 			OffCommand()
 	else:
-		if Input.is_action_just_pressed(\"ui_up\"):
+		if _ev.is_action_pressed(\"ui_up\"):
 			pos=getPrevClosestWeapon(pos)
 			select.play()
-		elif Input.is_action_just_pressed(\"ui_down\") and pos < weaponListCount-1:
+		elif _ev.is_action_pressed(\"ui_down\") and pos < weaponListCount-1:
 			pos=getNextClosestWeapon(pos,weaponListCount)
 			select.play()
-		elif Input.is_action_just_pressed(\"ui_left\") and pos > WEAPON_LIST_SPLIT_AT-1:
+		elif _ev.is_action_pressed(\"ui_left\") and pos > WEAPON_LIST_SPLIT_AT-1:
 			#pos-=WEAPON_LIST_SPLIT_AT
 			pos=getPrevClosestWeapon(pos-WEAPON_LIST_SPLIT_AT+1)
 			select.play()
-		elif Input.is_action_just_pressed(\"ui_right\") and pos < WEAPON_LIST_SPLIT_AT:
+		elif _ev.is_action_pressed(\"ui_right\") and pos < WEAPON_LIST_SPLIT_AT:
 			pos=getNextClosestWeapon(pos+WEAPON_LIST_SPLIT_AT-1,weaponListCount)
 			#pos+=WEAPON_LIST_SPLIT_AT
 			select.play()
-		elif Input.is_action_just_pressed(\"ui_cancel\"):
+		elif _ev.is_action_pressed(\"gameplay_shoot\"):
 			infoScreen.updateWeaponInfo(pos)
 			info.play()
 			showingInfo=true
@@ -235,11 +235,11 @@ func _input(_ev):
 			tween.interpolate_property(infoScreen, 'modulate:a',
 			null, 1, .5, Tween.TRANS_QUAD, Tween.EASE_OUT);
 			tween.start();
-		elif Input.is_action_just_pressed(\"ui_select\") or Input.is_action_just_pressed(\"ui_pause\"):
+		elif _ev.is_action_pressed(\"ui_select\") or _ev.is_action_pressed(\"ui_pause\") or _ev.is_action_pressed(\"ui_cancel\"):
 			if isStandAlone:
 				return
 			OffCommand()
-		elif Input.is_action_just_pressed(\"R1\"):
+		elif _ev.is_action_pressed(\"R1\"):
 			$Page2.input(_ev)
 			if pauseMenuPage < NUM_PAGES-1:
 				pauseMenuPage +=1
@@ -641,7 +641,7 @@ margin_right = 398.0
 margin_bottom = 157.0
 rect_scale = Vector2( 0.75, 0.75 )
 custom_fonts/font = ExtResource( 9 )
-text = "Press B for info"
+text = "Press X for info"
 align = 2
 valign = 2
 

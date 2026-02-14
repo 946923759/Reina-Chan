@@ -1,0 +1,99 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://ParticleEffects/AlphaMaskPurple.tres" type="Material" id=1]
+[ext_resource path="res://Character Sprites/m16/OmegaLasers.png" type="Texture" id=2]
+[ext_resource path="res://Sounds/Classic/S3K_5E - Laser shot.wav" type="AudioStream" id=4]
+
+[sub_resource type="GDScript" id=2]
+script/source = "tool
+extends Node2D
+
+export(float) var laser_width = 128.0 setget set_laser_width
+var rect_size = 44*1.5
+#l2*scale
+var begin_offset = 31
+onready var laserActor = $l1
+onready var laserEnd = $l2
+
+func _ready():
+	$Area2D.connect(\"body_entered\",self,\"objectTouched\")
+# warning-ignore:return_value_discarded
+	set_laser_width(laser_width)
+
+func objectTouched(obj):
+	#print(\"intersecting!\")
+	if obj.has_method(\"player_touched\"): #If enemy touched player
+		#lastTouched = obj
+		obj.call(\"player_touched\",self,3)
+		#print(\"hurt player\")
+	#elif obj.has_method(\"enemy_touched\"): #If enemy touched bullet
+	#	obj.call(\"enemy_touched\",self)
+
+func play():
+	$AudioStreamPlayer.play();
+
+func set_laser_width(v:float):
+	laser_width = v
+	if !is_instance_valid(laserActor):
+		return
+	laserActor.scale.y = v/44.0
+	#Scale 1 = 22
+	#Scale 1.5 = 33
+	#Scale 2 = 44
+	#Scale 2.5 = 55
+	#Scale 3 = 66
+	# So scale is 1.33
+	laserActor.position.x = begin_offset+v/2.0
+	laserEnd.position.x = begin_offset+v
+	$Area2D.position.x = -544+v+begin_offset
+
+func set_monitoring(b:bool):
+	$Area2D.monitoring = b
+"
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 544, 12 )
+
+[node name="laser" type="Node2D"]
+position = Vector2( -688, 640 )
+script = SubResource( 2 )
+
+[node name="l1" type="Sprite" parent="."]
+material = ExtResource( 1 )
+position = Vector2( 95, 0 )
+rotation = 1.5708
+scale = Vector2( 1.5, 2.90909 )
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 0, 28, 24, 44 )
+
+[node name="l2" type="Sprite" parent="."]
+material = ExtResource( 1 )
+position = Vector2( 159, 0 )
+rotation = 1.5708
+scale = Vector2( 1.5, 1.5 )
+texture = ExtResource( 2 )
+centered = false
+offset = Vector2( -12, -26 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 24, 26 )
+
+[node name="l3" type="Sprite" parent="."]
+material = ExtResource( 1 )
+rotation = 1.5708
+scale = Vector2( 1.5, 1.5 )
+texture = ExtResource( 2 )
+centered = false
+offset = Vector2( -12, -21 )
+region_enabled = true
+region_rect = Rect2( 0, 74, 24, 21 )
+
+[node name="Area2D" type="Area2D" parent="."]
+position = Vector2( -385, 0 )
+collision_layer = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource( 1 )
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 4 )

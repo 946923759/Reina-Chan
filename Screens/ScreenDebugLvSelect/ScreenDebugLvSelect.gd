@@ -68,7 +68,7 @@ func GainFocusCommand(p:int):
 func _input(event):
 # warning-ignore:integer_division
 	var jump:int=stgLen/2
-	if Input.is_action_just_pressed("ui_accept"):
+	if event.is_action_pressed("ui_accept"):
 		var newScreen = Globals.STAGES_REINA[stages[pos]]
 		if newScreen != "":
 			$Confirm.play()
@@ -77,29 +77,29 @@ func _input(event):
 			$NoWay.play()
 		#Globals.change_screen(get_tree(),Globals.STAGES_REINA[stages[pos]])
 		return
-	elif Input.is_action_just_pressed("ui_cancel"):
+	elif event.is_action_pressed("ui_cancel"):
 		Globals.change_screen(get_tree(),"ScreenTitleMenu")
 		return
 	
-	if Input.is_action_just_pressed("ui_down") and pos<stgLen-2:
+	if event.is_action_pressed("ui_down") and pos<stgLen-2:
 		pos+=2
 		$Select.play()
-	elif Input.is_action_just_pressed("ui_up") and pos>1:
+	elif event.is_action_pressed("ui_up") and pos>1:
 		pos-=2
 		$Select.play()
-	elif Input.is_action_just_pressed("ui_right") and pos < stgLen-1:
+	elif event.is_action_pressed("ui_right") and pos < stgLen-1:
 		pos+=1
 		$Select.play()
-	elif Input.is_action_just_pressed("ui_left") and pos > 0:
+	elif event.is_action_pressed("ui_left") and pos > 0:
 		pos-=1
 		$Select.play()
 		
-	if Input.is_action_just_pressed("R1"):
+	if event.is_action_pressed("R1"):
 		if charSel<Globals.Characters.LENGTH_CHARACTERS-1:
 			set_character(charSel+1)
 		else:
 			set_character(0)
-	elif Input.is_action_just_pressed("L1"):
+	elif event.is_action_pressed("L1"):
 		if charSel>0:
 			set_character(charSel-1)
 	GainFocusCommand(pos)

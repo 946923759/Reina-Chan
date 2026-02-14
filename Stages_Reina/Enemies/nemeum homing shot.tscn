@@ -16,7 +16,7 @@ var health = 2
 onready var sprite = $AnimatedSprite
 var velocity:Vector2
 
-func init(velo:Vector2,color:int=0):
+func init(velo:Vector2, color:int=0):
 	if color==2:
 		sprite.play(\"bubble\")
 		player_damage = 2
@@ -38,7 +38,6 @@ func _ready():
 	self.connect(\"body_entered\",self,\"objectTouched\")
 
 func _process(delta):
-	
 	position+=velocity*delta
 
 func objectTouched(obj):
@@ -156,9 +155,7 @@ script = SubResource( 1 )
 material = SubResource( 2 )
 scale = Vector2( 4, 4 )
 frames = SubResource( 5 )
-animation = "bubble_pop"
-frame = 3
-playing = true
+frame = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource( 6 )

@@ -140,15 +140,18 @@ func _input(event):
 		if event is InputEventMouseButton:
 			if event.pressed and event.button_index==0:
 				OffCommandNextScreen()
-		elif Input.is_action_just_pressed(\"ui_accept\") or Input.is_action_just_pressed(\"ui_pause\"):
+		elif event.is_action_pressed(\"ui_accept\") or event.is_action_pressed(\"ui_pause\"):
 			input_accept()
+#		elif event.is_action_pressed(\"DebugButton1\"):
+#			Globals.previous_screen = \"ScreenOpening\"
+#			set_up_demonstration()
 
 func tween_main_menu_on(play_sound:bool=true):
 	set_process(false)
 	if play_sound:
 		$Confirm.play()
 
-	var tw:SceneTreeTween = get_tree().create_tween()
+	var tw:SceneTreeTween = create_tween()
 	tw.set_parallel()
 	tw.tween_property($Logo,\"modulate\",Color.transparent,.25)
 	#tw.tween_property($BottomRight,\"modulate\",Color(.2,.2,.2),.25)
@@ -283,11 +286,9 @@ __meta__ = {
 }
 
 [node name="Sprite2" type="Sprite" parent="Backdrops/BackdropArchitect" index="1"]
-position = Vector2( 0, -112 )
 scale = Vector2( 4, 4 )
 texture = ExtResource( 19 )
 centered = false
-offset = Vector2( 0, 112 )
 region_enabled = true
 region_rect = Rect2( 0, 0, 464, 96 )
 
@@ -380,15 +381,17 @@ __meta__ = {
 
 [node name="VersionNum" parent="." index="4" instance=ExtResource( 1 )]
 position = Vector2( 9, 10 )
-text = "demo 7"
+text = "demo 7.1"
 wrap_at = 92233720368
 scale_by = 3
+displayed_characters = 500
 
 [node name="VersionNum2" parent="." index="5" instance=ExtResource( 1 )]
 position = Vector2( 9, 42 )
-text = "v.2026.06.21"
+text = "v.2025.12.22"
 wrap_at = 92233720368
 scale_by = 3
+displayed_characters = 500
 
 [node name="BottomRight" type="Node2D" parent="." index="6"]
 position = Vector2( 411, 667 )
@@ -401,18 +404,21 @@ __meta__ = {
 text = "                    created by micom"
 wrap_at = 92233720368
 scale_by = 3
+displayed_characters = 500
 
 [node name="BitmapSprite" parent="BottomRight" index="1" instance=ExtResource( 1 )]
 position = Vector2( 0, 24 )
 text = "            this is a free fan game!"
 wrap_at = 92233720368
 scale_by = 3
+displayed_characters = 500
 
 [node name="BitmapSprite2" parent="BottomRight" index="2" instance=ExtResource( 1 )]
 position = Vector2( 0, 48 )
 text = "girls' frontline is property of mica"
 wrap_at = 92233720368
 scale_by = 3
+displayed_characters = 500
 
 [node name="MenuFrame" parent="." index="7" instance=ExtResource( 16 )]
 
@@ -438,6 +444,7 @@ text = "press start"
 wrap_at = 92233720368
 scale_by = 4
 alignment = 1
+displayed_characters = 500
 
 [node name="Label" type="Label" parent="." index="11"]
 visible = false

@@ -107,14 +107,15 @@ func _input(_ev):
 					pos = i
 					optList.get_child(pos).modulate =Color(0.21,0.63,1,1)
 				break
-	if Input.is_action_pressed(\"L1\") and Input.is_action_just_pressed(\"ui_down\"):
+	#This is not the same as _ev! Input.is_action_pressed checks if it's held down
+	if Input.is_action_pressed(\"L1\") and _ev.is_action_pressed(\"ui_down\"):
 		get_tree().paused = false
 		CheckpointPlayerStats.playerLivesLeft-=1
 # warning-ignore:return_value_discarded
 		get_tree().reload_current_scene()
-	elif Input.is_action_just_pressed(\"ui_pause\") or Input.is_action_just_pressed(\"ui_options\"):
+	elif _ev.is_action_pressed(\"ui_pause\") or _ev.is_action_pressed(\"ui_options\"):
 		OffCommand()
-	elif Input.is_action_just_pressed(\"ui_up\"):
+	elif _ev.is_action_pressed(\"ui_up\"):
 		$SFX.play()
 		optList.get_child(pos).modulate=Color(1,1,1,1)
 		if pos > 0:
@@ -122,7 +123,7 @@ func _input(_ev):
 		else:
 			pos=OPLIST_SIZE-1
 		optList.get_child(pos).modulate =Color(0.21,0.63,1,1)
-	elif Input.is_action_just_pressed(\"ui_down\"):
+	elif _ev.is_action_pressed(\"ui_down\"):
 		$SFX.play()
 		optList.get_child(pos).modulate=Color(1,1,1,1)
 		if pos < OPLIST_SIZE-1:
@@ -130,11 +131,11 @@ func _input(_ev):
 		else:
 			pos=0
 		optList.get_child(pos).modulate =Color(0.21,0.63,1,1)
-	elif Input.is_action_just_pressed(\"ui_cancel\"):
+	elif _ev.is_action_pressed(\"ui_cancel\"):
 		OffCommand()
-	elif Input.is_action_just_pressed(\"ui_select\"):
+	elif _ev.is_action_pressed(\"ui_select\"):
 		input_accept()
-	elif Input.is_action_just_pressed(\"DebugButton1\") or (Input.is_action_pressed(\"R1\") and Input.is_action_just_pressed(\"R3\")):
+	elif _ev.is_action_pressed(\"DebugButton1\") or (_ev.is_action_pressed(\"R1\") and _ev.is_action_pressed(\"R3\")):
 		if Globals.playerData.gameDifficulty < len(Globals.Difficulty)-1:
 			Globals.playerData.gameDifficulty+=1
 		else:

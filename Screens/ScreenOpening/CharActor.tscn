@@ -49,6 +49,7 @@ position = Vector2( 20, 15 )
 text = "ouroboros ouroboros ouroboros ouroboros ouroboros"
 wrap_at = 500
 scale_by = 4
+displayed_characters = 500
 
 [node name="Polygon2D5" type="ColorRect" parent="."]
 anchor_top = 0.5
@@ -71,6 +72,7 @@ __meta__ = {
 text = "ouroboros ouroboros ouroboros ouroboros ouroboros"
 wrap_at = 500
 scale_by = 4
+displayed_characters = 500
 
 [node name="CenterBG" type="ColorRect" parent="."]
 anchor_top = 0.333
@@ -88,7 +90,7 @@ position = Vector2( 968, 360 )
 script = ExtResource( 2 )
 overwrite_pos = false
 draw_afterimge = true
-run_automatically = false
+init_from_params = false
 
 [node name="StaticBody2D" type="StaticBody2D" parent="BossSpriteLoader"]
 position = Vector2( 0, 60 )

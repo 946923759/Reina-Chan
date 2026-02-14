@@ -410,7 +410,7 @@ func _ready():
 func init_(message_:PoolStringArray, delim="|", msgColumn_:int=1, calling_entity_:Node2D = null):
 	assert(message_.size()>0,"You can't pass an empty message to a cutscene!!!")
 		
-	#var t := get_tree().create_tween()
+	#var t := create_tween()
 	#t.set_pause_mode(SceneTreeTween.TWEEN_PAUSE_PROCESS)
 	preparse_string_array(message_, delim)
 	#self.message=message

@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Dinergate Ghost Spritesheet.png-57d6bbc1aa682d1465d7a0134f5ce07c.stex"
+path="res://.import/003.png-b8eba82686d98690f564b7d87814c536.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Stages_Reina/Enemies/Dinergate Ghost Spritesheet.png"
-dest_files=[ "res://.import/Dinergate Ghost Spritesheet.png-57d6bbc1aa682d1465d7a0134f5ce07c.stex" ]
+source_file="res://Stages_Reina/Sangvis4/003.png"
+dest_files=[ "res://.import/003.png-b8eba82686d98690f564b7d87814c536.stex" ]
 
 [params]
 

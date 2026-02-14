@@ -21,7 +21,7 @@ R4MI
 80 - Cossack stage?
 81 - Bonus Boss (Vs. Shadow Man)
 82 - Title Screen
-83 - Balloon Item Get
+83 - Balloon Item Get (Metroid item get)
 84 - Stage Intro
 85 - Wily Boss
 87 - final wily stage
@@ -47,7 +47,7 @@ R4MI
 
 RNC
 0 - ???
-5 - 
+5 - Brave New World (Namco x Capcom)
 6 - Esperanto (Mega Man Zero 4)
 10 - Departure (Mega Man Zero 2)
 11 - Opening (Mega Man X2)
@@ -81,3 +81,8 @@ Kirby
 20 - Arena Menu
 39 - Death
 
+Sonic 3K
+2 - File Select
+30 - Final Boss
+31 - Final Boss (Doomsday Zone)
+35 - Ending

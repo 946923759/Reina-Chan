@@ -187,8 +187,8 @@ func get_input(delta):
 	var up = Input.is_action_pressed(INPUT.UP[controller_index])
 	var down = Input.is_action_pressed(INPUT.DOWN[controller_index])
 
-	var jump = Input.is_action_just_pressed(INPUT.FORWARD[controller_index])
-	var shoot = Input.is_action_just_pressed(INPUT.BACK[controller_index])
+	var jump = Input.is_action_just_pressed(INPUT.JUMP[controller_index])
+	var shoot = Input.is_action_just_pressed(INPUT.SHOOT[controller_index])
 	
 	if isRecording==RECORDING.PLAYBACK:
 		left  = getRecordedInputAtFrame(currentFrame,0)
@@ -202,7 +202,7 @@ func get_input(delta):
 		shoot=false
 
 	var grenade_input = (shoot and up) or (
-		Input.is_action_just_pressed(INPUT.THIRD[controller_index]) and
+		Input.is_action_just_pressed(INPUT.GRENADE[controller_index]) and
 		state!=State.DASH
 	)
 	#Can't throw grenades if using other weapons because it will
@@ -415,7 +415,7 @@ func get_input(delta):
 				sprite.set_animation("Dash")
 				canAirDash=false
 		if state == State.JUMPING:
-			var jumpHeld = Input.is_action_pressed(INPUT.FORWARD[controller_index])
+			var jumpHeld = Input.is_action_pressed(INPUT.JUMP[controller_index])
 			if isRecording==RECORDING.PLAYBACK:
 				jumpHeld = getRecordedInputAtFrame(currentFrame,4)
 			
@@ -437,7 +437,7 @@ func get_input(delta):
 		#Not elif! Because the above will set it to recording on input!
 		if isRecording==RECORDING.RECORDING:
 			if currentFrame < 360:
-				jump = Input.is_action_pressed(INPUT.FORWARD[controller_index])
+				jump = Input.is_action_pressed(INPUT.JUMP[controller_index])
 				var thisFrameInput = Globals.bitArrayToInt32([
 					left, right, up, down, jump, storedShootPressForRecord
 				])

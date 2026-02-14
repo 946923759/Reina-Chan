@@ -51,7 +51,7 @@ func setDeathTimer(newTimer):
 	timerWithDeath+=newTimer-timerWithDeath
 
 func setTimer(newTimer):
-	assert(newTimer > timer,"the new checkpoint timer is less than the old one!")
+	assert(newTimer >= timer,"the new checkpoint timer is less than the old one!")
 	timer=newTimer
 
 #func getTimeWithDeath(curTimer):

@@ -55,6 +55,7 @@ func _physics_process(delta):
 	if curState==0 and (abs(player.global_position.x - global_position.x) < 500 or sleepTime >= 0):
 		if sleepTime >= 0:
 			sleepTime-=delta
+			sprite.play("default")
 			move_and_slide(Vector2(0,420), Vector2(0, -1))
 		else:
 			if numShots < 3:
@@ -74,8 +75,10 @@ func _physics_process(delta):
 				curState=STATES.RUNNING_AGAIN
 	else:
 		if no_movement:
+			sprite.play("default")
 			move_and_slide(Vector2(0,420), Vector2(0, -1))
 		else:
+			sprite.play("moving")
 			move_and_slide(Vector2(200*facing,200), Vector2(0, -1))
 			if abs(player.global_position.x - global_position.x) > 500:
 				curState=0

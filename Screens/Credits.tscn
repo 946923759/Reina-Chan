@@ -98,22 +98,23 @@ bbcode_enabled = true
 bbcode_text = "[center]
 
 [b]Project Lead[/b]
-Amaryllis Works
+Amaryllis
 
 [b]designers[/b]
-amaryllis works
+amaryllis
 vandine
 unfiltered
 
 [b]programmers[/b]
-amaryllis works
+amaryllis
 wqyeo
 
 [b]artwork[/b]
 vandine
 anonymous
-amaryllis works
+amaryllis
 DWAnon
+mia
 ...and many sprites stolen from
 mighty gunvolt burst, megaman,
 castlevania, and more
@@ -154,26 +155,27 @@ girls' frontline is property of mica
 no copyright infringement intended
 this game is free and open source!
 
-see you next demo...?"
+see you next game...?"
 text = "
 
 Project Lead
-Amaryllis Works
+Amaryllis
 
 designers
-amaryllis works
+amaryllis
 vandine
 unfiltered
 
 programmers
-amaryllis works
+amaryllis
 wqyeo
 
 artwork
 vandine
 anonymous
-amaryllis works
+amaryllis
 DWAnon
+mia
 ...and many sprites stolen from
 mighty gunvolt burst, megaman,
 castlevania, and more
@@ -214,7 +216,7 @@ girls' frontline is property of mica
 no copyright infringement intended
 this game is free and open source!
 
-see you next demo...?"
+see you next game...?"
 scroll_active = false
 
 [node name="Tween" type="Tween" parent="."]

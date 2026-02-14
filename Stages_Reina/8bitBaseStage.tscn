@@ -173,12 +173,14 @@ text = "press start"
 wrap_at = 500
 scale_by = 4
 alignment = 1
+displayed_characters = 500
 
 [node name="BitmapFont2" parent="Demo" instance=ExtResource( 9 )]
 position = Vector2( 64, 664 )
 text = "demonstration"
 wrap_at = 500
 scale_by = 4
+displayed_characters = 500
 
 [node name="Sprite" type="Sprite" parent="Demo"]
 position = Vector2( 968, 632 )

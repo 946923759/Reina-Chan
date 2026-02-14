@@ -135,7 +135,7 @@ func teleport_1():
 	])
 	#return
 
-	var seq := get_tree().create_tween()
+	var seq := create_tween()
 	seq.tween_property(tilemap,'rotation_degrees',180,3).set_trans(Tween.TRANS_QUAD)
 	#device, weak magnitude, strong magnitude, duration
 	Input.start_joy_vibration(0,.5,.6,3)
@@ -1327,6 +1327,12 @@ position = Vector2( 6528, 6720 )
 
 [node name="Position2D6" type="Position2D" parent="DebugWarpPoints" index="6"]
 position = Vector2( 1728, 7488 )
+
+[node name="BitmapFont" parent="Demo" index="0"]
+displayed_characters = 500
+
+[node name="BitmapFont2" parent="Demo" index="1"]
+displayed_characters = 500
 
 [node name="CanvasLayer" parent="." index="47"]
 visible = true

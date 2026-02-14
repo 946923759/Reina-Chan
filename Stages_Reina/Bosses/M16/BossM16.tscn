@@ -224,21 +224,25 @@ __meta__ = {
 
 [node name="Sprite" type="Sprite" parent="RockSmash" index="0"]
 material = ExtResource( 8 )
+position = Vector2( 100, 0 )
 scale = Vector2( 4, 4 )
 texture = ExtResource( 9 )
 
 [node name="Sprite2" type="Sprite" parent="RockSmash" index="1"]
 material = ExtResource( 8 )
+position = Vector2( -100, 0 )
 scale = Vector2( 4, 4 )
 texture = ExtResource( 9 )
 
 [node name="Sprite3" type="Sprite" parent="RockSmash" index="2"]
 material = ExtResource( 8 )
+position = Vector2( -50, 0 )
 scale = Vector2( 4, 4 )
 texture = ExtResource( 9 )
 
 [node name="Sprite4" type="Sprite" parent="RockSmash" index="3"]
 material = ExtResource( 8 )
+position = Vector2( 50, 0 )
 scale = Vector2( 4, 4 )
 texture = ExtResource( 9 )
 

@@ -14,6 +14,7 @@ export(int,1,10) var scale_by = 2
 export(int,\"Left\",\"Center\",\"Right\") var alignment = 0
 #export(int,0,500) var start_at_char = 0
 #export(int,0,500) var end_at_char = 500
+export(int,0,500) var displayed_characters = 500
 
 const CHAR_PIXEL_SIZE = 8
 
@@ -22,6 +23,8 @@ func set_text(s):
 	update()
 
 func _ready():
+	if displayed_characters == null:
+		displayed_characters = 500
 	#print(\"-\".to_ascii())
 	#print(\"test\".split(\"\\n\",true))
 	set_process(Engine.editor_hint)
@@ -97,7 +100,8 @@ func _draw():
 	#print(tmp)
 	#if end_at_char == null:
 	#	end_at_char=500
-	for i in range(len(tmp)):
+	var num_to_draw = min(len(tmp), displayed_characters)
+	for i in range(num_to_draw):
 	#for i in range(start_at_char, int(min(len(tmp),end_at_char+start_at_char)) ):
 		
 		if tmp[i]==32: #Space
@@ -182,8 +186,11 @@ func get_size(txt:String=\"\"):
 
 func position_based_on_center(x_offset:float):
 	if wrap_at <= 0 or wrap_at >= 500:
-		var text_pixel_with = len(text)*scale_by*8
-		self.position.x = x_offset-text_pixel_with/2
+		if alignment == 0:
+			var text_pixel_with = len(text)*scale_by*8
+			self.position.x = x_offset-text_pixel_with/2
+		elif alignment == 1:
+			self.position.x = x_offset
 	else:
 		printerr(\"Can't center align this object \"+self.name+\", text wrap is on \"+String(wrap_at))
 "
@@ -194,3 +201,4 @@ script = SubResource( 1 )
 text = "abcd efgh 1234 5678 ,.:-"
 wrap_at = 10
 scale_by = 7
+displayed_characters = null

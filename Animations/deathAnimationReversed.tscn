@@ -1,0 +1,103 @@
+[gd_scene load_steps=2 format=2]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Node2D
+
+var tex = preload(\"res://Animations/mmExplodeSmall.png\")
+
+var destRect = Vector2(24,24)*3.5
+var texture_center_offset = destRect/2
+
+var curFrame:int = 0
+var time:float = 0
+var totalTime:float=5.0
+func _process(delta):
+	#return
+	time+=delta
+	totalTime-=delta
+	curFrame = int(floor(time/0.022))
+	#curFrame = floor(time*2)
+	if totalTime <= 0:
+		set_process(false)
+		#visible=false
+		#queue_free()
+	if curFrame > 10:
+		time=0
+		curFrame=0
+	if curFrame >= 0:
+		update()
+var speed=300
+func drawFrame(pos,frame):
+	#right
+	draw_texture_rect_region(tex,Rect2(
+		Vector2(pos*speed,0)-texture_center_offset,
+		destRect
+	),Rect2(24*frame,0,24,24))
+	#downright
+	draw_texture_rect_region(tex,Rect2(
+		Vector2(pos*.75*speed,pos*.75*speed)-texture_center_offset,
+		destRect
+	),Rect2(24*frame,0,24,24))
+	#down
+	draw_texture_rect_region(tex,
+		Rect2(
+			Vector2(0,pos*speed)-texture_center_offset,
+			destRect
+		),
+		Rect2(24*frame,0,24,24)
+	)
+	#downleft
+	draw_texture_rect_region(tex,
+		Rect2(
+			Vector2(pos*-.75*speed,pos*.75*speed)-texture_center_offset,
+			destRect
+		),
+		Rect2(24*frame,0,24,24)
+	)
+	#left
+	draw_texture_rect_region(
+		tex,
+		Rect2(
+			Vector2(pos*speed*-1,0)-texture_center_offset,
+			destRect
+		),
+		Rect2(24*frame,0,24,24)
+	)
+	#upleft
+	draw_texture_rect_region(tex,
+		Rect2(
+			Vector2(pos*-.75*speed,pos*-.75*speed)-texture_center_offset,
+			destRect
+		),
+		Rect2(24*frame,0,24,24)
+	)
+	#up
+	draw_texture_rect_region(tex,
+		Rect2(
+			Vector2(0,-pos*speed)-texture_center_offset,
+			destRect
+		),
+		Rect2(24*frame,0,24,24)
+	)
+	#upright
+	draw_texture_rect_region(tex,
+		Rect2(
+			Vector2(pos*.75*speed,pos*-.75*speed)-texture_center_offset,
+			destRect
+		),
+		Rect2(24*frame,0,24,24)
+	)
+	#draw_texture_rect_region(tex,Rect2(destPos[pos]*-2-Vector2(32,32),destRect),Rect2(24*frame,0,24,24))
+	#draw_texture_rect_region(tex,Rect2(Vector2(0,0),destRect),Rect2(24*frame,0,24,24))
+
+		
+func _draw():
+	drawFrame(totalTime*2,curFrame)
+	if totalTime>.3:
+		drawFrame(totalTime-.3,curFrame)
+
+	#draw_texture_rect_region(tex,Rect2(-texture_center_offset, Vector2(24,24)*3.5),Rect2(0,0,24,24))
+"
+
+[node name="Node2D" type="Node2D"]
+script = SubResource( 1 )

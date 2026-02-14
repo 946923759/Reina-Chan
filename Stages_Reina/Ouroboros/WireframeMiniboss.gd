@@ -103,6 +103,7 @@ func _process(delta):
 				curState=STATES.APPEAR
 				cooldown=.5
 				tweenTimer=0
+				#TODO: What the fuck is going on here?
 				position=stageRoot.cell2pos(Vector2(4+randi()%14,randi()%5+4))
 		STATES.APPEAR:
 			self.modulate.a=min(1,tweenTimer)
@@ -112,6 +113,7 @@ func _process(delta):
 				tweenTimer=0
 				curState=STATES.RANDOMPICK
 
+#physics_process will rotate the balls
 func spawn():
 	$CircleAttack.play()
 	radius=50.0
@@ -153,7 +155,7 @@ func _physics_process(delta):
 		if is_instance_valid(c)==false:
 			continue
 			
-		
+		#Fade out?
 		if radius>800:
 			c.modulate.a=min(0.0,(900-radius)/100)
 		

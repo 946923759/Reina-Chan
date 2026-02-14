@@ -142,12 +142,19 @@ msg	Hahahahaha! I have mastered the Raging Demon! Prepare to be sent to heaven u
 #KEY	vs_M16_M16
 msgbox_add	M16A1	right	top
 /M16?	...
-msgbox	M16A1_Nica	left
+msgbox	M16A1_Nice	left
 /M16	A clone of me? Don't you know nothing can replace the original?
 msgbox	default	left
 /Dandelion	This one is a replica of you when you were allied with Sangvis Ferri. She's controlled by me, so don't expect an easy fight.
 msgbox	M16A1_Nice	left
 msg	That's fine by me! You're on, Dandelion!
+
+#KEY	Elisa1
+msgbox_add	Elisa	right	top
+/Elisa	Hmph.
+
+#KEY	Elisa2
+/Elisa	Kneel before your god!
 
 #KEY	TalkHub_Skorp
 msgbox_add	Skorpion
