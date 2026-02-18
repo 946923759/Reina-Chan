@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/BBCF_Izanami_Eternal_Darkness_3-1_(A).ogg-0ced18300c32904e8720d2f2d549e81e.oggstr"
+
+[deps]
+
+source_file="res://Sounds/BossSounds/BBCF_Izanami_Eternal_Darkness_3-1_(A).ogg"
+dest_files=[ "res://.import/BBCF_Izanami_Eternal_Darkness_3-1_(A).ogg-0ced18300c32904e8720d2f2d549e81e.oggstr" ]
+
+[params]
+
+loop=false
+loop_offset=0

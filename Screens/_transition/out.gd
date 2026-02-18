@@ -82,9 +82,9 @@ func _ready():
 	#OnCommand()
 	pass
 	
-func _input(event):
-	if event is InputEventKey and event.pressed:
-		if event.scancode == KEY_0:
-			OnCommand()
-		elif event.scancode == KEY_9:
-			OffCommand()
+#func _input(event):
+#	if event is InputEventKey and event.pressed:
+#		if event.scancode == KEY_0:
+#			OnCommand()
+#		elif event.scancode == KEY_9:
+#			OffCommand()

@@ -1,0 +1,23 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/Sharpen your fangs.wav-09402d1b876c91ca1104ccb4a065a6e4.sample"
+
+[deps]
+
+source_file="res://Sounds/Announcer/Mission Start/Sharpen your fangs.wav"
+dest_files=[ "res://.import/Sharpen your fangs.wav-09402d1b876c91ca1104ccb4a065a6e4.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

@@ -7,6 +7,7 @@ export(DIRECTION) var facing = DIRECTION.LEFT
 var lastTouched
 var enabled:bool = false
 
+#Why isn't this customizable?
 var health:int = 28 #All bosses in mega man have 28 health.
 const MAX_HP = 28
 

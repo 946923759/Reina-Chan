@@ -49,6 +49,7 @@ func set_laser_width(v:float):
 
 func set_monitoring(b:bool):
 	$Area2D.monitoring = b
+	$Area2D.monitorable = b
 "
 
 [sub_resource type="RectangleShape2D" id=1]

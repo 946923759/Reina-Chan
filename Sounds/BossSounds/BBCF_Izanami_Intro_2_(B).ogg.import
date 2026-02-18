@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/BBCF_Izanami_Intro_2_(B).ogg-ecd785faec071a0a50d2d30fb6ab4f15.oggstr"
+
+[deps]
+
+source_file="res://Sounds/BossSounds/BBCF_Izanami_Intro_2_(B).ogg"
+dest_files=[ "res://.import/BBCF_Izanami_Intro_2_(B).ogg-ecd785faec071a0a50d2d30fb6ab4f15.oggstr" ]
+
+[params]
+
+loop=false
+loop_offset=0

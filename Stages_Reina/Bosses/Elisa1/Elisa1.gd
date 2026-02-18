@@ -3,6 +3,7 @@ extends "res://Stages_Reina/Bosses/BossBase.gd"
 export(PackedScene) var lasers
 export(PackedScene) var spinning_bullet
 export(PackedScene) var markers_scene
+export(NodePath) var breakable_blocks_container
 const deathAnimationReversed = preload("res://Animations/deathAnimationReversed.tscn")
 
 enum STATES {
@@ -13,9 +14,12 @@ enum STATES {
 	THROW_AT_PLAYER,
 	LASER,
 	LASER_ROOM,
-	LASER_GRID
+	LASER_GRID,
+	LASER_ALTERNATING
 }
 var curState:int = STATES.RANDOMPICK
+var current_phase = 0
+
 var tweener:SceneTreeTween
 var room:Node2D
 var player:KinematicBody2D
@@ -24,7 +28,6 @@ var objects:Array = [null,null,null,null]
 var objects_2:Array = [null, null, null, null]
 var bullet_spawned_position:Vector2
 var radius = 0.0
-
 var idleTime = 0.0
 
 
@@ -34,6 +37,7 @@ func _on_AnimatedSprite_animation_finished():
 
 func _ready():
 	assert(lasers,"You forgot to set the lasers packedscene!")
+	#$AnimatedSprite/GlowEffect.begin()
 
 func _input(event:InputEvent):
 	#print('a')
@@ -50,9 +54,12 @@ func _input(event:InputEvent):
 			t.tween_method(self,"bullet_spin_tween",0.0,2.1,2.1)
 			t.tween_callback(self,"queue_free_bullets")
 		elif Input.is_key_pressed(KEY_4):
-			var b = deathAnimationReversed.instance()
-			room.add_child(b)
-			b.global_position = global_position
+			#var b = deathAnimationReversed.instance()
+			#room.add_child(b)
+			#b.global_position = global_position
+			pass
+			var t = create_tween()
+			laser_room_dodge_alternating(t)
 		elif Input.is_key_pressed(KEY_5):
 			var t = create_tween()
 			begin_laser_grid(t)
@@ -62,6 +69,9 @@ func _input(event:InputEvent):
 		elif Input.is_key_pressed(KEY_7):
 			tweener = create_tween()
 			throw_bullets_at_player(tweener)
+		elif Input.is_key_pressed(KEY_0):
+			health = 1
+			HPBar.updateHP(health/28.0)
 
 
 func _physics_process(delta):
@@ -72,6 +82,8 @@ func _physics_process(delta):
 			markers = markers_scene.instance()
 			markers.visible = false
 			room.add_child(markers)
+		return
+	if not isAlive:
 		return
 	
 	sprite.flip_h = facing == DIRECTION.RIGHT
@@ -92,7 +104,7 @@ func _physics_process(delta):
 			teleport(tweener, Vector2(10,5)*64)
 			
 			var rand = randi()%3
-			if health < MAX_HP/2:
+			if health < MAX_HP/2 or current_phase > 0:
 				rand = randi()%4
 			
 			if rand == 0:
@@ -101,6 +113,8 @@ func _physics_process(delta):
 				curState = STATES.THROW_AT_PLAYER
 			elif rand == 2:
 				curState = STATES.LASER_ROOM
+				if current_phase > 0:
+					curState = STATES.LASER_ALTERNATING
 			elif rand == 3:
 				curState = STATES.LASER_GRID
 		STATES.LASER:
@@ -181,6 +195,24 @@ func _physics_process(delta):
 				#tweener.tween_property(self,"idleTime",0.0,1).from(.5)
 				
 			tweener.tween_callback(self,"set",["curState",STATES.RANDOMPICK])
+		STATES.LASER_ALTERNATING:
+			tweener = create_tween()
+			teleport(tweener, Vector2(10,-5)*64)
+			laser_room_dodge_alternating(tweener)
+			
+			#TODO: This should be an attack where she rushes towards the player
+			
+			#If player on the right
+			# This takes into account the position before the tweener starts
+			if (get_room_position_of_node(player)/64).x > 10:
+				facing = DIRECTION.RIGHT
+				teleport(tweener, Vector2(4,8.5)*64)
+				#tweener.tween_property(self,"idleTime",0.0,1).from(.5)
+			else:
+				facing = DIRECTION.LEFT
+				teleport(tweener, Vector2(16,8.5)*64)
+			tweener.tween_callback(self,"set",["curState",STATES.RANDOMPICK]).set_delay(1.25)
+			
 
 
 onready var original_offset = sprite.offset
@@ -521,6 +553,20 @@ func laser_room_dodge(tweener:SceneTreeTween):
 	tweener.set_parallel(false)
 	tweener.tween_property(markers,"draw_range",0,0.0)
 
+func laser_room_dodge_alternating(tweener:SceneTreeTween):
+	if (get_room_position_of_node(player)/64).x > 10:
+		for i in range(2,9):
+			var ret = tweener.tween_callback(self,"spawn_laser_at_pos",[Vector2(i*2,1)*64, Vector2.DOWN])
+			if i > 2:
+				ret.set_delay(.25)
+	else: #Right to left
+		for i in range(8,1,-1):
+			var ret = tweener.tween_callback(self,"spawn_laser_at_pos",[Vector2(i*2,1)*64, Vector2.DOWN])
+			if i < 8:
+				ret.set_delay(.25)
+		
+	pass
+
 func outward_spinning_circle(cur_time:float, object_idx:int, radius:float=0.1, base_position:Vector2=Vector2.ZERO):
 	objects[object_idx].position = base_position + Vector2(cur_time*radius*cos(cur_time), cur_time*radius*sin(cur_time) )
 	#print(objects[object_idx].position)
@@ -529,6 +575,68 @@ func outward_spinning_circle(cur_time:float, object_idx:int, radius:float=0.1, b
 
 func die():
 	queue_free_bullets()
+	markers.visible = false
 	if tweener.is_valid():
 		tweener.kill()
-	.die()
+		
+	#.die()
+	
+	HPBar.updateHP(0)
+	isAlive = false
+	curState = STATES.IDLE
+	#enabled = false
+
+	#collision_layer=0
+	#collision_mask=0
+	$Area2D.set_deferred("monitoring",false)
+	$Area2D.set_deferred("monitorable",false)
+	set_physics_process(false)
+	
+	sprite.visible = false
+	sprite.stop()
+	
+	$DieSound.play()
+	var sp = deathAnimation.instance()
+	sp.position=position
+	get_parent().add_child(sp)
+	yield(get_tree().create_timer(3.0), "timeout")
+	#yield($DieSound,"finished")
+	is_reflecting = true
+	resurrection()
+
+
+func resurrection():
+	$ReviveSound.play()
+	$ResurrectionVoice.play()
+	set_room_position(Vector2(10,4)*64)
+	var sp = deathAnimationReversed.instance()
+	sp.position = position
+	get_parent().add_child(sp)
+	
+	var tw = create_tween()
+	tw.tween_method(HPBar,"updateHP",0.0,1.0,2.5)
+	
+	yield(get_tree().create_timer(2.5), "timeout")
+	
+	#collision_layer=0
+	#collision_mask=0
+	
+	sprite.visible = true
+	sprite.play("idle")
+	curState = STATES.RANDOMPICK
+	
+	health = MAX_HP
+	
+	$Area2D.set_deferred("monitoring",true)
+	$Area2D.set_deferred("monitorable",true)
+	set_physics_process(true)
+	isAlive = true
+	current_phase = 1
+	$AnimatedSprite/GlowEffect.begin()
+	
+	var n = get_node_or_null(breakable_blocks_container)
+	if n:
+		n.execute()
+	else:
+		printerr("Can't find breakable block container!!")
+	#sprite.stop()

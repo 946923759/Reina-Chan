@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/BBCF_Izanami_Hour_of_Nihility_1_(B).ogg-32eb28a05e7716b58ef88b2cfdf85266.oggstr"
+
+[deps]
+
+source_file="res://Sounds/BossSounds/BBCF_Izanami_Hour_of_Nihility_1_(B).ogg"
+dest_files=[ "res://.import/BBCF_Izanami_Hour_of_Nihility_1_(B).ogg-32eb28a05e7716b58ef88b2cfdf85266.oggstr" ]
+
+[params]
+
+loop=false
+loop_offset=0

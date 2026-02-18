@@ -28,6 +28,11 @@ func execute():
 				child.enable();
 			else:
 				child.disable();
+				if play_explosions_if_disabling:
+					var e = explosion.instance()
+					e.init(true)
+					e.position = child.position
+					add_child(e)
 	else:
 		set_process(true)
 

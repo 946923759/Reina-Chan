@@ -266,8 +266,5 @@ curState = null
 facing = -1
 "
 script = ExtResource( 9 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 target_path = NodePath("..")
 properties = PoolStringArray( "position", "global_position", "curState", "facing" )

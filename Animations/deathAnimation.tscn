@@ -26,24 +26,53 @@ func _process(delta):
 		
 
 var destRect = Vector2(24,24)*3.5
+var texture_center_offset = destRect/2
 var speed=300
 func drawFrame(pos,frame):
 	#right
-	draw_texture_rect_region(tex,Rect2(Vector2(pos*speed,0),destRect),Rect2(24*frame,0,24,24))
+	draw_texture_rect_region(
+		tex,
+		Rect2(
+			Vector2(pos*speed,0)-texture_center_offset,
+			destRect
+		),
+		Rect2(24*frame,0,24,24)
+	)
 	#downright
-	draw_texture_rect_region(tex,Rect2(Vector2(pos*.75*speed,pos*.75*speed),destRect),Rect2(24*frame,0,24,24))
+	draw_texture_rect_region(
+		tex,
+		Rect2(
+			Vector2(pos*.75*speed,pos*.75*speed)-texture_center_offset,
+			destRect
+		),Rect2(24*frame,0,24,24)
+	)
 	#down
-	draw_texture_rect_region(tex,Rect2(Vector2(0,pos*speed),destRect),Rect2(24*frame,0,24,24))
+	draw_texture_rect_region(tex,
+		Rect2(
+			Vector2(0,pos*speed)-texture_center_offset,
+			destRect
+		),Rect2(24*frame,0,24,24)
+	)
 	#downleft
-	draw_texture_rect_region(tex,Rect2(Vector2(pos*-.75*speed,pos*.75*speed),destRect),Rect2(24*frame,0,24,24))
+	draw_texture_rect_region(tex,Rect2(
+		Vector2(pos*-.75*speed,pos*.75*speed)-texture_center_offset,
+		destRect),Rect2(24*frame,0,24,24))
 	#left
-	draw_texture_rect_region(tex,Rect2(Vector2(pos*speed*-1,0),destRect),Rect2(24*frame,0,24,24))
+	draw_texture_rect_region(tex,Rect2(
+		Vector2(pos*speed*-1,0)-texture_center_offset,
+		destRect),Rect2(24*frame,0,24,24))
 	#upleft
-	draw_texture_rect_region(tex,Rect2(Vector2(pos*-.75*speed,pos*-.75*speed),destRect),Rect2(24*frame,0,24,24))
+	draw_texture_rect_region(tex,Rect2(
+		Vector2(pos*-.75*speed,pos*-.75*speed)-texture_center_offset,
+		destRect),Rect2(24*frame,0,24,24))
 	#up
-	draw_texture_rect_region(tex,Rect2(Vector2(0,-pos*speed),destRect),Rect2(24*frame,0,24,24))
+	draw_texture_rect_region(tex,Rect2(
+		Vector2(0,-pos*speed)-texture_center_offset,
+		destRect),Rect2(24*frame,0,24,24))
 	#upright
-	draw_texture_rect_region(tex,Rect2(Vector2(pos*.75*speed,pos*-.75*speed),destRect),Rect2(24*frame,0,24,24))
+	draw_texture_rect_region(tex,Rect2(
+		Vector2(pos*.75*speed,pos*-.75*speed)-texture_center_offset,
+		destRect),Rect2(24*frame,0,24,24))
 	#draw_texture_rect_region(tex,Rect2(destPos[pos]*-2-Vector2(32,32),destRect),Rect2(24*frame,0,24,24))
 	#draw_texture_rect_region(tex,Rect2(Vector2(0,0),destRect),Rect2(24*frame,0,24,24))
 
