@@ -15,7 +15,9 @@ enum STATES {
 	LASER,
 	LASER_ROOM,
 	LASER_GRID,
-	LASER_ALTERNATING
+	LASER_ALTERNATING,
+	RUSH_PLAYER_LOW,
+	SPAWN_AND_THROW_HIGH
 }
 var curState:int = STATES.RANDOMPICK
 var current_phase = 0
@@ -30,6 +32,10 @@ var bullet_spawned_position:Vector2
 var radius = 0.0
 var idleTime = 0.0
 
+var oldPositions:PoolVector2Array = PoolVector2Array()
+onready var a1 = get_node("AnimatedSprite/AfterImage1")
+onready var a2 = get_node("AnimatedSprite/AfterImage2")
+onready var a3 = get_node("AnimatedSprite/AfterImage3")
 
 func _on_AnimatedSprite_animation_finished():
 	if sprite.animation == "intro" or sprite.animation == "attack":
@@ -38,6 +44,12 @@ func _on_AnimatedSprite_animation_finished():
 func _ready():
 	assert(lasers,"You forgot to set the lasers packedscene!")
 	#$AnimatedSprite/GlowEffect.begin()
+	
+	oldPositions.resize(6)
+	a1.visible=false
+	a2.visible=false
+	a3.visible=false
+	set_process(false)
 
 func _input(event:InputEvent):
 	#print('a')
@@ -58,8 +70,9 @@ func _input(event:InputEvent):
 			#room.add_child(b)
 			#b.global_position = global_position
 			pass
-			var t = create_tween()
-			laser_room_dodge_alternating(t)
+			#var t = create_tween()
+			#laser_room_dodge_alternating(t)
+			curState = STATES.SPAWN_AND_THROW_HIGH
 		elif Input.is_key_pressed(KEY_5):
 			var t = create_tween()
 			begin_laser_grid(t)
@@ -87,6 +100,8 @@ func _physics_process(delta):
 		return
 	
 	sprite.flip_h = facing == DIRECTION.RIGHT
+	if current_phase > 0:
+		update_after_image()
 	
 	if idleTime > 0: #Don't subtract delta, the tweener takes care of it
 		# warning-ignore:return_value_discarded
@@ -110,7 +125,9 @@ func _physics_process(delta):
 			if rand == 0:
 				curState = STATES.LASER
 			elif rand == 1:
-				curState = STATES.THROW_AT_PLAYER
+				#This is fucking impossible to dodge
+				#curState = STATES.THROW_AT_PLAYER
+				curState = STATES.SPAWN_AND_THROW_HIGH
 			elif rand == 2:
 				curState = STATES.LASER_ROOM
 				if current_phase > 0:
@@ -200,20 +217,79 @@ func _physics_process(delta):
 			teleport(tweener, Vector2(10,-5)*64)
 			laser_room_dodge_alternating(tweener)
 			
-			#TODO: This should be an attack where she rushes towards the player
+			tweener.tween_callback(self,"set",["curState",STATES.RUSH_PLAYER_LOW]).set_delay(1.0)
+		STATES.RUSH_PLAYER_LOW:
+			is_reflecting = false
+			tweener = create_tween()
+			
+			var begin = Vector2(4,9.5)*64
+			var end = Vector2(16,9.5)*64
 			
 			#If player on the right
-			# This takes into account the position before the tweener starts
 			if (get_room_position_of_node(player)/64).x > 10:
 				facing = DIRECTION.RIGHT
-				teleport(tweener, Vector2(4,8.5)*64)
-				#tweener.tween_property(self,"idleTime",0.0,1).from(.5)
 			else:
 				facing = DIRECTION.LEFT
-				teleport(tweener, Vector2(16,8.5)*64)
-			tweener.tween_callback(self,"set",["curState",STATES.RANDOMPICK]).set_delay(1.25)
+				var tmp = begin
+				begin = end
+				end = tmp
+			teleport(tweener, begin)
+			tweener.tween_method(self,"set_room_position",begin, end, 1.25).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
+			tweener.tween_callback(self,"set",["curState",STATES.RANDOMPICK])
+		STATES.SPAWN_AND_THROW_HIGH:
+			tweener = create_tween()
 			
+			var begin:Vector2 = Vector2(4,4)*64
+			var end:Vector2 = Vector2(16,4)*64
+			
+			#If player on the right
+			if (get_room_position_of_node(player)/64).x > 10:
+				facing = DIRECTION.RIGHT
+			else:
+				facing = DIRECTION.LEFT
+				var tmp = begin
+				begin = end
+				end = tmp
+			teleport(tweener, begin)
+			#$CircleAttack.play()
+			#tweener.tween_callback(sprite,"play",["attack"])
+			tweener.tween_callback($CircleAttack,"play")
+			tweener.tween_method(self,"set_room_position",begin, end, 1.0)
+			#if end.x > begin.x:
+			for i in range(4):
+				var bi:Node2D = spinning_bullet.instance()
+				var width = (end.x - begin.x)*(i/4.0)
+				bi.position = Vector2(begin.x+width, begin.y)
+				room.add_child(bi)
+				bi.init2()
+				objects_2[i]=bi
+				bi.visible = false
+				
+				tweener.parallel().tween_property(bi,"visible",true,0.0).set_delay(.25*i)
+			for i in range(4):
+				tweener.tween_callback(self,"bullet_init",[i]).set_delay(.25)
+			tweener.tween_callback(self,"set",["curState",STATES.RANDOMPICK])
 
+func update_after_image():
+	var t = sprite.frames.get_frame(sprite.get_animation(), sprite.frame)
+	var f = sprite.flip_h
+	#var p = 1 if f else -1
+	#var i = 0
+	oldPositions[5] = position
+	for i in range(5):
+		oldPositions[i] = oldPositions[i+1]
+		#i+=1
+	a1.texture = t
+	a2.texture = t
+	a3.texture = t
+
+	a1.flip_h = f
+	a2.flip_h = f
+	a3.flip_h = f
+
+	a1.position=oldPositions[4]-position
+	a2.position=oldPositions[3]-position
+	a3.position=oldPositions[2]-position
 
 onready var original_offset = sprite.offset
 onready var original_scale = sprite.scale
@@ -395,11 +471,9 @@ func throw_bullets_at_player(tweener:SceneTreeTween):
 		var newPos = Vector2(0,-radius).rotated(rotateBy) + bullet_spawned_position
 		tweener.parallel().tween_property(bi,"position",newPos,.25).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
 	for i in range(4):
-		tweener.tween_callback(self,"bullet_init",[i]).set_delay(.25)
+		tweener.tween_callback(self,"bullet_init",[i]).set_delay(.5)
 
 func bullet_init(i):
-	var v:Vector2 = player.global_position-global_position + Vector2(30,40)
-	v=v.normalized()*1000
 #		if facing==DIRECTION.LEFT and player.global_position.x > global_position.x:
 #			v.x=-400
 #		elif facing==DIRECTION.RIGHT and player.global_position.x < global_position.x:
@@ -408,6 +482,9 @@ func bullet_init(i):
 	#tweener.tween_callback(objects[i],"init",[v,0]).set_delay(.25)
 	#If the player runs into one of them before it can init it will already free
 	if is_instance_valid(objects_2[i]):
+		var v:Vector2 = player.global_position-objects_2[i].global_position + Vector2(20,20)
+		print(v)
+		v=v.normalized()*1000
 		objects_2[i].init(v,0)
 		objects_2[i].set_process(true)
 	#tweener.parallel().tween_callback(objects[i],"set_process",[true])
@@ -437,6 +514,8 @@ func begin_laser_grid(tweener:SceneTreeTween):
 		arr[i+8] = Vector2(19,i*2+3)*64
 	
 	var start_time = 1.20
+	if current_phase > 0 or Globals.playerData.gameDifficulty >= Globals.Difficulty.HARD:
+		start_time = .8
 	tweener.set_parallel(true)
 	tweener.tween_callback($LasersSound,"play").set_delay(start_time)
 	for i in range(12):
@@ -578,31 +657,34 @@ func die():
 	markers.visible = false
 	if tweener.is_valid():
 		tweener.kill()
-		
-	#.die()
 	
-	HPBar.updateHP(0)
-	isAlive = false
-	curState = STATES.IDLE
-	#enabled = false
+	
+	
+	if current_phase == 0:
+		HPBar.updateHP(0)
+		isAlive = false
+		curState = STATES.IDLE
+		#enabled = false
 
-	#collision_layer=0
-	#collision_mask=0
-	$Area2D.set_deferred("monitoring",false)
-	$Area2D.set_deferred("monitorable",false)
-	set_physics_process(false)
-	
-	sprite.visible = false
-	sprite.stop()
-	
-	$DieSound.play()
-	var sp = deathAnimation.instance()
-	sp.position=position
-	get_parent().add_child(sp)
-	yield(get_tree().create_timer(3.0), "timeout")
-	#yield($DieSound,"finished")
-	is_reflecting = true
-	resurrection()
+		#collision_layer=0
+		#collision_mask=0
+		$Area2D.set_deferred("monitoring",false)
+		$Area2D.set_deferred("monitorable",false)
+		set_physics_process(false)
+		
+		sprite.visible = false
+		sprite.stop()
+		
+		$DieSound.play()
+		var sp = deathAnimation.instance()
+		sp.position=position
+		get_parent().add_child(sp)
+		yield(get_tree().create_timer(3.0), "timeout")
+		#yield($DieSound,"finished")
+		is_reflecting = true
+		resurrection()
+	else:
+		.die()
 
 
 func resurrection():
@@ -632,6 +714,9 @@ func resurrection():
 	set_physics_process(true)
 	isAlive = true
 	current_phase = 1
+	a1.visible = true
+	a2.visible = true
+	a3.visible = true
 	$AnimatedSprite/GlowEffect.begin()
 	
 	var n = get_node_or_null(breakable_blocks_container)

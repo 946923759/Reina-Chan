@@ -325,7 +325,6 @@ saturation = 0.3
 value = 0.3
 
 [node name="BackdropScarecrow" type="Node2D" parent="Backdrops" index="4"]
-visible = false
 script = ExtResource( 9 )
 
 [node name="Sprite" type="Sprite" parent="Backdrops/BackdropScarecrow" index="0"]
@@ -339,6 +338,7 @@ __meta__ = {
 }
 
 [node name="Sprite2" type="Sprite" parent="Backdrops/BackdropScarecrow" index="1"]
+visible = false
 position = Vector2( 0, 760 )
 scale = Vector2( 4, 4 )
 texture = ExtResource( 10 )
@@ -381,14 +381,14 @@ __meta__ = {
 
 [node name="VersionNum" parent="." index="4" instance=ExtResource( 1 )]
 position = Vector2( 9, 10 )
-text = "demo 7.1"
+text = "release 1.0"
 wrap_at = 92233720368
 scale_by = 3
 displayed_characters = 500
 
 [node name="VersionNum2" parent="." index="5" instance=ExtResource( 1 )]
 position = Vector2( 9, 42 )
-text = "v.2025.12.22"
+text = "v.2026.02.19"
 wrap_at = 92233720368
 scale_by = 3
 displayed_characters = 500

@@ -27,6 +27,10 @@ func _ready():
 		textboxClientAddress.text = Globals.networkClientAddress
 		_on_ButtonClientConnect_pressed()
 
+func _input(event):
+	if event.is_action_pressed("ui_cancel"):
+		_on_ButtonExit_pressed()
+
 func _player_connected(peer_id):
 	if get_tree().is_network_server():
 		rpc("net_begin_game")
@@ -92,3 +96,7 @@ func _on_ButtonClientConnect_pressed():
 remotesync func net_begin_game():
 	Globals.change_screen(get_tree(),"ScreenSelectCharacter2P")
 
+
+
+func _on_ButtonExit_pressed():
+	Globals.change_screen(get_tree(),"ScreenTitleMenu")

@@ -14,7 +14,7 @@ func _ready():
 		c.visible=true
 	pass
 
-func playBossMusic():
+func playM16BossMusic():
 	if OS.is_debug_build() and mute_boss_music_in_debug:
 		return
 	print("playing boss music")

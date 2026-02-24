@@ -1,4 +1,4 @@
-[gd_scene load_steps=47 format=2]
+[gd_scene load_steps=48 format=2]
 
 [ext_resource path="res://Stages_Reina/Bosses/BossBase.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Sounds/Announcer/Mission Start/Sharpen your fangs.wav" type="AudioStream" id=2]
@@ -13,6 +13,7 @@
 [ext_resource path="res://Stages_Reina/Bosses/Elisa1/Elisa_Phase01_Masterfile.png" type="Texture" id=11]
 [ext_resource path="res://Sounds/Classic/Die_Reversed.wav" type="AudioStream" id=12]
 [ext_resource path="res://Stages_Reina/Bosses/Elisa1/GlowEffect.gd" type="Script" id=13]
+[ext_resource path="res://ParticleEffects/GreyscaleShader.tres" type="Material" id=14]
 
 [sub_resource type="AtlasTexture" id=36]
 atlas = ExtResource( 11 )
@@ -202,6 +203,30 @@ margin_top = 19.5
 margin_right = 54.0
 margin_bottom = 33.5
 text = "e"
+
+[node name="AfterImage1" type="Sprite" parent="AnimatedSprite" index="1"]
+visible = false
+modulate = Color( 0.788235, 0.788235, 0.788235, 0.54902 )
+show_behind_parent = true
+material = ExtResource( 14 )
+offset = Vector2( -3, -2 )
+region_rect = Rect2( 0, 0, 40, 32 )
+
+[node name="AfterImage2" type="Sprite" parent="AnimatedSprite" index="2"]
+visible = false
+modulate = Color( 0.788235, 0.788235, 0.788235, 0.305882 )
+show_behind_parent = true
+material = ExtResource( 14 )
+offset = Vector2( -3, -2 )
+region_rect = Rect2( 0, 0, 40, 32 )
+
+[node name="AfterImage3" type="Sprite" parent="AnimatedSprite" index="3"]
+visible = false
+modulate = Color( 0.788235, 0.788235, 0.788235, 0.196078 )
+show_behind_parent = true
+material = ExtResource( 14 )
+offset = Vector2( -3, -2 )
+region_rect = Rect2( 0, 0, 40, 32 )
 
 [node name="IntroSound" parent="." index="3"]
 stream = ExtResource( 3 )
