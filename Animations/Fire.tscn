@@ -1,0 +1,30 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://ParticleEffects/AlphaMaskPurple.tres" type="Material" id=1]
+[ext_resource path="res://Animations/fire.png" type="Texture" id=2]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Sprite
+
+func _init():
+	frame = 0
+
+#var frame = 0
+var time = 0.0
+func _process(delta):
+	#frame += 1
+	time += delta
+	var frame_time = floor(time*15.0)
+	if frame_time >= hframes:
+		queue_free()
+	else:
+		frame = frame_time
+"
+
+[node name="Fire" type="Sprite"]
+material = ExtResource( 1 )
+scale = Vector2( 4, 4 )
+texture = ExtResource( 2 )
+hframes = 7
+frame = 4
+script = SubResource( 1 )

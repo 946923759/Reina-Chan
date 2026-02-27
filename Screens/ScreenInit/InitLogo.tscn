@@ -14,10 +14,8 @@ var rText = [
 	\"Our code is chow mein just like MICA's\",
 	\"Don't stop, proceed. Because this is What U Need!\",
 	\"Not a real group name\",
-	\"Shoutouts to Midflight Digital\",
-	#\"Shoutouts to the StepPrime/StepPXX team\"
 	\"Hi /gfg/\",
-	#\"Fans of Girls' Frontline and Mega Man alike\"
+	#\"Fans of Girls' Frontline and Mega Man alike\",
 	\"Everyone Will Sue\",
 	\"Stole the precious thing\",
 	\"What is a T-Doll? A miserable little pile of bolts! And ice cream and cake.\",
@@ -25,11 +23,13 @@ var rText = [
 	\"https://amaryllis-works.itch.io/reina-chan\",
 	\"VZ-61 is cute. Cute!\",
 	\"\\\"SHOUJO ZENSEN!\\\"\",
-	\"Amaryllis Works, VanDine, Unfiltered, Anonymous, Chaosoup & Nirvash\",
+	\"Amaryllis, VanDine, Unfiltered, Anonymous, Chaosoup & Nirvash\",
 	\"Remember to hydrate\",
 	\"We will reverse all creation!\",
 	\"Heaven or Hell, let's rock!\",
-	\"Battle routine, set! Execute!\"
+	\"Battle routine, set! Execute!\",
+	\"Can't Escape From Crossing Fate!\",
+	\"Check out my other project called F.M. Replicant!\"
 ]
 
 #warning-ignore:return_value_discarded

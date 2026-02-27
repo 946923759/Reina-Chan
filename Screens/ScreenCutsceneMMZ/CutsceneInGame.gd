@@ -335,16 +335,18 @@ func advance_text()->bool:
 				if se!=null:
 					se.play()
 			'await_call':
-				otherScreenIsHandlingInput = Overlay.WAITING_FOR_BROADCAST
-				var n:Node
-				if curMessage[1]=="self":
-					n = calling_entity
-				else:
-					n = calling_entity.get_node(curMessage[1])
-				n.connect("finished",self,"end_await")
-				n.call(curMessage[2])
-				set_process(false)
-				return true
+				if calling_entity:
+					var n:Node
+					if curMessage[1]=="self":
+						n = calling_entity
+					else:
+						n = calling_entity.get_node(curMessage[1])
+
+					otherScreenIsHandlingInput = Overlay.WAITING_FOR_BROADCAST
+					n.connect("finished",self,"end_await")
+					n.call(curMessage[2])
+					set_process(false)
+					return true
 #			'stopmusic':
 #				if is_instance_valid(lastMusic):
 #					lastMusic.fade_music(float(curMessage[1]))

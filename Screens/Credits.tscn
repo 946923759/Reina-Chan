@@ -82,7 +82,7 @@ margin_bottom = 36.5
 grow_horizontal = 2
 custom_fonts/font = ExtResource( 1 )
 text = "Reina-Chan
-demo 7"
+Version 1.0"
 align = 1
 
 [node name="c2" type="RichTextLabel" parent="."]

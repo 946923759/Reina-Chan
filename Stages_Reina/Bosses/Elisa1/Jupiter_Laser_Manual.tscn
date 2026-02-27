@@ -1,0 +1,96 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://Stages_Reina/Enemies/Jupiter_Assets/jupiter_2.png" type="Texture" id=1]
+[ext_resource path="res://Stages_Reina/Enemies/Jupiter_Assets/jupiter_3.png" type="Texture" id=2]
+[ext_resource path="res://Stages_Reina/Enemies/Jupiter_Assets/jupiter_4.png" type="Texture" id=3]
+[ext_resource path="res://Stages_Reina/Enemies/Jupiter_Assets/jupiter_1.png" type="Texture" id=4]
+[ext_resource path="res://Sounds/Classic/S3K_DeathEggLaser2.wav" type="AudioStream" id=5]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Area2D
+
+onready var sprite:AnimatedSprite = $AnimatedSprite
+
+func _ready():
+	visible = false
+	$DrawTransparent.self_modulate.a = 0.0
+	var size = Vector2(32,32)*sprite.scale
+	$DrawTransparent.rect = Rect2(
+		-size/2,
+		size
+	)
+	sprite.visible=false
+	self.monitoring = false
+	self.connect(\"body_entered\",self,\"_on_Jupiter_Laser_body_entered\")
+
+#func _input(event):
+#	if event is InputEventKey:
+#		if Input.is_key_pressed(KEY_9):
+#			execute()
+			
+func execute() -> float:
+	visible = true
+	sprite.self_modulate.a = 1.0
+	sprite.frame = 0
+	sprite.playing = false
+
+	var t := create_tween()
+	t.tween_property($DrawTransparent,\"self_modulate:a\",0.5,.5).from(0.0)
+	t.tween_callback(self,\"set_monitoring\",[true])
+	t.tween_callback($Sound,\"play\")
+	t.tween_property(sprite,\"visible\",true,0.0)
+	t.tween_callback(sprite,\"play\",[\"default\"])
+	#t.tween_property($DrawTransparent,\"self_modulate:a\",0.0,.25).set_delay(.5).from(1.0)
+	t.tween_property($DrawTransparent,\"self_modulate:a\",0.0,0.0).set_delay(.75).from(0.5)
+	
+	t.tween_property(sprite,\"self_modulate:a\",0.0,0.5).from(1.0)
+	t.tween_callback(self,\"set_monitoring\",[false])
+	t.tween_property(sprite,\"visible\",false,0.0)
+	t.tween_property(self,\"visible\",false,0.0)
+	#t.tween_callback(self,\"queue_free\")
+	return .5
+
+func _on_Jupiter_Laser_body_entered(body):
+	if visible and body.has_method(\"player_touched\"):
+		body.player_touched(self,5)
+"
+
+[sub_resource type="GDScript" id=2]
+script/source = "extends Node2D
+
+#Overwritten by _ready() in parent
+var rect = Rect2(-128,-512*2,128,512*2)
+
+func _draw():
+	draw_rect(rect, Color.fuchsia,true)
+"
+
+[sub_resource type="SpriteFrames" id=3]
+animations = [ {
+"frames": [ ExtResource( 4 ), ExtResource( 1 ), ExtResource( 2 ), ExtResource( 3 ), ExtResource( 3 ) ],
+"loop": false,
+"name": "default",
+"speed": 30.0
+} ]
+
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 64, 448 )
+
+[node name="Jupiter" type="Area2D"]
+script = SubResource( 1 )
+
+[node name="DrawTransparent" type="Node2D" parent="."]
+script = SubResource( 2 )
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+scale = Vector2( 4, 28 )
+frames = SubResource( 3 )
+frame = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 4 )
+
+[node name="Sound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 5 )
+bus = "Player/Enemies"
+area_mask = 2

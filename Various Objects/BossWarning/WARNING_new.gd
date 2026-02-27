@@ -75,7 +75,7 @@ func playSound():
 func hideWarning():
 	get_node("/root/Node2D").playBossMusic()
 	sprite.cropright=true
-	var seq := get_tree().create_tween()
+	var seq := create_tween()
 	seq.tween_property(sprite,"toDraw",0,.5).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 # warning-ignore:return_value_discarded
 	#seq.connect("finished",playerObj,"clearLockedMovement")

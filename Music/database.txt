@@ -18,8 +18,9 @@ Sangvis 3	Tracking	Hokkaidou Rensa Satsujin - Okhotsk ni Shoyu	loginsoft sequenc
 UMP9 vs M16	Division By Zero	Mega Man Unlimited	Kevin Phetsomphou sequenced by ???	Mega Man Unlimited - Division by Zero.nsf	0
 M16 vs M16	Cannonball	Mega Man Zero 3	CAPCOM sequenced by ???	Cannonball.nsf	0
 Sangvis 4	Intro Stage	Mega Man X2	CAPCOM sequenced by IKA	RNC.nsf	11
+Final Boss	Vs. Nebula Grey	Mega Man Battle Network 5	???	Mega Man BN5 - VS. Nebula Grey.nsf	0
+Final Boss 2	Final Stage	Doraemon Taiketsu Himitsu Dougu!!	??? sequenced by puresabe	Rockman 4MI.nsf	69
 Test Stage	Zena Lan's Stage Fully Armored	Cosmic Carnage	Hikoshi Hashimoto	test.vgm	0
-Final Boss	Final Stage	Doraemon Taiketsu Himitsu Dougu!!	??? sequenced by puresabe	Rockman 4MI.nsf	69
 Credits	Sonic 3 Credits	Sonic The Hedgehog 3	Doug Grigsby, Cirocco Jones, Brad Buxer, Michael Jackson sequenced by danooct1	sonic3k.nsf	35
 
 --CD AUDIO

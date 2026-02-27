@@ -151,7 +151,7 @@ msg	That's fine by me! You're on, Dandelion!
 
 #KEY	Elisa1
 msgbox_add	Elisa	right	top
-/Elisa	Hmph.
+/Elisa	This place shall become your tomb!
 
 #KEY	Elisa2
 /Elisa	Kneel before your god!

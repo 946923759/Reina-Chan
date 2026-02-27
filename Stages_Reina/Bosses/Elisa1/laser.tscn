@@ -21,6 +21,8 @@ func _ready():
 	set_laser_width(laser_width)
 
 func objectTouched(obj):
+	if !visible:
+		return
 	#print(\"intersecting!\")
 	if obj.has_method(\"player_touched\"): #If enemy touched player
 		#lastTouched = obj
@@ -50,13 +52,27 @@ func set_laser_width(v:float):
 func set_monitoring(b:bool):
 	$Area2D.monitoring = b
 	$Area2D.monitorable = b
+
+func reset():
+	self.scale.y = 1.0
+	self.visible = true
+	self.set_laser_width(0.0)
+	
+func tween_out(t:SceneTreeTween):
+	t.tween_property(self,\"scale:y\",0.0,.25)
+	t.tween_property(self,\"visible\",false,0.0)
+
+# 0 width = 1 block
+# 640 width = 10 blocks
+#func auto_calc_width_from_room_pos(room_pos:Vector2) -> float:
+#	if rotation_degrees == 0:
+#
 "
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 544, 12 )
 
 [node name="laser" type="Node2D"]
-position = Vector2( -688, 640 )
 script = SubResource( 2 )
 
 [node name="l1" type="Sprite" parent="."]

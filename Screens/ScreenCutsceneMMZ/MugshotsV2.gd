@@ -11,9 +11,9 @@ var PORTRAITS = [
 	"M16_Nice",
 	"M16A1",
 	"Dandelion",
-	"9A91",
 	"Skorpion",
 	"T5000",
+	"9A91",
 	"Elisa"
 ]
 var t:SceneTreeTween

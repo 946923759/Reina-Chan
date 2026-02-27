@@ -5,4 +5,4 @@ func playBossMusic(isM16:bool=false):
 		return
 	print("playing boss music")
 	#reinaAudioPlayer.load_song("FinalBoss","Rockman 4MI.nsf",69)
-	reinaAudioPlayer.load_song("Elisa1","MMBN5 vs Nebula Grey.nsf",0)
+	reinaAudioPlayer.load_song("FinalBoss1","MMBN5 vs Nebula Grey.nsf",0)
