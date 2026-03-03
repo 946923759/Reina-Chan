@@ -78,4 +78,5 @@ func vibrate_device(
 			)
 		elif OS.has_feature("mobile"):
 			#Why is this in ms and the controller one in seconds?
+# warning-ignore:narrowing_conversion
 			Input.vibrate_handheld(duration_seconds * 1000)

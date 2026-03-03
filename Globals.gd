@@ -698,6 +698,8 @@ var SCREENS:Dictionary = {
 	"ScreenStageIntro":"res://Screens/ScreenStageIntro.tscn",
 	"ScreenSangvisIntro":"res://Screens/ScreenStageIntroSangvis/StageIntroSangvis.tscn",
 	"ScreenItemGet":"res://Screens/ScreenItemGet/ScreenItemGet.tscn",
+	
+	"ScreenDanmaku":"res://Stages_Reina/Sangvis5/Sangvis5.tscn",
 
 	"CutsceneFromFile":"res://Screens/ScreenCutscene/CutsceneFromFile.tscn",
 	"CutsceneDemoEnd":"res://Screens/ScreenCutscene/cutsceneWhatever.tscn",
@@ -725,6 +727,7 @@ var STAGES_REINA:Dictionary = {
 	"SF_2":"res://Stages_Reina/Sangvis2/StageSangvis2.tscn",
 	"SF_3":"res://Stages_Reina/Sangvis3/Sangvis3.tscn",
 	"SF_4":"res://Stages_Reina/Sangvis4/Sangvis4.tscn",
+	"SF_5":"res://Stages_Reina/Sangvis5/Sangvis5.tscn",
 	"Talk Hub":"res://Stages_Reina/StageTalkHub.tscn",
 	"TEST_STAGE":"res://Stages_Reina/TestStage.tscn",
 	"NSF_TEST":"res://Stages_Reina/TestStage_NSF/TestStage_NSF.tscn",

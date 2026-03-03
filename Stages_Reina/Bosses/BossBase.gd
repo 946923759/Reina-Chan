@@ -16,6 +16,7 @@ var is_reflecting:bool=false
 onready var sprite:AnimatedSprite = $AnimatedSprite
 onready var HPBar = $CanvasLayer/bar
 onready var hurtSound = $HurtSound
+onready var introSound:AudioStreamPlayer=$IntroSound
 
 #This is only if you didn't override objectTouched!
 #There might be cases where you need to override it.
@@ -88,12 +89,10 @@ func _ready():
 		# warning-ignore:return_value_discarded
 		$Area2D.connect("area_entered",self,"areaTouched")
 
-onready var introSound:AudioStreamPlayer=$IntroSound
-
 func playIntro(playSound=true,showHPbar=true)->AudioStreamPlayer:
 	sprite.play("intro")
 	if showHPbar:
-		var seq := get_tree().create_tween()
+		var seq := create_tween()
 		#HPBar.set_process(true)
 		seq.tween_property(HPBar,"position:x",1235,.1)
 # warning-ignore:return_value_discarded

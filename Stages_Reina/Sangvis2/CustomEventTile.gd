@@ -2,7 +2,7 @@ extends "res://Various Objects/EventTiles/EventTile.gd"
 
 var explode = preload("res://Stages/EnemyExplodeSmall.tscn")
 
-func _on_MinibossPlatforms_all_enemies_killed():
+func execute():
 	var tiles = $Spikes.region_rect.size.x/16
 	$Spikes.visible = false
 	collision_layer = 0

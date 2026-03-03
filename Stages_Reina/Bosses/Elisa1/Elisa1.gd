@@ -1,5 +1,6 @@
 extends "res://Stages_Reina/Bosses/BossBase.gd"
 
+export(bool) var has_second_phase:bool = true
 export(PackedScene) var lasers
 export(PackedScene) var spinning_bullet
 export(PackedScene) var markers_scene
@@ -15,6 +16,7 @@ enum STATES {
 	
 	CIRCLE,
 	THROW_AT_PLAYER,
+	SHOOT_LOW,
 	LASER,
 	LASER_ROOM,
 	LASER_GRID,
@@ -189,6 +191,7 @@ func _physics_process(delta):
 			
 			
 			tweener.tween_callback(self,"set",["curState",STATES.RANDOMPICK]).set_delay(1.0)
+		#This attack is not used.
 		STATES.THROW_AT_PLAYER:
 			tweener = create_tween()
 			if (get_room_position_of_node(player)/64).x > 10:
@@ -206,8 +209,8 @@ func _physics_process(delta):
 			#tweener.tween_callback(self,"queue_free_bullets").set_delay(4.0)
 			
 			tweener.tween_callback(self,"set",["curState",STATES.RANDOMPICK]).set_delay(1.0)
+			#tweener.tween_callback(self,"set",["curState",STATES.SHOOT_LOW]).set_delay(1.0)
 			#curState = STATES.RANDOMPICK
-
 		STATES.LASER_ROOM:
 			tweener = create_tween()
 			laser_room_dodge(tweener)
@@ -235,7 +238,9 @@ func _physics_process(delta):
 			teleport(tweener, Vector2(10,-5)*64)
 			laser_room_dodge_alternating(tweener)
 			
-			tweener.tween_callback(self,"set",["curState",STATES.RUSH_PLAYER_LOW]).set_delay(1.0)
+			#tweener.tween_callback(self,"set",["curState",STATES.RUSH_PLAYER_LOW]).set_delay(1.0)
+			tweener.tween_callback(self,"set",["curState",STATES.SHOOT_LOW])
+		#This attack isn't used. It's dumb anyways.
 		STATES.RUSH_PLAYER_LOW:
 			is_reflecting = false
 			tweener = create_tween()
@@ -288,7 +293,37 @@ func _physics_process(delta):
 				tweener.parallel().tween_property(bi,"visible",true,0.0).set_delay(.25*i)
 			for i in range(4):
 				tweener.tween_callback(self,"bullet_init",[i]).set_delay(.25)
-			tweener.tween_callback(self,"set",["curState",STATES.RANDOMPICK])
+			#tweener.tween_callback(self,"set",["curState",STATES.RANDOMPICK])
+			tweener.tween_callback(self,"set",["curState",STATES.SHOOT_LOW])
+
+		STATES.SHOOT_LOW:
+			set_facing_within_tween()
+			
+			tweener = create_tween()
+			#tweener.tween_property(self,"position:y", Vector2())\
+			var begin = get_room_position()
+			var end = Vector2(begin.x, 9.5*64)
+			#This should be based on the length I think
+			tweener.tween_method(self,"set_room_position",begin, end, .5)
+			#tweener.tween_callback(self,"set_facing_within_tween")
+			#tweener.tween_callback($CircleAttack,"play")
+			
+			var num_bullets = 2
+			if Globals.playerData.gameDifficulty >= Globals.Difficulty.HARD:
+				num_bullets = 4
+			
+			for i in range(num_bullets):
+				var bi:Node2D = spinning_bullet.instance()
+				bi.position = end
+				room.add_child(bi)
+				bi.init2()
+				objects_2[i]=bi
+				bi.visible = false
+				
+				tweener.tween_property(bi,"visible",true,0.0).set_delay(.5)
+				tweener.tween_callback(self,"bullet_init",[i])
+				tweener.tween_callback($ThrowOrbs,"play")
+			tweener.tween_callback(self,"set",["curState",STATES.RANDOMPICK]).set_delay(1.0)
 
 func update_after_image():
 	var t = sprite.frames.get_frame(sprite.get_animation(), sprite.frame)
@@ -315,8 +350,9 @@ onready var original_offset = sprite.offset
 onready var original_scale = sprite.scale
 
 func set_facing_within_tween():
-	if (get_room_position_of_node(player)/64).x > get_room_position().x:
+	if get_room_position_of_node(player).x > get_room_position().x:
 		facing = DIRECTION.RIGHT
+		#print("Facing right")
 		#tweener.tween_property(self,"idleTime",0.0,1).from(.5)
 	else:
 		facing = DIRECTION.LEFT
@@ -495,6 +531,7 @@ func throw_bullets_at_player(tweener:SceneTreeTween):
 		tweener.parallel().tween_property(bi,"position",newPos,.25).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
 	for i in range(4):
 		tweener.tween_callback(self,"bullet_init",[i]).set_delay(.5)
+		tweener.tween_callback($ThrowOrbs,"play")
 
 func bullet_init(i):
 #		if facing==DIRECTION.LEFT and player.global_position.x > global_position.x:
@@ -745,7 +782,7 @@ func die():
 	
 	
 	
-	if current_phase == 0:
+	if current_phase == 0 and has_second_phase:
 		HPBar.updateHP(0)
 		isAlive = false
 		curState = STATES.IDLE
@@ -800,10 +837,12 @@ func resurrection():
 	set_physics_process(true)
 	isAlive = true
 	current_phase = 1
-	a1.visible = true
-	a2.visible = true
-	a3.visible = true
-	$AnimatedSprite/GlowEffect.begin()
+	
+	#I hate this
+	#a1.visible = true
+	#a2.visible = true
+	#a3.visible = true
+	#$AnimatedSprite/GlowEffect.begin()
 	
 	#sprite.stop()
 

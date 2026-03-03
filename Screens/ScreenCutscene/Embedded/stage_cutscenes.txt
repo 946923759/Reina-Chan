@@ -156,6 +156,18 @@ msgbox_add	Elisa	right	top
 #KEY	Elisa2
 /Elisa	Kneel before your god!
 
+#KEY	Elisa3
+nop	Animation where Elisa revives again
+await_call	../GameplayLayer/Boss	resurrection
+msgbox_add	Elisa	right	top
+/Elisa	...Reverse Collapse!
+msgbox	UMP9	left
+/UMP9	Aren't you getting tired of losing!?
+msgbox	Elisa	right
+/Elisa	Never!
+msgbox	UMP9	left
+/UMP9	You're finished!
+
 #KEY	TalkHub_Skorp
 msgbox_add	Skorpion
 /Skorpion	Hey, UMP9! suco suco suco suco suco suco suco

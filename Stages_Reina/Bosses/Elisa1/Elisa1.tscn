@@ -1,4 +1,4 @@
-[gd_scene load_steps=49 format=2]
+[gd_scene load_steps=50 format=2]
 
 [ext_resource path="res://Stages_Reina/Bosses/BossBase.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Sounds/Announcer/Mission Start/Sharpen your fangs.wav" type="AudioStream" id=2]
@@ -15,6 +15,7 @@
 [ext_resource path="res://Stages_Reina/Bosses/Elisa1/GlowEffect.gd" type="Script" id=13]
 [ext_resource path="res://ParticleEffects/GreyscaleShader.tres" type="Material" id=14]
 [ext_resource path="res://Animations/Fire.tscn" type="PackedScene" id=15]
+[ext_resource path="res://Sounds/Classic/S3K_B6.wav" type="AudioStream" id=16]
 
 [sub_resource type="AtlasTexture" id=36]
 atlas = ExtResource( 11 )
@@ -173,6 +174,7 @@ blend_mode = 1
 
 [node name="BossElisa" instance=ExtResource( 1 )]
 script = ExtResource( 4 )
+has_second_phase = true
 lasers = ExtResource( 5 )
 spinning_bullet = ExtResource( 7 )
 markers_scene = ExtResource( 9 )
@@ -186,7 +188,6 @@ position = Vector2( 0, 25 )
 [node name="AnimatedSprite" parent="." index="1"]
 position = Vector2( 8, -46 )
 frames = SubResource( 11 )
-animation = "teleport"
 offset = Vector2( -3, -2 )
 
 [node name="GlowEffect" type="Sprite" parent="AnimatedSprite" index="0"]
@@ -233,11 +234,6 @@ region_rect = Rect2( 0, 0, 40, 32 )
 [node name="IntroSound" parent="." index="3"]
 stream = ExtResource( 3 )
 
-[node name="DebugLabel" parent="." index="7"]
-text = "animation = \"teleport\"
-playing = false
-"
-
 [node name="CircleAttack" type="AudioStreamPlayer2D" parent="." index="9"]
 stream = ExtResource( 6 )
 bus = "Player/Enemies"
@@ -268,5 +264,9 @@ laser_width = 0.0
 position = Vector2( 64, 0 )
 rotation = 1.5708
 laser_width = 0.0
+
+[node name="ThrowOrbs" type="AudioStreamPlayer2D" parent="." index="16"]
+stream = ExtResource( 16 )
+bus = "Player/Enemies"
 
 [connection signal="animation_finished" from="AnimatedSprite" to="." method="_on_AnimatedSprite_animation_finished"]

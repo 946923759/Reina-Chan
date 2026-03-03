@@ -52,7 +52,7 @@ func showWarning(playLonger=true):
 	sprite.set_process(true)
 	#playerObj.lockMovement(3,Vector2(0,0))
 	var CONST_IMG_WIDTH = sprite.CONST_IMG_WIDTH
-	var seq := get_tree().create_tween()
+	var seq := create_tween()
 	seq.tween_property(sprite,"toDraw",CONST_IMG_WIDTH,2.0 if playLonger else .5).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 # warning-ignore:return_value_discarded
 	seq.tween_callback(self,"playSound")

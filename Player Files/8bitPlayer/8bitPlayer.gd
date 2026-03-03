@@ -80,6 +80,7 @@ var deathAnimation = preload("res://Animations/deathAnimation.tscn")
 
 #Camera
 var stageRoot
+#This isn't used???
 var currentCam
 
 #UI
@@ -736,6 +737,9 @@ func get_onscreen_pos() -> Vector2:
 	else:
 		return position
 
+func get_camera():
+	return $Camera2D
+
 #Aka "This will have to be rewritten at some point because the player node is
 # not supposed to handle events"
 func handleEvents():
@@ -1130,6 +1134,7 @@ func processLockMovement(delta):
 				overrideSprite=true
 			else:
 				overrideSprite=false
+	#If freeze_y_velocity==true then overwrite velocity which was applied during _physics_process
 	elif len(lockQueue[posInQueue])>3 and lockQueue[posInQueue][3]:
 		velocity=lockQueue[posInQueue][1]
 
@@ -1257,7 +1262,7 @@ func die():
 # warning-ignore:return_value_discarded
 			Globals.change_screen(get_tree(),"ScreenTitleMenu")
 
-func finishStage():
+func finishStage() -> SceneTreeTimer:
 	is_timer_stopped=true
 	CheckpointPlayerStats.setDeathTimer(timerWithDeath)
 	CheckpointPlayerStats.setTimer(timer)
@@ -1275,6 +1280,8 @@ func finishStage():
 	
 	var timer_ = get_tree().create_timer(4.5)
 	timer_.connect("timeout",self,"finishStage_2")
+	#Return timer so functions that call this can use it
+	return timer_
 	
 func finishStage_2():
 
@@ -1284,7 +1291,7 @@ func finishStage_2():
 	var tween:SceneTreeTween
 	if stageRoot.wily_stage_num >= 4:
 		Globals.previous_screen = "StageSangvis"
-		nextScene="ScreenCredits"
+		nextScene="ScreenDanmaku"
 		tween = $CanvasLayer/Fadeout.fadeOut()
 	elif stageRoot.wily_stage_num>0:
 		Globals.previous_screen = "StageSangvis"

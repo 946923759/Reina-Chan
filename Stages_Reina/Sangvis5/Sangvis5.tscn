@@ -1,0 +1,416 @@
+[gd_scene load_steps=59 format=2]
+
+[ext_resource path="res://Stages_Reina/Sangvis4/Earth.png" type="Texture" id=1]
+[ext_resource path="res://Stages_Reina/Sangvis5/Sangvis5.gd" type="Script" id=2]
+[ext_resource path="res://ubuntu-font-family/BitmapFont.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Character Sprites/HPBar.png" type="Texture" id=4]
+[ext_resource path="res://Character Sprites/ump9/ump9fall.png" type="Texture" id=5]
+[ext_resource path="res://Screens/ScreenCutsceneMMZ/CutsceneInGame.tscn" type="PackedScene" id=6]
+[ext_resource path="res://ParticleEffects/PaletteSwapShader.gdshader" type="Shader" id=7]
+[ext_resource path="res://Screens/ScreenDanmaku/Player.gd" type="Script" id=8]
+[ext_resource path="res://Player Files/8bitPlayer/INPUTMAN.gd" type="Script" id=9]
+[ext_resource path="res://Character Sprites/HPBar_Player.png" type="Texture" id=10]
+[ext_resource path="res://Screens/ScreenDanmaku/GameplayLayer.gd" type="Script" id=11]
+[ext_resource path="res://ParticleEffects/AlphaMaskPurple.tres" type="Material" id=12]
+[ext_resource path="res://Various Objects/boulder.png" type="Texture" id=13]
+[ext_resource path="res://Various Objects/BossWarning/WARNING.tscn" type="PackedScene" id=14]
+[ext_resource path="res://Stages_Reina/Sangvis5/Boss.gd" type="Script" id=15]
+[ext_resource path="res://Stages_Reina/Sangvis5/WARNING_custom.gd" type="Script" id=16]
+[ext_resource path="res://Sounds/BossSounds/BBCF_Izanami_Eternal_Darkness_3_(A).ogg" type="AudioStream" id=17]
+[ext_resource path="res://Sounds/Announcer/Final Round.wav" type="AudioStream" id=18]
+[ext_resource path="res://Stages_Reina/Bosses/Elisa1/Elisa_Phase01_Masterfile.png" type="Texture" id=19]
+[ext_resource path="res://ParticleEffects/GlowShader.tres" type="Material" id=20]
+[ext_resource path="res://Sounds/Classic/Die_Reversed.wav" type="AudioStream" id=21]
+[ext_resource path="res://Stages_Reina/Sangvis5/BackgroundLayer.gd" type="Script" id=22]
+
+[sub_resource type="CircleShape2D" id=1]
+radius = 8.0
+
+[sub_resource type="AtlasTexture" id=36]
+atlas = ExtResource( 19 )
+region = Rect2( 0, 152, 64, 76 )
+
+[sub_resource type="AtlasTexture" id=37]
+atlas = ExtResource( 19 )
+region = Rect2( 64, 152, 64, 76 )
+
+[sub_resource type="AtlasTexture" id=38]
+atlas = ExtResource( 19 )
+region = Rect2( 128, 152, 64, 76 )
+
+[sub_resource type="AtlasTexture" id=39]
+atlas = ExtResource( 19 )
+region = Rect2( 192, 152, 64, 76 )
+
+[sub_resource type="AtlasTexture" id=40]
+atlas = ExtResource( 19 )
+region = Rect2( 256, 152, 64, 76 )
+
+[sub_resource type="AtlasTexture" id=41]
+atlas = ExtResource( 19 )
+region = Rect2( 320, 152, 64, 76 )
+
+[sub_resource type="AtlasTexture" id=42]
+atlas = ExtResource( 19 )
+region = Rect2( 384, 152, 64, 76 )
+
+[sub_resource type="AtlasTexture" id=12]
+atlas = ExtResource( 19 )
+region = Rect2( 0, 0, 64, 76 )
+
+[sub_resource type="AtlasTexture" id=13]
+atlas = ExtResource( 19 )
+region = Rect2( 0, 76, 64, 76 )
+
+[sub_resource type="AtlasTexture" id=14]
+atlas = ExtResource( 19 )
+region = Rect2( 64, 76, 64, 76 )
+
+[sub_resource type="AtlasTexture" id=15]
+atlas = ExtResource( 19 )
+region = Rect2( 128, 76, 64, 76 )
+
+[sub_resource type="AtlasTexture" id=16]
+atlas = ExtResource( 19 )
+region = Rect2( 192, 76, 64, 76 )
+
+[sub_resource type="AtlasTexture" id=17]
+atlas = ExtResource( 19 )
+region = Rect2( 256, 76, 64, 76 )
+
+[sub_resource type="AtlasTexture" id=18]
+atlas = ExtResource( 19 )
+region = Rect2( 0, 0, 64, 76 )
+
+[sub_resource type="AtlasTexture" id=19]
+atlas = ExtResource( 19 )
+region = Rect2( 64, 0, 64, 76 )
+
+[sub_resource type="AtlasTexture" id=20]
+atlas = ExtResource( 19 )
+region = Rect2( 128, 0, 64, 76 )
+
+[sub_resource type="AtlasTexture" id=21]
+atlas = ExtResource( 19 )
+region = Rect2( 192, 0, 64, 76 )
+
+[sub_resource type="AtlasTexture" id=22]
+atlas = ExtResource( 19 )
+region = Rect2( 256, 0, 64, 76 )
+
+[sub_resource type="AtlasTexture" id=23]
+atlas = ExtResource( 19 )
+region = Rect2( 320, 0, 64, 76 )
+
+[sub_resource type="AtlasTexture" id=24]
+atlas = ExtResource( 19 )
+region = Rect2( 384, 0, 64, 76 )
+
+[sub_resource type="AtlasTexture" id=25]
+atlas = ExtResource( 19 )
+region = Rect2( 448, 0, 64, 76 )
+
+[sub_resource type="AtlasTexture" id=26]
+atlas = ExtResource( 19 )
+region = Rect2( 0, 76, 64, 76 )
+
+[sub_resource type="AtlasTexture" id=27]
+atlas = ExtResource( 19 )
+region = Rect2( 0, 228, 64, 76 )
+
+[sub_resource type="AtlasTexture" id=28]
+atlas = ExtResource( 19 )
+region = Rect2( 64, 228, 64, 76 )
+
+[sub_resource type="AtlasTexture" id=29]
+atlas = ExtResource( 19 )
+region = Rect2( 128, 228, 64, 76 )
+
+[sub_resource type="AtlasTexture" id=30]
+atlas = ExtResource( 19 )
+region = Rect2( 192, 228, 64, 76 )
+
+[sub_resource type="AtlasTexture" id=31]
+atlas = ExtResource( 19 )
+region = Rect2( 256, 228, 64, 76 )
+
+[sub_resource type="AtlasTexture" id=32]
+atlas = ExtResource( 19 )
+region = Rect2( 320, 228, 64, 76 )
+
+[sub_resource type="AtlasTexture" id=33]
+atlas = ExtResource( 19 )
+region = Rect2( 384, 228, 64, 76 )
+
+[sub_resource type="AtlasTexture" id=34]
+atlas = ExtResource( 19 )
+region = Rect2( 448, 228, 64, 76 )
+
+[sub_resource type="AtlasTexture" id=35]
+atlas = ExtResource( 19 )
+region = Rect2( 512, 228, 64, 76 )
+
+[sub_resource type="SpriteFrames" id=43]
+animations = [ {
+"frames": [ SubResource( 36 ), SubResource( 37 ), SubResource( 38 ), SubResource( 39 ), SubResource( 40 ), SubResource( 41 ), SubResource( 42 ) ],
+"loop": false,
+"name": "attack",
+"speed": 15.0
+}, {
+"frames": [ SubResource( 12 ) ],
+"loop": true,
+"name": "default",
+"speed": 7.0
+}, {
+"frames": [ SubResource( 13 ), SubResource( 14 ), SubResource( 15 ), SubResource( 16 ), SubResource( 17 ) ],
+"loop": true,
+"name": "idle",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 18 ), SubResource( 19 ), SubResource( 20 ), SubResource( 21 ), SubResource( 22 ), SubResource( 23 ), SubResource( 24 ), SubResource( 25 ), SubResource( 26 ) ],
+"loop": false,
+"name": "intro",
+"speed": 15.0
+}, {
+"frames": [ SubResource( 27 ), SubResource( 28 ), SubResource( 29 ), SubResource( 30 ), SubResource( 31 ), SubResource( 32 ), SubResource( 33 ), SubResource( 34 ), SubResource( 35 ), null ],
+"loop": false,
+"name": "teleport",
+"speed": 30.0
+} ]
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = ExtResource( 7 )
+shader_param/colorToSwap1 = Color( 0.608, 0.467, 0.388, 1 )
+shader_param/colorToSwap2 = Color( 0.694, 0.627, 0.592, 1 )
+shader_param/clr1 = Color( 1, 0, 0, 1 )
+shader_param/clr2 = Color( 1, 0.47451, 0, 1 )
+
+[sub_resource type="GDScript" id=3]
+script/source = "extends Sprite
+#tool
+
+var piece = preload(\"res://Character Sprites/hp_piece.png\")
+var ammoPiece = preload(\"res://Character Sprites/ammo_piece.png\")
+#This would probably be better if it was an AnimatedSprite
+var normalBar = preload(\"res://Character Sprites/HPBar_Player.png\")
+var ammoBar = preload(\"res://Character Sprites/HPBar_Player_WithAmmo.png\")
+
+#export var showing_weapon:bool=false
+export(Globals.Weapons) var current_weapon = 0 setget set_weapon
+export(int,0,24) var current_hp = 10 setget set_hp
+var current_ammo_internal = 24
+export(float,0,1.0) var current_ammo = 1.0 setget set_ammo #I think the limit is 32
+
+func set_hp(newHP:int):
+	current_hp = newHP
+	update()
+
+func set_ammo(newAmmo:float):
+	current_ammo = newAmmo
+	current_ammo_internal=ceil(newAmmo*24.0)
+	#print(current_ammo_internal)
+	update()
+	
+func set_weapon(newWeapon:int):
+	current_weapon = newWeapon
+	if newWeapon:
+		get_material().set_shader_param(\"clr1\", Globals.weaponColorSwaps[newWeapon][0])
+		get_material().set_shader_param(\"clr2\", Globals.weaponColorSwaps[newWeapon][1])
+		texture=ammoBar
+	else:
+		texture=normalBar
+
+func _draw():
+	#draw_texture(ammoBar,Vector2(-7,-43))
+	for i in range(current_hp):
+		draw_texture(piece,Vector2(-4,23+2*-i))
+	if current_weapon > 0:
+		for i in range(current_ammo_internal):
+			draw_texture(ammoPiece,Vector2(8,23+2*-i))
+
+#func show_weapon(b:bool, newValue:float=-1):
+#	if b:
+#		texture=ammoBar
+#	else:
+#		texture=normalBar
+#	showing_weapon=b
+#	current_ammo=ceil(newValue*24.0)
+#	#print(currentAmmo)
+#	update()
+"
+
+[sub_resource type="GDScript" id=4]
+script/source = "extends Sprite
+
+var piece = preload(\"res://Character Sprites/hp_piece.png\")
+export(float,0,1.0) var health:float = 0 setget updateHP
+
+#func _ready():
+#	set_process(false)
+
+func _draw():
+	for i in range(floor(health*32)):
+		draw_texture(piece,Vector2(-4,23+2*-i))
+		
+func updateHP(percentHP):
+	health = percentHP
+	update()
+
+#func _process(_delta):
+#	update()
+"
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource( 2 )
+custom_music_name = "FinalBoss2"
+nsf_music_file = "Rockman 4MI.nsf"
+nsf_track_num = 69
+mute_boss_music_in_debug = true
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+pause_mode = 2
+bus = "Music"
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+
+[node name="Sprite" type="Sprite" parent="ParallaxBackground/ParallaxLayer"]
+position = Vector2( 1920, 1296 )
+rotation = 3.14159
+scale = Vector2( 5, 5 )
+texture = ExtResource( 1 )
+
+[node name="BackgroundLayer" type="Node2D" parent="."]
+self_modulate = Color( 0.286275, 0.286275, 0.286275, 1 )
+material = ExtResource( 12 )
+position = Vector2( 1280, 0 )
+script = ExtResource( 22 )
+
+[node name="Sprite" type="Sprite" parent="BackgroundLayer"]
+visible = false
+modulate = Color( 0.545098, 0.545098, 0.545098, 1 )
+material = ExtResource( 12 )
+position = Vector2( 224, 224 )
+scale = Vector2( 4, 4 )
+texture = ExtResource( 13 )
+
+[node name="GameplayLayer" type="Node2D" parent="."]
+position = Vector2( 1280, 0 )
+script = ExtResource( 11 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Player" type="Sprite" parent="GameplayLayer"]
+position = Vector2( 224, -112 )
+scale = Vector2( 4, 4 )
+texture = ExtResource( 5 )
+offset = Vector2( 1, -3 )
+region_rect = Rect2( 0, 32, 32, 48 )
+script = ExtResource( 8 )
+__meta__ = {
+"_edit_group_": true
+}
+playfield_limit = Rect2( 60, 20, 1220, 700 )
+
+[node name="INPUTMAN" type="Node" parent="GameplayLayer/Player"]
+script = ExtResource( 9 )
+
+[node name="Area2D" type="Area2D" parent="GameplayLayer/Player"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GameplayLayer/Player/Area2D"]
+shape = SubResource( 1 )
+
+[node name="Boss" type="Node2D" parent="GameplayLayer"]
+position = Vector2( 1104, 352 )
+script = ExtResource( 15 )
+__meta__ = {
+"_edit_group_": true
+}
+hp_bar_path = NodePath("../../UIElements/bossHP")
+
+[node name="IntroSound" type="AudioStreamPlayer" parent="GameplayLayer/Boss"]
+stream = ExtResource( 17 )
+bus = "Voices"
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="GameplayLayer/Boss"]
+material = ExtResource( 20 )
+use_parent_material = true
+scale = Vector2( 4, 4 )
+frames = SubResource( 43 )
+animation = "teleport"
+offset = Vector2( -1, -10 )
+
+[node name="ReviveSound" type="AudioStreamPlayer" parent="GameplayLayer/Boss"]
+stream = ExtResource( 21 )
+bus = "Player/Enemies"
+
+[node name="UIElements" type="CanvasLayer" parent="."]
+
+[node name="Node2D" type="Node2D" parent="UIElements"]
+visible = false
+position = Vector2( 384, 0 )
+
+[node name="BitmapFont" parent="UIElements/Node2D" instance=ExtResource( 3 )]
+position = Vector2( 64, 160 )
+text = "final stage:"
+wrap_at = 500
+scale_by = 4
+displayed_characters = 500
+
+[node name="BitmapFont2" parent="UIElements/Node2D" instance=ExtResource( 3 )]
+visible = false
+position = Vector2( 64, 192 )
+text = "final stage:"
+wrap_at = 500
+scale_by = 4
+displayed_characters = 500
+
+[node name="playerHP" type="Sprite" parent="UIElements"]
+material = SubResource( 2 )
+position = Vector2( 45, 340.658 )
+scale = Vector2( 4, 4 )
+texture = ExtResource( 10 )
+centered = false
+offset = Vector2( -7, -43 )
+script = SubResource( 3 )
+
+[node name="bossHP" type="Sprite" parent="UIElements"]
+position = Vector2( 1325, 352 )
+scale = Vector2( 4, 4 )
+texture = ExtResource( 4 )
+centered = false
+offset = Vector2( -7, -43 )
+flip_h = true
+script = SubResource( 4 )
+
+[node name="FadeIn" type="CanvasLayer" parent="."]
+
+[node name="ColorRect" type="ColorRect" parent="FadeIn"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 1 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="WARNING intro" parent="." instance=ExtResource( 14 )]
+position = Vector2( 1344, -128 )
+script = ExtResource( 16 )
+message_id = "Elisa3"
+boss_node = NodePath("../GameplayLayer/Boss")
+
+[node name="FinalRound" type="AudioStreamPlayer" parent="WARNING intro"]
+stream = ExtResource( 18 )
+volume_db = -1.0
+bus = "Voices"
+
+[node name="DialoguePlayerInGame" parent="WARNING intro" instance=ExtResource( 6 )]
+visible = false
+
+[node name="Empty" type="KinematicBody2D" parent="WARNING intro"]
+visible = false
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2( 1920, 360 )

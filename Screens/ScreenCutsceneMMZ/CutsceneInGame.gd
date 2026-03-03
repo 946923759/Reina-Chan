@@ -341,12 +341,18 @@ func advance_text()->bool:
 						n = calling_entity
 					else:
 						n = calling_entity.get_node(curMessage[1])
-
-					otherScreenIsHandlingInput = Overlay.WAITING_FOR_BROADCAST
-					n.connect("finished",self,"end_await")
-					n.call(curMessage[2])
-					set_process(false)
-					return true
+					if is_instance_valid(n):
+						#I think there are no other tweens if there's an await call so we can kill it
+						tw.kill()
+						
+						otherScreenIsHandlingInput = Overlay.WAITING_FOR_BROADCAST
+						n.connect("finished",self,"end_await")
+						n.call(curMessage[2])
+						set_process(false)
+						return true
+					else:
+						printerr("[CutsceneMMZ] Failed to obtain node from given NodePath "+curMessage[1])
+						printerr("[CutsceneMMZ] ignoring await_call command and continuing")
 #			'stopmusic':
 #				if is_instance_valid(lastMusic):
 #					lastMusic.fade_music(float(curMessage[1]))

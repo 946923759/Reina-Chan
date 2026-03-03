@@ -501,7 +501,7 @@ scale = Vector2( 4, 4 )
 texture = ExtResource( 3 )
 centered = false
 region_enabled = true
-region_rect = Rect2( 258.546, 0, 480, 16 )
+region_rect = Rect2( 126.2, 0, 480, 16 )
 script = SubResource( 1 )
 
 [node name="ScrollControl" type="Node" parent="." index="11"]
@@ -1446,7 +1446,7 @@ never_disable = true
 [connection signal="all_enemies_killed" from="Gauntlet4/Node2D" to="Gauntlet5/Door3" method="unlock_door"]
 [connection signal="all_enemies_killed" from="Gauntlet5/Node2D" to="Gauntlet6/Door3" method="unlock_door"]
 [connection signal="all_enemies_killed" from="Gauntlet6/Node2D" to="Gauntlet7/Door3" method="unlock_door"]
-[connection signal="all_enemies_killed" from="RenzorRoom/MinibossPlatforms" to="RenzorRoom/CustomEventTile" method="_on_MinibossPlatforms_all_enemies_killed"]
+[connection signal="all_enemies_killed" from="RenzorRoom/MinibossPlatforms" to="RenzorRoom/CustomEventTile" method="execute"]
 [connection signal="all_enemies_killed" from="RenzorRoom/MinibossPlatforms" to="RenzorRoom/Node2D" method="_on_MinibossPlatforms_all_enemies_killed"]
 [connection signal="event_executed" from="RenzorRoom/EventTile2" to="GOSign" method="hide_sign"]
 [connection signal="player_entered_door" from="BossAgent/Door" to="BossAgent" method="_on_Door_player_entered_door"]

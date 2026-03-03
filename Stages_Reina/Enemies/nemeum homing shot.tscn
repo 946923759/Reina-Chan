@@ -20,6 +20,7 @@ func init(velo:Vector2, color:int=0):
 	if color==2:
 		sprite.play(\"bubble\")
 		player_damage = 2
+		#Player weapons can hit if bit 3 is true
 		set_collision_mask_bit(3,true)
 	elif color==1:
 		sprite.play(\"recolor\")
@@ -147,8 +148,8 @@ animations = [ {
 [sub_resource type="CircleShape2D" id=6]
 radius = 38.0
 
-[node name="Node2D" type="Area2D"]
-collision_layer = 2
+[node name="NemeumShot" type="Area2D"]
+collision_layer = 0
 script = SubResource( 1 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
