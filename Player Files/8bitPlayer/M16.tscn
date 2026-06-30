@@ -77,13 +77,7 @@ animations = [ {
 script = ExtResource( 3 )
 dash_multiplier = 2.0
 
-[node name="Charging" type="AnimatedSprite" parent="." index="2"]
-visible = false
-scale = Vector2( 2, 2 )
-frames = SubResource( 7 )
-animation = "full"
-
-[node name="Sprite" parent="." index="3"]
+[node name="Sprite" parent="." index="2"]
 frames = ExtResource( 2 )
 animation = "intro_pt2"
 playing = true
@@ -122,13 +116,11 @@ margin_right = 34.7382
 margin_bottom = -15.7194
 rect_scale = Vector2( 0.25, 0.25 )
 text = "oldPositions = null
+dash_time = null
 "
 script = ExtResource( 6 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 target_path = NodePath("../..")
-properties = PoolStringArray( "oldPositions" )
+properties = PoolStringArray( "oldPositions", "dash_time" )
 
 [node name="Label" type="Label" parent="Sprite" index="4"]
 visible = false
@@ -139,13 +131,22 @@ margin_bottom = -28.3812
 rect_scale = Vector2( 0.5, 0.5 )
 text = "Offset = "
 
+[node name="Charging" type="AnimatedSprite" parent="." index="3"]
+visible = false
+scale = Vector2( 2, 2 )
+frames = SubResource( 7 )
+animation = "full"
+
 [node name="ChargeStartSound" type="AudioStreamPlayer2D" parent="." index="12"]
 stream = ExtResource( 9 )
+bus = "Player/Enemies"
 
 [node name="ChargeLoopSound" type="AudioStreamPlayer2D" parent="." index="13"]
 stream = ExtResource( 10 )
+bus = "Player/Enemies"
 
 [node name="ChargeShotFireSound" type="AudioStreamPlayer2D" parent="." index="14"]
 stream = ExtResource( 8 )
+bus = "Player/Enemies"
 
 [connection signal="switched_weapon" from="." to="WeaponSwitch" method="showIcon"]

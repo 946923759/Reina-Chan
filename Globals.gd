@@ -278,7 +278,7 @@ func reset_player_data():
 var systemData:Dictionary = {
 	if_you_can_see_this_you_are_a_cheater=false, #No, setting it to true won't do anything.
 	unlocked_ZeroMode=false,
-	unlocked_M16A1=true,
+	unlocked_M16A1=false,
 	unlocked_M16_Ultimate=false
 }
 
@@ -370,7 +370,8 @@ func save_system_data()->bool:
 		"options":{},
 		#"playerdata":playerData,
 		"extras":{
-			"zeroMode":unlockedZeroMode
+			"zeroMode":unlockedZeroMode,
+			"unlocked_M16A1":Globals.systemData['unlocked_M16A1']
 		}
 	}
 	for option in OPTIONS:
@@ -703,6 +704,8 @@ var SCREENS:Dictionary = {
 
 	"CutsceneFromFile":"res://Screens/ScreenCutscene/CutsceneFromFile.tscn",
 	"CutsceneDemoEnd":"res://Screens/ScreenCutscene/cutsceneWhatever.tscn",
+	"ScreenEnding":"res://Screens/ScreenEnding/ScreenEnding.tscn",
+	"ScreenEnding2":"res://Screens/ScreenEnding2/new scene.tscn",
 	"ScreenCredits":"res://Screens/Credits.tscn",
 	"ScreenJukebox":"res://Screens/ScreenJukebox/ScreenJukebox.tscn",
 	

@@ -37,6 +37,7 @@ class music_entry:
 
 func _ready():
 	reinaAudioPlayer=ReinaAudioPlayer.new(self)
+	$CrashWarning.visible = reinaAudioPlayer.is_nsf_supported()
 	
 	bigScroll1.get_node("s2").position.x = scroller1size.x
 	bigScroll2.get_node("s2").position.x = scroller1size.x
@@ -145,7 +146,7 @@ func _process(delta):
 		if sel.track_num < 0:
 			reinaAudioPlayer.stop_music()
 			
-			if reinaAudioPlayer.is_nsf_supported(): #
+			if reinaAudioPlayer.is_nsf_supported():
 				#print("Trying to play "+sel.audio_file)
 				var music = "res://Music/"+sel.audio_file
 				print("Attempting to load "+music)
@@ -155,8 +156,10 @@ func _process(delta):
 			else:
 				var music = Globals.get_custom_music(sel.audio_file)
 				if music:
-					audioStreamPlayer.stream = ExternalAudio.loadfile(music)
+					audioStreamPlayer.stream = load(music.trim_suffix(".import"))
 					audioStreamPlayer.play()
+				else:
+					printerr("Could not find audio file "+sel.audio_file)
 				#reinaAudioPlayer.load_song(sel.audio_file,"",0)
 		else:
 			audioStreamPlayer.stop()

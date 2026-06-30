@@ -201,4 +201,3 @@ script = SubResource( 1 )
 text = "abcd efgh 1234 5678 ,.:-"
 wrap_at = 10
 scale_by = 7
-displayed_characters = null

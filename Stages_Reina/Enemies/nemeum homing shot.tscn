@@ -27,9 +27,10 @@ func init(velo:Vector2, color:int=0):
 	else:
 		sprite.play(\"default\")
 	velocity=velo
+	visible = true
 
-#This is for the wireframe miniboss in Ouroboros,
-#DONT GET RID OF IT!!!
+# This is for the wireframe miniboss in Ouroboros,
+# DON'T GET RID OF IT!!!
 func init2():
 	set_process(false)
 	sprite.play(\"default\")

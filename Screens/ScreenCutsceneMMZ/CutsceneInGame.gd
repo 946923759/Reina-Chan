@@ -35,6 +35,7 @@ var cutsceneVars:Dictionary = {}
 
 export(PoolStringArray) var standalone_message
 export(bool) var automatically_advance_text = false
+export(bool) var allow_skipping = true
 var message: Array
 var tw:SceneTreeTween
 var calling_entity:Node2D
@@ -386,6 +387,7 @@ func advance_text()->bool:
 
 func _ready():
 	$PressStartToSkip.text = INITrans.GetString("Cutscene","PRESS START TO SKIP")
+	$PressStartToSkip.visible = allow_skipping
 	#print("Text speed is "+String(TEXT_SPEED))
 	set_process(false)
 	visible = false
@@ -468,7 +470,7 @@ func _process(_delta):
 		return
 	
 	
-	if Input.is_action_just_pressed("ui_pause"):
+	if allow_skipping and Input.is_action_just_pressed("ui_pause"):
 		end_cutscene()
 	
 	if isWaitingForChoice:

@@ -100,6 +100,8 @@ func _input(event:InputEvent):
 		elif Input.is_key_pressed(KEY_7):
 			tweener = create_tween()
 			throw_bullets_at_player(tweener)
+		elif Input.is_key_pressed(KEY_9):
+			.die()
 		elif Input.is_key_pressed(KEY_0):
 			health = 1
 			HPBar.updateHP(health/28.0)

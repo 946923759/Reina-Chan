@@ -1,0 +1,23 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/Mega Man 4 SFX (33) - Explosion Quake.wav-1191df0bb0580eba7831b37f138d78c5.sample"
+
+[deps]
+
+source_file="res://Sounds/Classic/Mega Man 4 SFX (33) - Explosion Quake.wav"
+dest_files=[ "res://.import/Mega Man 4 SFX (33) - Explosion Quake.wav-1191df0bb0580eba7831b37f138d78c5.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

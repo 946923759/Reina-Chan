@@ -12,6 +12,7 @@ func run_event(sender):
 	if Globals.playCutscenes==false or CheckpointPlayerStats.watchedBossIntro or message_id.empty():
 		get_node(boss_node).playIntro(false)
 		showWarning(false)
+		#get_node(boss_node).skip_intro()
 	else:
 		part1()
 

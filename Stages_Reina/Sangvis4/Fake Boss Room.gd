@@ -5,9 +5,12 @@ onready var camera:Camera2D = $Camera2D
 var player:KinematicBody2D
 var root:Node2D
 
+export(float,1,50,1) var tween_time = 3.0
+
 const CAMERA_SCALE = 64;
 const ROOM_WIDTH = 20
 const ROOM_HEIGHT = 12
+
 
 func _ready():
 	set_process(false)
@@ -62,7 +65,7 @@ func execute():
 	copy_limits()
 	camera.make_current()
 	var tw = create_tween()
-	tw.tween_property(self,"rotation_degrees", -180,3).from(0.0).set_trans(Tween.TRANS_QUAD)
+	tw.tween_property(self,"rotation_degrees", -180, tween_time).from(0.0).set_trans(Tween.TRANS_QUAD)
 	#We have to translate the player position
 	var rotated_pos = transform.xform(sprite.position)
 	tw.tween_property(sprite,"visible",false,0.0)

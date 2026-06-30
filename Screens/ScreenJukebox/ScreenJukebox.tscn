@@ -48,7 +48,7 @@ script = ExtResource( 3 )
 target_path = NodePath("..")
 properties = PoolStringArray( "rect_size" )
 
-[node name="BitmapFont2" parent="." instance=ExtResource( 1 )]
+[node name="CrashWarning" parent="." instance=ExtResource( 1 )]
 position = Vector2( 15, 124 )
 text = "the nsf audio player has a tendency to crash when switching too fast, so don't press the a button too much"
 wrap_at = 57

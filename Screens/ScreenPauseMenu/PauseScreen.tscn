@@ -709,6 +709,7 @@ position = Vector2( -300, -130 )
 text = "ump9's weapon of choice... Kind of.\\n\\nIn the simulator it has infinite ammo and shoots... lemons? plasma? what are these supposed to be, anyways?"
 wrap_at = 24
 scale_by = 3
+displayed_characters = 500
 
 [node name="Page2" parent="." instance=ExtResource( 18 )]
 margin_left = 1280.0

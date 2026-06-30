@@ -30,7 +30,6 @@ var velocity = Vector2()
 #go of the jump button.
 
 #Normal is running or idle, there doesn't need to be a distinction anyways
-#DASH MEANS DASH ATTACK! SLIDE IS WITHOUT ATTACK!
 enum State { INACTIVE, NORMAL, JUMPING, FALLING, HURT, GRABBING_LADDER, ON_LADDER, FLYING_BACKWARDS, DASH_ATTACK, DASH }
 var state_toString = ["INACTIVE","Normal","Jumping","Falling","Hurt","Grabbing_Ladder","On_Ladder","Flying_Backwards","DashAttack", "Dash"]
 var state = State.INACTIVE
@@ -180,9 +179,11 @@ func _ready():
 func _process(delta):
 	grenadeThrower.update(delta);
 	if hasGrenadeAbility and currentWeapon==0:
+		#But what if we're playing as M16 and want to override the cooldown...
 		var p = grenadeThrower.getCooldownPercent()
 		if p < 1.0:
 			HPBar.show_weapon(true,p)
+
 	#Not really necessary when we can just not make stages that use the left side
 #	var onscreen_pos = stageRoot.position + position + stageRoot.get_canvas_transform().origin
 #	if onscreen_pos.x < 150:
@@ -400,14 +401,7 @@ func get_input(delta):
 				i-=1
 		currentWeapon=i
 		switchWeapon()
-			
 	
-#	var right = Input.is_action_pressed('ui_right')
-#	var left = Input.is_action_pressed('ui_left')
-#	var up = Input.is_action_pressed('ui_up')
-#	var down = Input.is_action_pressed('ui_down')
-#	var jump = Input.is_action_just_pressed('ui_accept')
-#	var shoot = Input.is_action_just_pressed("ui_cancel")
 	var left = Input.is_action_pressed(INPUT.LEFT[controller_index])
 	var right = Input.is_action_pressed(INPUT.RIGHT[controller_index])
 	var up = Input.is_action_pressed(INPUT.UP[controller_index])
@@ -660,17 +654,6 @@ func get_input(delta):
 				#position = Vector2(round(floor(position.x)/16/4)*16*4+8*4, position.y)
 				#grabbingLadder = true
 				state = State.GRABBING_LADDER
-			#else:
-			#	print("Can't go down ladder!")
-			#	print(String(tilePos.y)+" < "+String(cameraBottom.y)+"?")
-			#	print(String(tile)+"!="+String(LADDER_TILE_ID)+"?")
-			#Example for one way platforms (I don't know if 7 is correct)
-			#elif tile == 7:
-			#	position.x = pos2cell(position).x*16*4+8*4;
-			#	#Don't set x velocity since we want them to keep moving at the same rate
-			#	velocity.y = 300
-			#	set_collision_mask_bit(0,false)
-			#	set_collision_layer_bit(0,false)
 		if canAirDash:
 			#Allowing dash on R2 was way too powerful
 			if (down and jump): #or Input.is_action_pressed("gameplay_dash"):
@@ -834,81 +817,10 @@ func set_checkpoint(respawnPosition:Vector2, shouldFaceLeft = false):
 	CheckpointPlayerStats.shouldFaceLeft=shouldFaceLeft
 	CheckpointPlayerStats.checkpointSet=true
 
-#Return true if dashing, false if dash ended.
-#Returning false 
-func dash_handler()->bool:
-	if dash_time>0:
-		var ss = -1.0 if sprite.flip_h else 1.0
-		velocity=Vector2(ss*run_speed*dash_multiplier,0)
-		return true
-		#return 
-	else:
-		return false
 
-func _physics_process(delta):
-	if !is_timer_stopped:
-		timer+=delta
-		timerWithDeath+=delta
-	
-	#Needs to be done first to check is_on_floor() properly
-	velocity = move_and_slide(velocity, Vector2(0, -1), true)
-	velocity.y = min(velocity.y,1500) #Cap the fall speed
-	
-	
-	
-	if shoot_sprite_time > 0:
-		shoot_sprite_time -= delta
-	if dash_time>=0:
-		dash_time-=delta
-	
-	#Menu buttons should always be accessible!
-	#...For player 1.
-	if controller_index == 0:
-		get_menu_buttons_input(delta)
-	
-	if state==State.INACTIVE:
-		handleEvents()
-		sprite.visible=false
-		invincible=true
-		velocity.y += gravity * delta
-		stateInfo.text = sprite.get_animation() + " ! " + String(sprite.is_playing())
-		time_before_active-=delta
-		if time_before_active<=0:
-			sprite.visible=true
-			if !sprite.playing:
-				sprite.playing=true
-			elif sprite.frame==3:
-				state=State.NORMAL
-				invincible=false
-		return
-	elif not movementLocked:
-		if freeRoam:
-			get_free_roam_input(delta)
-		else:
-			get_input(delta)
-		handleEvents() #This modifies velocity
-		
-	if position.x < $Camera2D.limit_left+10:
-		#velocity.x=run_speed
-		position.x+=3
-	
-	var tile = tiles.get_cellv(pos2cell(position))
-	#I got tired of dying to spikes in free roam
-	if tile == SPIKES_TILE_ID and (not noClip and not freeRoam) and not invincible:
-		die()
-	elif tile == DEATH_TILE_ID and (not noClip and not freeRoam):
-		die()
-	
-	#Only process when moving or falling. Because otherwise the character slides down slopes and that's bad.
-	#if !is_on_floor():
-	#velocity.y = gravity
-	if not freeRoam and state != State.ON_LADDER:
-		if inWater:
-			velocity.y += gravity/2 * delta
-		elif inSand:
-			velocity.y += gravity * 4 * delta
-		else:
-			velocity.y += gravity * delta
+#delta: time between frames (duh)
+#tile: current tile the player is on (passed in from physics)
+func process_normal_movement(delta, tile):
 	
 	if state==State.FLYING_BACKWARDS:
 		velocity.y=0
@@ -1037,6 +949,97 @@ func _physics_process(delta):
 		else:
 			sprite.set_animation("FallingShoot")
 	
+#Return true if dashing, false if dash ended.
+#Returning false 
+func dash_handler()->bool:
+	if dash_time>0:
+		var ss = -1.0 if sprite.flip_h else 1.0
+		velocity=Vector2(ss*run_speed*dash_multiplier,0)
+		return true
+		#return 
+	else:
+		return false
+
+func _physics_process(delta):
+	if !is_timer_stopped:
+		timer+=delta
+		timerWithDeath+=delta
+	
+	#Needs to be done first to check is_on_floor() properly
+	velocity = move_and_slide(velocity, Vector2(0, -1), true)
+	velocity.y = min(velocity.y,1500) #Cap the fall speed
+	
+	
+	
+	if shoot_sprite_time > 0:
+		shoot_sprite_time -= delta
+	if dash_time>=0:
+		dash_time-=delta
+	
+	#Menu buttons should always be accessible!
+	#...For player 1.
+	if controller_index == 0:
+		get_menu_buttons_input(delta)
+	
+	if state==State.INACTIVE:
+		handleEvents()
+		sprite.visible=false
+		invincible=true
+		velocity.y += gravity * delta
+		stateInfo.text = sprite.get_animation() + " ! " + String(sprite.is_playing())
+		time_before_active-=delta
+		if time_before_active<=0:
+			sprite.visible=true
+			if !sprite.playing:
+				sprite.playing=true
+			elif sprite.frame==3:
+				state=State.NORMAL
+				invincible=false
+		return
+	elif not movementLocked:
+		if freeRoam:
+			get_free_roam_input(delta)
+		else:
+			get_input(delta)
+		handleEvents() #This modifies velocity
+		
+	#Move back into screen
+	if position.x < $Camera2D.limit_left+10:
+		position.x+=3
+	
+	var tile = tiles.get_cellv(pos2cell(position))
+	#I got tired of dying to spikes in free roam
+	if tile == SPIKES_TILE_ID and (not noClip and not freeRoam) and not invincible:
+		die()
+	elif tile == DEATH_TILE_ID and (not noClip and not freeRoam):
+		die()
+	
+	#Only process when moving or falling. Because otherwise the character slides down slopes and that's bad.
+	#if !is_on_floor():
+	#velocity.y = gravity
+	if not freeRoam and state != State.ON_LADDER:
+		if inWater:
+			velocity.y += gravity/2 * delta
+		elif inSand:
+			velocity.y += gravity * 4 * delta
+		else:
+			velocity.y += gravity * delta
+			
+	process_normal_movement(delta, tile)
+	
+	if movementLocked:
+		processLockMovement(delta)
+		
+	if invincible:
+		processInvincible(delta)
+		
+	#If collision is turned off we've already processed the movement so now we can turn it back on
+	#But don't turn it back on if noClip is on
+	if !get_collision_mask_bit(0) and !noClip and !movementLocked:
+		set_collision_mask_bit(0,true)
+		set_collision_layer_bit(0,true)
+		
+	
 	#only update this if the display is showing
 	if debugDisplay.visible:
 		stateVelocity.text = String(velocity * delta)
@@ -1074,17 +1077,6 @@ func _physics_process(delta):
 		onscreenPos.text = "Onscreen pos: " + String(stageRoot.position + position + stageRoot.get_canvas_transform().origin)
 		onscreenPos.text = onscreenPos.text + "\nRoom: " + String(stageRoot.get_closest_room(global_position))
 	
-	if movementLocked:
-		processLockMovement(delta)
-		
-	if invincible:
-		processInvincible(delta)
-		
-	#If collision is turned off we've already processed the movement so now we can turn it back on
-	#But don't turn it back on if noClip is on
-	if !get_collision_mask_bit(0) and !noClip and !movementLocked:
-		set_collision_mask_bit(0,true)
-		set_collision_layer_bit(0,true)
 
 #Should this be using structs?
 var movementLocked = false
@@ -1245,7 +1237,7 @@ func die():
 		INPUT.vibrate_device(0,.5,.5,.3)
 		
 		var sp = deathAnimation.instance()
-		sp.position=position-Vector2(48,16)
+		sp.position=position
 		get_parent().add_child(sp)
 		$DieSound.play()
 		yield($DieSound,"finished")
@@ -1285,23 +1277,36 @@ func finishStage() -> SceneTreeTimer:
 	
 func finishStage_2():
 
-	var nextScene = "ScreenItemGet"
+	var next_screen = "ScreenItemGet"
 	CheckpointPlayerStats.lastPlayedStage = stageRoot.weapon_to_unlock
 	
 	var tween:SceneTreeTween
+	#Why is this even here, why isn't it in the stage handler
 	if stageRoot.wily_stage_num >= 4:
 		Globals.previous_screen = "StageSangvis"
-		nextScene="ScreenDanmaku"
+		
+		var emblems = Globals.bitArrayToInt32(Globals.playerData.ReinaChanEmblems)
+		# 0x1F = first 5 bits. If all 5 bits in "emblems" are set then
+		# the returned value after the operation will be the same.
+		if (emblems & 0x1F) == 0x1F:
+			next_screen = "ScreenDanmaku"
+		else: #Come back when you have all the emblems!!
+			next_screen = "ScreenEnding"
+
+		#still set stage 5 regardless so the player can use stage select
+		Globals.playerData.wilyStageNum = stageRoot.wily_stage_num+1
+		print("Next Sangvis stage: "+String(Globals.playerData.wilyStageNum))
 		tween = $CanvasLayer/Fadeout.fadeOut()
 	elif stageRoot.wily_stage_num>0:
 		Globals.previous_screen = "StageSangvis"
-		nextScene="ScreenSangvisIntro"
+		next_screen="ScreenSangvisIntro"
 		#CheckpointPlayerStats.lastPlayedStage = Globals.Weapons.LENGTH_WEAPONS+stageRoot.wily_stage_num
 		Globals.playerData.wilyStageNum = stageRoot.wily_stage_num+1
+		print("Next Sangvis stage: "+String(Globals.playerData.wilyStageNum))
 		tween = $CanvasLayer/Fadeout.fadeOut()
 		
 	elif Globals.playerData.availableWeapons[stageRoot.weapon_to_unlock]: #If this stage is already completed
-		nextScene="ScreenSelectStage"
+		next_screen="ScreenSelectStage"
 		tween = $CanvasLayer/TransitionOut.OnCommand()
 	else:
 		tween = $CanvasLayer/Fadeout.fadeOut()
@@ -1311,8 +1316,8 @@ func finishStage_2():
 	
 	Globals.save_player_game()
 	
-	tween.tween_callback(Globals,"change_screen",[get_tree(),nextScene])
-	#Globals.change_screen(get_tree(),nextScene)
+	tween.tween_callback(Globals,"change_screen",[get_tree(),next_screen])
+	#Globals.change_screen(get_tree(),next_screen)
 	
 
 func healPlayer(amount):

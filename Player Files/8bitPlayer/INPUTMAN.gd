@@ -5,6 +5,20 @@ const PLAYER_2 = 1
 const PLAYER_3 = 2
 const PLAYER_4 = 3
 
+#Matches the positions at the int32
+enum BUTTON {
+	LEFT,
+	RIGHT,
+	UP,
+	DOWN,
+	JUMP,
+	SHOOT,
+	GRENADE,
+	UNUSED, #Unused
+	L1,
+	R1
+}
+
 const LEFT = [
 	"ui_left",
 	"p2_left"
@@ -80,3 +94,33 @@ func vibrate_device(
 			#Why is this in ms and the controller one in seconds?
 # warning-ignore:narrowing_conversion
 			Input.vibrate_handheld(duration_seconds * 1000)
+
+func get_as_struct(controller_index:int = 0) -> Dictionary:
+	return {
+		left = Input.is_action_pressed(LEFT[controller_index]), 
+		right = Input.is_action_pressed(RIGHT[controller_index]),
+		up = Input.is_action_pressed(UP[controller_index]), 
+		down = Input.is_action_pressed(DOWN[controller_index]), 
+		jump = Input.is_action_just_pressed(JUMP[controller_index]), 
+		shoot = Input.is_action_just_pressed(SHOOT[controller_index])
+	}
+
+func get_as_int32(controller_index:int = 0) -> int:
+	# return Globals.bitArrayToInt32([
+	# 	Input.is_action_pressed(LEFT[controller_index]), 
+	# 	Input.is_action_pressed(RIGHT[controller_index]),
+	# 	Input.is_action_pressed(UP[controller_index]), 
+	# 	Input.is_action_pressed(DOWN[controller_index]), 
+	# 	Input.is_action_just_pressed(JUMP[controller_index]), 
+	# 	Input.is_action_just_pressed(SHOOT[controller_index])
+	# ])
+
+	# This is the same thing as above but optimized to not create an array. It does all the math on the CPU.
+	return (
+		int(Input.is_action_pressed(LEFT[controller_index])) |
+		(int(Input.is_action_pressed(RIGHT[controller_index])) << 1) |
+		(int(Input.is_action_pressed(UP[controller_index])) << 2) |
+		(int(Input.is_action_pressed(DOWN[controller_index])) << 3) |
+		(int(Input.is_action_just_pressed(JUMP[controller_index])) << 4) |
+		(int(Input.is_action_just_pressed(SHOOT[controller_index])) << 5)
+	) & 0xFF

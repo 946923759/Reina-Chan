@@ -13,6 +13,19 @@ onready var chargeStart:AudioStreamPlayer2D = $ChargeStartSound
 onready var chargeLoop:AudioStreamPlayer2D = $ChargeLoopSound
 onready var chargeShotS:AudioStreamPlayer2D = $ChargeShotFireSound
 
+##TODO: dude lmao
+#const CHARGE_MIN_TIME = .5
+#const CHARGE_FULL_TIME = 1.5
+#var chargeShotTime:float=0.0
+##var startedCharging:bool=false
+
+const DASH_MINIMUM_TIME = .2
+const DASH_MAXIMUM_TIME = 1.0
+# In Mega Man Zero, Zero will dash as long as he's in the air.
+# On the ground he dashes for a minimum of .2 seconds
+# or a maximum of 1 second. 
+var dashing:bool = false
+
 func _ready():
 	#oldPositions = PoolVector2Array()
 	oldPositions.resize(6)
@@ -45,9 +58,6 @@ func switchWeapon(showIcon:bool=true):
 		HPBar.get_material().set_shader_param("clr2", Globals.weaponColorSwaps[currentWeapon][1])
 		
 
-#TODO: dude lmao
-var chargeShotTime:float=0.0
-var startedCharging:bool=false
 func get_input(delta):
 	if hasGrenadeAbility==false and Globals.playerData.specialAbilities[Globals.SpecialAbilities.Grenade]:
 		hasGrenadeAbility=true
@@ -56,40 +66,40 @@ func get_input(delta):
 	var right = Input.is_action_pressed(INPUT.RIGHT[controller_index])
 	var up = Input.is_action_pressed(INPUT.UP[controller_index])
 	var down = Input.is_action_pressed(INPUT.DOWN[controller_index])
-	var jump = Input.is_action_just_pressed(INPUT.FORWARD[controller_index])
-	var shoot = Input.is_action_just_pressed(INPUT.BACK[controller_index])
+	var jump = Input.is_action_just_pressed(INPUT.JUMP[controller_index])
+	var shoot = Input.is_action_just_pressed(INPUT.SHOOT[controller_index])
+	var dash = (down and jump) or Input.is_action_just_pressed(INPUT.R1[controller_index])
+	var dash_hold = dash or Input.is_action_pressed(INPUT.R1[controller_index])
 
-	var chargeShot = Input.is_action_pressed(INPUT.BACK[controller_index]) and currentWeapon==Globals.Weapons.Buster
+	#var chargeShot = Input.is_action_pressed(INPUT.SHOOT[controller_index]) and currentWeapon==Globals.Weapons.Buster
+
 	if rapidFire and shoot_time > .1:
-		shoot = Input.is_action_pressed(INPUT.BACK[controller_index])
-		chargeShot=false #no charge shots when rapidFire!
+		shoot = Input.is_action_pressed(INPUT.SHOOT[controller_index])
+		#chargeShot=false #no charge shots when rapidFire!
 
+	#TODO: This is so stupid. Why isn't this handled in the input class?
 	if Globals.flipButtons:
-		jump = Input.is_action_just_pressed(INPUT.BACK[controller_index])
-		shoot = Input.is_action_just_pressed(INPUT.FORWARD[controller_index]) or rapidFire and (shoot_time > .1 and Input.is_action_pressed(INPUT.FORWARD[controller_index]))
+		jump = Input.is_action_just_pressed(INPUT.SHOOT[controller_index])
+		shoot = Input.is_action_just_pressed(INPUT.JUMP[controller_index]) or rapidFire and (shoot_time > .1 and Input.is_action_pressed(INPUT.SHOOT[controller_index]))
 
 	var grenade_input = (shoot and up) or (
-		Input.is_action_just_pressed(INPUT.THIRD[controller_index]) and
+		Input.is_action_just_pressed(INPUT.GRENADE[controller_index]) and
 		state!=State.DASH
 	)
-		#Can't throw grenades if using other weapons because it will
+	#Can't throw grenades if using other weapons because it will
 	#conflict with the alchemist rockets.
 	#...Even though square will also shoot it.
 	grenade_input = grenade_input and currentWeapon==Globals.Weapons.Buster
 
-	if dash_time>0:
-		jump=false
-	if Input.is_action_just_pressed("R1") or (
-		down and jump
-	):
-		if is_on_floor() and dash_time<=0:
-			#print("Dash")
-			state = State.DASH
-			dash_time=.5
-			sprite.set_animation("Dash")
-			for i in range(oldPositions.size()):
-				oldPositions[i] = position
-			return
+	if is_on_floor() and dash and dash_time <= 0:
+		jump = false
+		dashing = true
+		dash_time= DASH_MAXIMUM_TIME
+		sprite.set_animation("Dash")
+		for i in range(oldPositions.size()):
+			oldPositions[i] = position
+	elif is_on_floor() and dash_hold == false and dash_time < DASH_MAXIMUM_TIME-DASH_MINIMUM_TIME:
+		dash_time = 0
 
 	#Cancel it here instead of accounting for it anywhere else
 	#you can move in the split second between Zero falling though the ladder top and grabbing onto
@@ -99,73 +109,97 @@ func get_input(delta):
 		right = false;
 
 
-	if chargeShot:
-		chargeShotTime+=delta
-		if startedCharging:
-			if chargeStart.playing and chargeStart.get_playback_position() >= 1.00:
-				#TODO: stop() runs before play() so there's a gap in the audio
-				chargeStart.stop()
-				chargeLoop.play()
-				var tmp_f:int = chargingAnim.frame
-				chargingAnim.play("full")
-				chargingAnim.frame=tmp_f
-			#pass
-		elif chargeShotTime>.5:
-			chargingAnim.visible=true
-			chargingAnim.play("default")
-			chargeStart.play()
-			startedCharging=true
-	elif chargeShotTime>0.0 and chargeShot==false:
-		if chargeShotTime > 1.1:
-			chargeShotS.play()
-			print("Charge shot fired!")
+	#chargeShotTime+=delta
+	if grenadeThrower.getCooldownPercent() >= 1.0 and shoot:
+		chargeShotS.play()
+		#print("Charge shot fired!")
 
-			var bi = playerChargeShot.instance()
-			var ss
-			if sprite.flip_h:
-				ss = -1.0
-			else:
-				ss = 1.0
-			#Note: $ is shorthand for get_node()
-			#Right here it's doing get_node("bullet_shoot")
-			#ternary: var p = 1 if f else -1
-			var pos = position + Vector2(73*ss, 10)
-			if state == State.ON_LADDER:
-				pos = position + Vector2(95*ss, -20)
+		var bi = playerChargeShot.instance()
+		var ss
+		if sprite.flip_h:
+			ss = -1.0
+		else:
+			ss = 1.0
+		#Note: $ is shorthand for get_node()
+		#Right here it's doing get_node("bullet_shoot")
+		#ternary: var p = 1 if f else -1
+		var pos = position + Vector2(73*ss, 10)
+		if state == State.ON_LADDER:
+			pos = position + Vector2(95*ss, -20)
 
-			bi.position = pos
-			#get_parent().add_child(bi)
-			bulletHolder.add_child(bi)
-			#No need to use bulletHolder for charge shots.
-			#stageRoot.add_child(bi)
-			#KinematicBody2D only
-			#bi.linear_velocity = Vector2(800.0 * ss, 0)
-			#RigidBody2D only
-			bi.init(int(ss))
+		bi.position = pos
+		bulletHolder.add_child(bi)
+		bi.init(int(ss))
 
-			#add_collision_exception_with(bi) # Make bullet and this not collide
-
-	#		if Globals.playerData.gameDifficulty > Globals.Difficulty.EASY:
-	#			bulletManager.push_bullet(bi)
-	#		else:
-	#			for child in bulletHolder.get_children():
-	#				if is_instance_valid(child) and child.get_class()=="KinematicBody2D":
-	#					#print(child.get_class())
-	#					#child.add_collision_exception_with(bi)
-	#					bi.add_collision_exception_with(child)
-	#			pass
-			if sprite.animation=="IdleShoot":
-				sprite.frame = 0
-			shoot_sprite_time = 0.3
-			shoot_time = -.2
-			#$ShootSound.play()
-		elif chargeShotTime > .5: #Not fully charged
-			shoot=true
-		chargingAnim.visible=false
-		chargeShotTime=0
-		startedCharging=false
-		chargeStart.stop()
-		chargeLoop.stop()
+		if sprite.animation=="IdleShoot":
+			sprite.frame = 0
+		shoot_sprite_time = 0.3
+		shoot_time = -.2
+		grenadeThrower.currentCooldownTimer = 0.0
+		#chargeShotTime = -.2
+#	elif chargeShotTime > CHARGE_FULL_TIME:
+#		#shoot=true
+#		var tmp_f:int = chargingAnim.frame
+#		chargingAnim.play("full")
+#		chargingAnim.frame=tmp_f
+#
+#
+#	elif chargeShotTime > CHARGE_MIN_TIME:
+#		chargingAnim.visible=true
+#		chargingAnim.play("default")
+#	else:
+#		chargingAnim.visible = false
+	
+#	if chargeShot:
+#
+#		if startedCharging:
+#			if chargeStart.playing and chargeStart.get_playback_position() >= 1.00:
+#				#TODO: stop() runs before play() so there's a gap in the audio
+#				chargeStart.stop()
+#				chargeLoop.play()
+#				var tmp_f:int = chargingAnim.frame
+#				chargingAnim.play("full")
+#				chargingAnim.frame=tmp_f
+#			#pass
+#		elif chargeShotTime>.5:
+#			chargingAnim.visible=true
+#			chargingAnim.play("default")
+#			chargeStart.play()
+#			startedCharging=true
+#	elif chargeShotTime>0.0 and chargeShot==false:
+#		if chargeShotTime > 1.1:
+#			chargeShotS.play()
+#			print("Charge shot fired!")
+#
+#			var bi = playerChargeShot.instance()
+#			var ss
+#			if sprite.flip_h:
+#				ss = -1.0
+#			else:
+#				ss = 1.0
+#			#Note: $ is shorthand for get_node()
+#			#Right here it's doing get_node("bullet_shoot")
+#			#ternary: var p = 1 if f else -1
+#			var pos = position + Vector2(73*ss, 10)
+#			if state == State.ON_LADDER:
+#				pos = position + Vector2(95*ss, -20)
+#
+#			bi.position = pos
+#			bulletHolder.add_child(bi)
+#			bi.init(int(ss))
+#
+#			if sprite.animation=="IdleShoot":
+#				sprite.frame = 0
+#			shoot_sprite_time = 0.3
+#			shoot_time = -.2
+#			#$ShootSound.play()
+#		elif chargeShotTime > .5: #Not fully charged
+#			shoot=true
+#		chargingAnim.visible=false
+#		chargeShotTime=0
+#		startedCharging=false
+#		chargeStart.stop()
+#		chargeLoop.stop()
 
 
 	if grenade_input and hasGrenadeAbility:
@@ -177,6 +211,7 @@ func get_input(delta):
 	elif shoot:
 		if shoot_time>0:
 			shoot_time = 0
+			#chargeShotTime = 0.0
 			if (Globals.playerData.gameDifficulty <= Globals.Difficulty.EASY or bulletManager.get_num_bullets() < 3) and weaponMeters[currentWeapon]>=Globals.weaponEnergyCost[currentWeapon]:
 
 				var bi
@@ -234,13 +269,6 @@ func get_input(delta):
 		shoot_time += delta
 
 	if jump and is_on_floor():
-		#print("Jumped")
-		#$FootstepSound.play()
-		#state = State.JUMPING
-		#if shotTimer.is_stopped():
-		#	sprite.set_animation("JumpStart")
-		#else:
-		#	sprite.set_animation("JumpShoot")
 		velocity.y = jump_speed
 		state = State.JUMPING
 	elif state == State.ON_LADDER:
@@ -271,8 +299,24 @@ func get_input(delta):
 		elif left and position.x > $Camera2D.destPositions[0]+40:
 			velocity.x = -run_speed
 			sprite.flip_h = true
-		elif !movementLocked and state!=State.DASH and state!=State.DASH_ATTACK: #If movement locked, assume velocity should be preserved
+		elif !movementLocked: #If movement locked, assume velocity should be preserved
 			velocity.x=0
+			
+		
+		if position.x < $Camera2D.destPositions[0]+40 or position.x > $Camera2D.destPositions[2]-40:
+			dash_time = 0.0
+			
+		#While dashing and on the floor the velocity MUST be preserved
+		if dash_time > 0:
+			if is_on_floor():
+				#left
+				if sprite.flip_h:
+					velocity.x = dash_multiplier * run_speed * -1
+				else: # right
+					velocity.x = dash_multiplier * run_speed
+			else:
+				velocity.x *= dash_multiplier
+			
 		if up:
 			var tile = tiles.get_cellv(pos2cell(position))
 			if tile == LADDER_TILE_ID or tile == LADDER_TOP_TILE_ID:
@@ -325,16 +369,154 @@ func get_input(delta):
 					velocity.y = 0
 					state=State.FALLING
 
-#Return true if processing should stop
-func dash_handler()->bool:
-	if !is_on_floor():
-		dash_time=0.0
+
+#delta: time between frames (duh)
+#tile: current tile the player is on (passed in from physics)
+func process_normal_movement(delta, tile):
+	
+	if state==State.FLYING_BACKWARDS:
+		velocity.y=0
+		if is_on_wall():
+			invincibleTime=0
+			$Camera2D.shakeCamera(10.0)
+			clearLockedMovement()
+			velocity.y = 200
+			if sprite.flip_h:
+				velocity.x = -300
+			else:
+				velocity.x = 300
+			lockMovement(.25,velocity,false)
+			state=State.FALLING
+	# M16 doesn't have these...
+#	elif state==State.DASH_ATTACK:
+#		$ChargeDash.monitoring=(dash_time>=0)
+#		if $ChargeDash.touchedEnemy or is_on_wall():
+#			$ChargeDash.monitoring=false
+#			dash_time=0.0
+#			var ss = -1.0 if sprite.flip_h else 1.0
+#			lockMovement(.1,Vector2(ss*-600,-400),true)
+#			#velocity.y=-121771837874
+#			$ChargeDash.touchedEnemy=false
+#			state = State.FALLING
+#			sprite.set_animation("Falling")
+#		if dash_time>0:
+#			var ss = -1.0 if sprite.flip_h else 1.0
+#			$ChargeDash.position.x=60*ss
+#			velocity=Vector2(ss*run_speed*dash_multiplier,0)
+#			return
+#		else:
+#			velocity.y=1
+#	elif state==State.DASH:
+#		if invincible: #Still need to process invincibility frames
+#			processInvincible(delta)
+#		if dash_handler():
+#			if (position.x < $Camera2D.destPositions[2]-40 and position.x > $Camera2D.destPositions[0]+40):
+#				return
+#			#Cancel dash if player is outside camera bounds.
+#			else: 
+#				dash_time=0
+
+	
+
+	
+
+	if is_on_floor() and velocity.y >= 0:
+		if state == State.FALLING:
+			footstep.play()
+			sprite.playing=true #If sprite was paused at any point
+		state = State.NORMAL
+			
+		if velocity.x > 125.0 or velocity.x < -125.0:
+			if shoot_sprite_time <= 0:
+				if sprite.animation == "WalkLoopShoot":
+					var prevFrame = sprite.get_frame()
+					sprite.set_animation("WalkLoop")
+					sprite.set_frame(prevFrame)
+				elif dash_time > 0:
+					sprite.set_animation("Dash")
+				else:
+					sprite.set_animation("WalkLoop")
+			else:
+				if sprite.get_animation() == "WalkLoop":
+					var prevFrame = sprite.get_frame()
+					sprite.set_animation("WalkLoopShoot")
+					sprite.set_frame(prevFrame)
+				elif sprite.get_animation() != "WalkLoopShoot":
+					sprite.set_animation("WalkLoopShoot")
+			
+			#if sprite.frame == 3 or sprite.frame == 8:
+			#	if !$FootstepSound.playing:
+			#		$FootstepSound.play()
+		else:
+			if !overrideSprite:
+				if shoot_sprite_time <= 0:
+					sprite.set_animation("Idle")
+				elif sprite.animation != "IdleShoot":
+					sprite.set_animation("IdleShoot");
+	elif state == State.GRABBING_LADDER:
+		if tile == LADDER_TILE_ID or tile == LADDER_TOP_TILE_ID:
+			state = State.ON_LADDER
+	elif state == State.ON_LADDER:
+		#jumping = false
+		#ez modo way of playing the ladder animation
+		#Wait for begin animation to be done
+		if sprite.get_animation() == "LadderBegin":
+			if sprite.frame == sprite.frames.get_frame_count("LadderBegin")-1:
+				sprite.set_animation("LadderLoop")
+			
+		elif shoot_sprite_time > 0:
+				#TODO: Change to shot animation while keeping the frame
+				#var prevFrame = sprite.frame
+				sprite.set_animation("LadderShoot")
+				#elif sprite.animation == "IdleShoot":
+				#	sprite.frame=0
+		else:
+			sprite.set_animation("LadderLoop")
+		
+		if sprite.get_animation() == "LadderLoop":
+			# TODO: This isn't correct. Her animation should
+			# be tied to her y position.
+			if abs(velocity.y) > .1:
+				sprite.play()
+			else:
+				sprite.stop()
+			
+		if tile != LADDER_TILE_ID and tile != LADDER_TOP_TILE_ID:
+			state = State.FALLING
+			if tile != LADDER_TOP_TILE_ID and velocity.y < 0:
+				#TODO: So..... This doesn't work if you move the collision box 
+				lockMovement(.2,Vector2(velocity.x,-350),true)
+				sprite.set_animation("LadderFinish")
+				sprite.play()
+			else:
+				#state = State.FALLING
+				sprite.set_animation("Falling")
+				
+	elif velocity.y > 0.5 and not movementLocked:
+		state = State.FALLING
+		
+	if !is_on_floor() and not movementLocked and state != State.ON_LADDER:
+	#if state == State.FALLING:
+		if shoot_sprite_time <= 0:
+			if velocity.y<=0:
+				sprite.set_animation("JumpStart")
+			elif true: #velocity.y>.5
+				sprite.set_animation("Falling")
+		else:
+			sprite.set_animation("FallingShoot")
+	dash_handler()
+
+#Return false if processing should stop
+func dash_handler() -> bool:
+	#if !is_on_floor():
+	#	dash_time=0.0
 	a1.visible = dash_time>0
 	a2.visible = dash_time>0
 	a3.visible = dash_time>0
 	if dash_time>0:
-		var ss = -1.0 if sprite.flip_h else 1.0
-		velocity=Vector2(ss*run_speed*dash_multiplier,5)
+		#I don't think this is correct?
+		#var ss = -1.0 if sprite.flip_h else 1.0
+		#velocity=Vector2(ss*run_speed*dash_multiplier,5)
 
 		var t = sprite.frames.get_frame(sprite.get_animation(), sprite.frame)
 		var f = sprite.flip_h

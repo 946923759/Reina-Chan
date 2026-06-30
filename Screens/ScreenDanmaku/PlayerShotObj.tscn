@@ -1,0 +1,39 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://ParticleEffects/AlphaMaskPurple.tres" type="Material" id=1]
+[ext_resource path="res://Screens/ScreenDanmaku/playerShot.png" type="Texture" id=2]
+
+[sub_resource type="CircleShape2D" id=1]
+
+[sub_resource type="AtlasTexture" id=2]
+atlas = ExtResource( 2 )
+region = Rect2( 0, 0, 24, 16 )
+
+[sub_resource type="AtlasTexture" id=3]
+atlas = ExtResource( 2 )
+region = Rect2( 24, 0, 24, 16 )
+
+[sub_resource type="SpriteFrames" id=4]
+animations = [ {
+"frames": [ SubResource( 2 ), SubResource( 3 ) ],
+"loop": true,
+"name": "default",
+"speed": 10.0
+} ]
+
+[node name="CollisionShape2D" type="RigidBody2D"]
+collision_layer = 8
+collision_mask = 0
+gravity_scale = 0.0
+linear_damp = 0.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 1 )
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+material = ExtResource( 1 )
+frames = SubResource( 4 )
+frame = 1
+offset = Vector2( 4, 0 )
+
+[node name="VisibilityNotifier2D" type="VisibilityNotifier2D" parent="."]

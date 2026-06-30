@@ -151,7 +151,7 @@ msg	That's fine by me! You're on, Dandelion!
 
 #KEY	Elisa1
 msgbox_add	Elisa	right	top
-/Elisa	This place shall become your tomb!
+/Elisa	Kneel before your god!
 
 #KEY	Elisa2
 /Elisa	Kneel before your god!
@@ -164,9 +164,9 @@ msgbox_add	Elisa	right	top
 msgbox	UMP9	left
 /UMP9	Aren't you getting tired of losing!?
 msgbox	Elisa	right
-/Elisa	Never!
+/Elisa	Insolent scrap metal! This place shall become your tomb!
 msgbox	UMP9	left
-/UMP9	You're finished!
+/UMP9	Not a chance! You're finished!
 
 #KEY	TalkHub_Skorp
 msgbox_add	Skorpion
@@ -213,3 +213,18 @@ msgbox_add	Ouroboros
 msgbox_add	Scarecrow
 /Scarecrow	...
 /Scarecrow	No, I'm not taking off this mask. Stop asking.
+
+#KEY	Ending
+msgbox_add	Dandelion	left	bottom
+/Dandelion	Thank you for playing~
+/Dandelion	Did you have fun?
+/Dandelion	By the way, everyone in the talk hub has something new to say. Elisa is there as well.
+/Dandelion	You've unlocked M16 as well! You can play as her when starting a new game.
+/Dandelion	She's more powerful than UMP9 and has unique dialogue.
+
+#KEY	Ending_Bad
+msgbox_add	Elisa	left	bottom
+/Elisa	If you want to fight me for real, come back with all the emblems!
+/Elisa	I'll be waiting...
+msgbox	Dandelion	left
+/Dandelion	You can now select any stage you've completed.

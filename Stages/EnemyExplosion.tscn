@@ -9,8 +9,7 @@ onready var sound:AudioStreamPlayer2D=$ExplosionSound
 var tex = preload(\"res://Animations/mmExplodeSmall.png\")
 
 func _ready():
-	#$ExplosionParticle.emitting = true
-	sound.play()
+	#sound.play()
 # warning-ignore:return_value_discarded
 	sound.connect(\"finished\",self,\"queue_free\")
 
@@ -24,9 +23,9 @@ func addQueueFreeCallback(_obj):
 #So roughly every 66 milliseconds it changes frames
 
 var curFrame:int = 0
-var time:float = 0
+export(float,-1,0,.1) var time:float = 0
 func _process(delta):
-	#return
+	visible = time >= 0.0
 	time+=delta
 	curFrame = int(floor(time/0.066))
 	#curFrame = floor(time*2)
@@ -37,6 +36,10 @@ func _process(delta):
 		visible=false
 	if curFrame >= 0:
 		update()
+		#Basically if time < 0 there is nothing displayed,
+		#We can wait until time>=0 to start the explosion and sound
+		if curFrame == 0 and sound.playing == false:
+			sound.play()
 
 #So to draw ten explosions in order...
 #The previous explosion is drawn at the same time as the current one...

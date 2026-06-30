@@ -1074,7 +1074,7 @@ region_rect = Rect2( 0, 0, 192, 192 )
 material = SubResource( 15 )
 texture = ExtResource( 13 )
 region_enabled = true
-region_rect = Rect2( 0, 80.4086, 192, 192 )
+region_rect = Rect2( 0, 219.444, 192, 192 )
 
 [node name="textActor_better" type="RichTextLabel" parent="CenterContainer_v2"]
 anchor_left = 0.5
@@ -1120,6 +1120,9 @@ anchor_bottom = 1.0
 margin_left = 20.0
 margin_top = -35.0
 margin_right = 339.0
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 2
+custom_constants/shadow_offset_y = 2
 custom_fonts/font = ExtResource( 9 )
 text = "PRESS START TO SKIP"
 

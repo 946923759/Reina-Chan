@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Screens/ScreenCutsceneMMZ/CutsceneInGame.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Screens/ScreenEnding2/new scene.gd" type="Script" id=2]
+
+[node name="Node2D" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 2 )
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 1 )
+
+[node name="DialoguePlayerInGame" parent="." instance=ExtResource( 1 )]
+allow_skipping = false
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+
+[connection signal="cutscene_finished" from="DialoguePlayerInGame" to="." method="_on_DialoguePlayerInGame_cutscene_finished"]

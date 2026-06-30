@@ -381,17 +381,15 @@ __meta__ = {
 
 [node name="VersionNum" parent="." index="4" instance=ExtResource( 1 )]
 position = Vector2( 9, 10 )
-text = "release 1.0"
+text = "release 0.999"
 wrap_at = 92233720368
 scale_by = 3
-displayed_characters = 500
 
 [node name="VersionNum2" parent="." index="5" instance=ExtResource( 1 )]
 position = Vector2( 9, 42 )
-text = "v.2026.02.19"
+text = "v.2026.06.26"
 wrap_at = 92233720368
 scale_by = 3
-displayed_characters = 500
 
 [node name="BottomRight" type="Node2D" parent="." index="6"]
 position = Vector2( 411, 667 )
@@ -404,21 +402,18 @@ __meta__ = {
 text = "                    created by micom"
 wrap_at = 92233720368
 scale_by = 3
-displayed_characters = 500
 
 [node name="BitmapSprite" parent="BottomRight" index="1" instance=ExtResource( 1 )]
 position = Vector2( 0, 24 )
 text = "            this is a free fan game!"
 wrap_at = 92233720368
 scale_by = 3
-displayed_characters = 500
 
 [node name="BitmapSprite2" parent="BottomRight" index="2" instance=ExtResource( 1 )]
 position = Vector2( 0, 48 )
 text = "girls' frontline is property of mica"
 wrap_at = 92233720368
 scale_by = 3
-displayed_characters = 500
 
 [node name="MenuFrame" parent="." index="7" instance=ExtResource( 16 )]
 
@@ -444,7 +439,6 @@ text = "press start"
 wrap_at = 92233720368
 scale_by = 4
 alignment = 1
-displayed_characters = 500
 
 [node name="Label" type="Label" parent="." index="11"]
 visible = false

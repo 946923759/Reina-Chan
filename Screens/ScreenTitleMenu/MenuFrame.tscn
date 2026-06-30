@@ -130,14 +130,25 @@ func _ready():
 	setDescText()
 	#print(Globals.get(\"gameDifficulty\"))
 
+func input_accept():
+	
+	#It has to be done on start/continue in case the player changed the language
+	Globals.load_stage_cutscenes()
+	Globals.reset_player_data()
+	if Globals.systemData['unlocked_M16A1']:
+		Globals.change_screen(get_tree(),\"ScreenSelectCharacter\")
+	else:
+		#If you don't set this it will keep using the character from the attract demo...
+		Globals.playerData.currentCharacter = Globals.Characters.UMP9
+		var t = get_node(\"%Transition\").OnCommand(Globals.playerData.currentCharacter)
+		yield(t,\"finished\")
+		Globals.change_screen(get_tree(),\"ScreenSelectStage\")
+		#Globals.change_screen(get_tree(),\"ScreenSelectStage\")
+
 func input_touch(event:InputEvent, i:int = 0):
 	if event is InputEventMouseButton and event.pressed and event.button_index == 1:
 		if i==Globals.playerData.gameDifficulty:
-			
-			#It has to be done on start/continue in case the player changed the language
-			Globals.load_stage_cutscenes()
-			Globals.reset_player_data()
-			Globals.change_screen(get_tree(),\"ScreenSelectCharacter\")
+			input_accept()
 		else:
 			parent.selectSound.play()
 			Globals.playerData.gameDifficulty=i
@@ -155,11 +166,7 @@ func input(event):
 		setDescText()
 		parent.selectSound.play()
 	elif event.is_action_pressed(\"ui_select\") or event.is_action_pressed(\"ui_pause\"):
-		#Globals.nextStage = \"res://Stages_Reina/Architect/StageArchitect.tscn\"
-		#It has to be done on start/continue in case the player changed the language
-		Globals.load_stage_cutscenes()
-		Globals.reset_player_data()
-		Globals.change_screen(get_tree(),\"ScreenSelectCharacter\")
+		input_accept()
 	
 func OnCommand():
 	parent.diffusealpha(desc,1)
@@ -912,8 +919,10 @@ script/source = "extends TabContainer
 
 func _ready():
 	if OS.is_debug_build():
+		print(\"Building debug menu...\")
 		var vbox = $VBoxContainer
 		var stages = $PlayDemo
+		var systemDataPanel = $SystemData
 		for k in Globals.SCREENS:
 			var btn = Button.new()
 			btn.text = k
@@ -924,6 +933,13 @@ func _ready():
 			btn.text = Globals.stagesToString[i]
 			btn.connect(\"pressed\",self,\"change_screen\",[Globals.stagesToString[i]])
 			stages.add_child(btn)
+		#print(Globals.systemData)
+		for k in Globals.systemData:
+			var n = CheckBox.new()
+			n.text = k
+			n.pressed = Globals.systemData[k]
+			n.connect(\"toggled\",self,\"on_checkbox_changed\",[k])
+			systemDataPanel.add_child(n)
 	else:
 		self.visible=false
 
@@ -941,6 +957,11 @@ func change_screen(stageToLoad:String):
 	Globals.playerData.currentCharacter = Globals.Characters.UMP9_Demo
 	Globals.playerData.gameDifficulty = Globals.Difficulty.MEDIUM
 	get_tree().change_scene(Globals.nextStage)
+
+#Due to how connections work the value is before the key
+func on_checkbox_changed(new_value, key):
+	#print(new_value)
+	Globals.systemData[key] = new_value
 "
 
 [node name="MenuFrame" type="Control"]
@@ -1202,7 +1223,24 @@ margin_bottom = 24.0
 pressed = true
 text = "demo playback"
 
+[node name="SystemData" type="VBoxContainer" parent="DebugPanel"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
+
+[node name="Label" type="Label" parent="DebugPanel/SystemData"]
+margin_right = 422.0
+margin_bottom = 48.0
+text = "Changing any of these will immediately update their value in memory. However, system data is only saved when exiting the options menu."
+align = 1
+autowrap = true
+
 [node name="Transition" parent="." instance=ExtResource( 13 )]
+unique_name_in_owner = true
 visible = false
 anchor_left = 0.0
 anchor_top = 0.0

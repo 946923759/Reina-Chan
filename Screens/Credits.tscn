@@ -10,6 +10,9 @@ script/source = "extends Control
 #var music_player = FLMusicLib.new();
 onready var music_player = ReinaAudioPlayer.new(self)
 
+var seq:SceneTreeTween
+var scroll_time = 60.0
+
 func _ready():
 	get_tree().set_screen_stretch(SceneTree.STRETCH_MODE_2D,SceneTree.STRETCH_ASPECT_EXPAND,Vector2(1280,720))
 	#music_player.load_song(\"Credits\",\"Rockman 4MI.nsf\",104)
@@ -18,23 +21,18 @@ func _ready():
 	#music_player.load_song(\"Credits\",\"Metroid.nsf\",11)
 	
 	
-	
+	$TextureRect.self_modulate = Color.black
 	$c2.rect_position.y = Globals.gameResolution.y
-	#var tween2 = $Tween
-	#tween2.interpolate_property($c1, 'modulate',
-	#Color(0,0,0,0), Color(1,1,1,1), .5, Tween.TRANS_QUAD, Tween.EASE_OUT);
-	#tween2.start();
-	
 	$c1.set_modulate(Color(1,1,1,0))
-	var seq := get_tree().create_tween()
-	#seq.tween_property($c1,'modulate',Color(1,1,1,0),1) #sleep 1
-	seq.tween_property($c1,'modulate',Color(1,1,1,1),1).set_trans(Tween.TRANS_LINEAR)
-	seq.parallel().tween_property($TextureRect,\"modulate\",Color(.5,.5,.5,1),.3)
-	seq.tween_property($c1,'modulate',Color(1,1,1,1),3) #sleep 1
-	seq.tween_property($c1,'modulate',Color(1,1,1,0),1).set_trans(Tween.TRANS_LINEAR)
+	
+	seq = create_tween()
+	seq.tween_property($c1,'modulate',Color(1,1,1,1),1)
+	#seq.tween_property($c1,'modulate',Color(1,1,1,1),3) #sleep 1
+	seq.tween_property($c1,'modulate',Color(1,1,1,0),1).set_delay(3)
+	seq.parallel().tween_property($TextureRect,\"self_modulate\",Color(.5,.5,.5,1), 1).set_delay(3)
 	
 	#print(Globals.gameResolution.y-$c2.rect_size.y)
-	seq.tween_property($c2,'rect_position:y',-$c2.rect_size.y,30)
+	seq.tween_property($c2,'rect_position:y',-$c2.rect_size.y,scroll_time)
 	seq.tween_property($TextureRect,'modulate',Color(0,0,0,1),1)
 	seq.tween_callback(self,'screen_out')
 	
@@ -43,11 +41,22 @@ func _ready():
 	#seq2.append($c2,'rect_position',Vector2(Globals.gameResolution.x/2-$c2.rect_size.x/2,0),10).set_trans(Tween.TRANS_LINEAR).from_current()
 
 func screen_out():
-	Globals.change_screen(get_tree(),\"ScreenTitleMenu\")
+	if Globals.previous_screen==\"ScreenEnding\":
+		Globals.change_screen(get_tree(),\"ScreenEnding2\")
+	else:
+		Globals.change_screen(get_tree(),\"ScreenTitleMenu\")
 
-func _input(_event):
-	if Input.is_action_just_pressed(\"ui_pause\"):
+func _input(_event:InputEvent):
+	if _event.is_action_pressed(\"ui_pause\"):
 		screen_out()
+	
+	if _event.is_action(\"ui_cancel\") or _event.is_action(\"ui_accept\"):
+		if _event.is_pressed():
+			seq.set_speed_scale(5.0)
+		else:
+			seq.set_speed_scale(1.0)
+	#if _event.is_action_pressed(\"ui_cancel\"):
+		
 
 #func _process(delta):
 #	pass
@@ -59,6 +68,7 @@ anchor_bottom = 1.0
 script = SubResource( 1 )
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+bus = "Music"
 
 [node name="TextureRect" type="TextureRect" parent="."]
 anchor_right = 1.0
@@ -91,7 +101,7 @@ anchor_right = 0.5
 margin_left = -640.0
 margin_top = 720.0
 margin_right = 640.0
-margin_bottom = 3127.0
+margin_bottom = 3472.0
 custom_fonts/bold_font = ExtResource( 3 )
 custom_fonts/normal_font = ExtResource( 1 )
 bbcode_enabled = true
@@ -115,9 +125,19 @@ anonymous
 amaryllis
 DWAnon
 mia
+tressanightmaus
 ...and many sprites stolen from
 mighty gunvolt burst, megaman,
 castlevania, and more
+
+[b]Music[/b]
+Stolen from Rockman 4 Minus Infinity
+And Mega man
+And 8bitdanooct1
+And sega
+and konami
+and just about everything else
+Check the jukebox for full credits
 
 [b]Beta Testers[/b]
 Nirvash
@@ -176,9 +196,19 @@ anonymous
 amaryllis
 DWAnon
 mia
+tressanightmaus
 ...and many sprites stolen from
 mighty gunvolt burst, megaman,
 castlevania, and more
+
+Music
+Stolen from Rockman 4 Minus Infinity
+And Mega man
+And 8bitdanooct1
+And sega
+and konami
+and just about everything else
+Check the jukebox for full credits
 
 Beta Testers
 Nirvash

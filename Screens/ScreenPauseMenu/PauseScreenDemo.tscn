@@ -304,8 +304,11 @@ func set_input_true():
 	isHandlingInput=true
 
 func _ready():
-	$LabelPrevScreen.text = \"PrevScreen: \"+Globals.previous_screen+\", CurStage: \"+get_node(\"/root/Node2D\").custom_music_name
-	#construct()
+	var n = get_node(\"/root/Node2D\")
+	if n:
+		$LabelPrevScreen.text = \"PrevScreen: \"+Globals.previous_screen+\", CurStage: \"+n.custom_music_name
+	else:
+		$LabelPrevScreen.text = \"PrevScreen: \"+Globals.previous_screen+\", CurStage: ???\"
 	pass
 
 func input(event):

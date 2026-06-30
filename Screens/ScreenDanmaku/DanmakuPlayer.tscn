@@ -1,0 +1,178 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://Sounds/Classic/Shoot.wav" type="AudioStream" id=1]
+[ext_resource path="res://Character Sprites/ump9/cursor.png" type="Texture" id=2]
+[ext_resource path="res://Character Sprites/ump9/ump9.tres" type="SpriteFrames" id=3]
+[ext_resource path="res://Screens/ScreenDanmaku/Player.gd" type="Script" id=4]
+[ext_resource path="res://Sounds/Classic/Hurt.wav" type="AudioStream" id=5]
+[ext_resource path="res://Player Files/8bitPlayer/INPUTMAN.gd" type="Script" id=6]
+[ext_resource path="res://Player Files/Weapons/bulletManager.gd" type="Script" id=7]
+[ext_resource path="res://Sounds/Classic/Die.wav" type="AudioStream" id=8]
+[ext_resource path="res://ubuntu-font-family/MM2Font_Smaller.tres" type="DynamicFont" id=9]
+
+[sub_resource type="CircleShape2D" id=1]
+radius = 16.0
+
+[node name="Player" type="KinematicBody2D"]
+position = Vector2( 288, -96 )
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_group_": true
+}
+playfield_limit = Rect2( 0, 0, 1280, 720 )
+player_hp_node = NodePath("../../UIElements/playerHP")
+pause_screen = NodePath("../../UIElements/PauseScreen")
+options_screen = NodePath("../../OptionsScreen")
+
+[node name="Sprite" type="AnimatedSprite" parent="."]
+scale = Vector2( 4, 4 )
+frames = ExtResource( 3 )
+animation = "Falling"
+offset = Vector2( 0, 1 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="INPUTMAN" type="Node" parent="."]
+script = ExtResource( 6 )
+
+[node name="BulletManager" type="Node" parent="."]
+script = ExtResource( 7 )
+
+[node name="HurtSound" type="AudioStreamPlayer2D" parent="."]
+scale = Vector2( 4, 4 )
+stream = ExtResource( 5 )
+volume_db = 3.0
+bus = "Player/Enemies"
+
+[node name="ShootSound" type="AudioStreamPlayer2D" parent="."]
+scale = Vector2( 4, 4 )
+stream = ExtResource( 1 )
+volume_db = 5.0
+bus = "Player/Enemies"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 1 )
+
+[node name="Hitbox" type="Sprite" parent="."]
+scale = Vector2( 2, 2 )
+z_index = 2
+texture = ExtResource( 2 )
+
+[node name="DieSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 8 )
+bus = "Player/Enemies"
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="DebugButtonHelp" type="Label" parent="CanvasLayer"]
+visible = false
+margin_left = 721.264
+margin_top = 158.363
+margin_right = 1522.26
+margin_bottom = 339.363
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_as_outline = 10
+custom_fonts/font = ExtResource( 9 )
+text = "F1 - god mode
+F2 - 
+F3 - 
+F4 - RAPIDFIRE
+f5 - refill health
+f6 - 
+f7 - 
+f8 - exit game
+F9 - CYCLE  DEBUG DISP
+F10 - KILL SELF
+f11 - toggle fullscreen
+f12 - "
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="DebugDisplay" type="Control" parent="CanvasLayer"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="StateInfo" type="Label" parent="CanvasLayer/DebugDisplay"]
+margin_left = 96.0
+margin_top = 112.0
+margin_right = 897.0
+margin_bottom = 162.0
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_as_outline = 10
+custom_fonts/font = ExtResource( 9 )
+text = "PlayerState debug"
+
+[node name="CameraInfo" type="Label" parent="CanvasLayer/DebugDisplay"]
+margin_left = 454.816
+margin_top = 50.6725
+margin_right = 1255.82
+margin_bottom = 100.673
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_as_outline = 10
+custom_fonts/font = ExtResource( 9 )
+text = "camera debug"
+align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="StateVelocity" type="Label" parent="CanvasLayer/DebugDisplay"]
+visible = false
+margin_left = 96.0
+margin_top = 16.0
+margin_right = 734.0
+margin_bottom = 66.0
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_as_outline = 10
+custom_fonts/font = ExtResource( 9 )
+text = "Velocity debug"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="StateTile" type="Label" parent="CanvasLayer/DebugDisplay"]
+visible = false
+margin_left = 96.0
+margin_top = 80.0
+margin_right = 734.0
+margin_bottom = 130.0
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_as_outline = 10
+custom_fonts/font = ExtResource( 9 )
+text = "Tile Debug"
+
+[node name="StatePosition" type="Label" parent="CanvasLayer/DebugDisplay"]
+margin_left = 96.0
+margin_top = 48.0
+margin_right = 734.0
+margin_bottom = 98.0
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_as_outline = 10
+custom_fonts/font = ExtResource( 9 )
+text = "Position Debug"
+
+[node name="FreeRoam" type="Label" parent="CanvasLayer/DebugDisplay"]
+margin_left = 617.0
+margin_top = 15.0
+margin_right = 1255.0
+margin_bottom = 65.0
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_y = 0
+custom_constants/shadow_as_outline = 10
+custom_fonts/font = ExtResource( 9 )
+text = "Free Roam"
+align = 2
+
+[node name="PositionOnScreen" type="Label" parent="CanvasLayer/DebugDisplay"]
+visible = false
+margin_left = 96.0
+margin_top = 200.0
+margin_right = 672.0
+margin_bottom = 235.0
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_as_outline = 5
+custom_fonts/font = ExtResource( 9 )
+text = "Onscreen pos"

@@ -10,6 +10,10 @@ export(Vector2) var destination_spread_xpos = Vector2(0,1)
 #export(float,0.0,0.5,.01) var slowdown_speed=0.0
 #export()
 export(Vector2) var CubicSpread = Vector2(0,0)
+export(Color) var color = Color(0, 1, 0.415686)
+
+func _ready():
+	$sprite.modulate = color
 
 #var bulletSpin:Vector2 = Vector2(6,1)
 

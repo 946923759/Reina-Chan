@@ -6,6 +6,12 @@
 
 [node name="bullet" instance=ExtResource( 1 )]
 script = ExtResource( 2 )
+special_type = 0
+time_to_reverse = 1.0
+reverse_time_increase = 0.0
+destination_spread_xpos = Vector2( 0, 1 )
+CubicSpread = Vector2( 0, 0 )
+color = Color( 0, 1, 0.415686, 1 )
 
 [node name="sprite" parent="." index="1"]
 modulate = Color( 0, 1, 0.415686, 1 )
@@ -17,6 +23,7 @@ visible = false
 visible = false
 
 [node name="DebugLabel" type="Label" parent="." index="8"]
+visible = false
 margin_right = 40.0
 margin_bottom = 14.0
 text = "position = Vector2( 0, 0 )

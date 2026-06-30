@@ -125,5 +125,6 @@ position = Vector2( -48, -123 )
 text = "hurry up!!!"
 wrap_at = 92233720368
 scale_by = 4
+displayed_characters = 500
 
 [connection signal="switched_weapon" from="." to="WeaponSwitch" method="showIcon"]
