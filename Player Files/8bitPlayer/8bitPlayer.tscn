@@ -393,6 +393,36 @@ __meta__ = {
 anchor_right = 1.0
 anchor_bottom = 1.0
 
+[node name="StateVelocity" type="Label" parent="CanvasLayer/DebugDisplay"]
+margin_left = 96.0
+margin_top = 16.0
+margin_right = 734.0
+margin_bottom = 66.0
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_as_outline = 10
+custom_fonts/font = ExtResource( 6 )
+text = "Velocity debug"
+
+[node name="StatePosition" type="Label" parent="CanvasLayer/DebugDisplay"]
+margin_left = 96.0
+margin_top = 48.0
+margin_right = 734.0
+margin_bottom = 98.0
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_as_outline = 10
+custom_fonts/font = ExtResource( 6 )
+text = "Position Debug"
+
+[node name="StateTile" type="Label" parent="CanvasLayer/DebugDisplay"]
+margin_left = 96.0
+margin_top = 80.0
+margin_right = 734.0
+margin_bottom = 130.0
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_as_outline = 10
+custom_fonts/font = ExtResource( 6 )
+text = "Tile Debug"
+
 [node name="StateInfo" type="Label" parent="CanvasLayer/DebugDisplay"]
 margin_left = 96.0
 margin_top = 112.0
@@ -402,6 +432,26 @@ custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_constants/shadow_as_outline = 10
 custom_fonts/font = ExtResource( 6 )
 text = "PlayerState debug"
+
+[node name="CollisionInfo" type="Label" parent="CanvasLayer/DebugDisplay"]
+margin_left = 96.0
+margin_top = 136.0
+margin_right = 897.0
+margin_bottom = 186.0
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_as_outline = 10
+custom_fonts/font = ExtResource( 6 )
+text = "collision debug"
+
+[node name="PositionOnScreen" type="Label" parent="CanvasLayer/DebugDisplay"]
+margin_left = 96.0
+margin_top = 200.0
+margin_right = 672.0
+margin_bottom = 235.0
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_as_outline = 5
+custom_fonts/font = ExtResource( 6 )
+text = "Onscreen pos"
 
 [node name="CameraInfo" type="Label" parent="CanvasLayer/DebugDisplay"]
 margin_left = 454.816
@@ -417,39 +467,6 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="StateVelocity" type="Label" parent="CanvasLayer/DebugDisplay"]
-margin_left = 96.0
-margin_top = 16.0
-margin_right = 734.0
-margin_bottom = 66.0
-custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
-custom_constants/shadow_as_outline = 10
-custom_fonts/font = ExtResource( 6 )
-text = "Velocity debug"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="StateTile" type="Label" parent="CanvasLayer/DebugDisplay"]
-margin_left = 96.0
-margin_top = 80.0
-margin_right = 734.0
-margin_bottom = 130.0
-custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
-custom_constants/shadow_as_outline = 10
-custom_fonts/font = ExtResource( 6 )
-text = "Tile Debug"
-
-[node name="StatePosition" type="Label" parent="CanvasLayer/DebugDisplay"]
-margin_left = 96.0
-margin_top = 48.0
-margin_right = 734.0
-margin_bottom = 98.0
-custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
-custom_constants/shadow_as_outline = 10
-custom_fonts/font = ExtResource( 6 )
-text = "Position Debug"
-
 [node name="FreeRoam" type="Label" parent="CanvasLayer/DebugDisplay"]
 margin_left = 617.0
 margin_top = 15.0
@@ -461,16 +478,6 @@ custom_constants/shadow_as_outline = 10
 custom_fonts/font = ExtResource( 6 )
 text = "Free Roam"
 align = 2
-
-[node name="PositionOnScreen" type="Label" parent="CanvasLayer/DebugDisplay"]
-margin_left = 96.0
-margin_top = 200.0
-margin_right = 672.0
-margin_bottom = 235.0
-custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
-custom_constants/shadow_as_outline = 5
-custom_fonts/font = ExtResource( 6 )
-text = "Onscreen pos"
 
 [node name="bar" type="Sprite" parent="CanvasLayer"]
 material = SubResource( 4 )

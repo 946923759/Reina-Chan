@@ -30,8 +30,8 @@ var velocity = Vector2()
 #go of the jump button.
 
 #Normal is running or idle, there doesn't need to be a distinction anyways
-enum State { INACTIVE, NORMAL, JUMPING, FALLING, HURT, GRABBING_LADDER, ON_LADDER, FLYING_BACKWARDS, DASH_ATTACK, DASH }
-var state_toString = ["INACTIVE","Normal","Jumping","Falling","Hurt","Grabbing_Ladder","On_Ladder","Flying_Backwards","DashAttack", "Dash"]
+enum State { INACTIVE, NORMAL, JUMPING, FALLING, HURT, GRABBING_LADDER, ON_LADDER, FLYING_BACKWARDS, DASH_ATTACK, DASH, WALL_SLIDE }
+var state_toString = ["INACTIVE","Normal","Jumping","Falling","Hurt","Grabbing_Ladder","On_Ladder","Flying_Backwards","DashAttack", "Dash", "WallSlide"]
 var state = State.INACTIVE
 
 
@@ -104,6 +104,7 @@ var rapidFire:bool = (Globals.playerData.gameDifficulty==Globals.Difficulty.BEGI
 #var showDebugDisplay:int = 0 #0 - off, 1 - 
 onready var debugDisplay = $CanvasLayer/DebugDisplay
 onready var stateInfo = $CanvasLayer/DebugDisplay/StateInfo
+onready var collisionInfo = $CanvasLayer/DebugDisplay/CollisionInfo
 onready var stateVelocity = $CanvasLayer/DebugDisplay/StateVelocity
 onready var stateTile = $CanvasLayer/DebugDisplay/StateTile
 onready var statePos = $CanvasLayer/DebugDisplay/StatePosition
@@ -242,7 +243,7 @@ func get_menu_buttons_input(_delta):
 		setDebugInfoText()
 		CheckpointPlayerStats.usedDebugMode=true
 		
-	elif Input.is_action_just_pressed("DebugButton3"):
+	elif Input.is_action_just_pressed("DebugButton3") or (Input.is_action_pressed("L1") and Input.is_action_pressed("R1") and Input.is_action_just_pressed("R3")):
 		if lastDebugWarped+1 < stageRoot.debug_warp_points.size():
 			lastDebugWarped+=1
 		else:
@@ -986,7 +987,9 @@ func _physics_process(delta):
 		sprite.visible=false
 		invincible=true
 		velocity.y += gravity * delta
-		stateInfo.text = sprite.get_animation() + " ! " + String(sprite.is_playing())
+		# Update this if inactive so we can check intro animation
+		# (Although we don't use the intro animation anymore anyways...)
+		#stateInfo.text = sprite.get_animation() + " ! " + String(sprite.is_playing())
 		time_before_active-=delta
 		if time_before_active<=0:
 			sprite.visible=true
@@ -1052,6 +1055,8 @@ func _physics_process(delta):
 		#stateInfo.text = "Floor: " + String(is_on_floor()) + " Wall: " + String(is_on_wall()) + " Ceiling: " + String(rayCast.is_colliding())
 		#stateInfo.text = "Floor:" + String(is_on_floor()) +" ! "+ "Jumping: "+String(jumping)
 		stateInfo.text = sprite.get_animation() + " ! " + state_toString[state]
+		collisionInfo.text = "Wall: "+String(is_on_wall()) + "! Floor: "+String(is_on_floor())
+		
 		if Globals.playerData.gameDifficulty > Globals.Difficulty.EASY:
 			#var txt = "\n" + String(bulletManager.get_onscreen_bullet_pos(0))
 			#txt += "\n" + String(bulletManager.get_onscreen_bullet_pos(0)*stageRoot.get_canvas_transform().get_scale())

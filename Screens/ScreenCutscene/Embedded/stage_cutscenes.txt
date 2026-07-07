@@ -136,8 +136,12 @@ msgbox	Agent	right
 msg	Hmph! I have more tricks up my sleeve! Just you wait-
 nop	tween	before	BossM16	call,raging_demon_start;linear,.5;x,$Agent/position/x
 await_call	FakeM16	raging_demon_start
+msgbox	UMP9	left
+msg	Thank you for defeating Agent for me... I think?
 msgbox	M16A1	right
 msg	Hahahahaha! I have mastered the Raging Demon! Prepare to be sent to heaven under my supreme power!
+msgbox	UMP9	left
+msg	Never mind!
 
 #KEY	vs_M16_M16
 msgbox_add	M16A1	right	top

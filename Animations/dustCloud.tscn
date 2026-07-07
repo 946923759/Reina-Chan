@@ -1,0 +1,28 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Animations/dustCloud 2x1.png" type="Texture" id=1]
+[ext_resource path="res://ParticleEffects/AlphaMaskBlack.tres" type="Material" id=2]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Sprite
+
+#var frame_time = 
+var elapsed:float = 0.0
+
+func _init():
+	frame = 0
+
+func _process(delta):
+	elapsed += delta
+	if elapsed > .32:
+		queue_free()
+	elif elapsed > .16:
+		frame = 1
+"
+
+[node name="Sprite" type="Sprite"]
+material = ExtResource( 2 )
+texture = ExtResource( 1 )
+hframes = 2
+frame = 1
+script = SubResource( 1 )

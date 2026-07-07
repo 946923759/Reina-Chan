@@ -69,7 +69,7 @@ func enemy_touched_alt(obj,reflect):
 		reflectSound.play()
 	else:
 		if obj.has_method(\"damage\"):
-			obj.call(\"damage\",3)
+			obj.call(\"damage\",3, 0)
 		#This is only supposed to happen for large enemies
 		#queue_free()
 "
@@ -137,7 +137,6 @@ position = Vector2( -20, 0 )
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource( 3 )
-autoplay = true
 bus = "Player/Enemies"
 
 [node name="ReflectSound" type="AudioStreamPlayer2D" parent="."]

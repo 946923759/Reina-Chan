@@ -1,5 +1,7 @@
 extends "res://Stages_Reina/Bosses/BossBase.gd"
 
+#export(NodePath) var dust_cloud_node_path
+
 #Special handler for her intro animation because
 #we want it to always animate
 func _on_AnimatedSprite_animation_finished():

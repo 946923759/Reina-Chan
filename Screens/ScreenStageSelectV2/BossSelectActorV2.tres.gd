@@ -5,6 +5,7 @@ export(String) var text = "???" setget set_text
 export(String, FILE, "*.tscn") var destination_stage
 export(Texture) var portrait_texture setget set_texture
 export(bool) var show_texture = true setget set_show_texture
+export(int) var emblem_to_show = -1 setget set_emblem
 
 var time:float = 0.0
 
@@ -15,6 +16,7 @@ func _ready():
 func set_show_texture(b:bool):
 	show_texture = b
 	$TextureRect.visible = show_texture
+	#$Emblem.visible = !show_texture
 
 func set_text(t:String):
 	text=t
@@ -23,6 +25,14 @@ func set_text(t:String):
 func set_texture(tex:Texture):
 	portrait_texture = tex
 	$TextureRect.texture = tex
+
+func set_emblem(i:int):
+	if i>=0:
+		$Emblem.visible = !show_texture
+		$Emblem.frame = i
+	else:
+		$Emblem.visible = false
+	emblem_to_show = i
 
 func GainFocus():
 	time = 0.0

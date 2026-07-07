@@ -25,6 +25,18 @@ var LADDER_TILE_ID = 6
 var LADDER_TOP_TILE_ID = 11
 var SPIKES_TILE_ID = 12
 
+#THESE ONLY EXIST TO KEEP THE PAUSE MENU FROM CRASHING
+export (String) var custom_music_name
+export (String) var nsf_music_file
+export (int) var nsf_track_num = 0
+export (float,-8.0,8.0,.1) var nsf_volume_adjustment = 0.0
+export (bool) var mute_music_in_debug=false
+export (bool) var mute_boss_music_in_debug=false
+#export (bool) var completely_disable_music=false
+#var camera_multiplier = 16
+export (Globals.Weapons) var weapon_to_unlock=0
+export (int,0,4) var wily_stage_num=0
+
 var reinaAudioPlayer
 func _ready():
 	reinaAudioPlayer = ReinaAudioPlayer.new(self)

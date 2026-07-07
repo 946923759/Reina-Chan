@@ -28,17 +28,25 @@ func _ready():
 	else:
 		$HubButton.visible=false
 		
-	#for i in range(Globals.Weapons.LENGTH_WEAPONS):
-	#	var stage_name = Globals.stagesToString[i]
+		
+	var player_emblems:Array = Globals.playerData.ReinaChanEmblems
+	print(player_emblems)
 	for i in range(portrait_actor_frame.get_child_count()):
 		var p = portrait_actor_frame.get_child(i)
 		if "destination_stage" in p:
 			var stage_name = p.text
 			if stage_name:
+				var emblem_idx = Globals.EMBLEM_MAP[stage_name]
 				#Case sensitive!!
 				var stage_internal_index = Globals.stagesToString.find(stage_name)
 				if Globals.playerData.availableWeapons[stage_internal_index]:
 					p.show_texture = false
+					#print("Checking emblem "+String(emblem_idx))
+					if player_emblems[emblem_idx] == false:
+						p.emblem_to_show = emblem_idx
+					else:
+						p.emblem_to_show = -1
+				
 			p.connect("gui_input",self,"mouse_input",[i])
 	
 	# Show SF sprite if 4 stages beaten

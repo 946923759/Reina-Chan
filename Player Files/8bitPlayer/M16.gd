@@ -5,6 +5,8 @@ onready var a1 = get_node("Sprite/AfterImage1")
 onready var a2 = get_node("Sprite/AfterImage2")
 onready var a3 = get_node("Sprite/AfterImage3")
 var oldPositions:PoolVector2Array = PoolVector2Array()
+var oldFrameTextures:Array = []
+var oldFrameFlips:Array = []
 
 
 var playerChargeShot = preload("res://Player Files/Weapons/PlayerChargeShot.tscn")
@@ -12,6 +14,8 @@ onready var chargingAnim:AnimatedSprite = $Charging
 onready var chargeStart:AudioStreamPlayer2D = $ChargeStartSound
 onready var chargeLoop:AudioStreamPlayer2D = $ChargeLoopSound
 onready var chargeShotS:AudioStreamPlayer2D = $ChargeShotFireSound
+
+var dustCloudAnim = preload("res://Animations/dustCloud.tscn")
 
 ##TODO: dude lmao
 #const CHARGE_MIN_TIME = .5
@@ -21,20 +25,37 @@ onready var chargeShotS:AudioStreamPlayer2D = $ChargeShotFireSound
 
 const DASH_MINIMUM_TIME = .2
 const DASH_MAXIMUM_TIME = 1.0
+const WALL_JUMP_INPUT_LOCK_TIME = 0.08
+const WALL_JUMP_X_CURVE_ACCEL = 1400.0
 # In Mega Man Zero, Zero will dash as long as he's in the air.
 # On the ground he dashes for a minimum of .2 seconds
 # or a maximum of 1 second. 
 var dashing:bool = false
+var wall_jump_input_lock_timer:float = 0.0
+var wall_jump_x_recovery_active:bool = false
+#This is used to spawn the dust clouds every 5 frames
+var wall_slide_frame_timer:float = 0.0
 
 func _ready():
-	#oldPositions = PoolVector2Array()
 	oldPositions.resize(6)
+	oldFrameTextures.resize(6)
+	oldFrameFlips.resize(6)
+
+	var current_texture = sprite.frames.get_frame(sprite.get_animation(), sprite.frame)
+	for i in range(oldPositions.size()):
+		oldPositions[i] = position
+		oldFrameTextures[i] = current_texture
+		oldFrameFlips[i] = sprite.flip_h
+
+	#If this is left on the afterimages will be offset incorrectly.
+	#So always turn it off.
+	for after_image in [a1, a2, a3]:
+		after_image.centered = sprite.centered
+		after_image.offset = sprite.offset
+		after_image.region_enabled = false
 	a1.visible=false
 	a2.visible=false
 	a3.visible=false
-	#a1.offset=Vector2(0,0)
-	#a2.offset=Vector2(0,0)
-	#a3.offset=Vector2(0,0)
 
 	#I DON'T UNDERSTAND WHY THIS WILL OVERRIDE THE BASE
 	#SCENES IF YOU CHANGE IT IN THE EDITOR WHO THE FUCK
@@ -70,6 +91,13 @@ func get_input(delta):
 	var shoot = Input.is_action_just_pressed(INPUT.SHOOT[controller_index])
 	var dash = (down and jump) or Input.is_action_just_pressed(INPUT.R1[controller_index])
 	var dash_hold = dash or Input.is_action_pressed(INPUT.R1[controller_index])
+
+	if wall_jump_input_lock_timer > 0:
+		wall_jump_input_lock_timer = max(0.0, wall_jump_input_lock_timer - delta)
+
+	if is_on_floor() or state == State.ON_LADDER:
+		wall_jump_x_recovery_active = false
+		wall_jump_input_lock_timer = 0.0
 
 	#var chargeShot = Input.is_action_pressed(INPUT.SHOOT[controller_index]) and currentWeapon==Globals.Weapons.Buster
 
@@ -120,6 +148,8 @@ func get_input(delta):
 			ss = -1.0
 		else:
 			ss = 1.0
+		if state == State.WALL_SLIDE:
+			ss *= -1.0
 		#Note: $ is shorthand for get_node()
 		#Right here it's doing get_node("bullet_shoot")
 		#ternary: var p = 1 if f else -1
@@ -220,6 +250,8 @@ func get_input(delta):
 					ss = -1.0
 				else:
 					ss = 1.0
+				if state == State.WALL_SLIDE:
+					ss *= -1.0
 				#Note: $ is shorthand for get_node()
 				#Right here it's doing get_node("bullet_shoot")
 				#ternary: var p = 1 if f else -1
@@ -271,6 +303,21 @@ func get_input(delta):
 	if jump and is_on_floor():
 		velocity.y = jump_speed
 		state = State.JUMPING
+	elif jump and state == State.WALL_SLIDE:
+		velocity.y = jump_speed
+		state = State.JUMPING
+		
+		var inst = dustCloudAnim.instance()
+		inst.scale = Vector2(4,4)
+		stageRoot.add_child(inst)
+		var vec = get_collision_vector_from_wall()
+		inst.global_position = global_position + Vector2(32*vec.x, 32)
+		
+		velocity.x = vec.x * -100
+		wall_jump_x_recovery_active = true
+		wall_jump_input_lock_timer = WALL_JUMP_INPUT_LOCK_TIME
+		#Dashing and jumping is kinda broken so I'm just going to disable it
+		dash_time = 0
 	elif state == State.ON_LADDER:
 		#Maybe waste of CPU?
 		velocity.y = 0
@@ -293,14 +340,26 @@ func get_input(delta):
 		velocity = velocity.normalized() * SPEED
 	#Your normal movement processing
 	else:
-		if right and position.x < $Camera2D.destPositions[2]-40:
-			velocity.x = run_speed
-			sprite.flip_h = false
-		elif left and position.x > $Camera2D.destPositions[0]+40:
-			velocity.x = -run_speed
-			sprite.flip_h = true
-		elif !movementLocked: #If movement locked, assume velocity should be preserved
-			velocity.x=0
+		if wall_jump_x_recovery_active and !is_on_floor() and state != State.ON_LADDER:
+			var target_x = 0.0
+			if right and position.x < $Camera2D.destPositions[2]-40:
+				target_x = run_speed
+				sprite.flip_h = false
+			elif left and position.x > $Camera2D.destPositions[0]+40:
+				target_x = -run_speed
+				sprite.flip_h = true
+
+			if wall_jump_input_lock_timer <= 0.0:
+				velocity.x = move_toward(velocity.x, target_x, WALL_JUMP_X_CURVE_ACCEL * delta)
+		else:
+			if right and position.x < $Camera2D.destPositions[2]-40:
+				velocity.x = run_speed
+				sprite.flip_h = false
+			elif left and position.x > $Camera2D.destPositions[0]+40:
+				velocity.x = -run_speed
+				sprite.flip_h = true
+			elif !movementLocked: #If movement locked, assume velocity should be preserved
+				velocity.x=0
 			
 		
 		if position.x < $Camera2D.destPositions[0]+40 or position.x > $Camera2D.destPositions[2]-40:
@@ -371,7 +430,7 @@ func get_input(delta):
 
 
 #delta: time between frames (duh)
-#tile: current tile the player is on (passed in from physics)
+#tile: current tile the player is on (passed in from physics_process)
 func process_normal_movement(delta, tile):
 	
 	if state==State.FLYING_BACKWARDS:
@@ -491,12 +550,24 @@ func process_normal_movement(delta, tile):
 			else:
 				#state = State.FALLING
 				sprite.set_animation("Falling")
-				
+	elif is_on_wall() and velocity.y > 0 and get_collision_vector_from_wall() != Vector2.ZERO:
+		sprite.set_animation("WallSlide")
+		velocity.y = 100
+		state = State.WALL_SLIDE
+		wall_slide_frame_timer += delta
+		if wall_slide_frame_timer > .2:
+			wall_slide_frame_timer -= .2
+			var inst = dustCloudAnim.instance()
+			inst.scale = Vector2(4,4)
+			stageRoot.add_child(inst)
+			var vec = get_collision_vector_from_wall()
+			inst.global_position = global_position + Vector2(32*vec.x,-24)
+			
 	elif velocity.y > 0.5 and not movementLocked:
 		state = State.FALLING
 		
-	if !is_on_floor() and not movementLocked and state != State.ON_LADDER:
-	#if state == State.FALLING:
+	if !is_on_floor() and not movementLocked and state != State.ON_LADDER and state != State.WALL_SLIDE:
+	
 		if shoot_sprite_time <= 0:
 			if velocity.y<=0:
 				sprite.set_animation("JumpStart")
@@ -506,44 +577,60 @@ func process_normal_movement(delta, tile):
 			sprite.set_animation("FallingShoot")
 	dash_handler()
 
+# Returns the vector for the direction you're pressing on if you're sliding on a wall.
+func get_collision_vector_from_wall() -> Vector2:
+	var pressing_left = Input.is_action_pressed(INPUT.LEFT[controller_index])
+	var pressing_right = Input.is_action_pressed(INPUT.RIGHT[controller_index])
+
+	if pressing_left == pressing_right:
+		return Vector2.ZERO
+
+	for i in range(get_slide_count()):
+		var collision = get_slide_collision(i)
+		if collision == null:
+			continue
+
+		if collision.normal.x > 0.7 and pressing_left:
+			return Vector2.LEFT
+		elif collision.normal.x < -0.7 and pressing_right:
+			return Vector2.RIGHT
+	return Vector2.ZERO
+
 #Return false if processing should stop
 func dash_handler() -> bool:
-	#if !is_on_floor():
-	#	dash_time=0.0
-	a1.visible = dash_time>0
-	a2.visible = dash_time>0
-	a3.visible = dash_time>0
-	if dash_time>0:
-		#I don't think this is correct?
-		#var ss = -1.0 if sprite.flip_h else 1.0
-		#velocity=Vector2(ss*run_speed*dash_multiplier,5)
+	#"or true" for debugging purposes
+	var should_process = dash_time > 0 # or true
+
+	a1.visible = should_process
+	a2.visible = should_process
+	a3.visible = should_process
+	if should_process:
 
 		var t = sprite.frames.get_frame(sprite.get_animation(), sprite.frame)
 		var f = sprite.flip_h
-		#var p = 1 if f else -1
-		#var i = 0
-		oldPositions[5] = position
-		for i in range(5):
-			oldPositions[i] = oldPositions[i+1]
-			#i+=1
-		a1.texture = t
-		a2.texture = t
-		a3.texture = t
 
-		a1.flip_h = f
-		a2.flip_h = f
-		a3.flip_h = f
+		for i in range(oldPositions.size()-1):
+			oldPositions[i] = oldPositions[i+1]
+			oldFrameTextures[i] = oldFrameTextures[i+1]
+			oldFrameFlips[i] = oldFrameFlips[i+1]
+
+		oldPositions[oldPositions.size()-1] = position
+		oldFrameTextures[oldFrameTextures.size()-1] = t
+		oldFrameFlips[oldFrameFlips.size()-1] = f
+
+		a1.texture = oldFrameTextures[4]
+		a2.texture = oldFrameTextures[3]
+		a3.texture = oldFrameTextures[2]
+
+		a1.flip_h = oldFrameFlips[4]
+		a2.flip_h = oldFrameFlips[3]
+		a3.flip_h = oldFrameFlips[2]
 
 		a1.position=oldPositions[4]-position
 		a2.position=oldPositions[3]-position
 		a3.position=oldPositions[2]-position
-		#a3.offset = oldPositions[4] - position
-		#a2.offset = oldPositions[2] - position
-		#a1.offset = oldPositions[0] - position
-		#$Sprite/Label.text = "offset: "+String(oldPositions[4]-position)
-		return true
-	else:
-		return false
+	
+	return should_process;
 
 #Currently we decided m16 can't obtain weapons,
 #so the item get screen is disabled for her.

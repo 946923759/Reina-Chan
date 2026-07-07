@@ -66,3 +66,13 @@ func _on_FishBoss_enemy_destroyed():
 	for p in players:
 		p.finishStage()
 	pass # Replace with function body.
+
+
+func _on_EventTile2_event_executed_passPlayer(player):
+	#print("Triggered")
+	if Globals.playerData.gameDifficulty <= Globals.Difficulty.EASY:
+		player.player_touched(null,5)
+		player.position.y = player.get_node("Camera2D").limit_top
+	else:
+		player.die()
+

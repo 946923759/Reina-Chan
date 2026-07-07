@@ -1,4 +1,4 @@
-[gd_scene load_steps=70 format=2]
+[gd_scene load_steps=71 format=2]
 
 [ext_resource path="res://Stages/IceMan/IceManTileset.tres" type="TileSet" id=1]
 [ext_resource path="res://Stages_Reina/Enemies/Dinergate.tscn" type="PackedScene" id=2]
@@ -52,6 +52,7 @@
 [ext_resource path="res://Various Objects/shapes/CollsionShape2D_h.tscn" type="PackedScene" id=50]
 [ext_resource path="res://Stages_Reina/Sangvis1/drop.tscn" type="PackedScene" id=51]
 [ext_resource path="res://Stages_Reina/Ouroboros/ResetButton.tscn" type="PackedScene" id=52]
+[ext_resource path="res://Character Sprites/m16/m16Idle.png" type="Texture" id=53]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 1920, 32 )
@@ -724,6 +725,8 @@ bottomBound = 25
 
 [node name="PlayerHolder" parent="." index="40"]
 position = Vector2( 1488, 2880 )
+texture = ExtResource( 53 )
+player_to_spawn_in_debug = 1
 
 [node name="CameraAdjuster5" parent="." index="41" instance=ExtResource( 27 )]
 position = Vector2( 10341.1, -376.282 )

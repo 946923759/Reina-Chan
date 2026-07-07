@@ -85,7 +85,7 @@ margin_top = 70.0
 margin_right = 1280.0
 margin_bottom = 115.0
 custom_fonts/font = ExtResource( 8 )
-text = "For lazy people"
+text = "For super cool people"
 align = 1
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]

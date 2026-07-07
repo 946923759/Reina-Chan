@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/dustCloud 2x1.png-776f24e7c2109fdc833d5fecb524713f.stex"
+path="res://.import/dustCloud 2x1.png-ebf641c1d2e9d5d85e6a52d1b0739773.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Character Sprites/skorp/dustCloud 2x1.png"
-dest_files=[ "res://.import/dustCloud 2x1.png-776f24e7c2109fdc833d5fecb524713f.stex" ]
+source_file="res://Animations/dustCloud 2x1.png"
+dest_files=[ "res://.import/dustCloud 2x1.png-ebf641c1d2e9d5d85e6a52d1b0739773.stex" ]
 
 [params]
 

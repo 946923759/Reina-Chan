@@ -1,4 +1,4 @@
-[gd_scene load_steps=103 format=2]
+[gd_scene load_steps=104 format=2]
 
 [ext_resource path="res://Stages_Reina/8bitBaseStage.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Various Objects/BossWarning/WARNING.tscn" type="PackedScene" id=2]
@@ -72,7 +72,7 @@
 [ext_resource path="res://Stages_Reina/Bosses/Scarecrow/BossScarecrow.tscn" type="PackedScene" id=70]
 [ext_resource path="res://Stages_Reina/Scarecrow/quicksand_top.png" type="Texture" id=71]
 [ext_resource path="res://ParticleEffects/AlphaMaskBlack.tres" type="Material" id=72]
-[ext_resource path="res://Character Sprites/skorp/dustCloud 2x1.png" type="Texture" id=73]
+[ext_resource path="res://Animations/dustCloud 2x1.png" type="Texture" id=73]
 [ext_resource path="res://Stages_Reina/Sangvis3/LockDoorIfBitSet.gd" type="Script" id=74]
 [ext_resource path="res://Various Objects/Special Blocks/Yoku Block.tscn" type="PackedScene" id=75]
 [ext_resource path="res://Stages_Reina/Alchemist/castlevania interior bg 1.png" type="Texture" id=76]
@@ -88,6 +88,7 @@
 [ext_resource path="res://Screens/ScreenCutscene/Backgrounds/black.png" type="Texture" id=86]
 [ext_resource path="res://Stages_Reina/Sangvis3/bg.png" type="Texture" id=87]
 [ext_resource path="res://Stages_Reina/Sangvis3/WARNING_M16_Intro.gd" type="Script" id=88]
+[ext_resource path="res://ubuntu-font-family/BitmapFont.tscn" type="PackedScene" id=89]
 [ext_resource path="res://Stages_Reina/NPCs/NPC_M16_Fake.tscn" type="PackedScene" id=90]
 [ext_resource path="res://Stages_Reina/Sangvis1/platform.png" type="Texture" id=91]
 
@@ -309,6 +310,11 @@ script/source = "extends CanvasLayer
 
 func show():
 	$Minimap.visible = false
+	var player = get_node(\"/root/Node2D\").get_player()
+	var tmp_pos:Vector2 = player.pos2cell(player.position)
+		
+	$MinimapFull.player_current_room = Vector2(tmp_pos.x/20, tmp_pos.y/12).floor()
+	
 	$MinimapFull.update()
 	$MinimapFull.visible = true
 
@@ -359,6 +365,7 @@ func _draw():
 						QUAD_SIZE_IN_PIXELS
 					)
 				)
+	draw_circle(player_current_room*QUAD_SIZE_IN_PIXELS+POSITION_OFFSET+Vector2(4,3.5),1,Color.red)
 
 func _process(delta):
 	update()
@@ -3396,6 +3403,12 @@ position = Vector2( 1104, 176 )
 scale = Vector2( 2, 2 )
 script = SubResource( 29 )
 map_texture = ExtResource( 81 )
+
+[node name="BitmapFont" parent="Minimap/MinimapFull" index="0" instance=ExtResource( 89 )]
+position = Vector2( -72, 72 )
+text = "red dot - your location"
+wrap_at = 13
+scale_by = 1
 
 [node name="Sprite" type="Sprite" parent="Minimap" index="2"]
 visible = false

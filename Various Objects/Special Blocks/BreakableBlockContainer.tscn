@@ -20,5 +20,7 @@ func destroy_children(_discard=false, _discard2=false):
 [node name="BreakableBlockContainer" type="Node2D"]
 script = SubResource( 1 )
 __meta__ = {
-"_edit_group_": true
+"_edit_group_": true,
+"_editor_description_": "When a child block is broken, all other blocks in this container will be broken at the same time.
+If you want to adjust breakable block time, use BlockEnablerDisabler instead."
 }

@@ -6,3 +6,6 @@
 collision_layer = 4
 collision_mask = 4
 script = ExtResource( 1 )
+__meta__ = {
+"_editor_description_": "Runs the event handler in the player object. Or if you set it to \"custom event\", run_event(player_obj) from an inherited class will be executed."
+}

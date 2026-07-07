@@ -5,6 +5,7 @@ signal event_executed() #Need for compatibility reasons and for functions that d
 export(Globals.EVENT_TILES) var event_ID = 0;
 export(int,-1,999) var event_modifier = -1;
 export(bool) var trigger_if_player_is_inactive=false
+export(bool) var disable_after_signal_trigger=true
 
 #Some events like checkpoints or messages can become disabled after use.
 var disabled:bool = false
@@ -15,7 +16,8 @@ var disabled:bool = false
 func signal_event(player:KinematicBody2D):
 	emit_signal("event_executed")
 	emit_signal("event_executed_passPlayer",player)
-	self.disabled=true
+	if disable_after_signal_trigger:
+		self.disabled=true
 
 # For custom events, override this function!
 # Unlike the above function, run_event does not disable.

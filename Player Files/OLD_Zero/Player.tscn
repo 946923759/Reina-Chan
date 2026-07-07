@@ -204,9 +204,9 @@ margin_left = 99.0
 margin_top = 118.0
 margin_right = 900.0
 margin_bottom = 168.0
-custom_fonts/font = ExtResource( 14 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_constants/shadow_as_outline = 10
+custom_fonts/font = ExtResource( 14 )
 text = "PlayerState debug"
 
 [node name="CameraInfo" type="Label" parent="CanvasLayer"]
@@ -214,9 +214,9 @@ margin_left = 104.0
 margin_top = 211.0
 margin_right = 905.0
 margin_bottom = 261.0
-custom_fonts/font = ExtResource( 14 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_constants/shadow_as_outline = 10
+custom_fonts/font = ExtResource( 14 )
 text = "camera debug"
 
 [node name="StateVelocity" type="Label" parent="CanvasLayer"]
@@ -224,9 +224,9 @@ margin_left = 101.0
 margin_top = 21.0
 margin_right = 739.0
 margin_bottom = 71.0
-custom_fonts/font = ExtResource( 14 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_constants/shadow_as_outline = 10
+custom_fonts/font = ExtResource( 14 )
 text = "Velocity debug"
 
 [node name="StateTile" type="Label" parent="CanvasLayer"]
@@ -234,9 +234,9 @@ margin_left = 99.0
 margin_top = 88.0
 margin_right = 737.0
 margin_bottom = 138.0
-custom_fonts/font = ExtResource( 14 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_constants/shadow_as_outline = 10
+custom_fonts/font = ExtResource( 14 )
 text = "Tile Debug"
 
 [node name="StatePosition" type="Label" parent="CanvasLayer"]
@@ -244,9 +244,9 @@ margin_left = 101.0
 margin_top = 53.0
 margin_right = 739.0
 margin_bottom = 103.0
-custom_fonts/font = ExtResource( 14 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_constants/shadow_as_outline = 10
+custom_fonts/font = ExtResource( 14 )
 text = "Position Debug"
 
 [node name="FreeRoam" type="Label" parent="CanvasLayer"]
@@ -254,10 +254,10 @@ margin_left = 617.0
 margin_top = 15.0
 margin_right = 1255.0
 margin_bottom = 65.0
-custom_fonts/font = ExtResource( 14 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_constants/shadow_offset_y = 0
 custom_constants/shadow_as_outline = 10
+custom_fonts/font = ExtResource( 14 )
 text = "Free Roam"
 align = 2
 
@@ -266,9 +266,9 @@ margin_left = 103.0
 margin_top = 243.0
 margin_right = 679.0
 margin_bottom = 278.0
-custom_fonts/font = ExtResource( 14 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_constants/shadow_as_outline = 5
+custom_fonts/font = ExtResource( 14 )
 text = "Onscreen pos"
 
 [node name="bar" type="Sprite" parent="CanvasLayer"]

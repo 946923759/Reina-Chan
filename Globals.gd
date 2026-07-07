@@ -126,6 +126,15 @@ enum Weapons {
 	Glorylight,
 	LENGTH_WEAPONS #Put this last
 }
+
+#What stages contain what emblems
+var EMBLEM_MAP = {
+	Architect = 0, #R
+	Ouroboros = 1, #E
+	Alchemist = 2, #I
+	Scarecrow = 3  #N
+}
+
 enum SpecialAbilities {
 	AirDash=0,
 	Grenade,
@@ -381,11 +390,7 @@ func save_system_data()->bool:
 	print("Saved to "+get_save_directory('systemData'))
 	return true
 	
-func save_player_game()->bool:
-	#This doesn't work, playerHasSaveData will always be false!
-	#if !playerHasSaveData:
-	#	printerr("Attempted to save the player's game, but there's no savedata loaded!")
-	#	return false
+func save_player_game() -> bool:
 	var save_game = File.new()
 	var ok = save_game.open(get_save_directory('playerData'),File.WRITE)
 	if ok != OK:
