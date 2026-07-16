@@ -1235,7 +1235,7 @@ margin_bottom = -4.0
 [node name="Label" type="Label" parent="DebugPanel/SystemData"]
 margin_right = 422.0
 margin_bottom = 48.0
-text = "Changing any of these will immediately update their value in memory. However, system data is only saved when exiting the options menu."
+text = "Changing any of these will immediately update their value in memory. However, system data is only saved to disk when exiting the options menu."
 align = 1
 autowrap = true
 

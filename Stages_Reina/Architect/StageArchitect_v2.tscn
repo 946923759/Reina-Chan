@@ -722,6 +722,7 @@ freeze_player_during_transition = true
 
 [node name="9a91" parent="bonusRoom" index="3" instance=ExtResource( 17 )]
 position = Vector2( 13440, 640 )
+animToPlayIfNormal = "cold"
 message_id = "ArchitectNPC"
 unlocksEmblem = 1
 

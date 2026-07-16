@@ -346,6 +346,17 @@ centered = false
 region_enabled = true
 region_rect = Rect2( 0, 16, 704, 16 )
 
+[node name="Sprite3" type="Sprite" parent="Backdrops/BackdropScarecrow" index="2"]
+position = Vector2( 0, 760 )
+scale = Vector2( 4, 4 )
+texture = ExtResource( 12 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 0, 110, 832, 82 )
+__meta__ = {
+"_edit_lock_": true
+}
+
 [node name="BackdropSF1" type="Node2D" parent="Backdrops" index="5"]
 visible = false
 script = ExtResource( 9 )
@@ -381,13 +392,13 @@ __meta__ = {
 
 [node name="VersionNum" parent="." index="4" instance=ExtResource( 1 )]
 position = Vector2( 9, 10 )
-text = "release 0.999"
+text = "release 1.0 RC1.2"
 wrap_at = 92233720368
 scale_by = 3
 
 [node name="VersionNum2" parent="." index="5" instance=ExtResource( 1 )]
 position = Vector2( 9, 42 )
-text = "v.2026.06.26"
+text = "v.2026.07.16"
 wrap_at = 92233720368
 scale_by = 3
 

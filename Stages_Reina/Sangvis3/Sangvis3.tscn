@@ -3186,6 +3186,7 @@ position = Vector2( 1216, 0 )
 z_index = 1
 
 [node name="RoomBackground" type="Sprite" parent="BossRoom 24-0" index="0"]
+self_modulate = Color( 0.701961, 0.701961, 0.701961, 1 )
 scale = Vector2( 1.25, 1.25 )
 z_index = -2048
 z_as_relative = false

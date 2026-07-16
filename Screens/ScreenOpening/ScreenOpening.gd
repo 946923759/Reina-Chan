@@ -23,6 +23,9 @@ onready var bottom:ColorRect = $bottom
 #var total:float = 0.0
 
 func _ready():
+	get_tree().set_screen_stretch(SceneTree.STRETCH_MODE_2D,SceneTree.STRETCH_ASPECT_KEEP,Vector2(1280,720))
+	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
+	
 	Globals.previous_screen=self.name
 	
 	if Globals.eventMode:

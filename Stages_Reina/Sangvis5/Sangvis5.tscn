@@ -593,3 +593,4 @@ script = ExtResource( 36 )
 [connection signal="boss_killed" from="GameplayLayer/Boss" to="." method="finish_stage"]
 [connection signal="enabled" from="GameplayLayer/Boss" to="BackgroundLayer/scrollBottom" method="set_process" binds= [ true ]]
 [connection signal="enabled" from="GameplayLayer/Boss" to="UIElements" method="_on_Boss_enabled"]
+[connection signal="timer_expired" from="UIElements" to="." method="_on_UIElements_timer_expired"]

@@ -471,51 +471,82 @@ func get_stage_cutscene(key:String) -> PoolStringArray:
 		return d
 	return stage_cutscene_data[key] #If we got here there is a cutscene, return it
 
-func _ready():
-	#print(OS.window_size)
-	#print(get_viewport().size)
-	#DUDE WHAT IF WE JUST HAD THIS FUNCTION AND NEVER DOCUMENTED IT ANYWHERE
-	#EVEN THOUGH IT'S THE ONE YOU ACTUALLY WANT AND YOU HAVE TO CHECK A REDDIT
-	#POST TO FIND IT
-	# - The godot devs probably
-	#print(get_viewport().get_visible_rect().size)
-	
-	#gameResolution = Vector2(ProjectSettings.get_setting("display/window/size/width"),ProjectSettings.get_setting("display/window/size/height"))
-	gameResolution = get_viewport().get_visible_rect().size
+static func parse_launch_args(args: PoolStringArray) -> Dictionary:
+	var result := {}
+	var i := 0
+	while i < args.size():
+		var arg = args[i]
+		if arg.begins_with("--"):
+			var key = arg.substr(2, arg.length())  # strip leading "--"
+			var value = true  # default for flags without explicit value
+			# check if next token exists and is not another flag
+			if i + 1 < args.size() and not args[i + 1].begins_with("--"):
+				value = args[i + 1]
+				i += 1  # skip the value token
+			result[key] = value
+		i += 1
+	return result
+
+#Called from ScreenInit
+func apply_launch_args(args:Dictionary):
 	
 	var forcedFullscreen = 0
-	for arg in OS.get_cmdline_args():
-		print("Cmdline arg: "+arg)
-		if arg.find("=") > -1:
-			var kv = arg.split("=")
-			if kv[0]=="--force-res":
-				#print("Found cmdline arg --force-res="+kv[1])
-				if kv[1].find("x") > -1:
-					var w_h = kv[1].split('x')
-					if w_h[0].is_valid_integer() and w_h[1].is_valid_integer():
-						var w = int(w_h[0])
-						var h = int(w_h[1])
-						if w>0 and h>0:
-							gameResolution=Vector2(w,h)
-							OS.window_size = gameResolution
-							OS.center_window()
-			elif kv[0]=="--fullscreen":
-				if kv[1].to_lower()=="true":
+	var override_resolution = Vector2.ZERO
+	
+	print("[Init] " + String(args))
+	
+	for arg_name in args.keys():
+		var arg_value = args[arg_name]
+		match arg_name:
+			"fullscreen":
+				if (arg_value is bool and arg_value) or arg_value.to_lower()=="true":
 					forcedFullscreen=2
 				else:
 					forcedFullscreen=1
-			elif kv[0]=="--network-host-port":
+			"window-size","window-res","force-res":
+				#print("Found cmdline arg --force-res="+kv[1])
+				if arg_value.find("x") > -1:
+					var w_h = arg_value.split('x')
+					if w_h[0].is_valid_integer() and w_h[1].is_valid_integer():
+						override_resolution.x = int(w_h[0])
+						override_resolution.y = int(w_h[1])
+						forcedFullscreen=1
+			"width":
+				override_resolution.x = int(arg_value)
+				forcedFullscreen=1
+			"height":
+				override_resolution.y = int(arg_value)
+				forcedFullscreen=1
+			"network-host-port":
 				networkMode = NetworkMode.SERVER
-				networkPort = int(kv[1])
-			elif kv[0]=="--network-client-address":
+				networkPort = int(arg_value)
+			"network-client-address":
 				networkMode = NetworkMode.CLIENT
-				if ":" in kv[1]:
-					var address_and_port = kv[1].split(":")
+				if ":" in arg_value:
+					var address_and_port = arg_value.split(":")
 					networkClientAddress = address_and_port[0]
 					networkPort = int(address_and_port[1])
 				else:
-					networkClientAddress = kv[1]
-	
+					networkClientAddress = arg_value
+			"print-screens":
+				print(Globals.SCREENS)
+				get_tree().quit(0)
+				
+
+	if forcedFullscreen>0:
+		set_fullscreen(forcedFullscreen==2)
+		if override_resolution != Vector2.ZERO and forcedFullscreen == 1:
+			OS.window_size = override_resolution
+			OS.center_window()
+			print("[Init] Resized window to "+String(override_resolution))
+	elif playerHadSystemData:
+		set_fullscreen(OPTIONS['isFullscreen']['value'])
+		
+	OS.set_use_vsync(OPTIONS['vsync']['value'])
+
+
+func _ready():
+	gameResolution = get_viewport().get_visible_rect().size
 	
 # warning-ignore:narrowing_conversion
 	SCREEN_CENTER_X = gameResolution.x/2
@@ -524,7 +555,6 @@ func _ready():
 	SCREEN_CENTER=Vector2(SCREEN_CENTER_X,SCREEN_CENTER_Y)
 	
 	print("Game resolution: "+String(gameResolution))
-	
 	
 	if OS.has_feature("web"):
 		NSF_location = "GameData/Music/"
@@ -545,17 +575,6 @@ func _ready():
 	
 	var save_game = File.new()
 	playerHasSaveData=save_game.file_exists(get_save_directory('playerData'))
-	
-	if forcedFullscreen>0:
-		print("User specified --fullscreen=true")
-		set_fullscreen(forcedFullscreen==2)
-	#It's annoying when I'm debugging
-	elif !OS.is_debug_build():
-		set_fullscreen(OPTIONS['isFullscreen']['value'])
-	elif OPTIONS['isFullscreen']['value']:
-		print("Fullscreen setting is ignored in debug.")
-	
-	OS.set_use_vsync(OPTIONS['vsync']['value'])
 
 func _input(_event):
 	if Input.is_action_just_pressed("FullscreenButton"):

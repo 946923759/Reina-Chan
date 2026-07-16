@@ -87,9 +87,8 @@ func _process(delta):
 			bi.position = pos
 			get_parent().add_child(bi)
 			bi.init(1.5,facing==DIRECTION.LEFT)
+			connect(\"tree_exited\",bi,\"queue_free\")
 			
-			#self.add_collision_exception_with(bi)# Make bullet and this not collide
-			#print(\"Fired bullet.\")
 			timer=3.0
 			state +=1
 		STATES.WAIT_FOR_BOOMERANG:

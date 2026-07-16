@@ -42,6 +42,9 @@ func _on_HowToPlay_item_rect_changed():
 	$LabelHowToPlay.position_based_on_center(rect.x/2.0)
 	$Controller/LabelStart.position_based_on_center(rect.x/2.0)
 	$Controller/LabelSelect.position_based_on_center(rect.x/2.0)
+	
+	$Controller/InputHint.position.y = rect.y - 24;
+	$Keyboard/InputHint.position.y = rect.y - 24;
 "
 
 [node name="HowToPlay" type="Control"]
@@ -124,7 +127,7 @@ text = "select: STAGE OPTIONS"
 wrap_at = 92233720368
 scale_by = 4
 
-[node name="Shoot2" parent="Controller" instance=ExtResource( 2 )]
+[node name="InputHint" parent="Controller" instance=ExtResource( 2 )]
 position = Vector2( 8, 696 )
 text = "Using a keyboard? press any arrow key to show the keyboard controls."
 wrap_at = 92233720368
@@ -197,7 +200,7 @@ position = Vector2( 1040.09, 272.116 )
 text = "select"
 scale_by = 3
 
-[node name="Shoot2" parent="Keyboard" instance=ExtResource( 2 )]
+[node name="InputHint" parent="Keyboard" instance=ExtResource( 2 )]
 position = Vector2( 8, 696 )
 text = "Have a controller? press the d-pad to show controller help."
 wrap_at = 92233720368

@@ -8,6 +8,8 @@
 script/source = "extends Node
 
 export var debug_boot = true
+export(String) var debug_boot_arguments = \"\"
+var parsed_boot_args;
 
 var rText = [
 	\"Live in your world. Date guns in ours.\",
@@ -40,6 +42,14 @@ func _ready():
 	elif debug_boot and OS.is_debug_build():
 		Globals.change_screen(get_tree(),\"ScreenDebugSelect\")
 		return
+		
+	if OS.is_debug_build():
+		parsed_boot_args = Globals.parse_launch_args(debug_boot_arguments.split(\" \"))
+	else:
+		parsed_boot_args = Globals.parse_launch_args(OS.get_cmdline_args())
+	#print(parsed_boot_args)
+	Globals.apply_launch_args(parsed_boot_args)
+
 	
 	var l = $Label
 	randomize()
@@ -71,6 +81,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 script = SubResource( 1 )
 debug_boot = false
+debug_boot_arguments = "--window-res 1280x800"
 
 [node name="Panel" type="ColorRect" parent="."]
 modulate = Color( 0, 0, 0, 1 )

@@ -14,7 +14,8 @@ func OnCommand(character:int = -1):
 	if character == -1:
 		character = Globals.playerData.currentCharacter
 	var s = get_viewport().get_visible_rect().size
-	$Node2D.position.x = s.x/2.0
+	#$Node2D.position.x = s.x/2.0
+	$Node2D.position = s/2.0
 	print("Screen Center: ",s.x/2)
 	if character == 1:
 		U.texture = m16_tex
@@ -33,6 +34,8 @@ func OnCommand(character:int = -1):
 	
 	t.tween_property($Node2D/BorderLeft,"modulate:a",1.0,.25)
 	t.tween_property($Node2D/BorderRight,"modulate:a",1.0,.25)
+	t.tween_property($Node2D/BorderTop,"modulate:a",1.0,.25)
+	t.tween_property($Node2D/BorderBottom,"modulate:a",1.0,.25)
 	
 	t.tween_property(U,"position:y",0,.15)
 	t.tween_property(U,"region_rect:position:y",0,1).from(spin).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
@@ -44,6 +47,7 @@ func OnCommand(character:int = -1):
 	t.tween_property(P,"region_rect:position:y",0,1).from(spin).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 	#U.region_rect.position
 	
+	#Bounce effect
 	t.tween_callback($AudioStreamPlayer,"play").set_delay(1)
 	for n in [U,M,P]:
 		t.tween_property(n,"region_rect:position:y",-4,.07).from_current().set_delay(1).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)

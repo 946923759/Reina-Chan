@@ -32,7 +32,8 @@ enum SPELL_CARD_PHASES {
 	LARGE_SHOT,
 	SMALL_SHOT,
 	SPREAD,
-	NITORI_WAVE #Yes, from touhou 10
+	MAGMA_RISING, # :)
+	NITORI_WAVE, #Yes, from touhou 10
 }
 var phase = SPELL_CARD_PHASES.LARGE_SHOT
 var tween:SceneTreeTween
@@ -45,6 +46,10 @@ const SCREEN_LEFT = 0
 const SCREEN_RIGHT = 1280
 const SCREEN_BOTTOM = 720
 const SCREEN_CENTER_Y = 720/2
+
+var _magma_wave_targets:Array = []
+var _magma_wave_base_y:Array = []
+var _magma_wave_amplitude:float = 0.0
 
 func _ready():
 	# All danmaku shots are CollisionShape2D
@@ -117,6 +122,8 @@ func _input(event:InputEvent):
 			danmaku_alt()
 		elif Input.is_key_pressed(KEY_4):
 			aaaa()
+		elif Input.is_key_pressed(KEY_5):
+			magma_rising()
 
 
 var tmp_explode = false
@@ -161,6 +168,7 @@ func _physics_process(delta):
 	
 	match phase:
 		SPELL_CARD_PHASES.LARGE_SHOT:
+			#Align x positions
 			var targets = [guns[0], self, guns[1]]
 			guns[0].position.x = self.position.x
 			guns[1].position.x = self.position.x
@@ -198,8 +206,8 @@ func _physics_process(delta):
 				tween.parallel().tween_callback(g,"play",["charging"]).set_delay(1)
 			#
 			tween.parallel().tween_property(self,"position",move_target,1.3).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD).set_delay(1)
-			tween.parallel().tween_property(guns[0],"position",move_target-Vector2(0,-20),1.3).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD).set_delay(1)
-			tween.parallel().tween_property(guns[1],"position",move_target-Vector2(0,+20),1.3).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD).set_delay(1)
+			tween.parallel().tween_property(guns[0],"position",move_target-Vector2(0,-200),1.3).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD).set_delay(1)
+			tween.parallel().tween_property(guns[1],"position",move_target-Vector2(0,+200),1.3).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD).set_delay(1)
 			# Keep a small pause so this phase cadence stays close to the old 1.5s sleep.
 			#tween.tween_property(self,"position",position,.4)
 			#tween.tween_callback($ShootSound2,"play")
@@ -216,6 +224,10 @@ func _physics_process(delta):
 			aaaa(tween)
 			#tween.tween_callback(self,"aaaa")
 			#tween.tween_property(self,"visible",true,1.5)
+		SPELL_CARD_PHASES.MAGMA_RISING:
+			tween = create_tween()
+			magma_rising(tween)
+			
 
 func objectTouched(obj):
 	if is_reflecting:
@@ -554,3 +566,145 @@ func danmaku_alt(optional_tween=null):
 		var velocity = Vector2.LEFT*300
 		var ret = tw.tween_callback(bi,"init",[velocity, 0])
 		ret.set_delay(1.1)
+
+func magma_rising(optional_tween=null):
+	var tw:SceneTreeTween
+	if is_instance_valid(optional_tween):
+		tw = optional_tween
+	else:
+		tw = create_tween()
+
+	var Y_RANGE = 400
+	var wave_speed = 1 # Radians per second; increase for faster travel.
+	var wave_duration = (PI * 8.0) / wave_speed
+	var shot_interval = 0.22
+	var shot_count = int(ceil(wave_duration / shot_interval))
+	
+	
+	#TODO: This hot garbage
+	#tween_callback can call the function at the tween's current time
+	#so using that to instance bullets works fine
+
+	_magma_wave_targets = [self, guns[0], guns[1]]
+
+
+	_magma_wave_base_y.clear()
+	_magma_wave_amplitude = Y_RANGE * 0.5
+	var center_y = SCREEN_CENTER_Y
+	for target in _magma_wave_targets:
+		if target == self:
+			_magma_wave_base_y.append(center_y)
+		else:
+			_magma_wave_base_y.append(center_y + (target.position.y - self.position.y))
+
+	# Tween theta from 0..2*PI and derive Y from sin(theta).
+	tw.tween_method(self, "_set_magma_wave_theta", 0.0, PI * 4.0, wave_duration).set_trans(Tween.TRANS_LINEAR).set_ease(Tween.EASE_IN_OUT)
+	for i in range(shot_count):
+		tw.parallel().tween_callback(self, "_fire_bullet_pair").set_delay(i * shot_interval)
+	for i in range(10):
+		#tw.parallel().tween_callback(self, "_alt_bullets",[i]).set_delay(i * shot_interval * 5)
+		#If integer is odd then & 1 will be 1 else 0. So this is doing -1 or 1
+		var bottom_or_top = (i&1)*2-1
+		tw.parallel().tween_callback(self, "line_bullets",[
+			#Starting position
+			#+SCREEN_CENTER_Y*bottom_or_top*1.25
+			Vector2(i*90, SCREEN_CENTER_Y+(SCREEN_CENTER_Y+100)*bottom_or_top), 
+			#Movement direction
+			Vector2(0,bottom_or_top*-330)
+		]).set_delay(i * shot_interval * 5)
+	for i in range(1,10):
+		var bottom_or_top = (i&1)*2-1
+		tw.parallel().tween_callback(self, "line_bullets",[
+			Vector2(SCREEN_RIGHT-150-i*90, SCREEN_CENTER_Y+(SCREEN_CENTER_Y+100)*bottom_or_top), 
+			Vector2(0,bottom_or_top*-330)
+		]).set_delay((i+10) * shot_interval * 5)
+	tw.tween_callback(self, "_clear_magma_wave_state")
+
+
+func _set_magma_wave_theta(theta:float):
+	if _magma_wave_targets.empty() or _magma_wave_base_y.empty():
+		return
+
+	var y_offset = sin(theta) * _magma_wave_amplitude
+	for i in range(_magma_wave_targets.size()):
+		var target = _magma_wave_targets[i]
+		if is_instance_valid(target):
+			target.position.y = _magma_wave_base_y[i] + y_offset
+
+
+func _fire_bullet_pair():
+	var room = get_parent()
+	var player = get_node("/root/Node2D").get_player()
+	$ShootSound2.play()
+	for g in guns:
+		for i in range(-1, 2):
+			var bi:Node2D = small_bullet.instance()
+			bi.color = Color("#c700ff")
+			bi.position = g.position + g.bullet_spawn_pos
+			room.add_child(bi)
+			bi.add_to_group("bullets")
+			#var d_normalized = bi.position.direction_to(player.position).normalized()
+			bi.init(
+				Vector2.LEFT*10,
+				false
+			)
+
+#Spawns 4 or 5 large bullets that spread out. Yes I know the code is horrible.
+func _alt_bullets(even_or_odd_integer:int=0):
+	var room = get_parent()
+	var tw = create_tween()
+	tw.set_parallel()
+	tw.tween_callback($ShootSound,"play")
+	#If integer is odd then & 1 will add +1 to LIM
+	var LIM = 4 + (even_or_odd_integer & 1)
+	var RANGE = SCREEN_SIZE.y-100
+	var SPACING = RANGE/LIM
+	for i in range(LIM):
+		var y_pos = SCREEN_CENTER_Y+((i)-LIM/2.0)*SPACING+SPACING/2
+		
+		var bi = large_bullet.instance()
+		#bi.visible = false
+		#We have to make it so when k==3 it's zero
+		#bi.position = Vector2(position.x+200, y_pos)
+		bi.position = position
+		#bi.position = self.position
+		room.add_child(bi)
+		bi.add_to_group("bullets")
+		
+		tw.tween_property(bi,"visible",true,0.0)
+		tw.tween_property(bi,"position",Vector2(position.x, y_pos),.5).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+		
+		var velocity = Vector2.LEFT*300
+		var ret = tw.tween_callback(bi,"init",[velocity, 0])
+		#ret.set_delay(1.1)
+		
+#Spawns 4 or 5 large bullets that spread out. Yes I know the code is horrible.
+func line_bullets(starting_position:Vector2, direction:Vector2):
+	var room = get_parent()
+	var tw = create_tween()
+	tw.set_parallel()
+	tw.tween_callback($ShootSound,"play")
+	#$ShootSound.play()
+	for i in range(4):
+		
+		var bi = large_bullet.instance()
+		bi.visible = true
+		#We have to make it so when k==3 it's zero
+		#bi.position = Vector2(position.x+200, y_pos)
+		bi.position = starting_position
+		#bi.position = self.position
+		room.add_child(bi)
+		bi.add_to_group("bullets")
+		
+		#tw.tween_property(bi,"visible",true,0.0)
+		#tw.tween_property(bi,"position",Vector2(position.x, y_pos),.5).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+		
+		#var velocity = Vector2.LEFT*300
+		var ret = tw.tween_callback(bi,"init",[direction, 0]).set_delay(.4*i)
+		#bi.init(direction, 0)
+		#ret.set_delay(.5)
+
+func _clear_magma_wave_state():
+	_magma_wave_targets.clear()
+	_magma_wave_base_y.clear()
+	_magma_wave_amplitude = 0.0

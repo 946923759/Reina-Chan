@@ -96,3 +96,7 @@ func finish_stage():
 
 func shake_camera(amount:float):
 	$Camera2D.shake_camera(amount)
+
+
+func _on_UIElements_timer_expired():
+	get_player().die()
