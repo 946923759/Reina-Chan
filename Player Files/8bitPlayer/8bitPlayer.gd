@@ -598,27 +598,29 @@ func get_input(delta):
 				negativeFrameTimer=0.0
 		
 		if right and position.x < $Camera2D.destPositions[2]-40:
-			#In short, freeze x position for 5 frames here
-			if is_on_floor() and frameTimer < 5.0/60.0:
-				if frameTimer < 1.0/60.0:
-					velocity.x = 125.0
-				else:
-					velocity.x = 0
-			else:
-				velocity.x = run_speed
+#			#In short, freeze x position for 5 frames here
+#			if is_on_floor() and frameTimer < 5.0/60.0:
+#				if frameTimer < 1.0/60.0:
+#					velocity.x = 125.0
+#				else:
+#					velocity.x = 0
+#			else:
+#				velocity.x = run_speed
+			velocity.x = run_speed
 			#Always add to the frameTimer, because even in the air
 			# and landing you want to resume immediately
 			frameTimer+=delta
 				
 			sprite.flip_h = false
 		elif left and position.x > $Camera2D.destPositions[0]+40:
-			if is_on_floor() and frameTimer < 5.0/60.0:
-				if frameTimer < 1.0/60.0:
-					velocity.x = -125.0
-				else:
-					velocity.x = 0
-			else:
-				velocity.x = -run_speed
+#			if is_on_floor() and frameTimer < 5.0/60.0:
+#				if frameTimer < 1.0/60.0:
+#					velocity.x = -125.0
+#				else:
+#					velocity.x = 0
+#			else:
+#				velocity.x = -run_speed
+			velocity.x = -run_speed
 			#Always add to the frameTimer, because even in the air
 			# and landing you want to resume immediately
 			frameTimer+=delta
@@ -657,7 +659,8 @@ func get_input(delta):
 				state = State.GRABBING_LADDER
 		if canAirDash:
 			#Allowing dash on R2 was way too powerful
-			if (down and jump): #or Input.is_action_pressed("gameplay_dash"):
+			#if (down and jump): #or Input.is_action_pressed("gameplay_dash"):
+			if jump:
 				state = State.DASH
 				dash_time=.5
 				sprite.set_animation("Dash")
@@ -1299,14 +1302,15 @@ func finishStage_2():
 			next_screen = "ScreenEnding"
 
 		#still set stage 5 regardless so the player can use stage select
-		Globals.playerData.wilyStageNum = stageRoot.wily_stage_num+1
+		Globals.playerData.wilyStageNum = 5 #stageRoot.wily_stage_num+1
 		print("Next Sangvis stage: "+String(Globals.playerData.wilyStageNum))
 		tween = $CanvasLayer/Fadeout.fadeOut()
 	elif stageRoot.wily_stage_num>0:
 		Globals.previous_screen = "StageSangvis"
 		next_screen="ScreenSangvisIntro"
 		#CheckpointPlayerStats.lastPlayedStage = Globals.Weapons.LENGTH_WEAPONS+stageRoot.wily_stage_num
-		Globals.playerData.wilyStageNum = stageRoot.wily_stage_num+1
+		# We don't want it to decrement since =5 controls the stage select
+		Globals.playerData.wilyStageNum = max(Globals.playerData.wilyStageNum, stageRoot.wily_stage_num+1)
 		print("Next Sangvis stage: "+String(Globals.playerData.wilyStageNum))
 		tween = $CanvasLayer/Fadeout.fadeOut()
 		

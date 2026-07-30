@@ -41,7 +41,7 @@ func _ready():
 		OnCommand()
 	#print($page1/CenterContainer/VBoxContainer/Label.rect_global_position)
 
-var time
+var time = 0.0
 func updateTimer(time_,timeWithDeath):
 	self.time=time_
 	var text = INITrans.GetString(\"PauseMenu\",\"YOUR TIME SO FAR\")+\"\\n\"
@@ -345,7 +345,7 @@ var selX:int = 0
 var selY:int = 0
 
 #const COL = 1
-const ROWS = 4
+const ROWS = 5
 
 var isHandlingInput:bool=false
 onready var SFX = $\"../SFX\"
@@ -354,6 +354,7 @@ onready var BinaryFrame = $ObtainedMedals/BinarySelFrame
 onready var CheckpointBinaryFrame = $CheckpointFlags/BinarySelFrame
 onready var livesActor = $PlayerStats/BitmapSprite
 onready var difficultyActor = $PlayerStats/BitmapSprite2
+onready var sfStageNumActor = $PlayerStats/BitmapSprite3
 var bitmapFont = preload(\"res://ubuntu-font-family/BitmapFont.tscn\")
 
 func Def_Bitmap(txt:String):
@@ -388,6 +389,7 @@ func redraw_all():
 	else:
 		livesActor.text = \"Lives: \"+String(CheckpointPlayerStats.playerLivesLeft)
 	difficultyActor.text=\"Difficulty: \"+INITrans.GetString(\"Difficulty\",Globals.difficultyToString())
+	sfStageNumActor.text = \"SF CLEARED: \"+String(Globals.playerData.wilyStageNum)
 	
 	for i in range(8):
 		#var chA = UMP9CHAN.get_child(i)
@@ -412,6 +414,7 @@ func redraw_all():
 	$CheckpointFlags.text=\"checkpt. flags:\"+String(CheckpointPlayerStats.temporaryStageStats)
 	livesActor.modulate=Color.aqua if selY==2 else Color.white
 	difficultyActor.modulate=Color.aqua if selY==3 else Color.white
+	sfStageNumActor.modulate=Color.aqua if selY==4 else Color.white
 
 func set_selection(selX_tmp,selY_tmp,play_sound:bool=true):
 	
@@ -447,6 +450,11 @@ func input(event):
 			else:
 				Globals.playerData.gameDifficulty=len(Globals.Difficulty)-1
 			pass
+		elif selY == 4:
+			if Globals.playerData.wilyStageNum > 0:
+				Globals.playerData.wilyStageNum-=1
+			else:
+				Globals.playerData.wilyStageNum = 5
 	elif event.is_action_pressed(\"ui_right\"):
 		if selY < 2:
 			set_selection(selX+1,selY)
@@ -457,6 +465,11 @@ func input(event):
 				Globals.playerData.gameDifficulty+=1
 			else:
 				Globals.playerData.gameDifficulty=0
+		elif selY == 4:
+			if Globals.playerData.wilyStageNum < 5:
+				Globals.playerData.wilyStageNum+=1
+			else:
+				Globals.playerData.wilyStageNum = 0
 	
 	elif event.is_action_pressed(\"ui_select\"):
 		if selY==0:
@@ -767,9 +780,6 @@ position = Vector2( 576, 0 )
 
 [node name="PlayerStats" type="Node2D" parent="page3"]
 position = Vector2( 128, 256 )
-__meta__ = {
-"_edit_group_": true
-}
 
 [node name="BitmapSprite" parent="page3/PlayerStats" instance=ExtResource( 5 )]
 text = "Lives: ??"
@@ -779,6 +789,12 @@ scale_by = 4
 [node name="BitmapSprite2" parent="page3/PlayerStats" instance=ExtResource( 5 )]
 position = Vector2( 0, 36 )
 text = "difficulty: ???"
+wrap_at = 500
+scale_by = 4
+
+[node name="BitmapSprite3" parent="page3/PlayerStats" instance=ExtResource( 5 )]
+position = Vector2( 0, 96 )
+text = "sf cleared: ???"
 wrap_at = 500
 scale_by = 4
 

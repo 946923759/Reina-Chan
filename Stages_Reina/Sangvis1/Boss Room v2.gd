@@ -60,7 +60,6 @@ func _on_CameraAdjuster_Warp_player_teleported(new_player_position):
 	#set_process(true)
 	#player_camera_top
 
-
 func _on_FishBoss_enemy_destroyed():
 	set_process(false)
 	for p in players:
@@ -70,9 +69,10 @@ func _on_FishBoss_enemy_destroyed():
 
 func _on_EventTile2_event_executed_passPlayer(player):
 	#print("Triggered")
-	if Globals.playerData.gameDifficulty <= Globals.Difficulty.EASY:
+	if Globals.playerData.gameDifficulty <= Globals.Difficulty.MEDIUM:
 		player.player_touched(null,5)
 		player.position.y = player.get_node("Camera2D").limit_top
 	else:
 		player.die()
+
 

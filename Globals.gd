@@ -174,12 +174,12 @@ var weaponEnergyCost = [
 	9, #Architect 144/9 = 16 uses
 	4, #Alchemist, 24 uses for dash
 	6, #Ouroboros
-	6, #Scarecrow
+	8, #Scarecrow
 	0,
 	0,
 	0,
 	0,
-	24  #Glorylight
+	144  #Glorylight
 ]
 
 var weaponColorSwaps = [
@@ -291,7 +291,6 @@ var systemData:Dictionary = {
 	unlocked_M16_Ultimate=false
 }
 
-var unlockedZeroMode:bool=false
 var playerHasSaveData:bool=false
 var playerHadSystemData:bool=false
 
@@ -348,7 +347,8 @@ func load_system_data()->bool:
 		#gameDifficulty=dataToLoad['playerdata']['difficulty']
 		#availableWeapons=dataToLoad['playerdata']['weapons']
 		if 'extras' in dataToLoad:
-			unlockedZeroMode=dataToLoad['extras']['zeroMode']
+			systemData.unlocked_ZeroMode=dataToLoad['extras']['zeroMode']
+			systemData.unlocked_M16A1=dataToLoad['extras']['unlocked_M16A1']
 		save_game.close()
 		print("System save data loaded.")
 		#print(dataToLoad.options)
@@ -379,7 +379,7 @@ func save_system_data()->bool:
 		"options":{},
 		#"playerdata":playerData,
 		"extras":{
-			"zeroMode":unlockedZeroMode,
+			"zeroMode":Globals.systemData['unlocked_ZeroMode'],
 			"unlocked_M16A1":Globals.systemData['unlocked_M16A1']
 		}
 	}

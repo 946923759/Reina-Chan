@@ -496,7 +496,7 @@ bus = "Player/Enemies"
 [node name="Gun2" parent="GameplayLayer" instance=ExtResource( 24 )]
 position = Vector2( 1104, 512 )
 
-[node name="TimeRemain" parent="GameplayLayer" instance=ExtResource( 3 )]
+[node name="DebugDisp" parent="GameplayLayer" instance=ExtResource( 3 )]
 position = Vector2( 0, 672 )
 z_index = 5
 text = "time remaining:"
@@ -537,6 +537,7 @@ texture = ExtResource( 10 )
 centered = false
 offset = Vector2( -7, -43 )
 script = SubResource( 3 )
+current_hp = 24
 
 [node name="bossHP" type="Sprite" parent="UIElements"]
 position = Vector2( 1325, 352 )

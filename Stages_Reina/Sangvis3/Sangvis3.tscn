@@ -678,6 +678,7 @@ bottomBound = -999
 
 [node name="Checkpoint" parent="Architect/Room 0-24" index="2" instance=ExtResource( 39 )]
 position = Vector2( 416, 512 )
+maximum_difficulty = 4
 
 [node name="BossRoom" parent="Architect" index="9" instance=ExtResource( 67 )]
 position = Vector2( -1152, 1536 )
@@ -956,7 +957,7 @@ warp_type = 1
 destination_coordinates_if_warp = Vector2( 20, 0 )
 
 [node name="CameraAdjuster2" parent="Architect/Room 50-12 (fake)" index="4" instance=ExtResource( 15 )]
-position = Vector2( 640, 864 )
+position = Vector2( 640, 928 )
 leftBound = 60
 topBound = -999
 rightBound = 80
@@ -1940,6 +1941,7 @@ conditional_value = 1
 
 [node name="Checkpoint" parent="Alchemist/Room 260-12" index="4" instance=ExtResource( 39 )]
 position = Vector2( 2208, 384 )
+maximum_difficulty = 4
 
 [node name="PickupHealth" parent="Alchemist/Room 260-12" index="5" instance=ExtResource( 43 )]
 position = Vector2( 640, 1168 )
@@ -2429,9 +2431,11 @@ position = Vector2( 192, 0 )
 auto_adjust_bounds = 1
 topBound = 144
 freeze_player_during_transition = true
+never_disable = true
 
 [node name="Checkpoint" parent="Ouroboros/Room 0-144" index="1" instance=ExtResource( 39 )]
 position = Vector2( -544, 512 )
+maximum_difficulty = 4
 
 [node name="DoorLeft" parent="Ouroboros/Room 0-144" index="2" instance=ExtResource( 51 )]
 position = Vector2( 0, 384 )
@@ -2967,6 +2971,7 @@ bottomBound = 168
 
 [node name="Checkpoint" parent="Scarecrow/Room 300-156 before boss" index="1" instance=ExtResource( 39 )]
 position = Vector2( 864, 384 )
+maximum_difficulty = 4
 
 [node name="BossRoom" parent="Scarecrow" index="12" instance=ExtResource( 67 )]
 position = Vector2( 10112, 3840 )
@@ -3174,6 +3179,7 @@ collision_mask = 32
 
 [node name="Checkpoint" parent="Room 0-0" index="4" instance=ExtResource( 39 )]
 position = Vector2( 480, 752 )
+maximum_difficulty = 4
 
 [node name="PickupAmmo" parent="Room 0-0" index="5" instance=ExtResource( 42 )]
 position = Vector2( 208, 272 )

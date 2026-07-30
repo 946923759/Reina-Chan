@@ -21,8 +21,6 @@ func _ready():
 		CheckpointPlayerStats.watchedBossIntro = true
 	if mute_announcer_in_debug and OS.is_debug_build():
 		get_node("WARNING intro/FinalRound").volume_db = -INF
-	
-	Globals.previous_screen = "SF_5"
 		
 	#Also manually reset this
 	get_tree().set_screen_stretch(SceneTree.STRETCH_MODE_2D,SceneTree.STRETCH_ASPECT_KEEP,Vector2(1280,720))
@@ -70,6 +68,7 @@ func get_player():
 	return $GameplayLayer/Player
 
 func finish_stage():
+	Globals.previous_screen = "SF_5"
 	#is_timer_stopped=true
 	#CheckpointPlayerStats.setDeathTimer(timerWithDeath)
 	#CheckpointPlayerStats.setTimer(timer)
@@ -86,6 +85,11 @@ func finish_stage():
 	#$VictorySound.connect("finished",self,"finishStage_2")
 	
 	var nextScene = "ScreenEnding"
+	
+	Globals.systemData['unlocked_M16A1'] = true
+	#This is already set after beating stage 4...
+	#Globals.playerData.wilyStageNum = 5
+	Globals.save_system_data()
 	Globals.save_player_game()
 	
 	var tween = create_tween()

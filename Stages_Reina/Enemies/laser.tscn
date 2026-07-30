@@ -91,6 +91,7 @@ shape = SubResource( 3 )
 [node name="Sound" type="AudioStreamPlayer2D" parent="."]
 position = Vector2( -64, 0 )
 stream = ExtResource( 1 )
+bus = "Player/Enemies"
 
 [node name="VisibilityEnabler2D" type="VisibilityEnabler2D" parent="."]
 position = Vector2( -192, 0 )

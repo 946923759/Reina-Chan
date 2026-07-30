@@ -1,4 +1,5 @@
 extends StaticBody2D
+signal before_enemy_destroyed()
 signal enemy_destroyed()
 
 export(int, 1, 50) var MAX_HEALTH = 10
@@ -102,6 +103,7 @@ func die():
 	sprite.set_animation("die")
 	#curState=STATES.DEAD
 	isAlive = false
+	emit_signal("before_enemy_destroyed")
 
 var elapsed:float = 0.0
 var anim:int = 0

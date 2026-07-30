@@ -22,7 +22,7 @@ func _ready():
 	
 	
 	$TextureRect.self_modulate = Color.black
-	$c2.rect_position.y = Globals.gameResolution.y
+	$c2.rect_position.y = rect_size.y
 	$c1.set_modulate(Color(1,1,1,0))
 	
 	seq = create_tween()
@@ -101,7 +101,7 @@ anchor_right = 0.5
 margin_left = -640.0
 margin_top = 720.0
 margin_right = 640.0
-margin_bottom = 3472.0
+margin_bottom = 3617.0
 custom_fonts/bold_font = ExtResource( 3 )
 custom_fonts/normal_font = ExtResource( 1 )
 bbcode_enabled = true
@@ -142,6 +142,8 @@ Check the jukebox for full credits
 [b]Beta Testers[/b]
 Nirvash
 The rest of the team
+Nikisizm
+Omega
 
 [b]Translations[/b]
 Nokotarou - Spanish
@@ -154,6 +156,7 @@ Godot Next - Will Nations
 FLMusicLib - Mighty Prinny
 PIURED - Pedro G. Bascoy
 Grayscale shader - Arcticfqx
+Onscreen Controls by Kenney Vleugels (www.kenney.nl)
 See LICENSES.txt for more information
 
 [b]External Artwork[/b]
@@ -213,6 +216,8 @@ Check the jukebox for full credits
 Beta Testers
 Nirvash
 The rest of the team
+Nikisizm
+Omega
 
 Translations
 Nokotarou - Spanish
@@ -225,6 +230,7 @@ Godot Next - Will Nations
 FLMusicLib - Mighty Prinny
 PIURED - Pedro G. Bascoy
 Grayscale shader - Arcticfqx
+Onscreen Controls by Kenney Vleugels (www.kenney.nl)
 See LICENSES.txt for more information
 
 External Artwork

@@ -4,6 +4,7 @@
 [ext_resource path="res://Character Sprites/skorp/NPC_skorp_base.tscn" type="PackedScene" id=2]
 
 [node name="NPC_M16" instance=ExtResource( 2 )]
+animToPlayIfNormal = "Idle"
 
 [node name="AnimatedSprite" parent="." index="1"]
 frames = ExtResource( 1 )

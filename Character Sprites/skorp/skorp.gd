@@ -21,8 +21,10 @@ export(int,"None",
 	"Scarecrow",
 	"???", "???", "???", "???",
 	"Clear And Fail",
-	"U (9A-91)", "M", "P", "9", "C", "H", "A", "N") var requiresUnlock = 0
+	"SF 1", "SF 2", "SF 3", "SF 4", "SF 5 (Final Boss Beaten)") var requiresStage = 0
 #export(int,"Unlocks","Requires") var unlocksOrRequires = 1
+export(int,FLAGS,
+	"U (9A-91)", "M", "P", "9", "C", "H", "A", "N") var requiresEmblem = 0
 
 var velocity:Vector2
 var gravity = 2000
@@ -32,12 +34,20 @@ onready var animPlayer:AnimationPlayer = $DustCloud/AnimationPlayer
 onready var sprite:AnimatedSprite = $AnimatedSprite
 
 func _ready():
-	if requiresUnlock > 0:
-		if requiresUnlock < 10:
-			self.visible = Globals.playerData.availableWeapons[requiresUnlock]
+	if requiresStage > 0:
+		if requiresStage >= 10:
+			#print(Globals.playerData.wilyStageNum)
+			self.visible = Globals.playerData.wilyStageNum >= requiresStage - 10
 		else:
-			self.visible = Globals.playerData.ReinaChanEmblems[requiresUnlock-10]
-		set_physics_process(self.visible)
+			self.visible = Globals.playerData.availableWeapons[requiresStage]
+	if requiresEmblem > 0:
+		var bitflags = Globals.bitArrayToInt32(Globals.playerData.ReinaChanEmblems)
+		self.visible = self.visible and ((bitflags & requiresEmblem) == requiresEmblem)
+		
+	set_physics_process(self.visible)
+	# For some reason the above line does not work so set this var as well
+	# if not unlocked
+	talk_allowed = talk_allowed and self.visible
 	
 	
 	$DustCloud/LeftC.modulate.a=0

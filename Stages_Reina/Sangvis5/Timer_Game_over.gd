@@ -1,9 +1,13 @@
 extends CanvasLayer
 signal timer_expired()
 
-var time_remain:float = 200.00
+var time_remain:float = 180.00
 
 func _ready():
+	#0 to 5, so medium would be 2
+	var difficulty = Globals.playerData.gameDifficulty
+	#Add more time if easier and subtract if harder
+	time_remain -= (difficulty-2)*30
 	set_process(false)
 
 func _on_Boss_enabled():

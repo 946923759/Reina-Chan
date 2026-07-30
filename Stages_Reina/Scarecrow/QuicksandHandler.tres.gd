@@ -3,6 +3,7 @@ export(int) var quicksand_height_in_half_blocks=4
 export(int) var quicksand_draw_height=4
 export(float,10,30) var quicksand_speed=10
 export(float,0,30) var rising_speed=0
+export(float) var kill_player_when_position_reaches = 0
 
 var original_global_pos_y:float
 var original_pos_y:float
@@ -39,6 +40,8 @@ func _physics_process(delta):
 		original_global_pos_y-=rising_speed*delta*4
 		original_pos_y-=rising_speed*delta*4
 		sprite.height+=rising_speed*delta
+		if original_pos_y < kill_player_when_position_reaches:
+			player.die()
 	
 	if player==null:
 		#if rising:
@@ -58,7 +61,26 @@ func _physics_process(delta):
 
 
 func _enable_rising(camera, newBounds):
-	print("Rising.,..")
+	print("Rising...")
+	
+		#Scale by player difficulty here
+		#playerData.gameDifficulty
+#		match Globals.playerData.gameDifficulty:
+#			Globals.Difficulty.BEGINNER:
+#				rising_speed *= .5
+#			Globals.Difficulty.EASY:
+#				rising_speed *= .75
+#			Globals.Difficulty.MEDIUM:
+#				rising_speed *= 1.0
+#			Globals.Difficulty.HARD:
+#				rising_speed *= 1.25
+#			Globals.Difficulty.SUPERHERO:
+#				rising_speed *= 1.5
+	# The above switch case, but in one line
+	rising_speed *= Globals.playerData.gameDifficulty/4.0 + .5
+	print("Rising speed: "+String(rising_speed))
+	if kill_player_when_position_reaches == 0:
+		kill_player_when_position_reaches = INF
 	rising=true
 	set_physics_process(true)
 	
@@ -69,6 +91,11 @@ func _enable_rising_alt(obj:KinematicBody2D):
 		#player.inSand=true
 		
 		print("Rising.,..")
+		
+		rising_speed *= Globals.playerData.gameDifficulty/4.0 + .5
+		print("Rising speed: "+String(rising_speed))
+		if kill_player_when_position_reaches == 0:
+			kill_player_when_position_reaches = -INF
 		rising=true
 		set_physics_process(true)
 	

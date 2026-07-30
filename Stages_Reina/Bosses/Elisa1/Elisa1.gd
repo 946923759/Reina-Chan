@@ -392,7 +392,7 @@ func spawn_lasers(t:SceneTreeTween):
 	
 	var delay_between_lasers = .5
 	if Globals.playerData.gameDifficulty >= Globals.Difficulty.HARD:
-		delay_between_lasers = .25
+		delay_between_lasers = .4
 	
 	t.set_parallel(true)
 	for i in range(3):

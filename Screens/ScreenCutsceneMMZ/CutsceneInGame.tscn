@@ -1074,7 +1074,7 @@ region_rect = Rect2( 0, 0, 192, 192 )
 material = SubResource( 15 )
 texture = ExtResource( 13 )
 region_enabled = true
-region_rect = Rect2( 0, 219.444, 192, 192 )
+region_rect = Rect2( 0, 66.6216, 192, 192 )
 
 [node name="textActor_better" type="RichTextLabel" parent="CenterContainer_v2"]
 anchor_left = 0.5

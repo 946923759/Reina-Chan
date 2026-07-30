@@ -42,6 +42,8 @@ func action():
 	Globals.load_stage_cutscenes()
 	
 	if Globals.load_player_game():
+		#So they can't spam the start button, of course
+		get_parent().get_parent().set_process_input(false)
 		var t = get_node(\"../../Transition\").OnCommand(Globals.playerData.currentCharacter)
 		yield(t,\"finished\")
 		Globals.change_screen(get_tree(),\"ScreenSelectStage\")
@@ -185,9 +187,11 @@ onready var parent = get_node(\"../\")
 var selection = 0
 #var propertyToAdjust=\"gameDifficulty\"
 
+
+#TODO: Why not just put the unlock calls in this table? And some of these options should be debug only
 var extras_table = {
 	\"Multiplayer\":{
-		\"hidden\":false
+		\"hidden\":true
 	},
 	\"Jukebox\":{
 		\"hidden\":false
@@ -196,7 +200,7 @@ var extras_table = {
 		\"hidden\":false
 	},
 	\"EventMode\":{
-		\"hidden\":false
+		\"hidden\":true
 	},
 	\"TestStage\":{
 		\"hidden\":false
@@ -214,7 +218,7 @@ var extras_table = {
 		\"hidden\":false
 	},
 	\"PIURED_Debug\":{
-		\"hidden\":false
+		\"hidden\":true
 	},
 	\"CustomStage\":{
 		\"hidden\":true #Because we need to check if PC
@@ -255,7 +259,12 @@ func action_Multiplayer():
 	parent.currentlyHandledMenu = parent.get_node(\"MultiplayerMenu\")
 	tweenToMenu(parent.currentlyHandledMenu)
 
+func unlock_Multiplayer():
+	return OS.is_debug_build()
+
 func action_TestStage():
+	#Work around stupid bug I should really fix
+	Globals.previous_screen = \"ScreenSelectDebug\"
 	get_tree().change_scene(\"res://Stages_Reina/TestStage.tscn\");
 
 func action_ZeroTest():
@@ -273,9 +282,15 @@ func action_NSF_Test():
 func action_PIURED_Debug():
 	get_tree().change_scene(\"res://Stages_Reina/Clear_And_Fail/PIURED_DebugTest.tscn\")
 
+func unlock_PIURED_Debug():
+	return OS.is_debug_build()
+
 func action_EventMode():
 	Globals.eventMode=true
 	Globals.change_screen(get_tree(),\"ScreenTitleJoin\")
+
+func unlock_EventMode():
+	return OS.is_debug_build()
 
 func action_CustomStage():
 	var filePicker = parent.get_node(\"FileDialog_stage\")
@@ -902,14 +917,12 @@ func _on_CheatCodeHandler_cheat_detected(_a):
 	#pass # Replace with function body.
 	#print(code)
 	if _a==\"UUDDLRLR\":
-		Globals.unlockedZeroMode=true
-		if Globals.playerHasSaveData:
-			Globals.playerData.availableWeapons[1]=true
-			Globals.playerData.availableWeapons[2]=true
-			Globals.playerData.availableWeapons[3]=true
-		get_parent().reinaAudioPlayer.stop_music()
+		Globals.systemData.unlocked_M16A1 = true
+#		var root = get_node_or_null(\"/root/ScreenTitleMenu_v3\")
+#		if root:
+#			root.reinaAudioPlayer.stop_music()
 		play()
-		connect(\"finished\",self, \"on_play_finished\")
+		#connect(\"finished\",self, \"on_play_finished\")
 	elif _a==\"LLLRRRUUU\":
 			get_tree().change_scene(\"res://Screens/ScreenDebugLvSelect/ScreenDebugLvSelect.tscn\")
 "

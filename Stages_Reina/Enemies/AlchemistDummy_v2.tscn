@@ -34,13 +34,14 @@ const bullet = preload(\"res://Stages_Reina/Enemies/EnemyChargeShot.tscn\")
 #const bullet = preload(\"res://Stages_Reina/Enemies/bulletDinergate.tscn\")
 var pumpkin = preload(\"res://Stages_Reina/Bosses/Alchemist/PumpkinBomb.tscn\")
 
-onready var dg = get_node(\"dg\")
+export(NodePath) var enemy1_path
+export(NodePath) var enemy2_path
+#onready var dg = get_node(\"dg\")
+var num_enemies_left = 2
 
 var curState = STATE.PUMPKIN_THROW_WAIT
 var player:KinematicBody2D
 
-#WHAT COULD POSSIBLY GO WRONG
-#func init():
 
 func _ready():
 	#sprite.material = motionBlur
@@ -50,7 +51,9 @@ func _ready():
 	#set_physics_process(false)
 	sprite.flip_h = (facing == DIRECTION.RIGHT)
 	set_process(false)
-	pass
+	
+	get_node(enemy1_path).connect(\"tree_exited\",self,\"_on_node_exited\")
+	get_node(enemy2_path).connect(\"tree_exited\",self,\"_on_node_exited\")
 	
 var reverse:int = 1
 func _process(delta):
@@ -102,10 +105,10 @@ func _physics_process(delta):
 		STATE.PUMPKIN_THROW_WAIT:
 			warpAnimationProgress-=delta
 			if warpAnimationProgress<=0:
-				if dg.get_child_count()==0:
+				if num_enemies_left <= 0:
 					curState=STATE.IDLE
 				else:
-					print(dg.get_child_count())
+					print(\"[Alchemist Dummy] \"+String(num_enemies_left))
 					justShot=false
 					sprite.set_animation(\"throw\")
 					sprite.frame=0
@@ -225,11 +228,16 @@ func _on_EventTile_event_executed_passPlayer(player_):
 	player=player_
 	health=14 #lol
 	enabled=true
+
+func _on_node_exited():
+	num_enemies_left-=1
 "
 
 [node name="AlchemistDummy_v2" instance=ExtResource( 1 )]
 position = Vector2( 608, 352 )
 script = SubResource( 1 )
+enemy1_path = NodePath("")
+enemy2_path = NodePath("")
 
 [node name="AnimatedSprite" parent="." index="1"]
 frames = ExtResource( 2 )

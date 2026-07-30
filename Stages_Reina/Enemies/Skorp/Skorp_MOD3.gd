@@ -139,6 +139,8 @@ func _physics_process(delta):
 		STATES.JUMPINIT:
 			gravity = -500
 			curState=STATES.JUMP
+			moveTimer = 0.0
+			stateTimer = 0.0
 		STATES.JUMP:
 			var velocity = move_and_slide(Vector2(0,gravity), Vector2(0, -1), true)
 			gravity+=delta*1200
@@ -150,11 +152,15 @@ func _physics_process(delta):
 				player.get_node("Camera2D").shakeCamera(2.0)
 				curState=STATES.IDLE
 		STATES.JUMP_INTO_SKY:
-			if position.y > -150: #if not at the top of the room (y is 0 at the top, add some offset to hide the whole sprite)
+			#if not at the top of the room (y is 0 at the top, add some offset to hide the whole sprite)
+			#For some reason this boss is bugged so if it's stuck after 5 seconds change to next phase anyways
+			if position.y > -150 and stateTimer < 3.0:
 				move_and_slide(Vector2(0,-1000), Vector2(0, -1), true)
+				stateTimer+=delta
 			else:
 				global_position.x=player.global_position.x
 				curState=STATES.FALL_FROM_SKY
+				stateTimer = 0.0
 		STATES.FALL_FROM_SKY:
 			if stateTimer==0.0:
 				#var parent_pos = get_parent().position

@@ -339,19 +339,18 @@ text = "DISTANCE BETWEEN SC. AND PLAYER"
 
 [node name="DebugLabel" type="Label" parent="." index="17"]
 margin_left = -142.766
-margin_top = 215.708
+margin_top = 199.708
 margin_right = 102.234
-margin_bottom = 263.708
+margin_bottom = 264.708
 rect_scale = Vector2( 3, 3 )
 text = "curState = null
 position = Vector2( 206.766, 184.292 )
+moveTimer = null
+stateTimer = null
 "
 script = ExtResource( 9 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 target_path = NodePath("..")
-properties = PoolStringArray( "curState", "position" )
+properties = PoolStringArray( "curState", "position", "moveTimer", "stateTimer" )
 
 [node name="FakeBottle" type="Sprite" parent="." index="18"]
 material = SubResource( 29 )

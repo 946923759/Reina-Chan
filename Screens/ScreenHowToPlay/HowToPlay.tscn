@@ -4,53 +4,12 @@
 [ext_resource path="res://ubuntu-font-family/BitmapFont.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Screens/ScreenHowToPlay/Blank_QWERTkeyboard_for_input_methods.svg.png" type="Texture" id=3]
 [ext_resource path="res://Screens/ScreenHowToPlay/NX_Diagram.png" type="Texture" id=4]
-
-[sub_resource type="GDScript" id=1]
-script/source = "extends Control
-
-export(int, FLAGS,
-	\"Air Dash\",
-	\"Grenade\",
-	\"None\",
-	\"None\",
-	\"None\",
-	\"None\",
-	\"None\",
-	\"None\",
-	\"None\") var unlocked_abilities=0
-
-func _ready():
-	$Keyboard.visible=false
-	$Keyboard.rect_position.y=0
-
-#func _input(event):
-#	if 
-
-#Passed by the pause screen.
-func input(_event):
-	if _event is InputEventMouseButton or _event is InputEventMouseMotion:
-		return
-	$Keyboard.visible=(_event is InputEventKey)
-	$Controller.visible=(_event is InputEventJoypadButton or _event is InputEventJoypadMotion)
-	#if _event is InputEventKey:
-
-
-func _on_HowToPlay_item_rect_changed():
-	#print(\"rect\")
-	var rect = get_viewport().get_visible_rect().size
-	#print(rect)
-	$LabelHowToPlay.position_based_on_center(rect.x/2.0)
-	$Controller/LabelStart.position_based_on_center(rect.x/2.0)
-	$Controller/LabelSelect.position_based_on_center(rect.x/2.0)
-	
-	$Controller/InputHint.position.y = rect.y - 24;
-	$Keyboard/InputHint.position.y = rect.y - 24;
-"
+[ext_resource path="res://Screens/ScreenHowToPlay/HowToPlay.tres.gd" type="Script" id=5]
 
 [node name="HowToPlay" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-script = SubResource( 1 )
+script = ExtResource( 5 )
 unlocked_abilities = 3
 
 [node name="LabelHowToPlay" parent="." instance=ExtResource( 2 )]
@@ -65,8 +24,14 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 
 [node name="XboxSeriesXDiagram" type="TextureRect" parent="Controller"]
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -640.0
+margin_top = -360.0
+margin_right = 640.0
+margin_bottom = 360.0
 texture = ExtResource( 1 )
 stretch_mode = 4
 
@@ -77,6 +42,7 @@ text = "jump"
 scale_by = 4
 
 [node name="Jump2" parent="Controller" instance=ExtResource( 2 )]
+visible = false
 modulate = Color( 1, 0.890196, 0, 1 )
 position = Vector2( 697.87, 239.59 )
 text = "air dash"

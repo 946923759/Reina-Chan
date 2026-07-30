@@ -445,10 +445,11 @@ func init_by_msg_id(message_id:String):
 	)
 
 func end_cutscene():
+	#This needs to be at the top or it will bug out when the player mashes start
+	set_process(false)
 	print("[CutsceneMMZ] Hit the end. Now closing the textbox...")
 	$CenterContainer_v2.remove()
 	yield($CenterContainer_v2/AnimationPlayer,"animation_finished")
-	set_process(false)
 	visible = false
 	emit_signal("cutscene_finished")
 

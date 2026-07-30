@@ -1,4 +1,4 @@
-[gd_scene load_steps=52 format=2]
+[gd_scene load_steps=55 format=2]
 
 [ext_resource path="res://Player Files/mission start2.png" type="Texture" id=1]
 [ext_resource path="res://Character Sprites/ump9/ump9.tres" type="SpriteFrames" id=2]
@@ -21,10 +21,10 @@
 [ext_resource path="res://ParticleEffects/PaletteSwapShader.gdshader" type="Shader" id=19]
 [ext_resource path="res://Sounds/Classic/1up.wav" type="AudioStream" id=20]
 [ext_resource path="res://Player Files/8bitPlayer/FadeoutController.gd" type="Script" id=21]
-[ext_resource path="res://Player Files/8bitPlayer/TouchScreenUI/flatDark35.png" type="Texture" id=22]
-[ext_resource path="res://Player Files/8bitPlayer/TouchScreenUI/flatDark36.png" type="Texture" id=23]
-[ext_resource path="res://Player Files/8bitPlayer/TouchScreenUI/shadedDark37.png" type="Texture" id=24]
-[ext_resource path="res://Player Files/8bitPlayer/TouchScreenUI/shadedDark36.png" type="Texture" id=25]
+[ext_resource path="res://Player Files/8bitPlayer/TouchScreenUI/flatDark25.png" type="Texture" id=22]
+[ext_resource path="res://Player Files/8bitPlayer/TouchScreenUI/shadedDark33.png" type="Texture" id=23]
+[ext_resource path="res://Player Files/8bitPlayer/TouchScreenUI/shadedDark25.png" type="Texture" id=24]
+[ext_resource path="res://Player Files/8bitPlayer/TouchScreenUI/shadedDark49.png" type="Texture" id=25]
 [ext_resource path="res://Player Files/8bitPlayer/TouchScreenUI/shadedDark09.png" type="Texture" id=26]
 [ext_resource path="res://Player Files/8bitPlayer/TouchScreenDPad.gd" type="Script" id=27]
 [ext_resource path="res://Player Files/8bitPlayer/TouchScreenUI/shadedDark14.png" type="Texture" id=28]
@@ -39,6 +39,9 @@
 [ext_resource path="res://Player Files/Weapons/bulletManager.gd" type="Script" id=37]
 [ext_resource path="res://Screens/_transition/transition.tscn" type="PackedScene" id=38]
 [ext_resource path="res://Player Files/8bitPlayer/INPUTMAN.gd" type="Script" id=39]
+[ext_resource path="res://Player Files/8bitPlayer/TouchScreenUI/shadedDark26.png" type="Texture" id=40]
+[ext_resource path="res://Player Files/8bitPlayer/TouchScreenUI/flatDark48.png" type="Texture" id=41]
+[ext_resource path="res://Player Files/8bitPlayer/TouchScreenUI/flatDark24.png" type="Texture" id=42]
 
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 19 )
@@ -115,6 +118,7 @@ func updateHP(newHP, shouldTween:bool=false):
 		tween.start();
 		audio.play()
 		set_process(true)
+		timeout()
 	else:
 		curHP = newHP
 		update()
@@ -131,6 +135,7 @@ func updateAmmo(newAmmoPercent:float, shouldTween:bool=false):
 		tween.start();
 		audio.play()
 		set_process(true)
+		timeout()
 	else:
 		currentAmmo = newAmmo
 		update()
@@ -148,23 +153,18 @@ func show_weapon(b:bool, newValue:float=-1):
 	#print(currentAmmo)
 	update()
 
-var timer:float=0.0
+func timeout():
+	var timer = get_tree().create_timer(2.5, false)
+	timer.connect(\"timeout\",self,\"tweenFinished\",[null, null])
+
 func _process(delta):
 	update()
-	
-	
-	timer+=delta #Just in case it gets stuck
-	if timer > 3.0:
-		audio.stop()
-		timer=0
-		set_process(false)
 	
 func tweenFinished(_a,_b):
 	#Just in case.
 	update();
 	set_process(false)
 	audio.stop()
-	timer=0
 "
 
 [sub_resource type="GDScript" id=6]
@@ -280,7 +280,9 @@ func _process(_delta):
 script/source = "extends Node2D
 
 func _ready():
-	visible = Globals.OPTIONS[\"Touchscreen\"]['value']
+	#visible = Globals.OPTIONS[\"Touchscreen\"]['value']
+	#I'm not going to bother fixing this
+	visible = false
 "
 
 [sub_resource type="GDScript" id=9]
@@ -490,6 +492,7 @@ script = SubResource( 5 )
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="CanvasLayer/bar"]
 stream = ExtResource( 18 )
+bus = "Player/Enemies"
 
 [node name="Tween" type="Tween" parent="CanvasLayer/bar"]
 
@@ -562,25 +565,42 @@ script = SubResource( 12 )
 modulate = Color( 1, 1, 1, 0.627451 )
 position = Vector2( 885.166, 500 )
 scale = Vector2( 2, 2 )
-normal = ExtResource( 25 )
+normal = ExtResource( 40 )
 pressed = ExtResource( 22 )
 passby_press = true
-action = "ui_select"
+action = "gameplay_jump"
 visibility_mode = 1
 
 [node name="TouchScreenButton2" type="TouchScreenButton" parent="CanvasLayer/TouchscreenButtons"]
 modulate = Color( 1, 1, 1, 0.627451 )
 position = Vector2( 1070.47, 500 )
 scale = Vector2( 2, 2 )
-normal = ExtResource( 24 )
-pressed = ExtResource( 23 )
+normal = ExtResource( 25 )
+pressed = ExtResource( 41 )
 passby_press = true
-action = "ui_cancel"
+action = "gameplay_shoot"
+visibility_mode = 1
+
+[node name="TouchScreenButton5" type="TouchScreenButton" parent="CanvasLayer/TouchscreenButtons"]
+modulate = Color( 1, 1, 1, 0.627451 )
+position = Vector2( 1112, 408 )
+normal = ExtResource( 24 )
+pressed = ExtResource( 42 )
+passby_press = true
+action = "R1"
 visibility_mode = 1
 
 [node name="TouchScreenButton3" type="TouchScreenButton" parent="CanvasLayer/TouchscreenButtons"]
 modulate = Color( 1, 1, 1, 0.627451 )
-position = Vector2( 592, 21.382 )
+position = Vector2( 528, 16 )
+scale = Vector2( 2, 2 )
+normal = ExtResource( 23 )
+action = "ui_options"
+visibility_mode = 1
+
+[node name="TouchScreenButton4" type="TouchScreenButton" parent="CanvasLayer/TouchscreenButtons"]
+modulate = Color( 1, 1, 1, 0.627451 )
+position = Vector2( 656, 16 )
 scale = Vector2( 2, 2 )
 normal = ExtResource( 28 )
 action = "ui_pause"

@@ -520,6 +520,7 @@ bottomBound = 36
 [node name="Checkpoint" parent="Room 20-48 to 40-48" index="3" instance=ExtResource( 33 )]
 position = Vector2( -992, 336 )
 respawn_facing_left = true
+maximum_difficulty = 4
 
 [node name="CameraAdjuster3" parent="Room 20-48 to 40-48" index="4" instance=ExtResource( 11 )]
 position = Vector2( 1120, 496 )
@@ -547,15 +548,23 @@ collision_mask = 32
 position = Vector2( 960, -32 )
 collision_mask = 32
 
-[node name="1Up Drop3" parent="Room 20-48 to 40-48" index="8" instance=ExtResource( 3 )]
+[node name="1Up Drop4" parent="Room 20-48 to 40-48" index="8" instance=ExtResource( 3 )]
+position = Vector2( 864, -96 )
+collision_mask = 32
+
+[node name="1Up Drop5" parent="Room 20-48 to 40-48" index="9" instance=ExtResource( 3 )]
+position = Vector2( 928, -96 )
+collision_mask = 32
+
+[node name="1Up Drop3" parent="Room 20-48 to 40-48" index="10" instance=ExtResource( 3 )]
 position = Vector2( 896, -32 )
 collision_mask = 32
 
-[node name="PickupAmmo" parent="Room 20-48 to 40-48" index="9" instance=ExtResource( 35 )]
-position = Vector2( 864, -96 )
+[node name="PickupAmmo" parent="Room 20-48 to 40-48" index="11" instance=ExtResource( 35 )]
+position = Vector2( 864, -160 )
 
-[node name="PickupAmmo2" parent="Room 20-48 to 40-48" index="10" instance=ExtResource( 35 )]
-position = Vector2( 928, -96 )
+[node name="PickupAmmo2" parent="Room 20-48 to 40-48" index="12" instance=ExtResource( 35 )]
+position = Vector2( 928, -160 )
 
 [node name="Room 60-48" type="Node2D" parent="." index="11"]
 position = Vector2( 6400, 2304 )

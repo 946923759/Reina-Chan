@@ -40,18 +40,19 @@ msgbox	9A91	right	top
 
 #KEY	Alchemist1
 msgbox_add	Alchemist	right	top
+nop	TN: Dummy meaning "fake" here if you're unfamiliar with Girls' Frontline
 msg	Hahaha! Did you really think you defeated me? That was just a dummy!	JAJAJA! ¿En verdad piensas que me has derrotado? Eso solo fue un secuaz!
 msg	Take this!	¡Toma esto!
 
 #KEY	AlchemistChicken
 msgbox_add	UMP9	left	bottom
 /UMP9	...A chicken? From the wall? That doesn't seem sanitary.
-msgbox	default	left
-/Dier	You're an android, why do you care?
+msgbox	Dandelion	left
+/Dandelion	You're an android, why do you care?
 msgbox	UMP9	left
 /UMP9	Hey, T-Dolls can have stomach issues too! Somehow.
-msgbox	default	left
-/Dier	What kind of feature is that...?
+msgbox	Dandelion	left
+/Dandelion	What kind of feature is that...?
 
 #KEY	Alchemist2
 msgbox_add	Alchemist	right	top
@@ -73,7 +74,7 @@ msgbox	Skorpion	right
 msgbox	UMP9	left
 /UMP9	Thanks!
 msgbox	default	left
-/SYSTEM	You obtained the air dash! Press DOWN+JUMP in mid-air to dash.
+/SYSTEM	You obtained the air dash! Press JUMP while in the air to dash.
 msg	There are certain locations in other stages that are only possible to cross using the dash. Try searching everywhere, you might find a shortcut!
 
 #KEY	Scarecrow2
@@ -107,6 +108,12 @@ msgbox	default	left
 /SYSTEM	You obtained the grenade. Press UP+SHOOT while the default weapon is equipped to throw a grenade.
 msg	There are some blocks throughout the stages that you can use grenades on.
 
+#KEY	Ouroboros1_M16
+msgbox_add	T5000	right	top
+/T5000	Thanks for rescuing me! Here, have this!
+msgbox	M16_Nice	left
+/M16A1_Nice	Grenades? Thanks!
+
 #KEY	Ouroboros2
 msgbox_add	Ouroboros	right	top
 /Ouroboros	Hmph... So you've made it past my puzzles. No matter, my battle strategries are flawless!
@@ -118,7 +125,7 @@ msgbox_add	Ouroboros	right	top
 /Ouroboros	Hmph... So you've made it past my puzzles. You didn't just smash through them, right...?
 msgbox	M16_Nice	left
 /M16A1	Would you be sad if I cheated? Don't worry, I solved them properly. Now, let's see what you've got!
-msgbox	Ouroboros	left
+msgbox	Ouroboros	right
 /Ouroboros	(Who's battling who here?)
 
 #KEY	Agent1
@@ -128,6 +135,12 @@ msg	Worthless trash like you thinks it can go near my master? Be buried here wit
 #KEY	Agent2
 msgbox_add	Agent	right	top
 msg	Your adventure ends here. Prepare to die!
+
+#KEY	Agent2_M16
+msgbox_add	Agent	right	top
+msg	Your adventure ends here. Prepare to die!
+msgbox	M16_Nice	left
+msg	Yeah, I don't think so.
 
 #KEY	vs_M16
 msgbox_add	UMP9	left
@@ -139,18 +152,18 @@ await_call	FakeM16	raging_demon_start
 msgbox	UMP9	left
 msg	Thank you for defeating Agent for me... I think?
 msgbox	M16A1	right
-msg	Hahahahaha! I have mastered the Raging Demon! Prepare to be sent to heaven under my supreme power!
+msg	Hahahahaha! I have mastered the Shun Goku Satsu! Prepare to be sent to heaven under my supreme power!
 msgbox	UMP9	left
 msg	Never mind!
 
 #KEY	vs_M16_M16
 msgbox_add	M16A1	right	top
 /M16?	...
-msgbox	M16A1_Nice	left
+msgbox	M16_Nice	left
 /M16	A clone of me? Don't you know nothing can replace the original?
 msgbox	default	left
 /Dandelion	This one is a replica of you when you were allied with Sangvis Ferri. She's controlled by me, so don't expect an easy fight.
-msgbox	M16A1_Nice	left
+msgbox	M16_Nice	left
 msg	That's fine by me! You're on, Dandelion!
 
 #KEY	Elisa1
@@ -203,20 +216,58 @@ msgbox_add	9A91
 msgbox_add	Architect
 /Architect	Heeeey! Wanna play again after this? It's so boring, all the T-Dolls are too scared to talk to me!
 
+#KEY	TalkHub_Architect_M16
+msgbox_add	Architect
+/Architect	Heeeey! M16! You know, I left S.F. before you joined! How's Beak doing, by the way? I heard you two were best buddies!
+
 #KEY	TalkHub_Alchemist
 msgbox_add	Alchemist
 /Alchemist	...What? You gonna ask me for some candy? I'll impale you.
+
+#KEY	TalkHub_Alchemist_M16
+msgbox_add	Alchemist
+/Alchemist	...So, what's the story behind the eye patch?
 
 #KEY	TalkHub_Ouroboros
 msgbox_add	Ouroboros
 /Ouroboros	My clothes? What about them?
 /Ouroboros	I don't know who designed this outfit, but I think it looks fine. If anything, Architect's outfit looks weird...
 
+#KEY	TalkHub_Ouroboros_M16
+msgbox_add	Ouroboros
+msg	I hate to admit it, but I can't win against AR Team.
 
 #KEY	TalkHub_Scarecrow
 msgbox_add	Scarecrow
 /Scarecrow	...
 /Scarecrow	No, I'm not taking off this mask. Stop asking.
+
+#KEY	TalkHub_M16
+msgbox_add	M16_Nice	right
+/M16	Hey, let's fight again some time! Maybe one day I'll learn the Shoryuken and the Tatsumaki Senpukyaku!
+msgbox	UMP9	left
+/UMP9	I think the Shun Goku Satsu was already enough...
+
+#KEY	TalkHub_M16_M16
+msgbox_add	M16A1	right
+msg	...
+msgbox	M16_Nice	left
+msg	Well, this is odd.
+
+#KEY	TalkHub_Elisa
+msgbox_add	Elisa	right
+/Elisa	...............
+msgbox	UMP9	left
+/UMP9	(Is she pouting?)
+msgbox	Elisa	right
+/Elisa	...I'm not pouting!
+msgbox	UMP9	left
+/UMP9	I didn't say anything.
+
+
+#KEY	TalkHub_Elisa_M16
+msgbox_add	Elisa	right
+/Elisa	...............
 
 #KEY	Ending
 msgbox_add	Dandelion	left	bottom
@@ -232,3 +283,9 @@ msgbox_add	Elisa	left	bottom
 /Elisa	I'll be waiting...
 msgbox	Dandelion	left
 /Dandelion	You can now select any stage you've completed.
+
+#KEY	Ending_M16
+msgbox_add	Dandelion	left	bottom
+/Dandelion	Wow, you beat the game as M16...
+/Dandelion	Thank you for playing~
+/Dandelion	I hope you enjoy the next game made by Amaryllis Works Team!!

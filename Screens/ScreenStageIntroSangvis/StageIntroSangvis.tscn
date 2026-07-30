@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://ubuntu-font-family/BitmapFont.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Various Objects/Item_BigHealth.png" type="Texture" id=2]
@@ -16,6 +16,7 @@
 [ext_resource path="res://Screens/ScreenStageIntroSangvis/StageIntroSangvis.tres.gd" type="Script" id=14]
 [ext_resource path="res://Sounds/Classic/Mega Man 4 SFX (20) - Weapon Switch.wav" type="AudioStream" id=15]
 [ext_resource path="res://Sounds/Classic/03 - MenuSelect.wav" type="AudioStream" id=16]
+[ext_resource path="res://Various Objects/reina_letters.png" type="Texture" id=17]
 
 [node name="Node2D" type="Control"]
 anchor_right = 1.0
@@ -391,6 +392,15 @@ material = ExtResource( 12 )
 position = Vector2( 128, 384 )
 scale = Vector2( 4, 4 )
 texture = ExtResource( 13 )
+
+[node name="Emblem" type="Sprite" parent="Node2D"]
+visible = false
+material = ExtResource( 12 )
+position = Vector2( 128, 448 )
+scale = Vector2( 4, 4 )
+texture = ExtResource( 17 )
+hframes = 8
+frame = 4
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 8 )

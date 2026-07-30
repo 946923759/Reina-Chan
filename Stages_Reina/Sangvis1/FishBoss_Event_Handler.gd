@@ -1,7 +1,6 @@
 extends "res://Various Objects/EventTiles/EventTile.gd"
 
-func run_event(player:KinematicBody2D):
-	if Globals.playerData.gameDifficulty <= Globals.Difficulty.EASY:
-		player.position.y -= 1280
-	else:
-		player.die()
+#Disable so the player doesn't die right after they kill the boss and fall anyways
+func _on_FishBoss_before_enemy_destroyed():
+	collision_layer = 0
+	collision_mask = 0

@@ -10,8 +10,9 @@ func _ready():
 	# 0x1F = first 5 bits. If all 5 bits in "emblems" are set then
 	# the returned value after the operation will be the same.
 	if (emblems & 0x1F) == 0x1F:
-		Globals.systemData['unlocked_M16A1'] = true
-		Globals.save_system_data()
+		#No reason to do this here since beating sangvis5 already means they have all the emblems
+		#Globals.systemData['unlocked_M16A1'] = true
+		#Globals.save_system_data()
 		$DialoguePlayerInGame.init_by_msg_id("Ending")
 	else:
 		$DialoguePlayerInGame.init_by_msg_id("Ending_Bad")
