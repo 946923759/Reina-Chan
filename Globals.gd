@@ -348,7 +348,8 @@ func load_system_data()->bool:
 		#availableWeapons=dataToLoad['playerdata']['weapons']
 		if 'extras' in dataToLoad:
 			systemData.unlocked_ZeroMode=dataToLoad['extras']['zeroMode']
-			systemData.unlocked_M16A1=dataToLoad['extras']['unlocked_M16A1']
+			if 'unlocked_M16A1' in dataToLoad['extras']:
+				systemData.unlocked_M16A1=dataToLoad['extras']['unlocked_M16A1']
 		save_game.close()
 		print("System save data loaded.")
 		#print(dataToLoad.options)

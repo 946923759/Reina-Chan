@@ -80,7 +80,6 @@ func _on_AudioStreamPlayer_finished():
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = SubResource( 1 )
-debug_boot = false
 debug_boot_arguments = "--window-res 1280x800"
 
 [node name="Panel" type="ColorRect" parent="."]

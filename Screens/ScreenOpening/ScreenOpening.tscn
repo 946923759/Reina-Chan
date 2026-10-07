@@ -345,7 +345,6 @@ position = Vector2( 176, 96 )
 text = "ump9 'reina'"
 wrap_at = 500
 scale_by = 10
-displayed_characters = 500
 
 [node name="BitmapFont2" parent="ZTextWalk/BackBufferDest" index="4" instance=ExtResource( 13 )]
 material = ExtResource( 14 )
@@ -353,7 +352,6 @@ position = Vector2( 272, 480 )
 text = "and m16a1"
 wrap_at = 500
 scale_by = 10
-displayed_characters = 500
 
 [node name="rcText1" parent="ZTextWalk/BackBufferDest" index="5" instance=ExtResource( 13 )]
 material = ExtResource( 14 )
@@ -361,7 +359,6 @@ position = Vector2( -1440, 560 )
 text = "reina-chan  reina-chan  reina-chan  reina-chan  reina-chan  reina-chan  reina-chan  reina-chan  reina-chan  "
 wrap_at = 500
 scale_by = 5
-displayed_characters = 500
 
 [node name="rcText2" parent="ZTextWalk/BackBufferDest" index="6" instance=ExtResource( 13 )]
 material = ExtResource( 14 )
@@ -369,7 +366,6 @@ position = Vector2( 0, 432 )
 text = "reina-chan  reina-chan  reina-chan  reina-chan  reina-chan  reina-chan  reina-chan  reina-chan  reina-chan  "
 wrap_at = 500
 scale_by = 5
-displayed_characters = 500
 
 [node name="rcText3" parent="ZTextWalk/BackBufferDest" index="7" instance=ExtResource( 13 )]
 material = ExtResource( 14 )
@@ -377,7 +373,6 @@ position = Vector2( -1440, 176 )
 text = "reina-chan  reina-chan  reina-chan  reina-chan  reina-chan  reina-chan  reina-chan  reina-chan  reina-chan  "
 wrap_at = 500
 scale_by = 5
-displayed_characters = 500
 
 [node name="rcText4" parent="ZTextWalk/BackBufferDest" index="8" instance=ExtResource( 13 )]
 material = ExtResource( 14 )
@@ -385,7 +380,6 @@ position = Vector2( 0, 48 )
 text = "reina-chan  reina-chan  reina-chan  reina-chan  reina-chan  reina-chan  reina-chan  reina-chan  reina-chan  "
 wrap_at = 500
 scale_by = 5
-displayed_characters = 500
 
 [node name="ZTextWalk_NoM16" type="Control" parent="." index="9"]
 visible = false
@@ -476,7 +470,6 @@ text = "ump9"
 wrap_at = 7
 scale_by = 10
 alignment = 1
-displayed_characters = 500
 
 [node name="BitmapFont3" parent="ZTextWalk_NoM16/BackBufferDest" index="4" instance=ExtResource( 13 )]
 material = ExtResource( 14 )
@@ -485,7 +478,6 @@ text = "'reina'"
 wrap_at = 7
 scale_by = 10
 alignment = 1
-displayed_characters = 500
 
 [node name="BitmapFont2" parent="ZTextWalk_NoM16/BackBufferDest" index="5" instance=ExtResource( 13 )]
 material = ExtResource( 14 )
@@ -494,7 +486,6 @@ text = "vs..."
 wrap_at = 500
 scale_by = 10
 alignment = 1
-displayed_characters = 500
 
 [node name="rcText1" parent="ZTextWalk_NoM16/BackBufferDest" index="6" instance=ExtResource( 13 )]
 material = ExtResource( 14 )
@@ -502,7 +493,6 @@ position = Vector2( -1440, 560 )
 text = "reina-chan  reina-chan  reina-chan  reina-chan  reina-chan  reina-chan  reina-chan  reina-chan  reina-chan  "
 wrap_at = 500
 scale_by = 5
-displayed_characters = 500
 
 [node name="rcText2" parent="ZTextWalk_NoM16/BackBufferDest" index="7" instance=ExtResource( 13 )]
 material = ExtResource( 14 )
@@ -510,7 +500,6 @@ position = Vector2( 0, 432 )
 text = "reina-chan  reina-chan  reina-chan  reina-chan  reina-chan  reina-chan  reina-chan  reina-chan  reina-chan  "
 wrap_at = 500
 scale_by = 5
-displayed_characters = 500
 
 [node name="rcText3" parent="ZTextWalk_NoM16/BackBufferDest" index="8" instance=ExtResource( 13 )]
 material = ExtResource( 14 )
@@ -518,7 +507,6 @@ position = Vector2( -1440, 256 )
 text = "reina-chan  reina-chan  reina-chan  reina-chan  reina-chan  reina-chan  reina-chan  reina-chan  reina-chan  "
 wrap_at = 500
 scale_by = 5
-displayed_characters = 500
 
 [node name="rcText4" parent="ZTextWalk_NoM16/BackBufferDest" index="9" instance=ExtResource( 13 )]
 material = ExtResource( 14 )
@@ -526,7 +514,6 @@ position = Vector2( 0, 48 )
 text = "reina-chan  reina-chan  reina-chan  reina-chan  reina-chan  reina-chan  reina-chan  reina-chan  reina-chan  "
 wrap_at = 500
 scale_by = 5
-displayed_characters = 500
 
 [node name="TextureRect" type="TextureRect" parent="ZTextWalk_NoM16" index="3"]
 visible = false
@@ -571,7 +558,6 @@ position = Vector2( 640, 448 )
 text = "sangvis ferri"
 wrap_at = 500
 alignment = 1
-displayed_characters = 500
 
 [node name="BitmapFont2" parent="ZText2" index="5" instance=ExtResource( 13 )]
 material = ExtResource( 14 )
@@ -579,7 +565,6 @@ position = Vector2( 640, 448 )
 text = "sangvis ferri"
 wrap_at = 500
 alignment = 1
-displayed_characters = 500
 
 [node name="top" type="ColorRect" parent="ZText2" index="6"]
 anchor_right = 1.0

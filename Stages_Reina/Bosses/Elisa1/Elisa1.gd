@@ -351,6 +351,7 @@ func update_after_image():
 onready var original_offset = sprite.offset
 onready var original_scale = sprite.scale
 
+#This is so tween_callback can be used
 func set_facing_within_tween():
 	if get_room_position_of_node(player).x > get_room_position().x:
 		facing = DIRECTION.RIGHT

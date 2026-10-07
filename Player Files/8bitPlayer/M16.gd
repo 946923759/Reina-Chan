@@ -32,9 +32,14 @@ const WALL_JUMP_X_CURVE_ACCEL = 1400.0
 # or a maximum of 1 second. 
 var dashing:bool = false
 var wall_jump_input_lock_timer:float = 0.0
-var wall_jump_x_recovery_active:bool = false
+#0 = not active, 1 or -1 depending on direction
+var wall_jump_x_recovery_vector:int = 0
+#var wall_jump_x_recovery_active:bool = false
 #This is used to spawn the dust clouds every 5 frames
 var wall_slide_frame_timer:float = 0.0
+
+#Time since last stuck to the wall.
+var coyote_time:float = 0.0
 
 func _ready():
 	oldPositions.resize(6)
@@ -96,7 +101,7 @@ func get_input(delta):
 		wall_jump_input_lock_timer = max(0.0, wall_jump_input_lock_timer - delta)
 
 	if is_on_floor() or state == State.ON_LADDER:
-		wall_jump_x_recovery_active = false
+		wall_jump_x_recovery_vector = 0
 		wall_jump_input_lock_timer = 0.0
 
 	#var chargeShot = Input.is_action_pressed(INPUT.SHOOT[controller_index]) and currentWeapon==Globals.Weapons.Buster
@@ -119,11 +124,12 @@ func get_input(delta):
 	#...Even though square will also shoot it.
 	grenade_input = grenade_input and currentWeapon==Globals.Weapons.Buster
 
-	if is_on_floor() and dash and dash_time <= 0:
+	if (is_on_floor() or state == State.WALL_SLIDE or coyote_time < 0.15) and dash and dash_time <= 0:
+		if is_on_floor():
+			sprite.set_animation("Dash")
 		jump = false
 		dashing = true
 		dash_time= DASH_MAXIMUM_TIME
-		sprite.set_animation("Dash")
 		for i in range(oldPositions.size()):
 			oldPositions[i] = position
 	elif is_on_floor() and dash_hold == false and dash_time < DASH_MAXIMUM_TIME-DASH_MINIMUM_TIME:
@@ -303,7 +309,7 @@ func get_input(delta):
 	if jump and is_on_floor():
 		velocity.y = jump_speed
 		state = State.JUMPING
-	elif jump and state == State.WALL_SLIDE:
+	elif jump and (state == State.WALL_SLIDE or coyote_time < 0.15):
 		velocity.y = jump_speed
 		state = State.JUMPING
 		
@@ -314,10 +320,11 @@ func get_input(delta):
 		inst.global_position = global_position + Vector2(32*vec.x, 32)
 		
 		velocity.x = vec.x * -100
-		wall_jump_x_recovery_active = true
+		wall_jump_x_recovery_vector = int(vec.x)
 		wall_jump_input_lock_timer = WALL_JUMP_INPUT_LOCK_TIME
 		#Dashing and jumping is kinda broken so I'm just going to disable it
-		dash_time = 0
+		#dash_time = 0
+		#print(wall_jump_x_recovery_vector)
 	elif state == State.ON_LADDER:
 		#Maybe waste of CPU?
 		velocity.y = 0
@@ -340,7 +347,7 @@ func get_input(delta):
 		velocity = velocity.normalized() * SPEED
 	#Your normal movement processing
 	else:
-		if wall_jump_x_recovery_active and !is_on_floor() and state != State.ON_LADDER:
+		if bool(wall_jump_x_recovery_vector) and !is_on_floor() and state != State.ON_LADDER:
 			var target_x = 0.0
 			if right and position.x < $Camera2D.destPositions[2]-40:
 				target_x = run_speed
@@ -349,7 +356,14 @@ func get_input(delta):
 				target_x = -run_speed
 				sprite.flip_h = true
 
-			if wall_jump_input_lock_timer <= 0.0:
+			# If target x is positive and recovery vector is negative, then the result is negative.
+			# This means they pressed in the opposite direction of the wall,
+			if target_x * wall_jump_x_recovery_vector < 0:
+				velocity.x = target_x
+				if dash_time > 0:
+					velocity.x *= dash_multiplier
+			#Override input and velocity
+			elif wall_jump_input_lock_timer <= 0.0:
 				velocity.x = move_toward(velocity.x, target_x, WALL_JUMP_X_CURVE_ACCEL * delta)
 		else:
 			if right and position.x < $Camera2D.destPositions[2]-40:
@@ -374,7 +388,11 @@ func get_input(delta):
 				else: # right
 					velocity.x = dash_multiplier * run_speed
 			else:
-				velocity.x *= dash_multiplier
+				#Technically this code is wrong because we are multiplying it every frame...
+				#but normally the velocity is overwritten every frame in the above code so it doesn't bug out
+				#Fixing it seems like more effort than it's worth so instead I'll just add a check for the wall jump
+				if wall_jump_x_recovery_vector == 0:
+					velocity.x *= dash_multiplier
 			
 		if up:
 			var tile = tiles.get_cellv(pos2cell(position))
@@ -554,6 +572,7 @@ func process_normal_movement(delta, tile):
 		sprite.set_animation("WallSlide")
 		velocity.y = 100
 		state = State.WALL_SLIDE
+		coyote_time = 0.0
 		wall_slide_frame_timer += delta
 		if wall_slide_frame_timer > .2:
 			wall_slide_frame_timer -= .2
@@ -575,6 +594,7 @@ func process_normal_movement(delta, tile):
 				sprite.set_animation("Falling")
 		else:
 			sprite.set_animation("FallingShoot")
+		coyote_time += delta
 	dash_handler()
 
 # Returns the vector for the direction you're pressing on if you're sliding on a wall.
